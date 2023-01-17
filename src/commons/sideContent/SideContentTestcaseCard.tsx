@@ -6,7 +6,6 @@ import * as React from 'react';
 
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import SideContentCanvasOutput from './SideContentCanvasOutput';
 
 type SideContentTestcaseCardProps = DispatchProps & StateProps & OwnProps;
 
@@ -21,16 +20,6 @@ type StateProps = {
 
 type OwnProps = {
   workspaceLocation: WorkspaceLocation;
-};
-
-const renderResult = (value: any) => {
-  /** A class which is the output of the show() function */
-  const ShapeDrawn = (window as any).ShapeDrawn;
-  if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-    return <SideContentCanvasOutput canvas={value.$canvas} />;
-  } else {
-    return stringify(value);
-  }
 };
 
 const SideContentTestcaseCard: React.FunctionComponent<SideContentTestcaseCardProps> = props => {
@@ -85,7 +74,7 @@ const SideContentTestcaseCard: React.FunctionComponent<SideContentTestcaseCardPr
               {testcase.errors
                 ? parseError(testcase.errors)
                 : testcase.result !== undefined
-                ? renderResult(testcase.result)
+                ? stringify(testcase.result)
                 : 'No Answer'}
             </Pre>
           </>

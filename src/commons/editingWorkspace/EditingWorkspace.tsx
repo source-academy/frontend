@@ -10,7 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -33,7 +33,7 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import { ControlBarToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { AutograderTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
 import DeploymentTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
 import GradingTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
@@ -41,6 +41,7 @@ import ManageQuestionTab from '../editingWorkspaceSideContent/EditingWorkspaceSi
 import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
+import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
@@ -107,127 +108,49 @@ export type StateProps = {
   storedQuestionId?: number;
 };
 
-type State = {
-  assessment: Assessment | null;
-  activeTab: SideContentType;
-  editingMode: string;
-  hasUnsavedChanges: boolean;
-  showResetTemplateOverlay: boolean;
-  originalMaxXp: number;
-};
-
-class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
-  public constructor(props: EditingWorkspaceProps) {
-    super(props);
-    this.state = {
-      assessment: retrieveLocalAssessment(),
-      activeTab: SideContentType.editorQuestionOverview,
-      editingMode: 'question',
-      hasUnsavedChanges: false,
-      showResetTemplateOverlay: false,
-      originalMaxXp: 0
-    };
-  }
+const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
+  const [assessment, setAssessment] = useState(retrieveLocalAssessment());
+  const [editingMode, setEditingMode] = useState('question');
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
+  const [originalMaxXp, setOriginalMaxXp] = useState(0);
 
   /**
    * After mounting (either an older copy of the assessment
    * or a loading screen), try to fetch a newer assessment,
    * and show the briefing.
    */
-  public componentDidMount() {
-    if (this.state.assessment) {
-      this.resetWorkspaceValues();
-      this.setState({
-        originalMaxXp: this.getMaxXp()
-      });
+  useEffect(() => {
+    if (assessment) {
+      resetWorkspaceValues();
+      setOriginalMaxXp(getMaxXp());
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Once there is an update (due to the assessment being fetched), check
    * if a workspace reset is needed.
    */
-  public componentDidUpdate() {
-    this.checkWorkspaceReset(this.props);
-  }
+  useEffect(() => checkWorkspaceReset());
 
-  public render() {
-    if (this.state.assessment === null || this.state.assessment!.questions.length === 0) {
-      return (
-        <NonIdealState
-          className={classNames('WorkspaceParent', Classes.DARK)}
-          description="Getting mission ready..."
-          icon={<Spinner size={SpinnerSize.LARGE} />}
-        />
-      );
-    }
-
-    const questionId = this.formatedQuestionId();
-    const question: Question = this.state.assessment.questions[questionId];
-    const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(questionId),
-      editorProps:
-        question.type === QuestionTypes.programming
-          ? {
-              editorSessionId: '',
-              editorValue:
-                // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                this.props.editorTabs[0].value ||
-                question.editorValue ||
-                (question as IProgrammingQuestion).solutionTemplate,
-              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange,
-              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              highlightedLines: this.props.editorTabs[0].highlightedLines,
-              breakpoints: this.props.editorTabs[0].breakpoints,
-              newCursorPosition: this.props.editorTabs[0].newCursorPosition,
-              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
-            }
-          : undefined,
-      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      hasUnsavedChanges: this.state.hasUnsavedChanges,
-      mcqProps: {
-        mcq: question as IMCQQuestion,
-        handleMCQSubmit: (option: number) =>
-          this.props.handleSave(this.state.assessment!.questions[questionId].id, option)
-      },
-      sideBarProps: {
-        tabs: []
-      },
-      sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: this.sideContentProps(this.props, questionId),
-      replProps: {
-        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
-        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
-        handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange,
-        output: this.props.output,
-        replValue: this.props.replValue,
-        sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-        sourceVariant: Variant.DEFAULT,
-        externalLibrary: question?.library?.external?.name || 'NONE',
-        replButtons: this.replButtons()
-      }
-    };
+  if (assessment === null || assessment!.questions.length === 0) {
     return (
-      <div className={classNames('WorkspaceParent', Classes.DARK)}>
-        {this.resetTemplateOverlay()}
-        <Workspace {...workspaceProps} />
-      </div>
+      <NonIdealState
+        className={classNames('WorkspaceParent', Classes.DARK)}
+        description="Getting mission ready..."
+        icon={<Spinner size={SpinnerSize.LARGE} />}
+      />
     );
   }
 
   /* If questionId is out of bounds, set it within range. */
-  private formatedQuestionId = () => {
-    let questionId = this.props.questionId;
+  const formatedQuestionId = () => {
+    let questionId = props.questionId;
     if (questionId < 0) {
       questionId = 0;
-    } else if (questionId >= this.state.assessment!.questions.length) {
-      questionId = this.state.assessment!.questions.length - 1;
+    } else if (questionId >= assessment!.questions.length) {
+      questionId = assessment!.questions.length - 1;
     }
     return questionId;
   };
@@ -235,12 +158,12 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
   /**
    * Resets to last save.
    */
-  private resetTemplateOverlay = () => (
+  const resetTemplateOverlay = () => (
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
       isCloseButtonShown={true}
-      isOpen={this.state.showResetTemplateOverlay}
+      isOpen={showResetTemplateOverlay}
       title="Confirmation: Reset editor?"
     >
       <div className={Classes.DIALOG_BODY}>
@@ -248,25 +171,24 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, () => this.setState({ showResetTemplateOverlay: false }), {
-            minimal: false
-          })}
-          {controlButton(
-            'Confirm',
-            null,
-            () => {
+          <ControlButton
+            label="Cancel"
+            onClick={() => setShowResetTemplateOverlay(false)}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Confirm"
+            onClick={() => {
               const assessment = retrieveLocalAssessment()!;
-              this.setState({
-                assessment,
-                hasUnsavedChanges: false,
-                showResetTemplateOverlay: false,
-                originalMaxXp: this.getMaxXp()
-              });
-              this.handleRefreshLibrary();
-              this.resetWorkspaceValues();
-            },
-            { minimal: false, intent: Intent.DANGER }
-          )}
+              setAssessment(assessment);
+              setHasUnsavedChanges(false);
+              setShowResetTemplateOverlay(false);
+              setOriginalMaxXp(getMaxXp());
+              handleRefreshLibrary();
+              resetWorkspaceValues();
+            }}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>
@@ -276,40 +198,32 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    */
-  private checkWorkspaceReset(props: EditingWorkspaceProps) {
+  function checkWorkspaceReset() {
     /* Don't reset workspace if assessment not fetched yet. */
-    if (this.state.assessment === undefined) {
+    if (assessment === undefined) {
       return;
     }
 
     /* Reset assessment if it has changed.*/
     const assessmentId = -1;
-    const questionId = this.formatedQuestionId();
+    const questionId = formatedQuestionId();
 
-    if (
-      this.props.storedAssessmentId !== assessmentId ||
-      this.props.storedQuestionId !== questionId
-    ) {
-      this.resetWorkspaceValues();
-      this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-      this.props.handleUpdateHasUnsavedChanges(false);
-      if (this.state.hasUnsavedChanges) {
-        this.setState({
-          assessment: retrieveLocalAssessment(),
-          hasUnsavedChanges: false
-        });
+    if (props.storedAssessmentId !== assessmentId || props.storedQuestionId !== questionId) {
+      resetWorkspaceValues();
+      props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
+      props.handleUpdateHasUnsavedChanges(false);
+      if (hasUnsavedChanges) {
+        setAssessment(retrieveLocalAssessment());
+        setHasUnsavedChanges(false);
       }
-      this.handleRefreshLibrary();
+      handleRefreshLibrary();
     }
   }
 
-  private handleRefreshLibrary = (library: Library | undefined = undefined) => {
-    const question = this.state.assessment!.questions[this.formatedQuestionId()];
+  const handleRefreshLibrary = (library: Library | undefined = undefined) => {
+    const question = assessment!.questions[formatedQuestionId()];
     if (!library) {
-      library =
-        question.library.chapter === -1
-          ? this.state.assessment!.globalDeployment!
-          : question.library;
+      library = question.library.chapter === -1 ? assessment!.globalDeployment! : question.library;
     }
     if (library && library.globals.length > 0) {
       const globalsVal = library.globals.map((x: any) => x[0]);
@@ -322,11 +236,11 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         }
       };
     }
-    this.props.handleClearContext(library, true);
+    props.handleClearContext(library, true);
   };
 
-  private resetWorkspaceValues = () => {
-    const question: Question = this.state.assessment!.questions[this.formatedQuestionId()];
+  const resetWorkspaceValues = () => {
+    const question: Question = assessment!.questions[formatedQuestionId()];
     let editorValue: string;
     let editorPrepend = '';
     let editorPostpend = '';
@@ -342,7 +256,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       editorValue = '//If you see this, this is a bug. Please report bug.';
     }
 
-    this.props.handleResetWorkspace({
+    props.handleResetWorkspace({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
         {
@@ -354,105 +268,89 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         }
       ]
     });
-    this.props.handleEditorValueChange(editorValue);
+    props.handleEditorValueChange(editorValue);
   };
 
-  private handleTestcaseEval = (testcase: Testcase) => {
+  const handleTestcaseEval = (testcase: Testcase) => {
     const editorTestcases = [testcase];
-    this.props.handleUpdateWorkspace({ editorTestcases });
-    this.props.handleTestcaseEval(0);
+    props.handleUpdateWorkspace({ editorTestcases });
+    props.handleTestcaseEval(0);
   };
 
-  private handleSave = () => {
-    const assessment = this.state.assessment!;
+  const handleSave = () => {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    assessment.questions[this.formatedQuestionId()].editorValue = this.props.editorTabs[0].value;
-    this.setState({
-      assessment,
-      hasUnsavedChanges: false
-    });
+    assessment!.questions[formatedQuestionId()].editorValue = props.editorTabs[0].value;
+    setAssessment(assessment);
+    setHasUnsavedChanges(false);
     storeLocalAssessment(assessment);
     // this.handleRefreshLibrary();
-    this.handleSaveXp();
+    handleSaveXp();
   };
 
-  private handleSaveXp = () => {
-    const curXp = this.getMaxXp();
-    const changeXp = curXp - this.state.originalMaxXp;
+  const handleSaveXp = () => {
+    const curXp = getMaxXp();
+    const changeXp = curXp - originalMaxXp;
     if (changeXp !== 0) {
-      const overview = this.props.assessmentOverview;
+      const overview = props.assessmentOverview;
       if (changeXp !== 0) {
         overview.maxXp = curXp;
       }
-      this.setState({
-        originalMaxXp: curXp
-      });
-      this.props.updateAssessmentOverview(overview);
+      setOriginalMaxXp(curXp);
+      props.updateAssessmentOverview(overview);
       storeLocalAssessmentOverview(overview);
     }
   };
 
-  private getMaxXp = () => {
+  const getMaxXp = () => {
     let xp = 0;
-    const questions = this.state.assessment!.questions;
+    const questions = assessment!.questions;
     for (const question of questions) {
       xp += question.maxXp;
     }
     return xp as number;
   };
-  private updateEditAssessmentState = (assessmentVal: Assessment) => {
-    this.setState({
-      assessment: assessmentVal,
-      hasUnsavedChanges: true
-    });
+  const updateEditAssessmentState = (assessmentVal: Assessment) => {
+    setAssessment(assessmentVal);
+    setHasUnsavedChanges(true);
   };
 
-  private updateAndSaveAssessment = (assessmentVal: Assessment) => {
-    this.setState({
-      assessment: assessmentVal
-    });
-    this.handleRefreshLibrary();
-    this.handleSave();
-    this.resetWorkspaceValues();
+  const updateAndSaveAssessment = (assessmentVal: Assessment) => {
+    setAssessment(assessmentVal);
+    handleRefreshLibrary();
+    handleSave();
+    resetWorkspaceValues();
   };
 
-  private handleActiveTabChange = (tab: SideContentType) => {
-    this.setState({
-      activeTab: tab
-    });
-  };
-  private toggleEditingMode = () => {
-    const toggle = this.state.editingMode === 'question' ? 'global' : 'question';
-    this.setState({
-      editingMode: toggle
-    });
+  const toggleEditingMode = () => {
+    const toggle = editingMode === 'question' ? 'global' : 'question';
+    setEditingMode(toggle);
   };
 
   /** Pre-condition: IAssessment has been loaded */
-  private sideContentProps: (p: EditingWorkspaceProps, q: number) => SideContentProps = (
+  const sideContentProps: (p: EditingWorkspaceProps, q: number) => SideContentProps = (
     props: EditingWorkspaceProps,
     questionId: number
   ) => {
-    const assessment = this.state.assessment!;
+    const currentAssessment = assessment!;
     let tabs: SideContentTab[];
-    if (this.state.editingMode === 'question') {
-      const qnType = this.state.assessment!.questions[this.props.questionId].type;
+    if (editingMode === 'question') {
+      const qnType = currentAssessment!.questions[props.questionId].type;
       const questionTemplateTab =
         qnType === 'mcq' ? (
           <MCQQuestionTemplateTab
-            assessment={assessment}
+            assessment={currentAssessment}
             questionId={questionId}
-            updateAssessment={this.updateEditAssessmentState}
+            updateAssessment={updateEditAssessmentState}
           />
         ) : (
           <ProgrammingQuestionTemplateTab
-            assessment={assessment}
+            assessment={currentAssessment}
             questionId={questionId}
-            updateAssessment={this.updateEditAssessmentState}
+            updateAssessment={updateEditAssessmentState}
             // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-            editorValue={this.props.editorTabs[0].value}
-            handleEditorValueChange={this.props.handleEditorValueChange}
-            handleUpdateActiveEditorTab={this.props.handleUpdateActiveEditorTab}
+            editorValue={props.editorTabs[0].value}
+            handleEditorValueChange={props.handleEditorValueChange}
+            handleUpdateActiveEditorTab={props.handleUpdateActiveEditorTab}
           />
         );
 
@@ -462,9 +360,9 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.NINJA,
           body: (
             <TextAreaContent
-              assessment={assessment}
+              assessment={currentAssessment}
               path={['questions', questionId, 'content']}
-              updateAssessment={this.updateEditAssessmentState}
+              updateAssessment={updateEditAssessmentState}
             />
           ),
           id: SideContentType.editorQuestionOverview
@@ -480,11 +378,11 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.HOME,
           body: (
             <DeploymentTab
-              assessment={assessment}
+              assessment={currentAssessment}
               label={'Question Specific'}
-              handleRefreshLibrary={this.handleRefreshLibrary}
+              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'library']}
-              updateAssessment={this.updateEditAssessmentState}
+              updateAssessment={updateEditAssessmentState}
               isOptionalDeployment={true}
             />
           ),
@@ -495,12 +393,12 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.CONFIRM,
           body: (
             <DeploymentTab
-              assessment={assessment}
+              assessment={currentAssessment}
               label={'Question Specific Grader'}
-              handleRefreshLibrary={this.handleRefreshLibrary}
+              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'graderLibrary']}
               pathToCopy={['questions', questionId, 'library']}
-              updateAssessment={this.updateEditAssessmentState}
+              updateAssessment={updateEditAssessmentState}
               isOptionalDeployment={true}
             />
           ),
@@ -511,9 +409,9 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.TICK,
           body: (
             <GradingTab
-              assessment={assessment}
+              assessment={currentAssessment}
               path={['questions', questionId]}
-              updateAssessment={this.updateEditAssessmentState}
+              updateAssessment={updateEditAssessmentState}
             />
           ),
           id: SideContentType.editorGrading
@@ -525,16 +423,16 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.AIRPLANE,
           body: (
             <AutograderTab
-              assessment={assessment}
+              assessment={currentAssessment}
               questionId={questionId}
-              handleTestcaseEval={this.handleTestcaseEval}
-              updateAssessment={this.updateEditAssessmentState}
+              handleTestcaseEval={handleTestcaseEval}
+              updateAssessment={updateEditAssessmentState}
             />
           ),
           id: SideContentType.editorAutograder
         });
       }
-      const functionsAttached = assessment!.globalDeployment!.external.symbols;
+      const functionsAttached = currentAssessment!.globalDeployment!.external.symbols;
       if (functionsAttached.includes('get_matrix')) {
         tabs.push({
           label: `Tone Matrix`,
@@ -546,13 +444,13 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     } else {
       tabs = [
         {
-          label: `${assessment!.type} Briefing`,
+          label: `${currentAssessment!.type} Briefing`,
           iconName: IconNames.BRIEFCASE,
           body: (
             <TextAreaContent
-              assessment={assessment}
+              assessment={currentAssessment}
               path={['longSummary']}
-              updateAssessment={this.updateEditAssessmentState}
+              updateAssessment={updateEditAssessmentState}
             />
           ),
           id: SideContentType.editorBriefing
@@ -562,10 +460,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.WRENCH,
           body: (
             <ManageQuestionTab
-              assessment={assessment}
-              hasUnsavedChanges={this.state.hasUnsavedChanges}
+              assessment={currentAssessment}
+              hasUnsavedChanges={hasUnsavedChanges}
               questionId={questionId}
-              updateAssessment={this.updateAndSaveAssessment}
+              updateAssessment={updateAndSaveAssessment}
             />
           ),
           id: SideContentType.editorManageQuestion
@@ -575,11 +473,11 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.GLOBE,
           body: (
             <DeploymentTab
-              assessment={assessment}
+              assessment={currentAssessment}
               label={'Global'}
-              handleRefreshLibrary={this.handleRefreshLibrary}
+              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['globalDeployment']}
-              updateAssessment={this.updateEditAssessmentState}
+              updateAssessment={updateEditAssessmentState}
               isOptionalDeployment={false}
             />
           ),
@@ -590,11 +488,11 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.CONFIRM,
           body: (
             <DeploymentTab
-              assessment={assessment}
+              assessment={currentAssessment}
               label={'Global Grader'}
-              handleRefreshLibrary={this.handleRefreshLibrary}
+              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['graderDeployment']}
-              updateAssessment={this.updateEditAssessmentState}
+              updateAssessment={updateEditAssessmentState}
               isOptionalDeployment={true}
             />
           ),
@@ -604,19 +502,15 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     }
 
     return {
-      handleActiveTabChange: this.handleActiveTabChange,
       tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] }
     };
   };
 
   /** Pre-condition: IAssessment has been loaded */
-  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
+  const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = '/mission-control';
-    const assessmentWorkspacePath = listingPath + `/${this.state.assessment!.id.toString()}`;
-    const questionProgress: [number, number] = [
-      questionId + 1,
-      this.state.assessment!.questions.length
-    ];
+    const assessmentWorkspacePath = listingPath + `/${assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [questionId + 1, assessment!.questions.length];
 
     const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -625,12 +519,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     const onClickReturn = () => history.push(listingPath);
 
     const onClickResetTemplate = () => {
-      this.setState((currentState: State) => {
-        return {
-          ...currentState,
-          showResetTemplateOverlay: currentState.hasUnsavedChanges
-        };
-      });
+      setShowResetTemplateOverlay(() => hasUnsavedChanges);
     };
 
     const nextButton = (
@@ -658,22 +547,20 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
     );
 
-    const runButton = (
-      <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />
-    );
+    const runButton = <ControlBarRunButton handleEditorEval={props.handleEditorEval} key="run" />;
 
     const saveButton = (
       <ControlButtonSaveButton
-        hasUnsavedChanges={this.state.hasUnsavedChanges}
-        onClickSave={this.handleSave}
+        hasUnsavedChanges={hasUnsavedChanges}
+        onClickSave={handleSave}
         key="save"
       />
     );
 
     const toggleEditModeButton = (
       <ControlBarToggleEditModeButton
-        editingMode={this.state.editingMode}
-        toggleEditMode={this.toggleEditingMode}
+        editingMode={editingMode}
+        toggleEditMode={toggleEditingMode}
         key="toggle_edit_mode"
       />
     );
@@ -685,25 +572,89 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     };
   };
 
-  private replButtons() {
+  function replButtons() {
     const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
+      <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
       <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
+        handleReplEval={props.handleReplEval}
+        isRunning={props.isRunning}
         key="eval_repl"
       />
     );
 
     return [evalButton, clearButton];
   }
-}
+
+  const questionId = formatedQuestionId();
+  const question: Question = assessment.questions[questionId];
+
+  const workspaceProps: WorkspaceProps = {
+    controlBarProps: controlBarProps(questionId),
+    editorContainerProps:
+      question.type === QuestionTypes.programming
+        ? {
+            editorVariant: 'normal',
+            editorTabs: props.editorTabs
+              .map(convertEditorTabStateToProps)
+              .map((editorTabStateProps, index) => {
+                // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                //       Specifically, need to update questions such that they can span multiple files.
+                if (index !== 0) {
+                  return editorTabStateProps;
+                }
+                return {
+                  ...editorTabStateProps,
+                  editorValue:
+                    editorTabStateProps.editorValue ||
+                    question.editorValue ||
+                    (question as IProgrammingQuestion).solutionTemplate
+                };
+              }),
+            editorSessionId: '',
+            handleDeclarationNavigate: props.handleDeclarationNavigate,
+            handleEditorEval: props.handleEditorEval,
+            handleEditorValueChange: props.handleEditorValueChange,
+            handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
+            handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
+            handlePromptAutocomplete: props.handlePromptAutocomplete,
+            isEditorAutorun: false
+          }
+        : undefined,
+    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    hasUnsavedChanges: hasUnsavedChanges,
+    mcqProps: {
+      mcq: question as IMCQQuestion,
+      handleMCQSubmit: (option: number) =>
+        props.handleSave(assessment!.questions[questionId].id, option)
+    },
+    sideBarProps: {
+      tabs: []
+    },
+    sideContentHeight: props.sideContentHeight,
+    sideContentProps: sideContentProps(props, questionId),
+    replProps: {
+      handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+      handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+      handleReplEval: props.handleReplEval,
+      handleReplValueChange: props.handleReplValueChange,
+      output: props.output,
+      replValue: props.replValue,
+      sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
+      sourceVariant: Variant.DEFAULT,
+      externalLibrary: question?.library?.external?.name || 'NONE',
+      replButtons: replButtons()
+    }
+  };
+  return (
+    <div className={classNames('WorkspaceParent', Classes.DARK)}>
+      {resetTemplateOverlay()}
+      <Workspace {...workspaceProps} />
+    </div>
+  );
+};
 
 function uniq(a: string[]) {
   const seen = {};

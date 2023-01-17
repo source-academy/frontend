@@ -5,7 +5,7 @@ import * as React from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 
-import controlButton from '../../../../commons/ControlButton';
+import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
 export type DropzoneProps = DispatchProps & StateProps;
@@ -111,13 +111,18 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
   const confirmationPrompt = React.useMemo(
     () => (
       <div className="dropzone-controls">
-        {controlButton('Yes', IconNames.CONFIRM, handleConfirmForceUpdate, {
-          minimal: false,
-          intent: Intent.DANGER
-        })}
-        {controlButton('No', IconNames.CROSS, handleCancelForceUpdate, {
-          minimal: false
-        })}
+        <ControlButton
+          label="Yes"
+          icon={IconNames.CONFIRM}
+          onClick={handleConfirmForceUpdate}
+          options={{ minimal: false, intent: Intent.DANGER }}
+        />
+        <ControlButton
+          label="No"
+          icon={IconNames.CROSS}
+          onClick={handleCancelForceUpdate}
+          options={{ minimal: false }}
+        />
       </div>
     ),
     [handleCancelForceUpdate, handleConfirmForceUpdate]
@@ -142,13 +147,18 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
                   onChange={e => setAssessmentConfigId(parseInt(e.target.value))}
                   value={assessmentConfigId}
                 />
-                {controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload, {
-                  minimal: false,
-                  intent: Intent.DANGER
-                })}
-                {controlButton('Cancel Upload', IconNames.DELETE, handleCancelUpload, {
-                  minimal: false
-                })}
+                <ControlButton
+                  label="Confirm Upload"
+                  icon={IconNames.UPLOAD}
+                  onClick={handleConfirmUpload}
+                  options={{ minimal: false, intent: Intent.DANGER }}
+                />
+                <ControlButton
+                  label="Cancel Upload"
+                  icon={IconNames.DELETE}
+                  onClick={handleCancelUpload}
+                  options={{ minimal: false }}
+                />
               </div>
               <div className="dropzone-controls">
                 <p>Force update opened assessment</p>

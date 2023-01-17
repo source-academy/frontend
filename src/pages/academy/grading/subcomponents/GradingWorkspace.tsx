@@ -25,6 +25,7 @@ import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarN
 import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
+import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
 import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
@@ -180,19 +181,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     const question = this.props.grading[questionId].question as Question;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
-      editorProps:
+      editorContainerProps:
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
+              editorVariant: 'normal',
+              editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
               editorSessionId: '',
-              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              editorValue: this.props.editorTabs[0].value,
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
               handleEditorEval: this.handleEval,
               handleEditorValueChange: this.props.handleEditorValueChange,
-              // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-              highlightedLines: this.props.editorTabs[0].highlightedLines,
-              breakpoints: this.props.editorTabs[0].breakpoints,
-              newCursorPosition: this.props.editorTabs[0].newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
               isEditorAutorun: false,
@@ -311,7 +308,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
             xpAdjustment={props.grading![questionId].grade.xpAdjustment}
             maxXp={props.grading![questionId].question.maxXp}
             studentName={props.grading![questionId].student.name}
-            comments={props.grading![questionId].grade.comments!}
+            comments={props.grading![questionId].grade.comments ?? ''}
             graderName={
               props.grading![questionId].grade.grader
                 ? props.grading![questionId].grade.grader!.name

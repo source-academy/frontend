@@ -4,7 +4,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
 import SideContentTestcaseCard from './SideContentTestcaseCard';
@@ -137,10 +137,13 @@ const resultsHeader = (
   </div>
 );
 
-const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
-  controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
-    className: 'collapse-button',
-    minimal: true
-  });
+const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
+  <ControlButton
+    label={label}
+    icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+    onClick={toggleFunc}
+    options={{ className: 'collapse-button', minimal: true }}
+  />
+);
 
 export default SideContentAutograder;

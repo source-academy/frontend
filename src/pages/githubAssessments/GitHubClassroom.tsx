@@ -4,10 +4,9 @@ import { Octokit } from '@octokit/rest';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import { OverallState } from '../../commons/application/ApplicationTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
@@ -32,8 +31,8 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
     assessmentTypeOverviews: GHAssessmentTypeOverview[] | undefined;
     selectedCourse: string | undefined;
   }>();
-  const octokit: Octokit | undefined = useSelector(
-    (store: OverallState) => store.session.githubOctokitObject
+  const octokit: Octokit | undefined = useTypedSelector(
+    store => store.session.githubOctokitObject
   ).octokit;
   const [courses, setCourses] = useState<string[] | undefined>(location.state?.courses);
   const [selectedCourse, setSelectedCourse] = useState<string>(

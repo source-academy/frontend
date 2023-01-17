@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { Assessment, IMCQQuestion } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
@@ -79,7 +79,9 @@ const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
       {textareaContent(['questions', questionId, 'choices', i, 'hint'])}
     </div>
   ));
-  const deleteButton = controlButton('Delete Option', IconNames.REMOVE, delOption);
+  const deleteButton = (
+    <ControlButton label="Delete Option" icon={IconNames.REMOVE} onClick={delOption} />
+  );
 
   return (
     <div className="MCQChooser row">
@@ -92,7 +94,7 @@ const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
             question.choices.length
           ])}
           <br />
-          {controlButton('Add Option', IconNames.CONFIRM, addOption)}
+          <ControlButton label="Add Option" icon={IconNames.CONFIRM} onClick={addOption} />
           {question.choices.length > 0 ? deleteButton : undefined}
         </div>
       </Card>

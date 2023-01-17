@@ -31,15 +31,18 @@ import {
   DELETE_ASSESSMENT_CONFIG,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_TOTAL_XP,
+  FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
-  GET_TOTAL_XP,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -76,6 +79,7 @@ import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTyp
 import {
   deleteAssessment,
   deleteSourcecastEntry,
+  getAllUserXp,
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
@@ -235,7 +239,16 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(GET_TOTAL_XP, function* () {
+  yield takeEvery(FETCH_ALL_USER_XP, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const res: { all_users_xp: string[][] } = yield call(getAllUserXp, tokens);
+    if (res) {
+      yield put(actions.updateAllUserXp(res.all_users_xp));
+    }
+  });
+
+  yield takeEvery(FETCH_TOTAL_XP, function* () {
     const tokens: Tokens = yield selectTokens();
 
     const res: { totalXp: number } = yield call(getTotalXp, tokens);
@@ -244,16 +257,49 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
+  yield takeEvery(
+    FETCH_TOTAL_XP_ADMIN,
+    function* (action: ReturnType<typeof actions.fetchTotalXpAdmin>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const courseRegId = action.payload;
+
+      const res: { totalXp: number } = yield call(getTotalXp, tokens, courseRegId);
+      if (res) {
+        yield put(actions.updateTotalXp(res.totalXp));
+      }
+    }
+  );
+
   yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
     const tokens: Tokens = yield selectTokens();
 
-    const id = action.payload;
+    const assessmentId = action.payload;
 
-    const assessment: Assessment | null = yield call(getAssessment, id, tokens);
+    const assessment: Assessment | null = yield call(getAssessment, assessmentId, tokens);
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
     }
   });
+
+  yield takeEvery(
+    FETCH_ASSESSMENT_ADMIN,
+    function* (action: ReturnType<typeof actions.fetchAssessmentAdmin>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const { assessmentId, courseRegId } = action.payload;
+
+      const assessment: Assessment | null = yield call(
+        getAssessment,
+        assessmentId,
+        tokens,
+        courseRegId
+      );
+      if (assessment) {
+        yield put(actions.updateAssessment(assessment));
+      }
+    }
+  );
 
   yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>): any {
     const tokens: Tokens = yield selectTokens();
