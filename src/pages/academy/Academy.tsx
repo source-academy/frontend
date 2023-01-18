@@ -16,7 +16,7 @@ import Achievement from '../../pages/achievement/AchievementContainer';
 import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
 import NotFound from '../notFound/NotFound';
 import AdminPanel from './adminPanel/AdminPanel';
-import DashboardContainer from './dashboard/DashboardContainer';
+import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
 import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
@@ -45,7 +45,7 @@ const Academy: React.FC<{}> = () => {
           <Route path={`${path}/xpcalculation`} component={XpCalculation} key={2} />,
           <Route path={`${path}/sourcereel`} component={Sourcereel} key={3} />,
           <Route path={`${path}/storysimulator`} component={StorySimulator} key={4} />,
-          <Route path={`${path}/dashboard`} component={DashboardContainer} key={5} />
+          <Route path={`${path}/dashboard`} component={Dashboard} key={5} />
         ]
       : null;
   return (
