@@ -1,12 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from '../../../../commons/application/actions/InterpreterActions';
 import { fetchGrading } from '../../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../../commons/application/ApplicationTypes';
 import { Library } from '../../../../commons/assessment/AssessmentTypes';
@@ -71,7 +65,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleGradingFetch: fetchGrading,
-      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
@@ -86,9 +79,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateCurrentSubmissionId: updateCurrentSubmissionId,
       handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, unsavedChanges),
-      handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
-      handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback)
     },
