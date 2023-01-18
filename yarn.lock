@@ -8531,10 +8531,10 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
-js-slang@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.8.tgz#fb32f78c8569e4ffbe1f06ce639371d7d3a1ae2e"
-  integrity sha512-74feKdgVPsvg57C6t8hU/HXouT7AUGimMwvqThsHU8KdH7Z6vDtxiVsw3ZpVhWUvINn7DO795qAb6nIK1vOXhw==
+js-slang@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.9.tgz#f4ed5d63f2ab31fd88d842c2bd6cf18da19715a2"
+  integrity sha512-MbpL67kR2kpbxaJZsMcM9DGRwYs/1huHvdk1G2o/Hmkf0Y35nFgErDLMCR4G8Z1yC+zY+REjlHtUt8fuDQ0n/A==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
