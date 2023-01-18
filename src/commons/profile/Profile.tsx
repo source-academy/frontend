@@ -1,6 +1,6 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Role } from '../application/ApplicationTypes';
 import {
@@ -41,14 +41,23 @@ const Profile: React.FC<ProfileProps> = props => {
       // If assessment overviews are not loaded, fetch them
       props.handleAssessmentOverviewFetch();
     }
-    if (!xp) {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assessmentOverviews, name, role, xp]);
+
+  useEffect(() => {
+    if (courseId && !xp) {
       props.handleTotalXpFetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [courseId, xp]);
+
+  const [isLoaded, setIsLoaded] = useState(name && role && assessmentOverviews);
+
+  useEffect(() => {
+    setIsLoaded(name && role && assessmentOverviews);
+  }, [assessmentOverviews, name, role]);
 
   // Render
-  const isLoaded = name && role && assessmentOverviews;
   let content: JSX.Element;
 
   if (!isLoaded) {
