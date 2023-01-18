@@ -23,7 +23,7 @@ import { Role } from '../application/ApplicationTypes';
 import { UpdateCourseConfiguration, UserCourse } from '../application/types/SessionTypes';
 import { AssessmentType } from '../assessment/AssessmentTypes';
 import Dropdown from '../dropdown/Dropdown';
-import NotificationBadgeContainer from '../notificationBadge/NotificationBadgeContainer';
+import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { useResponsive } from '../utils/Hooks';
@@ -242,7 +242,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           >
             <Icon icon={icons[idx]} />
             <div className="navbar-button-text">{assessmentType}</div>
-            <NotificationBadgeContainer
+            <NotificationBadge
               notificationFilter={filterNotificationsByType(assessmentType)}
               disableHover={true}
             />

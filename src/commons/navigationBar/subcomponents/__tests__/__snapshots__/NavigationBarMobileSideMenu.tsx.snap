@@ -35,35 +35,35 @@ exports[`NavigationBarMobileSideMenu renders correctly when logged in (with cour
     <div>
       Missions
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
   <NavLink to=\\"/courses/1/quests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"lightbulb\\" />
     <div>
       Quests
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
   <NavLink to=\\"/courses/1/paths\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"predictive-analysis\\" />
     <div>
       Paths
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
   <NavLink to=\\"/courses/1/contests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"comparison\\" />
     <div>
       Contests
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
   <NavLink to=\\"/courses/1/others\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"manual\\" />
     <div>
       Others
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
   <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" to=\\"/playground\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"code\\" />

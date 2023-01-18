@@ -36,7 +36,7 @@ import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorks
 import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
-import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
+import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';

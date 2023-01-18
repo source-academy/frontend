@@ -37,9 +37,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -138,9 +136,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -255,9 +251,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -447,9 +441,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -548,9 +540,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -665,9 +655,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -857,9 +845,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -958,9 +944,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -1075,9 +1059,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -1267,9 +1249,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-not_attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -1368,9 +1348,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempting\\" src=\\"https://fakeimg.pl/350x200/?text=World&font=lobster\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
@@ -1485,9 +1463,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             <Blueprint4.Card className=\\"row listing\\" elevation={1} interactive={false}>
                               <div className=\\"bp4-card bp4-elevation-1 row listing\\">
                                 <div className=\\"col-xs-3 listing-picture\\">
-                                  <Connect(NotificationBadge) className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true}>
-                                    <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
-                                  </Connect(NotificationBadge)>
+                                  <NotificationBadge className=\\"badge\\" notificationFilter={[Function (anonymous)]} large={true} />
                                   <img alt=\\"Assessment\\" className=\\"cover-image-attempted\\" src=\\"https://fakeimg.pl/300/\\" />
                                 </div>
                                 <div className=\\"col-xs-9 listing-text\\">
