@@ -2,20 +2,14 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { OverallState } from '../../../commons/application/ApplicationTypes';
-import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
-import Dashboard, { DispatchProps, StateProps } from './Dashboard';
+import Dashboard, { StateProps } from './Dashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   gradingSummary: state.dashboard.gradingSummary
 });
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      handleFetchGradingSummary: fetchGroupGradingSummary
-    },
-    dispatch
-  );
+const mapDispatchToProps: MapDispatchToProps<{}, {}> = (dispatch: Dispatch) =>
+  bindActionCreators({}, dispatch);
 
 const DashboardContainer = connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 

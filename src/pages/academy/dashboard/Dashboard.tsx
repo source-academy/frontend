@@ -5,15 +5,13 @@ import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
+import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 import { GradingSummary } from '../../../features/dashboard/DashboardTypes';
 
-type DashboardProps = DispatchProps & StateProps;
-
-export type DispatchProps = {
-  handleFetchGradingSummary: () => void;
-};
+type DashboardProps = StateProps;
 
 export type StateProps = {
   gradingSummary: GradingSummary;
@@ -26,6 +24,8 @@ const defaultColumnDefs: ColDef = {
 };
 
 const Dashboard: React.FC<DashboardProps> = props => {
+  const dispatch = useDispatch();
+
   let gridApi: GridApi | undefined;
 
   const onGridReady = (params: GridReadyEvent) => {
@@ -65,7 +65,10 @@ const Dashboard: React.FC<DashboardProps> = props => {
 
   return (
     <div>
-      <ContentDisplay display={content} loadContentDispatch={props.handleFetchGradingSummary} />
+      <ContentDisplay
+        display={content}
+        loadContentDispatch={() => dispatch(fetchGroupGradingSummary())}
+      />
     </div>
   );
 };
