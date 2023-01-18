@@ -6,16 +6,14 @@ import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
-import { GradingSummary } from '../../../features/dashboard/DashboardTypes';
 
 type DashboardProps = StateProps;
 
-export type StateProps = {
-  gradingSummary: GradingSummary;
-};
+export type StateProps = {};
 
 const defaultColumnDefs: ColDef = {
   filter: true,
@@ -25,6 +23,7 @@ const defaultColumnDefs: ColDef = {
 
 const Dashboard: React.FC<DashboardProps> = props => {
   const dispatch = useDispatch();
+  const gradingSummary = useTypedSelector(state => state.dashboard.gradingSummary);
 
   let gridApi: GridApi | undefined;
 
@@ -38,7 +37,7 @@ const Dashboard: React.FC<DashboardProps> = props => {
     }
   };
 
-  const columnDefs = props.gradingSummary.cols.map(e => {
+  const columnDefs = gradingSummary.cols.map(e => {
     return {
       headerName: startCase(e),
       field: e
@@ -54,7 +53,7 @@ const Dashboard: React.FC<DashboardProps> = props => {
           defaultColDef={defaultColumnDefs}
           onGridReady={onGridReady}
           onGridSizeChanged={resizeGrid}
-          rowData={props.gradingSummary.rows}
+          rowData={gradingSummary.rows}
           rowHeight={30}
           suppressCellSelection={true}
           suppressMovableColumns={true}
