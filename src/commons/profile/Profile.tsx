@@ -130,8 +130,8 @@ const Profile: React.FC<ProfileProps> = props => {
       };
 
       // Build condensed assessment cards from an array of assessments
-      const summaryCallouts = props
-        .assessmentOverviews!.filter(
+      const summaryCallouts = assessmentOverviews!
+        .filter(
           item =>
             item.status === AssessmentStatuses.submitted &&
             (item.gradingStatus === GradingStatuses.graded ||
