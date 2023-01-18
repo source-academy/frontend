@@ -1,20 +1,13 @@
 import { Intent, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { acknowledgeNotifications } from '../application/actions/SessionActions';
 import { filterNotificationsById } from './NotificationBadgeHelper';
-import {
-  Notification,
-  NotificationFilterFunction,
-  NotificationType,
-  NotificationTypes
-} from './NotificationBadgeTypes';
+import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
 
-type NotificationBadgeProps = DispatchProps & StateProps & OwnProps;
-
-export type DispatchProps = {
-  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
-};
+type NotificationBadgeProps = StateProps & OwnProps;
 
 type OwnProps = {
   className?: string;
@@ -28,6 +21,8 @@ export type StateProps = {
 };
 
 const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
+  const dispatch = useDispatch();
+
   const notifications = props.notificationFilter
     ? props.notificationFilter(props.notifications)
     : props.notifications;
@@ -45,7 +40,7 @@ const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
   if (!props.disableHover) {
     const makeNotificationTag = (notification: Notification) => {
       const onRemove = () =>
-        props.handleAcknowledgeNotifications(filterNotificationsById(notification.id));
+        dispatch(acknowledgeNotifications(filterNotificationsById(notification.id)));
 
       return (
         <Tag
