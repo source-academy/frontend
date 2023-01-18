@@ -30,6 +30,7 @@ import {
   fetchAssessmentOverviews,
   submitAssessment
 } from '../application/actions/SessionActions';
+import { Role } from '../application/ApplicationTypes';
 import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
 import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from '../ContentDisplay';
@@ -39,7 +40,7 @@ import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { useResponsive } from '../utils/Hooks';
+import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
@@ -50,16 +51,10 @@ import {
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = OwnProps & StateProps;
+export type AssessmentProps = OwnProps;
 
 export type OwnProps = {
   assessmentConfiguration: AssessmentConfiguration;
-};
-
-export type StateProps = {
-  assessmentOverviews?: AssessmentOverview[];
-  isStudent: boolean;
-  courseId?: number;
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
@@ -69,6 +64,14 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);
   const [showUpcomingAssessments, setShowUpcomingAssessments] = React.useState<boolean>(true);
+
+  const assessmentOverviewsUnfiltered = useTypedSelector(
+    state => state.session.assessmentOverviews
+  );
+  const isStudent = useTypedSelector(state =>
+    state.session.role ? state.session.role === Role.Student : true
+  );
+  const courseId = useTypedSelector(state => state.session.courseId);
 
   const dispatch = useDispatch();
 
@@ -133,9 +136,9 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/courses/${props.courseId}/${assessmentTypeLink(
-          overview.type
-        )}/${overview.id.toString()}/${Constants.defaultQuestionId}`}
+        to={`/courses/${courseId}/${assessmentTypeLink(overview.type)}/${overview.id.toString()}/${
+          Constants.defaultQuestionId
+        }`}
       >
         <Button
           icon={icon}
@@ -244,7 +247,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 
   // Rendering Logic
-  const { assessmentOverviews: assessmentOverviewsUnfiltered, isStudent } = props;
   const assessmentOverviews = React.useMemo(
     () =>
       assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
@@ -265,7 +267,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       questionId,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
-        !props.isStudent ||
+        !isStudent ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
       assessmentConfiguration: props.assessmentConfiguration
     };
