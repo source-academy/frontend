@@ -1,13 +1,6 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from '../application/actions/InterpreterActions';
 import { submitAnswer } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -17,7 +10,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeSideContentHeight,
-  chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -59,8 +51,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChapterSelect: (chapter: Chapter, changeEvent: any) =>
-        chapterSelect(chapter, Variant.DEFAULT, workspaceLocation),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
         beginClearContext(workspaceLocation, library, shouldInitLibrary),
       handleDeclarationNavigate: (cursorPosition: Position) =>
@@ -69,7 +59,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
@@ -86,9 +75,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
       handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,
-      handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
-      handleDebuggerResume: () => debuggerResume(workspaceLocation),
-      handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback)
     },
