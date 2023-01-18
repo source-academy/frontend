@@ -20,10 +20,16 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import {
+  acknowledgeNotifications,
+  fetchAssessmentOverviews,
+  submitAssessment
+} from '../application/actions/SessionActions';
 import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
 import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from '../ContentDisplay';
@@ -31,7 +37,6 @@ import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
-import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
 import { useResponsive } from '../utils/Hooks';
@@ -45,13 +50,7 @@ import {
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = DispatchProps & OwnProps & StateProps;
-
-export type DispatchProps = {
-  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
-  handleAssessmentOverviewFetch: () => void;
-  handleSubmitAssessment: (id: number) => void;
-};
+export type AssessmentProps = OwnProps & StateProps;
 
 export type OwnProps = {
   assessmentConfiguration: AssessmentConfiguration;
@@ -71,13 +70,15 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);
   const [showUpcomingAssessments, setShowUpcomingAssessments] = React.useState<boolean>(true);
 
+  const dispatch = useDispatch();
+
   const toggleClosedAssessments = () => setShowClosedAssessments(!showClosedAssessments);
   const toggleOpenAssessments = () => setShowOpenedAssessments(!showOpenedAssessments);
   const toggleUpcomingAssessments = () => setShowUpcomingAssessments(!showUpcomingAssessments);
   const setBetchaAssessmentNull = () => setBetchaAssessment(null);
-  const submitAssessment = () => {
+  const handleSubmitAssessment = () => {
     if (betchaAssessment) {
-      props.handleSubmitAssessment(betchaAssessment.id);
+      dispatch(submitAssessment(betchaAssessment.id));
       setBetchaAssessmentNull();
     }
   };
@@ -140,7 +141,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
           icon={icon}
           minimal={true}
           onClick={() =>
-            props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+            dispatch(acknowledgeNotifications(filterNotificationsByAssessment(overview.id)))
           }
         >
           <span className="custom-hidden-xxxs">{label}</span>
@@ -372,7 +373,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
           />
           <ControlButton
             label="Finalise"
-            onClick={submitAssessment}
+            onClick={handleSubmitAssessment}
             options={{ minimal: false, intent: Intent.DANGER }}
           />
         </ButtonGroup>
@@ -383,7 +384,10 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // Finally, render the ContentDisplay.
   return (
     <div className="Assessment">
-      <ContentDisplay display={display} loadContentDispatch={props.handleAssessmentOverviewFetch} />
+      <ContentDisplay
+        display={display}
+        loadContentDispatch={() => dispatch(fetchAssessmentOverviews())}
+      />
       {betchaDialog}
     </div>
   );
