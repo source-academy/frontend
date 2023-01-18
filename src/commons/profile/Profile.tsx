@@ -35,38 +35,39 @@ type OwnProps = {
 };
 
 const Profile: React.FC<ProfileProps> = props => {
+  const { name, role, assessmentOverviews, assessmentConfigurations, xp, courseId } = props;
   useEffect(() => {
-    if (props.name && props.role && !props.assessmentOverviews) {
+    if (name && role && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
       props.handleAssessmentOverviewFetch();
     }
-    if (!props.xp) {
+    if (!xp) {
       props.handleTotalXpFetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Render
-  const isLoaded = props.name && props.role && props.assessmentOverviews;
+  const isLoaded = name && role && assessmentOverviews;
   let content: JSX.Element;
 
   if (!isLoaded) {
     content = <NonIdealState description="Loading..." icon={<Spinner />} />;
   } else {
     // Check if there are any closed assessments, else render a placeholder <div>
-    const numClosed = props.assessmentOverviews!.filter(
+    const numClosed = assessmentOverviews!.filter(
       item => item.status === AssessmentStatuses.submitted
     ).length;
 
-    const userXp = props.xp || 0;
+    const userXp = xp || 0;
     const caFulfillmentLevel = Constants.caFulfillmentLevel;
     const fullXp = caFulfillmentLevel * 1000;
 
     const userDetails = (
       <div className="profile-header">
         <div className="profile-username">
-          <div className="name">{props.name}</div>
-          <div className="role">{props.role}</div>
+          <div className="name">{name}</div>
+          <div className="role">{role}</div>
         </div>
       </div>
     );
@@ -106,8 +107,8 @@ const Profile: React.FC<ProfileProps> = props => {
           IconNames.COMPARISON,
           IconNames.MANUAL
         ];
-        if (props.assessmentConfigurations) {
-          const index = props.assessmentConfigurations.findIndex(c => c.type === assessmentType);
+        if (assessmentConfigurations) {
+          const index = assessmentConfigurations.findIndex(c => c.type === assessmentType);
 
           // For rendering hidden assessments not visible to the student
           // e.g. studio participation marks
@@ -135,7 +136,7 @@ const Profile: React.FC<ProfileProps> = props => {
               getFrac={getFrac}
               parseColour={parseColour}
               renderIcon={renderIcon}
-              courseId={props.courseId}
+              courseId={courseId}
             />
           );
         });
