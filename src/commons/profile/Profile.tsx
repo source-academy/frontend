@@ -1,7 +1,9 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -11,16 +13,12 @@ import {
   GradingStatuses
 } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
+import { useTypedSelector } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
 
-type ProfileProps = DispatchProps & StateProps & OwnProps;
+type ProfileProps = OwnProps;
 
-export type DispatchProps = {
-  handleAssessmentOverviewFetch: () => void;
-  handleTotalXpFetch: () => void;
-};
-
-export type StateProps = {
+type StateProps = {
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
@@ -35,18 +33,23 @@ type OwnProps = {
 };
 
 const Profile: React.FC<ProfileProps> = props => {
-  const { name, role, assessmentOverviews, assessmentConfigurations, xp, courseId } = props;
+  // FIXME: `xp` is actually of type number | undefined here!
+  // Fix the session type, then remove the typecast below
+  const { name, role, assessmentOverviews, assessmentConfigurations, xp, courseId } =
+    useTypedSelector(state => state.session) as StateProps;
+
+  const dispatch = useDispatch();
   useEffect(() => {
     if (name && role && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
-      props.handleAssessmentOverviewFetch();
+      dispatch(fetchAssessmentOverviews());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [assessmentOverviews, name, role, xp]);
 
   useEffect(() => {
     if (courseId && !xp) {
-      props.handleTotalXpFetch();
+      dispatch(fetchTotalXp());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId, xp]);
