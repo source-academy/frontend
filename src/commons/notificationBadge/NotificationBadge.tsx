@@ -4,10 +4,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { acknowledgeNotifications } from '../application/actions/SessionActions';
+import { useTypedSelector } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
 import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
 
-type NotificationBadgeProps = StateProps & OwnProps;
+type NotificationBadgeProps = OwnProps;
 
 type OwnProps = {
   className?: string;
@@ -16,16 +17,13 @@ type OwnProps = {
   notificationFilter?: (notifications: Notification[]) => Notification[];
 };
 
-export type StateProps = {
-  notifications: Notification[];
-};
-
 const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
   const dispatch = useDispatch();
+  const initialNotifications = useTypedSelector(state => state.session.notifications);
 
   const notifications = props.notificationFilter
-    ? props.notificationFilter(props.notifications)
-    : props.notifications;
+    ? props.notificationFilter(initialNotifications)
+    : initialNotifications;
 
   if (!notifications.length) {
     return null;
