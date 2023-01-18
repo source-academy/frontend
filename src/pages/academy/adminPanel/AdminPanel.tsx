@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
 
 import {
@@ -19,10 +20,7 @@ import {
   updateCourseConfig,
   updateUserRole
 } from '../../../commons/application/actions/SessionActions';
-import {
-  AdminPanelCourseRegistration,
-  UpdateCourseConfiguration
-} from '../../../commons/application/types/SessionTypes';
+import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
@@ -30,22 +28,7 @@ import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/Assessm
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
-export type AdminPanelProps = StateProps;
-
-export type StateProps = {
-  courseRegId?: number;
-  courseName?: string;
-  courseShortName?: string;
-  viewable?: boolean;
-  enableGame?: boolean;
-  enableAchievements?: boolean;
-  enableSourcecast?: boolean;
-  moduleHelpText?: string;
-  assessmentConfigurations?: AssessmentConfiguration[];
-  userCourseRegistrations?: AdminPanelCourseRegistration[];
-};
-
-const AdminPanel: React.FC<AdminPanelProps> = props => {
+const AdminPanel: React.FC = () => {
   const [hasChangesCourseConfig, setHasChangesCourseConfig] = React.useState(false);
   const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = React.useState(false);
 
@@ -61,6 +44,8 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
 
   const dispatch = useDispatch();
 
+  const session = useTypedSelector(state => state.session);
+
   /**
    * Mutable ref to track the assessment configuration form state instead of useState. This is
    * because ag-grid does not update the cellRendererParams whenever there is an update in rowData,
@@ -70,7 +55,7 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
    * Also, useState causes a flicker in ag-grid during rerenders. Thus we use this mutable ref and
    * ag-grid's API to update cell values instead.
    */
-  const assessmentConfig = React.useRef(props.assessmentConfigurations);
+  const assessmentConfig = React.useRef(session.assessmentConfigurations);
 
   // Tracks the assessment configurations to be deleted in the backend when the save button is clicked
   const [assessmentConfigsToDelete, setAssessmentConfigsToDelete] = React.useState<
@@ -86,18 +71,18 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   // After updated configs have been loaded from the backend, put them into local React state
   React.useEffect(() => {
     setCourseConfiguration({
-      courseName: props.courseName,
-      courseShortName: props.courseShortName,
-      viewable: props.viewable,
-      enableGame: props.enableGame,
-      enableAchievements: props.enableAchievements,
-      enableSourcecast: props.enableSourcecast,
-      moduleHelpText: props.moduleHelpText
+      courseName: session.courseName,
+      courseShortName: session.courseShortName,
+      viewable: session.viewable,
+      enableGame: session.enableGame,
+      enableAchievements: session.enableAchievements,
+      enableSourcecast: session.enableSourcecast,
+      moduleHelpText: session.moduleHelpText
     });
 
     // IMPT: To prevent mutation of props
-    assessmentConfig.current = cloneDeep(props.assessmentConfigurations);
-  }, [props]);
+    assessmentConfig.current = cloneDeep(session.assessmentConfigurations);
+  }, [session]);
 
   const courseConfigPanelProps = {
     courseConfiguration: courseConfiguration,
@@ -128,8 +113,8 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   }, [assessmentConfigsToDelete]);
 
   const userConfigPanelProps = {
-    courseRegId: props.courseRegId,
-    userCourseRegistrations: props.userCourseRegistrations,
+    courseRegId: session.courseRegId,
+    userCourseRegistrations: session.userCourseRegistrations,
     handleUpdateUserRole: (courseRegId: number, role: Role) =>
       dispatch(updateUserRole(courseRegId, role)),
     handleDeleteUserFromCourse: (courseRegId: number) =>
