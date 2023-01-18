@@ -9,7 +9,7 @@ import {
   fetchNotifications,
   updateLatestViewedCourse
 } from '../../commons/application/actions/SessionActions';
-import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
+import Assessment from '../../commons/assessment/Assessment';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
 import Achievement from '../../pages/achievement/AchievementContainer';
@@ -56,7 +56,7 @@ const Academy: React.FC<{}> = () => {
             path={`${path}/${assessmentTypeLink(assessmentConfiguration.type)}/${assessmentRegExp}`}
             key={assessmentConfiguration.type}
           >
-            <AssessmentContainer assessmentConfiguration={assessmentConfiguration} />
+            <Assessment assessmentConfiguration={assessmentConfiguration} />
           </Route>
         ))}
         {enableGame && <Route path={`${path}/game`} component={Game} />}
