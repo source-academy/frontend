@@ -1,7 +1,7 @@
 import { expectSaga } from 'redux-saga-test-plan';
 
-import { actions } from '../../../commons/utils/ActionsHelper';
 import { REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN } from '../../application/types/SessionTypes';
+import { actions } from '../../utils/ActionsHelper';
 
 // mock away the store
 jest.mock('../../../pages/createStore');

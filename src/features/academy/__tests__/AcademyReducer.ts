@@ -1,7 +1,7 @@
 import { defaultAcademy } from '../../../commons/application/ApplicationTypes';
 import { LOG_OUT } from '../../../commons/application/types/CommonsTypes';
-import { AcademyState, SAVE_CANVAS } from '../../../features/academy/AcademyTypes';
 import { AcademyReducer } from '../AcademyReducer';
+import { AcademyState, SAVE_CANVAS } from '../AcademyTypes';
 
 function createContext(width: number, height: number): HTMLCanvasElement {
   const canvas = document.createElement('canvas');

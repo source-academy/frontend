@@ -1,6 +1,5 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import {
   Assessment,
@@ -8,6 +7,7 @@ import {
   AssessmentOverview,
   ContestEntry
 } from '../../assessment/AssessmentTypes';
+import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import {
   Notification,
   NotificationFilterFunction

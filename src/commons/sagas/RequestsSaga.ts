@@ -1,17 +1,5 @@
 import { call } from 'redux-saga/effects';
 
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import {
-  Assessment,
-  AssessmentConfiguration,
-  AssessmentOverview,
-  ContestEntry,
-  GradingStatus,
-  IContestVotingQuestion,
-  IProgrammingQuestion,
-  QuestionType,
-  QuestionTypes
-} from '../../commons/assessment/AssessmentTypes';
 import {
   AchievementGoal,
   AchievementItem,
@@ -35,6 +23,7 @@ import {
   frontendifyAchievementItem
 } from '../achievement/utils/AchievementBackender';
 import { Role } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
@@ -43,6 +32,17 @@ import {
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  ContestEntry,
+  GradingStatus,
+  IContestVotingQuestion,
+  IProgrammingQuestion,
+  QuestionType,
+  QuestionTypes
+} from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
