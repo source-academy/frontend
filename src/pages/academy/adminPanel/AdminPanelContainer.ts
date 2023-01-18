@@ -1,20 +1,8 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
 
-import {
-  deleteAssessmentConfig,
-  deleteUserCourseRegistration,
-  fetchAdminPanelCourseRegistrations,
-  fetchAssessmentConfigs,
-  fetchCourseConfig,
-  setAssessmentConfigurations,
-  updateAssessmentConfigs,
-  updateCourseConfig,
-  updateUserRole
-} from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
-import AdminPanel, { DispatchProps, StateProps } from './AdminPanel';
+import AdminPanel, { StateProps } from './AdminPanel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   courseRegId: state.session.courseRegId,
@@ -29,22 +17,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   userCourseRegistrations: state.session.userCourseRegistrations
 });
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      handleFetchCourseConfiguration: fetchCourseConfig,
-      handleFetchAssessmentConfigs: fetchAssessmentConfigs,
-      handleFetchUserCourseRegistrations: fetchAdminPanelCourseRegistrations,
-      handleUpdateCourseConfig: updateCourseConfig,
-      handleUpdateAssessmentConfigs: updateAssessmentConfigs,
-      setAssessmentConfigurations: setAssessmentConfigurations,
-      handleDeleteAssessmentConfig: deleteAssessmentConfig,
-      handleUpdateUserRole: updateUserRole,
-      handleDeleteUserFromCourse: deleteUserCourseRegistration,
-      handleAddNewUsersToCourse: addNewUsersToCourse
-    },
-    dispatch
-  );
+const mapDispatchToProps: MapDispatchToProps<{}, {}> = (dispatch: Dispatch) =>
+  bindActionCreators({}, dispatch);
 
 const AdminPanelContainer = connect(mapStateToProps, mapDispatchToProps)(AdminPanel);
 

@@ -1,11 +1,24 @@
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
 
+import {
+  deleteAssessmentConfig,
+  deleteUserCourseRegistration,
+  fetchAdminPanelCourseRegistrations,
+  fetchAssessmentConfigs,
+  fetchCourseConfig,
+  setAssessmentConfigurations,
+  updateAssessmentConfigs,
+  updateCourseConfig,
+  updateUserRole
+} from '../../../commons/application/actions/SessionActions';
 import {
   AdminPanelCourseRegistration,
   UpdateCourseConfiguration
@@ -17,20 +30,7 @@ import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/Assessm
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
-export type AdminPanelProps = DispatchProps & StateProps;
-
-export type DispatchProps = {
-  handleFetchCourseConfiguration: () => void;
-  handleFetchAssessmentConfigs: () => void;
-  handleFetchUserCourseRegistrations: () => void;
-  handleUpdateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => void;
-  handleUpdateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => void;
-  setAssessmentConfigurations: (assessmentConfigs: AssessmentConfiguration[]) => void;
-  handleDeleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => void;
-  handleUpdateUserRole: (courseRegId: number, role: Role) => void;
-  handleDeleteUserFromCourse: (courseRegId: number) => void;
-  handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => void;
-};
+export type AdminPanelProps = StateProps;
 
 export type StateProps = {
   courseRegId?: number;
@@ -59,6 +59,8 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
     moduleHelpText: ''
   });
 
+  const dispatch = useDispatch();
+
   /**
    * Mutable ref to track the assessment configuration form state instead of useState. This is
    * because ag-grid does not update the cellRendererParams whenever there is an update in rowData,
@@ -76,11 +78,10 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   >([]);
 
   React.useEffect(() => {
-    props.handleFetchCourseConfiguration();
-    props.handleFetchAssessmentConfigs();
-    props.handleFetchUserCourseRegistrations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(fetchCourseConfig());
+    dispatch(fetchAssessmentConfigs());
+    dispatch(fetchAdminPanelCourseRegistrations());
+  }, [dispatch]);
 
   // After updated configs have been loaded from the backend, put them into local React state
   React.useEffect(() => {
@@ -129,33 +130,36 @@ const AdminPanel: React.FC<AdminPanelProps> = props => {
   const userConfigPanelProps = {
     courseRegId: props.courseRegId,
     userCourseRegistrations: props.userCourseRegistrations,
-    handleUpdateUserRole: props.handleUpdateUserRole,
-    handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
+    handleUpdateUserRole: (courseRegId: number, role: Role) =>
+      dispatch(updateUserRole(courseRegId, role)),
+    handleDeleteUserFromCourse: (courseRegId: number) =>
+      dispatch(deleteUserCourseRegistration(courseRegId))
   };
 
   const addUserPanelProps = {
-    handleAddNewUsersToCourse: props.handleAddNewUsersToCourse
+    handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) =>
+      dispatch(addNewUsersToCourse(users, provider))
   };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = () => {
     if (hasChangesCourseConfig) {
-      props.handleUpdateCourseConfig(courseConfiguration);
+      dispatch(updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);
     }
     if (assessmentConfigsToDelete.length > 0) {
       assessmentConfigsToDelete.forEach(assessmentConfig => {
-        props.handleDeleteAssessmentConfig(assessmentConfig);
+        dispatch(deleteAssessmentConfig(assessmentConfig));
       });
       setAssessmentConfigsToDelete([]);
     }
     if (hasChangesAssessmentConfig) {
       // Reset the store first so that old props do not propagate down and cause a flicker
-      props.setAssessmentConfigurations([]);
+      dispatch(setAssessmentConfigurations([]));
 
       // assessmentConfig.current will exist after the first load
-      props.handleUpdateAssessmentConfigs(assessmentConfig.current!);
+      dispatch(updateAssessmentConfigs(assessmentConfig.current!));
       setHasChangesAssessmentConfig(false);
     }
   };
