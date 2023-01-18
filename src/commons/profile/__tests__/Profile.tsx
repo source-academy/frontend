@@ -1,10 +1,13 @@
 import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { assertType } from 'src/commons/utils/TypeHelper';
 
-import { Role } from '../../application/ApplicationTypes';
 import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
-import Profile from '../Profile';
+import Profile, { ProfileProps } from '../Profile';
 
 const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(
   item => item.status !== AssessmentStatuses.submitted
@@ -40,21 +43,25 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
 }));
 
 test('Profile renders correctly when there are no closed assessments', () => {
-  const props = {
-    name: 'yeet',
-    role: Role.Student,
-    courseId: 1,
-    assessmentOverviews: mockNoClosedAssessmentOverviews,
-    assessmentConfigurations,
+  const props = assertType<ProfileProps>()({
     isOpen: true,
-    handleAssessmentOverviewFetch: () => {},
-    handleTotalXpFetch: () => {},
     onClose: () => {}
-  };
+  });
+  const mockStore = mockInitialStore({
+    session: {
+      name: 'yeet',
+      role: Role.Student,
+      courseId: 1,
+      assessmentOverviews: mockNoClosedAssessmentOverviews,
+      assessmentConfigurations
+    }
+  });
   const tree = mount(
-    <MemoryRouter initialEntries={['/']}>
-      <Profile {...props} />
-    </MemoryRouter>
+    <Provider store={mockStore}>
+      <MemoryRouter initialEntries={['/']}>
+        <Profile {...props} />
+      </MemoryRouter>
+    </Provider>
   );
   expect(tree.debug()).toMatchSnapshot();
   // Expect the placeholder <div> to be rendered
@@ -70,21 +77,25 @@ test('Profile renders correctly when there are no closed assessments', () => {
 
 test('Profile renders correctly when there are closed and graded, or closed and not manually graded assessments', () => {
   // Only closed and graded, and closed and not manually graded assessments will be rendered in the Profile
-  const props = {
-    name: 'yeeet',
-    role: Role.Staff,
-    courseId: 1,
-    assessmentOverviews: mockAssessmentOverviews,
-    assessmentConfigurations,
+  const props = assertType<ProfileProps>()({
     isOpen: true,
-    handleAssessmentOverviewFetch: () => {},
-    handleTotalXpFetch: () => {},
     onClose: () => {}
-  };
+  });
+  const mockStore = mockInitialStore({
+    session: {
+      name: 'yeeet',
+      role: Role.Staff,
+      courseId: 1,
+      assessmentOverviews: mockAssessmentOverviews,
+      assessmentConfigurations
+    }
+  });
   const tree = mount(
-    <MemoryRouter initialEntries={['/']}>
-      <Profile {...props} />
-    </MemoryRouter>
+    <Provider store={mockStore}>
+      <MemoryRouter initialEntries={['/']}>
+        <Profile {...props} />
+      </MemoryRouter>
+    </Provider>
   );
   expect(tree.debug()).toMatchSnapshot();
   // Expect the placeholder <div> to NOT be rendered

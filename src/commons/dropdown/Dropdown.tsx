@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import { UpdateCourseConfiguration, UserCourse } from '../application/types/SessionTypes';
 import ControlButton from '../ControlButton';
-import Profile from '../profile/ProfileContainer';
+import Profile from '../profile/Profile';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';
