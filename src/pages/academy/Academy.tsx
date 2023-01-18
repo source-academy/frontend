@@ -15,7 +15,7 @@ import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyT
 import Achievement from '../../pages/achievement/AchievementContainer';
 import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
 import NotFound from '../notFound/NotFound';
-import AdminPanel from './adminPanel/AdminPanelContainer';
+import AdminPanel from './adminPanel/AdminPanel';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Game from './game/Game';
 import Grading from './grading/GradingContainer';
