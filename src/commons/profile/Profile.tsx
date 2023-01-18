@@ -44,15 +44,13 @@ const Profile: React.FC<ProfileProps> = props => {
       // If assessment overviews are not loaded, fetch them
       dispatch(fetchAssessmentOverviews());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assessmentOverviews, name, role, xp]);
+  }, [assessmentOverviews, dispatch, name, role, xp]);
 
   useEffect(() => {
     if (courseId && !xp) {
       dispatch(fetchTotalXp());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseId, xp]);
+  }, [courseId, dispatch, xp]);
 
   const [isLoaded, setIsLoaded] = useState(name && role && assessmentOverviews);
 
