@@ -16,7 +16,7 @@ import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
 
-type ProfileProps = OwnProps;
+export type ProfileProps = OwnProps;
 
 type StateProps = {
   name?: string;
