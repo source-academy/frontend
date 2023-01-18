@@ -4,7 +4,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment courseId={1} assessmentConfiguration={{...}} assessmentOverviews={[undefined]} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
             <div className=\\"ContentDisplay row center-xs\\">
@@ -408,7 +408,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment courseId={1} assessmentConfiguration={{...}} assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={true} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
             <div className=\\"ContentDisplay row center-xs\\">
@@ -812,7 +812,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment courseId={1} assessmentConfiguration={{...}} assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
             <div className=\\"ContentDisplay row center-xs\\">
@@ -1216,7 +1216,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
     <Router history={{...}}>
-      <Assessment courseId={1} assessmentConfiguration={{...}} assessmentOverviews={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} handleAssessmentOverviewFetch={[Function: handleAssessmentOverviewFetch]} handleSubmitAssessment={[Function: handleSubmitAssessment]} isStudent={false} match={{...}} location={{...}} history={{...}} staticContext={{...}}>
+      <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
             <div className=\\"ContentDisplay row center-xs\\">
