@@ -1,7 +1,7 @@
 import TextAssets, { MockTextAssets, toTxtPath } from '../assets/TextAssets';
 import Parser from '../parser/Parser';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { loadText } from '../utils/LoaderUtils';
+import { loadText } from './LoaderUtils';
 
 /**
  * Starts a new checkpoint with the given chapter number

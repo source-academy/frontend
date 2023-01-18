@@ -5,21 +5,6 @@ import { call, put, select } from 'redux-saga/effects';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { OverallState, Role } from '../../commons/application/ApplicationTypes';
-import {
-  Assessment,
-  AssessmentConfiguration,
-  AssessmentOverview,
-  AssessmentStatuses,
-  FETCH_ASSESSMENT_OVERVIEWS,
-  Question,
-  SUBMIT_ASSESSMENT
-} from '../../commons/assessment/AssessmentTypes';
-import {
-  Notification,
-  NotificationFilterFunction
-} from '../../commons/notificationBadge/NotificationBadgeTypes';
-import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
@@ -37,6 +22,7 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { OverallState, Role } from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -72,10 +58,24 @@ import {
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  AssessmentStatuses,
+  FETCH_ASSESSMENT_OVERVIEWS,
+  Question,
+  SUBMIT_ASSESSMENT
+} from '../assessment/AssessmentTypes';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   deleteAssessment,
   deleteSourcecastEntry,

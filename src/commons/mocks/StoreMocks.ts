@@ -1,4 +1,5 @@
-import { Store } from 'redux';
+import _ from 'lodash';
+import { DeepPartial, Store } from 'redux';
 import mockStore from 'redux-mock-store';
 
 import {
@@ -12,7 +13,7 @@ import {
   OverallState
 } from '../application/ApplicationTypes';
 
-export function mockInitialStore(): Store<OverallState> {
+export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<OverallState> {
   const createStore = (mockStore as any)();
   const state: OverallState = {
     academy: defaultAcademy,
@@ -23,5 +24,5 @@ export function mockInitialStore(): Store<OverallState> {
     workspaces: defaultWorkspaceManager,
     session: defaultSession
   };
-  return createStore(state);
+  return createStore(_.merge(state, overrides));
 }

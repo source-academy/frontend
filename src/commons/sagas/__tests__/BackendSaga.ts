@@ -5,7 +5,6 @@ import { history } from 'src/commons/utils/HistoryHelper';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 import {
   FETCH_GROUP_GRADING_SUMMARY,
@@ -72,6 +71,7 @@ import {
 } from '../../mocks/AssessmentMocks';
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications } from '../../mocks/UserMocks';
+import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
