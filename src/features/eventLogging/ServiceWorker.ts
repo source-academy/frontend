@@ -5,7 +5,7 @@ import { SYNC_LOGS } from './client';
 declare const self: ServiceWorkerGlobalScope;
 
 let currentlyUploading = false;
-const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
+const cadetLoggerUrl = import.meta.env.VITE_CADET_LOGGER;
 
 // This needs to be a library, so i'm simply going to export a main function
 // TODO: actually upload something.

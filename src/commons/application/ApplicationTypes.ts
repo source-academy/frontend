@@ -184,7 +184,7 @@ export const isSourceLanguage = (chapter: Chapter) =>
   [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
 
 const currentEnvironment = (): ApplicationEnvironment => {
-  switch (process.env.NODE_ENV) {
+  switch (import.meta.env.NODE_ENV) {
     case 'development':
       return ApplicationEnvironment.Development;
     case 'production':

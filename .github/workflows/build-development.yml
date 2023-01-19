@@ -41,25 +41,25 @@ jobs:
         yarn install
         yarn run build
       env:
-        REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
-        REACT_APP_URL_SHORTENER_BASE: ${{ secrets.REACT_APP_URL_SHORTENER_BASE }}
-        REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
-        REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }}
-        REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
-        REACT_APP_GOOGLE_APP_ID: ${{ secrets.REACT_APP_GOOGLE_APP_ID }}
-        REACT_APP_PLAYGROUND_ONLY: "TRUE"
-        REACT_APP_ENABLE_GITHUB_ASSESSMENTS: "TRUE"
-        REACT_APP_VERSION: ${{ format('{0}-{1}', github.sha, steps.get-time.outputs.time) }}
-        REACT_APP_ENVIRONMENT: "pages"
-        REACT_APP_MODULE_BACKEND_URL: https://source-academy.github.io/modules
-        REACT_APP_SHAREDB_BACKEND_URL: ${{ secrets.REACT_APP_SHAREDB_BACKEND_URL }}
+        VITE_URL_SHORTENER_SIGNATURE: ${{ secrets.VITE_URL_SHORTENER_SIGNATURE }}
+        VITE_URL_SHORTENER_BASE: ${{ secrets.VITE_URL_SHORTENER_BASE }}
+        VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+        VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+        VITE_GOOGLE_API_KEY: ${{ secrets.VITE_GOOGLE_API_KEY }}
+        VITE_GOOGLE_APP_ID: ${{ secrets.VITE_GOOGLE_APP_ID }}
+        VITE_PLAYGROUND_ONLY: "TRUE"
+        VITE_ENABLE_GITHUB_ASSESSMENTS: "TRUE"
+        VITE_VERSION: ${{ format('{0}-{1}', github.sha, steps.get-time.outputs.time) }}
+        VITE_ENVIRONMENT: "pages"
+        VITE_MODULE_BACKEND_URL: https://source-academy.github.io/modules
+        VITE_SHAREDB_BACKEND_URL: ${{ secrets.VITE_SHAREDB_BACKEND_URL }}
         PUBLIC_URL: "https://sourceacademy.org"
-        REACT_APP_GITHUB_OAUTH_PROXY_URL: ${{ secrets.REACT_APP_GITHUB_OAUTH_PROXY_URL }}
-        REACT_APP_GITHUB_CLIENT_ID: ${{ secrets.REACT_APP_GITHUB_CLIENT_ID }}
+        VITE_GITHUB_OAUTH_PROXY_URL: ${{ secrets.VITE_GITHUB_OAUTH_PROXY_URL }}
+        VITE_GITHUB_CLIENT_ID: ${{ secrets.VITE_GITHUB_CLIENT_ID }}
     - name: Create Sentry release
       working-directory: build
       run: |
-        SENTRY_RELEASE="cadet-frontend@$REACT_APP_VERSION"
+        SENTRY_RELEASE="cadet-frontend@$VITE_VERSION"
         "$GITHUB_WORKSPACE/sentry-cli" releases new -p "$SENTRY_PROJECT" "$SENTRY_RELEASE"
         "$GITHUB_WORKSPACE/sentry-cli" releases set-commits --auto "$SENTRY_RELEASE"
         "$GITHUB_WORKSPACE/sentry-cli" releases files "$SENTRY_RELEASE" upload-sourcemaps --url-prefix '~/static/js' --rewrite static/js
@@ -69,7 +69,7 @@ jobs:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         SENTRY_ORG: sourceacademy
         SENTRY_PROJECT: cadet-frontend
-        REACT_APP_VERSION: ${{ format('{0}-{1}', github.sha, steps.get-time.outputs.time) }}
+        VITE_VERSION: ${{ format('{0}-{1}', github.sha, steps.get-time.outputs.time) }}
     - name: Remove sourcemaps
       working-directory: build
       run: |
