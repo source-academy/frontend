@@ -10,13 +10,14 @@
     "update-ui-snapshots": "Update UI test snapshots"
   },
   "scripts": {
-    "build": "cross-env EXTEND_ESLINT=true NODE_OPTIONS=--max_old_space_size=8192 craco build",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
     "coverage": "./scripts/coverage-fix.sh do && craco test --coverage && ./scripts/coverage-fix.sh undo",
     "format": "eslint --ext \".js,.jsx,.ts,.tsx\" --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
     "format:ci": "yarn run format:tsx && yarn run format:scss",
-    "start": "cross-env EXTEND_ESLINT=true BROWSER=none PORT=8000 craco start",
     "test": "TZ=UTF-8 craco test",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
@@ -116,6 +117,7 @@
     "@types/redux-mock-store": "^1.0.3",
     "@types/showdown": "^2.0.0",
     "@types/xml2js": "^0.4.11",
+    "@vitejs/plugin-react": "^3.0.1",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "babel-core": "6",
     "babel-runtime": "^6.26.0",
@@ -125,7 +127,9 @@
     "enzyme": "^3.11.0",
     "eslint": "7",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "events": "^3.3.0",
     "husky": "^8.0.2",
+    "isomorphic-fetch": "^3.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "react-error-overlay": "^6.0.11",
@@ -133,7 +137,11 @@
     "redux-saga-test-plan": "^4.0.6",
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.54.0",
-    "typescript": "~4.7.4"
+    "stream": "^0.0.2",
+    "typescript": "~4.7.4",
+    "vite": "^4.0.4",
+    "vite-plugin-wasm": "^3.1.1",
+    "vite-tsconfig-paths": "^4.0.3"
   },
   "resolutions": {
     "//": "FIXME: Remove this selective dependency resolution (along with the devDependency) once react-scripts is updated past 4.0.3.",
