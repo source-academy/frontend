@@ -12,7 +12,7 @@ import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { useResponsive } from 'src/commons/utils/Hooks';
@@ -142,35 +142,33 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * State variables relating to information we are concerned with saving
    */
-  const [missionMetadata, setMissionMetadata] = React.useState(defaultMissionMetadata);
-  const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(defaultMissionMetadata);
-  const [hasUnsavedChangesToMetadata, setHasUnsavedChangesToMetadata] = React.useState(false);
+  const [missionMetadata, setMissionMetadata] = useState(defaultMissionMetadata);
+  const [cachedMissionMetadata, setCachedMissionMetadata] = useState(defaultMissionMetadata);
+  const [hasUnsavedChangesToMetadata, setHasUnsavedChangesToMetadata] = useState(false);
 
-  const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
-  const [cachedBriefingContent, setCachedBriefingContent] = React.useState(defaultMissionBriefing);
-  const [hasUnsavedChangesToBriefing, setHasUnsavedChangesToBriefing] = React.useState(false);
+  const [briefingContent, setBriefingContent] = useState(defaultMissionBriefing);
+  const [cachedBriefingContent, setCachedBriefingContent] = useState(defaultMissionBriefing);
+  const [hasUnsavedChangesToBriefing, setHasUnsavedChangesToBriefing] = useState(false);
 
-  const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
-  const [taskList, setTaskList] = React.useState<TaskData[]>([]);
-  const [hasUnsavedChangesToTasks, setHasUnsavedChangesToTasks] = React.useState(false);
+  const [cachedTaskList, setCachedTaskList] = useState<TaskData[]>([]);
+  const [taskList, setTaskList] = useState<TaskData[]>([]);
+  const [hasUnsavedChangesToTasks, setHasUnsavedChangesToTasks] = useState(false);
 
   /**
    * State variables relating to the rendering and function of the workspace
    */
-  const [summary, setSummary] = React.useState('');
-  const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
-  const [isTeacherMode, setIsTeacherMode] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = React.useState(false);
-  const [displayMCQInEditor, setDisplayMCQInEditor] = React.useState(true);
-  const [mcqQuestion, setMCQQuestion] = React.useState(defaultMCQQuestion);
-  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData | undefined>(
-    undefined
-  );
+  const [summary, setSummary] = useState('');
+  const [currentTaskNumber, setCurrentTaskNumber] = useState(0);
+  const [isTeacherMode, setIsTeacherMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = useState(false);
+  const [displayMCQInEditor, setDisplayMCQInEditor] = useState(true);
+  const [mcqQuestion, setMCQQuestion] = useState(defaultMCQQuestion);
+  const [missionRepoData, setMissionRepoData] = useState<MissionRepoData | undefined>(undefined);
   const assessmentOverview = props.location.state as GHAssessmentOverview;
 
-  const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
+  const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
   const { isMobileBreakpoint } = useResponsive();
 
   /**
@@ -718,7 +716,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       !isMobileBreakpoint &&
       (selectedTab === SideContentType.mobileEditor ||
@@ -728,7 +726,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
-  const onEditorValueChange = React.useCallback(
+  const onEditorValueChange = useCallback(
     val => {
       handleEditorValueChange(val);
       editCode(currentTaskNumber, val);
@@ -753,7 +751,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    * However, AceEditor only binds commands on mount (https://github.com/securingsincity/react-ace/issues/684)
    * Thus, we use a mutable ref to overcome the stale closure problem
    */
-  const activeTab = React.useRef(selectedTab);
+  const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = () => {
     props.handleEditorEval();
