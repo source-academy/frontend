@@ -83,8 +83,11 @@ import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/Di
 import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { EditorTabState, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import {
+  EditorTabState,
+  WorkspaceLocation,
+  WorkspaceState
+} from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
@@ -118,12 +121,12 @@ export type StateProps = {
   editorTestcases: Testcase[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
+  isDebugging: boolean; // TODO: Unused for now. To check for possible removal.
+  enableDebugging: boolean; // TODO: Unused for now. To check for possible removal.
   output: InterpreterOutput[];
   replValue: string;
   sideContentHeight?: number;
-  sourceChapter: Chapter;
+  sourceChapter: Chapter; // TODO: Unused for now. To check for possible removal.
 };
 
 const workspaceLocation: WorkspaceLocation = 'githubAssessment';
@@ -173,8 +176,15 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   /**
    * Unpacked properties
    */
-  const hasUnsavedChanges = props.hasUnsavedChanges;
-  const editorTestcases = props.editorTestcases;
+  const {
+    hasUnsavedChanges,
+    editorTestcases,
+    editorTabs,
+    isRunning,
+    output,
+    replValue,
+    sideContentHeight
+  } = props;
   const handleEditorValueChange = props.handleEditorValueChange;
   const handleUpdateWorkspace = props.handleUpdateWorkspace;
   const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
@@ -1036,7 +1046,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const evalButton = (
       <ControlBarEvalButton
         handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
+        isRunning={isRunning}
         key="eval_repl"
       />
     );
@@ -1070,7 +1080,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
-    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+    editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
@@ -1089,8 +1099,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleReplEval: props.handleReplEval,
     handleReplValueChange: (newValue: string) =>
       dispatch(updateReplValue(newValue, workspaceLocation)),
-    output: props.output,
-    replValue: props.replValue,
+    output: output,
+    replValue: replValue,
     sourceChapter: missionMetadata.sourceVersion || Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     externalLibrary: ExternalLibraryName.NONE,
@@ -1107,7 +1117,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: props.sideContentHeight,
+    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props),
     replProps: replProps
   };
