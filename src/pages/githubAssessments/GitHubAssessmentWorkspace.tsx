@@ -15,7 +15,7 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { useResponsive } from 'src/commons/utils/Hooks';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -28,7 +28,6 @@ import {
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 
-import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
@@ -83,11 +82,7 @@ import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/Di
 import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import {
-  EditorTabState,
-  WorkspaceLocation,
-  WorkspaceState
-} from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
@@ -117,15 +112,8 @@ export type DispatchProps = {
 
 export type StateProps = {
   activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
-  editorTestcases: Testcase[];
-  hasUnsavedChanges: boolean;
-  isRunning: boolean;
   isDebugging: boolean; // TODO: Unused for now. To check for possible removal.
   enableDebugging: boolean; // TODO: Unused for now. To check for possible removal.
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
   sourceChapter: Chapter; // TODO: Unused for now. To check for possible removal.
 };
 
@@ -171,18 +159,19 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
   const { isMobileBreakpoint } = useResponsive();
 
-  /**
-   * Unpacked properties
-   */
   const {
-    hasUnsavedChanges,
-    editorTestcases,
     editorTabs,
+    editorTestcases,
+    hasUnsavedChanges,
     isRunning,
     output,
     replValue,
     sideContentHeight
-  } = props;
+  } = useTypedSelector(state => state.workspaces.githubAssessment);
+
+  /**
+   * Unpacked properties
+   */
   const handleEditorValueChange = props.handleEditorValueChange;
   const handleUpdateWorkspace = props.handleUpdateWorkspace;
   const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
