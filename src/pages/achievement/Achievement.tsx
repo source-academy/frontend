@@ -1,3 +1,4 @@
+import React from 'react';
 import { Route, Switch } from 'react-router';
 
 import { Role } from '../../commons/application/ApplicationTypes';
@@ -13,7 +14,7 @@ export type StateProps = {
 
 export type AchievementProps = DispatchProps & StateProps;
 
-function Achievement(props: AchievementProps) {
+const Achievement: React.FC<AchievementProps> = props => {
   const { role } = props;
 
   const toAchievementControl =
@@ -33,6 +34,6 @@ function Achievement(props: AchievementProps) {
       <Route component={NotFound} />
     </Switch>
   );
-}
+};
 
 export default Achievement;
