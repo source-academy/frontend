@@ -1,7 +1,7 @@
 import { Button, Classes, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import * as React from 'react';
+import React from 'react';
 
 import {
   External,
@@ -21,7 +21,9 @@ type StateProps = {
   disabled?: boolean;
 };
 
-export function ControlBarExternalLibrarySelect(props: ControlBarExternalLibrarySelectProps) {
+export const ControlBarExternalLibrarySelect: React.FC<
+  ControlBarExternalLibrarySelectProps
+> = props => {
   const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
     name: entry[0] as ExternalLibraryName,
     key: index,
@@ -52,4 +54,4 @@ export function ControlBarExternalLibrarySelect(props: ControlBarExternalLibrary
       />
     </ExternalSelectComponent>
   );
-}
+};
