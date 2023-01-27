@@ -45,6 +45,7 @@ import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
+import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { history } from '../utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
@@ -429,6 +430,15 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             />
           ),
           id: SideContentType.editorAutograder
+        });
+      }
+      const functionsAttached = currentAssessment!.globalDeployment!.external.symbols;
+      if (functionsAttached.includes('get_matrix')) {
+        tabs.push({
+          label: `Tone Matrix`,
+          iconName: IconNames.GRID_VIEW,
+          body: <SideContentToneMatrix />,
+          id: SideContentType.toneMatrix
         });
       }
     } else {

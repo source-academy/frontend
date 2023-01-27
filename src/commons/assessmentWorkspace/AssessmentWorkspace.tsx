@@ -61,6 +61,7 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
+import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
@@ -479,6 +480,17 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           />
         ),
         id: SideContentType.grading
+      });
+    }
+
+    const externalLibrary = props.assessment!.questions[questionId].library.external;
+    const functionsAttached = externalLibrary.symbols;
+    if (functionsAttached.includes('get_matrix')) {
+      tabs.push({
+        label: `Tone Matrix`,
+        iconName: IconNames.GRID_VIEW,
+        body: <SideContentToneMatrix />,
+        id: SideContentType.toneMatrix
       });
     }
 

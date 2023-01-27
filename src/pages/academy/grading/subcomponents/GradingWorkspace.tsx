@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 
 import {
   defaultWorkspaceManager,
@@ -340,6 +341,16 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         id: SideContentType.autograder
       }
     ];
+    const externalLibrary = props.grading![questionId].question.library.external;
+    const functionsAttached = externalLibrary.symbols;
+    if (functionsAttached.includes('get_matrix')) {
+      tabs.push({
+        label: `Tone Matrix`,
+        iconName: IconNames.GRID_VIEW,
+        body: <SideContentToneMatrix />,
+        id: SideContentType.toneMatrix
+      });
+    }
 
     const sideContentProps: SideContentProps = {
       onChange: (
