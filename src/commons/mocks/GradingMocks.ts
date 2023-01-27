@@ -2,7 +2,7 @@ import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
 import { Role } from '../application/ApplicationTypes';
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
-import { mockRuneLibrary } from './AssessmentMocks';
+import { mockLibrary } from './AssessmentMocks';
 import { mockFetchRole } from './UserMocks';
 
 export const mockGradingOverviews: GradingOverview[] = [
@@ -113,7 +113,7 @@ Hello and welcome to this assessment! This is the *0th question*.
       postpend: '// THIS IS A POSTPEND',
       testcases: mockTestcases,
       id: 0,
-      library: mockRuneLibrary,
+      library: mockLibrary,
       solutionTemplate: '0th question mock solution template',
       solution: `This is how the 0th question is solved. [7 points]
 
@@ -219,7 +219,7 @@ _italics_
       answer: "This student's answer to the 1st question",
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
-      library: mockRuneLibrary,
+      library: mockLibrary,
       solutionTemplate: '1st question mock solution template',
       solution: null,
       type: 'programming',
@@ -330,7 +330,7 @@ New message from **Avenger**!
         }
       ],
       id: 2,
-      library: mockRuneLibrary,
+      library: mockLibrary,
       type: 'mcq',
       maxXp: 100,
       grader: {

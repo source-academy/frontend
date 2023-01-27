@@ -15,12 +15,11 @@ import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, race, select, StrictEffect, take } from 'redux-saga/effects';
+import { call, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
@@ -333,47 +332,6 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   /**
-   * Ensures that the external JS libraries have been loaded by waiting
-   * with a timeout. An error message will be shown
-   * if the libraries are not loaded. This is particularly useful
-   * when dealing with external library pre-conditions, e.g when the
-   * website has just loaded and there is a need to reset the js-slang context,
-   * but it cannot be determined if the global JS files are loaded yet.
-   *
-   * The presence of JS libraries are checked using the presence of a global
-   * function "getReadyWebGLForCanvas", that is used in CLEAR_CONTEXT to prepare
-   * the canvas for rendering in a specific mode.
-   *
-   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
-   * the function.
-   *
-   * @returns true if the libraries are loaded before timeout
-   * @returns false if the loading of the libraries times out
-   */
-  function* checkWebGLAvailable() {
-    function* helper() {
-      while (true) {
-        if ((window as any).getReadyWebGLForCanvas !== undefined) {
-          break;
-        }
-        yield delay(250);
-      }
-      return true;
-    }
-    // Create a race condition between the js files being loaded and a timeout.
-    const { loadedScripts, timeout } = yield race({
-      loadedScripts: call(helper),
-      timeout: delay(4000)
-    });
-    if (timeout !== undefined && loadedScripts === undefined) {
-      yield call(showWarningMessage, 'Error loading libraries', 750);
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  /**
    * Handles the side effect of resetting the WebGL context when context is reset.
    *
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
@@ -382,20 +340,6 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     BEGIN_CLEAR_CONTEXT,
     function* (action: ReturnType<typeof actions.beginClearContext>) {
-      yield* checkWebGLAvailable();
-      if (action.payload.shouldInitLibrary) {
-        const externalLibraryName = action.payload.library.external.name;
-        switch (externalLibraryName) {
-          case ExternalLibraryName.RUNES:
-            (window as any).loadLib('RUNES');
-            (window as any).getReadyWebGLForCanvas('3d');
-            (window as any).getReadyStringifyForRunes(stringify);
-            break;
-          case ExternalLibraryName.MACHINELEARNING:
-            (window as any).loadLib('MACHINELEARNING');
-            break;
-        }
-      }
       DataVisualizer.clear();
       EnvVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
