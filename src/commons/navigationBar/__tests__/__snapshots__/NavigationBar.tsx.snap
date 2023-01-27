@@ -18,16 +18,11 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
-      <Blueprint4.Popover isOpen={false} position=\\"bottom-left\\" onInteraction={[Function: onInteraction]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+      <Blueprint4.Popover2 isOpen={false} position=\\"bottom-left\\" onInteraction={[Function: onInteraction]} content={{...}} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
         <Blueprint4.Button onClick={[Function: toggleMenu]} icon=\\"translate\\">
           Select Language
         </Blueprint4.Button>
-        <Blueprint4.Menu>
-          <Blueprint4.MenuItem text=\\"JavaScript\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-          <Blueprint4.MenuItem text=\\"Python\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-          <Blueprint4.MenuItem text=\\"Scheme\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-        </Blueprint4.Menu>
-      </Blueprint4.Popover>
+      </Blueprint4.Popover2>
       <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
         <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
@@ -96,16 +91,11 @@ exports[`NavigationBar renders correctly for student with course 1`] = `
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
-      <Blueprint4.Popover isOpen={false} position=\\"bottom-left\\" onInteraction={[Function: onInteraction]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+      <Blueprint4.Popover2 isOpen={false} position=\\"bottom-left\\" onInteraction={[Function: onInteraction]} content={{...}} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
         <Blueprint4.Button onClick={[Function: toggleMenu]} icon=\\"translate\\">
           Select Language
         </Blueprint4.Button>
-        <Blueprint4.Menu>
-          <Blueprint4.MenuItem text=\\"JavaScript\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-          <Blueprint4.MenuItem text=\\"Python\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-          <Blueprint4.MenuItem text=\\"Scheme\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-        </Blueprint4.Menu>
-      </Blueprint4.Popover>
+      </Blueprint4.Popover2>
       <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
         <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
@@ -158,16 +148,11 @@ exports[`NavigationBar renders correctly for student without course 1`] = `
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
-      <Blueprint4.Popover isOpen={false} position=\\"bottom-left\\" onInteraction={[Function: onInteraction]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+      <Blueprint4.Popover2 isOpen={false} position=\\"bottom-left\\" onInteraction={[Function: onInteraction]} content={{...}} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
         <Blueprint4.Button onClick={[Function: toggleMenu]} icon=\\"translate\\">
           Select Language
         </Blueprint4.Button>
-        <Blueprint4.Menu>
-          <Blueprint4.MenuItem text=\\"JavaScript\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-          <Blueprint4.MenuItem text=\\"Python\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-          <Blueprint4.MenuItem text=\\"Scheme\\" active={false} disabled={false} multiline={false} popoverProps={{...}} selected={false} shouldDismissPopover={true} />
-        </Blueprint4.Menu>
-      </Blueprint4.Popover>
+      </Blueprint4.Popover2>
       <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
         <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>

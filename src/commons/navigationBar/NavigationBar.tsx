@@ -11,7 +11,6 @@ import {
   NavbarDivider,
   NavbarGroup,
   NavbarHeading,
-  Popover,
   Position
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -21,7 +20,6 @@ import { Location } from 'history';
 import * as React from 'react';
 import { match, NavLink, Route, Switch, useLocation } from 'react-router-dom';
 
-import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
 import { Role } from '../application/ApplicationTypes';
 import { UpdateCourseConfiguration, UserCourse } from '../application/types/SessionTypes';
 import { AssessmentType } from '../assessment/AssessmentTypes';
@@ -33,6 +31,7 @@ import { useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
+import SicpNavigationBar from './subcomponents/SicpNavigationBar';
 
 type NavigationBarProps = DispatchProps & StateProps;
 
@@ -354,20 +353,24 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
   const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
-      <Popover
+      <Popover2
         isOpen={isOpen}
         position={Position.BOTTOM_LEFT}
         onInteraction={nextOpen => setIsOpen(nextOpen)}
+        content={
+          <div>
+            <Menu>
+              <MenuItem text="JavaScript" />
+              <MenuItem text="Scheme" />
+              <MenuItem text="Python" />
+            </Menu>
+          </div>
+        }
       >
         <Button onClick={toggleMenu} icon={IconNames.TRANSLATE}>
           Select Language
         </Button>
-        <Menu>
-          <MenuItem text="JavaScript" />
-          <MenuItem text="Python" />
-          <MenuItem text="Scheme" />
-        </Menu>
-      </Popover>
+      </Popover2>
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
