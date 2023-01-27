@@ -25,7 +25,7 @@ const FILE_NAME = 'file';
 const FILE_DATA = '// Hello world';
 const SOURCE_CHAPTER = Chapter.SOURCE_3;
 const SOURCE_VARIANT = Variant.LAZY;
-const SOURCE_LIBRARY = ExternalLibraryName.MACHINELEARNING;
+const SOURCE_LIBRARY = ExternalLibraryName.SOUNDS;
 
 beforeAll(() => {
   const authInstance: gapi.auth2.GoogleAuth = {

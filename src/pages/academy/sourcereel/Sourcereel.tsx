@@ -37,7 +37,6 @@ import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBar
 import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
 import {
   convertEditorTabStateToProps,
   SourcecastEditorContainerProps
@@ -229,26 +228,6 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     />
   );
 
-  const externalSelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) => {
-    props.handleExternalSelect(name);
-    if (props.recordingStatus !== RecordingStatus.recording) {
-      return;
-    }
-    props.handleRecordInput({
-      time: getTimerDuration(),
-      type: 'externalLibrarySelect',
-      data: name
-    });
-  };
-
-  const externalLibrarySelect = (
-    <ControlBarExternalLibrarySelect
-      externalLibraryName={props.externalLibraryName}
-      handleExternalSelect={externalSelectHandler}
-      key="external_library"
-    />
-  );
-
   const editorContainerProps: SourcecastEditorContainerProps = {
     ..._.pick(
       props,
@@ -286,7 +265,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
+      editorButtons: [autorunButtons, chapterSelect]
     },
     editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: heightChange =>

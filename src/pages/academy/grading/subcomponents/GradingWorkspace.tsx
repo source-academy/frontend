@@ -3,8 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
+import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 
 import {
   defaultWorkspaceManager,
@@ -30,7 +29,6 @@ import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
-import SideContentToneMatrix from '../../../../commons/sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
@@ -343,7 +341,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         id: SideContentType.autograder
       }
     ];
-
     const externalLibrary = props.grading![questionId].question.library.external;
     const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
@@ -352,18 +349,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix
-      });
-    }
-
-    if (
-      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
-      externalLibrary.name === ExternalLibraryName.ALL
-    ) {
-      tabs.push({
-        label: 'Video Display',
-        iconName: IconNames.MOBILE_VIDEO,
-        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
-        id: SideContentType.videoDisplay
       });
     }
 
