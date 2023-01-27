@@ -68,10 +68,10 @@ const matchExceptSourcecastAchievement = (match: match | null, location: Locatio
 };
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
-//Placeholder
+  //Placeholder
   const [isOpen, setIsOpen] = React.useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
-//Placeholder end
+  //Placeholder end
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
@@ -357,13 +357,15 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       <Popover
         isOpen={isOpen}
         position={Position.BOTTOM_LEFT}
-        onInteraction={(nextOpen) => setIsOpen(nextOpen)}
+        onInteraction={nextOpen => setIsOpen(nextOpen)}
       >
-        <Button onClick={toggleMenu} icon={IconNames.TRANSLATE}>Select Language</Button>
-          <Menu>
-            <MenuItem text="JavaScript" />
-            <MenuItem text="Python" />
-            <MenuItem text="Scheme" />
+        <Button onClick={toggleMenu} icon={IconNames.TRANSLATE}>
+          Select Language
+        </Button>
+        <Menu>
+          <MenuItem text="JavaScript" />
+          <MenuItem text="Python" />
+          <MenuItem text="Scheme" />
         </Menu>
       </Popover>
       <NavLink
