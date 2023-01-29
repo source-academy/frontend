@@ -512,16 +512,18 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const { handleEditorValueChange } = props;
 
-  // No point memoing this, it uses props.editorValue
-  const sessionButtons = (
-    <ControlBarSessionButtons
-      editorSessionId={props.editorSessionId}
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue={props.editorTabs[0].value}
-      handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-      sharedbConnected={props.sharedbConnected}
-      key="session"
-    />
+  const sessionButtons = React.useMemo(
+    () => (
+      <ControlBarSessionButtons
+        editorSessionId={props.editorSessionId}
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editorValue={props.editorTabs[0].value}
+        handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
+        sharedbConnected={props.sharedbConnected}
+        key="session"
+      />
+    ),
+    [dispatch, props.editorSessionId, props.editorTabs, props.sharedbConnected, workspaceLocation]
   );
 
   const shareButton = React.useMemo(() => {
