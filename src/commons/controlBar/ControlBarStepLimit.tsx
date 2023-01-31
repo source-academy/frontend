@@ -1,6 +1,7 @@
 import { NumericInput, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 
 type ControlBarStepLimitProps = DispatchProps & StateProps;
 
@@ -13,7 +14,7 @@ type StateProps = {
   key: string;
 };
 
-export function ControlBarStepLimit(props: ControlBarStepLimitProps) {
+export const ControlBarStepLimit: React.FC<ControlBarStepLimitProps> = props => {
   return (
     <Tooltip2 content="Step Limit" placement={Position.TOP}>
       <NumericInput
@@ -26,4 +27,4 @@ export function ControlBarStepLimit(props: ControlBarStepLimitProps) {
       />
     </Tooltip2>
   );
-}
+};
