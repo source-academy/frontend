@@ -388,7 +388,6 @@ class Grading extends React.Component<GradingProps, State> {
   };
 
   private applyFilter = (filter: string) => {
-    console.log(filter);
     this.gridApi?.setQuickFilter(filter);
   };
 
