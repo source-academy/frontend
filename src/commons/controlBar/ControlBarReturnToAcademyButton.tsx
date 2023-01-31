@@ -1,4 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
+import React from 'react';
 
 import ControlButton from '../ControlButton';
 
@@ -6,7 +7,9 @@ type ControlBarReturnToAcademyButtonProps = {
   onClick?(): any;
 };
 
-export function ControlBarReturnToAcademyButton({ onClick }: ControlBarReturnToAcademyButtonProps) {
+export const ControlBarReturnToAcademyButton: React.FC<ControlBarReturnToAcademyButtonProps> = ({
+  onClick
+}) => {
   return (
     <ControlButton
       label="Return to Academy"
@@ -15,4 +18,4 @@ export function ControlBarReturnToAcademyButton({ onClick }: ControlBarReturnToA
       options={{ iconOnRight: true }}
     />
   );
-}
+};

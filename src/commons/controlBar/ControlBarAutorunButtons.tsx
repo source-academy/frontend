@@ -1,5 +1,6 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import React from 'react';
 
 import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
@@ -26,7 +27,7 @@ type StateProps = {
   sourceChapter?: number;
 };
 
-export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
+export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = props => {
   const showRunButton = !props.isDebugging && (
     <ControlBarRunButton
       handleEditorEval={props.handleEditorEval}
@@ -90,4 +91,4 @@ export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
       {showDebuggerReset('Stop Debugger')}
     </>
   );
-}
+};
