@@ -57,7 +57,6 @@ export type StateProps = {
 };
 
 type State = {
-  filterValue: string;
   groupFilterEnabled: boolean;
   currPage: number;
   maxPages: number;
@@ -167,7 +166,6 @@ class Grading extends React.Component<GradingProps, State> {
     };
 
     this.state = {
-      filterValue: '',
       groupFilterEnabled: false,
       currPage: 1,
       maxPages: 1,
@@ -212,8 +210,6 @@ class Grading extends React.Component<GradingProps, State> {
             large={false}
             leftIcon="filter"
             placeholder="Enter any text (e.g. mission)"
-            value={this.state.filterValue}
-            onChange={this.handleFilterChange}
             onKeyPress={this.handleFilterKeypress}
             onBlur={this.handleApplyFilter}
           />
@@ -374,21 +370,14 @@ class Grading extends React.Component<GradingProps, State> {
       : `(#${pageSize * currPage - 24} - #${totalRows})`;
   };
 
-  private handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const changeVal = event.target.value;
-    this.setState({ filterValue: changeVal });
-  };
-
   private handleFilterKeypress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.handleApplyFilter();
+      this.applyFilter(event.currentTarget.value);
     }
   };
 
-  private handleApplyFilter = () => {
-    if (this.gridApi) {
-      this.gridApi.setQuickFilter(this.state.filterValue);
-    }
+  private handleApplyFilter = (event: React.FocusEvent<HTMLInputElement>) => {
+    this.applyFilter(event.target.value);
   };
 
   private handleGroupsFilter = () => {
@@ -396,6 +385,10 @@ class Grading extends React.Component<GradingProps, State> {
       this.setState({ groupFilterEnabled: !this.state.groupFilterEnabled });
       this.props.handleFetchGradingOverviews(this.state.groupFilterEnabled);
     }
+  };
+
+  private applyFilter = (filter: string) => {
+    this.gridApi?.setQuickFilter(filter);
   };
 
   private onGridReady = (params: GridReadyEvent) => {
