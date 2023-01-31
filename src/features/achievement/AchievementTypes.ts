@@ -115,7 +115,6 @@ export enum EventType {
   NONE = 'None', // This is just for the purposes of a default value
   RUN_CODE = 'Run Code',
   ERROR = 'Error',
-  INFINITE_LOOP = 'Infinite Loop',
   RUN_TESTCASE = 'Run Testcase'
 }
 

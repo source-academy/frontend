@@ -348,7 +348,6 @@ export const defaultSession: SessionState = {
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
   agreedToResearch: undefined,
-  hadPreviousInfiniteLoop: false,
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
