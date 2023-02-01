@@ -364,16 +364,37 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [dispatch, workspaceLocation]
   );
 
+  const handleInterruptEval = React.useCallback(
+    () => dispatch(beginInterruptExecution(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleToggleEditorAutorun = React.useCallback(
+    () => dispatch(toggleEditorAutorun(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerPause = React.useCallback(
+    () => dispatch(beginDebuggerPause(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerReset = React.useCallback(
+    () => dispatch(debuggerReset(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerResume = React.useCallback(
+    () => dispatch(debuggerResume(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
         {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning')}
-        handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
-        handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+        handleInterruptEval={handleInterruptEval}
+        handleToggleEditorAutorun={handleToggleEditorAutorun}
         handleEditorEval={handleEditorEval}
-        handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
-        handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
-        handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
+        handleDebuggerPause={handleDebuggerPause}
+        handleDebuggerReset={handleDebuggerReset}
+        handleDebuggerResume={handleDebuggerResume}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         sourceChapter={props.playgroundSourceChapter}
@@ -381,7 +402,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
     );
-  }, [dispatch, handleEditorEval, props, usingRemoteExecution, workspaceLocation]);
+  }, [
+    handleDebuggerPause,
+    handleDebuggerReset,
+    handleDebuggerResume,
+    handleEditorEval,
+    handleInterruptEval,
+    handleToggleEditorAutorun,
+    props,
+    usingRemoteExecution
+  ]);
 
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
