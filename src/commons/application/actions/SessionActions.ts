@@ -65,7 +65,6 @@ import {
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_INFINITE_LOOP_ENCOUNTERED,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
   UPDATE_TOTAL_XP,
@@ -252,5 +251,3 @@ export const deleteUserCourseRegistration = (courseRegId: number) =>
 
 export const updateCourseResearchAgreement = (agreedToResearch: boolean) =>
   action(UPDATE_COURSE_RESEARCH_AGREEMENT, { agreedToResearch });
-
-export const updateInfiniteLoopEncountered = () => action(UPDATE_INFINITE_LOOP_ENCOUNTERED);

@@ -1,6 +1,7 @@
 import { Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 
 import ControlButton from '../ControlButton';
 
@@ -16,7 +17,7 @@ type StateProps = {
   className?: string;
 };
 
-export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
+export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props => {
   return (
     <Tooltip2 content="...or press shift-enter in the editor" placement={Position.TOP}>
       <ControlButton
@@ -27,4 +28,4 @@ export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
       />
     </Tooltip2>
   );
-}
+};
