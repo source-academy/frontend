@@ -9,7 +9,7 @@ import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import {
   beginDebuggerPause,
@@ -64,6 +64,7 @@ import {
 import {
   InterpreterOutput,
   isSourceLanguage,
+  OverallState,
   ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -204,6 +205,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
   const history = useHistory();
+  const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
@@ -512,18 +514,23 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const { handleEditorValueChange } = props;
 
+  const getEditorValue = React.useCallback(
+    () => store.getState().workspaces.playground.editorTabs[0].value,
+    [store]
+  );
+
   const sessionButtons = React.useMemo(
     () => (
       <ControlBarSessionButtons
         editorSessionId={props.editorSessionId}
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorValue={props.editorTabs[0].value}
+        getEditorValue={getEditorValue}
         handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
         sharedbConnected={props.sharedbConnected}
         key="session"
       />
     ),
-    [dispatch, props.editorSessionId, props.editorTabs, props.sharedbConnected, workspaceLocation]
+    [dispatch, getEditorValue, props.editorSessionId, props.sharedbConnected, workspaceLocation]
   );
 
   const shareButton = React.useMemo(() => {
