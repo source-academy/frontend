@@ -322,7 +322,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         id: SideContentType.grading
       },
       {
-        label: `Task ${questionId + 1}`,
+        label: `Question ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
         id: SideContentType.questionOverview

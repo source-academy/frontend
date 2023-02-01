@@ -379,7 +379,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const tabs: SideContentTab[] = isContestVoting
       ? [
           {
-            label: `Task ${questionId + 1}`,
+            label: `Question ${questionId + 1}`,
             iconName: IconNames.NINJA,
             body: <Markdown content={props.assessment!.questions[questionId].content} />,
             id: SideContentType.questionOverview
@@ -428,7 +428,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         ]
       : [
           {
-            label: `Task ${questionId + 1}`,
+            label: `Question ${questionId + 1}`,
             iconName: IconNames.NINJA,
             body: (
               <Markdown

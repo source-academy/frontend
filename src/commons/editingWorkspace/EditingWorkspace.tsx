@@ -356,7 +356,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
       tabs = [
         {
-          label: `Task ${questionId + 1}`,
+          label: `Question ${questionId + 1}`,
           iconName: IconNames.NINJA,
           body: (
             <TextAreaContent
