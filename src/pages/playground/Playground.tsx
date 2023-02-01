@@ -388,7 +388,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
-        {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning')}
+        isDebugging={props.isDebugging}
+        isEditorAutorun={props.isEditorAutorun}
+        isRunning={props.isRunning}
         handleInterruptEval={handleInterruptEval}
         handleToggleEditorAutorun={handleToggleEditorAutorun}
         handleEditorEval={handleEditorEval}
@@ -409,7 +411,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     handleEditorEval,
     handleInterruptEval,
     handleToggleEditorAutorun,
-    props,
+    props.isDebugging,
+    props.isEditorAutorun,
+    props.isRunning,
+    props.playgroundSourceChapter,
     usingRemoteExecution
   ]);
 
