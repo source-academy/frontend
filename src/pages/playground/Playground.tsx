@@ -550,8 +550,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const { handleEditorValueChange } = props;
 
   const getEditorValue = React.useCallback(
-    () => store.getState().workspaces.playground.editorTabs[0].value,
-    [store]
+    () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
+    [store, workspaceLocation]
   );
 
   const sessionButtons = React.useMemo(
