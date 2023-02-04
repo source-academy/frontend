@@ -527,6 +527,8 @@ export function* evalEditor(
         }
       }
     }
+    // Clear the errors on the context before any further evaluation.
+    context.errors = [];
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
