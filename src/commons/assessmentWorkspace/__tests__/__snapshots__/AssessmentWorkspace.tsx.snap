@@ -257,7 +257,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
               <div className=\\"right-parent\\">
                 <Resizable bounds=\\"parent\\" className=\\"resize-side-content\\" enable={{...}} onResize={[Function: toggleDividerDisplay]} onResizeStop={[Function: onResizeStop]} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
                   <div style={{...}} className=\\"resize-side-content\\">
-                    <Component selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
+                    <SideContent selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
                       <GenericSideContent tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\" renderFunction={[Function: renderFunction]}>
                         <div className=\\"side-content\\">
                           <Blueprint4.Card elevation={0} interactive={false}>
@@ -735,7 +735,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                           </Blueprint4.Card>
                         </div>
                       </GenericSideContent>
-                    </Component>
+                    </SideContent>
                     <div className=\\"side-content-divider\\" />
                     <div className={[undefined]} style={[undefined]}>
                       <Resizer direction=\\"bottom\\" onResizeStart={[Function: bound ]} replaceStyles={[undefined]} className={[undefined]}>
@@ -1056,7 +1056,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
               <div className=\\"right-parent\\">
                 <Resizable bounds=\\"parent\\" className=\\"resize-side-content\\" enable={{...}} onResize={[Function: toggleDividerDisplay]} onResizeStop={[Function: onResizeStop]} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
                   <div style={{...}} className=\\"resize-side-content\\">
-                    <Component selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
+                    <SideContent selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
                       <GenericSideContent tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\" renderFunction={[Function: renderFunction]}>
                         <div className=\\"side-content\\">
                           <Blueprint4.Card elevation={0} interactive={false}>
@@ -1266,7 +1266,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                           </Blueprint4.Card>
                         </div>
                       </GenericSideContent>
-                    </Component>
+                    </SideContent>
                     <div className=\\"side-content-divider\\" />
                     <div className={[undefined]} style={[undefined]}>
                       <Resizer direction=\\"bottom\\" onResizeStart={[Function: bound ]} replaceStyles={[undefined]} className={[undefined]}>
@@ -1589,7 +1589,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
               <div className=\\"right-parent\\">
                 <Resizable bounds=\\"parent\\" className=\\"resize-side-content\\" enable={{...}} onResize={[Function: toggleDividerDisplay]} onResizeStop={[Function: onResizeStop]} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
                   <div style={{...}} className=\\"resize-side-content\\">
-                    <Component selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
+                    <SideContent selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
                       <GenericSideContent tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\" renderFunction={[Function: renderFunction]}>
                         <div className=\\"side-content\\">
                           <Blueprint4.Card elevation={0} interactive={false}>
@@ -1799,7 +1799,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                           </Blueprint4.Card>
                         </div>
                       </GenericSideContent>
-                    </Component>
+                    </SideContent>
                     <div className=\\"side-content-divider\\" />
                     <div className={[undefined]} style={[undefined]}>
                       <Resizer direction=\\"bottom\\" onResizeStart={[Function: bound ]} replaceStyles={[undefined]} className={[undefined]}>
@@ -2143,7 +2143,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
               <div className=\\"right-parent\\">
                 <Resizable bounds=\\"parent\\" className=\\"resize-side-content\\" enable={{...}} onResize={[Function: toggleDividerDisplay]} onResizeStop={[Function: onResizeStop]} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
                   <div style={{...}} className=\\"resize-side-content\\">
-                    <Component selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
+                    <SideContent selectedTabId=\\"question_overview\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
                       <GenericSideContent tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\" renderFunction={[Function: renderFunction]}>
                         <div className=\\"side-content\\">
                           <Blueprint4.Card elevation={0} interactive={false}>
@@ -2353,7 +2353,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                           </Blueprint4.Card>
                         </div>
                       </GenericSideContent>
-                    </Component>
+                    </SideContent>
                     <div className=\\"side-content-divider\\" />
                     <div className={[undefined]} style={[undefined]}>
                       <Resizer direction=\\"bottom\\" onResizeStart={[Function: bound ]} replaceStyles={[undefined]} className={[undefined]}>
@@ -2697,7 +2697,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
               <div className=\\"right-parent\\">
                 <Resizable bounds=\\"parent\\" className=\\"resize-side-content\\" enable={{...}} onResize={[Function: toggleDividerDisplay]} onResizeStop={[Function: onResizeStop]} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
                   <div style={{...}} className=\\"resize-side-content\\">
-                    <Component selectedTabId=\\"grading\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
+                    <SideContent selectedTabId=\\"grading\\" tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\">
                       <GenericSideContent tabs={{...}} onChange={[Function: onChangeTabs]} workspaceLocation=\\"assessment\\" renderFunction={[Function: renderFunction]}>
                         <div className=\\"side-content\\">
                           <Blueprint4.Card elevation={0} interactive={false}>
@@ -3005,7 +3005,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                           </Blueprint4.Card>
                         </div>
                       </GenericSideContent>
-                    </Component>
+                    </SideContent>
                     <div className=\\"side-content-divider\\" />
                     <div className={[undefined]} style={[undefined]}>
                       <Resizer direction=\\"bottom\\" onResizeStart={[Function: bound ]} replaceStyles={[undefined]} className={[undefined]}>

@@ -16,7 +16,7 @@ type DispatchProps = {
 
 type StateProps = {
   editorSessionId?: string;
-  editorValue: string;
+  getEditorValue: () => string;
   sharedbConnected?: boolean;
   key: string;
 };
@@ -48,7 +48,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
     const handleStartInvite = () => {
       // FIXME this handler should be a Saga action or at least in a controller
       if (this.props.editorSessionId === '') {
-        createNewSession(this.props.editorValue || '').then(sessionId => {
+        createNewSession(this.props.getEditorValue()).then(sessionId => {
           this.props.handleSetEditorSessionId!(sessionId);
         }, handleError);
       }
