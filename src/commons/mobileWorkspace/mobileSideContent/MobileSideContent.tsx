@@ -57,76 +57,76 @@ const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: Work
   );
 };
 
-const MobileSideContent: React.FC<MobileSideContentProps> = React.memo(
-  ({ selectedTabId, renderActiveTabPanelOnly, mobileControlBarProps, ...otherProps }) => {
-    const isIOS = /iPhone|iPod/.test(navigator.platform);
+const MobileSideContent: React.FC<MobileSideContentProps> = ({
+  selectedTabId,
+  renderActiveTabPanelOnly,
+  mobileControlBarProps,
+  ...otherProps
+}) => {
+  const isIOS = /iPhone|iPod/.test(navigator.platform);
 
-    /**
-     * renderedPanels is not memoized since a change in selectedTabId (when changing tabs)
-     * would force React.useMemo to recompute the nullary function anyway
-     */
-    const renderedPanels = (dynamicTabs: SideContentTab[]) => {
-      // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
-      const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
-        if (!tab.body) return;
+  /**
+   * renderedPanels is not memoized since a change in selectedTabId (when changing tabs)
+   * would force React.useMemo to recompute the nullary function anyway
+   */
+  const renderedPanels = (dynamicTabs: SideContentTab[]) => {
+    // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
+    const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+      if (!tab.body) return;
 
-        const tabBody: JSX.Element = workspaceLocation
-          ? {
-              ...tab.body,
-              props: {
-                ...tab.body.props,
-                workspaceLocation
-              }
+      const tabBody: JSX.Element = workspaceLocation
+        ? {
+            ...tab.body,
+            props: {
+              ...tab.body.props,
+              workspaceLocation
             }
-          : tab.body;
+          }
+        : tab.body;
 
-        // Render the other panels only when their corresponding tab is selected
-        return (
-          <div
-            className={
-              tab.id === selectedTabId ? 'mobile-selected-panel' : 'mobile-unselected-panel'
-            }
-            key={tab.id}
-          >
-            {tabBody}
-          </div>
-        );
-      };
-
-      return dynamicTabs.map(tab => renderPanel(tab, otherProps.workspaceLocation));
+      // Render the other panels only when their corresponding tab is selected
+      return (
+        <div
+          className={tab.id === selectedTabId ? 'mobile-selected-panel' : 'mobile-unselected-panel'}
+          key={tab.id}
+        >
+          {tabBody}
+        </div>
+      );
     };
 
-    return (
-      <GenericSideContent
-        {...otherProps}
-        renderFunction={(dynamicTabs, changeTabsCallback) => {
-          return (
-            <>
-              {renderedPanels(dynamicTabs)}
-              <div className="mobile-tabs-container">
-                <Tabs
-                  id="mobile-side-content"
-                  onChange={changeTabsCallback}
-                  renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-                  selectedTabId={selectedTabId}
-                  className={classNames(Classes.DARK, 'mobile-side-content')}
-                >
-                  {dynamicTabs.map(tab => renderTab(tab, isIOS, otherProps.workspaceLocation))}
+    return dynamicTabs.map(tab => renderPanel(tab, otherProps.workspaceLocation));
+  };
 
-                  {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
-                  {(otherProps.workspaceLocation === 'playground' ||
-                    otherProps.workspaceLocation === 'sicp') && (
-                    <MobileControlBar {...mobileControlBarProps} />
-                  )}
-                </Tabs>
-              </div>
-            </>
-          );
-        }}
-      />
-    );
-  },
-  propsAreEqual
-);
+  return (
+    <GenericSideContent
+      {...otherProps}
+      renderFunction={(dynamicTabs, changeTabsCallback) => {
+        return (
+          <>
+            {renderedPanels(dynamicTabs)}
+            <div className="mobile-tabs-container">
+              <Tabs
+                id="mobile-side-content"
+                onChange={changeTabsCallback}
+                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                selectedTabId={selectedTabId}
+                className={classNames(Classes.DARK, 'mobile-side-content')}
+              >
+                {dynamicTabs.map(tab => renderTab(tab, isIOS, otherProps.workspaceLocation))}
 
-export default MobileSideContent;
+                {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
+                {(otherProps.workspaceLocation === 'playground' ||
+                  otherProps.workspaceLocation === 'sicp') && (
+                  <MobileControlBar {...mobileControlBarProps} />
+                )}
+              </Tabs>
+            </div>
+          </>
+        );
+      }}
+    />
+  );
+};
+
+export default React.memo(MobileSideContent, propsAreEqual);
