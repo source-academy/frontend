@@ -9,7 +9,7 @@ import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import {
   beginDebuggerPause,
@@ -64,6 +64,7 @@ import {
 import {
   InterpreterOutput,
   isSourceLanguage,
+  OverallState,
   ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -204,6 +205,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
   const history = useHistory();
+  const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
@@ -362,16 +364,39 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [dispatch, workspaceLocation]
   );
 
+  const handleInterruptEval = React.useCallback(
+    () => dispatch(beginInterruptExecution(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleToggleEditorAutorun = React.useCallback(
+    () => dispatch(toggleEditorAutorun(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerPause = React.useCallback(
+    () => dispatch(beginDebuggerPause(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerReset = React.useCallback(
+    () => dispatch(debuggerReset(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerResume = React.useCallback(
+    () => dispatch(debuggerResume(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
-        {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning')}
-        handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
-        handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+        isDebugging={props.isDebugging}
+        isEditorAutorun={props.isEditorAutorun}
+        isRunning={props.isRunning}
+        handleInterruptEval={handleInterruptEval}
+        handleToggleEditorAutorun={handleToggleEditorAutorun}
         handleEditorEval={handleEditorEval}
-        handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
-        handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
-        handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
+        handleDebuggerPause={handleDebuggerPause}
+        handleDebuggerReset={handleDebuggerReset}
+        handleDebuggerResume={handleDebuggerResume}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         sourceChapter={props.playgroundSourceChapter}
@@ -379,7 +404,19 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
     );
-  }, [dispatch, handleEditorEval, props, usingRemoteExecution, workspaceLocation]);
+  }, [
+    handleDebuggerPause,
+    handleDebuggerReset,
+    handleDebuggerResume,
+    handleEditorEval,
+    handleInterruptEval,
+    handleToggleEditorAutorun,
+    props.isDebugging,
+    props.isEditorAutorun,
+    props.isRunning,
+    props.playgroundSourceChapter,
+    usingRemoteExecution
+  ]);
 
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
@@ -512,16 +549,23 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const { handleEditorValueChange } = props;
 
-  // No point memoing this, it uses props.editorValue
-  const sessionButtons = (
-    <ControlBarSessionButtons
-      editorSessionId={props.editorSessionId}
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue={props.editorTabs[0].value}
-      handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-      sharedbConnected={props.sharedbConnected}
-      key="session"
-    />
+  const getEditorValue = React.useCallback(
+    () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
+    [store, workspaceLocation]
+  );
+
+  const sessionButtons = React.useMemo(
+    () => (
+      <ControlBarSessionButtons
+        editorSessionId={props.editorSessionId}
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        getEditorValue={getEditorValue}
+        handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
+        sharedbConnected={props.sharedbConnected}
+        key="session"
+      />
+    ),
+    [dispatch, getEditorValue, props.editorSessionId, props.sharedbConnected, workspaceLocation]
   );
 
   const shareButton = React.useMemo(() => {

@@ -82,33 +82,36 @@ const renderTab = (
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const SideContent: React.FC<SideContentProps> = React.memo(
-  ({ selectedTabId, renderActiveTabPanelOnly, editorWidth, sideContentHeight, ...otherProps }) => {
-    return (
-      <GenericSideContent
-        {...otherProps}
-        renderFunction={(dynamicTabs, changeTabsCallback) => (
-          <div className="side-content">
-            <Card>
-              <div className="side-content-tabs">
-                <Tabs
-                  id="side-content-tabs"
-                  onChange={changeTabsCallback}
-                  renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-                  selectedTabId={selectedTabId}
-                >
-                  {dynamicTabs.map(tab =>
-                    renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
-                  )}
-                </Tabs>
-              </div>
-            </Card>
-          </div>
-        )}
-      />
-    );
-  },
-  propsAreEqual
-);
+const SideContent: React.FC<SideContentProps> = ({
+  selectedTabId,
+  renderActiveTabPanelOnly,
+  editorWidth,
+  sideContentHeight,
+  ...otherProps
+}) => {
+  return (
+    <GenericSideContent
+      {...otherProps}
+      renderFunction={(dynamicTabs, changeTabsCallback) => (
+        <div className="side-content">
+          <Card>
+            <div className="side-content-tabs">
+              <Tabs
+                id="side-content-tabs"
+                onChange={changeTabsCallback}
+                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                selectedTabId={selectedTabId}
+              >
+                {dynamicTabs.map(tab =>
+                  renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
+                )}
+              </Tabs>
+            </div>
+          </Card>
+        </div>
+      )}
+    />
+  );
+};
 
-export default SideContent;
+export default React.memo(SideContent, propsAreEqual);
