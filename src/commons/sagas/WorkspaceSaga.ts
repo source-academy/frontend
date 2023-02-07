@@ -468,10 +468,55 @@ export function* dumpDisplayBuffer(
   yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
 }
 
+function* insertDebuggerStatements(
+  workspaceLocation: WorkspaceLocation,
+  code: string,
+  breakpoints: string[],
+  context: Context
+): Generator<StrictEffect, string, any> {
+  // Check for initial syntax errors.
+  if (isSourceLanguage(context.chapter)) {
+    parse(code, context);
+  }
+
+  // If there are syntax errors, we do not insert the debugger statements.
+  // Instead, we let the code be evaluated so that the error messages are printed.
+  if (context.errors.length > 0) {
+    context.errors = [];
+    return code;
+  }
+
+  // Otherwise, we step through the breakpoints one by one & try to insert
+  // corresponding debugger statements.
+  const lines = code.split('\n');
+  let transformedCode = code;
+  for (const breakpoint in breakpoints) {
+    // Add a debugger statement to the line with the breakpoint.
+    const breakpointLineNum: number = parseInt(breakpoint);
+    lines[breakpointLineNum] = 'debugger;' + lines[breakpointLineNum];
+    // Reconstruct the code & check that the code is still syntactically valid.
+    // The insertion of the debugger statement is potentially invalid if it
+    // happens within an existing statement (that is split across lines).
+    transformedCode = lines.join('\n');
+    if (isSourceLanguage(context.chapter)) {
+      parse(transformedCode, context);
+    }
+    // If the resulting code is no longer syntactically valid, throw an error.
+    if (context.errors.length > 0) {
+      const errorMessage = `Hint: Misplaced breakpoint at line ${breakpointLineNum + 1}.`;
+      yield put(actions.sendReplInputToOutput(errorMessage, workspaceLocation));
+      return code;
+    }
+  }
+
+  // Finally, return the transformed code with debugger statements added.
+  return transformedCode;
+}
+
 export function* evalEditor(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
-  const [prepend, editorCode, execTime, remoteExecutionSession]: [
+  const [prepend, code, execTime, remoteExecutionSession]: [
     string,
     string,
     number,
@@ -487,48 +532,27 @@ export function* evalEditor(
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    yield put(actions.remoteExecRun(editorCode));
+    yield put(actions.remoteExecRun(code));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
-    yield* clearContext(workspaceLocation, editorCode);
+    yield* clearContext(workspaceLocation, code);
     yield put(actions.clearReplOutput(workspaceLocation));
     const context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context
     );
-    let value = editorCode;
-    // Check for initial syntax errors. If there are errors, we continue with
-    // eval and let it print the error messages.
-    if (isSourceLanguage(context.chapter)) {
-      parse(value, context);
-    }
-    if (!context.errors.length) {
-      // Otherwise we step through the breakpoints one by one and check them.
-      const exploded = editorCode.split('\n');
-      const breakpoints: string[] = yield select(
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].breakpoints
-      );
-      for (const b in breakpoints) {
-        if (typeof b !== 'string') {
-          continue;
-        }
+    const breakpoints: string[] = yield select(
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].breakpoints
+    );
 
-        const index: number = +b;
-        context.errors = [];
-        exploded[index] = 'debugger;' + exploded[index];
-        value = exploded.join('\n');
-        if (isSourceLanguage(context.chapter)) {
-          parse(value, context);
-        }
-        if (context.errors.length) {
-          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
-          yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
-        }
-      }
-    }
-    // Clear the errors on the context before any further evaluation.
-    context.errors = [];
+    // Insert debugger statements at the lines of the program with a breakpoint.
+    const transformedCode = yield* insertDebuggerStatements(
+      workspaceLocation,
+      code,
+      breakpoints,
+      context
+    );
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
@@ -538,7 +562,7 @@ export function* evalEditor(
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
-    yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_EDITOR);
+    yield call(evalCode, transformedCode, context, execTime, workspaceLocation, EVAL_EDITOR);
   }
 }
 
