@@ -468,6 +468,35 @@ export function* dumpDisplayBuffer(
   yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
 }
 
+/**
+ * Inserts debugger statements into the code based off the breakpoints set by the user.
+ *
+ * For every breakpoint, a corresponding `debugger;` statement is inserted at the start
+ * of the line that the breakpoint is placed at. The `debugger;` statement is available
+ * in both JavaScript and Source, and invokes any available debugging functionality.
+ * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/debugger
+ * for more information.
+ *
+ * While it is typically the case that statements are contained within a single line,
+ * this is not necessarily true. For example, the code `const x = 3;` can be rewritten as:
+ * ```
+ * const x
+ * = 3;
+ * ```
+ * A breakpoint on the line `= 3;` would thus result in a `debugger;` statement being
+ * added in the middle of another statement. The resulting code would then be syntactically
+ * invalid.
+ *
+ * To work around this issue, we parse the code to check for syntax errors whenever we
+ * add a `debugger;` statement. If the addition of a `debugger;` statement results in
+ * invalid code, an error message is outputted with the line number of the offending
+ * breakpoint.
+ *
+ * @param workspaceLocation The location of the current workspace.
+ * @param code              The code which debugger statements should be inserted into.
+ * @param breakpoints       The breakpoints corresponding to the code.
+ * @param context           The context in which the code should be evaluated in.
+ */
 function* insertDebuggerStatements(
   workspaceLocation: WorkspaceLocation,
   code: string,
