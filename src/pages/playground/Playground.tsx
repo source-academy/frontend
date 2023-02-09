@@ -541,6 +541,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarStepLimit
         stepLimit={props.stepLimit}
         handleChangeStepLimit={limit => dispatch(changeStepLimit(limit, workspaceLocation))}
+        handleOnBlurAutoScale={limit => {limit % 2 === 0 ? dispatch(changeStepLimit(limit, workspaceLocation)) : dispatch(changeStepLimit(limit+1, workspaceLocation))}}
         key="step_limit"
       />
     ),
