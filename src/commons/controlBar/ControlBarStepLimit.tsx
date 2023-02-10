@@ -21,8 +21,8 @@ export const ControlBarStepLimit: React.FC<ControlBarStepLimitProps> = props => 
    * Triggered when the input box lost focus.
    */
   const onBlurAutoScale = () => {
-    if(props.handleOnBlurAutoScale !== undefined) {
-      props.handleOnBlurAutoScale(Number(props.stepLimit))
+    if (props.handleOnBlurAutoScale !== undefined) {
+      props.handleOnBlurAutoScale(Number(props.stepLimit));
     }
   };
 
