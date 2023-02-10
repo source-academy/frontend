@@ -16,14 +16,14 @@ type StateProps = {
 };
 
 export const ControlBarStepLimit: React.FC<ControlBarStepLimitProps> = props => {
-   /**
-   * Scale the odd stepLimit into the next even integer. 
+  /**
+   * Scale the odd stepLimit into the next even integer.
    * Triggered when the input box lost focus.
    */
-   const onBlurAutoScale = ()=>{
+  const onBlurAutoScale = () => {
     props.handleOnBlurAutoScale != undefined
-    ? props.handleOnBlurAutoScale(Number(props.stepLimit))
-    : console.log('undefined');
+      ? props.handleOnBlurAutoScale(Number(props.stepLimit))
+      : console.log('undefined');
   };
 
   return (
