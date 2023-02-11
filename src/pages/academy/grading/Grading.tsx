@@ -3,6 +3,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 import {
   Button,
+  ButtonGroup,
   Colors,
   Divider,
   FormGroup,
@@ -58,6 +59,7 @@ export type StateProps = {
 
 type State = {
   groupFilterEnabled: boolean;
+  showGraded: boolean;
   currPage: number;
   maxPages: number;
   rowCountString: string;
@@ -167,6 +169,7 @@ class Grading extends React.Component<GradingProps, State> {
 
     this.state = {
       groupFilterEnabled: false,
+      showGraded: false,
       currPage: 1,
       maxPages: 1,
       rowCountString: '(none)',
@@ -198,9 +201,15 @@ class Grading extends React.Component<GradingProps, State> {
       />
     );
 
-    const data = this.sortSubmissionsByNotifications().map(e =>
+    let data = this.sortSubmissionsByNotifications().map(e =>
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     );
+
+    if (!this.state.showGraded) {
+      data = data.filter(
+        e => !(e.submissionStatus === 'submitted' && e.gradingStatus === 'graded')
+      );
+    }
 
     const controls = (
       <div className="grading-controls">
@@ -217,14 +226,24 @@ class Grading extends React.Component<GradingProps, State> {
 
         <div className="GridControls ag-grid-controls">
           <div className="left-controls">
-            <Button
-              active={this.state.groupFilterEnabled}
-              icon={IconNames.GIT_REPO}
-              intent={this.state.groupFilterEnabled ? Intent.PRIMARY : Intent.NONE}
-              onClick={this.handleGroupsFilter}
-            >
-              <span className="hidden-xs">Show all groups</span>
-            </Button>
+            <ButtonGroup>
+              <Button
+                active={this.state.groupFilterEnabled}
+                icon={IconNames.GIT_REPO}
+                intent={this.state.groupFilterEnabled ? Intent.PRIMARY : Intent.NONE}
+                onClick={this.handleGroupsFilter}
+              >
+                <span className="hidden-xs">Show all groups</span>
+              </Button>
+              <Button
+                active={this.state.showGraded}
+                icon={IconNames.Tick}
+                intent={!this.state.showGraded ? Intent.NONE : Intent.PRIMARY}
+                onClick={this.handleShowGradedToggle}
+              >
+                <span className="hidden-xs">Show graded</span>
+              </Button>
+            </ButtonGroup>
           </div>
           <div className="centre-controls">
             <Button
@@ -385,6 +404,10 @@ class Grading extends React.Component<GradingProps, State> {
       this.setState({ groupFilterEnabled: !this.state.groupFilterEnabled });
       this.props.handleFetchGradingOverviews(this.state.groupFilterEnabled);
     }
+  };
+
+  private handleShowGradedToggle = () => {
+    this.setState({ showGraded: !this.state.showGraded });
   };
 
   private applyFilter = (filter: string) => {
