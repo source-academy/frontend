@@ -1,20 +1,14 @@
 import { Intent, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { acknowledgeNotifications } from '../application/actions/SessionActions';
+import { useTypedSelector } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
-import {
-  Notification,
-  NotificationFilterFunction,
-  NotificationType,
-  NotificationTypes
-} from './NotificationBadgeTypes';
+import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
 
-type NotificationBadgeProps = DispatchProps & StateProps & OwnProps;
-
-export type DispatchProps = {
-  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
-};
+type NotificationBadgeProps = OwnProps;
 
 type OwnProps = {
   className?: string;
@@ -23,14 +17,13 @@ type OwnProps = {
   notificationFilter?: (notifications: Notification[]) => Notification[];
 };
 
-export type StateProps = {
-  notifications: Notification[];
-};
-
 const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
+  const dispatch = useDispatch();
+  const initialNotifications = useTypedSelector(state => state.session.notifications);
+
   const notifications = props.notificationFilter
-    ? props.notificationFilter(props.notifications)
-    : props.notifications;
+    ? props.notificationFilter(initialNotifications)
+    : initialNotifications;
 
   if (!notifications.length) {
     return null;
@@ -45,7 +38,7 @@ const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
   if (!props.disableHover) {
     const makeNotificationTag = (notification: Notification) => {
       const onRemove = () =>
-        props.handleAcknowledgeNotifications(filterNotificationsById(notification.id));
+        dispatch(acknowledgeNotifications(filterNotificationsById(notification.id)));
 
       return (
         <Tag

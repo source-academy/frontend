@@ -22,7 +22,7 @@ import { GradingNavLinkProps, GradingWorkspaceParams } from 'src/features/gradin
 
 import { Role } from '../../../commons/application/ApplicationTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import NotificationBadge from '../../../commons/notificationBadge/NotificationBadgeContainer';
+import NotificationBadge from '../../../commons/notificationBadge/NotificationBadge';
 import { filterNotificationsBySubmission } from '../../../commons/notificationBadge/NotificationBadgeHelper';
 import {
   Notification,

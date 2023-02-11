@@ -1,92 +1,131 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Badge does not render with no notifications 1`] = `"<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} />"`;
+exports[`Badge does not render with no notifications 1`] = `
+"<Provider store={{...}}>
+  <NotificationBadge>
+    <Blueprint4.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+      <Manager>
+        <Reference>
+          <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
+            <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+              <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                <span disabled={[undefined]} aria-labelledby=\\"tag-1\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                  <Blueprint4.Icon icon={[undefined]} />
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-1\\" tagName=\\"span\\" title={[undefined]}>
+                    <span id=\\"tag-1\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                      4
+                    </span>
+                  </Blueprint4.Text>
+                  <Blueprint4.Icon icon={[undefined]} />
+                </span>
+              </Blueprint4.Tag>
+            </span>
+          </Blueprint4.ResizeSensor2>
+        </Reference>
+        <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
+          <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
+        </Popper>
+      </Manager>
+    </Blueprint4.Popover2>
+  </NotificationBadge>
+</Provider>"
+`;
 
 exports[`Badge renders properly with notifications 1`] = `
-"<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]}>
-  <Blueprint4.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
-    <Manager>
-      <Reference>
-        <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-          <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-            <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-              <span disabled={[undefined]} aria-labelledby=\\"tag-0\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
-                <Blueprint4.Icon icon={[undefined]} />
-                <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-0\\" tagName=\\"span\\" title={[undefined]}>
-                  <span id=\\"tag-0\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
-                    4
-                  </span>
-                </Blueprint4.Text>
-                <Blueprint4.Icon icon={[undefined]} />
-              </span>
-            </Blueprint4.Tag>
-          </span>
-        </Blueprint4.ResizeSensor2>
-      </Reference>
-      <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
-        <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
-      </Popper>
-    </Manager>
-  </Blueprint4.Popover2>
-</NotificationBadge>"
+"<Provider store={{...}}>
+  <NotificationBadge>
+    <Blueprint4.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+      <Manager>
+        <Reference>
+          <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
+            <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+              <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                <span disabled={[undefined]} aria-labelledby=\\"tag-0\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                  <Blueprint4.Icon icon={[undefined]} />
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-0\\" tagName=\\"span\\" title={[undefined]}>
+                    <span id=\\"tag-0\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                      4
+                    </span>
+                  </Blueprint4.Text>
+                  <Blueprint4.Icon icon={[undefined]} />
+                </span>
+              </Blueprint4.Tag>
+            </span>
+          </Blueprint4.ResizeSensor2>
+        </Reference>
+        <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
+          <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
+        </Popper>
+      </Manager>
+    </Blueprint4.Popover2>
+  </NotificationBadge>
+</Provider>"
 `;
 
 exports[`Badge with filter, filterNotificationsByAssessment renders properly 1`] = `
-"<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} notificationFilter={[Function (anonymous)]}>
-  <Blueprint4.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
-    <Manager>
-      <Reference>
-        <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-          <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-            <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-              <span disabled={[undefined]} aria-labelledby=\\"tag-1\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
-                <Blueprint4.Icon icon={[undefined]} />
-                <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-1\\" tagName=\\"span\\" title={[undefined]}>
-                  <span id=\\"tag-1\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
-                    4
-                  </span>
-                </Blueprint4.Text>
-                <Blueprint4.Icon icon={[undefined]} />
-              </span>
-            </Blueprint4.Tag>
-          </span>
-        </Blueprint4.ResizeSensor2>
-      </Reference>
-      <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
-        <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
-      </Popper>
-    </Manager>
-  </Blueprint4.Popover2>
-</NotificationBadge>"
+"<Provider store={{...}}>
+  <NotificationBadge notificationFilter={[Function (anonymous)]}>
+    <Blueprint4.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+      <Manager>
+        <Reference>
+          <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
+            <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+              <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                <span disabled={[undefined]} aria-labelledby=\\"tag-2\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                  <Blueprint4.Icon icon={[undefined]} />
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-2\\" tagName=\\"span\\" title={[undefined]}>
+                    <span id=\\"tag-2\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                      4
+                    </span>
+                  </Blueprint4.Text>
+                  <Blueprint4.Icon icon={[undefined]} />
+                </span>
+              </Blueprint4.Tag>
+            </span>
+          </Blueprint4.ResizeSensor2>
+        </Reference>
+        <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
+          <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
+        </Popper>
+      </Manager>
+    </Blueprint4.Popover2>
+  </NotificationBadge>
+</Provider>"
 `;
 
 exports[`Badge with filter, filterNotificationsByAssessment renders properly 2`] = `
-"<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} notificationFilter={[Function (anonymous)]}>
-  <Blueprint4.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
-    <Manager>
-      <Reference>
-        <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-          <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-            <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-              <span disabled={[undefined]} aria-labelledby=\\"tag-2\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
-                <Blueprint4.Icon icon={[undefined]} />
-                <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-2\\" tagName=\\"span\\" title={[undefined]}>
-                  <span id=\\"tag-2\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
-                    4
-                  </span>
-                </Blueprint4.Text>
-                <Blueprint4.Icon icon={[undefined]} />
-              </span>
-            </Blueprint4.Tag>
-          </span>
-        </Blueprint4.ResizeSensor2>
-      </Reference>
-      <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
-        <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
-      </Popper>
-    </Manager>
-  </Blueprint4.Popover2>
-</NotificationBadge>"
+"<Provider store={{...}}>
+  <NotificationBadge notificationFilter={[Function (anonymous)]}>
+    <Blueprint4.Popover2 className={[undefined]} content={{...}} interactionKind=\\"hover\\" placement=\\"right\\" hoverOpenDelay={50} hoverCloseDelay={50} lazy={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+      <Manager>
+        <Reference>
+          <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
+            <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
+              <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                <span disabled={[undefined]} aria-labelledby=\\"tag-3\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                  <Blueprint4.Icon icon={[undefined]} />
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-3\\" tagName=\\"span\\" title={[undefined]}>
+                    <span id=\\"tag-3\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                      4
+                    </span>
+                  </Blueprint4.Text>
+                  <Blueprint4.Icon icon={[undefined]} />
+                </span>
+              </Blueprint4.Tag>
+            </span>
+          </Blueprint4.ResizeSensor2>
+        </Reference>
+        <Popper innerRef={[Function (anonymous)]} placement=\\"right\\" strategy=\\"absolute\\" modifiers={{...}}>
+          <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={false} enforceFocus={true} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={300} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
+        </Popper>
+      </Manager>
+    </Blueprint4.Popover2>
+  </NotificationBadge>
+</Provider>"
 `;
 
-exports[`Badge with filter, filterNotificationsBySubmission renders properly 1`] = `"<NotificationBadge notifications={{...}} handleAcknowledgeNotifications={[Function: handleAcknowledgeNotifications]} notificationFilter={[Function (anonymous)]} />"`;
+exports[`Badge with filter, filterNotificationsBySubmission renders properly 1`] = `
+"<Provider store={{...}}>
+  <NotificationBadge notificationFilter={[Function (anonymous)]} />
+</Provider>"
+`;
