@@ -1,4 +1,6 @@
 import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import NotificationBadge from '../NotificationBadge';
 import {
@@ -39,25 +41,23 @@ const notifications: Notification[] = [
   }
 ];
 
-const handleAcknowledgeNotifications = () => {};
-
 describe('Badge', () => {
   test('renders properly with notifications', () => {
+    const mockStore = mockInitialStore({ session: { notifications: notifications } });
     const tree = mount(
-      <NotificationBadge
-        notifications={notifications}
-        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-      />
+      <Provider store={mockStore}>
+        <NotificationBadge />
+      </Provider>
     );
     expect(tree.debug()).toMatchSnapshot();
   });
 
   test('does not render with no notifications', () => {
+    const mockStore = mockInitialStore({ session: { notifications: [] } });
     const tree = mount(
-      <NotificationBadge
-        notifications={[]}
-        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-      />
+      <Provider store={mockStore}>
+        <NotificationBadge />
+      </Provider>
     );
 
     expect(tree.debug()).toMatchSnapshot();
@@ -66,34 +66,31 @@ describe('Badge', () => {
 
 describe('Badge with filter,', () => {
   test('filterNotificationsByAssessment renders properly', () => {
+    const mockStore = mockInitialStore({ session: { notifications: notifications } });
     const tree = mount(
-      <NotificationBadge
-        notifications={notifications}
-        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-        notificationFilter={filterNotificationsByAssessment(1)}
-      />
+      <Provider store={mockStore}>
+        <NotificationBadge notificationFilter={filterNotificationsByAssessment(1)} />
+      </Provider>
     );
     expect(tree.debug()).toMatchSnapshot();
   });
 
   test('filterNotificationsBySubmission renders properly', () => {
+    const mockStore = mockInitialStore({ session: { notifications: notifications } });
     const tree = mount(
-      <NotificationBadge
-        notifications={notifications}
-        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-        notificationFilter={filterNotificationsBySubmission(1)}
-      />
+      <Provider store={mockStore}>
+        <NotificationBadge notificationFilter={filterNotificationsBySubmission(1)} />
+      </Provider>
     );
     expect(tree.debug()).toMatchSnapshot();
   });
 
   test('filterNotificationsByAssessment renders properly', () => {
+    const mockStore = mockInitialStore({ session: { notifications: notifications } });
     const tree = mount(
-      <NotificationBadge
-        notifications={notifications}
-        handleAcknowledgeNotifications={handleAcknowledgeNotifications}
-        notificationFilter={filterNotificationsByType('Missions')}
-      />
+      <Provider store={mockStore}>
+        <NotificationBadge notificationFilter={filterNotificationsByType('Missions')} />
+      </Provider>
     );
     expect(tree.debug()).toMatchSnapshot();
   });

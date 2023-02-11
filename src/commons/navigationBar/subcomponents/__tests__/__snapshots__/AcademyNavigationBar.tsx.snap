@@ -8,35 +8,35 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/quests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/paths\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Paths
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/contests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Contests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/others\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"manual\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Others
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
@@ -63,7 +63,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Grading
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/storysimulator\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"crown\\" />
@@ -83,35 +83,35 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/quests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/paths\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Paths
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/contests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Contests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/others\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"manual\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Others
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
   </Blueprint4.NavbarGroup>
 </Blueprint4.Navbar>"
@@ -125,35 +125,35 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/quests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/paths\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Paths
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/contests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Contests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/others\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"manual\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Others
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
@@ -186,7 +186,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Grading
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+      <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/courses/0/storysimulator\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"crown\\" />
