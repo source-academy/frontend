@@ -61,7 +61,7 @@ const GradingActionsCell: React.FC<GradingActionsCellProps> = props => {
     <>
     <Tooltip2 content={'Grade'} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
         <AnchorButtonLink
-          to={/courses/${props.courseId}/grading/${props.data.submissionId}}
+          to={`/courses/${props.courseId}/grading/${props.data.submissionId}`}
           icon="annotation"
           minimal
           //title="Grade"
