@@ -1,4 +1,5 @@
-import { Button } from '@blueprintjs/core';
+import { Button, Position } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import AnchorButtonLink from 'src/commons/AnchorButtonLink';
 
@@ -7,7 +8,6 @@ import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper'
 import { GradingOverview } from '../../../../features/grading/GradingTypes';
 
 export type GradingActionsCellProps = DispatchProps & StateProps;
-
 type DispatchProps = {
   handleUnsubmitSubmission: (submissionId: number) => void;
   handleReautogradeSubmission: (submissionId: number) => void;
@@ -59,26 +59,33 @@ const GradingActionsCell: React.FC<GradingActionsCellProps> = props => {
 
   return (
     <>
-      <AnchorButtonLink
-        to={`/courses/${props.courseId}/grading/${props.data.submissionId}`}
-        icon="annotation"
-        minimal
-        title="Grade"
-      />
-      <Button
-        icon="refresh"
-        minimal
-        onClick={handleConfirmReautograde}
-        disabled={!canReautograde}
-        title="Reautograde"
-      />
-      <Button
-        icon="arrow-left"
-        minimal
-        onClick={handleConfirmUnsubmit}
-        disabled={!canUnsubmit}
-        title="Unsubmit"
-      />
+    <Tooltip2 content={'Grade'} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
+        <AnchorButtonLink
+          to={/courses/${props.courseId}/grading/${props.data.submissionId}}
+          icon="annotation"
+          minimal
+          //title="Grade"
+        />
+     </Tooltip2>
+      
+      <Tooltip2 content={'Reautograde'} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
+        <Button
+          icon="refresh"
+          minimal
+          onClick={handleConfirmReautograde}
+          disabled={!canReautograde}
+          //title="Reautograde"
+        />
+      </Tooltip2>
+      <Tooltip2 content={'Unsubmit'} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
+        <Button
+          icon="arrow-left"
+          minimal
+          onClick={handleConfirmUnsubmit}
+          disabled={!canUnsubmit}
+          //title="Unsubmit"
+        />
+      </Tooltip2>
     </>
   );
 };
