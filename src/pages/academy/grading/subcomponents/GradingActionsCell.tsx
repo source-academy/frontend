@@ -59,15 +59,15 @@ const GradingActionsCell: React.FC<GradingActionsCellProps> = props => {
 
   return (
     <>
-    <Tooltip2 content={'Grade'} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
+      <Tooltip2 content={'Grade'} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
         <AnchorButtonLink
           to={`/courses/${props.courseId}/grading/${props.data.submissionId}`}
           icon="annotation"
           minimal
           //title="Grade"
         />
-     </Tooltip2>
-      
+      </Tooltip2>
+
       <Tooltip2 content={'Reautograde'} placement={Position.LEFT} hoverOpenDelay={10} lazy={true}>
         <Button
           icon="refresh"
