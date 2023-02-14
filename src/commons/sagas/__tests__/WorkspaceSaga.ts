@@ -88,9 +88,9 @@ beforeEach(() => {
 describe('EVAL_EDITOR', () => {
   test('puts beginClearContext and correctly executes prepend and value in sequence (calls evalCode)', () => {
     const workspaceLocation = 'playground';
-    const editorPrepend = 'const foo = (x) => -1;\n"reeee";';
+    const programPrependValue = 'const foo = (x) => -1;\n"reeee";';
     const editorValue = 'foo(2);';
-    const editorPostpend = '42;';
+    const programPostpendValue = '42;';
     const execTime = 1000;
     const context = createContext();
     const variant = Variant.DEFAULT;
@@ -114,12 +114,12 @@ describe('EVAL_EDITOR', () => {
       editorTabs: [
         {
           value: editorValue,
-          prependValue: editorPrepend,
-          postpendValue: editorPostpend,
           highlightedLines: [],
           breakpoints: []
         }
       ],
+      programPrependValue,
+      programPostpendValue,
       execTime,
       context,
       globals
@@ -135,7 +135,7 @@ describe('EVAL_EDITOR', () => {
         .call.like({
           fn: runInContext,
           args: [
-            editorPrepend,
+            programPrependValue,
             {
               scheduler: 'preemptive',
               originalMaxExecTime: execTime,
@@ -319,9 +319,9 @@ describe('DEBUG_RESET', () => {
 describe('EVAL_TESTCASE', () => {
   test('correctly executes prepend, value, postpend, testcase in sequence (calls evalTestCode)', () => {
     const workspaceLocation = 'grading';
-    const editorPrepend = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
+    const programPrependValue = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
     const editorValue = 'bar(6, 9);';
-    const editorPostpend = '777;';
+    const programPostpendValue = '777;';
     const execTime = 1000;
     const testcaseId = 0;
 
@@ -355,12 +355,12 @@ describe('EVAL_TESTCASE', () => {
       editorTabs: [
         {
           value: editorValue,
-          prependValue: editorPrepend,
-          postpendValue: editorPostpend,
           highlightedLines: [],
           breakpoints: []
         }
       ],
+      programPrependValue,
+      programPostpendValue,
       editorTestcases,
       execTime,
       context,
@@ -378,7 +378,7 @@ describe('EVAL_TESTCASE', () => {
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
           fn: runInContext,
-          args: [editorPrepend, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          args: [programPrependValue, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
         // running the prepend block should return 'boink', but silent run -> not written to REPL
         .not.put(evalInterpreterSuccess('boink', workspaceLocation))
@@ -396,7 +396,7 @@ describe('EVAL_TESTCASE', () => {
         // calls evalCode here again with the postpend now in elevated Context: silent run
         .call.like({
           fn: runInContext,
-          args: [editorPostpend, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          args: [programPostpendValue, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
         // running the postpend block should return true, but silent run -> not written to REPL
         .not.put(evalInterpreterSuccess(true, workspaceLocation))

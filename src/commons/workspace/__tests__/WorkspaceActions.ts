@@ -257,7 +257,7 @@ test('evalTestcase generates correct action object', () => {
 });
 
 test('updateActiveEditorTab generates correct action object', () => {
-  const newEditorTab: Partial<EditorTabState> = { prependValue: 'Hello', postpendValue: 'World' };
+  const newEditorTab: Partial<EditorTabState> = { value: 'Hello World' };
   const action = updateActiveEditorTab(assessmentWorkspace, newEditorTab);
   expect(action).toEqual({
     type: UPDATE_ACTIVE_EDITOR_TAB,
