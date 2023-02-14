@@ -110,6 +110,8 @@ export type StateProps = {
   autogradingResults: AutogradingResult[];
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
+  programPrependValue: string;
+  programPostpendValue: string;
   editorTestcases: Testcase[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
@@ -297,15 +299,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
-    let editorPrepend: string = '';
-    let editorPostpend: string = '';
+    let programPrependValue: string = '';
+    let programPostpendValue: string = '';
     let editorTestcases: Testcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IProgrammingQuestion;
       autogradingResults = questionData.autogradingResults;
-      editorPrepend = questionData.prepend;
-      editorPostpend = questionData.postpend;
+      programPrependValue = questionData.prepend;
+      programPostpendValue = questionData.postpend;
       editorTestcases = questionData.testcases;
 
       editorValue = questionData.answer as string;
@@ -327,8 +329,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     if (question.type === QuestionTypes.voting) {
       const questionData = question as IContestVotingQuestion;
-      editorPrepend = questionData.prepend;
-      editorPostpend = questionData.postpend;
+      programPrependValue = questionData.prepend;
+      programPostpendValue = questionData.postpend;
     }
 
     props.handleEditorUpdateBreakpoints([]);
@@ -340,12 +342,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         editorTabs: [
           {
             value: editorValue,
-            prependValue: editorPrepend,
-            postpendValue: editorPostpend,
             highlightedLines: [],
             breakpoints: []
           }
         ],
+        programPrependValue,
+        programPostpendValue,
         editorTestcases
       })
     );

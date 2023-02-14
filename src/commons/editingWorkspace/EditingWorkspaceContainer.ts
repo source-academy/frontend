@@ -26,14 +26,13 @@ import {
   promptAutocomplete,
   resetWorkspace,
   setEditorBreakpoint,
-  updateActiveEditorTab,
   updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace
 } from '../workspace/WorkspaceActions';
-import { EditorTabState, WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
@@ -77,8 +76,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         resetWorkspace(workspaceLocation, options),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),
-      handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) =>
-        updateActiveEditorTab(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
