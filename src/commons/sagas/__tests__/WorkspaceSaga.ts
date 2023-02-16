@@ -747,7 +747,7 @@ describe('evalCode', () => {
     test('with error in the code, should return correct line number in error', () => {
       code = '// Prepend\n error';
       state = generateDefaultState(workspaceLocation, {
-        editorTabs: [{ prependValue: '// Prepend' }]
+        programPrependValue: '// Prepend'
       });
 
       runInContext(code, context, {
