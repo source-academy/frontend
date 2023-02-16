@@ -29,9 +29,9 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     earlySubmissionXp: 200
   },
   activeEditorTabIndex: 0,
-  editorTabs: [
-    { value: '', prependValue: '', postpendValue: '', highlightedLines: [], breakpoints: [] }
-  ],
+  editorTabs: [{ value: '', highlightedLines: [], breakpoints: [] }],
+  programPrependValue: '',
+  programPostpendValue: '',
   editorTestcases: [],
   hasUnsavedChanges: false,
   handleEditorValueChange: mockedHandleEditorValueChange,

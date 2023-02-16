@@ -24,6 +24,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     state.workspaces.sicp,
     'activeEditorTabIndex',
     'editorTabs',
+    'programPrependValue',
+    'programPostpendValue',
     'editorSessionId',
     'execTime',
     'stepLimit',

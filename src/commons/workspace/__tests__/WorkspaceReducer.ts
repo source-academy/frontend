@@ -1304,9 +1304,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
 
 describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
   const activeEditorTabOptions: Partial<EditorTabState> = {
-    value: 'Goodbye World!',
-    prependValue: 'Prepend value',
-    postpendValue: 'Postpend value'
+    value: 'Goodbye World!'
   };
 
   test('overrides the active editor tab correctly', () => {
@@ -1315,15 +1313,11 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
       editorTabs: [
         {
           value: 'Hello World!',
-          prependValue: 'This is a prepend value.',
-          postpendValue: 'This is a postpend value.',
           highlightedLines: [],
           breakpoints: []
         },
         {
           value: 'Hello World!',
-          prependValue: 'This is a prepend value.',
-          postpendValue: 'This is a postpend value.',
           highlightedLines: [],
           breakpoints: []
         }
@@ -1348,8 +1342,6 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
             editorTabs: [
               {
                 value: 'Hello World!',
-                prependValue: 'This is a prepend value.',
-                postpendValue: 'This is a postpend value.',
                 highlightedLines: [],
                 breakpoints: []
               },
