@@ -135,6 +135,8 @@ export type DispatchProps = {
 export type StateProps = {
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
+  programPrependValue: string;
+  programPostpendValue: string;
   editorSessionId: string;
   execTime: number;
   isEditorAutorun: boolean;

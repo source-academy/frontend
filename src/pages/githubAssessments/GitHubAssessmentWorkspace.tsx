@@ -190,12 +190,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         editorTabs: [
           {
             value: currentTaskList[actualTaskIndex].savedCode,
-            prependValue: currentTaskList[actualTaskIndex].testPrepend,
-            postpendValue: currentTaskList[actualTaskIndex].testPostpend,
             highlightedLines: [],
             breakpoints: []
           }
         ],
+        programPrependValue: currentTaskList[actualTaskIndex].testPrepend,
+        programPostpendValue: currentTaskList[actualTaskIndex].testPostpend,
         editorTestcases: currentTaskList[actualTaskIndex].testCases
       });
       handleReplOutputClear();

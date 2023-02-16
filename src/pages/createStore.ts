@@ -61,8 +61,6 @@ function loadStore(loadedStore: SavedState | undefined) {
             [
               {
                 value: loadedStore.playgroundEditorValue,
-                prependValue: '',
-                postpendValue: '',
                 highlightedLines: [],
                 breakpoints: []
               }

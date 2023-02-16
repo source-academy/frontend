@@ -244,15 +244,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
-    let editorPrepend: string = '';
-    let editorPostpend: string = '';
+    let programPrependValue: string = '';
+    let programPostpendValue: string = '';
     let editorTestcases: Testcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as AnsweredQuestion;
       autogradingResults = questionData.autogradingResults;
-      editorPrepend = questionData.prepend;
-      editorPostpend = questionData.postpend;
+      programPrependValue = questionData.prepend;
+      programPostpendValue = questionData.postpend;
       editorTestcases = questionData.testcases;
 
       editorValue = questionData.answer as string;
@@ -269,12 +269,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       editorTabs: [
         {
           value: editorValue,
-          prependValue: editorPrepend,
-          postpendValue: editorPostpend,
           highlightedLines: [],
           breakpoints: []
         }
       ],
+      programPrependValue,
+      programPostpendValue,
       editorTestcases
     });
     props.handleChangeExecTime(
