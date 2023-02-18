@@ -780,15 +780,25 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate: (cursorPosition: Position) =>
-      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+    handleDeclarationNavigate: React.useCallback(
+      (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      [dispatch, workspaceLocation]
+    ),
     handleEditorEval,
-    handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
-    handleSendReplInputToOutput: (code: string) =>
-      dispatch(sendReplInputToOutput(code, workspaceLocation)),
-    handleSetSharedbConnected: (connected: boolean) =>
-      dispatch(setSharedbConnected(workspaceLocation, connected)),
+    handlePromptAutocomplete: React.useCallback(
+      (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+      [dispatch, workspaceLocation]
+    ),
+    handleSendReplInputToOutput: React.useCallback(
+      (code: string) => dispatch(sendReplInputToOutput(code, workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
+    handleSetSharedbConnected: React.useCallback(
+      (connected: boolean) => dispatch(setSharedbConnected(workspaceLocation, connected)),
+      [dispatch, workspaceLocation]
+    ),
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
@@ -802,10 +812,18 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const replProps = {
     ..._.pick(props, 'output', 'replValue', 'handleReplEval', 'usingSubst'),
-    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
-    handleReplValueChange: (newValue: string) =>
-      dispatch(updateReplValue(newValue, workspaceLocation)),
+    handleBrowseHistoryDown: React.useCallback(
+      () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
+    handleBrowseHistoryUp: React.useCallback(
+      () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
+    handleReplValueChange: React.useCallback(
+      (newValue: string) => dispatch(updateReplValue(newValue, workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
     sourceChapter: props.playgroundSourceChapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
@@ -844,8 +862,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       ]
     },
     editorContainerProps: editorContainerProps,
-    handleSideContentHeightChange: change =>
-      dispatch(changeSideContentHeight(change, workspaceLocation)),
+    handleSideContentHeightChange: React.useCallback(
+      change => dispatch(changeSideContentHeight(change, workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
     replProps: replProps,
     sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,
