@@ -439,7 +439,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }
 
-  const hooksOnChange = aceEditorProps.onChange;
+  const { onChange, onLoad } = aceEditorProps;
 
   aceEditorProps.onChange = React.useCallback(
     (newCode: string, delta: Ace.Delta) => {
@@ -455,13 +455,15 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       if (isEditorAutorun && annotations.length === 0) {
         handleEditorEval();
       }
-      hooksOnChange && hooksOnChange(newCode, delta);
+      if (onChange !== undefined) {
+        onChange(newCode, delta);
+      }
     },
     [
       handleEditorValueChange,
       handleUpdateHasUnsavedChanges,
       isEditorAutorun,
-      hooksOnChange,
+      onChange,
       handleEditorEval
     ]
   );
@@ -469,8 +471,11 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   aceEditorProps.onLoad = React.useCallback(
     (editor: IAceEditor) => {
       displayBreakpoints(editor, props.breakpoints);
+      if (onLoad !== undefined) {
+        onLoad(editor);
+      }
     },
-    [props.breakpoints]
+    [props.breakpoints, onLoad]
   );
 
   aceEditorProps.commands = Object.entries(keyHandlers)
