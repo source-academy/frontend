@@ -142,6 +142,22 @@ const makeHandleGutterClick =
   };
 
 /**
+ * Returns an array of breakpoint line numbers from the Ace Editor's breakpoint
+ * array representation.
+ *
+ * In JavaScript, arrays are just objects. As a result, the Ace Editor's breakpoint
+ * array has empty slots (i.e., array indices which are not defined at all). Breakpoints
+ * are represented in the Ace Editor's breakpoints array as key-value pairs where the
+ * key is a string representation of the line number it is on, and the value is
+ * 'ace_breakpoint'. As such, to get an array of breakpoint line numbers, we need to
+ * get the keys of the Ace Editor's breakpoint array/object and parse them as integers.
+ *
+ * @param breakpoints The Ace Editor's breakpoint representation.
+ */
+const getBreakpointLineNumbers = (breakpoints: string[]): number[] =>
+  Object.keys(breakpoints).map(breakpointIndex => parseInt(breakpointIndex));
+
+/**
  * Shifts breakpoints in accordance to changes in the code. This is a quality-of-life
  * feature that attempts to shift breakpoints together with changes made to the code
  * so as to provide a smoother debugging experience for the user. It is modelled after
@@ -156,15 +172,7 @@ const shiftBreakpointsWithCode = (editor: IAceEditor, delta: Ace.Delta) => {
   const isWhitespace = (s: string): boolean => s.trim().length === 0;
 
   const oldBreakpoints = editor.session.getBreakpoints();
-  // In JavaScript, arrays are just objects. As a result, the `oldBreakpoints` array
-  // has empty slots (i.e., array indices which are not defined at all). Breakpoints
-  // are represented in the `oldBreakpoints` array as key-value pairs where the key is
-  // a string representation of the line number it is on, and the value is 'ace_breakpoint'.
-  // As such, to get an array of breakpoint line numbers, we need to get the keys of
-  // the `oldBreakpoints` array/object and parse them as integers.
-  const oldBreakpointLineNumbers: number[] = Object.keys(oldBreakpoints).map(oldBreakpointIndex =>
-    parseInt(oldBreakpointIndex)
-  );
+  const oldBreakpointLineNumbers = getBreakpointLineNumbers(oldBreakpoints);
   const newBreakpointLineNumbers: number[] = [];
 
   const deltaStartLineNumber = delta.start.row;
@@ -246,6 +254,20 @@ const shiftBreakpointsWithCode = (editor: IAceEditor, delta: Ace.Delta) => {
   }
 
   editor.session.setBreakpoints(newBreakpointLineNumbers);
+};
+
+/**
+ * Displays breakpoints on the Ace Editor instance.
+ *
+ * This is necessary for when the Ace Editor instance is first loaded and
+ * there are breakpoints which should be displayed in the gutter.
+ *
+ * @param editor      The Ace Editor instance.
+ * @param breakpoints The breakpoints to be set on the Ace Editor instance.
+ */
+const displayBreakpoints = (editor: IAceEditor, breakpoints: string[]) => {
+  const breakpointLineNumbers = getBreakpointLineNumbers(breakpoints);
+  editor.session.setBreakpoints(breakpointLineNumbers);
 };
 
 // Note: This is untestable/unused because JS-hint has been removed.
@@ -417,7 +439,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }
 
-  const hooksOnChange = aceEditorProps.onChange;
+  const { onChange, onLoad } = aceEditorProps;
 
   aceEditorProps.onChange = React.useCallback(
     (newCode: string, delta: Ace.Delta) => {
@@ -433,15 +455,27 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       if (isEditorAutorun && annotations.length === 0) {
         handleEditorEval();
       }
-      hooksOnChange && hooksOnChange(newCode, delta);
+      if (onChange !== undefined) {
+        onChange(newCode, delta);
+      }
     },
     [
       handleEditorValueChange,
       handleUpdateHasUnsavedChanges,
       isEditorAutorun,
-      hooksOnChange,
+      onChange,
       handleEditorEval
     ]
+  );
+
+  aceEditorProps.onLoad = React.useCallback(
+    (editor: IAceEditor) => {
+      displayBreakpoints(editor, props.breakpoints);
+      if (onLoad !== undefined) {
+        onLoad(editor);
+      }
+    },
+    [props.breakpoints, onLoad]
   );
 
   aceEditorProps.commands = Object.entries(keyHandlers)
