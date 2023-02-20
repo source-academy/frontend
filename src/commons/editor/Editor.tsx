@@ -256,6 +256,20 @@ const shiftBreakpointsWithCode = (editor: IAceEditor, delta: Ace.Delta) => {
   editor.session.setBreakpoints(newBreakpointLineNumbers);
 };
 
+/**
+ * Displays breakpoints on the Ace Editor instance.
+ *
+ * This is necessary for when the Ace Editor instance is first loaded and
+ * there are breakpoints which should be displayed in the gutter.
+ *
+ * @param editor      The Ace Editor instance.
+ * @param breakpoints The breakpoints to be set on the Ace Editor instance.
+ */
+const displayBreakpoints = (editor: IAceEditor, breakpoints: string[]) => {
+  const breakpointLineNumbers = getBreakpointLineNumbers(breakpoints);
+  editor.session.setBreakpoints(breakpointLineNumbers);
+};
+
 // Note: This is untestable/unused because JS-hint has been removed.
 const makeHandleAnnotationChange = (session: Ace.EditSession) => () => {
   const annotations = session.getAnnotations();
@@ -450,6 +464,13 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       hooksOnChange,
       handleEditorEval
     ]
+  );
+
+  aceEditorProps.onLoad = React.useCallback(
+    (editor: IAceEditor) => {
+      displayBreakpoints(editor, props.breakpoints);
+    },
+    [props.breakpoints]
   );
 
   aceEditorProps.commands = Object.entries(keyHandlers)
