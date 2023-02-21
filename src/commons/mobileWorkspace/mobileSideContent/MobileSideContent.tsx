@@ -9,6 +9,7 @@ import GenericSideContent, {
   GenericSideContentProps
 } from '../../sideContent/GenericSideContent';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
+import { propsAreEqual } from '../../utils/MemoizeHelper';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import MobileControlBar from './MobileControlBar';
 
@@ -128,4 +129,4 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
   );
 };
 
-export default MobileSideContent;
+export default React.memo(MobileSideContent, propsAreEqual);

@@ -1,7 +1,9 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -11,16 +13,12 @@ import {
   GradingStatuses
 } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
+import { useTypedSelector } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
 
-type ProfileProps = DispatchProps & StateProps & OwnProps;
+export type ProfileProps = OwnProps;
 
-export type DispatchProps = {
-  handleAssessmentOverviewFetch: () => void;
-  handleTotalXpFetch: () => void;
-};
-
-export type StateProps = {
+type StateProps = {
   name?: string;
   role?: Role;
   assessmentOverviews?: AssessmentOverview[];
@@ -35,38 +33,51 @@ type OwnProps = {
 };
 
 const Profile: React.FC<ProfileProps> = props => {
+  // FIXME: `xp` is actually of type number | undefined here!
+  // Fix the session type, then remove the typecast below
+  const { name, role, assessmentOverviews, assessmentConfigurations, xp, courseId } =
+    useTypedSelector(state => state.session) as StateProps;
+
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (props.name && props.role && !props.assessmentOverviews) {
+    if (name && role && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
-      props.handleAssessmentOverviewFetch();
+      dispatch(fetchAssessmentOverviews());
     }
-    if (!props.xp) {
-      props.handleTotalXpFetch();
+  }, [assessmentOverviews, dispatch, name, role, xp]);
+
+  useEffect(() => {
+    if (courseId && !xp) {
+      dispatch(fetchTotalXp());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [courseId, dispatch, xp]);
+
+  const [isLoaded, setIsLoaded] = useState(name && role && assessmentOverviews);
+
+  useEffect(() => {
+    setIsLoaded(name && role && assessmentOverviews);
+  }, [assessmentOverviews, name, role]);
 
   // Render
-  const isLoaded = props.name && props.role && props.assessmentOverviews;
   let content: JSX.Element;
 
   if (!isLoaded) {
     content = <NonIdealState description="Loading..." icon={<Spinner />} />;
   } else {
     // Check if there are any closed assessments, else render a placeholder <div>
-    const numClosed = props.assessmentOverviews!.filter(
+    const numClosed = assessmentOverviews!.filter(
       item => item.status === AssessmentStatuses.submitted
     ).length;
 
-    const userXp = props.xp || 0;
+    const userXp = xp || 0;
     const caFulfillmentLevel = Constants.caFulfillmentLevel;
     const fullXp = caFulfillmentLevel * 1000;
 
     const userDetails = (
       <div className="profile-header">
         <div className="profile-username">
-          <div className="name">{props.name}</div>
-          <div className="role">{props.role}</div>
+          <div className="name">{name}</div>
+          <div className="role">{role}</div>
         </div>
       </div>
     );
@@ -106,8 +117,8 @@ const Profile: React.FC<ProfileProps> = props => {
           IconNames.COMPARISON,
           IconNames.MANUAL
         ];
-        if (props.assessmentConfigurations) {
-          const index = props.assessmentConfigurations.findIndex(c => c.type === assessmentType);
+        if (assessmentConfigurations) {
+          const index = assessmentConfigurations.findIndex(c => c.type === assessmentType);
 
           // For rendering hidden assessments not visible to the student
           // e.g. studio participation marks
@@ -120,8 +131,8 @@ const Profile: React.FC<ProfileProps> = props => {
       };
 
       // Build condensed assessment cards from an array of assessments
-      const summaryCallouts = props
-        .assessmentOverviews!.filter(
+      const summaryCallouts = assessmentOverviews!
+        .filter(
           item =>
             item.status === AssessmentStatuses.submitted &&
             (item.gradingStatus === GradingStatuses.graded ||
@@ -135,7 +146,7 @@ const Profile: React.FC<ProfileProps> = props => {
               getFrac={getFrac}
               parseColour={parseColour}
               renderIcon={renderIcon}
-              courseId={props.courseId}
+              courseId={courseId}
             />
           );
         });

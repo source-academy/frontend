@@ -1,7 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import {
@@ -9,6 +8,7 @@ import {
   AssessmentConfiguration,
   AssessmentOverview
 } from '../../assessment/AssessmentTypes';
+import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
@@ -63,7 +63,6 @@ export const DELETE_ASSESSMENT_CONFIG = 'DELETE_ASSESSMENT_CONFIG';
 export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS';
 export const UPDATE_USER_ROLE = 'UPDATE_USER_ROLE';
 export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
-export const UPDATE_INFINITE_LOOP_ENCOUNTERED = 'UPDATE_INFINITE_LOOP_ENCOUNTERED';
 export const DELETE_USER_COURSE_REGISTRATION = 'DELETE_USER_COURSE_REGISTRATION';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
@@ -104,9 +103,8 @@ export type SessionState = {
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
 
-  // For infinite loop research data collection
+  // For research data collection
   readonly agreedToResearch?: boolean | null;
-  readonly hadPreviousInfiniteLoop: boolean;
   readonly sessionId: number;
 
   readonly assessmentOverviews?: AssessmentOverview[];

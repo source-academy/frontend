@@ -8,7 +8,7 @@ import Constants from 'src/commons/utils/Constants';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { AssessmentType } from '../../assessment/AssessmentTypes';
-import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
+import NotificationBadge from '../../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
 import { icons } from './AcademyNavigationBar';
 
@@ -54,7 +54,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         >
           <Icon icon={icons[idx]} />
           <div>{assessmentType}</div>
-          <NotificationBadgeContainer
+          <NotificationBadge
             notificationFilter={filterNotificationsByType(assessmentType)}
             disableHover={true}
           />

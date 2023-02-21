@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -63,7 +63,9 @@ export const generateAchievementTasks = (
     />
   ));
 
-function Dashboard(props: DispatchProps & StateProps) {
+type DashboardProps = DispatchProps & StateProps;
+
+const Dashboard: React.FC<DashboardProps> = props => {
   const {
     getAchievements,
     getOwnGoals,
@@ -188,6 +190,6 @@ function Dashboard(props: DispatchProps & StateProps) {
       </div>
     </AchievementContext.Provider>
   );
-}
+};
 
 export default Dashboard;

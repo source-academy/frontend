@@ -1,6 +1,6 @@
 import { Chapter } from 'js-slang/dist/types';
 
-import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -273,51 +273,13 @@ export const mockAssessmentOverviews = [
   ...mockClosedAssessmentOverviews
 ];
 
-const mockGlobals: Array<[string, any]> = [
-  ['testNumber', 3.141592653589793],
-  ['testString', 'who dat boi'],
-  ['testBooleanTrue', true],
-  ['testBooleanFalse', false],
-  ['testBooleanUndefined', undefined],
-  ['testBooleanNull', null],
-  ['testObject', { a: 1, b: 2 }],
-  ['testArray', [1, 2, 'a', 'b']]
-];
-
-const mockSoundLibrary: Library = {
-  chapter: Chapter.SOURCE_4,
-  external: {
-    name: ExternalLibraryName.SOUNDS,
-    symbols: externalLibraries.get(ExternalLibraryName.SOUNDS)!
-  },
-  globals: mockGlobals
-};
-
-export const mockRuneLibrary: Library = {
+export const mockLibrary: Library = {
   chapter: Chapter.SOURCE_1,
   external: {
-    name: ExternalLibraryName.RUNES,
-    symbols: externalLibraries.get(ExternalLibraryName.RUNES)!
+    name: ExternalLibraryName.NONE,
+    symbols: []
   },
-  globals: mockGlobals
-};
-
-const mockBinaryTreeLibrary: Library = {
-  chapter: Chapter.SOURCE_4,
-  external: {
-    name: ExternalLibraryName.BINARYTREES,
-    symbols: externalLibraries.get(ExternalLibraryName.BINARYTREES)!
-  },
-  globals: mockGlobals
-};
-
-const mockToneMatrixLibrary: Library = {
-  chapter: Chapter.SOURCE_4,
-  external: {
-    name: ExternalLibraryName.SOUNDS,
-    symbols: ['get_matrix']
-  },
-  globals: mockGlobals
+  globals: []
 };
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
@@ -332,7 +294,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   \`\`\`
   `,
     id: 0,
-    library: mockSoundLibrary,
+    library: mockLibrary,
     prepend: `const pizza = "pizza";
   const sushi = "sushi";
   const chickenrice = "chicken rice";`,
@@ -377,7 +339,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   }`,
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
-    library: mockRuneLibrary,
+    library: mockLibrary,
     prepend: `const square = x => x * x;
   const cube = x => x * x * x;
   const pi = 3.1415928;`,
@@ -431,7 +393,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 2,
-    library: mockBinaryTreeLibrary,
+    library: mockLibrary,
     type: 'mcq',
     solution: 0,
     xp: 0,
@@ -461,7 +423,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
       }
     ],
     id: 3,
-    library: mockBinaryTreeLibrary,
+    library: mockLibrary,
     type: 'mcq',
     solution: undefined,
     xp: 0,
@@ -473,7 +435,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     answer: null,
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 4,
-    library: mockToneMatrixLibrary,
+    library: mockLibrary,
     prepend: '',
     postpend: '',
     testcases: [],
@@ -496,7 +458,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
   }`,
     content: 'You can see autograding results!!!',
     id: 0,
-    library: mockRuneLibrary,
+    library: mockLibrary,
     prepend: '',
     postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
     testcases: [
@@ -587,7 +549,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
   }`,
     content: 'This is a runes question - there are no testcases nor autograding results.',
     id: 1,
-    library: mockRuneLibrary,
+    library: mockLibrary,
     prepend: '',
     postpend: '',
     testcases: [],
@@ -664,7 +626,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
       }
     ],
     id: 0,
-    library: mockRuneLibrary,
+    library: mockLibrary,
     type: 'mcq',
     solution: 1,
     xp: 0,
@@ -682,7 +644,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   
   This question makes use of the sentinel function method to throw custom errors for each testcase.`,
     id: 1,
-    library: mockRuneLibrary,
+    library: mockLibrary,
     prepend: `const OR = (x, y) => x || y;`,
     postpend: `
   const __AND = (xs) => {
@@ -757,7 +719,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   
   This question makes use of the wrapping container method to throw custom errors for each testcase.`,
     id: 2,
-    library: mockRuneLibrary,
+    library: mockLibrary,
     prepend: ``,
     postpend: `
   const __XOR = (x, y) => {
@@ -816,7 +778,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   
   The \`NOR\` function modeled after a NOR gate is provided for you - it accepts two boolean values and returns \`true\` iff both inputs are \`false\`.`,
     id: 3,
-    library: mockRuneLibrary,
+    library: mockLibrary,
     prepend: `
   let counter = 0;
   const NOR = (x, y) => {
@@ -912,7 +874,7 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
         answer: { code: 'function leaderboard_test() { return true; }' }
       }
     ],
-    library: mockRuneLibrary,
+    library: mockLibrary,
     blocking: false
   }
 ];

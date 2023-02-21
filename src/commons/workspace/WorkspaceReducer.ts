@@ -61,7 +61,7 @@ import {
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
-} from '../workspace/WorkspaceTypes';
+} from './WorkspaceTypes';
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The

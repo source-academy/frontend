@@ -7,7 +7,7 @@ import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
-import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
+import NotificationBadge from '../../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
 
 type OwnProps = {
@@ -28,7 +28,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
         >
           <Icon icon={icons[idx]} />
           <div className="navbar-button-text hidden-xs hidden-sm">{assessmentType}</div>
-          <NotificationBadgeContainer
+          <NotificationBadge
             notificationFilter={filterNotificationsByType(assessmentType)}
             disableHover={true}
           />
@@ -82,7 +82,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
         >
           <Icon icon={IconNames.ENDORSED} />
           <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Grading</div>
-          <NotificationBadgeContainer
+          <NotificationBadge
             notificationFilter={filterNotificationsByType('Grading')}
             disableHover={true}
           />

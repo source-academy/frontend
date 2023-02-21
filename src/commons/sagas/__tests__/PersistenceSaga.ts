@@ -1,14 +1,14 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { actions } from '../../../commons/utils/ActionsHelper';
+import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
+import { ExternalLibraryName } from '../../application/types/ExternalTypes';
+import { actions } from '../../utils/ActionsHelper';
 import {
   CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
   UPDATE_EDITOR_VALUE
-} from '../../../commons/workspace/WorkspaceTypes';
-import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
+} from '../../workspace/WorkspaceTypes';
 
 // mock away the store - the store can't be created in a test, it leads to
 // import cycles
@@ -25,7 +25,7 @@ const FILE_NAME = 'file';
 const FILE_DATA = '// Hello world';
 const SOURCE_CHAPTER = Chapter.SOURCE_3;
 const SOURCE_VARIANT = Variant.LAZY;
-const SOURCE_LIBRARY = ExternalLibraryName.MACHINELEARNING;
+const SOURCE_LIBRARY = ExternalLibraryName.SOUNDS;
 
 beforeAll(() => {
   const authInstance: gapi.auth2.GoogleAuth = {

@@ -26,7 +26,6 @@ import {
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { fetchAssessment } from '../application/actions/SessionActions';
 import { defaultWorkspaceManager, InterpreterOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -64,7 +63,6 @@ import SideContentContestLeaderboard from '../sideContent/SideContentContestLead
 import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
 import { useResponsive } from '../utils/Hooks';
@@ -84,7 +82,6 @@ import {
   promptAutocomplete,
   resetWorkspace,
   runAllTestcases,
-  sendReplInputToOutput,
   updateCurrentAssessmentId,
   updateReplValue
 } from '../workspace/WorkspaceActions';
@@ -113,6 +110,8 @@ export type StateProps = {
   autogradingResults: AutogradingResult[];
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
+  programPrependValue: string;
+  programPostpendValue: string;
   editorTestcases: Testcase[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
@@ -300,15 +299,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
-    let editorPrepend: string = '';
-    let editorPostpend: string = '';
+    let programPrependValue: string = '';
+    let programPostpendValue: string = '';
     let editorTestcases: Testcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IProgrammingQuestion;
       autogradingResults = questionData.autogradingResults;
-      editorPrepend = questionData.prepend;
-      editorPostpend = questionData.postpend;
+      programPrependValue = questionData.prepend;
+      programPostpendValue = questionData.postpend;
       editorTestcases = questionData.testcases;
 
       editorValue = questionData.answer as string;
@@ -330,8 +329,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     if (question.type === QuestionTypes.voting) {
       const questionData = question as IContestVotingQuestion;
-      editorPrepend = questionData.prepend;
-      editorPostpend = questionData.postpend;
+      programPrependValue = questionData.prepend;
+      programPostpendValue = questionData.postpend;
     }
 
     props.handleEditorUpdateBreakpoints([]);
@@ -343,12 +342,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         editorTabs: [
           {
             value: editorValue,
-            prependValue: editorPrepend,
-            postpendValue: editorPostpend,
             highlightedLines: [],
             breakpoints: []
           }
         ],
+        programPrependValue,
+        programPostpendValue,
         editorTestcases
       })
     );
@@ -382,7 +381,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const tabs: SideContentTab[] = isContestVoting
       ? [
           {
-            label: `Task ${questionId + 1}`,
+            label: `Question ${questionId + 1}`,
             iconName: IconNames.NINJA,
             body: <Markdown content={props.assessment!.questions[questionId].content} />,
             id: SideContentType.questionOverview
@@ -431,7 +430,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         ]
       : [
           {
-            label: `Task ${questionId + 1}`,
+            label: `Question ${questionId + 1}`,
             iconName: IconNames.NINJA,
             body: (
               <Markdown
@@ -494,22 +493,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix
-      });
-    }
-
-    if (
-      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
-      externalLibrary.name === ExternalLibraryName.ALL
-    ) {
-      tabs.push({
-        label: 'Video Display',
-        iconName: IconNames.MOBILE_VIDEO,
-        body: (
-          <SideContentVideoDisplay
-            replChange={code => dispatch(sendReplInputToOutput(code, workspaceLocation))}
-          />
-        ),
-        id: SideContentType.videoDisplay
       });
     }
 

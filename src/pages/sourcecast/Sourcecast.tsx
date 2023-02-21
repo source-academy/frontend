@@ -39,7 +39,6 @@ import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAut
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
 import {
   convertEditorTabStateToProps,
   SourcecastEditorContainerProps
@@ -230,17 +229,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     />
   );
 
-  const externalSelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) =>
-    props.handleExternalSelect(name);
-
-  const externalLibrarySelect = (
-    <ControlBarExternalLibrarySelect
-      externalLibraryName={props.externalLibraryName}
-      handleExternalSelect={externalSelectHandler}
-      key="external_library"
-    />
-  );
-
   const tabs: SideContentTab[] = [
     {
       label: 'Sourcecast Table',
@@ -315,7 +303,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
+      editorButtons: [autorunButtons, chapterSelect]
     },
     editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: change =>
@@ -340,7 +328,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     sideBarProps: sideBarProps,
     mobileSideContentProps: {
       mobileControlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
+        editorButtons: [autorunButtons, chapterSelect]
       },
       selectedTabId: selectedTab,
       onChange: onChangeTabs,

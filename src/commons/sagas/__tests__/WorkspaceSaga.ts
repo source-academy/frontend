@@ -4,7 +4,6 @@ import { Chapter, Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { updateInfiniteLoopEncountered } from 'src/commons/application/actions/SessionActions';
 import * as fullJSUtils from 'src/commons/fullJS/FullJSUtils';
 
 import {
@@ -29,11 +28,6 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
-import {
-  InfiniteLoopErrorType,
-  reportInfiniteLoopError,
-  reportNonErrorProgram
-} from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginClearContext,
@@ -94,9 +88,9 @@ beforeEach(() => {
 describe('EVAL_EDITOR', () => {
   test('puts beginClearContext and correctly executes prepend and value in sequence (calls evalCode)', () => {
     const workspaceLocation = 'playground';
-    const editorPrepend = 'const foo = (x) => -1;\n"reeee";';
+    const programPrependValue = 'const foo = (x) => -1;\n"reeee";';
     const editorValue = 'foo(2);';
-    const editorPostpend = '42;';
+    const programPostpendValue = '42;';
     const execTime = 1000;
     const context = createContext();
     const variant = Variant.DEFAULT;
@@ -120,12 +114,12 @@ describe('EVAL_EDITOR', () => {
       editorTabs: [
         {
           value: editorValue,
-          prependValue: editorPrepend,
-          postpendValue: editorPostpend,
           highlightedLines: [],
           breakpoints: []
         }
       ],
+      programPrependValue,
+      programPostpendValue,
       execTime,
       context,
       globals
@@ -141,7 +135,7 @@ describe('EVAL_EDITOR', () => {
         .call.like({
           fn: runInContext,
           args: [
-            editorPrepend,
+            programPrependValue,
             {
               scheduler: 'preemptive',
               originalMaxExecTime: execTime,
@@ -325,9 +319,9 @@ describe('DEBUG_RESET', () => {
 describe('EVAL_TESTCASE', () => {
   test('correctly executes prepend, value, postpend, testcase in sequence (calls evalTestCode)', () => {
     const workspaceLocation = 'grading';
-    const editorPrepend = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
+    const programPrependValue = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
     const editorValue = 'bar(6, 9);';
-    const editorPostpend = '777;';
+    const programPostpendValue = '777;';
     const execTime = 1000;
     const testcaseId = 0;
 
@@ -361,12 +355,12 @@ describe('EVAL_TESTCASE', () => {
       editorTabs: [
         {
           value: editorValue,
-          prependValue: editorPrepend,
-          postpendValue: editorPostpend,
           highlightedLines: [],
           breakpoints: []
         }
       ],
+      programPrependValue,
+      programPostpendValue,
       editorTestcases,
       execTime,
       context,
@@ -384,7 +378,7 @@ describe('EVAL_TESTCASE', () => {
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
           fn: runInContext,
-          args: [editorPrepend, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          args: [programPrependValue, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
         // running the prepend block should return 'boink', but silent run -> not written to REPL
         .not.put(evalInterpreterSuccess('boink', workspaceLocation))
@@ -402,7 +396,7 @@ describe('EVAL_TESTCASE', () => {
         // calls evalCode here again with the postpend now in elevated Context: silent run
         .call.like({
           fn: runInContext,
-          args: [editorPostpend, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          args: [programPostpendValue, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
         })
         // running the postpend block should return true, but silent run -> not written to REPL
         .not.put(evalInterpreterSuccess(true, workspaceLocation))
@@ -564,8 +558,8 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 
   test('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
-    const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
-    const newExternalLibraryName = ExternalLibraryName.RUNES;
+    const oldExternalLibraryName = ExternalLibraryName.NONE;
+    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
@@ -600,8 +594,8 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 
   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
-    const oldExternalLibraryName = ExternalLibraryName.RUNES;
-    const newExternalLibraryName = ExternalLibraryName.RUNES;
+    const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
+    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
       globals,
@@ -651,8 +645,8 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     ];
   });
 
-  test('loads RUNES library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryName.RUNES;
+  test('loads SOUNDS library correctly', () => {
+    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
 
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library: Library = {
@@ -670,14 +664,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
         type: BEGIN_CLEAR_CONTEXT,
         payload: { library, workspaceLocation, shouldInitLibrary: true }
       })
-      .silentRun()
-      .then(() => {
-        expect(loadLib).toHaveBeenCalledWith('RUNES');
-        expect(getReadyWebGLForCanvas).toHaveBeenCalledWith('3d');
-        globals.forEach(item => {
-          expect(window[item[0]]).toEqual(item[1]);
-        });
-      });
+      .silentRun();
   });
 });
 
@@ -691,7 +678,6 @@ describe('evalCode', () => {
   let options: Partial<IOptions>;
   let lastDebuggerResult: Result;
   let state: OverallState;
-  let defaultSessionId: number;
 
   beforeEach(() => {
     workspaceLocation = 'assessment';
@@ -709,7 +695,6 @@ describe('evalCode', () => {
     };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
-    defaultSessionId = state.session.sessionId;
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
@@ -762,7 +747,7 @@ describe('evalCode', () => {
     test('with error in the code, should return correct line number in error', () => {
       code = '// Prepend\n error';
       state = generateDefaultState(workspaceLocation, {
-        editorTabs: [{ prependValue: '// Prepend' }]
+        programPrependValue: '// Prepend'
       });
 
       runInContext(code, context, {
@@ -781,105 +766,6 @@ describe('evalCode', () => {
           throwInfiniteLoops: true
         })
         .put(evalInterpreterError(context.errors, workspaceLocation))
-        .silentRun();
-    });
-
-    test('calls reportInfiniteLoop on error and sends correct data to sentry', () => {
-      state = {
-        ...state,
-        session: { ...state.session, agreedToResearch: true }
-      };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const code1 = 'function f(x){f(x);}';
-      const code2 = 'f(1);';
-
-      return runInContext(code1, context, {
-        scheduler: 'preemptive',
-        originalMaxExecTime: 1000,
-        useSubst: false
-      }).then(_ => {
-        expectSaga(evalCode, code2, context, execTime, workspaceLocation, actionType)
-          .withState(state)
-          .call(
-            reportInfiniteLoopError,
-            defaultSessionId,
-            InfiniteLoopErrorType.NoBaseCase,
-            false,
-            'The function f has encountered an infinite loop. It has no base case.',
-            [code2, code1]
-          )
-          .silentRun();
-      });
-    });
-
-    test('does not send correct data to sentry if approval is false', () => {
-      state = {
-        ...state,
-        session: { ...state.session, agreedToResearch: false }
-      };
-      context = createContext(3);
-      const theCode = 'function f(x){f(x);} f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .not.call(
-          reportInfiniteLoopError,
-          defaultSessionId,
-          InfiniteLoopErrorType.NoBaseCase,
-          false,
-          'The function f has encountered an infinite loop. It has no base case.',
-          [theCode]
-        )
-        .silentRun();
-    });
-
-    test('infinite loops call updateInfiniteLoopEncountered', () => {
-      state = {
-        ...state,
-        session: { ...state.session, agreedToResearch: true }
-      };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const theCode = 'function f(x){f(x);}f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .put(updateInfiniteLoopEncountered())
-        .silentRun();
-    });
-
-    test('reports non error code to sentry after infinite loop', () => {
-      state = {
-        ...state,
-        session: {
-          ...state.session,
-          hadPreviousInfiniteLoop: true,
-          agreedToResearch: true
-        }
-      };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const theCode = 'function f(x){return 1;}f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .call(reportNonErrorProgram, defaultSessionId, [theCode])
-        .silentRun();
-    });
-
-    test('does not report non error code before infinite loop', () => {
-      state = {
-        ...state,
-        session: { ...state.session, agreedToResearch: true }
-      };
-      const thisContext = createContext(3);
-      context = thisContext;
-      const theCode = 'function f(x){return 1;}f(1);';
-
-      return expectSaga(evalCode, theCode, context, execTime, workspaceLocation, actionType)
-        .withState(state)
-        .not.call(reportNonErrorProgram, defaultSessionId, [theCode])
         .silentRun();
     });
   });

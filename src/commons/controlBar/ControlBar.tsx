@@ -1,5 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
+import React from 'react';
 
 export type ControlBarProps = {
   editorButtons: Array<JSX.Element | null>;
@@ -7,7 +8,7 @@ export type ControlBarProps = {
   editingWorkspaceButtons?: Array<JSX.Element | null>;
 };
 
-function ControlBar(props: ControlBarProps) {
+const ControlBar: React.FC<ControlBarProps> = props => {
   const editorControl = (
     <div className={classNames('ControlBar_editor', Classes.BUTTON_GROUP)}>
       {props.editorButtons}
@@ -31,6 +32,6 @@ function ControlBar(props: ControlBarProps) {
       {editingWorkspaceControl}
     </div>
   );
-}
+};
 
 export default ControlBar;

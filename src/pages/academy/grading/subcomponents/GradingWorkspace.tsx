@@ -3,8 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
+import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 
 import {
   defaultWorkspaceManager,
@@ -30,7 +29,6 @@ import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
-import SideContentToneMatrix from '../../../../commons/sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
@@ -246,15 +244,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
-    let editorPrepend: string = '';
-    let editorPostpend: string = '';
+    let programPrependValue: string = '';
+    let programPostpendValue: string = '';
     let editorTestcases: Testcase[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as AnsweredQuestion;
       autogradingResults = questionData.autogradingResults;
-      editorPrepend = questionData.prepend;
-      editorPostpend = questionData.postpend;
+      programPrependValue = questionData.prepend;
+      programPostpendValue = questionData.postpend;
       editorTestcases = questionData.testcases;
 
       editorValue = questionData.answer as string;
@@ -271,12 +269,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       editorTabs: [
         {
           value: editorValue,
-          prependValue: editorPrepend,
-          postpendValue: editorPostpend,
           highlightedLines: [],
           breakpoints: []
         }
       ],
+      programPrependValue,
+      programPostpendValue,
       editorTestcases
     });
     props.handleChangeExecTime(
@@ -308,7 +306,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
             xpAdjustment={props.grading![questionId].grade.xpAdjustment}
             maxXp={props.grading![questionId].question.maxXp}
             studentName={props.grading![questionId].student.name}
-            comments={props.grading![questionId].grade.comments!}
+            comments={props.grading![questionId].grade.comments ?? ''}
             graderName={
               props.grading![questionId].grade.grader
                 ? props.grading![questionId].grade.grader!.name
@@ -324,7 +322,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         id: SideContentType.grading
       },
       {
-        label: `Task ${questionId + 1}`,
+        label: `Question ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
         id: SideContentType.questionOverview
@@ -343,7 +341,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         id: SideContentType.autograder
       }
     ];
-
     const externalLibrary = props.grading![questionId].question.library.external;
     const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
@@ -352,18 +349,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix
-      });
-    }
-
-    if (
-      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
-      externalLibrary.name === ExternalLibraryName.ALL
-    ) {
-      tabs.push({
-        label: 'Video Display',
-        iconName: IconNames.MOBILE_VIDEO,
-        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
-        id: SideContentType.videoDisplay
       });
     }
 
