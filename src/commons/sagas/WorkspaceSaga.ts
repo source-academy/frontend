@@ -837,7 +837,8 @@ export function* evalCode(
   if (
     result.status !== 'suspended' &&
     result.status !== 'finished' &&
-    result.status !== 'suspended-non-det'
+    result.status !== 'suspended-non-det' &&
+    result.status !== 'suspended-ec-eval'
   ) {
     yield* dumpDisplayBuffer(workspaceLocation);
     yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
@@ -884,7 +885,7 @@ export function* evalCode(
     }
     yield put(actions.addEvent(events));
     return;
-  } else if (result.status === 'suspended') {
+  } else if (result.status === 'suspended' || result.status === 'suspended-ec-eval') {
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
