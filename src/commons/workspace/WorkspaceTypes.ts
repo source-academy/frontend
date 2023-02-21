@@ -81,8 +81,6 @@ export type WorkspaceManagerState = {
 
 export type EditorTabState = {
   readonly value: string;
-  readonly prependValue: string;
-  readonly postpendValue: string;
   readonly highlightedLines: HighlightedLines[];
   readonly breakpoints: string[];
   readonly newCursorPosition?: Position;
@@ -93,6 +91,8 @@ export type WorkspaceState = {
   readonly context: Context;
   readonly activeEditorTabIndex: number | null;
   readonly editorTabs: EditorTabState[];
+  readonly programPrependValue: string;
+  readonly programPostpendValue: string;
   readonly editorSessionId: string;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;

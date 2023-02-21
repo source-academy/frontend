@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 
-import ProfileContainer from '../../profile/ProfileContainer';
+import Profile from '../../profile/Profile';
 import Dropdown from '../Dropdown';
 import DropdownCourses from '../DropdownCourses';
 import DropdownCreateCourse from '../DropdownCreateCourse';
@@ -19,7 +19,7 @@ test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect the Profile component to NOT be mounted
-  expect(tree.find(ProfileContainer)).toHaveLength(0);
+  expect(tree.find(Profile)).toHaveLength(0);
   expect(tree.find(DropdownCourses)).toHaveLength(0);
   expect(tree.find(DropdownCreateCourse)).toHaveLength(0);
 });
@@ -39,7 +39,7 @@ test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCour
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect the Profile component to be mounted
-  expect(tree.find(ProfileContainer)).toHaveLength(1);
+  expect(tree.find(Profile)).toHaveLength(1);
   expect(tree.find(DropdownCourses)).toHaveLength(1);
   expect(tree.find(DropdownCreateCourse)).toHaveLength(1);
 });

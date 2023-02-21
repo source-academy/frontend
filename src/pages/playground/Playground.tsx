@@ -9,7 +9,7 @@ import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import {
   beginDebuggerPause,
@@ -64,6 +64,7 @@ import {
 import {
   InterpreterOutput,
   isSourceLanguage,
+  OverallState,
   ResultOutput,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
@@ -87,9 +88,9 @@ import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import SideContentRemoteExecution from '../../commons/sideContent/remoteExecution/SideContentRemoteExecution';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
@@ -134,6 +135,8 @@ export type DispatchProps = {
 export type StateProps = {
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
+  programPrependValue: string;
+  programPostpendValue: string;
   editorSessionId: string;
   execTime: number;
   isEditorAutorun: boolean;
@@ -204,6 +207,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
   const history = useHistory();
+  const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
@@ -362,16 +366,39 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [dispatch, workspaceLocation]
   );
 
+  const handleInterruptEval = React.useCallback(
+    () => dispatch(beginInterruptExecution(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleToggleEditorAutorun = React.useCallback(
+    () => dispatch(toggleEditorAutorun(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerPause = React.useCallback(
+    () => dispatch(beginDebuggerPause(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerReset = React.useCallback(
+    () => dispatch(debuggerReset(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleDebuggerResume = React.useCallback(
+    () => dispatch(debuggerResume(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
-        {..._.pick(props, 'isDebugging', 'isEditorAutorun', 'isRunning')}
-        handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
-        handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+        isDebugging={props.isDebugging}
+        isEditorAutorun={props.isEditorAutorun}
+        isRunning={props.isRunning}
+        handleInterruptEval={handleInterruptEval}
+        handleToggleEditorAutorun={handleToggleEditorAutorun}
         handleEditorEval={handleEditorEval}
-        handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
-        handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
-        handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
+        handleDebuggerPause={handleDebuggerPause}
+        handleDebuggerReset={handleDebuggerReset}
+        handleDebuggerResume={handleDebuggerResume}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         sourceChapter={props.playgroundSourceChapter}
@@ -379,7 +406,19 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
       />
     );
-  }, [dispatch, handleEditorEval, props, usingRemoteExecution, workspaceLocation]);
+  }, [
+    handleDebuggerPause,
+    handleDebuggerReset,
+    handleDebuggerResume,
+    handleEditorEval,
+    handleInterruptEval,
+    handleToggleEditorAutorun,
+    props.isDebugging,
+    props.isEditorAutorun,
+    props.isRunning,
+    props.playgroundSourceChapter,
+    usingRemoteExecution
+  ]);
 
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
@@ -504,6 +543,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarStepLimit
         stepLimit={props.stepLimit}
         handleChangeStepLimit={limit => dispatch(changeStepLimit(limit, workspaceLocation))}
+        handleOnBlurAutoScale={limit => {
+          limit % 2 === 0
+            ? dispatch(changeStepLimit(limit, workspaceLocation))
+            : dispatch(changeStepLimit(limit + 1, workspaceLocation));
+        }}
         key="step_limit"
       />
     ),
@@ -512,16 +556,23 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const { handleEditorValueChange } = props;
 
-  // No point memoing this, it uses props.editorValue
-  const sessionButtons = (
-    <ControlBarSessionButtons
-      editorSessionId={props.editorSessionId}
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue={props.editorTabs[0].value}
-      handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-      sharedbConnected={props.sharedbConnected}
-      key="session"
-    />
+  const getEditorValue = React.useCallback(
+    () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
+    [store, workspaceLocation]
+  );
+
+  const sessionButtons = React.useMemo(
+    () => (
+      <ControlBarSessionButtons
+        editorSessionId={props.editorSessionId}
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        getEditorValue={getEditorValue}
+        handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
+        sharedbConnected={props.sharedbConnected}
+        key="session"
+      />
+    ),
+    [dispatch, getEditorValue, props.editorSessionId, props.sharedbConnected, workspaceLocation]
   );
 
   const shareButton = React.useMemo(() => {
@@ -729,15 +780,25 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate: (cursorPosition: Position) =>
-      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+    handleDeclarationNavigate: React.useCallback(
+      (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      [dispatch, workspaceLocation]
+    ),
     handleEditorEval,
-    handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
-    handleSendReplInputToOutput: (code: string) =>
-      dispatch(sendReplInputToOutput(code, workspaceLocation)),
-    handleSetSharedbConnected: (connected: boolean) =>
-      dispatch(setSharedbConnected(workspaceLocation, connected)),
+    handlePromptAutocomplete: React.useCallback(
+      (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+      [dispatch, workspaceLocation]
+    ),
+    handleSendReplInputToOutput: React.useCallback(
+      (code: string) => dispatch(sendReplInputToOutput(code, workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
+    handleSetSharedbConnected: React.useCallback(
+      (connected: boolean) => dispatch(setSharedbConnected(workspaceLocation, connected)),
+      [dispatch, workspaceLocation]
+    ),
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
@@ -751,10 +812,18 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const replProps = {
     ..._.pick(props, 'output', 'replValue', 'handleReplEval', 'usingSubst'),
-    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
-    handleReplValueChange: (newValue: string) =>
-      dispatch(updateReplValue(newValue, workspaceLocation)),
+    handleBrowseHistoryDown: React.useCallback(
+      () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
+    handleBrowseHistoryUp: React.useCallback(
+      () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
+    handleReplValueChange: React.useCallback(
+      (newValue: string) => dispatch(updateReplValue(newValue, workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
     sourceChapter: props.playgroundSourceChapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
@@ -793,8 +862,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       ]
     },
     editorContainerProps: editorContainerProps,
-    handleSideContentHeightChange: change =>
-      dispatch(changeSideContentHeight(change, workspaceLocation)),
+    handleSideContentHeightChange: React.useCallback(
+      change => dispatch(changeSideContentHeight(change, workspaceLocation)),
+      [dispatch, workspaceLocation]
+    ),
     replProps: replProps,
     sideBarProps: sideBarProps,
     sideContentHeight: props.sideContentHeight,

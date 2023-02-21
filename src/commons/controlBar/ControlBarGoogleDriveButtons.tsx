@@ -1,7 +1,7 @@
 import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React from 'react';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import ControlButton from '../ControlButton';

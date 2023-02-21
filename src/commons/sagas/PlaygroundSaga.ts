@@ -4,7 +4,6 @@ import * as qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
 
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   changeQueryString,
   shortenURL,
@@ -12,6 +11,7 @@ import {
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
 import { defaultEditorValue, OverallState } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { safeTakeEvery as takeEvery } from './SafeEffects';

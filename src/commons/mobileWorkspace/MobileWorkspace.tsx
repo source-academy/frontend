@@ -185,38 +185,57 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     document.documentElement.style.setProperty('--mobile-repl-height', '0px');
   };
 
-  const handleTabChangeForRepl = (newTabId: SideContentType, prevTabId: SideContentType) => {
-    // Evaluate program upon pressing the run tab.
-    if (newTabId === SideContentType.mobileEditorRun) {
-      props.editorContainerProps?.handleEditorEval();
-    }
+  const handleEditorEval = props.editorContainerProps?.handleEditorEval;
+  const handleTabChangeForRepl = React.useCallback(
+    (newTabId: SideContentType, prevTabId: SideContentType) => {
+      // Evaluate program upon pressing the run tab.
+      if (newTabId === SideContentType.mobileEditorRun) {
+        if (handleEditorEval) {
+          handleEditorEval();
+        }
+      }
 
-    // Show the REPL upon pressing the run tab if the previous tab is not listed below.
-    if (
-      newTabId === SideContentType.mobileEditorRun &&
-      !(
-        prevTabId === SideContentType.substVisualizer ||
-        prevTabId === SideContentType.autograder ||
-        prevTabId === SideContentType.testcases
-      )
-    ) {
-      handleShowRepl(-300);
-    } else {
-      handleHideRepl();
-    }
+      // Show the REPL upon pressing the run tab if the previous tab is not listed below.
+      if (
+        newTabId === SideContentType.mobileEditorRun &&
+        !(
+          prevTabId === SideContentType.substVisualizer ||
+          prevTabId === SideContentType.autograder ||
+          prevTabId === SideContentType.testcases
+        )
+      ) {
+        handleShowRepl(-300);
+      } else {
+        handleHideRepl();
+      }
 
-    // Disable draggable REPL when on the files & stepper tab.
-    if (
-      newTabId === SideContentType.files ||
-      newTabId === SideContentType.substVisualizer ||
-      (prevTabId === SideContentType.substVisualizer &&
-        newTabId === SideContentType.mobileEditorRun)
-    ) {
-      setIsDraggableReplDisabled(true);
-    } else {
-      setIsDraggableReplDisabled(false);
-    }
-  };
+      // Disable draggable REPL when on the files & stepper tab.
+      if (
+        newTabId === SideContentType.files ||
+        newTabId === SideContentType.substVisualizer ||
+        (prevTabId === SideContentType.substVisualizer &&
+          newTabId === SideContentType.mobileEditorRun)
+      ) {
+        setIsDraggableReplDisabled(true);
+      } else {
+        setIsDraggableReplDisabled(false);
+      }
+    },
+    [handleEditorEval]
+  );
+
+  const onChange = props.mobileSideContentProps.onChange;
+  const onSideContentTabChange = React.useCallback(
+    (
+      newTabId: SideContentType,
+      prevTabId: SideContentType,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      onChange(newTabId, prevTabId, event);
+      handleTabChangeForRepl(newTabId, prevTabId);
+    },
+    [handleTabChangeForRepl, onChange]
+  );
 
   // Convert sidebar tabs with a side content tab ID into side content tabs.
   const sideBarTabs: SideContentTab[] = props.sideBarProps.tabs.filter(tab => tab.id !== undefined);
@@ -241,17 +260,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     []
   );
 
-  const updatedMobileSideContentProps = () => {
+  const updatedMobileSideContentProps = React.useCallback(() => {
     return {
       ...props.mobileSideContentProps,
-      onChange: (
-        newTabId: SideContentType,
-        prevTabId: SideContentType,
-        event: React.MouseEvent<HTMLElement>
-      ) => {
-        props.mobileSideContentProps.onChange(newTabId, prevTabId, event);
-        handleTabChangeForRepl(newTabId, prevTabId);
-      },
+      onChange: onSideContentTabChange,
       tabs: {
         beforeDynamicTabs: [
           ...sideBarTabs,
@@ -261,7 +273,13 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         afterDynamicTabs: [...props.mobileSideContentProps.tabs.afterDynamicTabs, mobileRunTab]
       }
     };
-  };
+  }, [
+    onSideContentTabChange,
+    mobileEditorTab,
+    mobileRunTab,
+    props.mobileSideContentProps,
+    sideBarTabs
+  ]);
 
   const inAssessmentWorkspace =
     props.mobileSideContentProps.workspaceLocation === 'assessment' ||

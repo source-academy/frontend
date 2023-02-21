@@ -16,9 +16,9 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { assessmentTypeLink } from '../../../commons/utils/ParamParseHelper';
 import { GHAssessmentTypeOverview } from '../../../pages/githubAssessments/GitHubClassroom';
 import { ControlBarGitHubLoginButton } from '../../controlBar/github/ControlBarGitHubLoginButton';
+import { assessmentTypeLink } from '../../utils/ParamParseHelper';
 
 type GitHubAssessmentsNavigationBarProps = DispatchProps & StateProps;
 

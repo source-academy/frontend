@@ -19,15 +19,8 @@ import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessmentWork
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => {
   return {
     activeEditorTabIndex: state.workspaces.githubAssessment.activeEditorTabIndex,
-    editorTabs: state.workspaces.githubAssessment.editorTabs,
-    editorTestcases: state.workspaces.githubAssessment.editorTestcases,
-    hasUnsavedChanges: state.workspaces.githubAssessment.hasUnsavedChanges,
-    isRunning: state.workspaces.githubAssessment.isRunning,
     isDebugging: state.workspaces.githubAssessment.isDebugging,
     enableDebugging: state.workspaces.githubAssessment.enableDebugging,
-    output: state.workspaces.githubAssessment.output,
-    replValue: state.workspaces.githubAssessment.replValue,
-    sideContentHeight: state.workspaces.githubAssessment.sideContentHeight,
     sourceChapter: state.workspaces.githubAssessment.context.chapter
   };
 };

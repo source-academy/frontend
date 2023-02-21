@@ -244,12 +244,12 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
       value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
         ? defaultEditorValue
         : '',
-      prependValue: '',
-      postpendValue: '',
       highlightedLines: [],
       breakpoints: []
     }
   ],
+  programPrependValue: '',
+  programPostpendValue: '',
   editorSessionId: '',
   isEditorReadonly: false,
   editorTestcases: [],
@@ -350,7 +350,6 @@ export const defaultSession: SessionState = {
   assessments: new Map<number, Assessment>(),
   assessmentOverviews: undefined,
   agreedToResearch: undefined,
-  hadPreviousInfiniteLoop: false,
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,

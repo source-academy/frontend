@@ -15,12 +15,11 @@ import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, race, select, StrictEffect, take } from 'redux-saga/effects';
+import { call, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
@@ -46,13 +45,6 @@ import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
-import {
-  getInfiniteLoopData,
-  isPotentialInfiniteLoop,
-  reportInfiniteLoopError,
-  reportNonErrorProgram,
-  reportPotentialInfiniteLoop
-} from '../utils/InfiniteLoopReporter';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
@@ -111,8 +103,8 @@ export default function* WorkspaceSaga(): SagaIterator {
       context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
       const code: string = yield select((state: OverallState) => {
+        const prependCode = state.workspaces[workspaceLocation].programPrependValue;
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        const prependCode = state.workspaces[workspaceLocation].editorTabs[0].prependValue;
         const editorCode = state.workspaces[workspaceLocation].editorTabs[0].value;
         return [prependCode, editorCode] as [string, string];
       });
@@ -333,47 +325,6 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   /**
-   * Ensures that the external JS libraries have been loaded by waiting
-   * with a timeout. An error message will be shown
-   * if the libraries are not loaded. This is particularly useful
-   * when dealing with external library pre-conditions, e.g when the
-   * website has just loaded and there is a need to reset the js-slang context,
-   * but it cannot be determined if the global JS files are loaded yet.
-   *
-   * The presence of JS libraries are checked using the presence of a global
-   * function "getReadyWebGLForCanvas", that is used in CLEAR_CONTEXT to prepare
-   * the canvas for rendering in a specific mode.
-   *
-   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
-   * the function.
-   *
-   * @returns true if the libraries are loaded before timeout
-   * @returns false if the loading of the libraries times out
-   */
-  function* checkWebGLAvailable() {
-    function* helper() {
-      while (true) {
-        if ((window as any).getReadyWebGLForCanvas !== undefined) {
-          break;
-        }
-        yield delay(250);
-      }
-      return true;
-    }
-    // Create a race condition between the js files being loaded and a timeout.
-    const { loadedScripts, timeout } = yield race({
-      loadedScripts: call(helper),
-      timeout: delay(4000)
-    });
-    if (timeout !== undefined && loadedScripts === undefined) {
-      yield call(showWarningMessage, 'Error loading libraries', 750);
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  /**
    * Handles the side effect of resetting the WebGL context when context is reset.
    *
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
@@ -382,20 +333,6 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     BEGIN_CLEAR_CONTEXT,
     function* (action: ReturnType<typeof actions.beginClearContext>) {
-      yield* checkWebGLAvailable();
-      if (action.payload.shouldInitLibrary) {
-        const externalLibraryName = action.payload.library.external.name;
-        switch (externalLibraryName) {
-          case ExternalLibraryName.RUNES:
-            (window as any).loadLib('RUNES');
-            (window as any).getReadyWebGLForCanvas('3d');
-            (window as any).getReadyStringifyForRunes(stringify);
-            break;
-          case ExternalLibraryName.MACHINELEARNING:
-            (window as any).loadLib('MACHINELEARNING');
-            break;
-        }
-      }
       DataVisualizer.clear();
       EnvVisualizer.clear();
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
@@ -531,17 +468,91 @@ export function* dumpDisplayBuffer(
   yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
 }
 
+/**
+ * Inserts debugger statements into the code based off the breakpoints set by the user.
+ *
+ * For every breakpoint, a corresponding `debugger;` statement is inserted at the start
+ * of the line that the breakpoint is placed at. The `debugger;` statement is available
+ * in both JavaScript and Source, and invokes any available debugging functionality.
+ * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/debugger
+ * for more information.
+ *
+ * While it is typically the case that statements are contained within a single line,
+ * this is not necessarily true. For example, the code `const x = 3;` can be rewritten as:
+ * ```
+ * const x
+ * = 3;
+ * ```
+ * A breakpoint on the line `= 3;` would thus result in a `debugger;` statement being
+ * added in the middle of another statement. The resulting code would then be syntactically
+ * invalid.
+ *
+ * To work around this issue, we parse the code to check for syntax errors whenever we
+ * add a `debugger;` statement. If the addition of a `debugger;` statement results in
+ * invalid code, an error message is outputted with the line number of the offending
+ * breakpoint.
+ *
+ * @param workspaceLocation The location of the current workspace.
+ * @param code              The code which debugger statements should be inserted into.
+ * @param breakpoints       The breakpoints corresponding to the code.
+ * @param context           The context in which the code should be evaluated in.
+ */
+function* insertDebuggerStatements(
+  workspaceLocation: WorkspaceLocation,
+  code: string,
+  breakpoints: string[],
+  context: Context
+): Generator<StrictEffect, string, any> {
+  // Check for initial syntax errors.
+  if (isSourceLanguage(context.chapter)) {
+    parse(code, context);
+  }
+
+  // If there are syntax errors, we do not insert the debugger statements.
+  // Instead, we let the code be evaluated so that the error messages are printed.
+  if (context.errors.length > 0) {
+    context.errors = [];
+    return code;
+  }
+
+  // Otherwise, we step through the breakpoints one by one & try to insert
+  // corresponding debugger statements.
+  const lines = code.split('\n');
+  let transformedCode = code;
+  for (const breakpoint in breakpoints) {
+    // Add a debugger statement to the line with the breakpoint.
+    const breakpointLineNum: number = parseInt(breakpoint);
+    lines[breakpointLineNum] = 'debugger;' + lines[breakpointLineNum];
+    // Reconstruct the code & check that the code is still syntactically valid.
+    // The insertion of the debugger statement is potentially invalid if it
+    // happens within an existing statement (that is split across lines).
+    transformedCode = lines.join('\n');
+    if (isSourceLanguage(context.chapter)) {
+      parse(transformedCode, context);
+    }
+    // If the resulting code is no longer syntactically valid, throw an error.
+    if (context.errors.length > 0) {
+      const errorMessage = `Hint: Misplaced breakpoint at line ${breakpointLineNum + 1}.`;
+      yield put(actions.sendReplInputToOutput(errorMessage, workspaceLocation));
+      return code;
+    }
+  }
+
+  // Finally, return the transformed code with debugger statements added.
+  return transformedCode;
+}
+
 export function* evalEditor(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
-  const [prepend, editorCode, execTime, remoteExecutionSession]: [
+  const [prepend, code, execTime, remoteExecutionSession]: [
     string,
     string,
     number,
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
+    state.workspaces[workspaceLocation].programPrependValue,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    state.workspaces[workspaceLocation].editorTabs[0].prependValue,
     state.workspaces[workspaceLocation].editorTabs[0].value,
     state.workspaces[workspaceLocation].execTime,
     state.session.remoteExecutionSession
@@ -550,46 +561,27 @@ export function* evalEditor(
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    yield put(actions.remoteExecRun(editorCode));
+    yield put(actions.remoteExecRun(code));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
-    yield* clearContext(workspaceLocation, editorCode);
+    yield* clearContext(workspaceLocation, code);
     yield put(actions.clearReplOutput(workspaceLocation));
     const context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context
     );
-    let value = editorCode;
-    // Check for initial syntax errors. If there are errors, we continue with
-    // eval and let it print the error messages.
-    if (isSourceLanguage(context.chapter)) {
-      parse(value, context);
-    }
-    if (!context.errors.length) {
-      // Otherwise we step through the breakpoints one by one and check them.
-      const exploded = editorCode.split('\n');
-      const breakpoints: string[] = yield select(
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].breakpoints
-      );
-      for (const b in breakpoints) {
-        if (typeof b !== 'string') {
-          continue;
-        }
+    const breakpoints: string[] = yield select(
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].breakpoints
+    );
 
-        const index: number = +b;
-        context.errors = [];
-        exploded[index] = 'debugger;' + exploded[index];
-        value = exploded.join('\n');
-        if (isSourceLanguage(context.chapter)) {
-          parse(value, context);
-        }
-        if (context.errors.length) {
-          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
-          yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
-        }
-      }
-    }
+    // Insert debugger statements at the lines of the program with a breakpoint.
+    const transformedCode = yield* insertDebuggerStatements(
+      workspaceLocation,
+      code,
+      breakpoints,
+      context
+    );
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
@@ -599,7 +591,7 @@ export function* evalEditor(
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
-    yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_EDITOR);
+    yield call(evalCode, transformedCode, context, execTime, workspaceLocation, EVAL_EDITOR);
   }
 }
 
@@ -609,10 +601,10 @@ export function* runTestCase(
 ): Generator<StrictEffect, boolean, any> {
   const [prepend, value, postpend, testcase]: [string, string, string, string] = yield select(
     (state: OverallState) => {
+      const prepend = state.workspaces[workspaceLocation].programPrependValue;
+      const postpend = state.workspaces[workspaceLocation].programPostpendValue;
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      const prepend = state.workspaces[workspaceLocation].editorTabs[0].prependValue;
       const value = state.workspaces[workspaceLocation].editorTabs[0].value;
-      const postpend = state.workspaces[workspaceLocation].editorTabs[0].postpendValue;
       const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
       return [prepend, value, postpend, testcase] as [string, string, string, string];
     }
@@ -851,31 +843,6 @@ export function* evalCode(
     // for achievement event tracking
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
 
-    // report infinite loops but only for 'vanilla'/default source
-    if (context.variant === undefined || context.variant === Variant.DEFAULT) {
-      const [approval, sessionId] = yield select((state: OverallState) => [
-        state.session.agreedToResearch,
-        state.session.sessionId
-      ]);
-      if (approval) {
-        const infiniteLoopData = getInfiniteLoopData(context);
-        const lastError = context.errors[context.errors.length - 1];
-        if (infiniteLoopData) {
-          events.push(EventType.INFINITE_LOOP);
-          yield put(actions.updateInfiniteLoopEncountered());
-          yield call(reportInfiniteLoopError, sessionId, ...infiniteLoopData);
-        } else if (isPotentialInfiniteLoop(lastError)) {
-          events.push(EventType.INFINITE_LOOP);
-          yield call(
-            reportPotentialInfiniteLoop,
-            sessionId,
-            lastError.explain(),
-            context.previousCode
-          );
-        }
-      }
-    }
-
     if (typeErrors && typeErrors.length > 0) {
       events.push(EventType.ERROR);
       yield put(
@@ -893,16 +860,6 @@ export function* evalCode(
       result.value = undefined;
     }
     lastNonDetResult = result;
-  } else if (context.variant === undefined || context.variant === Variant.DEFAULT) {
-    // Finished execution with no errors
-    const [approval, sessionId, previousInfiniteLoop] = yield select((state: OverallState) => [
-      state.session.agreedToResearch,
-      state.session.sessionId,
-      state.session.hadPreviousInfiniteLoop
-    ]);
-    if (approval && previousInfiniteLoop) {
-      yield call(reportNonErrorProgram, sessionId, context.previousCode);
-    }
   }
 
   yield* dumpDisplayBuffer(workspaceLocation);
