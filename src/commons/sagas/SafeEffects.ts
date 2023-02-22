@@ -14,7 +14,7 @@ import {
 // higher-kinded types (type parameters that take )
 
 function handleUncaughtError(error: any) {
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.NODE_ENV === 'development') {
     // react-error-overlay is a "special" package that's automatically included
     // in development mode by CRA
 

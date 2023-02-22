@@ -21,7 +21,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
-const SW_EXCLUDE_REGEXES = process.env.REACT_APP_SW_EXCLUDE_REGEXES;
+const SW_EXCLUDE_REGEXES = import.meta.env.VITE_SW_EXCLUDE_REGEXES;
 const ignorePathnameRegexps = (JSON.parse(SW_EXCLUDE_REGEXES || '[]') as string[]).map(
   str => new RegExp(str)
 );
@@ -51,7 +51,7 @@ registerRoute(
     // Return true to signal that we want to use the handler.
     return true;
   },
-  createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html')
+  createHandlerBoundToURL(import.meta.env.PUBLIC_URL + '/index.html')
 );
 
 // This allows the web app to trigger skipWaiting via

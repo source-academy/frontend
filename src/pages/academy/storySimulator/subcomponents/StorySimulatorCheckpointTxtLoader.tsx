@@ -1,5 +1,3 @@
-import 'ace-builds/webpack-resolver';
-
 import { Button, Tab, Tabs } from '@blueprintjs/core';
 import React from 'react';
 import { toTxtPath } from 'src/features/game/assets/TextAssets';

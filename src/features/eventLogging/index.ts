@@ -23,9 +23,9 @@ const questionIdLookup: { [id: string]: string } = {};
 
 // ------------------- EXTERNAL API -------------------
 
-const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
+const cadetLoggerUrl = import.meta.env.VITE_CADET_LOGGER;
 export function log(id: string, input: Input) {
-  if (process.env.NODE_ENV === 'test' || !cadetLoggerUrl) {
+  if (import.meta.env.NODE_ENV === 'test' || !cadetLoggerUrl) {
     return;
   } // This is set statically
   saveRecord({

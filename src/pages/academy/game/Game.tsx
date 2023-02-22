@@ -43,7 +43,7 @@ function Game() {
     SourceAcademyGame.getInstance().setAchievements(achievements);
     SourceAcademyGame.getInstance().setGoals(goals);
 
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.NODE_ENV === 'development') {
       setIsTestStudent(true);
       setIsUsingMock(true);
       SourceAcademyGame.getInstance().toggleUsingMock(true);
