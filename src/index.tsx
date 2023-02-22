@@ -13,7 +13,7 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
-import FileSystemProvider from './pages/fileSystem/FileSystemProvider';
+import { createFileSystem } from './pages/fileSystem/createFileSystem';
 
 if (Constants.sentryDsn) {
   Sentry.init({
@@ -38,11 +38,9 @@ console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 
 render(
   <Provider store={store}>
-    <FileSystemProvider>
-      <Router history={history}>
-        <ApplicationContainer />
-      </Router>
-    </FileSystemProvider>
+    <Router history={history}>
+      <ApplicationContainer />
+    </Router>
   </Provider>,
   rootContainer
 );
@@ -64,3 +62,5 @@ if (Constants.cadetLoggerUrl) {
     setInterval(sync, Constants.cadetLoggerInterval);
   });
 }
+
+createFileSystem(store);

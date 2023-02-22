@@ -1,10 +1,10 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import path from 'path';
-import React, { useContext } from 'react';
+import React from 'react';
 
-import { FileSystemContext } from '../../pages/fileSystem/FileSystemProvider';
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
@@ -16,7 +16,7 @@ export type FileSystemViewProps = {
 
 const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProps) => {
   const { basePath } = props;
-  const fileSystem = useContext(FileSystemContext);
+  const fileSystem = useTypedSelector(state => state.fileSystem.fileSystem);
 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState<boolean>(false);
@@ -29,7 +29,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
   const forceRefreshFileSystemViewList = () =>
     setFileSystemViewListKey((fileSystemViewListKey + 1) % 2);
 
-  if (!fileSystem) {
+  if (fileSystem === null) {
     return <div className="file-system-view-error">Unable to load file system.</div>;
   }
 
