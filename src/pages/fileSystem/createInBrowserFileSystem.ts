@@ -4,7 +4,7 @@ import { Store } from 'redux';
 
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 
-export const createFileSystem = (store: Store) => {
+export const createInBrowserFileSystem = (store: Store) => {
   configure(
     {
       fs: 'MountableFileSystem',

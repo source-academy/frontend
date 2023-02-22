@@ -13,7 +13,7 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
-import { createFileSystem } from './pages/fileSystem/createFileSystem';
+import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
 if (Constants.sentryDsn) {
   Sentry.init({
@@ -63,4 +63,4 @@ if (Constants.cadetLoggerUrl) {
   });
 }
 
-createFileSystem(store);
+createInBrowserFileSystem(store);
