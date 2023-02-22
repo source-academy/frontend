@@ -358,7 +358,7 @@ export const defaultSession: SessionState = {
 };
 
 export const defaultFileSystem: FileSystemState = {
-  fileSystem: null
+  inBrowserFileSystem: null
 };
 
 export const defaultState: OverallState = {

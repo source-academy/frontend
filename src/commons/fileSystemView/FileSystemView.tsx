@@ -16,7 +16,7 @@ export type FileSystemViewProps = {
 
 const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProps) => {
   const { basePath } = props;
-  const fileSystem = useTypedSelector(state => state.fileSystem.fileSystem);
+  const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState<boolean>(false);

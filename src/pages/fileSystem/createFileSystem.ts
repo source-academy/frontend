@@ -2,7 +2,7 @@ import { BFSRequire, configure } from 'browserfs';
 import { ApiError } from 'browserfs/dist/node/core/api_error';
 import { Store } from 'redux';
 
-import { setFileSystem } from '../../commons/fileSystem/FileSystemActions';
+import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 
 export const createFileSystem = (store: Store) => {
   configure(
@@ -21,7 +21,7 @@ export const createFileSystem = (store: Store) => {
       if (err) {
         console.error(err);
       }
-      store.dispatch(setFileSystem(BFSRequire('fs')));
+      store.dispatch(setInBrowserFileSystem(BFSRequire('fs')));
     }
   );
 };
