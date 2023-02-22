@@ -103,8 +103,8 @@ export default function* WorkspaceSaga(): SagaIterator {
       context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
       const code: string = yield select((state: OverallState) => {
+        const prependCode = state.workspaces[workspaceLocation].programPrependValue;
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        const prependCode = state.workspaces[workspaceLocation].editorTabs[0].prependValue;
         const editorCode = state.workspaces[workspaceLocation].editorTabs[0].value;
         return [prependCode, editorCode] as [string, string];
       });
@@ -551,8 +551,8 @@ export function* evalEditor(
     number,
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
+    state.workspaces[workspaceLocation].programPrependValue,
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    state.workspaces[workspaceLocation].editorTabs[0].prependValue,
     state.workspaces[workspaceLocation].editorTabs[0].value,
     state.workspaces[workspaceLocation].execTime,
     state.session.remoteExecutionSession
@@ -601,10 +601,10 @@ export function* runTestCase(
 ): Generator<StrictEffect, boolean, any> {
   const [prepend, value, postpend, testcase]: [string, string, string, string] = yield select(
     (state: OverallState) => {
+      const prepend = state.workspaces[workspaceLocation].programPrependValue;
+      const postpend = state.workspaces[workspaceLocation].programPostpendValue;
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      const prepend = state.workspaces[workspaceLocation].editorTabs[0].prependValue;
       const value = state.workspaces[workspaceLocation].editorTabs[0].value;
-      const postpend = state.workspaces[workspaceLocation].editorTabs[0].postpendValue;
       const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
       return [prepend, value, postpend, testcase] as [string, string, string, string];
     }

@@ -22,6 +22,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     state.workspaces.playground,
     'activeEditorTabIndex',
     'editorTabs',
+    'programPrependValue',
+    'programPostpendValue',
     'editorSessionId',
     'execTime',
     'stepLimit',

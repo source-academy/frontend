@@ -71,7 +71,6 @@ export type DispatchProps = {
   handleReplValueChange: (newValue: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -237,16 +236,16 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const resetWorkspaceValues = () => {
     const question: Question = assessment!.questions[formatedQuestionId()];
     let editorValue: string;
-    let editorPrepend = '';
-    let editorPostpend = '';
+    let programPrependValue = '';
+    let programPostpendValue = '';
     if (question.type === QuestionTypes.programming) {
       if (question.editorValue) {
         editorValue = question.editorValue;
       } else {
         editorValue = (question as IProgrammingQuestion).solutionTemplate as string;
       }
-      editorPrepend = (question as IProgrammingQuestion).prepend;
-      editorPostpend = (question as IProgrammingQuestion).postpend;
+      programPrependValue = (question as IProgrammingQuestion).prepend;
+      programPostpendValue = (question as IProgrammingQuestion).postpend;
     } else {
       editorValue = '//If you see this, this is a bug. Please report bug.';
     }
@@ -256,12 +255,12 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       editorTabs: [
         {
           value: editorValue,
-          prependValue: editorPrepend,
-          postpendValue: editorPostpend,
           highlightedLines: [],
           breakpoints: []
         }
-      ]
+      ],
+      programPrependValue,
+      programPostpendValue
     });
     props.handleEditorValueChange(editorValue);
   };
@@ -345,7 +344,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
             editorValue={props.editorTabs[0].value}
             handleEditorValueChange={props.handleEditorValueChange}
-            handleUpdateActiveEditorTab={props.handleUpdateActiveEditorTab}
+            handleUpdateWorkspace={props.handleUpdateWorkspace}
           />
         );
 

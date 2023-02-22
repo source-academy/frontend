@@ -14,9 +14,9 @@ const baseProps = assertType<PlaygroundProps>()({
   isDebugging: false,
   enableDebugging: true,
   activeEditorTabIndex: 0,
-  editorTabs: [
-    { value: '', prependValue: '', postpendValue: '', highlightedLines: [], breakpoints: [] }
-  ],
+  editorTabs: [{ value: '', highlightedLines: [], breakpoints: [] }],
+  programPrependValue: '',
+  programPostpendValue: '',
   editorSessionId: '',
   isEditorAutorun: false,
   sideContentHeight: 40,

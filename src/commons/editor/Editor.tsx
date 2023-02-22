@@ -23,6 +23,7 @@ import useShareAce from './UseShareAce';
 import useTypeInference from './UseTypeInference';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
+import { IAceEditor } from 'react-ace/lib/types';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -139,6 +140,135 @@ const makeHandleGutterClick =
     e.stop();
     handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
   };
+
+/**
+ * Returns an array of breakpoint line numbers from the Ace Editor's breakpoint
+ * array representation.
+ *
+ * In JavaScript, arrays are just objects. As a result, the Ace Editor's breakpoint
+ * array has empty slots (i.e., array indices which are not defined at all). Breakpoints
+ * are represented in the Ace Editor's breakpoints array as key-value pairs where the
+ * key is a string representation of the line number it is on, and the value is
+ * 'ace_breakpoint'. As such, to get an array of breakpoint line numbers, we need to
+ * get the keys of the Ace Editor's breakpoint array/object and parse them as integers.
+ *
+ * @param breakpoints The Ace Editor's breakpoint representation.
+ */
+const getBreakpointLineNumbers = (breakpoints: string[]): number[] =>
+  Object.keys(breakpoints).map(breakpointIndex => parseInt(breakpointIndex));
+
+/**
+ * Shifts breakpoints in accordance to changes in the code. This is a quality-of-life
+ * feature that attempts to shift breakpoints together with changes made to the code
+ * so as to provide a smoother debugging experience for the user. It is modelled after
+ * the breakpoint shifting behaviour of popular code editors & IDEs such as Visual
+ * Studio Code and JetBrains IDEs.
+ *
+ * @param editor The Ace Editor instance.
+ * @param delta  An object representing the changes made to the code.
+ */
+const shiftBreakpointsWithCode = (editor: IAceEditor, delta: Ace.Delta) => {
+  const getIndexOfFirstNonWhitespaceChar = (s: string): number => s.length - s.trimStart().length;
+  const isWhitespace = (s: string): boolean => s.trim().length === 0;
+
+  const oldBreakpoints = editor.session.getBreakpoints();
+  const oldBreakpointLineNumbers = getBreakpointLineNumbers(oldBreakpoints);
+  const newBreakpointLineNumbers: number[] = [];
+
+  const deltaStartLineNumber = delta.start.row;
+  const deltaStartColumnNumber = delta.start.column;
+  const deltaEndLineNumber = delta.end.row;
+  // Subtract 1 because one line of every change modifies an existing line.
+  const deltaNumOfLinesModified = delta.lines.length - 1;
+
+  for (const oldBreakpointLineNumber of oldBreakpointLineNumbers) {
+    switch (delta.action) {
+      case 'insert': {
+        let shouldIncreaseBreakpointLineNumber: boolean;
+        if (oldBreakpointLineNumber < deltaStartLineNumber) {
+          // Line number of the breakpoint is unaffected since the changes happen on a later line.
+          shouldIncreaseBreakpointLineNumber = false;
+        } else if (oldBreakpointLineNumber === deltaStartLineNumber) {
+          // Line number of the breakpoint is unaffected if the changes happen before the first
+          // non-whitespace character on the same line. Otherwise, the line number of breakpoint
+          // is increased by the number of lines added.
+          const firstModifiedLine = editor.session.getLine(oldBreakpointLineNumber);
+          const firstNonWhitespaceCharIndex = getIndexOfFirstNonWhitespaceChar(firstModifiedLine);
+          shouldIncreaseBreakpointLineNumber =
+            firstNonWhitespaceCharIndex >= deltaStartColumnNumber;
+        } else {
+          // Line number of the breakpoint is increased by the number of lines added since the changes
+          // happen on an earlier line.
+          shouldIncreaseBreakpointLineNumber = true;
+        }
+        const newBreakpointLineNumber =
+          oldBreakpointLineNumber +
+          (shouldIncreaseBreakpointLineNumber ? deltaNumOfLinesModified : 0);
+        newBreakpointLineNumbers.push(newBreakpointLineNumber);
+        break;
+      }
+      case 'remove': {
+        let shouldDecreaseBreakpointLineNumber: boolean;
+        if (oldBreakpointLineNumber < deltaStartLineNumber) {
+          // Line number of the breakpoint is unaffected since the changes happen on a later line.
+          shouldDecreaseBreakpointLineNumber = false;
+        } else if (
+          oldBreakpointLineNumber > deltaStartLineNumber &&
+          oldBreakpointLineNumber < deltaEndLineNumber
+        ) {
+          // Breakpoint should be removed as the line it is on is deleted.
+          break;
+        } else if (oldBreakpointLineNumber === deltaStartLineNumber) {
+          // Breakpoint should be removed if the first (partially) deleted line only has whitespace
+          // characters remaining. Otherwise, the line number of the breakpoint should remain unchanged.
+          const firstModifiedLine = editor.session.getLine(oldBreakpointLineNumber);
+          const firstModifiedLineIsWhitespace = isWhitespace(firstModifiedLine);
+          if (firstModifiedLineIsWhitespace) {
+            break;
+          }
+          shouldDecreaseBreakpointLineNumber = false;
+        } else if (oldBreakpointLineNumber === deltaEndLineNumber) {
+          // Breakpoint should be removed if the last (partially) deleted line only has whitespace
+          // characters remaining. Otherwise, the line number of the breakpoint should decrease by
+          // the number of lines removed.
+          const lastModifiedLine = editor.session
+            .getLine(oldBreakpointLineNumber - deltaNumOfLinesModified)
+            .substring(deltaStartColumnNumber);
+          const lastModifiedLineIsWhitespace = isWhitespace(lastModifiedLine);
+          if (lastModifiedLineIsWhitespace) {
+            break;
+          }
+          shouldDecreaseBreakpointLineNumber = true;
+        } else {
+          // Line number of the breakpoint is decreased by the number of lines removed since the changes
+          // happen on an earlier line.
+          shouldDecreaseBreakpointLineNumber = true;
+        }
+        const newBreakpointLineNumber =
+          oldBreakpointLineNumber -
+          (shouldDecreaseBreakpointLineNumber ? deltaNumOfLinesModified : 0);
+        newBreakpointLineNumbers.push(newBreakpointLineNumber);
+        break;
+      }
+    }
+  }
+
+  editor.session.setBreakpoints(newBreakpointLineNumbers);
+};
+
+/**
+ * Displays breakpoints on the Ace Editor instance.
+ *
+ * This is necessary for when the Ace Editor instance is first loaded and
+ * there are breakpoints which should be displayed in the gutter.
+ *
+ * @param editor      The Ace Editor instance.
+ * @param breakpoints The breakpoints to be set on the Ace Editor instance.
+ */
+const displayBreakpoints = (editor: IAceEditor, breakpoints: string[]) => {
+  const breakpointLineNumbers = getBreakpointLineNumbers(breakpoints);
+  editor.session.setBreakpoints(breakpointLineNumbers);
+};
 
 // Note: This is untestable/unused because JS-hint has been removed.
 const makeHandleAnnotationChange = (session: Ace.EditSession) => () => {
@@ -309,7 +439,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }
 
-  const hooksOnChange = aceEditorProps.onChange;
+  const { onChange, onLoad } = aceEditorProps;
 
   aceEditorProps.onChange = React.useCallback(
     (newCode: string, delta: Ace.Delta) => {
@@ -317,6 +447,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
         return;
       }
       handleEditorValueChange(newCode);
+      shiftBreakpointsWithCode(reactAceRef.current.editor, delta);
       if (handleUpdateHasUnsavedChanges) {
         handleUpdateHasUnsavedChanges(true);
       }
@@ -324,15 +455,27 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       if (isEditorAutorun && annotations.length === 0) {
         handleEditorEval();
       }
-      hooksOnChange && hooksOnChange(newCode, delta);
+      if (onChange !== undefined) {
+        onChange(newCode, delta);
+      }
     },
     [
       handleEditorValueChange,
       handleUpdateHasUnsavedChanges,
       isEditorAutorun,
-      hooksOnChange,
+      onChange,
       handleEditorEval
     ]
+  );
+
+  aceEditorProps.onLoad = React.useCallback(
+    (editor: IAceEditor) => {
+      displayBreakpoints(editor, props.breakpoints);
+      if (onLoad !== undefined) {
+        onLoad(editor);
+      }
+    },
+    [props.breakpoints, onLoad]
   );
 
   aceEditorProps.commands = Object.entries(keyHandlers)

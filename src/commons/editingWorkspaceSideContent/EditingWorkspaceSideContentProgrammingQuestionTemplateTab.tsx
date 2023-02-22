@@ -6,7 +6,7 @@ import AceEditor from 'react-ace';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
+import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type QuestionEditorProps = DispatchProps & StateProps;
@@ -14,7 +14,7 @@ type QuestionEditorProps = DispatchProps & StateProps;
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (val: string) => void;
-  handleUpdateActiveEditorTab: (options: Partial<EditorTabState>) => void;
+  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
 };
 
 type StateProps = {
@@ -179,11 +179,11 @@ const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
         }
 
         if (activeEditor.id === 'prepend') {
-          const editorPrepend = templateValue;
-          props.handleUpdateActiveEditorTab({ prependValue: editorPrepend });
+          const programPrependValue = templateValue;
+          props.handleUpdateWorkspace({ programPrependValue });
         } else if (activeEditor.id === 'postpend') {
-          const editorPostpend = templateValue;
-          props.handleUpdateActiveEditorTab({ postpendValue: editorPostpend });
+          const programPostpendValue = templateValue;
+          props.handleUpdateWorkspace({ programPostpendValue });
         }
 
         setTemplateValue('');
