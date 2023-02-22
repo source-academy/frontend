@@ -14,7 +14,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
 
@@ -38,85 +38,57 @@ type StateProps = {
   assessmentTypes: AssessmentType[];
 };
 
-type State = {
-  editingOverviewField: string;
-  fieldValue: any;
-  showOptionsOverlay: boolean;
-};
+export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => {
+  const [editingOverviewField, setEditingOverviewField] = useState('');
+  const [fieldValue, setFieldValue] = useState<any>('');
+  const [showOptionsOverlay, setShowOptionsOverlay] = useState(false);
 
-export class EditingOverviewCard extends React.Component<EditingOverviewCardProps, State> {
-  public constructor(props: EditingOverviewCardProps) {
-    super(props);
-    this.state = {
-      editingOverviewField: '',
-      fieldValue: '',
-      showOptionsOverlay: false
-    };
-  }
-
-  public render() {
-    return (
-      <div>
-        {this.optionsOverlay()}
-        {this.makeEditingOverviewCard(this.props.overview)}
-      </div>
-    );
-  }
-
-  private saveEditOverview = (field: keyof AssessmentOverview) => (e: any) => {
+  const saveEditOverview = (field: keyof AssessmentOverview) => (e: any) => {
     const overview = {
-      ...this.props.overview,
-      [field]: this.state.fieldValue
+      ...props.overview,
+      [field]: fieldValue
     };
-    this.setState({
-      editingOverviewField: '',
-      fieldValue: ''
-    });
+    setEditingOverviewField('');
+    setFieldValue('');
     storeLocalAssessmentOverview(overview);
-    this.props.updateEditingOverview(overview);
+    props.updateEditingOverview(overview);
   };
 
-  private handleEditOverview = () => (e: any) => {
-    this.setState({
-      fieldValue: e.target.value
-    });
+  const handleEditOverview = (e: any) => {
+    setFieldValue(e.target.value);
   };
 
-  private toggleEditField = (field: keyof AssessmentOverview) => (e: any) => {
-    if (this.state.editingOverviewField !== field) {
-      this.setState({
-        editingOverviewField: field,
-        fieldValue: this.props.overview[field]
-      });
+  const toggleEditField = (field: keyof AssessmentOverview) => (e: any) => {
+    if (editingOverviewField !== field) {
+      setEditingOverviewField(field);
+      setFieldValue(props.overview[field]);
     }
   };
 
-  private toggleOptionsOverlay = () => {
-    this.setState({
-      showOptionsOverlay: !this.state.showOptionsOverlay
-    });
+  const toggleOptionsOverlay = () => {
+    setShowOptionsOverlay(!showOptionsOverlay);
   };
 
-  private handleExportXml = (e: any) => {
+  const handleExportXml = (e: any) => {
     exportXml();
   };
 
-  private makeEditingOverviewTextarea = (field: keyof AssessmentOverview) => (
+  const makeEditingOverviewTextarea = (field: keyof AssessmentOverview) => (
     <Textarea
       autoFocus={true}
       className={'editing-textarea'}
-      onChange={this.handleEditOverview()}
-      onBlur={this.saveEditOverview(field)}
-      value={this.state.fieldValue}
+      onChange={handleEditOverview}
+      onBlur={saveEditOverview(field)}
+      value={fieldValue}
     />
   );
 
-  private makeEditingOverviewCard = (overview: AssessmentOverview) => (
+  const makeEditingOverviewCard = (overview: AssessmentOverview) => (
     <div>
       <Card className="row listing" elevation={Elevation.ONE}>
-        <div className="col-xs-3 listing-picture" onClick={this.toggleEditField('coverImage')}>
-          {this.state.editingOverviewField === 'coverImage' ? (
-            this.makeEditingOverviewTextarea('coverImage')
+        <div className="col-xs-3 listing-picture" onClick={toggleEditField('coverImage')}>
+          {editingOverviewField === 'coverImage' ? (
+            makeEditingOverviewTextarea('coverImage')
           ) : (
             <img
               alt="Assessment cover"
@@ -127,13 +99,13 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
         </div>
 
         <div className="col-xs-9 listing-text">
-          {this.makeEditingOverviewCardTitle(overview, overview.title)}
+          {makeEditingOverviewCardTitle(overview, overview.title)}
           <div className="row listing-xp">
             <H6> {`Max XP: ${overview.maxXp}`} </H6>
           </div>
-          <div className="row listing-description" onClick={this.toggleEditField('shortSummary')}>
-            {this.state.editingOverviewField === 'shortSummary' ? (
-              this.makeEditingOverviewTextarea('shortSummary')
+          <div className="row listing-description" onClick={toggleEditField('shortSummary')}>
+            {editingOverviewField === 'shortSummary' ? (
+              makeEditingOverviewTextarea('shortSummary')
             ) : (
               <Markdown content={createPlaceholder(overview.shortSummary)} />
             )}
@@ -142,26 +114,24 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
             <Text className="listing-due-date">
               <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
               <div className="date-container">Opens at:&nbsp;</div>
-              <div className="date-container" onClick={this.toggleEditField('openAt')}>
-                {this.state.editingOverviewField === 'openAt'
-                  ? this.makeEditingOverviewTextarea('openAt')
+              <div className="date-container" onClick={toggleEditField('openAt')}>
+                {editingOverviewField === 'openAt'
+                  ? makeEditingOverviewTextarea('openAt')
                   : `${getPrettyDate(overview.openAt)}`}
               </div>
 
               <div className="date-container">&nbsp;&nbsp;Due:&nbsp;</div>
-              <div className="date-container" onClick={this.toggleEditField('closeAt')}>
-                {this.state.editingOverviewField === 'closeAt'
-                  ? this.makeEditingOverviewTextarea('closeAt')
+              <div className="date-container" onClick={toggleEditField('closeAt')}>
+                {editingOverviewField === 'closeAt'
+                  ? makeEditingOverviewTextarea('closeAt')
                   : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
-            <Button icon={IconNames.WRENCH} minimal={true} onClick={this.toggleOptionsOverlay}>
+            <Button icon={IconNames.WRENCH} minimal={true} onClick={toggleOptionsOverlay}>
               Other Options
             </Button>
             <NavLink
-              to={`${this.props.listingPath}/${overview.id.toString()}/${
-                Constants.defaultQuestionId
-              }`}
+              to={`${props.listingPath}/${overview.id.toString()}/${Constants.defaultQuestionId}`}
             >
               <ControlButton label="Edit mission" icon={IconNames.EDIT} />
             </NavLink>
@@ -171,82 +141,77 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
     </div>
   );
 
-  private makeEditingOverviewCardTitle = (overview: AssessmentOverview, title: string) => (
+  const makeEditingOverviewCardTitle = (overview: AssessmentOverview, title: string) => (
     <div className="row listing-title">
       <Text ellipsize={true} className={'col-xs-10'}>
-        <H4 onClick={this.toggleEditField('title')}>
-          {this.state.editingOverviewField === 'title'
-            ? this.makeEditingOverviewTextarea('title')
+        <H4 onClick={toggleEditField('title')}>
+          {editingOverviewField === 'title'
+            ? makeEditingOverviewTextarea('title')
             : createPlaceholder(title)}
         </H4>
       </Text>
-      <div className="col-xs-2">{this.makeExportButton(overview)}</div>
+      <div className="col-xs-2">{makeExportButton(overview)}</div>
     </div>
   );
 
-  private makeExportButton = (overview: AssessmentOverview) => (
-    <Button
-      icon={IconNames.EXPORT}
-      intent={Intent.DANGER}
-      minimal={true}
-      onClick={this.handleExportXml}
-    >
+  const makeExportButton = (overview: AssessmentOverview) => (
+    <Button icon={IconNames.EXPORT} intent={Intent.DANGER} minimal={true} onClick={handleExportXml}>
       Save as XML
     </Button>
   );
 
-  private saveCategory = (i: AssessmentType, e: any) => {
+  const saveCategory = (i: AssessmentType, e: any) => {
     const overview = {
-      ...this.props.overview,
+      ...props.overview,
       category: i
     };
     storeLocalAssessmentOverview(overview);
-    this.props.updateEditingOverview(overview);
+    props.updateEditingOverview(overview);
   };
 
-  private optionsOverlay = () => (
+  const optionsOverlay = () => (
     <Dialog
       canOutsideClickClose={false}
       className="assessment-reset"
       icon={IconNames.WRENCH}
       isCloseButtonShown={true}
-      isOpen={this.state.showOptionsOverlay}
-      onClose={this.toggleOptionsOverlay}
+      isOpen={showOptionsOverlay}
+      onClose={toggleOptionsOverlay}
       title="Other options"
     >
       <div className={Classes.DIALOG_BODY}>
         <H3>Assessment Type</H3>
-        {this.assessmentTypeSelect(this.props.overview.type, this.saveCategory)}
+        {assessmentTypeSelect(props.overview.type, saveCategory)}
         <H3>Number</H3>
-        <div onClick={this.toggleEditField('number')}>
-          {this.state.editingOverviewField === 'number'
-            ? this.makeEditingOverviewTextarea('number')
-            : createPlaceholder(this.props.overview.number || '')}
+        <div onClick={toggleEditField('number')}>
+          {editingOverviewField === 'number'
+            ? makeEditingOverviewTextarea('number')
+            : createPlaceholder(props.overview.number || '')}
         </div>
         <H3>Story</H3>
-        <div onClick={this.toggleEditField('story')}>
-          {this.state.editingOverviewField === 'story'
-            ? this.makeEditingOverviewTextarea('story')
-            : createPlaceholder(this.props.overview.story || '')}
+        <div onClick={toggleEditField('story')}>
+          {editingOverviewField === 'story'
+            ? makeEditingOverviewTextarea('story')
+            : createPlaceholder(props.overview.story || '')}
         </div>
         <br />
         <H3>Filename</H3>
-        <div onClick={this.toggleEditField('fileName')}>
-          {this.state.editingOverviewField === 'fileName'
-            ? this.makeEditingOverviewTextarea('fileName')
-            : createPlaceholder(this.props.overview.fileName || '')}
+        <div onClick={toggleEditField('fileName')}>
+          {editingOverviewField === 'fileName'
+            ? makeEditingOverviewTextarea('fileName')
+            : createPlaceholder(props.overview.fileName || '')}
         </div>
       </div>
     </Dialog>
   );
 
-  private assessmentTypeSelect = (
+  const assessmentTypeSelect = (
     assessmentType: AssessmentType,
     handleSelect = (i: AssessmentType, e?: React.SyntheticEvent<HTMLElement>) => {}
   ) => (
     <AssessmentTypeSelectComponent
       className={Classes.MINIMAL}
-      items={this.props.assessmentTypes}
+      items={props.assessmentTypes}
       onItemSelect={handleSelect}
       itemRenderer={assessmentTypeRenderer}
       filterable={false}
@@ -258,7 +223,14 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
       />
     </AssessmentTypeSelectComponent>
   );
-}
+
+  return (
+    <div>
+      {optionsOverlay()}
+      {makeEditingOverviewCard(props.overview)}
+    </div>
+  );
+};
 
 const createPlaceholder = (str: string): string => {
   if (str.match('^(\n| )*$')) {
