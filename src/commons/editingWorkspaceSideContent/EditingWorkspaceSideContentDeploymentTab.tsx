@@ -34,16 +34,12 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
   const deploymentTab = () => {
     const deploymentPath = props.pathToLibrary;
     const deployment = getValueFromPath(deploymentPath, props.assessment) as Library;
-    // const deploymentDisp = this.props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
+    // const deploymentDisp = props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
     const symbols = deployment.external.symbols.map((symbol, i) => (
       <tr key={i}>
         <td>{textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
         <td style={{ width: '100px' }}>
-          <ControlButton
-            label="Delete"
-            icon={IconNames.MINUS}
-            onClick={handleSymbolDelete(i)}
-          />
+          <ControlButton label="Delete" icon={IconNames.MINUS} onClick={handleSymbolDelete(i)} />
         </td>
       </tr>
     ));
@@ -55,11 +51,7 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
         </td>
         <td>{globalValueTextareaContent(i)}</td>
         <td style={{ width: '90px' }}>
-          <ControlButton
-            label="Delete"
-            icon={IconNames.MINUS}
-            onClick={handleGlobalDelete(i)}
-          />
+          <ControlButton label="Delete" icon={IconNames.MINUS} onClick={handleGlobalDelete(i)} />
         </td>
       </tr>
     ));
