@@ -84,7 +84,6 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
-import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -836,12 +835,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const sideBarProps = {
     tabs: [
-      {
-        label: 'Files',
-        body: <FileSystemView basePath="/playground" />,
-        iconName: IconNames.FOLDER_CLOSE,
-        id: SideContentType.files
-      }
+      // TODO: Re-enable on master once the feature is production-ready.
+      // {
+      //   label: 'Files',
+      //   body: <FileSystemView basePath="/playground" />,
+      //   iconName: IconNames.FOLDER_CLOSE,
+      //   id: SideContentType.files
+      // }
     ]
   };
 
