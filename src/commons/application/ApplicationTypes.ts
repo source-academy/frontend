@@ -7,6 +7,7 @@ import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
+import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
@@ -26,6 +27,7 @@ export type OverallState = {
   readonly session: SessionState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
+  readonly fileSystem: FileSystemState;
 };
 
 export type ApplicationState = {
@@ -357,6 +359,10 @@ export const defaultSession: SessionState = {
   notifications: []
 };
 
+export const defaultFileSystem: FileSystemState = {
+  inBrowserFileSystem: null
+};
+
 export const defaultState: OverallState = {
   academy: defaultAcademy,
   achievement: defaultAchievement,
@@ -364,5 +370,6 @@ export const defaultState: OverallState = {
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
-  workspaces: defaultWorkspaceManager
+  workspaces: defaultWorkspaceManager,
+  fileSystem: defaultFileSystem
 };
