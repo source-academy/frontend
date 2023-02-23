@@ -4,6 +4,7 @@ import * as CommonsActions from '../../commons/application/actions/CommonsAction
 import * as InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import * as SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
+import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import * as AcademyActions from '../../features/academy/AcademyActions';
 import * as AchievementActions from '../../features/achievement/AchievementActions';
@@ -31,7 +32,8 @@ export const actions = {
   ...GroundControlActions,
   ...AcademyActions,
   ...PersistenceActions,
-  ...RemoteExecutionActions
+  ...RemoteExecutionActions,
+  ...FileSystemActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;
