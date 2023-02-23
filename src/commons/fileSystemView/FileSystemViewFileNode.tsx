@@ -61,13 +61,20 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
     });
   };
 
+  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Open file on double click.
+    if (e.detail === 2) {
+      handleOpenFile();
+    }
+  };
+
   return (
     <FileSystemViewContextMenu
       open={handleOpenFile}
       rename={handleRenameFile}
       remove={handleRemoveFile}
     >
-      <div className="file-system-view-node-container">
+      <div className="file-system-view-node-container" onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
         <Icon icon={IconNames.DOCUMENT} />
         <FileSystemViewFileName
