@@ -7,6 +7,7 @@ import {
   defaultAchievement,
   defaultApplication,
   defaultDashboard,
+  defaultFileSystem,
   defaultPlayground,
   defaultSession,
   defaultWorkspaceManager,
@@ -22,7 +23,8 @@ export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<O
     dashboard: defaultDashboard,
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,
-    session: defaultSession
+    session: defaultSession,
+    fileSystem: defaultFileSystem
   };
   return createStore(_.merge(state, overrides));
 }
