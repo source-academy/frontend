@@ -41,6 +41,7 @@ import {
   promptAutocomplete,
   sendReplInputToOutput,
   toggleEditorAutorun,
+  toggleMultipleFilesMode,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
@@ -78,6 +79,7 @@ import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBa
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
+import { ControlBarToggleMultipleFilesModeButton } from '../../commons/controlBar/ControlBarToggleMultipleFilesModeButton';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
@@ -592,6 +594,19 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
+  const isMultipleFilesEnabled = useTypedSelector(
+    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  );
+
+  const toggleMultipleFilesModeButton = React.useMemo(() => {
+    return (
+      <ControlBarToggleMultipleFilesModeButton
+        isMultipleFilesEnabled={isMultipleFilesEnabled}
+        toggleMultipleFilesMode={() => dispatch(toggleMultipleFilesMode(workspaceLocation))}
+      />
+    );
+  }, [dispatch, isMultipleFilesEnabled, workspaceLocation]);
+
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Introduction',
@@ -858,7 +873,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           ? null
           : props.usingSubst
           ? stepperStepLimit
-          : executionTime
+          : executionTime,
+        toggleMultipleFilesModeButton
       ]
     },
     editorContainerProps: editorContainerProps,
@@ -894,7 +910,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
-          githubButtons
+          githubButtons,
+          toggleMultipleFilesModeButton
         ]
       },
       selectedTabId: selectedTab,
