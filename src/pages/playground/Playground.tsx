@@ -86,10 +86,12 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
+import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import { SideBarTab } from '../../commons/sideBar/SideBar';
 import SideContentRemoteExecution from '../../commons/sideContent/remoteExecution/SideContentRemoteExecution';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
@@ -848,17 +850,22 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     disableScrolling: isSicpEditor
   };
 
-  const sideBarProps = {
-    tabs: [
-      // TODO: Re-enable on master once the feature is production-ready.
-      // {
-      //   label: 'Files',
-      //   body: <FileSystemView basePath="/playground" />,
-      //   iconName: IconNames.FOLDER_CLOSE,
-      //   id: SideContentType.files
-      // }
-    ]
-  };
+  const sideBarProps: { tabs: SideBarTab[] } = React.useMemo(() => {
+    return {
+      tabs: [
+        ...(isMultipleFilesEnabled
+          ? [
+              {
+                label: 'Files',
+                body: <FileSystemView basePath="/playground" />,
+                iconName: IconNames.FOLDER_CLOSE,
+                id: SideContentType.files
+              }
+            ]
+          : [])
+      ]
+    };
+  }, [isMultipleFilesEnabled]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
