@@ -90,6 +90,7 @@ export type EditorTabState = {
 export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
   readonly context: Context;
+  readonly isMultipleFilesEnabled: boolean;
   readonly activeEditorTabIndex: number | null;
   readonly editorTabs: EditorTabState[];
   readonly programPrependValue: string;
