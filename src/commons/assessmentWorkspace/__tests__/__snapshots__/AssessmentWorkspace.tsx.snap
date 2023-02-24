@@ -228,7 +228,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
             </div>
           </ControlBar>
           <div className=\\"workspace-parent\\">
-            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
+            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} size={{...}} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
               <div style={{...}} className={[undefined]}>
                 <SideBar tabs={{...}} isExpanded={false} expandSideBar={[Function: expandSideBar]} collapseSideBar={[Function: collapseSideBar]}>
                   <div className=\\"sidebar-container\\" />
@@ -980,7 +980,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
             </div>
           </ControlBar>
           <div className=\\"workspace-parent\\">
-            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
+            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} size={{...}} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
               <div style={{...}} className={[undefined]}>
                 <SideBar tabs={{...}} isExpanded={false} expandSideBar={[Function: expandSideBar]} collapseSideBar={[Function: collapseSideBar]}>
                   <div className=\\"sidebar-container\\" />
@@ -1560,7 +1560,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
             </div>
           </ControlBar>
           <div className=\\"workspace-parent\\">
-            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
+            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} size={{...}} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
               <div style={{...}} className={[undefined]}>
                 <SideBar tabs={{...}} isExpanded={false} expandSideBar={[Function: expandSideBar]} collapseSideBar={[Function: collapseSideBar]}>
                   <div className=\\"sidebar-container\\" />
@@ -2114,7 +2114,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
             </div>
           </ControlBar>
           <div className=\\"workspace-parent\\">
-            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
+            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} size={{...}} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
               <div style={{...}} className={[undefined]}>
                 <SideBar tabs={{...}} isExpanded={false} expandSideBar={[Function: expandSideBar]} collapseSideBar={[Function: collapseSideBar]}>
                   <div className=\\"sidebar-container\\" />
@@ -2668,7 +2668,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
             </div>
           </ControlBar>
           <div className=\\"workspace-parent\\">
-            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
+            <Resizable enable={{...}} minWidth=\\"auto\\" maxWidth=\\"50%\\" onResize={[Function: toggleSideBarDividerDisplay]} onResizeStop={[Function: onResizeStop]} size={{...}} defaultSize={{...}} as=\\"div\\" onResizeStart={[Function: onResizeStart]} style={{...}} grid={{...}} lockAspectRatio={false} lockAspectRatioExtraWidth={0} lockAspectRatioExtraHeight={0} scale={1} resizeRatio={1} snapGap={0}>
               <div style={{...}} className={[undefined]}>
                 <SideBar tabs={{...}} isExpanded={false} expandSideBar={[Function: expandSideBar]} collapseSideBar={[Function: collapseSideBar]}>
                   <div className=\\"sidebar-container\\" />
