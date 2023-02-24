@@ -75,6 +75,7 @@ import {
   PROMPT_AUTOCOMPLETE,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_MULTIPLE_FILES_MODE,
   UPDATE_EDITOR_VALUE,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
@@ -89,6 +90,20 @@ export default function* WorkspaceSaga(): SagaIterator {
       yield put(
         actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
       );
+    }
+  );
+
+  yield takeEvery(
+    TOGGLE_MULTIPLE_FILES_MODE,
+    function* (action: ReturnType<typeof actions.toggleMultipleFilesMode>) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      const isMultipleFilesEnabled: boolean = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].isMultipleFilesEnabled
+      );
+      const warningMessage = `Multiple files mode ${
+        isMultipleFilesEnabled ? 'enabled' : 'disabled'
+      }`;
+      yield call(showWarningMessage, warningMessage, 750);
     }
   );
 
