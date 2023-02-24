@@ -72,7 +72,9 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     }
   });
 
-  const sideBarResizableProps = () => {
+  const sideBarResizableProps = (): ResizableProps & {
+    ref: React.MutableRefObject<Resizable | null>;
+  } => {
     const onResizeStop: ResizeCallback = (
       event: MouseEvent | TouchEvent,
       direction: Direction,
@@ -93,8 +95,10 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       onResize: toggleSideBarDividerDisplay,
       onResizeStop,
       ref: sideBarResizable,
+      // Force update of width when sidebar is not rendered.
+      size: isSideBarRendered ? undefined : { width: minWidth, height: '100%' },
       defaultSize: { width: minWidth, height: '100%' }
-    } as ResizableProps;
+    };
   };
 
   const editorResizableProps = () => {
