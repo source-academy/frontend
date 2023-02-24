@@ -48,6 +48,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -1298,6 +1299,33 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
         currentSubmission: submissionId,
         currentQuestion: questionId
       }
+    });
+  });
+});
+
+describe('TOGGLE_MULTIPLE_FILES_MODE', () => {
+  test('toggles isMultipleFilesEnabled correctly', () => {
+    const actions = generateActions(TOGGLE_MULTIPLE_FILES_MODE);
+
+    actions.forEach(action => {
+      let result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          isMultipleFilesEnabled: true
+        }
+      });
+
+      result = WorkspaceReducer(result, action);
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          isMultipleFilesEnabled: false
+        }
+      });
     });
   });
 });
