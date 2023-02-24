@@ -1,4 +1,5 @@
 import {
+  AnchorButton,
   Button,
   ButtonGroup,
   Card,
@@ -89,6 +90,14 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const sortAssessments = (assessments: AssessmentOverview[]) => sortBy(assessments, [a => -a.id]);
 
   const makeSubmissionButton = (overview: AssessmentOverview, index: number) => (
+    <Tooltip2
+    content={'You can finalize after saving an answer for each question!'}
+    hoverOpenDelay={10}
+    hoverCloseDelay={10}
+    placement={Position.LEFT}
+    lazy={true}
+    disabled={overview.status == AssessmentStatuses.attempted}
+    >
     <Button
       disabled={overview.status !== AssessmentStatuses.attempted}
       icon={IconNames.CONFIRM}
@@ -101,6 +110,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       <span className="custom-hidden-xxxs">Finalize</span>
       <span className="custom-hidden-xxs"> Submission</span>
     </Button>
+    </Tooltip2>
   );
 
   const makeAssessmentInteractButton = (overview: AssessmentOverview) => {
