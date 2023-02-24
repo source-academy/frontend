@@ -24,6 +24,11 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
 
+  const handleOpenFile = () => {
+    // TODO: Implement this.
+    console.log(`Opened file ${fileName}!`);
+  };
+
   const handleRenameFile = () => setIsEditing(true);
   const handleRemoveFile = () => {
     showSimpleConfirmDialog({
@@ -56,9 +61,20 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
     });
   };
 
+  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Open file on double click.
+    if (e.detail === 2) {
+      handleOpenFile();
+    }
+  };
+
   return (
-    <FileSystemViewContextMenu rename={handleRenameFile} remove={handleRemoveFile}>
-      <div className="file-system-view-node-container">
+    <FileSystemViewContextMenu
+      open={handleOpenFile}
+      rename={handleRenameFile}
+      remove={handleRemoveFile}
+    >
+      <div className="file-system-view-node-container" onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
         <Icon icon={IconNames.DOCUMENT} />
         <FileSystemViewFileName
