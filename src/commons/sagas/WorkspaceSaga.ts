@@ -1,3 +1,4 @@
+import { FSModule } from 'browserfs/dist/node/core/FS';
 import {
   Context,
   findDeclaration,
@@ -74,6 +75,7 @@ import {
   PROMPT_AUTOCOMPLETE,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
+  UPDATE_EDITOR_VALUE,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from './SafeEffects';
@@ -87,6 +89,38 @@ export default function* WorkspaceSaga(): SagaIterator {
       yield put(
         actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
       );
+    }
+  );
+
+  // Mirror editor updates to the associated file in the filesystem.
+  yield takeEvery(
+    UPDATE_EDITOR_VALUE,
+    function* (action: ReturnType<typeof actions.updateEditorValue>) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      const filePath: string | undefined = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].filePath
+      );
+      // If the code does not have an associated file, do nothing.
+      if (filePath === undefined) {
+        return;
+      }
+
+      const fileSystem: FSModule | null = yield select(
+        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+      );
+      // If the file system is not initialised, do nothing.
+      if (fileSystem === null) {
+        return;
+      }
+
+      fileSystem.writeFile(filePath, action.payload.newEditorValue, err => {
+        if (err) {
+          console.error(err);
+        }
+        console.log(action.payload.newEditorValue);
+      });
+      yield;
     }
   );
 

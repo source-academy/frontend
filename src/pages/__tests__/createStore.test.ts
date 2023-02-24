@@ -17,7 +17,20 @@ const mockChangedStoredState: SavedState = {
     userId: 1,
     githubAccessToken: 'githubAccessToken'
   },
-  playgroundEditorValue: 'Nihao everybody',
+  playgroundEditorTabs: [
+    {
+      filePath: '/playground/a.js',
+      value: `import { square } from './b.js'; square(5);`,
+      breakpoints: [],
+      highlightedLines: []
+    },
+    {
+      filePath: '/playground/b.js',
+      value: 'export const square = x => x * x;',
+      breakpoints: [],
+      highlightedLines: []
+    }
+  ],
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
@@ -40,7 +53,18 @@ const mockChangedState: OverallState = {
     playground: {
       ...defaultState.workspaces.playground,
       editorTabs: [
-        { ...defaultState.workspaces.playground.editorTabs[0], value: 'Nihao everybody' }
+        {
+          filePath: '/playground/a.js',
+          value: `import { square } from './b.js'; square(5);`,
+          breakpoints: [],
+          highlightedLines: []
+        },
+        {
+          filePath: '/playground/b.js',
+          value: 'export const square = x => x * x;',
+          breakpoints: [],
+          highlightedLines: []
+        }
       ],
       isEditorAutorun: true
     }

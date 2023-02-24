@@ -24,8 +24,7 @@ const mockShortDefaultState: SavedState = {
     assessmentConfigurations: defaultState.session.assessmentConfigurations
   },
   achievements: defaultState.achievement.achievements,
-  // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-  playgroundEditorValue: defaultState.workspaces.playground.editorTabs[0].value,
+  playgroundEditorTabs: defaultState.workspaces.playground.editorTabs,
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
   playgroundSourceVariant: defaultState.workspaces.playground.context.variant,

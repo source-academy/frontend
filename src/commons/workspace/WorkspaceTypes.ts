@@ -80,6 +80,7 @@ export type WorkspaceManagerState = {
 };
 
 export type EditorTabState = {
+  readonly filePath?: string;
   readonly value: string;
   readonly highlightedLines: HighlightedLines[];
   readonly breakpoints: string[];
