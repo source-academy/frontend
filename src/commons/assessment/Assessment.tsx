@@ -91,25 +91,25 @@ const Assessment: React.FC<AssessmentProps> = props => {
 
   const makeSubmissionButton = (overview: AssessmentOverview, index: number) => (
     <Tooltip2
-    content={'You can finalize after saving an answer for each question!'}
-    hoverOpenDelay={10}
-    hoverCloseDelay={10}
-    placement={Position.LEFT}
-    lazy={true}
-    disabled={overview.status == AssessmentStatuses.attempted}
+      content={'You can finalize after saving an answer for each question!'}
+      hoverOpenDelay={10}
+      hoverCloseDelay={10}
+      placement={Position.LEFT}
+      lazy={true}
+      disabled={overview.status === AssessmentStatuses.attempted}
     >
-    <Button
-      disabled={overview.status !== AssessmentStatuses.attempted}
-      icon={IconNames.CONFIRM}
-      intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
-      minimal={true}
-      // intentional: each listing renders its own version of onClick
-      // tslint:disable-next-line:jsx-no-lambda
-      onClick={() => setBetchaAssessment(overview)}
-    >
-      <span className="custom-hidden-xxxs">Finalize</span>
-      <span className="custom-hidden-xxs"> Submission</span>
-    </Button>
+      <AnchorButton
+        disabled={overview.status !== AssessmentStatuses.attempted}
+        icon={IconNames.CONFIRM}
+        intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
+        minimal={true}
+        // intentional: each listing renders its own version of onClick
+        // tslint:disable-next-line:jsx-no-lambda
+        onClick={() => setBetchaAssessment(overview)}
+      >
+        <span className="custom-hidden-xxxs">Finalize</span>
+        <span className="custom-hidden-xxs"> Submission</span>
+      </AnchorButton>
     </Tooltip2>
   );
 
