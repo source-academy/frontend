@@ -98,7 +98,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     lazy={true}
     disabled={overview.status == AssessmentStatuses.attempted}
     >
-    <Button
+    <AnchorButton
       disabled={overview.status !== AssessmentStatuses.attempted}
       icon={IconNames.CONFIRM}
       intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
@@ -109,7 +109,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     >
       <span className="custom-hidden-xxxs">Finalize</span>
       <span className="custom-hidden-xxs"> Submission</span>
-    </Button>
+    </AnchorButton>
     </Tooltip2>
   );
 
