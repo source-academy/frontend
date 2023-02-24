@@ -851,6 +851,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   };
 
   const sideBarProps: { tabs: SideBarTab[] } = React.useMemo(() => {
+    // The sidebar is rendered if and only if there is at least one tab present.
+    // Because whether the sidebar is rendered or not affects the sidebar resizing
+    // logic, we cannot defer the decision on which sidebar tabs should be rendered
+    // to the sidebar as it would be too late - the sidebar resizing logic in the
+    // workspace would not be able to act on that information. Instead, we need to
+    // determine which sidebar tabs should be rendered here.
     return {
       tabs: [
         ...(isMultipleFilesEnabled
