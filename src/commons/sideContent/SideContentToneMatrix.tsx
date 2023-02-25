@@ -38,4 +38,4 @@ const SideContentToneMatrix: React.FC = () => {
   );
 };
 
-export default React.memo(SideContentToneMatrix);
+export default React.memo(SideContentToneMatrix, () => true);
