@@ -60,4 +60,4 @@ const BackwardArrowDrawable: React.FC<ArrowConfig> = ({ from, to }) => {
   );
 };
 
-export default BackwardArrowDrawable;
+export default React.memo(BackwardArrowDrawable);
