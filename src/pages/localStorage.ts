@@ -5,12 +5,13 @@ import { OverallState } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/NotificationsHelper';
+import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
 import { AchievementItem } from '../features/achievement/AchievementTypes';
 
 export type SavedState = {
   session: Partial<SessionState>;
   achievements: AchievementItem[];
-  playgroundEditorValue: string;
+  playgroundEditorTabs: EditorTabState[];
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;
   playgroundSourceVariant: Variant;
@@ -58,8 +59,7 @@ export const saveState = (state: OverallState) => {
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      playgroundEditorValue: state.workspaces.playground.editorTabs[0].value,
+      playgroundEditorTabs: state.workspaces.playground.editorTabs,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,

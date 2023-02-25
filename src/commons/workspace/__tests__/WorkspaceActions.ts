@@ -28,6 +28,7 @@ import {
   sendReplInputToOutput,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  toggleMultipleFilesMode,
   toggleUsingSubst,
   updateActiveEditorTab,
   updateCurrentAssessmentId,
@@ -60,6 +61,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -252,6 +254,16 @@ test('evalTestcase generates correct action object', () => {
     payload: {
       testcaseId,
       workspaceLocation: playgroundWorkspace
+    }
+  });
+});
+
+test('toggleMultipleFilesMode generates correct action object', () => {
+  const action = toggleMultipleFilesMode(gradingWorkspace);
+  expect(action).toEqual({
+    type: TOGGLE_MULTIPLE_FILES_MODE,
+    payload: {
+      workspaceLocation: gradingWorkspace
     }
   });
 });

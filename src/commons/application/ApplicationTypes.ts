@@ -238,6 +238,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     workspaceLocation,
     Constants.defaultSourceVariant
   ),
+  isMultipleFilesEnabled: false,
   activeEditorTabIndex: 0,
   editorTabs: [
     {
@@ -287,7 +288,15 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace('playground'),
-    usingSubst: false
+    usingSubst: false,
+    editorTabs: [
+      {
+        filePath: '/playground/program.js',
+        value: defaultEditorValue,
+        highlightedLines: [],
+        breakpoints: []
+      }
+    ]
   },
   sourcecast: {
     ...createDefaultWorkspace('sourcecast'),

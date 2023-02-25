@@ -37,6 +37,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -156,6 +157,9 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
 
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
+
+export const toggleMultipleFilesMode = (workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_MULTIPLE_FILES_MODE, { workspaceLocation });
 
 export const updateActiveEditorTab = (
   workspaceLocation: WorkspaceLocation,
