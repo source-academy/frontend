@@ -10,7 +10,7 @@ type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number 
  * that is positioned to the top left of the parent node.
  *
  */
-export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
+class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
   /**
    *  Connects a box to a previously known box, the arrow path is more complicated.
    *
@@ -60,3 +60,5 @@ export class BackwardArrowDrawable extends PureComponent<ArrowConfig> {
     );
   }
 }
+
+export default BackwardArrowDrawable;

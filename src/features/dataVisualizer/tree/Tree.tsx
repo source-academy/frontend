@@ -4,8 +4,7 @@ import { Layer, Text } from 'react-konva';
 import { Config } from '../Config';
 import { Data, Pair } from '../dataVisualizerTypes';
 import { isArray, isFunction, toText } from '../dataVisualizerUtils';
-import { ArrowDrawable } from '../drawable/ArrowDrawable';
-import { BackwardArrowDrawable } from '../drawable/BackwardArrowDrawable';
+import { ArrowDrawable, BackwardArrowDrawable } from '../drawable/Drawable';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import {
   ArrayTreeNode,

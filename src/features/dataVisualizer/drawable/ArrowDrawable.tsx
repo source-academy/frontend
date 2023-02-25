@@ -10,7 +10,7 @@ type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number 
  *
  * Used with ArrayDrawable and FunctionDrawable.
  */
-export class ArrowDrawable extends React.PureComponent<ArrowConfig> {
+class ArrowDrawable extends React.PureComponent<ArrowConfig> {
   render() {
     return (
       <Arrow
@@ -31,3 +31,5 @@ export class ArrowDrawable extends React.PureComponent<ArrowConfig> {
     );
   }
 }
+
+export default ArrowDrawable;
