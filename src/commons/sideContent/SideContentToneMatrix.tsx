@@ -1,47 +1,41 @@
 import { Button, Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-class SideContentToneMatrix extends React.Component<{}, {}> {
-  private $container: HTMLElement | null = null;
+const SideContentToneMatrix: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  public shouldComponentUpdate() {
-    return false;
-  }
-
-  public componentDidMount() {
+  useEffect(() => {
     if ((window as any).ToneMatrix) {
-      (window as any).ToneMatrix.initialise_matrix(this.$container!);
+      (window as any).ToneMatrix.initialise_matrix(containerRef.current!);
     }
-  }
+  }, []);
 
-  public handleClear() {
+  const handleClear = () => {
     (window as any).ToneMatrix.clear_matrix();
-  }
+  };
 
-  public handleRandomise() {
+  const handleRandomise = () => {
     (window as any).ToneMatrix.randomise_matrix();
-  }
+  };
 
-  public render() {
-    return (
-      <div className="sa-tone-matrix">
-        <div className="row">
-          <div className={classNames('controls', 'col-xs-12', Classes.DARK, Classes.BUTTON_GROUP)}>
-            <Button id="clear-matrix" onClick={this.handleClear}>
-              Clear
-            </Button>
-            <Button id="randomise-matrix" onClick={this.handleRandomise}>
-              Randomise
-            </Button>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12" ref={r => (this.$container = r)} />
+  return (
+    <div className="sa-tone-matrix">
+      <div className="row">
+        <div className={classNames('controls', 'col-xs-12', Classes.DARK, Classes.BUTTON_GROUP)}>
+          <Button id="clear-matrix" onClick={handleClear}>
+            Clear
+          </Button>
+          <Button id="randomise-matrix" onClick={handleRandomise}>
+            Randomise
+          </Button>
         </div>
       </div>
-    );
-  }
-}
+      <div className="row">
+        <div className="col-xs-12" ref={containerRef} />
+      </div>
+    </div>
+  );
+};
 
-export default SideContentToneMatrix;
+export default React.memo(SideContentToneMatrix);
