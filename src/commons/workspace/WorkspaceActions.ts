@@ -33,6 +33,7 @@ import {
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
   PROMPT_AUTOCOMPLETE,
+  REMOVE_EDITOR_TAB,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -182,6 +183,9 @@ export const highlightEditorLine = (
   highlightedLines: number[],
   workspaceLocation: WorkspaceLocation
 ) => action(HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
+
+export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
+  action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });
 
 export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });

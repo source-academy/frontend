@@ -45,6 +45,7 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   MOVE_CURSOR,
+  REMOVE_EDITOR_TAB,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -668,6 +669,43 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ]
         }
       };
+    case REMOVE_EDITOR_TAB: {
+      const editorTabIndex = action.payload.editorTabIndex;
+      if (editorTabIndex < 0) {
+        throw new Error('Editor tab index must be non-negative!');
+      }
+      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Editor tab index must have a corresponding editor tab!');
+      }
+      const newEditorTabs = state[workspaceLocation].editorTabs.splice(editorTabIndex, 1);
+
+      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newActiveEditorTabIndex =
+        activeEditorTabIndex !== editorTabIndex
+          ? // If the active editor tab is not the one that is removed,
+            // the active editor tab remains the same.
+            activeEditorTabIndex
+          : newEditorTabs.length === 0
+          ? // If there are no editor tabs after removal, there cannot
+            // be an active editor tab.
+            null
+          : editorTabIndex === 0
+          ? // If the removed editor tab is the leftmost tab, the active
+            // editor tab will be the new leftmost tab.
+            0
+          : // Otherwise, the active editor tab will be the tab to the
+            // left of the removed tab.
+            editorTabIndex - 1;
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
     case MOVE_CURSOR:
       return {
         ...state,
