@@ -82,6 +82,7 @@ import {
   promptAutocomplete,
   resetWorkspace,
   runAllTestcases,
+  updateActiveEditorTabIndex,
   updateCurrentAssessmentId,
   updateReplValue
 } from '../workspace/WorkspaceActions';
@@ -275,6 +276,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     pushLog(input);
   };
+
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
 
   /* ================
      Helper Functions
@@ -777,6 +784,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           editorVariant: 'normal',
           isMultipleFilesEnabled,
           activeEditorTabIndex,
+          setActiveEditorTabIndex,
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,

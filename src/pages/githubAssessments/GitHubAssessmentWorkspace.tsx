@@ -25,6 +25,7 @@ import {
   promptAutocomplete,
   runAllTestcases,
   setEditorBreakpoint,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 
@@ -1066,10 +1067,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
     isMultipleFilesEnabled,
     activeEditorTabIndex,
+    setActiveEditorTabIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: (cursorPosition: Position) =>

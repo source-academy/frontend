@@ -59,6 +59,7 @@ import {
   promptAutocomplete,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
@@ -149,6 +150,12 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.inputToApply]);
+
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
 
   const getTimerDuration = () => props.timeElapsedBeforePause + Date.now() - props.timeResumed;
 
@@ -245,6 +252,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     editorVariant: 'sourcecast',
     isMultipleFilesEnabled,
     activeEditorTabIndex,
+    setActiveEditorTabIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),

@@ -27,6 +27,7 @@ import {
   runAllTestcases,
   sendReplInputToOutput,
   setEditorBreakpoint,
+  updateActiveEditorTabIndex,
   updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
@@ -68,6 +69,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
+      handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),

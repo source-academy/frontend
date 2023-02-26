@@ -42,6 +42,7 @@ import {
   sendReplInputToOutput,
   toggleEditorAutorun,
   toggleMultipleFilesMode,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
@@ -795,11 +796,18 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.playgroundSourceVariant === Variant.CONCURRENT ||
     usingRemoteExecution;
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch, workspaceLocation]
+  );
+
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
     isMultipleFilesEnabled,
     activeEditorTabIndex,
+    setActiveEditorTabIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>

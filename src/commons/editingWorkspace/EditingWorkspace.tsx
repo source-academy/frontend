@@ -11,6 +11,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -50,6 +51,7 @@ import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes
 import { history } from '../utils/HistoryHelper';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+import { updateActiveEditorTabIndex } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
@@ -114,6 +116,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
+  const dispatch = useDispatch();
 
   const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
     store => store.workspaces[workspaceLocation]
@@ -137,6 +140,12 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
    * if a workspace reset is needed.
    */
   useEffect(() => checkWorkspaceReset());
+
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
 
   if (assessment === null || assessment!.questions.length === 0) {
     return (
@@ -603,6 +612,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             editorVariant: 'normal',
             isMultipleFilesEnabled,
             activeEditorTabIndex,
+            setActiveEditorTabIndex,
             editorTabs: editorTabs
               .map(convertEditorTabStateToProps)
               .map((editorTabStateProps, index) => {

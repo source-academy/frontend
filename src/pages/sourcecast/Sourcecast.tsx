@@ -22,6 +22,7 @@ import {
   setEditorBreakpoint,
   setIsEditorReadonly,
   toggleEditorAutorun,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
@@ -54,7 +55,6 @@ import SourceRecorderControlBar, {
 } from '../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -89,8 +89,6 @@ export type StateProps = {
   codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   externalLibraryName: ExternalLibraryName;
   isEditorAutorun: boolean;
   isEditorReadonly: boolean;
@@ -118,8 +116,8 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const dispatch = useDispatch();
 
-  const isMultipleFilesEnabled = useTypedSelector(
-    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
   );
 
   /**
@@ -270,11 +268,18 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     setSelectedTab(newTabId);
   };
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
     isMultipleFilesEnabled,
-    activeEditorTabIndex: props.activeEditorTabIndex,
-    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    editorTabs: editorTabs.map(convertEditorTabStateToProps),
     codeDeltasToApply: props.codeDeltasToApply,
     isEditorReadonly: props.isEditorReadonly,
     editorSessionId: '',
