@@ -45,6 +45,7 @@ export type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
+  handleRemoveEditorTabByIndex: (editorTabIndex: number) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGradingFetch: (submissionId: number) => void;
@@ -188,6 +189,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
               isMultipleFilesEnabled: this.props.isMultipleFilesEnabled,
               activeEditorTabIndex: this.props.activeEditorTabIndex,
               setActiveEditorTabIndex: this.props.handleSetActiveEditorTabIndex,
+              removeEditorTabByIndex: this.props.handleRemoveEditorTabByIndex,
               editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
               editorSessionId: '',
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,

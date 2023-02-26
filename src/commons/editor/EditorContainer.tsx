@@ -15,6 +15,7 @@ type OwnProps = {
   isMultipleFilesEnabled: boolean;
   activeEditorTabIndex: number | null;
   setActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
+  removeEditorTabByIndex: (editorTabIndex: number) => void;
   editorTabs: EditorTabStateProps[];
 };
 

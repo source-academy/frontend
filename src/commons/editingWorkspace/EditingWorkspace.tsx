@@ -51,7 +51,7 @@ import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes
 import { history } from '../utils/HistoryHelper';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { updateActiveEditorTabIndex } from '../workspace/WorkspaceActions';
+import { removeEditorTab, updateActiveEditorTabIndex } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
@@ -144,6 +144,10 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const setActiveEditorTabIndex = React.useCallback(
     (activeEditorTabIndex: number | null) =>
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
     [dispatch]
   );
 
@@ -613,6 +617,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             isMultipleFilesEnabled,
             activeEditorTabIndex,
             setActiveEditorTabIndex,
+            removeEditorTabByIndex,
             editorTabs: editorTabs
               .map(convertEditorTabStateToProps)
               .map((editorTabStateProps, index) => {

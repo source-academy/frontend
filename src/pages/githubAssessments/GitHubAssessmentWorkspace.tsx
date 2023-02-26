@@ -23,6 +23,7 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   runAllTestcases,
   setEditorBreakpoint,
   updateActiveEditorTabIndex,
@@ -1072,12 +1073,17 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
     [dispatch]
   );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
 
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
     isMultipleFilesEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: (cursorPosition: Position) =>

@@ -80,6 +80,7 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   resetWorkspace,
   runAllTestcases,
   updateActiveEditorTabIndex,
@@ -280,6 +281,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const setActiveEditorTabIndex = React.useCallback(
     (activeEditorTabIndex: number | null) =>
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
     [dispatch]
   );
 
@@ -785,6 +790,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           isMultipleFilesEnabled,
           activeEditorTabIndex,
           setActiveEditorTabIndex,
+          removeEditorTabByIndex,
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,

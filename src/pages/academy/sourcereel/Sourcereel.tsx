@@ -57,6 +57,7 @@ import {
   clearReplOutput,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   setEditorBreakpoint,
   toggleEditorAutorun,
   updateActiveEditorTabIndex,
@@ -156,6 +157,10 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
     [dispatch]
   );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
 
   const getTimerDuration = () => props.timeElapsedBeforePause + Date.now() - props.timeResumed;
 
@@ -253,6 +258,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     isMultipleFilesEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),

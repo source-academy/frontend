@@ -19,6 +19,7 @@ import {
   clearReplOutput,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   setEditorBreakpoint,
   setIsEditorReadonly,
   toggleEditorAutorun,
@@ -273,12 +274,17 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
     [dispatch]
   );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
 
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
     isMultipleFilesEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     codeDeltasToApply: props.codeDeltasToApply,
     isEditorReadonly: props.isEditorReadonly,

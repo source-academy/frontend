@@ -39,6 +39,7 @@ import {
   evalEditor,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   sendReplInputToOutput,
   toggleEditorAutorun,
   toggleMultipleFilesMode,
@@ -801,6 +802,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
     [dispatch, workspaceLocation]
   );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch, workspaceLocation]
+  );
 
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
@@ -808,6 +813,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     isMultipleFilesEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>

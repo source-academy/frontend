@@ -23,6 +23,7 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   resetWorkspace,
   runAllTestcases,
   sendReplInputToOutput,
@@ -71,6 +72,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleEditorEval: () => evalEditor(workspaceLocation),
       handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
+      handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
+        removeEditorTab(workspaceLocation, editorTabIndex),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
