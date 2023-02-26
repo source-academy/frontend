@@ -13,8 +13,6 @@ const baseProps = assertType<PlaygroundProps>()({
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  activeEditorTabIndex: 0,
-  editorTabs: [{ value: '', highlightedLines: [], breakpoints: [] }],
   programPrependValue: '',
   programPostpendValue: '',
   editorSessionId: '',
@@ -41,14 +39,12 @@ const baseProps = assertType<PlaygroundProps>()({
 
 const testValueProps: PlaygroundProps = {
   ...baseProps,
-  ...mockRouterProps('/academy', {}),
-  editorTabs: [{ ...baseProps.editorTabs[0], value: 'Test value' }]
+  ...mockRouterProps('/academy', {})
 };
 
 const playgroundLinkProps: PlaygroundProps = {
   ...baseProps,
-  ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
-  editorTabs: [{ ...baseProps.editorTabs[0], value: 'This should not show up' }]
+  ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {})
 };
 
 const mockStore = mockInitialStore();
