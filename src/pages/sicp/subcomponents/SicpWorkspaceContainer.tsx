@@ -22,6 +22,7 @@ import Playground, { DispatchProps, StateProps } from '../../playground/Playgrou
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   ..._.pick(
     state.workspaces.sicp,
+    'editorTabs',
     'programPrependValue',
     'programPostpendValue',
     'editorSessionId',

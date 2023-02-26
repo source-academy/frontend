@@ -20,6 +20,7 @@ import Playground, { DispatchProps, StateProps } from './Playground';
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   ..._.pick(
     state.workspaces.playground,
+    'editorTabs',
     'programPrependValue',
     'programPostpendValue',
     'editorSessionId',

@@ -46,7 +46,7 @@ import {
   updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -138,6 +138,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  editorTabs: EditorTabState[];
   programPrependValue: string;
   programPostpendValue: string;
   editorSessionId: string;
@@ -214,7 +215,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
-  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+  const { isMultipleFilesEnabled, activeEditorTabIndex } = useTypedSelector(
     state => state.workspaces[workspaceLocation]
   );
 
@@ -234,7 +235,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: editorTabs[0].value,
+      editorValue: propsRef.current.editorTabs[0].value,
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -268,11 +269,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     setSessionId(
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorValue: editorTabs[0].value,
+        editorValue: propsRef.current.editorTabs[0].value,
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
-  }, [editorTabs, props.editorSessionId]);
+  }, [props.editorSessionId]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
 
@@ -814,7 +815,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
-    editorTabs: editorTabs.map(convertEditorTabStateToProps),
+    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
