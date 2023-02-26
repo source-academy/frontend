@@ -41,6 +41,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
@@ -677,7 +678,9 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
-      const newEditorTabs = state[workspaceLocation].editorTabs.splice(editorTabIndex, 1);
+      const newEditorTabs = state[workspaceLocation].editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndex
+      );
 
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
       const newActiveEditorTabIndex =
