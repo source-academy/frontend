@@ -40,6 +40,7 @@ import {
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
+  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -160,6 +161,11 @@ export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
 
 export const toggleMultipleFilesMode = (workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_MULTIPLE_FILES_MODE, { workspaceLocation });
+
+export const updateActiveEditorTabIndex = (
+  workspaceLocation: WorkspaceLocation,
+  activeEditorTabIndex: number | null
+) => action(UPDATE_ACTIVE_EDITOR_TAB_INDEX, { workspaceLocation, activeEditorTabIndex });
 
 export const updateActiveEditorTab = (
   workspaceLocation: WorkspaceLocation,

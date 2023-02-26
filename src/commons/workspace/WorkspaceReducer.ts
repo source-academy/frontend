@@ -52,6 +52,7 @@ import {
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
+  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -591,6 +592,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           isMultipleFilesEnabled: !state[workspaceLocation].isMultipleFilesEnabled
+        }
+      };
+    case UPDATE_ACTIVE_EDITOR_TAB_INDEX:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: action.payload.activeEditorTabIndex
         }
       };
     case UPDATE_ACTIVE_EDITOR_TAB:
