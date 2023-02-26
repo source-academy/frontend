@@ -594,15 +594,26 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           isMultipleFilesEnabled: !state[workspaceLocation].isMultipleFilesEnabled
         }
       };
-    case UPDATE_ACTIVE_EDITOR_TAB_INDEX:
+    case UPDATE_ACTIVE_EDITOR_TAB_INDEX: {
+      const activeEditorTabIndex = action.payload.activeEditorTabIndex;
+      if (activeEditorTabIndex !== null) {
+        if (activeEditorTabIndex < 0) {
+          throw new Error('Active editor tab index must be non-negative!');
+        }
+        if (activeEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
+          throw new Error('Active editor tab index must have a corresponding editor tab!');
+        }
+      }
+
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          activeEditorTabIndex: action.payload.activeEditorTabIndex
+          activeEditorTabIndex: activeEditorTabIndex
         }
       };
-    case UPDATE_ACTIVE_EDITOR_TAB:
+    }
+    case UPDATE_ACTIVE_EDITOR_TAB: {
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
       // Do not modify the workspace state if there is no active editor tab.
       if (activeEditorTabIndex === null) {
@@ -620,6 +631,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           editorTabs: updatedEditorTabs
         }
       };
+    }
     case UPDATE_EDITOR_BREAKPOINTS:
       return {
         ...state,
