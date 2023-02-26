@@ -31,6 +31,7 @@ import {
   toggleMultipleFilesMode,
   toggleUsingSubst,
   updateActiveEditorTab,
+  updateActiveEditorTabIndex,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -64,6 +65,7 @@ import {
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
+  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -264,6 +266,18 @@ test('toggleMultipleFilesMode generates correct action object', () => {
     type: TOGGLE_MULTIPLE_FILES_MODE,
     payload: {
       workspaceLocation: gradingWorkspace
+    }
+  });
+});
+
+test('updateActiveEditorTabIndex generates correct action object', () => {
+  const activeEditorTabIndex = 3;
+  const action = updateActiveEditorTabIndex(playgroundWorkspace, activeEditorTabIndex);
+  expect(action).toEqual({
+    type: UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      activeEditorTabIndex
     }
   });
 });
