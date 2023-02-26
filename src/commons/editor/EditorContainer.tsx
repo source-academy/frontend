@@ -52,14 +52,18 @@ const createSourcecastEditorTab =
   };
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
-  const { isMultipleFilesEnabled, editorTabs, ...editorProps } = props;
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs, ...editorProps } = props;
   const createEditorTab =
     editorProps.editorVariant === 'sourcecast'
       ? createSourcecastEditorTab(editorProps)
       : createNormalEditorTab(editorProps);
 
-  // TODO: Implement editor tabs.
-  return createEditorTab(editorTabs[0]);
+  if (activeEditorTabIndex === null) {
+    // TODO: Handle the case where there are no editor tabs.
+    return <></>;
+  }
+
+  return createEditorTab(editorTabs[activeEditorTabIndex]);
 };
 
 export default EditorContainer;
