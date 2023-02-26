@@ -133,7 +133,6 @@ export default function* WorkspaceSaga(): SagaIterator {
         if (err) {
           console.error(err);
         }
-        console.log(action.payload.newEditorValue);
       });
       yield;
     }
