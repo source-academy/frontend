@@ -85,7 +85,7 @@ import {
   updateCurrentAssessmentId,
   updateReplValue
 } from '../workspace/WorkspaceActions';
-import { EditorTabState, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
@@ -108,8 +108,6 @@ export type OwnProps = {
 export type StateProps = {
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   programPrependValue: string;
   programPostpendValue: string;
   editorTestcases: Testcase[];
@@ -140,8 +138,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const dispatch = useDispatch();
 
-  const isMultipleFilesEnabled = useTypedSelector(
-    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
   );
 
   React.useEffect(() => {
@@ -586,7 +584,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     const onClickSave = () =>
-      props.handleSave(props.assessment!.questions[questionId].id, props.editorTabs[0].value);
+      props.handleSave(props.assessment!.questions[questionId].id, editorTabs[0].value);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -778,8 +776,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? {
           editorVariant: 'normal',
           isMultipleFilesEnabled,
-          activeEditorTabIndex: props.activeEditorTabIndex,
-          editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+          activeEditorTabIndex,
+          editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,

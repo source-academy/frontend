@@ -61,7 +61,7 @@ import {
   toggleEditorAutorun,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
-import { EditorTabState, WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -90,8 +90,6 @@ export type StateProps = {
   audioUrl: string;
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   isEditorReadonly: boolean;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
@@ -120,8 +118,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
   const dispatch = useDispatch();
 
-  const isMultipleFilesEnabled = useTypedSelector(
-    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
   );
 
   useEffect(() => {
@@ -159,7 +157,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       chapter: props.sourceChapter,
       externalLibrary: props.externalLibraryName as ExternalLibraryName,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: props.editorTabs[0].value
+      editorValue: editorTabs[0].value
     };
     dispatch(recordInit(initData, workspaceLocation));
   };
@@ -246,8 +244,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     ),
     editorVariant: 'sourcecast',
     isMultipleFilesEnabled,
-    activeEditorTabIndex: props.activeEditorTabIndex,
-    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+    activeEditorTabIndex,
+    editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorUpdateBreakpoints: breakpoints =>
@@ -315,7 +313,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                 <SourcereelControlbar
                   currentPlayerTime={props.currentPlayerTime}
                   // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                  editorValue={props.editorTabs[0].value}
+                  editorValue={editorTabs[0].value}
                   getTimerDuration={getTimerDuration}
                   playbackData={props.playbackData}
                   handleRecordInit={handleRecordInit}

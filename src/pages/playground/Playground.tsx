@@ -102,7 +102,6 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -137,8 +136,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   programPrependValue: string;
   programPostpendValue: string;
   editorSessionId: string;
@@ -215,6 +212,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    state => state.workspaces[workspaceLocation]
+  );
+
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
   if (shouldAddDevice && !deviceSecret) {
@@ -231,7 +232,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: propsRef.current.editorTabs[0].value,
+      editorValue: editorTabs[0].value,
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -265,11 +266,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     setSessionId(
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorValue: propsRef.current.editorTabs[0].value,
+        editorValue: editorTabs[0].value,
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
-  }, [props.editorSessionId]);
+  }, [editorTabs, props.editorSessionId]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
 
@@ -596,10 +597,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
-  const isMultipleFilesEnabled = useTypedSelector(
-    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
-  );
-
   const toggleMultipleFilesModeButton = React.useMemo(() => {
     // TODO: Remove this once the multiple file mode is ready for production.
     if (false) {
@@ -802,8 +799,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
     isMultipleFilesEnabled,
-    activeEditorTabIndex: props.activeEditorTabIndex,
-    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+    activeEditorTabIndex,
+    editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),

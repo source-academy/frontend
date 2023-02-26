@@ -111,7 +111,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  activeEditorTabIndex: number | null;
   isDebugging: boolean; // TODO: Unused for now. To check for possible removal.
   enableDebugging: boolean; // TODO: Unused for now. To check for possible removal.
   sourceChapter: Chapter; // TODO: Unused for now. To check for possible removal.
@@ -160,6 +159,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const { isMobileBreakpoint } = useResponsive();
 
   const {
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
     editorTabs,
     editorTestcases,
     hasUnsavedChanges,
@@ -168,9 +169,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     replValue,
     sideContentHeight
   } = useTypedSelector(state => state.workspaces.githubAssessment);
-  const isMultipleFilesEnabled = useTypedSelector(
-    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
-  );
 
   /**
    * Unpacked properties
@@ -1071,7 +1069,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
     isMultipleFilesEnabled,
-    activeEditorTabIndex: props.activeEditorTabIndex,
+    activeEditorTabIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: (cursorPosition: Position) =>

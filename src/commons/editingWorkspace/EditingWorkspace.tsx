@@ -50,7 +50,7 @@ import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes
 import { history } from '../utils/HistoryHelper';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { EditorTabState, WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -95,8 +95,6 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -117,8 +115,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
 
-  const isMultipleFilesEnabled = useTypedSelector(
-    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
   );
 
   /**
@@ -285,7 +283,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
   const handleSave = () => {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    assessment!.questions[formatedQuestionId()].editorValue = props.editorTabs[0].value;
+    assessment!.questions[formatedQuestionId()].editorValue = editorTabs[0].value;
     setAssessment(assessment);
     setHasUnsavedChanges(false);
     storeLocalAssessment(assessment);
@@ -354,7 +352,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             questionId={questionId}
             updateAssessment={updateEditAssessmentState}
             // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-            editorValue={props.editorTabs[0].value}
+            editorValue={editorTabs[0].value}
             handleEditorValueChange={props.handleEditorValueChange}
             handleUpdateWorkspace={props.handleUpdateWorkspace}
           />
@@ -604,8 +602,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         ? {
             editorVariant: 'normal',
             isMultipleFilesEnabled,
-            activeEditorTabIndex: props.activeEditorTabIndex,
-            editorTabs: props.editorTabs
+            activeEditorTabIndex,
+            editorTabs: editorTabs
               .map(convertEditorTabStateToProps)
               .map((editorTabStateProps, index) => {
                 // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
