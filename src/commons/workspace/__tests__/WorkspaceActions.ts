@@ -23,6 +23,7 @@ import {
   highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
+  removeEditorTab,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
@@ -58,6 +59,7 @@ import {
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
+  REMOVE_EDITOR_TAB,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -326,6 +328,18 @@ test('highlightEditorLine generates correct action object', () => {
     payload: {
       highlightedLines,
       workspaceLocation: playgroundWorkspace
+    }
+  });
+});
+
+test('removeEditorTab generates correct action object', () => {
+  const editorTabIndex = 3;
+  const action = removeEditorTab(playgroundWorkspace, editorTabIndex);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      editorTabIndex
     }
   });
 });
