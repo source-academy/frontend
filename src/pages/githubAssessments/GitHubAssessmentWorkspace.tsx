@@ -168,6 +168,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     replValue,
     sideContentHeight
   } = useTypedSelector(state => state.workspaces.githubAssessment);
+  const isMultipleFilesEnabled = useTypedSelector(
+    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  );
 
   /**
    * Unpacked properties
@@ -1067,6 +1070,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
+    isMultipleFilesEnabled,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: (cursorPosition: Position) =>

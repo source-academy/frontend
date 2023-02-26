@@ -602,7 +602,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const toggleMultipleFilesModeButton = React.useMemo(() => {
     // TODO: Remove this once the multiple file mode is ready for production.
-    if (true) {
+    if (false) {
       return <></>;
     }
 
@@ -801,6 +801,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
+    isMultipleFilesEnabled,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>

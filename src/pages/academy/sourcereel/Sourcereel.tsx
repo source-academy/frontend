@@ -48,6 +48,7 @@ import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from '../../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
+import { useTypedSelector } from '../../../commons/utils/Hooks';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
 import {
   browseReplHistoryDown,
@@ -118,6 +119,10 @@ const workspaceLocation: WorkspaceLocation = 'sourcereel';
 const Sourcereel: React.FC<SourcereelProps> = props => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
   const dispatch = useDispatch();
+
+  const isMultipleFilesEnabled = useTypedSelector(
+    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  );
 
   useEffect(() => {
     fetchSourcecastIndex('sourcecast');
@@ -240,6 +245,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       'isEditorReadonly'
     ),
     editorVariant: 'sourcecast',
+    isMultipleFilesEnabled,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),

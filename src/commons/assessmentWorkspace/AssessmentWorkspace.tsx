@@ -65,7 +65,7 @@ import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
-import { useResponsive } from '../utils/Hooks';
+import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
@@ -139,6 +139,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const dispatch = useDispatch();
+
+  const isMultipleFilesEnabled = useTypedSelector(
+    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  );
 
   React.useEffect(() => {
     props.handleEditorValueChange('');
@@ -773,6 +777,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
           editorVariant: 'normal',
+          isMultipleFilesEnabled,
           editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,

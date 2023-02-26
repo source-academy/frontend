@@ -73,6 +73,7 @@ export type OwnProps = {
 export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
+  isMultipleFilesEnabled: boolean;
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
@@ -183,6 +184,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
               editorVariant: 'normal',
+              isMultipleFilesEnabled: this.props.isMultipleFilesEnabled,
               editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
               editorSessionId: '',
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,

@@ -48,8 +48,9 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { history } from '../utils/HistoryHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { EditorTabState, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -107,12 +108,18 @@ export type StateProps = {
   storedQuestionId?: number;
 };
 
+const workspaceLocation: WorkspaceLocation = 'assessment';
+
 const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [assessment, setAssessment] = useState(retrieveLocalAssessment());
   const [editingMode, setEditingMode] = useState('question');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
+
+  const isMultipleFilesEnabled = useTypedSelector(
+    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  );
 
   /**
    * After mounting (either an older copy of the assessment
@@ -596,6 +603,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       question.type === QuestionTypes.programming
         ? {
             editorVariant: 'normal',
+            isMultipleFilesEnabled,
             editorTabs: props.editorTabs
               .map(convertEditorTabStateToProps)
               .map((editorTabStateProps, index) => {

@@ -11,18 +11,23 @@ import SourcecastEditor, {
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 
-export type NormalEditorContainerProps = Omit<EditorProps, keyof EditorTabStateProps> & {
-  editorVariant: 'normal';
+type OwnProps = {
+  isMultipleFilesEnabled: boolean;
   editorTabs: EditorTabStateProps[];
 };
+
+export type NormalEditorContainerProps = Omit<EditorProps, keyof EditorTabStateProps> &
+  OwnProps & {
+    editorVariant: 'normal';
+  };
 
 export type SourcecastEditorContainerProps = Omit<
   SourceRecorderEditorProps,
   keyof EditorTabStateProps
-> & {
-  editorVariant: 'sourcecast';
-  editorTabs: EditorTabStateProps[];
-};
+> &
+  OwnProps & {
+    editorVariant: 'sourcecast';
+  };
 
 export type EditorContainerProps = NormalEditorContainerProps | SourcecastEditorContainerProps;
 

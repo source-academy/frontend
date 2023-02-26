@@ -11,7 +11,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { useResponsive } from 'src/commons/utils/Hooks';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -117,6 +117,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const dispatch = useDispatch();
+
+  const isMultipleFilesEnabled = useTypedSelector(
+    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
+  );
 
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,
@@ -268,6 +272,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
+    isMultipleFilesEnabled,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     codeDeltasToApply: props.codeDeltasToApply,
     isEditorReadonly: props.isEditorReadonly,
