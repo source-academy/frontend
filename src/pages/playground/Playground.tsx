@@ -802,6 +802,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
     isMultipleFilesEnabled,
+    activeEditorTabIndex: props.activeEditorTabIndex,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>

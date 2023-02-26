@@ -1071,6 +1071,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
     isMultipleFilesEnabled,
+    activeEditorTabIndex: props.activeEditorTabIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: (cursorPosition: Position) =>

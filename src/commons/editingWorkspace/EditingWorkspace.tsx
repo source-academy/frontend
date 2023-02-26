@@ -604,6 +604,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         ? {
             editorVariant: 'normal',
             isMultipleFilesEnabled,
+            activeEditorTabIndex: props.activeEditorTabIndex,
             editorTabs: props.editorTabs
               .map(convertEditorTabStateToProps)
               .map((editorTabStateProps, index) => {

@@ -778,6 +778,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? {
           editorVariant: 'normal',
           isMultipleFilesEnabled,
+          activeEditorTabIndex: props.activeEditorTabIndex,
           editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,

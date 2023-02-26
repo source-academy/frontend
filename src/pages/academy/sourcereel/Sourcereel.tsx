@@ -246,6 +246,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     ),
     editorVariant: 'sourcecast',
     isMultipleFilesEnabled,
+    activeEditorTabIndex: props.activeEditorTabIndex,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),

@@ -273,6 +273,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
     isMultipleFilesEnabled,
+    activeEditorTabIndex: props.activeEditorTabIndex,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     codeDeltasToApply: props.codeDeltasToApply,
     isEditorReadonly: props.isEditorReadonly,

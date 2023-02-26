@@ -13,6 +13,7 @@ import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 
 type OwnProps = {
   isMultipleFilesEnabled: boolean;
+  activeEditorTabIndex: number | null;
   editorTabs: EditorTabStateProps[];
 };
 

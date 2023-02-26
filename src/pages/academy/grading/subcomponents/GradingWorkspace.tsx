@@ -185,6 +185,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
           ? {
               editorVariant: 'normal',
               isMultipleFilesEnabled: this.props.isMultipleFilesEnabled,
+              activeEditorTabIndex: this.props.activeEditorTabIndex,
               editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
               editorSessionId: '',
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,
