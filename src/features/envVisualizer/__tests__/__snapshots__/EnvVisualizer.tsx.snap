@@ -18,9 +18,6 @@ Object {
     "4": [Function],
     "5": [Function],
     "6": [Function],
-    "7": [Function],
-    "8": [Function],
-    "9": [Function],
     "fn": [Function],
     "x": Array [
       "long string",
@@ -225,13 +222,13 @@ Array [
       ],
     ],
   ],
+  "3:= ",
+  [Function],
   "4:= ",
   [Function],
   "5:= ",
   [Function],
   "6:= ",
-  [Function],
-  "7:= ",
   [Function],
 ]
 `;
@@ -250,10 +247,7 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 1 2`] = `
 Object {
   "head": Object {
-    "12": [Function],
-    "13": [Function],
-    "14": [Function],
-    "15": [Function],
+    "9": [Function],
     "fn": [Function],
     "l": Array [
       1,
@@ -379,7 +373,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "10",
+    "id": "7",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -478,7 +472,7 @@ Array [
       ],
     ],
   ],
-  "15:= ",
+  "9:= ",
   [Function],
 ]
 `;
@@ -574,7 +568,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "16",
+    "id": "10",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -641,8 +635,8 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 3 2`] = `
 Object {
   "head": Object {
-    "20": [Function],
-    "21": [Function],
+    "14": [Function],
+    "15": [Function],
     "e": Array [
       Array [
         3,
@@ -767,7 +761,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "18",
+    "id": "12",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -866,9 +860,9 @@ Array [
       ],
     ],
   ],
-  "20:= ",
+  "14:= ",
   [Function],
-  "21:= ",
+  "15:= ",
   [Function],
 ]
 `;
@@ -887,8 +881,6 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 4 2`] = `
 Object {
   "head": Object {
-    "24": [Function],
-    "28": [Function],
     "f": [Function],
     "x": 0,
     "y": 10,
@@ -944,7 +936,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "22",
+    "id": "16",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -999,21 +991,18 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "27": [Function],
     "x": 11,
   },
   "id": Any<String>,
   "name": "f",
   "tail": Object {
     "head": Object {
-      "24": [Function],
-      "28": [Function],
       "f": [Function],
       "x": 0,
       "y": 10,
       "z": [Function],
     },
-    "id": "23",
+    "id": "17",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1063,7 +1052,7 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "22",
+      "id": "16",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1079,6 +1068,135 @@ Object {
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 4 4`] = `
+Object {
+  "head": Object {
+    "21": [Function],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {},
+    "id": "19",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "callExpression": Object {
+        "arguments": Array [
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 11,
+          },
+        ],
+        "callee": Node {
+          "end": 97,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 15,
+              "line": 7,
+            },
+            "start": Position {
+              "column": 14,
+              "line": 7,
+            },
+          },
+          "name": "f",
+          "start": 96,
+          "type": "Identifier",
+        },
+        "end": 101,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 19,
+            "line": 7,
+          },
+          "start": Position {
+            "column": 14,
+            "line": 7,
+          },
+        },
+        "start": 96,
+        "type": "CallExpression",
+      },
+      "head": Object {
+        "x": 11,
+      },
+      "id": "18",
+      "name": "f",
+      "tail": Object {
+        "head": Object {
+          "f": [Function],
+          "x": 0,
+          "y": 10,
+          "z": [Function],
+        },
+        "id": "17",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "16",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              ":::pre-declared names::": Symbol(),
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 4 5`] = `
 Array [
   0,
   0,
@@ -1098,7 +1216,9 @@ Array [
   2,
   "x: ",
   11,
-  "27:= ",
+  0,
+  3,
+  "21:= ",
   [Function],
 ]
 `;
@@ -1119,7 +1239,6 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 5 2`] = `
 Object {
   "head": Object {
-    "31": [Function],
     "x": Array [
       1,
       Array [
@@ -1181,7 +1300,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "29",
+    "id": "22",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1289,7 +1408,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "32",
+    "id": "24",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1331,8 +1450,6 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 2`] = `
 Object {
   "head": Object {
-    "45": [Function],
-    "46": [Function],
     "eval_stream": [Function],
     "x": Symbol(Used to implement hoisting),
     "y": Array [
@@ -1394,7 +1511,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "34",
+    "id": "26",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1450,8 +1567,6 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "49": [Function],
-    "58": [Function],
     "n": 1,
   },
   "id": Any<String>,
@@ -1504,7 +1619,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "34",
+    "id": "26",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1560,11 +1675,11 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "61": [Function],
+    "57": [Function],
     "n": 2,
   },
   "id": Any<String>,
-  "name": "integers_from",
+  "name": "n => ...",
   "tail": Object {
     "head": Object {
       "$accumulate": [Function],
@@ -1613,7 +1728,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "34",
+    "id": "26",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1634,11 +1749,9 @@ Object {
     "i": 5,
   },
   "id": Any<String>,
-  "name": "forLoopEnvironment",
+  "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "45": [Function],
-      "46": [Function],
       "eval_stream": [Function],
       "x": Symbol(Used to implement hoisting),
       "y": Array [
@@ -1650,7 +1763,7 @@ Object {
         ],
       ],
     },
-    "id": "35",
+    "id": "27",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1700,7 +1813,7 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "34",
+      "id": "26",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1717,6 +1830,127 @@ Object {
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 7 6`] = `
+Object {
+  "head": Object {
+    "44": [Function],
+    "53": [Function],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {},
+    "id": "42",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "callExpression": Object {
+        "arguments": Array [
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 1,
+          },
+        ],
+        "callee": Node {
+          "end": 457,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 29,
+              "line": 17,
+            },
+            "start": Position {
+              "column": 16,
+              "line": 17,
+            },
+          },
+          "name": "integers_from",
+          "start": 444,
+          "type": "Identifier",
+        },
+        "end": 460,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 32,
+            "line": 17,
+          },
+          "start": Position {
+            "column": 16,
+            "line": 17,
+          },
+        },
+        "start": 444,
+        "type": "CallExpression",
+      },
+      "head": Object {
+        "n": 1,
+      },
+      "id": "41",
+      "name": "integers_from",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_to_list": [Function],
+        },
+        "id": "26",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            ":::pre-declared names::": Symbol(),
+            "integers_from": [Function],
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 7 7`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -1775,8 +2009,6 @@ Object {
   "name": "eval_stream",
   "tail": Object {
     "head": Object {
-      "45": [Function],
-      "46": [Function],
       "eval_stream": [Function],
       "x": Symbol(Used to implement hoisting),
       "y": Array [
@@ -1788,7 +2020,7 @@ Object {
         ],
       ],
     },
-    "id": "35",
+    "id": "27",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1838,7 +2070,7 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "34",
+      "id": "26",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1854,118 +2086,21 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 7`] = `
-Object {
-  "head": Object {
-    "i": 1,
-  },
-  "id": Any<String>,
-  "name": "forBlockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "i": 5,
-    },
-    "id": "36",
-    "name": "forLoopEnvironment",
-    "tail": Object {
-      "head": Object {
-        "45": [Function],
-        "46": [Function],
-        "eval_stream": [Function],
-        "x": Symbol(Used to implement hoisting),
-        "y": Array [
-          [Circular],
-          Array [
-            1,
-            [Circular],
-            [Circular],
-          ],
-        ],
-      },
-      "id": "35",
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
-          "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
-        },
-        "id": "34",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
-          },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
-        },
-      },
-    },
-  },
-}
-`;
-
 exports[`EnvVisualizer calculates correct layout for code sample 7 8`] = `
 Object {
   "head": Object {
-    "i": 2,
+    "_copy_of_i": 1,
   },
   "id": Any<String>,
-  "name": "forBlockEnvironment",
+  "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 5,
     },
-    "id": "36",
-    "name": "forLoopEnvironment",
+    "id": "28",
+    "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "45": [Function],
-        "46": [Function],
         "eval_stream": [Function],
         "x": Symbol(Used to implement hoisting),
         "y": Array [
@@ -1977,7 +2112,7 @@ Object {
           ],
         ],
       },
-      "id": "35",
+      "id": "27",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2027,7 +2162,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "34",
+        "id": "26",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2047,20 +2182,18 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 9`] = `
 Object {
   "head": Object {
-    "i": 3,
+    "_copy_of_i": 2,
   },
   "id": Any<String>,
-  "name": "forBlockEnvironment",
+  "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 5,
     },
-    "id": "36",
-    "name": "forLoopEnvironment",
+    "id": "28",
+    "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "45": [Function],
-        "46": [Function],
         "eval_stream": [Function],
         "x": Symbol(Used to implement hoisting),
         "y": Array [
@@ -2072,7 +2205,7 @@ Object {
           ],
         ],
       },
-      "id": "35",
+      "id": "27",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2122,7 +2255,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "34",
+        "id": "26",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2142,20 +2275,18 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 10`] = `
 Object {
   "head": Object {
-    "i": 4,
+    "_copy_of_i": 3,
   },
   "id": Any<String>,
-  "name": "forBlockEnvironment",
+  "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 5,
     },
-    "id": "36",
-    "name": "forLoopEnvironment",
+    "id": "28",
+    "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "45": [Function],
-        "46": [Function],
         "eval_stream": [Function],
         "x": Symbol(Used to implement hoisting),
         "y": Array [
@@ -2167,7 +2298,7 @@ Object {
           ],
         ],
       },
-      "id": "35",
+      "id": "27",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2217,7 +2348,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "34",
+        "id": "26",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2237,71 +2368,18 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 11`] = `
 Object {
   "head": Object {
-    "52": [Function],
-    "es": [Function],
+    "_copy_of_i": 4,
   },
   "id": Any<String>,
-  "name": "functionBodyEnvironment",
+  "name": "blockEnvironment",
   "tail": Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
-          "loc": undefined,
-          "type": "Literal",
-          "value": Array [
-            1,
-            [Function],
-          ],
-        },
-        Object {
-          "loc": undefined,
-          "type": "Literal",
-          "value": 2,
-        },
-      ],
-      "callee": Node {
-        "end": 443,
-        "loc": SourceLocation {
-          "end": Position {
-            "column": 15,
-            "line": 17,
-          },
-          "start": Position {
-            "column": 4,
-            "line": 17,
-          },
-        },
-        "name": "eval_stream",
-        "start": 432,
-        "type": "Identifier",
-      },
-      "end": 464,
-      "loc": SourceLocation {
-        "end": Position {
-          "column": 36,
-          "line": 17,
-        },
-        "start": Position {
-          "column": 4,
-          "line": 17,
-        },
-      },
-      "start": 432,
-      "type": "CallExpression",
-    },
     "head": Object {
-      "n": 2,
-      "s": Array [
-        1,
-        [Function],
-      ],
+      "i": 5,
     },
-    "id": "50",
-    "name": "eval_stream",
+    "id": "28",
+    "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "45": [Function],
-        "46": [Function],
         "eval_stream": [Function],
         "x": Symbol(Used to implement hoisting),
         "y": Array [
@@ -2313,7 +2391,7 @@ Object {
           ],
         ],
       },
-      "id": "35",
+      "id": "27",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2363,7 +2441,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "34",
+        "id": "26",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2377,35 +2455,78 @@ Object {
       },
     },
   },
-  "thisContext": undefined,
 }
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 7 12`] = `
 Object {
   "head": Object {
-    "x": Array [
-      Array [],
-    ],
+    "es": [Function],
   },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
-    "head": Object {
-      "i": 1,
-    },
-    "id": "37",
-    "name": "forBlockEnvironment",
+    "head": Object {},
+    "id": "46",
+    "name": "blockEnvironment",
     "tail": Object {
-      "head": Object {
-        "i": 5,
+      "callExpression": Object {
+        "arguments": Array [
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": Array [
+              1,
+              [Function],
+            ],
+          },
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 2,
+          },
+        ],
+        "callee": Node {
+          "end": 443,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 15,
+              "line": 17,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 17,
+            },
+          },
+          "name": "eval_stream",
+          "start": 432,
+          "type": "Identifier",
+        },
+        "end": 464,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 36,
+            "line": 17,
+          },
+          "start": Position {
+            "column": 4,
+            "line": 17,
+          },
+        },
+        "start": 432,
+        "type": "CallExpression",
       },
-      "id": "36",
-      "name": "forLoopEnvironment",
+      "head": Object {
+        "n": 2,
+        "s": Array [
+          1,
+          [Function],
+        ],
+      },
+      "id": "45",
+      "name": "eval_stream",
       "tail": Object {
         "head": Object {
-          "45": [Function],
-          "46": [Function],
           "eval_stream": [Function],
           "x": Symbol(Used to implement hoisting),
           "y": Array [
@@ -2417,7 +2538,7 @@ Object {
             ],
           ],
         },
-        "id": "35",
+        "id": "27",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2467,7 +2588,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "34",
+          "id": "26",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2488,28 +2609,24 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 13`] = `
 Object {
   "head": Object {
-    "x": Array [
-      Array [],
-    ],
+    "i": 1,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "i": 2,
+      "_copy_of_i": 1,
     },
-    "id": "39",
-    "name": "forBlockEnvironment",
+    "id": "29",
+    "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "36",
-      "name": "forLoopEnvironment",
+      "id": "28",
+      "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "45": [Function],
-          "46": [Function],
           "eval_stream": [Function],
           "x": Symbol(Used to implement hoisting),
           "y": Array [
@@ -2521,7 +2638,7 @@ Object {
             ],
           ],
         },
-        "id": "35",
+        "id": "27",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2571,7 +2688,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "34",
+          "id": "26",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2592,28 +2709,24 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 14`] = `
 Object {
   "head": Object {
-    "x": Array [
-      Array [],
-    ],
+    "i": 2,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "i": 3,
+      "_copy_of_i": 2,
     },
-    "id": "41",
-    "name": "forBlockEnvironment",
+    "id": "32",
+    "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "36",
-      "name": "forLoopEnvironment",
+      "id": "28",
+      "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "45": [Function],
-          "46": [Function],
           "eval_stream": [Function],
           "x": Symbol(Used to implement hoisting),
           "y": Array [
@@ -2625,7 +2738,7 @@ Object {
             ],
           ],
         },
-        "id": "35",
+        "id": "27",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2675,7 +2788,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "34",
+          "id": "26",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2696,28 +2809,24 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 15`] = `
 Object {
   "head": Object {
-    "x": Array [
-      Array [],
-    ],
+    "i": 3,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "i": 4,
+      "_copy_of_i": 3,
     },
-    "id": "43",
-    "name": "forBlockEnvironment",
+    "id": "35",
+    "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "36",
-      "name": "forLoopEnvironment",
+      "id": "28",
+      "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "45": [Function],
-          "46": [Function],
           "eval_stream": [Function],
           "x": Symbol(Used to implement hoisting),
           "y": Array [
@@ -2729,7 +2838,7 @@ Object {
             ],
           ],
         },
-        "id": "35",
+        "id": "27",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2779,7 +2888,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "34",
+          "id": "26",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2798,6 +2907,106 @@ Object {
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 7 16`] = `
+Object {
+  "head": Object {
+    "i": 4,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 4,
+    },
+    "id": "38",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "id": "28",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": Symbol(Used to implement hoisting),
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "id": "27",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "26",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              ":::pre-declared names::": Symbol(),
+              "integers_from": [Function],
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 7 17`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -2856,33 +3065,51 @@ Object {
   "name": "es",
   "tail": Object {
     "head": Object {
-      "52": [Function],
       "es": [Function],
     },
-    "id": "51",
-    "name": "functionBodyEnvironment",
+    "id": "47",
+    "name": "blockEnvironment",
     "tail": Object {
-      "callExpression": Object {
-        "arguments": Array [
-          Object {
-            "loc": undefined,
-            "type": "Literal",
-            "value": Array [
-              1,
-              [Function],
-            ],
+      "head": Object {},
+      "id": "46",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "callExpression": Object {
+          "arguments": Array [
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": Array [
+                1,
+                [Function],
+              ],
+            },
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": 2,
+            },
+          ],
+          "callee": Node {
+            "end": 443,
+            "loc": SourceLocation {
+              "end": Position {
+                "column": 15,
+                "line": 17,
+              },
+              "start": Position {
+                "column": 4,
+                "line": 17,
+              },
+            },
+            "name": "eval_stream",
+            "start": 432,
+            "type": "Identifier",
           },
-          Object {
-            "loc": undefined,
-            "type": "Literal",
-            "value": 2,
-          },
-        ],
-        "callee": Node {
-          "end": 443,
+          "end": 464,
           "loc": SourceLocation {
             "end": Position {
-              "column": 15,
+              "column": 36,
               "line": 17,
             },
             "start": Position {
@@ -2890,118 +3117,101 @@ Object {
               "line": 17,
             },
           },
-          "name": "eval_stream",
           "start": 432,
-          "type": "Identifier",
+          "type": "CallExpression",
         },
-        "end": 464,
-        "loc": SourceLocation {
-          "end": Position {
-            "column": 36,
-            "line": 17,
-          },
-          "start": Position {
-            "column": 4,
-            "line": 17,
-          },
-        },
-        "start": 432,
-        "type": "CallExpression",
-      },
-      "head": Object {
-        "n": 2,
-        "s": Array [
-          1,
-          [Function],
-        ],
-      },
-      "id": "50",
-      "name": "eval_stream",
-      "tail": Object {
         "head": Object {
-          "45": [Function],
-          "46": [Function],
-          "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
-          "y": Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
+          "n": 2,
+          "s": Array [
+            1,
+            [Function],
           ],
         },
-        "id": "35",
-        "name": "programEnvironment",
+        "id": "45",
+        "name": "eval_stream",
         "tail": Object {
           "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
             "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
-            "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
+            "x": Symbol(Used to implement hoisting),
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
           },
-          "id": "34",
+          "id": "27",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
-              ":::pre-declared names::": Symbol(),
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
               "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
+            "id": "26",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
           },
         },
       },
     },
-    "thisContext": undefined,
   },
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 17`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 18`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -3060,11 +3270,608 @@ Object {
   "name": "es",
   "tail": Object {
     "head": Object {
-      "52": [Function],
       "es": [Function],
     },
-    "id": "51",
-    "name": "functionBodyEnvironment",
+    "id": "47",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {},
+      "id": "46",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "callExpression": Object {
+          "arguments": Array [
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": Array [
+                1,
+                [Function],
+              ],
+            },
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": 2,
+            },
+          ],
+          "callee": Node {
+            "end": 443,
+            "loc": SourceLocation {
+              "end": Position {
+                "column": 15,
+                "line": 17,
+              },
+              "start": Position {
+                "column": 4,
+                "line": 17,
+              },
+            },
+            "name": "eval_stream",
+            "start": 432,
+            "type": "Identifier",
+          },
+          "end": 464,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 36,
+              "line": 17,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 17,
+            },
+          },
+          "start": 432,
+          "type": "CallExpression",
+        },
+        "head": Object {
+          "n": 2,
+          "s": Array [
+            1,
+            [Function],
+          ],
+        },
+        "id": "45",
+        "name": "eval_stream",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": Symbol(Used to implement hoisting),
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "27",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "26",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 7 19`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 1,
+    },
+    "id": "30",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 1,
+      },
+      "id": "29",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "28",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": Symbol(Used to implement hoisting),
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "27",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "26",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 7 20`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 2,
+    },
+    "id": "33",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 2,
+      },
+      "id": "32",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "28",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": Symbol(Used to implement hoisting),
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "27",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "26",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 7 21`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 3,
+    },
+    "id": "36",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 3,
+      },
+      "id": "35",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "28",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": Symbol(Used to implement hoisting),
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "27",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "26",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 7 22`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 4,
+    },
+    "id": "39",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 4,
+      },
+      "id": "38",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "28",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": Symbol(Used to implement hoisting),
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "27",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "26",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`EnvVisualizer calculates correct layout for code sample 7 23`] = `
+Object {
+  "head": Object {
+    "z": Array [
+      Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {},
+    "id": "49",
+    "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
         "arguments": Array [
@@ -3083,33 +3890,33 @@ Object {
           },
         ],
         "callee": Node {
-          "end": 443,
+          "end": 414,
           "loc": SourceLocation {
             "end": Position {
-              "column": 15,
-              "line": 17,
+              "column": 34,
+              "line": 15,
             },
             "start": Position {
-              "column": 4,
-              "line": 17,
+              "column": 32,
+              "line": 15,
             },
           },
-          "name": "eval_stream",
-          "start": 432,
+          "name": "es",
+          "start": 412,
           "type": "Identifier",
         },
-        "end": 464,
+        "end": 420,
         "loc": SourceLocation {
           "end": Position {
-            "column": 36,
-            "line": 17,
+            "column": 40,
+            "line": 15,
           },
           "start": Position {
-            "column": 4,
-            "line": 17,
+            "column": 32,
+            "line": 15,
           },
         },
-        "start": 432,
+        "start": 412,
         "type": "CallExpression",
       },
       "head": Object {
@@ -3119,343 +3926,206 @@ Object {
           [Function],
         ],
       },
-      "id": "50",
-      "name": "eval_stream",
+      "id": "48",
+      "name": "es",
       "tail": Object {
         "head": Object {
-          "45": [Function],
-          "46": [Function],
-          "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
-          "y": Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
-          ],
+          "es": [Function],
         },
-        "id": "35",
-        "name": "programEnvironment",
+        "id": "47",
+        "name": "blockEnvironment",
         "tail": Object {
-          "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
-            "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
-          },
-          "id": "34",
-          "name": "programEnvironment",
+          "head": Object {},
+          "id": "46",
+          "name": "blockEnvironment",
           "tail": Object {
-            "head": Object {
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+            "callExpression": Object {
+              "arguments": Array [
+                Object {
+                  "loc": undefined,
+                  "type": "Literal",
+                  "value": Array [
+                    1,
+                    [Function],
+                  ],
+                },
+                Object {
+                  "loc": undefined,
+                  "type": "Literal",
+                  "value": 2,
+                },
+              ],
+              "callee": Node {
+                "end": 443,
+                "loc": SourceLocation {
+                  "end": Position {
+                    "column": 15,
+                    "line": 17,
+                  },
+                  "start": Position {
+                    "column": 4,
+                    "line": 17,
+                  },
+                },
+                "name": "eval_stream",
+                "start": 432,
+                "type": "Identifier",
+              },
+              "end": 464,
+              "loc": SourceLocation {
+                "end": Position {
+                  "column": 36,
+                  "line": 17,
+                },
+                "start": Position {
+                  "column": 4,
+                  "line": 17,
+                },
+              },
+              "start": 432,
+              "type": "CallExpression",
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
-          },
-        },
-      },
-    },
-    "thisContext": undefined,
-  },
-}
-`;
-
-exports[`EnvVisualizer calculates correct layout for code sample 7 18`] = `
-Object {
-  "head": Object {
-    "55": [Function],
-    "z": Array [
-      Array [
-        [Circular],
-        Array [
-          1,
-          [Circular],
-          [Circular],
-        ],
-      ],
-    ],
-  },
-  "id": Any<String>,
-  "name": "functionBodyEnvironment",
-  "tail": Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
-          "loc": undefined,
-          "type": "Literal",
-          "value": Array [
-            1,
-            [Function],
-          ],
-        },
-        Object {
-          "loc": undefined,
-          "type": "Literal",
-          "value": 2,
-        },
-      ],
-      "callee": Node {
-        "end": 414,
-        "loc": SourceLocation {
-          "end": Position {
-            "column": 34,
-            "line": 15,
-          },
-          "start": Position {
-            "column": 32,
-            "line": 15,
-          },
-        },
-        "name": "es",
-        "start": 412,
-        "type": "Identifier",
-      },
-      "end": 420,
-      "loc": SourceLocation {
-        "end": Position {
-          "column": 40,
-          "line": 15,
-        },
-        "start": Position {
-          "column": 32,
-          "line": 15,
-        },
-      },
-      "start": 412,
-      "type": "CallExpression",
-    },
-    "head": Object {
-      "n": 2,
-      "s": Array [
-        1,
-        [Function],
-      ],
-    },
-    "id": "53",
-    "name": "es",
-    "tail": Object {
-      "head": Object {
-        "52": [Function],
-        "es": [Function],
-      },
-      "id": "51",
-      "name": "functionBodyEnvironment",
-      "tail": Object {
-        "callExpression": Object {
-          "arguments": Array [
-            Object {
-              "loc": undefined,
-              "type": "Literal",
-              "value": Array [
+            "head": Object {
+              "n": 2,
+              "s": Array [
                 1,
                 [Function],
               ],
             },
-            Object {
-              "loc": undefined,
-              "type": "Literal",
-              "value": 2,
-            },
-          ],
-          "callee": Node {
-            "end": 443,
-            "loc": SourceLocation {
-              "end": Position {
-                "column": 15,
-                "line": 17,
-              },
-              "start": Position {
-                "column": 4,
-                "line": 17,
-              },
-            },
+            "id": "45",
             "name": "eval_stream",
-            "start": 432,
-            "type": "Identifier",
-          },
-          "end": 464,
-          "loc": SourceLocation {
-            "end": Position {
-              "column": 36,
-              "line": 17,
-            },
-            "start": Position {
-              "column": 4,
-              "line": 17,
-            },
-          },
-          "start": 432,
-          "type": "CallExpression",
-        },
-        "head": Object {
-          "n": 2,
-          "s": Array [
-            1,
-            [Function],
-          ],
-        },
-        "id": "50",
-        "name": "eval_stream",
-        "tail": Object {
-          "head": Object {
-            "45": [Function],
-            "46": [Function],
-            "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
-            "y": Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-          },
-          "id": "35",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
-              "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
-            },
-            "id": "34",
-            "name": "programEnvironment",
             "tail": Object {
               "head": Object {
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+                "eval_stream": [Function],
+                "x": Symbol(Used to implement hoisting),
+                "y": Array [
+                  [Circular],
+                  Array [
+                    1,
+                    [Circular],
+                    [Circular],
+                  ],
+                ],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
+              "id": "27",
+              "name": "programEnvironment",
+              "tail": Object {
+                "head": Object {
+                  "$accumulate": [Function],
+                  "$append": [Function],
+                  "$build_list": [Function],
+                  "$enum_list": [Function],
+                  "$filter": [Function],
+                  "$length": [Function],
+                  "$list_to_string": [Function],
+                  "$map": [Function],
+                  "$remove": [Function],
+                  "$remove_all": [Function],
+                  "$reverse": [Function],
+                  "__access_export__": [Function],
+                  "__access_named_export__": [Function],
+                  "accumulate": [Function],
+                  "append": [Function],
+                  "build_list": [Function],
+                  "build_stream": [Function],
+                  "enum_list": [Function],
+                  "enum_stream": [Function],
+                  "equal": [Function],
+                  "eval_stream": [Function],
+                  "filter": [Function],
+                  "for_each": [Function],
+                  "integers_from": [Function],
+                  "is_stream": [Function],
+                  "length": [Function],
+                  "list_ref": [Function],
+                  "list_to_stream": [Function],
+                  "list_to_string": [Function],
+                  "map": [Function],
+                  "member": [Function],
+                  "remove": [Function],
+                  "remove_all": [Function],
+                  "reverse": [Function],
+                  "stream_append": [Function],
+                  "stream_filter": [Function],
+                  "stream_for_each": [Function],
+                  "stream_length": [Function],
+                  "stream_map": [Function],
+                  "stream_member": [Function],
+                  "stream_ref": [Function],
+                  "stream_remove": [Function],
+                  "stream_remove_all": [Function],
+                  "stream_reverse": [Function],
+                  "stream_to_list": [Function],
+                },
+                "id": "26",
+                "name": "programEnvironment",
+                "tail": Object {
+                  "head": Object {
+                    ":::pre-declared names::": Symbol(),
+                    "integers_from": [Function],
+                  },
+                  "id": "-1",
+                  "name": "global",
+                  "tail": null,
+                },
+              },
             },
           },
         },
       },
-      "thisContext": undefined,
     },
   },
-  "thisContext": undefined,
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 19`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 24`] = `
 Object {
   "head": Object {
     "z": Symbol(Used to implement hoisting),
   },
   "id": Any<String>,
-  "name": "functionBodyEnvironment",
+  "name": "blockEnvironment",
   "tail": Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
-          "loc": undefined,
-          "type": "Literal",
-          "value": Array [
-            2,
-            [Function],
-          ],
+    "head": Object {},
+    "id": "59",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "callExpression": Object {
+        "arguments": Array [
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": Array [
+              2,
+              [Function],
+            ],
+          },
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 1,
+          },
+        ],
+        "callee": Node {
+          "end": 344,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 61,
+              "line": 13,
+            },
+            "start": Position {
+              "column": 59,
+              "line": 13,
+            },
+          },
+          "name": "es",
+          "start": 342,
+          "type": "Identifier",
         },
-        Object {
-          "loc": undefined,
-          "type": "Literal",
-          "value": 1,
-        },
-      ],
-      "callee": Node {
-        "end": 344,
+        "end": 367,
         "loc": SourceLocation {
           "end": Position {
-            "column": 61,
+            "column": 84,
             "line": 13,
           },
           "start": Position {
@@ -3463,183 +4133,169 @@ Object {
             "line": 13,
           },
         },
-        "name": "es",
         "start": 342,
-        "type": "Identifier",
+        "type": "CallExpression",
       },
-      "end": 367,
-      "loc": SourceLocation {
-        "end": Position {
-          "column": 84,
-          "line": 13,
-        },
-        "start": Position {
-          "column": 59,
-          "line": 13,
-        },
-      },
-      "start": 342,
-      "type": "CallExpression",
-    },
-    "head": Object {
-      "n": 1,
-      "s": Array [
-        2,
-        [Function],
-      ],
-    },
-    "id": "62",
-    "name": "es",
-    "tail": Object {
       "head": Object {
-        "52": [Function],
-        "es": [Function],
+        "n": 1,
+        "s": Array [
+          2,
+          [Function],
+        ],
       },
-      "id": "51",
-      "name": "functionBodyEnvironment",
+      "id": "58",
+      "name": "es",
       "tail": Object {
-        "callExpression": Object {
-          "arguments": Array [
-            Object {
-              "loc": undefined,
-              "type": "Literal",
-              "value": Array [
+        "head": Object {
+          "es": [Function],
+        },
+        "id": "47",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {},
+          "id": "46",
+          "name": "blockEnvironment",
+          "tail": Object {
+            "callExpression": Object {
+              "arguments": Array [
+                Object {
+                  "loc": undefined,
+                  "type": "Literal",
+                  "value": Array [
+                    1,
+                    [Function],
+                  ],
+                },
+                Object {
+                  "loc": undefined,
+                  "type": "Literal",
+                  "value": 2,
+                },
+              ],
+              "callee": Node {
+                "end": 443,
+                "loc": SourceLocation {
+                  "end": Position {
+                    "column": 15,
+                    "line": 17,
+                  },
+                  "start": Position {
+                    "column": 4,
+                    "line": 17,
+                  },
+                },
+                "name": "eval_stream",
+                "start": 432,
+                "type": "Identifier",
+              },
+              "end": 464,
+              "loc": SourceLocation {
+                "end": Position {
+                  "column": 36,
+                  "line": 17,
+                },
+                "start": Position {
+                  "column": 4,
+                  "line": 17,
+                },
+              },
+              "start": 432,
+              "type": "CallExpression",
+            },
+            "head": Object {
+              "n": 2,
+              "s": Array [
                 1,
                 [Function],
               ],
             },
-            Object {
-              "loc": undefined,
-              "type": "Literal",
-              "value": 2,
-            },
-          ],
-          "callee": Node {
-            "end": 443,
-            "loc": SourceLocation {
-              "end": Position {
-                "column": 15,
-                "line": 17,
-              },
-              "start": Position {
-                "column": 4,
-                "line": 17,
-              },
-            },
+            "id": "45",
             "name": "eval_stream",
-            "start": 432,
-            "type": "Identifier",
-          },
-          "end": 464,
-          "loc": SourceLocation {
-            "end": Position {
-              "column": 36,
-              "line": 17,
-            },
-            "start": Position {
-              "column": 4,
-              "line": 17,
-            },
-          },
-          "start": 432,
-          "type": "CallExpression",
-        },
-        "head": Object {
-          "n": 2,
-          "s": Array [
-            1,
-            [Function],
-          ],
-        },
-        "id": "50",
-        "name": "eval_stream",
-        "tail": Object {
-          "head": Object {
-            "45": [Function],
-            "46": [Function],
-            "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
-            "y": Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-          },
-          "id": "35",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
-              "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
-            },
-            "id": "34",
-            "name": "programEnvironment",
             "tail": Object {
               "head": Object {
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+                "eval_stream": [Function],
+                "x": Symbol(Used to implement hoisting),
+                "y": Array [
+                  [Circular],
+                  Array [
+                    1,
+                    [Circular],
+                    [Circular],
+                  ],
+                ],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
+              "id": "27",
+              "name": "programEnvironment",
+              "tail": Object {
+                "head": Object {
+                  "$accumulate": [Function],
+                  "$append": [Function],
+                  "$build_list": [Function],
+                  "$enum_list": [Function],
+                  "$filter": [Function],
+                  "$length": [Function],
+                  "$list_to_string": [Function],
+                  "$map": [Function],
+                  "$remove": [Function],
+                  "$remove_all": [Function],
+                  "$reverse": [Function],
+                  "__access_export__": [Function],
+                  "__access_named_export__": [Function],
+                  "accumulate": [Function],
+                  "append": [Function],
+                  "build_list": [Function],
+                  "build_stream": [Function],
+                  "enum_list": [Function],
+                  "enum_stream": [Function],
+                  "equal": [Function],
+                  "eval_stream": [Function],
+                  "filter": [Function],
+                  "for_each": [Function],
+                  "integers_from": [Function],
+                  "is_stream": [Function],
+                  "length": [Function],
+                  "list_ref": [Function],
+                  "list_to_stream": [Function],
+                  "list_to_string": [Function],
+                  "map": [Function],
+                  "member": [Function],
+                  "remove": [Function],
+                  "remove_all": [Function],
+                  "reverse": [Function],
+                  "stream_append": [Function],
+                  "stream_filter": [Function],
+                  "stream_for_each": [Function],
+                  "stream_length": [Function],
+                  "stream_map": [Function],
+                  "stream_member": [Function],
+                  "stream_ref": [Function],
+                  "stream_remove": [Function],
+                  "stream_remove_all": [Function],
+                  "stream_reverse": [Function],
+                  "stream_to_list": [Function],
+                },
+                "id": "26",
+                "name": "programEnvironment",
+                "tail": Object {
+                  "head": Object {
+                    ":::pre-declared names::": Symbol(),
+                    "integers_from": [Function],
+                  },
+                  "id": "-1",
+                  "name": "global",
+                  "tail": null,
+                },
+              },
             },
           },
         },
       },
-      "thisContext": undefined,
     },
   },
-  "thisContext": undefined,
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 20`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 25`] = `
 Array [
   0,
   0,
@@ -3666,18 +4322,20 @@ Array [
   1,
   "n: ",
   1,
-  "49:= ",
-  [Function],
   2,
   1,
   "n: ",
   2,
-  "61:= ",
+  "57:= ",
   [Function],
   0,
   2,
   "i: ",
   5,
+  1,
+  2,
+  "44:= ",
+  [Function],
   4,
   2,
   "s: ",
@@ -3689,19 +4347,19 @@ Array [
   2,
   0,
   3,
-  "i:= ",
+  "_copy_of_i:= ",
   1,
   1,
   3,
-  "i:= ",
+  "_copy_of_i:= ",
   2,
   2,
   3,
-  "i:= ",
+  "_copy_of_i:= ",
   3,
   3,
   3,
-  "i:= ",
+  "_copy_of_i:= ",
   4,
   4,
   3,
@@ -3709,28 +4367,20 @@ Array [
   [Function],
   0,
   4,
-  "x:= ",
-  Array [
-    Array [],
-  ],
+  "i:= ",
+  1,
   1,
   4,
-  "x:= ",
-  Array [
-    Array [],
-  ],
+  "i:= ",
+  2,
   2,
   4,
-  "x:= ",
-  Array [
-    Array [],
-  ],
+  "i:= ",
+  3,
   3,
   4,
-  "x:= ",
-  Array [
-    Array [],
-  ],
+  "i:= ",
+  4,
   4,
   4,
   "s: ",
@@ -3749,6 +4399,30 @@ Array [
   ],
   "n: ",
   1,
+  0,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
+  1,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
+  2,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
+  3,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
   4,
   5,
   "z:= ",
