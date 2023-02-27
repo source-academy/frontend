@@ -53,7 +53,9 @@ import {
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
   TOGGLE_EDITOR_AUTORUN,
-  WorkspaceLocation
+  TOGGLE_MULTIPLE_FILES_MODE,
+  WorkspaceLocation,
+  WorkspaceState
 } from '../../workspace/WorkspaceTypes';
 import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from '../WorkspaceSaga';
 
@@ -83,6 +85,42 @@ beforeEach(() => {
   (window as any).Inspector = jest.fn();
   (window as any).Inspector.highlightClean = jest.fn();
   (window as any).Inspector.highlightLine = jest.fn();
+});
+
+describe('TOGGLE_MULTIPLE_FILES_MODE', () => {
+  test('calls showWarningMessage correctly when isMultipleFilesMode is false', () => {
+    const workspaceLocation = 'assessment';
+    const updatedWorkspaceFields: Partial<WorkspaceState> = {
+      isMultipleFilesEnabled: false
+    };
+    const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
+
+    return expectSaga(workspaceSaga)
+      .withState(updatedDefaultState)
+      .call(showWarningMessage, 'Multiple files mode disabled', 750)
+      .dispatch({
+        type: TOGGLE_MULTIPLE_FILES_MODE,
+        payload: { workspaceLocation }
+      })
+      .silentRun();
+  });
+
+  test('calls showWarningMessage correctly when isMultipleFilesMode is true', () => {
+    const workspaceLocation = 'grading';
+    const updatedWorkspaceFields: Partial<WorkspaceState> = {
+      isMultipleFilesEnabled: true
+    };
+    const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
+
+    return expectSaga(workspaceSaga)
+      .withState(updatedDefaultState)
+      .call(showWarningMessage, 'Multiple files mode enabled', 750)
+      .dispatch({
+        type: TOGGLE_MULTIPLE_FILES_MODE,
+        payload: { workspaceLocation }
+      })
+      .silentRun();
+  });
 });
 
 describe('EVAL_EDITOR', () => {

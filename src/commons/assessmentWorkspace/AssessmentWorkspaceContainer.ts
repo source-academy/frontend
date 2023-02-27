@@ -17,8 +17,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     courseId: state.session.courseId,
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
-    activeEditorTabIndex: state.workspaces.assessment.activeEditorTabIndex,
-    editorTabs: state.workspaces.assessment.editorTabs,
     programPrependValue: state.workspaces.assessment.programPrependValue,
     programPostpendValue: state.workspaces.assessment.programPostpendValue,
     editorTestcases: state.workspaces.assessment.editorTestcases,

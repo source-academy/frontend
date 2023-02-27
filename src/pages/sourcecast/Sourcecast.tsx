@@ -11,7 +11,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { useResponsive } from 'src/commons/utils/Hooks';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -19,9 +19,11 @@ import {
   clearReplOutput,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   setEditorBreakpoint,
   setIsEditorReadonly,
   toggleEditorAutorun,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
@@ -54,7 +56,6 @@ import SourceRecorderControlBar, {
 } from '../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -89,8 +90,6 @@ export type StateProps = {
   codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   externalLibraryName: ExternalLibraryName;
   isEditorAutorun: boolean;
   isEditorReadonly: boolean;
@@ -117,6 +116,10 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const dispatch = useDispatch();
+
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
+  );
 
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,
@@ -266,9 +269,23 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     setSelectedTab(newTabId);
   };
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
+
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
-    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex,
+    editorTabs: editorTabs.map(convertEditorTabStateToProps),
     codeDeltasToApply: props.codeDeltasToApply,
     isEditorReadonly: props.isEditorReadonly,
     editorSessionId: '',

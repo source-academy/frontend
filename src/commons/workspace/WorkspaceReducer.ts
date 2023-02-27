@@ -41,16 +41,20 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
   MOVE_CURSOR,
+  REMOVE_EDITOR_TAB,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
+  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -584,7 +588,34 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           currentQuestion: action.payload.questionId
         }
       };
-    case UPDATE_ACTIVE_EDITOR_TAB:
+    case TOGGLE_MULTIPLE_FILES_MODE:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          isMultipleFilesEnabled: !state[workspaceLocation].isMultipleFilesEnabled
+        }
+      };
+    case UPDATE_ACTIVE_EDITOR_TAB_INDEX: {
+      const activeEditorTabIndex = action.payload.activeEditorTabIndex;
+      if (activeEditorTabIndex !== null) {
+        if (activeEditorTabIndex < 0) {
+          throw new Error('Active editor tab index must be non-negative!');
+        }
+        if (activeEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
+          throw new Error('Active editor tab index must have a corresponding editor tab!');
+        }
+      }
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: activeEditorTabIndex
+        }
+      };
+    }
+    case UPDATE_ACTIVE_EDITOR_TAB: {
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
       // Do not modify the workspace state if there is no active editor tab.
       if (activeEditorTabIndex === null) {
@@ -602,6 +633,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           editorTabs: updatedEditorTabs
         }
       };
+    }
     case UPDATE_EDITOR_BREAKPOINTS:
       return {
         ...state,
@@ -638,6 +670,45 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ]
         }
       };
+    case REMOVE_EDITOR_TAB: {
+      const editorTabIndex = action.payload.editorTabIndex;
+      if (editorTabIndex < 0) {
+        throw new Error('Editor tab index must be non-negative!');
+      }
+      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Editor tab index must have a corresponding editor tab!');
+      }
+      const newEditorTabs = state[workspaceLocation].editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndex
+      );
+
+      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newActiveEditorTabIndex =
+        activeEditorTabIndex !== editorTabIndex
+          ? // If the active editor tab is not the one that is removed,
+            // the active editor tab remains the same.
+            activeEditorTabIndex
+          : newEditorTabs.length === 0
+          ? // If there are no editor tabs after removal, there cannot
+            // be an active editor tab.
+            null
+          : editorTabIndex === 0
+          ? // If the removed editor tab is the leftmost tab, the active
+            // editor tab will be the new leftmost tab.
+            0
+          : // Otherwise, the active editor tab will be the tab to the
+            // left of the removed tab.
+            editorTabIndex - 1;
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
     case MOVE_CURSOR:
       return {
         ...state,
