@@ -44,6 +44,8 @@ export type DispatchProps = {
   handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
+  handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
+  handleRemoveEditorTabByIndex: (editorTabIndex: number) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleGradingFetch: (submissionId: number) => void;
@@ -73,6 +75,7 @@ export type OwnProps = {
 export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
+  isMultipleFilesEnabled: boolean;
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
@@ -183,6 +186,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
               editorVariant: 'normal',
+              isMultipleFilesEnabled: this.props.isMultipleFilesEnabled,
+              activeEditorTabIndex: this.props.activeEditorTabIndex,
+              setActiveEditorTabIndex: this.props.handleSetActiveEditorTabIndex,
+              removeEditorTabByIndex: this.props.handleRemoveEditorTabByIndex,
               editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
               editorSessionId: '',
               handleDeclarationNavigate: this.props.handleDeclarationNavigate,

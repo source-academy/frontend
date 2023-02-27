@@ -39,11 +39,14 @@ import {
   evalEditor,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   sendReplInputToOutput,
   toggleEditorAutorun,
+  toggleMultipleFilesMode,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -78,16 +81,19 @@ import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBa
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
+import { ControlBarToggleMultipleFilesModeButton } from '../../commons/controlBar/ControlBarToggleMultipleFilesModeButton';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
+import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import { SideBarTab } from '../../commons/sideBar/SideBar';
 import SideContentRemoteExecution from '../../commons/sideContent/remoteExecution/SideContentRemoteExecution';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
@@ -98,7 +104,6 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -133,7 +138,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   programPrependValue: string;
   programPostpendValue: string;
@@ -210,6 +214,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
+
+  const { isMultipleFilesEnabled, activeEditorTabIndex } = useTypedSelector(
+    state => state.workspaces[workspaceLocation]
+  );
 
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
@@ -592,6 +600,20 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
+  const toggleMultipleFilesModeButton = React.useMemo(() => {
+    // TODO: Remove this once the multiple file mode is ready for production.
+    if (true) {
+      return <></>;
+    }
+
+    return (
+      <ControlBarToggleMultipleFilesModeButton
+        isMultipleFilesEnabled={isMultipleFilesEnabled}
+        toggleMultipleFilesMode={() => dispatch(toggleMultipleFilesMode(workspaceLocation))}
+      />
+    );
+  }, [dispatch, isMultipleFilesEnabled, workspaceLocation]);
+
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Introduction',
@@ -776,9 +798,23 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.playgroundSourceVariant === Variant.CONCURRENT ||
     usingRemoteExecution;
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch, workspaceLocation]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch, workspaceLocation]
+  );
+
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>
@@ -833,17 +869,28 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     disableScrolling: isSicpEditor
   };
 
-  const sideBarProps = {
-    tabs: [
-      // TODO: Re-enable on master once the feature is production-ready.
-      // {
-      //   label: 'Files',
-      //   body: <FileSystemView basePath="/playground" />,
-      //   iconName: IconNames.FOLDER_CLOSE,
-      //   id: SideContentType.files
-      // }
-    ]
-  };
+  const sideBarProps: { tabs: SideBarTab[] } = React.useMemo(() => {
+    // The sidebar is rendered if and only if there is at least one tab present.
+    // Because whether the sidebar is rendered or not affects the sidebar resizing
+    // logic, we cannot defer the decision on which sidebar tabs should be rendered
+    // to the sidebar as it would be too late - the sidebar resizing logic in the
+    // workspace would not be able to act on that information. Instead, we need to
+    // determine which sidebar tabs should be rendered here.
+    return {
+      tabs: [
+        ...(isMultipleFilesEnabled
+          ? [
+              {
+                label: 'Files',
+                body: <FileSystemView basePath="/playground" />,
+                iconName: IconNames.FOLDER_CLOSE,
+                id: SideContentType.files
+              }
+            ]
+          : [])
+      ]
+    };
+  }, [isMultipleFilesEnabled]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
@@ -858,7 +905,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           ? null
           : props.usingSubst
           ? stepperStepLimit
-          : executionTime
+          : executionTime,
+        toggleMultipleFilesModeButton
       ]
     },
     editorContainerProps: editorContainerProps,
@@ -894,7 +942,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
-          githubButtons
+          githubButtons,
+          toggleMultipleFilesModeButton
         ]
       },
       selectedTabId: selectedTab,

@@ -23,8 +23,10 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   runAllTestcases,
   setEditorBreakpoint,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 
@@ -111,7 +113,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  activeEditorTabIndex: number | null;
   isDebugging: boolean; // TODO: Unused for now. To check for possible removal.
   enableDebugging: boolean; // TODO: Unused for now. To check for possible removal.
   sourceChapter: Chapter; // TODO: Unused for now. To check for possible removal.
@@ -160,6 +161,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const { isMobileBreakpoint } = useResponsive();
 
   const {
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
     editorTabs,
     editorTestcases,
     hasUnsavedChanges,
@@ -1065,8 +1068,22 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
+
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
     handleDeclarationNavigate: (cursorPosition: Position) =>
