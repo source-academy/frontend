@@ -28,8 +28,6 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
-  activeEditorTabIndex: 0,
-  editorTabs: [{ value: '', highlightedLines: [], breakpoints: [] }],
   programPrependValue: '',
   programPostpendValue: '',
   editorTestcases: [],

@@ -39,12 +39,14 @@ import {
   evalEditor,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   sendReplInputToOutput,
   toggleEditorAutorun,
   toggleMultipleFilesMode,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -102,7 +104,6 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -137,7 +138,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   programPrependValue: string;
   programPostpendValue: string;
@@ -214,6 +214,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
+
+  const { isMultipleFilesEnabled, activeEditorTabIndex } = useTypedSelector(
+    state => state.workspaces[workspaceLocation]
+  );
 
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
@@ -596,10 +600,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
-  const isMultipleFilesEnabled = useTypedSelector(
-    store => store.workspaces[workspaceLocation].isMultipleFilesEnabled
-  );
-
   const toggleMultipleFilesModeButton = React.useMemo(() => {
     // TODO: Remove this once the multiple file mode is ready for production.
     if (true) {
@@ -798,9 +798,23 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.playgroundSourceVariant === Variant.CONCURRENT ||
     usingRemoteExecution;
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch, workspaceLocation]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch, workspaceLocation]
+  );
+
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>

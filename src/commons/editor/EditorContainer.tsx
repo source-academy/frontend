@@ -11,18 +11,26 @@ import SourcecastEditor, {
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 
-export type NormalEditorContainerProps = Omit<EditorProps, keyof EditorTabStateProps> & {
-  editorVariant: 'normal';
+type OwnProps = {
+  isMultipleFilesEnabled: boolean;
+  activeEditorTabIndex: number | null;
+  setActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
+  removeEditorTabByIndex: (editorTabIndex: number) => void;
   editorTabs: EditorTabStateProps[];
 };
+
+export type NormalEditorContainerProps = Omit<EditorProps, keyof EditorTabStateProps> &
+  OwnProps & {
+    editorVariant: 'normal';
+  };
 
 export type SourcecastEditorContainerProps = Omit<
   SourceRecorderEditorProps,
   keyof EditorTabStateProps
-> & {
-  editorVariant: 'sourcecast';
-  editorTabs: EditorTabStateProps[];
-};
+> &
+  OwnProps & {
+    editorVariant: 'sourcecast';
+  };
 
 export type EditorContainerProps = NormalEditorContainerProps | SourcecastEditorContainerProps;
 
@@ -46,16 +54,18 @@ const createSourcecastEditorTab =
   };
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
-  let createEditorTab;
-  if (props.editorVariant === 'sourcecast') {
-    const { editorVariant, editorTabs, ...editorProps } = props;
-    createEditorTab = createSourcecastEditorTab(editorProps);
-  } else {
-    const { editorVariant, editorTabs, ...editorProps } = props;
-    createEditorTab = createNormalEditorTab(editorProps);
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs, ...editorProps } = props;
+  const createEditorTab =
+    editorProps.editorVariant === 'sourcecast'
+      ? createSourcecastEditorTab(editorProps)
+      : createNormalEditorTab(editorProps);
+
+  if (activeEditorTabIndex === null) {
+    // TODO: Handle the case where there are no editor tabs.
+    return <></>;
   }
-  // TODO: Implement editor tabs.
-  return createEditorTab(props.editorTabs[0]);
+
+  return createEditorTab(editorTabs[activeEditorTabIndex]);
 };
 
 export default EditorContainer;

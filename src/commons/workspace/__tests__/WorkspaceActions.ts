@@ -23,6 +23,7 @@ import {
   highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
+  removeEditorTab,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
@@ -31,6 +32,7 @@ import {
   toggleMultipleFilesMode,
   toggleUsingSubst,
   updateActiveEditorTab,
+  updateActiveEditorTabIndex,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
@@ -57,6 +59,7 @@ import {
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
+  REMOVE_EDITOR_TAB,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -64,6 +67,7 @@ import {
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
+  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -268,6 +272,18 @@ test('toggleMultipleFilesMode generates correct action object', () => {
   });
 });
 
+test('updateActiveEditorTabIndex generates correct action object', () => {
+  const activeEditorTabIndex = 3;
+  const action = updateActiveEditorTabIndex(playgroundWorkspace, activeEditorTabIndex);
+  expect(action).toEqual({
+    type: UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      activeEditorTabIndex
+    }
+  });
+});
+
 test('updateActiveEditorTab generates correct action object', () => {
   const newEditorTab: Partial<EditorTabState> = { value: 'Hello World' };
   const action = updateActiveEditorTab(assessmentWorkspace, newEditorTab);
@@ -312,6 +328,18 @@ test('highlightEditorLine generates correct action object', () => {
     payload: {
       highlightedLines,
       workspaceLocation: playgroundWorkspace
+    }
+  });
+});
+
+test('removeEditorTab generates correct action object', () => {
+  const editorTabIndex = 3;
+  const action = removeEditorTab(playgroundWorkspace, editorTabIndex);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      editorTabIndex
     }
   });
 });
