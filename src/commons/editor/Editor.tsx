@@ -145,27 +145,18 @@ const makeHandleGutterClick =
  * Returns an array of breakpoint line numbers from the Ace Editor's breakpoint
  * array representation.
  *
- * In JavaScript, arrays are just objects. As a result, the Ace Editor's breakpoint
- * array has empty slots (i.e., array indices which are not defined at all). Breakpoints
- * are represented in the Ace Editor's breakpoints array as key-value pairs where the
- * key is a string representation of the line number it is on, and the value is
- * 'ace_breakpoint'.
- *
- * However, because the JSON-serialised representation of empty slots in a JavaScript
- * array is the same as that of the 'null', we cannot simply parse all keys of the object
- * as integers to get the breakpoint line numbers. Instead, we need to:
- * (1) Find all entries in the object which has 'ace_breakpoint' as its value; then
- * (2) Parse the keys of all such entries to integers to get our breakpoint line numbers.
+ * Breakpoints are elements in the array with the value 'ace_breakpoint' where
+ * the associated line number is the index of the element in the array.
  *
  * @param breakpoints The Ace Editor's breakpoint representation.
  */
 const getBreakpointLineNumbers = (breakpoints: string[]): number[] => {
   const breakpointLineNumbers: number[] = [];
-  Object.entries(breakpoints).forEach(([key, value]: [string, string]): void => {
+  breakpoints.forEach((value: string, index: number) => {
     if (value !== 'ace_breakpoint') {
       return;
     }
-    breakpointLineNumbers.push(parseInt(key));
+    breakpointLineNumbers.push(index);
   });
   return breakpointLineNumbers;
 };
