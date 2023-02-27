@@ -118,7 +118,8 @@ const variantDisplay: Map<Variant, string> = new Map([
   [Variant.CONCURRENT, 'Concurrent'],
   [Variant.LAZY, 'Lazy'],
   [Variant.GPU, 'GPU'],
-  [Variant.NATIVE, 'Native']
+  [Variant.NATIVE, 'Native'],
+  [Variant.EXPLICIT_CONTROL, 'Explicit-Control']
 ]);
 
 export const fullJSLanguage: SALanguage = {
@@ -164,7 +165,8 @@ export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_4, variant: Variant.GPU },
-  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE }
+  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE },
+  { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ];
 
 export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
