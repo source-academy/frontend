@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
 import { SourcecastData } from '../SourceRecorderTypes';
 import { FETCH_SOURCECAST_INDEX, UPDATE_SOURCECAST_INDEX } from './SourcecastTypes';
 

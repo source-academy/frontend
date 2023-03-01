@@ -2,7 +2,7 @@ import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { action } from 'typesafe-actions';
 
-import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SET_IS_EDITOR_READONLY } from '../../features/sicp/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';

@@ -1,8 +1,8 @@
 import { Chapter } from 'js-slang/dist/types';
 import { action as generateAction } from 'typesafe-actions';
 
-import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
+import { defaultWorkspaceManager } from '../../../../../commons/application/ApplicationTypes';
+import { ExternalLibraryName } from '../../../../../commons/application/types/ExternalTypes';
 import {
   CodeDelta,
   Input,

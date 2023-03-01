@@ -1,7 +1,7 @@
 import { Chapter } from 'js-slang/dist/types';
 
-import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
-import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
+import { ExternalLibraryName } from '../../../../../commons/application/types/ExternalTypes';
+import { WorkspaceLocation } from '../../../../../commons/workspace/WorkspaceTypes';
 import { CodeDelta, Input, PlaybackData } from '../../SourceRecorderTypes';
 import {
   recordInit,

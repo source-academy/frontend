@@ -9,7 +9,7 @@ import {
   PlaybackData,
   PlaybackStatus,
   SourcecastData
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import ControlButton from '../ControlButton';
 import { SideContentType } from '../sideContent/SideContentTypes';

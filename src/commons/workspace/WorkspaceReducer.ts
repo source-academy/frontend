@@ -1,9 +1,9 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 
-import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
-import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
+import { SourcecastReducer } from '../../features/sicp/sourceRecorder/sourcecast/SourcecastReducer';
+import { SET_IS_EDITOR_READONLY } from '../../features/sicp/sourceRecorder/sourcecast/SourcecastTypes';
+import { SourcereelReducer } from '../../features/sicp/sourceRecorder/sourcereel/SourcereelReducer';
 import {
   CodeOutput,
   createDefaultWorkspace,

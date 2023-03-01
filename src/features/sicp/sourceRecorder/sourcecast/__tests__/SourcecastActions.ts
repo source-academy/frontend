@@ -1,4 +1,4 @@
-import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../../../commons/workspace/WorkspaceTypes';
 import { SourcecastData } from '../../SourceRecorderTypes';
 import { fetchSourcecastIndex, updateSourcecastIndex } from '../SourcecastActions';
 import { FETCH_SOURCECAST_INDEX, UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';

@@ -16,12 +16,12 @@ import {
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { FETCH_SOURCECAST_INDEX } from '../../features/sicp/sourceRecorder/sourcecast/SourcecastTypes';
 import {
   SAVE_SOURCECAST_DATA,
   SourcecastData
-} from '../../features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+} from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
+import { DELETE_SOURCECAST_ENTRY } from '../../features/sicp/sourceRecorder/sourcereel/SourcereelTypes';
 import { OverallState, Role } from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,

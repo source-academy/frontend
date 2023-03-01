@@ -1,4 +1,4 @@
-import { WorkspaceState } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,

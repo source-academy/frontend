@@ -1,4 +1,4 @@
-import { WorkspaceState } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { PlaybackData, RecordingStatus } from '../SourceRecorderTypes';
 
 export const DELETE_SOURCECAST_ENTRY = 'DELETE_SOURCECAST_ENTRY';

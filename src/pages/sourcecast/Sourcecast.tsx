@@ -27,13 +27,8 @@ import {
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
-import {
-  setCodeDeltasToApply,
-  setCurrentPlayerTime,
-  setInputToApply,
-  setSourcecastDuration
-} from 'src/features/sourceRecorder/SourceRecorderActions';
+import { fetchSourcecastIndex } from 'src/features/sicp/sourceRecorder/sourcecast/SourcecastActions';
+import { setCodeDeltasToApply, setCurrentPlayerTime, setInputToApply, setSourcecastDuration } from 'src/features/sicp/sourceRecorder/SourceRecorderActions';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -62,7 +57,7 @@ import {
   PlaybackData,
   PlaybackStatus,
   SourcecastData
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 
 export type SourcecastProps = DispatchProps &
   StateProps &

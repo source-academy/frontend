@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
-import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { PlaybackData, SourcecastData } from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import ControlButton from '../ControlButton';
 
 type SourceRecorderSelectCellProps = DispatchProps & StateProps;

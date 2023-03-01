@@ -111,7 +111,7 @@ import {
   CodeDelta,
   Input,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 
 export type PlaygroundProps = OwnProps &
   DispatchProps &

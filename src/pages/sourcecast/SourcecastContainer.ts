@@ -3,8 +3,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { OverallState } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import type { OverallState } from '../../commons/application/ApplicationTypes';
+import type { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   chapterSelect,
   evalEditor,
@@ -12,12 +12,15 @@ import {
   externalLibrarySelect,
   updateEditorValue
 } from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   setSourcecastData,
   setSourcecastStatus
-} from '../../features/sourceRecorder/SourceRecorderActions';
-import { PlaybackData, PlaybackStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/sicp/sourceRecorder/SourceRecorderActions';
+import type {
+  PlaybackData,
+  PlaybackStatus
+} from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import Sourcecast, { DispatchProps, StateProps } from './Sourcecast';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

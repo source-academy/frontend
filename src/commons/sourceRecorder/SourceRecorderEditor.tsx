@@ -8,14 +8,14 @@ import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-import {
+import type {
   CodeDelta,
   Input,
   KeyboardCommand,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
-import { EditorTabStateProps } from '../editor/Editor';
-import { Position } from '../editor/EditorTypes';
+} from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
+import type { EditorTabStateProps } from '../editor/Editor';
+import type { Position } from '../editor/EditorTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor

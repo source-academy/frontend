@@ -3,7 +3,7 @@ import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
-import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { SourcecastData } from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import ControlButton from '../ControlButton';
 
 type SourceRecorderShareCellProps = StateProps;

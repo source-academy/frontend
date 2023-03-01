@@ -13,7 +13,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { PlaybackData, SourcecastData } from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import { getStandardDate } from '../utils/DateHelper';
 import SourcastDeleteCell from './SourceRecorderDeleteCell';
 import SourceRecorderSelectCell from './SourceRecorderSelectCell';

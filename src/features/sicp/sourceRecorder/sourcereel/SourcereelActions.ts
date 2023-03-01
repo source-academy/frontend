@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
 import { Input, PlaybackData } from '../SourceRecorderTypes';
 import {
   DELETE_SOURCECAST_ENTRY,

@@ -1,4 +1,4 @@
-import { SourceActionType } from '../../../commons/utils/ActionsHelper';
+import { SourceActionType } from '../../../../commons/utils/ActionsHelper';
 import {
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,

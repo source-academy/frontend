@@ -13,7 +13,7 @@ import {
   Device,
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { PlaybackData, SourcecastData } from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {

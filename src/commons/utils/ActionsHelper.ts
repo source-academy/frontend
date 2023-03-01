@@ -13,9 +13,9 @@ import * as GroundControlActions from '../../features/groundControl/GroundContro
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
 import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
-import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
-import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
-import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
+import * as SourcecastActions from '../../features/sicp/sourceRecorder/sourcecast/SourcecastActions';
+import * as SourceRecorderActions from '../../features/sicp/sourceRecorder/SourceRecorderActions';
+import * as SourcereelActions from '../../features/sicp/sourceRecorder/sourcereel/SourcereelActions';
 
 export const actions = {
   ...AchievementActions,

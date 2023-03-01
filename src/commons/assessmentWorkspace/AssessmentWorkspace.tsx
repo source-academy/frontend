@@ -23,7 +23,7 @@ import {
   Input,
   KeyboardCommand,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import { fetchAssessment } from '../application/actions/SessionActions';
 import { defaultWorkspaceManager, InterpreterOutput } from '../application/ApplicationTypes';
 import {
