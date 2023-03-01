@@ -1,6 +1,9 @@
 import { IconName } from '@blueprintjs/core';
+import type React from 'react';
+import type JSXRuntime from 'react/jsx-runtime';
+import type ReactDOM from 'react-dom';
 
-import { DebuggerContext } from '../workspace/WorkspaceTypes';
+import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 
@@ -79,5 +82,36 @@ export type ModuleSideContent = {
   label: string;
   iconName: IconName;
   body: (props: any) => JSX.Element;
-  toSpawn: (context: DebuggerContext) => boolean;
+  toSpawn?: (context: DebuggerContext) => boolean;
+};
+
+export type RawTab = (react: typeof React, reactDom: typeof ReactDOM, jsxRuntime: typeof JSXRuntime) => ModuleSideContent;
+
+/**
+ * @property onChange A function that is called whenever the
+ * active tab is changed by the user.
+ *
+ * @property tabs An array of SideContentTabs.
+ *  The tabs will be rendered in order of the array.
+ *  If this array is empty, no tabs will be rendered.
+ */
+export type SideContentBaseProps = DispatchProps & StateProps 
+
+type DispatchProps = {
+  // Optional due to uncontrolled tab component in EditingWorkspace
+  onChange?: (
+    newTabId: SideContentType,
+    prevTabId: SideContentType,
+    event: React.MouseEvent<HTMLElement>
+  ) => void;
+
+  onAllTabsChanged?: () => void;
+};
+
+type StateProps = {
+  tabs: {
+    beforeDynamicTabs: SideContentTab[];
+    afterDynamicTabs: SideContentTab[];
+  };
+  workspaceLocation?: WorkspaceLocation;
 };

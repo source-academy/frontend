@@ -172,16 +172,13 @@ export default class RoomPreview extends Phaser.Scene {
   public createContext() {
     this.context = createContext(Chapter.SOURCE_4, [], 'playground', Variant.DEFAULT);
     this.context.moduleContexts.game = {
-      tabs: null,
-      state: {
-        scene: this,
-        preloadImageMap: this.preloadImageMap,
-        preloadSoundMap: this.preloadSoundMap,
-        preloadSpritesheetMap: this.preloadSpritesheetMap,
-        remotePath: (file: string) => toS3Path(file, true),
-        screenSize: screenSize,
-        createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
-      }
+      scene: this,
+      preloadImageMap: this.preloadImageMap,
+      preloadSoundMap: this.preloadSoundMap,
+      preloadSpritesheetMap: this.preloadSpritesheetMap,
+      remotePath: (file: string) => toS3Path(file, true),
+      screenSize: screenSize,
+      createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
     };
   }
 

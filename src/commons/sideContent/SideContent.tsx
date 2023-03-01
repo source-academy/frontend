@@ -5,8 +5,8 @@ import * as React from 'react';
 import { propsAreEqual } from '../utils/MemoizeHelper';
 import { assertType } from '../utils/TypeHelper';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import GenericSideContent, { generateIconId, GenericSideContentProps } from './GenericSideContent';
-import { SideContentTab, SideContentType } from './SideContentTypes';
+import { useDynamicTabs } from './SideContentHelper';
+import { SideContentBaseProps, SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
  * @property onChange A function that is called whenever the
@@ -23,7 +23,7 @@ import { SideContentTab, SideContentType } from './SideContentTypes';
  * mounting of the SideContent component. Switching tabs
  * will merely hide them from view.
  */
-export type SideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
+export type SideContentProps = SideContentBaseProps & StateProps;
 
 type StateProps = {
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
@@ -35,26 +35,31 @@ type StateProps = {
 /**
  * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
  */
-const generateClassName = (id: string | undefined) =>
-  id === SideContentType.module || id === SideContentType.htmlDisplay
-    ? 'side-content-tooltip side-content-tab-alert'
-    : 'side-content-tooltip';
+// const generateClassName = (id: string | undefined) =>
+//   id === SideContentType.module || id === SideContentType.htmlDisplay
+//     ? 'side-content-tooltip side-content-tab-alert'
+//     : 'side-content-tooltip';
 
 const renderTab = (
   tab: SideContentTab,
+  visited: boolean,
   workspaceLocation?: WorkspaceLocation,
   editorWidth?: string,
-  sideContentHeight?: number
+  sideContentHeight?: number,
 ) => {
-  const iconSize = 20;
   const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+  const iconClassName = !visited && (tab.id === SideContentType.module || tab.id === SideContentType.htmlDisplay)
+    ? 'side-content-tooltip side-content-tab-alert'
+    : 'side-content-tooltip';
+
   const tabTitle = (
     <Tooltip2 content={tab.label}>
-      <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
-        <Icon icon={tab.iconName} iconSize={iconSize} />
+      <div className={iconClassName}>
+        <Icon icon={tab.iconName} iconSize={20} />
       </div>
     </Tooltip2>
   );
+
   const tabProps = assertType<TabProps>()({
     id: tabId,
     title: tabTitle,
@@ -87,30 +92,34 @@ const SideContent: React.FC<SideContentProps> = ({
   renderActiveTabPanelOnly,
   editorWidth,
   sideContentHeight,
-  ...otherProps
+  tabs,
+  onChange,
+  workspaceLocation,
 }) => {
+  const [dynamicTabs, visitedTabs, addVisitedTab] = useDynamicTabs(workspaceLocation, selectedTabId);
+  const allTabs = React.useMemo(() => [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs], [tabs, dynamicTabs]);
+  
   return (
-    <GenericSideContent
-      {...otherProps}
-      renderFunction={(dynamicTabs, changeTabsCallback) => (
-        <div className="side-content">
-          <Card>
-            <div className="side-content-tabs">
-              <Tabs
-                id="side-content-tabs"
-                onChange={changeTabsCallback}
-                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-                selectedTabId={selectedTabId}
-              >
-                {dynamicTabs.map(tab =>
-                  renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
-                )}
-              </Tabs>
-            </div>
-          </Card>
+    <div className="side-content">
+      <Card>
+        <div className="side-content-tabs">
+          <Tabs
+            id="side-content-tabs"
+            onChange={(newId: SideContentType, prevId: SideContentType, event) => {
+              addVisitedTab(newId);
+              if (onChange) onChange(newId, prevId, event);
+            }}
+            renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+            selectedTabId={selectedTabId}
+          >
+            {allTabs.map(tab => {
+              const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+              return renderTab(tab, visitedTabs.includes(tabId), workspaceLocation, editorWidth, sideContentHeight);
+            })}
+          </Tabs>
         </div>
-      )}
-    />
+      </Card>
+    </div>
   );
 };
 

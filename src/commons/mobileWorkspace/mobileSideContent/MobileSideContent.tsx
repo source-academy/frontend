@@ -1,20 +1,17 @@
-import { Classes, Icon, Tab, Tabs } from '@blueprintjs/core';
+import { Classes, Icon, Tab, TabId, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
+import { useDynamicTabs } from 'src/commons/sideContent/SideContentHelper';
 
 import { ControlBarProps } from '../../controlBar/ControlBar';
-import GenericSideContent, {
-  generateIconId,
-  GenericSideContentProps
-} from '../../sideContent/GenericSideContent';
-import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
+import { SideContentBaseProps, SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import MobileControlBar from './MobileControlBar';
 
-export type MobileSideContentProps = Omit<GenericSideContentProps, 'renderFunction'> &
-  Required<Pick<GenericSideContentProps, 'onChange'>> &
+export type MobileSideContentProps = SideContentBaseProps &
+  Required<Pick<SideContentBaseProps, 'onChange'>> &
   StateProps &
   MobileControlBarProps;
 
@@ -27,7 +24,13 @@ type MobileControlBarProps = {
   mobileControlBarProps: ControlBarProps;
 };
 
-const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: WorkspaceLocation) => {
+/**
+ * Generates an icon id given a TabId.
+ * Used to set and remove the 'side-content-tab-alert' style to the tabs.
+ */
+const generateIconId = (tabId: TabId) => `${tabId}-icon`;
+
+const renderTab = (tab: SideContentTab, isIOS: boolean) => {
   const iconSize = 20;
   const tabId = tab.id === undefined ? tab.label : tab.id;
   const tabTitle: JSX.Element = (
@@ -61,7 +64,9 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
   selectedTabId,
   renderActiveTabPanelOnly,
   mobileControlBarProps,
-  ...otherProps
+  workspaceLocation,
+  tabs,
+  onChange,
 }) => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
 
@@ -95,38 +100,32 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
       );
     };
 
-    return dynamicTabs.map(tab => renderPanel(tab, otherProps.workspaceLocation));
+    return dynamicTabs.map(tab => renderPanel(tab, workspaceLocation));
   };
 
-  return (
-    <GenericSideContent
-      {...otherProps}
-      renderFunction={(dynamicTabs, changeTabsCallback) => {
-        return (
-          <>
-            {renderedPanels(dynamicTabs)}
-            <div className="mobile-tabs-container">
-              <Tabs
-                id="mobile-side-content"
-                onChange={changeTabsCallback}
-                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-                selectedTabId={selectedTabId}
-                className={classNames(Classes.DARK, 'mobile-side-content')}
-              >
-                {dynamicTabs.map(tab => renderTab(tab, isIOS, otherProps.workspaceLocation))}
+  const [dynamicTabs] = useDynamicTabs(workspaceLocation);  
+  const allTabs = [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs];
 
-                {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
-                {(otherProps.workspaceLocation === 'playground' ||
-                  otherProps.workspaceLocation === 'sicp') && (
-                  <MobileControlBar {...mobileControlBarProps} />
-                )}
-              </Tabs>
-            </div>
-          </>
-        );
-      }}
-    />
-  );
+  return <>
+    {renderedPanels(dynamicTabs)}
+    <div className="mobile-tabs-container">
+      <Tabs
+        id="mobile-side-content"
+        onChange={(newId: SideContentType, oldId: SideContentType, event) => onChange(newId, oldId, event)}
+        renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+        selectedTabId={selectedTabId}
+        className={classNames(Classes.DARK, 'mobile-side-content')}
+      >
+        {allTabs.map(tab => renderTab(tab, isIOS))}
+
+        {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
+        {(workspaceLocation === 'playground' ||
+          workspaceLocation === 'sicp') && (
+          <MobileControlBar {...mobileControlBarProps} />
+        )}
+      </Tabs>
+    </div>
+  </>
 };
 
 export default React.memo(MobileSideContent, propsAreEqual);
