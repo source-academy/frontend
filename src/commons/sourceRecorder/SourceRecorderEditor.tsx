@@ -14,8 +14,8 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sicp/sourceRecorder/SourceRecorderTypes';
-import type { EditorTabStateProps } from '../editor/Editor';
-import type { Position } from '../editor/EditorTypes';
+import { EditorTabStateProps } from '../editor/Editor';
+import { Position } from '../editor/EditorTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor

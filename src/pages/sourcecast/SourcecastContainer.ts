@@ -12,12 +12,12 @@ import {
   externalLibrarySelect,
   updateEditorValue
 } from '../../commons/workspace/WorkspaceActions';
-import type { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   setSourcecastData,
   setSourcecastStatus
 } from '../../features/sicp/sourceRecorder/SourceRecorderActions';
-import type {
+import {
   PlaybackData,
   PlaybackStatus
 } from '../../features/sicp/sourceRecorder/SourceRecorderTypes';

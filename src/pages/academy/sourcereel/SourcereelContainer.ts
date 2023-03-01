@@ -21,7 +21,8 @@ import {
   PlaybackStatus
 } from '../../../features/sicp/sourceRecorder/SourceRecorderTypes';
 import {
-  recordInput} from '../../../features/sicp/sourceRecorder/sourcereel/SourcereelActions';
+  recordInput,
+} from '../../../features/sicp/sourceRecorder/sourcereel/SourcereelActions';
 import Sourcereel, { DispatchProps, StateProps } from './Sourcereel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
