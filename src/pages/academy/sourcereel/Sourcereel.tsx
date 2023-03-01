@@ -11,25 +11,25 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
-import {
+import { fetchSourcecastIndex } from 'src/features/sicp/sourceRecorder/sourcecast/SourcecastActions';
+import { 
   saveSourcecastData,
   setCodeDeltasToApply,
   setCurrentPlayerTime,
   setInputToApply,
   setSourcecastData,
   setSourcecastDuration
-} from 'src/features/sourceRecorder/SourceRecorderActions';
+} from 'src/features/sicp/sourceRecorder/SourceRecorderActions';
 import {
   deleteSourcecastEntry,
   recordInit,
-  resetInputs,
+  resetInputs, 
   timerPause,
   timerReset,
   timerResume,
   timerStart,
   timerStop
-} from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
+} from 'src/features/sicp/sourceRecorder/sourcereel/SourcereelActions';
 
 import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';

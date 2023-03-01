@@ -8,7 +8,7 @@ import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-import type {
+import {
   CodeDelta,
   Input,
   KeyboardCommand,
