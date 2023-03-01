@@ -13,16 +13,9 @@ import {
   updateEditorValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import {
-  setSourcecastStatus
-} from '../../../features/sicp/sourceRecorder/SourceRecorderActions';
-import {
-  Input,
-  PlaybackStatus
-} from '../../../features/sicp/sourceRecorder/SourceRecorderTypes';
-import {
-  recordInput,
-} from '../../../features/sicp/sourceRecorder/sourcereel/SourcereelActions';
+import { setSourcecastStatus } from '../../../features/sicp/sourceRecorder/SourceRecorderActions';
+import { Input, PlaybackStatus } from '../../../features/sicp/sourceRecorder/SourceRecorderTypes';
+import { recordInput } from '../../../features/sicp/sourceRecorder/sourcereel/SourcereelActions';
 import Sourcereel, { DispatchProps, StateProps } from './Sourcereel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

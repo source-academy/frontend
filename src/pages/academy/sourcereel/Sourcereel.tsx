@@ -12,7 +12,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { fetchSourcecastIndex } from 'src/features/sicp/sourceRecorder/sourcecast/SourcecastActions';
-import { 
+import {
   saveSourcecastData,
   setCodeDeltasToApply,
   setCurrentPlayerTime,
@@ -23,7 +23,7 @@ import {
 import {
   deleteSourcecastEntry,
   recordInit,
-  resetInputs, 
+  resetInputs,
   timerPause,
   timerReset,
   timerResume,

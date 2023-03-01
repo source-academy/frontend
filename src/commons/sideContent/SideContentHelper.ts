@@ -16,42 +16,53 @@ const getModuleFile = async (path: string, type: 'text' | 'json') => {
 const memoizedGetModuleFile = memoize(getModuleFile);
 
 const requireProvider = (x: string) => {
-  const result = ({
-    "react": React,
-    "react-dom": ReactDOM,
-    "react/jsx-runtime": JSXRuntime
-  })[x];
-  if (result === undefined) throw new Error(`Internal Error: Unknown import "${x}"!`); else return result;
-}
+  const result = {
+    react: React,
+    'react-dom': ReactDOM,
+    'react/jsx-runtime': JSXRuntime
+  }[x];
+  if (result === undefined) throw new Error(`Internal Error: Unknown import "${x}"!`);
+  else return result;
+};
 
-export const getDynamicTabs = async (debuggerContext?: DebuggerContext): Promise<SideContentTab[]> => {
+export const getDynamicTabs = async (
+  debuggerContext?: DebuggerContext
+): Promise<SideContentTab[]> => {
   const moduleContexts = debuggerContext?.context?.moduleContexts;
   if (!moduleContexts) return [];
 
-  const manifest = await memoizedGetModuleFile('modules.json', 'json')
+  const manifest = await memoizedGetModuleFile('modules.json', 'json');
   const bundles = Object.keys(moduleContexts);
 
   const tabsToSpawn = uniq(bundles.flatMap(bundle => manifest[bundle].tabs));
-  const rawTabs = await Promise.all(tabsToSpawn.map(async tabName => {
-    const tabFile = await memoizedGetModuleFile(`tabs/${tabName}.js`, 'text');
-    // eslint-disable-next-line no-eval
-    return eval(tabFile)(requireProvider).default as ModuleSideContent;
-  }));
+  const rawTabs = await Promise.all(
+    tabsToSpawn.map(async tabName => {
+      const tabFile = await memoizedGetModuleFile(`tabs/${tabName}.js`, 'text');
+      // eslint-disable-next-line no-eval
+      return eval(tabFile)(requireProvider).default as ModuleSideContent;
+    })
+  );
 
-  return rawTabs.filter(({ toSpawn }) => toSpawn && toSpawn(debuggerContext))
-    .map((tabContent) => ({
+  return rawTabs
+    .filter(({ toSpawn }) => toSpawn && toSpawn(debuggerContext))
+    .map(tabContent => ({
       ...tabContent,
       id: SideContentType.module,
-      body: tabContent.body(debuggerContext),
-    }))  
-}
+      body: tabContent.body(debuggerContext)
+    }));
+};
 
 /**
  * Hook for managing dynamic tabs generated from the debugger context stored in the redux
  * store.
  */
-export const useDynamicTabs = (workspaceLocation: keyof WorkspaceManagerState | undefined, selectedTabId?: SideContentType) => { 
-  const [visitedTabs, setVisitedTabs] = React.useState<string[]>(selectedTabId ? [selectedTabId] : []);
+export const useDynamicTabs = (
+  workspaceLocation: keyof WorkspaceManagerState | undefined,
+  selectedTabId?: SideContentType
+) => {
+  const [visitedTabs, setVisitedTabs] = React.useState<string[]>(
+    selectedTabId ? [selectedTabId] : []
+  );
   const [dynamicTabs, setDynamicTabs] = React.useState<SideContentTab[]>([]);
   // Fetch debuggerContext from store
   const debuggerContext = useTypedSelector(
@@ -63,13 +74,13 @@ export const useDynamicTabs = (workspaceLocation: keyof WorkspaceManagerState | 
       setDynamicTabs(await getDynamicTabs(debuggerContext));
       setVisitedTabs(selectedTabId ? [selectedTabId] : []);
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debuggerContext]);
 
   return [
     dynamicTabs,
     visitedTabs,
-    (tab) => setVisitedTabs([...visitedTabs, tab]),
+    tab => setVisitedTabs([...visitedTabs, tab]),
     () => setVisitedTabs([])
   ] as [SideContentTab[], string[], (tab: string) => void, () => void];
 };

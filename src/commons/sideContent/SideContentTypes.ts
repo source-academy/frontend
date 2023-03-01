@@ -85,7 +85,11 @@ export type ModuleSideContent = {
   toSpawn?: (context: DebuggerContext) => boolean;
 };
 
-export type RawTab = (react: typeof React, reactDom: typeof ReactDOM, jsxRuntime: typeof JSXRuntime) => ModuleSideContent;
+export type RawTab = (
+  react: typeof React,
+  reactDom: typeof ReactDOM,
+  jsxRuntime: typeof JSXRuntime
+) => ModuleSideContent;
 
 /**
  * @property onChange A function that is called whenever the
@@ -95,7 +99,7 @@ export type RawTab = (react: typeof React, reactDom: typeof ReactDOM, jsxRuntime
  *  The tabs will be rendered in order of the array.
  *  If this array is empty, no tabs will be rendered.
  */
-export type SideContentBaseProps = DispatchProps & StateProps 
+export type SideContentBaseProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   // Optional due to uncontrolled tab component in EditingWorkspace

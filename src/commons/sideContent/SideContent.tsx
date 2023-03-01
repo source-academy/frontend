@@ -45,12 +45,13 @@ const renderTab = (
   visited: boolean,
   workspaceLocation?: WorkspaceLocation,
   editorWidth?: string,
-  sideContentHeight?: number,
+  sideContentHeight?: number
 ) => {
   const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-  const iconClassName = !visited && (tab.id === SideContentType.module || tab.id === SideContentType.htmlDisplay)
-    ? 'side-content-tooltip side-content-tab-alert'
-    : 'side-content-tooltip';
+  const iconClassName =
+    !visited && (tab.id === SideContentType.module || tab.id === SideContentType.htmlDisplay)
+      ? 'side-content-tooltip side-content-tab-alert'
+      : 'side-content-tooltip';
 
   const tabTitle = (
     <Tooltip2 content={tab.label}>
@@ -94,11 +95,17 @@ const SideContent: React.FC<SideContentProps> = ({
   sideContentHeight,
   tabs,
   onChange,
-  workspaceLocation,
+  workspaceLocation
 }) => {
-  const [dynamicTabs, visitedTabs, addVisitedTab] = useDynamicTabs(workspaceLocation, selectedTabId);
-  const allTabs = React.useMemo(() => [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs], [tabs, dynamicTabs]);
-  
+  const [dynamicTabs, visitedTabs, addVisitedTab] = useDynamicTabs(
+    workspaceLocation,
+    selectedTabId
+  );
+  const allTabs = React.useMemo(
+    () => [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs],
+    [tabs, dynamicTabs]
+  );
+
   return (
     <div className="side-content">
       <Card>
@@ -113,8 +120,15 @@ const SideContent: React.FC<SideContentProps> = ({
             selectedTabId={selectedTabId}
           >
             {allTabs.map(tab => {
-              const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-              return renderTab(tab, visitedTabs.includes(tabId), workspaceLocation, editorWidth, sideContentHeight);
+              const tabId =
+                tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+              return renderTab(
+                tab,
+                visitedTabs.includes(tabId),
+                workspaceLocation,
+                editorWidth,
+                sideContentHeight
+              );
             })}
           </Tabs>
         </div>
