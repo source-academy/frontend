@@ -78,7 +78,8 @@ export function* persistenceSaga(): SagaIterator {
         fields: 'appProperties'
       });
       const contents = yield call([gapi.client.drive.files, 'get'], { fileId: id, alt: 'media' });
-      yield put(actions.updateEditorValue(contents.body, 'playground'));
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      yield put(actions.updateEditorValue(contents.body, 0, 'playground'));
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
       if (meta && meta.appProperties) {
         yield put(

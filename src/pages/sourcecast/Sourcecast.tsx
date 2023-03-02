@@ -71,7 +71,7 @@ export type SourcecastProps = DispatchProps &
 export type DispatchProps = {
   handleChapterSelect: (chapter: Chapter) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (val: string) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleReplEval: () => void;
   handleSetSourcecastData: (

@@ -173,8 +173,11 @@ export const updateActiveEditorTab = (
   activeEditorTabOptions?: Partial<EditorTabState>
 ) => action(UPDATE_ACTIVE_EDITOR_TAB, { workspaceLocation, activeEditorTabOptions });
 
-export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
-  action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
+export const updateEditorValue = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newEditorValue: string
+) => action(UPDATE_EDITOR_VALUE, { workspaceLocation, editorTabIndex, newEditorValue });
 
 export const setEditorBreakpoint = (breakpoints: string[], workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_EDITOR_BREAKPOINTS, { breakpoints, workspaceLocation });
