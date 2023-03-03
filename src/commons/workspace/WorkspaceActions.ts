@@ -7,7 +7,7 @@ import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   ADD_HTML_CONSOLE_ERROR,
@@ -180,7 +180,7 @@ export const setEditorBreakpoint = (breakpoints: string[], workspaceLocation: Wo
   action(UPDATE_EDITOR_BREAKPOINTS, { breakpoints, workspaceLocation });
 
 export const highlightEditorLine = (
-  highlightedLines: number[],
+  highlightedLines: HighlightedLines[],
   workspaceLocation: WorkspaceLocation
 ) => action(HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
 

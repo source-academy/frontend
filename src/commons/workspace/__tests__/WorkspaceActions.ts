@@ -4,6 +4,7 @@ import { createDefaultWorkspace, SALanguage } from '../../application/Applicatio
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
+import { HighlightedLines } from '../../editor/EditorTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -321,7 +322,10 @@ test('setEditorBreakpoint generates correct action object', () => {
 });
 
 test('highlightEditorLine generates correct action object', () => {
-  const highlightedLines = [1, 2, 5];
+  const highlightedLines: HighlightedLines[] = [
+    [1, 2],
+    [5, 6]
+  ];
   const action = highlightEditorLine(highlightedLines, playgroundWorkspace);
   expect(action).toEqual({
     type: HIGHLIGHT_LINE,

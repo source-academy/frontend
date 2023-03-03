@@ -272,7 +272,9 @@ export default function* WorkspaceSaga(): SagaIterator {
       if (highlightedLines.length === 0) {
         highlightClean();
       } else {
-        highlightLine(highlightedLines[0]);
+        highlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
+          highlightLine(startRow)
+        );
       }
       yield;
     }
@@ -464,7 +466,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    yield put(actions.highlightEditorLine([start, end], workspaceLocation));
+    yield put(actions.highlightEditorLine([[start, end]], workspaceLocation));
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
     yield put(actions.highlightEditorLine([], workspaceLocation));
