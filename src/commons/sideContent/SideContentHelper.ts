@@ -6,7 +6,12 @@ import ReactDOM from 'react-dom';
 
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext, WorkspaceManagerState } from '../workspace/WorkspaceTypes';
-import { ModuleSideContent, SideContentState, SideContentTab, SideContentType } from './SideContentTypes';
+import {
+  ModuleSideContent,
+  SideContentState,
+  SideContentTab,
+  SideContentType
+} from './SideContentTypes';
 
 const getModuleFile = async (path: string, type: 'text' | 'json') => {
   const resp = await fetch(`${process.env.REACT_APP_MODULE_BACKEND_URL}/${path}`);
