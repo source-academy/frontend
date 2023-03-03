@@ -7,7 +7,7 @@ import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   ADD_HTML_CONSOLE_ERROR,
@@ -186,9 +186,10 @@ export const setEditorBreakpoint = (
 ) => action(UPDATE_EDITOR_BREAKPOINTS, { workspaceLocation, editorTabIndex, newBreakpoints });
 
 export const highlightEditorLine = (
-  highlightedLines: number[],
-  workspaceLocation: WorkspaceLocation
-) => action(HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newHighlightedLines: HighlightedLines[]
+) => action(HIGHLIGHT_LINE, { workspaceLocation, editorTabIndex, newHighlightedLines });
 
 export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
   action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });

@@ -683,20 +683,29 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
-    case HIGHLIGHT_LINE:
+    case HIGHLIGHT_LINE: {
+      const { editorTabIndex, newHighlightedLines } = action.payload;
+      if (editorTabIndex < 0) {
+        throw new Error('Editor tab index must be non-negative!');
+      }
+      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Editor tab index must have a corresponding editor tab!');
+      }
+
+      const newEditorTabs = [...state[workspaceLocation].editorTabs];
+      newEditorTabs[editorTabIndex] = {
+        ...newEditorTabs[editorTabIndex],
+        highlightedLines: newHighlightedLines
+      };
+
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          editorTabs: [
-            {
-              ...state[workspaceLocation].editorTabs[0],
-              highlightedLines: action.payload.highlightedLines
-            }
-          ]
+          editorTabs: newEditorTabs
         }
       };
+    }
     case REMOVE_EDITOR_TAB: {
       const editorTabIndex = action.payload.editorTabIndex;
       if (editorTabIndex < 0) {
