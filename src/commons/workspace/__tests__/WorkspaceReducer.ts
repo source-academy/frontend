@@ -1476,19 +1476,71 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
 });
 
 describe('UPDATE_EDITOR_VALUE', () => {
-  test('sets editorValue correctly', () => {
-    const newEditorValue = 'test new editor value';
-    const actions = generateActions(UPDATE_EDITOR_VALUE, { newEditorValue });
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newEditorValue = 'The quick brown fox jumps over the lazy dog.';
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
 
     actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the value of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
-        ...defaultWorkspaceManager,
+        ...defaultWorkspaceState,
         [location]: {
-          ...defaultWorkspaceManager[location],
+          ...defaultWorkspaceState[location],
           editorTabs: [
-            { ...defaultWorkspaceManager[location].editorTabs[0], value: newEditorValue }
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              value: newEditorValue
+            }
           ]
         }
       });

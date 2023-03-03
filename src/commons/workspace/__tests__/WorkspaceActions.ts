@@ -297,13 +297,15 @@ test('updateActiveEditorTab generates correct action object', () => {
 });
 
 test('updateEditorValue generates correct action object', () => {
+  const editorTabIndex = 3;
   const newEditorValue = 'new_editor_value';
-  const action = updateEditorValue(newEditorValue, assessmentWorkspace);
+  const action = updateEditorValue(assessmentWorkspace, editorTabIndex, newEditorValue);
   expect(action).toEqual({
     type: UPDATE_EDITOR_VALUE,
     payload: {
-      newEditorValue,
-      workspaceLocation: assessmentWorkspace
+      workspaceLocation: assessmentWorkspace,
+      editorTabIndex,
+      newEditorValue
     }
   });
 });

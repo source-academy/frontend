@@ -72,47 +72,50 @@ test('LOGOUT_GOOGLE causes logout', async () => {
 
 describe('PERSISTENCE_OPEN_PICKER', () => {
   test('opens a file on success path', () => {
-    return expectSaga(PersistenceSaga)
-      .dispatch(actions.persistenceOpenPicker())
-      .provide({
-        call(effect, next) {
-          switch (effect.fn.name) {
-            case 'pickFile':
-              return { id: FILE_ID, name: FILE_NAME, picked: true };
-            case 'showSimpleConfirmDialog':
-              return true;
-            case 'get':
-              expect(effect.args[0].fileId).toEqual(FILE_ID);
-              if (effect.args[0].alt === 'media') {
-                return { body: FILE_DATA };
-              } else if (effect.args[0].fields.includes('appProperties')) {
-                return {
-                  result: {
-                    appProperties: {
-                      chapter: SOURCE_CHAPTER,
-                      variant: SOURCE_VARIANT,
-                      external: SOURCE_LIBRARY
+    return (
+      expectSaga(PersistenceSaga)
+        .dispatch(actions.persistenceOpenPicker())
+        .provide({
+          call(effect, next) {
+            switch (effect.fn.name) {
+              case 'pickFile':
+                return { id: FILE_ID, name: FILE_NAME, picked: true };
+              case 'showSimpleConfirmDialog':
+                return true;
+              case 'get':
+                expect(effect.args[0].fileId).toEqual(FILE_ID);
+                if (effect.args[0].alt === 'media') {
+                  return { body: FILE_DATA };
+                } else if (effect.args[0].fields.includes('appProperties')) {
+                  return {
+                    result: {
+                      appProperties: {
+                        chapter: SOURCE_CHAPTER,
+                        variant: SOURCE_VARIANT,
+                        external: SOURCE_LIBRARY
+                      }
                     }
-                  }
-                };
-              }
-              break;
-            case 'ensureInitialisedAndAuthorised':
-            case 'ensureInitialised':
-            case 'showMessage':
-            case 'showSuccessMessage':
-              return;
+                  };
+                }
+                break;
+              case 'ensureInitialisedAndAuthorised':
+              case 'ensureInitialised':
+              case 'showMessage':
+              case 'showSuccessMessage':
+                return;
+            }
+            fail(`unexpected function called: ${effect.fn.name}`);
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
-        }
-      })
-      .put.like({
-        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
-      })
-      .put(actions.updateEditorValue(FILE_DATA, 'playground'))
-      .put(actions.chapterSelect(SOURCE_CHAPTER, SOURCE_VARIANT, 'playground'))
-      .put(actions.externalLibrarySelect(SOURCE_LIBRARY, 'playground'))
-      .silentRun();
+        })
+        .put.like({
+          action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+        })
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .put(actions.updateEditorValue('playground', 0, FILE_DATA))
+        .put(actions.chapterSelect(SOURCE_CHAPTER, SOURCE_VARIANT, 'playground'))
+        .put(actions.externalLibrarySelect(SOURCE_LIBRARY, 'playground'))
+        .silentRun()
+    );
   });
 
   test('does not open if picker cancelled', () => {
