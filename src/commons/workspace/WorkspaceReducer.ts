@@ -616,16 +616,19 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       };
     }
     case UPDATE_ACTIVE_EDITOR_TAB: {
+      const { activeEditorTabOptions } = action.payload;
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
       // Do not modify the workspace state if there is no active editor tab.
       if (activeEditorTabIndex === null) {
         return state;
       }
+
       const updatedEditorTabs = [...state[workspaceLocation].editorTabs];
       updatedEditorTabs[activeEditorTabIndex] = {
         ...updatedEditorTabs[activeEditorTabIndex],
-        ...action.payload.activeEditorTabOptions
+        ...activeEditorTabOptions
       };
+
       return {
         ...state,
         [workspaceLocation]: {
@@ -634,17 +637,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
-    case UPDATE_EDITOR_BREAKPOINTS:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          editorTabs: [
-            { ...state[workspaceLocation].editorTabs[0], breakpoints: action.payload.breakpoints }
-          ]
-        }
-      };
     case UPDATE_EDITOR_VALUE: {
       const { editorTabIndex, newEditorValue } = action.payload;
       if (editorTabIndex < 0) {
@@ -656,8 +648,31 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
 
       const newEditorTabs = [...state[workspaceLocation].editorTabs];
       newEditorTabs[editorTabIndex] = {
-        ...state[workspaceLocation].editorTabs[editorTabIndex],
+        ...newEditorTabs[editorTabIndex],
         value: newEditorValue
+      };
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case UPDATE_EDITOR_BREAKPOINTS: {
+      const { editorTabIndex, breakpoints } = action.payload;
+      if (editorTabIndex < 0) {
+        throw new Error('Editor tab index must be non-negative!');
+      }
+      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Editor tab index must have a corresponding editor tab!');
+      }
+
+      const newEditorTabs = [...state[workspaceLocation].editorTabs];
+      newEditorTabs[editorTabIndex] = {
+        ...newEditorTabs[editorTabIndex],
+        breakpoints
       };
 
       return {
