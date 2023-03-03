@@ -262,8 +262,9 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-    handleEditorUpdateBreakpoints: breakpoints =>
-      dispatch(setEditorBreakpoint(breakpoints, workspaceLocation)),
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    handleEditorUpdateBreakpoints: newBreakpoints =>
+      dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
     editorSessionId: '',
     getTimerDuration: getTimerDuration,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,

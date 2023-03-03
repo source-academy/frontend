@@ -296,8 +296,9 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     isEditorAutorun: props.isEditorAutorun,
     inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    handleEditorUpdateBreakpoints: breakpoints =>
-      dispatch(setEditorBreakpoint(breakpoints, workspaceLocation))
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    handleEditorUpdateBreakpoints: newBreakpoints =>
+      dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints))
   };
 
   const replProps = {
