@@ -661,7 +661,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       };
     }
     case UPDATE_EDITOR_BREAKPOINTS: {
-      const { editorTabIndex, breakpoints } = action.payload;
+      const { editorTabIndex, newBreakpoints } = action.payload;
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');
       }
@@ -672,7 +672,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       const newEditorTabs = [...state[workspaceLocation].editorTabs];
       newEditorTabs[editorTabIndex] = {
         ...newEditorTabs[editorTabIndex],
-        breakpoints
+        breakpoints: newBreakpoints
       };
 
       return {

@@ -182,8 +182,8 @@ export const updateEditorValue = (
 export const setEditorBreakpoint = (
   workspaceLocation: WorkspaceLocation,
   editorTabIndex: number,
-  breakpoints: string[]
-) => action(UPDATE_EDITOR_BREAKPOINTS, { workspaceLocation, editorTabIndex, breakpoints });
+  newBreakpoints: string[]
+) => action(UPDATE_EDITOR_BREAKPOINTS, { workspaceLocation, editorTabIndex, newBreakpoints });
 
 export const highlightEditorLine = (
   highlightedLines: number[],

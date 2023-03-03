@@ -55,6 +55,7 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -1540,6 +1541,79 @@ describe('UPDATE_EDITOR_VALUE', () => {
             {
               ...firstEditorTab,
               value: newEditorValue
+            }
+          ]
+        }
+      });
+    });
+  });
+});
+
+describe('UPDATE_EDITOR_BREAKPOINTS', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newBreakpoints = [null, null, 'ace_breakpoint', null, 'ace_breakpoint'];
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the breakpoints of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceState,
+        [location]: {
+          ...defaultWorkspaceState[location],
+          editorTabs: [
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              breakpoints: newBreakpoints
             }
           ]
         }

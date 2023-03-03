@@ -311,13 +311,15 @@ test('updateEditorValue generates correct action object', () => {
 });
 
 test('setEditorBreakpoint generates correct action object', () => {
-  const breakpoints = ['1', '2', '5'];
-  const action = setEditorBreakpoint(breakpoints, gradingWorkspace);
+  const editorTabIndex = 3;
+  const newBreakpoints = ['ace_breakpoint', 'ace_breakpoint'];
+  const action = setEditorBreakpoint(gradingWorkspace, editorTabIndex, newBreakpoints);
   expect(action).toEqual({
     type: UPDATE_EDITOR_BREAKPOINTS,
     payload: {
-      breakpoints,
-      workspaceLocation: gradingWorkspace
+      workspaceLocation: gradingWorkspace,
+      editorTabIndex,
+      newBreakpoints
     }
   });
 });
