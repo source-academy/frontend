@@ -645,19 +645,29 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ]
         }
       };
-    case UPDATE_EDITOR_VALUE:
+    case UPDATE_EDITOR_VALUE: {
+      const { editorTabIndex, newEditorValue } = action.payload;
+      if (editorTabIndex < 0) {
+        throw new Error('Editor tab index must be non-negative!');
+      }
+      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Editor tab index must have a corresponding editor tab!');
+      }
+
+      const newEditorTabs = [...state[workspaceLocation].editorTabs];
+      newEditorTabs[editorTabIndex] = {
+        ...state[workspaceLocation].editorTabs[editorTabIndex],
+        value: newEditorValue
+      };
+
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTabs: [
-            {
-              ...state[workspaceLocation].editorTabs[action.payload.editorTabIndex],
-              value: action.payload.newEditorValue
-            }
-          ]
+          editorTabs: newEditorTabs
         }
       };
+    }
     case HIGHLIGHT_LINE:
       return {
         ...state,
