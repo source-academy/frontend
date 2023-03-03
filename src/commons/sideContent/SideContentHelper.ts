@@ -5,8 +5,8 @@ import JSXRuntime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
 
 import { useTypedSelector } from '../utils/Hooks';
-import { DebuggerContext, WorkspaceManagerState } from '../workspace/WorkspaceTypes';
-import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
+import type { DebuggerContext, WorkspaceManagerState } from '../workspace/WorkspaceTypes';
+import { ModuleSideContent, SideContentState, SideContentTab, SideContentType } from './SideContentTypes';
 
 const getModuleFile = async (path: string, type: 'text' | 'json') => {
   const resp = await fetch(`${process.env.REACT_APP_MODULE_BACKEND_URL}/${path}`);
@@ -59,11 +59,9 @@ export const getDynamicTabs = async (
 export const useDynamicTabs = (
   workspaceLocation: keyof WorkspaceManagerState | undefined,
   selectedTabId?: SideContentType
-) => {
-  const [visitedTabs, setVisitedTabs] = React.useState<string[]>(
-    selectedTabId ? [selectedTabId] : []
-  );
-  const [dynamicTabs, setDynamicTabs] = React.useState<SideContentTab[]>([]);
+): SideContentState => {
+  const [alertedTabs, setAlertedTabs] = React.useState<string[]>([]);
+  const [moduleTabs, setDynamicTabs] = React.useState<SideContentTab[]>([]);
   // Fetch debuggerContext from store
   const debuggerContext = useTypedSelector(
     state => workspaceLocation && state.workspaces[workspaceLocation].debuggerContext
@@ -71,16 +69,27 @@ export const useDynamicTabs = (
 
   React.useEffect(() => {
     (async () => {
-      setDynamicTabs(await getDynamicTabs(debuggerContext));
-      setVisitedTabs(selectedTabId ? [selectedTabId] : []);
+      const newTabs = await getDynamicTabs(debuggerContext);
+      let tabIds = newTabs.map(tab => tab.label);
+      if (selectedTabId) tabIds = tabIds.filter(tabId => tabId !== selectedTabId);
+
+      setDynamicTabs(newTabs);
+      setAlertedTabs(tabIds);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debuggerContext]);
 
-  return [
-    dynamicTabs,
-    visitedTabs,
-    tab => setVisitedTabs([...visitedTabs, tab]),
-    () => setVisitedTabs([])
-  ] as [SideContentTab[], string[], (tab: string) => void, () => void];
+  return {
+    moduleTabs,
+    alertedTabs,
+    addAlert: (tab: string) => setAlertedTabs([...alertedTabs, tab]),
+    visitTab: (tab: string) => setAlertedTabs(alertedTabs.filter(id => id !== tab))
+  };
 };
+
+export const SideContentContext = React.createContext<SideContentState>({
+  moduleTabs: [],
+  alertedTabs: [],
+  visitTab: () => {},
+  addAlert: () => {}
+});

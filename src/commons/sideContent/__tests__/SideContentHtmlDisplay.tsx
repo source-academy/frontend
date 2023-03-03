@@ -1,7 +1,7 @@
 import { fireEvent } from '@testing-library/react';
 import { mount } from 'enzyme';
 
-import SideContentHtmlDisplay from '../SideContentHtmlDisplay';
+import SideContentHtmlDisplay from '../content/SideContentHtmlDisplay';
 
 test('HTML Display renders correctly', () => {
   const mockProps = {

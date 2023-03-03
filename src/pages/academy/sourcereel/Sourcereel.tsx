@@ -41,8 +41,8 @@ import {
   convertEditorTabStateToProps,
   SourcecastEditorContainerProps
 } from '../../../commons/editor/EditorContainer';
-import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
+import SideContentDataVisualizer from '../../../commons/sideContent/content/SideContentDataVisualizer';
+import SideContentEnvVisualizer from '../../../commons/sideContent/content/SideContentEnvVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps

@@ -45,8 +45,8 @@ import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspace
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
+import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
-import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { history } from '../utils/HistoryHelper';
 import { useTypedSelector } from '../utils/Hooks';

@@ -28,7 +28,7 @@ import {
 } from 'src/commons/collabEditing/CollabEditingActions';
 import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
 import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
-import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
+import SideContentHtmlDisplay from 'src/commons/sideContent/content/SideContentHtmlDisplay';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   addHtmlConsoleError,
@@ -94,10 +94,10 @@ import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
-import SideContentRemoteExecution from '../../commons/sideContent/remoteExecution/SideContentRemoteExecution';
-import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
+import SideContentRemoteExecution from '../../commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
+import SideContentDataVisualizer from '../../commons/sideContent/content/SideContentDataVisualizer';
+import SideContentEnvVisualizer from '../../commons/sideContent/content/SideContentEnvVisualizer';
+import SideContentSubstVisualizer from '../../commons/sideContent/content/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';

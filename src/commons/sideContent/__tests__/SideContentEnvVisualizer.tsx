@@ -3,7 +3,7 @@ import { runInContext } from 'js-slang/dist/';
 
 import { mockContext } from '../../mocks/ContextMocks';
 import { visualizeEnv } from '../../utils/JsSlangHelper';
-import SideContentEnvVisualizer from '../SideContentEnvVisualizer';
+import SideContentEnvVisualizer from '../content/SideContentEnvVisualizer';
 
 /**
  * This is to fix some weird bug with Jest and Konva

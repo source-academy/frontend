@@ -3,7 +3,9 @@ import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockGrading } from '../../mocks/GradingMocks';
-import SideContentAutograder, { SideContentAutograderProps } from '../SideContentAutograder';
+import SideContentAutograder, {
+  SideContentAutograderProps
+} from '../content/SideContentAutograder';
 
 const mockErrors: SourceError[] = [
   {

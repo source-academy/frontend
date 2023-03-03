@@ -2,10 +2,10 @@ import { Label } from '@blueprintjs/core';
 import { Chapter } from 'js-slang/dist/types';
 import React from 'react';
 
-import { SALanguage } from '../../application/ApplicationTypes';
-import { ControlBarChapterSelect } from '../../controlBar/ControlBarChapterSelect';
-import { MissionMetadata } from '../../githubAssessments/GitHubMissionTypes';
-import Constants from '../../utils/Constants';
+import { SALanguage } from '../../../application/ApplicationTypes';
+import { ControlBarChapterSelect } from '../../../controlBar/ControlBarChapterSelect';
+import { MissionMetadata } from '../../../githubAssessments/GitHubMissionTypes';
+import Constants from '../../../utils/Constants';
 
 export type SideContentMissionEditorProps = {
   missionMetadata: MissionMetadata;

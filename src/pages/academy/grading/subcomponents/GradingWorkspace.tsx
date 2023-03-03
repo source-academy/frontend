@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import SideContentToneMatrix from 'src/commons/sideContent/content/SideContentToneMatrix';
 
 import {
   defaultWorkspaceManager,
@@ -27,8 +27,8 @@ import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRu
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
 import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
+import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';

@@ -1,5 +1,5 @@
 import { IconName } from '@blueprintjs/core';
-import type React from 'react';
+import React from 'react';
 import type JSXRuntime from 'react/jsx-runtime';
 import type ReactDOM from 'react-dom';
 
@@ -83,6 +83,13 @@ export type ModuleSideContent = {
   iconName: IconName;
   body: (props: any) => JSX.Element;
   toSpawn?: (context: DebuggerContext) => boolean;
+};
+
+export type SideContentState = {
+  readonly moduleTabs: SideContentTab[];
+  readonly alertedTabs: string[];
+  addAlert: (id: string) => void;
+  visitTab: (id: string) => void;
 };
 
 export type RawTab = (

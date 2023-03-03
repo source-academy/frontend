@@ -4,8 +4,8 @@ import * as React from 'react';
 
 import { propsAreEqual } from '../utils/MemoizeHelper';
 import { assertType } from '../utils/TypeHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { useDynamicTabs } from './SideContentHelper';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import SideContentProvider from './SideContentProvider';
 import { SideContentBaseProps, SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
@@ -32,26 +32,17 @@ type StateProps = {
   sideContentHeight?: number;
 };
 
-/**
- * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
- */
-// const generateClassName = (id: string | undefined) =>
-//   id === SideContentType.module || id === SideContentType.htmlDisplay
-//     ? 'side-content-tooltip side-content-tab-alert'
-//     : 'side-content-tooltip';
-
 const renderTab = (
   tab: SideContentTab,
-  visited: boolean,
+  shouldAlert: boolean,
   workspaceLocation?: WorkspaceLocation,
   editorWidth?: string,
   sideContentHeight?: number
 ) => {
   const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-  const iconClassName =
-    !visited && (tab.id === SideContentType.module || tab.id === SideContentType.htmlDisplay)
-      ? 'side-content-tooltip side-content-tab-alert'
-      : 'side-content-tooltip';
+  const iconClassName = shouldAlert
+    ? 'side-content-tooltip side-content-tab-alert'
+    : 'side-content-tooltip';
 
   const tabTitle = (
     <Tooltip2 content={tab.label}>
@@ -89,48 +80,43 @@ const renderTab = (
 };
 
 const SideContent: React.FC<SideContentProps> = ({
-  selectedTabId,
   renderActiveTabPanelOnly,
   editorWidth,
   sideContentHeight,
-  tabs,
   onChange,
-  workspaceLocation
+  selectedTabId,
+  workspaceLocation,
+  tabs
 }) => {
-  const [dynamicTabs, visitedTabs, addVisitedTab] = useDynamicTabs(
-    workspaceLocation,
-    selectedTabId
-  );
-  const allTabs = React.useMemo(
-    () => [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs],
-    [tabs, dynamicTabs]
-  );
-
   return (
     <div className="side-content">
       <Card>
         <div className="side-content-tabs">
-          <Tabs
-            id="side-content-tabs"
-            onChange={(newId: SideContentType, prevId: SideContentType, event) => {
-              addVisitedTab(newId);
-              if (onChange) onChange(newId, prevId, event);
-            }}
-            renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-            selectedTabId={selectedTabId}
-          >
-            {allTabs.map(tab => {
-              const tabId =
-                tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
-              return renderTab(
-                tab,
-                visitedTabs.includes(tabId),
-                workspaceLocation,
-                editorWidth,
-                sideContentHeight
-              );
-            })}
-          </Tabs>
+          <SideContentProvider workspaceLocation={workspaceLocation} selectedTabId={selectedTabId}>
+            {({ moduleTabs, alertedTabs, visitTab }) => (
+              <Tabs
+                id="side-content-tabs"
+                onChange={(newId: SideContentType, prevId: SideContentType, event) => {
+                  visitTab(newId);
+                  if (onChange) onChange(newId, prevId, event);
+                }}
+                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                selectedTabId={selectedTabId}
+              >
+                {[...tabs.beforeDynamicTabs, ...moduleTabs, ...tabs.afterDynamicTabs].map(tab => {
+                  const tabId =
+                    tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+                  return renderTab(
+                    tab,
+                    alertedTabs.includes(tabId),
+                    workspaceLocation,
+                    editorWidth,
+                    sideContentHeight
+                  );
+                })}
+              </Tabs>
+            )}
+          </SideContentProvider>
         </div>
       </Card>
     </div>

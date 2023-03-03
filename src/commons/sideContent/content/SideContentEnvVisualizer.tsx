@@ -1,9 +1,11 @@
 import { Classes } from '@blueprintjs/core';
 import { debounce } from 'lodash';
 import * as React from 'react';
+import Constants, { Links } from 'src/commons/utils/Constants';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
-import Constants, { Links } from '../utils/Constants';
+import { SideContentContext } from '../SideContentHelper';
+import { SideContentType } from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -15,6 +17,8 @@ class SideContentEnvVisualizer extends React.Component<
   { editorWidth?: string; sideContentHeight?: number },
   State
 > {
+  static contextType = SideContentContext;
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -23,7 +27,10 @@ class SideContentEnvVisualizer extends React.Component<
       height: this.calculateHeight(props.sideContentHeight)
     };
     EnvVisualizer.init(
-      visualization => this.setState({ visualization }),
+      visualization => {
+        this.setState({ visualization });
+        this.context.addAlert(SideContentType.envVisualizer);
+      },
       this.state.width,
       this.state.height
     );

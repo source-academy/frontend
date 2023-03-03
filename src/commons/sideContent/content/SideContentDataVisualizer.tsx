@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { configure, GlobalHotKeys } from 'react-hotkeys';
 
-import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
-import { Step } from '../../features/dataVisualizer/dataVisualizerTypes';
-import { Links } from '../utils/Constants';
+import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
+import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
+import { Links } from '../../utils/Constants';
 
 type State = {
   steps: Step[];
