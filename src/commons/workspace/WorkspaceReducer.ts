@@ -706,6 +706,29 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
+    case MOVE_CURSOR: {
+      const { editorTabIndex, newCursorPosition } = action.payload;
+      if (editorTabIndex < 0) {
+        throw new Error('Editor tab index must be non-negative!');
+      }
+      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Editor tab index must have a corresponding editor tab!');
+      }
+
+      const newEditorTabs = [...state[workspaceLocation].editorTabs];
+      newEditorTabs[editorTabIndex] = {
+        ...newEditorTabs[editorTabIndex],
+        newCursorPosition
+      };
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
     case REMOVE_EDITOR_TAB: {
       const editorTabIndex = action.payload.editorTabIndex;
       if (editorTabIndex < 0) {
@@ -745,20 +768,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
-    case MOVE_CURSOR:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          editorTabs: [
-            {
-              ...state[workspaceLocation].editorTabs[0],
-              newCursorPosition: action.payload.cursorPosition
-            }
-          ]
-        }
-      };
     case UPDATE_REPL_VALUE:
       return {
         ...state,

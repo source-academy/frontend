@@ -422,8 +422,9 @@ export default function* WorkspaceSaga(): SagaIterator {
         column: action.payload.cursorPosition.column
       });
       if (result) {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         yield put(
-          actions.moveCursor(action.payload.workspaceLocation, {
+          actions.moveCursor(action.payload.workspaceLocation, 0, {
             row: result.start.line - 1,
             column: result.start.column
           })

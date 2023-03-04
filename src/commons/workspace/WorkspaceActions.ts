@@ -196,6 +196,12 @@ export const setEditorHighlightedLines = (
     newHighlightedLines
   });
 
+export const moveCursor = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newCursorPosition: Position
+) => action(MOVE_CURSOR, { workspaceLocation, editorTabIndex, newCursorPosition });
+
 export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
   action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });
 
@@ -216,9 +222,6 @@ export const navigateToDeclaration = (
   workspaceLocation: WorkspaceLocation,
   cursorPosition: Position
 ) => action(NAV_DECLARATION, { workspaceLocation, cursorPosition });
-
-export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition: Position) =>
-  action(MOVE_CURSOR, { workspaceLocation, cursorPosition });
 
 /**
  * Resets a workspace to its default properties.
