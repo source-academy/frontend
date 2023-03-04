@@ -2,8 +2,10 @@ import { NumericInput } from '@blueprintjs/core';
 import { Card } from '@blueprintjs/core';
 import { mount } from 'enzyme';
 
-import SideContentContestEntryCard from '../SideContentContestEntryCard';
-import SideContentContestVotingContainer from '../SideContentContestVotingContainer';
+import {
+  SideContentContestEntryCard,
+  SideContentContestVotingContainer
+} from '../content/SideContentContestVoting';
 
 const mockContestEntries = [
   {

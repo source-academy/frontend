@@ -59,7 +59,7 @@ import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/Mob
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
-import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
+import { SideContentContestVotingContainer } from '../sideContent/content/SideContentContestVoting';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';

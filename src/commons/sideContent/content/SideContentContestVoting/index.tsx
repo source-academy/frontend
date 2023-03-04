@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
-import type { ContestEntry } from '../../assessment/AssessmentTypes';
+import type { ContestEntry } from '../../../assessment/AssessmentTypes';
 import SideContentContestEntryCard from './SideContentContestEntryCard';
 
 export type SideContentContestVotingProps = DispatchProps & StateProps;
@@ -117,3 +117,5 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
 };
 
 export default SideContentContestVoting;
+export { default as SideContentContestVotingContainer } from './SideContentContestVotingContainer';
+export { default as SideContentContestEntryCard } from './SideContentContestEntryCard';

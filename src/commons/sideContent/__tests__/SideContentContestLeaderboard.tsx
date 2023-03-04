@@ -1,8 +1,8 @@
 import { Card, Pre } from '@blueprintjs/core';
 import { mount } from 'enzyme';
 
-import SideContentContestLeaderboard from '../SideContentContestLeaderboard';
-import SideContentLeaderboardCard from '../SideContentLeaderboardCard';
+import SideContentContestLeaderboard from '../content/SideContentContestLeaderboard';
+import SideContentLeaderboardCard from '../content/SideContentLeaderboardCard';
 
 const mockLeaderboardEntries = [
   {
