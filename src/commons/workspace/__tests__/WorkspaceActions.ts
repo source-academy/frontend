@@ -346,6 +346,20 @@ test('setEditorHighlightedLines generates correct action object', () => {
   });
 });
 
+test('moveCursor generates correct action object', () => {
+  const editorTabIndex = 3;
+  const newCursorPosition = { row: 0, column: 0 };
+  const action = moveCursor(playgroundWorkspace, editorTabIndex, newCursorPosition);
+  expect(action).toEqual({
+    type: MOVE_CURSOR,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      editorTabIndex,
+      newCursorPosition
+    }
+  });
+});
+
 test('removeEditorTab generates correct action object', () => {
   const editorTabIndex = 3;
   const action = removeEditorTab(playgroundWorkspace, editorTabIndex);
@@ -460,18 +474,6 @@ test('navigateToDeclaration generates correct action object', () => {
   const action = navigateToDeclaration(playgroundWorkspace, cursorPosition);
   expect(action).toEqual({
     type: NAV_DECLARATION,
-    payload: {
-      workspaceLocation: playgroundWorkspace,
-      cursorPosition
-    }
-  });
-});
-
-test('moveCursor generates correct action object', () => {
-  const cursorPosition = { row: 0, column: 0 };
-  const action = moveCursor(playgroundWorkspace, cursorPosition);
-  expect(action).toEqual({
-    type: MOVE_CURSOR,
     payload: {
       workspaceLocation: playgroundWorkspace,
       cursorPosition

@@ -27,6 +27,7 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_SHAREDB_CONNECTED
 } from '../../collabEditing/CollabEditingTypes';
+import { HighlightedLines, Position } from '../../editor/EditorTypes';
 import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
 import { WorkspaceReducer } from '../WorkspaceReducer';
@@ -1615,7 +1616,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
     breakpoints: []
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
-  const newHighlightedLines = [
+  const newHighlightedLines: HighlightedLines[] = [
     [1, 3],
     [6, 9]
   ];
@@ -1680,6 +1681,91 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
             {
               ...firstEditorTab,
               highlightedLines: newHighlightedLines
+            }
+          ]
+        }
+      });
+    });
+  });
+});
+
+describe('MOVE_CURSOR', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newCursorPosition: Position = {
+    row: 2,
+    column: 5
+  };
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(MOVE_CURSOR, {
+      editorTabIndex,
+      newCursorPosition
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(MOVE_CURSOR, {
+      editorTabIndex,
+      newCursorPosition
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the cursor position of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(MOVE_CURSOR, {
+      editorTabIndex,
+      newCursorPosition
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceState,
+        [location]: {
+          ...defaultWorkspaceState[location],
+          editorTabs: [
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              newCursorPosition
             }
           ]
         }
@@ -1872,26 +1958,6 @@ describe('UPDATE_REPL_VALUE', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           replValue: newReplValue
-        }
-      });
-    });
-  });
-});
-
-describe('MOVE_CURSOR', () => {
-  test('moves cursor correctly', () => {
-    const newCursorPosition = { row: 0, column: 0 };
-    const actions = generateActions(MOVE_CURSOR, { newCursorPosition });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      const cursorPosition = action.payload.cursorPosition;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          newCursorPosition: cursorPosition
         }
       });
     });
