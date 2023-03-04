@@ -326,16 +326,22 @@ test('setEditorBreakpoint generates correct action object', () => {
 });
 
 test('setEditorHighlightedLines generates correct action object', () => {
-  const highlightedLines: HighlightedLines[] = [
+  const editorTabIndex = 3;
+  const newHighlightedLines: HighlightedLines[] = [
     [1, 2],
     [5, 6]
   ];
-  const action = setEditorHighlightedLines(highlightedLines, playgroundWorkspace);
+  const action = setEditorHighlightedLines(
+    playgroundWorkspace,
+    editorTabIndex,
+    newHighlightedLines
+  );
   expect(action).toEqual({
     type: UPDATE_EDITOR_HIGHLIGHTED_LINES,
     payload: {
-      highlightedLines,
-      workspaceLocation: playgroundWorkspace
+      workspaceLocation: playgroundWorkspace,
+      editorTabIndex,
+      newHighlightedLines
     }
   });
 });

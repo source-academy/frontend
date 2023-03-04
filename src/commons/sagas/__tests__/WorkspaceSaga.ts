@@ -317,7 +317,8 @@ describe('DEBUG_RESUME', () => {
         })
         .put(beginInterruptExecution(workspaceLocation))
         .put(clearReplOutput(workspaceLocation))
-        .put(setEditorHighlightedLines([], workspaceLocation))
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .put(setEditorHighlightedLines(workspaceLocation, 0, []))
         // also calls evalCode here
         .call.like({
           fn: evalCode,
@@ -339,18 +340,21 @@ describe('DEBUG_RESET', () => {
       editorTabs: [{ value: 'test-value' }]
     });
 
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .put(clearReplOutput(workspaceLocation))
-      .put(setEditorHighlightedLines([], workspaceLocation))
-      .dispatch({
-        type: DEBUG_RESET,
-        payload: { workspaceLocation }
-      })
-      .silentRun()
-      .then(result => {
-        expect(result.storeState.workspaces[workspaceLocation].context.runtime.break).toBe(false);
-      });
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newDefaultState)
+        .put(clearReplOutput(workspaceLocation))
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .put(setEditorHighlightedLines(workspaceLocation, 0, []))
+        .dispatch({
+          type: DEBUG_RESET,
+          payload: { workspaceLocation }
+        })
+        .silentRun()
+        .then(result => {
+          expect(result.storeState.workspaces[workspaceLocation].context.runtime.break).toBe(false);
+        })
+    );
   });
 });
 

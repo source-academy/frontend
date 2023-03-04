@@ -987,25 +987,6 @@ describe('HANDLE_CONSOLE_LOG', () => {
   });
 });
 
-describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
-  test('sets highlightedLines correctly', () => {
-    const highlightedLines = [12, 34, 56];
-    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, { highlightedLines });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          editorTabs: [{ ...defaultWorkspaceManager[location].editorTabs[0], highlightedLines }]
-        }
-      });
-    });
-  });
-});
-
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const defaultPlaygroundState = createDefaultWorkspace('playground');
@@ -1614,6 +1595,91 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
             {
               ...firstEditorTab,
               breakpoints: newBreakpoints
+            }
+          ]
+        }
+      });
+    });
+  });
+});
+
+describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newHighlightedLines = [
+    [1, 3],
+    [6, 9]
+  ];
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+      editorTabIndex,
+      newHighlightedLines
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+      editorTabIndex,
+      newHighlightedLines
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the highlighted lines of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+      editorTabIndex,
+      newHighlightedLines
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceState,
+        [location]: {
+          ...defaultWorkspaceState[location],
+          editorTabs: [
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              highlightedLines: newHighlightedLines
             }
           ]
         }
