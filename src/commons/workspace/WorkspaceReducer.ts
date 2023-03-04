@@ -23,7 +23,7 @@ import {
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
-  HIGHLIGHT_LINE
+  UPDATE_EDITOR_HIGHLIGHTED_LINES
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
@@ -683,7 +683,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
-    case HIGHLIGHT_LINE: {
+    case UPDATE_EDITOR_HIGHLIGHTED_LINES: {
       const { editorTabIndex, newHighlightedLines } = action.payload;
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');

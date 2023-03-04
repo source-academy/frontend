@@ -2,8 +2,9 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { createDefaultWorkspace, SALanguage } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
+import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
+import { HighlightedLines } from '../../editor/EditorTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -20,7 +21,6 @@ import {
   evalRepl,
   evalTestcase,
   externalLibrarySelect,
-  highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
   removeEditorTab,
@@ -28,6 +28,7 @@ import {
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
+  setEditorHighlightedLines,
   toggleEditorAutorun,
   toggleMultipleFilesMode,
   toggleUsingSubst,
@@ -324,11 +325,14 @@ test('setEditorBreakpoint generates correct action object', () => {
   });
 });
 
-test('highlightEditorLine generates correct action object', () => {
-  const highlightedLines = [1, 2, 5];
-  const action = highlightEditorLine(highlightedLines, playgroundWorkspace);
+test('setEditorHighlightedLines generates correct action object', () => {
+  const highlightedLines: HighlightedLines[] = [
+    [1, 2],
+    [5, 6]
+  ];
+  const action = setEditorHighlightedLines(highlightedLines, playgroundWorkspace);
   expect(action).toEqual({
-    type: HIGHLIGHT_LINE,
+    type: UPDATE_EDITOR_HIGHLIGHTED_LINES,
     payload: {
       highlightedLines,
       workspaceLocation: playgroundWorkspace
