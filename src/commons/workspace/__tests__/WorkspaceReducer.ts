@@ -20,7 +20,7 @@ import {
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
-  HIGHLIGHT_LINE
+  UPDATE_EDITOR_HIGHLIGHTED_LINES
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import {
@@ -986,10 +986,10 @@ describe('HANDLE_CONSOLE_LOG', () => {
   });
 });
 
-describe('HIGHLIGHT_LINE', () => {
+describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
   test('sets highlightedLines correctly', () => {
     const highlightedLines = [12, 34, 56];
-    const actions = generateActions(HIGHLIGHT_LINE, { highlightedLines });
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, { highlightedLines });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
