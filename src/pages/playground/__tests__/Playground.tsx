@@ -13,7 +13,6 @@ const baseProps = assertType<PlaygroundProps>()({
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  activeEditorTabIndex: 0,
   editorTabs: [{ value: '', highlightedLines: [], breakpoints: [] }],
   programPrependValue: '',
   programPostpendValue: '',

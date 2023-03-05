@@ -11,6 +11,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -48,8 +49,10 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { history } from '../utils/HistoryHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { EditorTabState, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { removeEditorTab, updateActiveEditorTabIndex } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
@@ -89,8 +92,6 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -102,12 +103,19 @@ export type StateProps = {
   storedQuestionId?: number;
 };
 
+const workspaceLocation: WorkspaceLocation = 'assessment';
+
 const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [assessment, setAssessment] = useState(retrieveLocalAssessment());
   const [editingMode, setEditingMode] = useState('question');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
+  const dispatch = useDispatch();
+
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
+  );
 
   /**
    * After mounting (either an older copy of the assessment
@@ -127,6 +135,16 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
    * if a workspace reset is needed.
    */
   useEffect(() => checkWorkspaceReset());
+
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
 
   if (assessment === null || assessment!.questions.length === 0) {
     return (
@@ -273,7 +291,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
   const handleSave = () => {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    assessment!.questions[formatedQuestionId()].editorValue = props.editorTabs[0].value;
+    assessment!.questions[formatedQuestionId()].editorValue = editorTabs[0].value;
     setAssessment(assessment);
     setHasUnsavedChanges(false);
     storeLocalAssessment(assessment);
@@ -342,7 +360,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             questionId={questionId}
             updateAssessment={updateEditAssessmentState}
             // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-            editorValue={props.editorTabs[0].value}
+            editorValue={editorTabs[0].value}
             handleEditorValueChange={props.handleEditorValueChange}
             handleUpdateWorkspace={props.handleUpdateWorkspace}
           />
@@ -591,7 +609,11 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       question.type === QuestionTypes.programming
         ? {
             editorVariant: 'normal',
-            editorTabs: props.editorTabs
+            isMultipleFilesEnabled,
+            activeEditorTabIndex,
+            setActiveEditorTabIndex,
+            removeEditorTabByIndex,
+            editorTabs: editorTabs
               .map(convertEditorTabStateToProps)
               .map((editorTabStateProps, index) => {
                 // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.

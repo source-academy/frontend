@@ -48,6 +48,7 @@ import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from '../../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
+import { useTypedSelector } from '../../../commons/utils/Hooks';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
 import {
   browseReplHistoryDown,
@@ -56,11 +57,13 @@ import {
   clearReplOutput,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   setEditorBreakpoint,
   toggleEditorAutorun,
+  updateActiveEditorTabIndex,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
-import { EditorTabState, WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -89,8 +92,6 @@ export type StateProps = {
   audioUrl: string;
   currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   isEditorReadonly: boolean;
   enableDebugging: boolean;
   externalLibraryName: ExternalLibraryName;
@@ -118,6 +119,10 @@ const workspaceLocation: WorkspaceLocation = 'sourcereel';
 const Sourcereel: React.FC<SourcereelProps> = props => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
   const dispatch = useDispatch();
+
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
+  );
 
   useEffect(() => {
     fetchSourcecastIndex('sourcecast');
@@ -147,6 +152,16 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.inputToApply]);
 
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
+
   const getTimerDuration = () => props.timeElapsedBeforePause + Date.now() - props.timeResumed;
 
   const handleRecordInit = () => {
@@ -154,7 +169,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       chapter: props.sourceChapter,
       externalLibrary: props.externalLibraryName as ExternalLibraryName,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: props.editorTabs[0].value
+      editorValue: editorTabs[0].value
     };
     dispatch(recordInit(initData, workspaceLocation));
   };
@@ -240,7 +255,11 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       'isEditorReadonly'
     ),
     editorVariant: 'sourcecast',
-    editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex,
+    editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorUpdateBreakpoints: breakpoints =>
@@ -308,7 +327,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                 <SourcereelControlbar
                   currentPlayerTime={props.currentPlayerTime}
                   // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-                  editorValue={props.editorTabs[0].value}
+                  editorValue={editorTabs[0].value}
                   getTimerDuration={getTimerDuration}
                   playbackData={props.playbackData}
                   handleRecordInit={handleRecordInit}

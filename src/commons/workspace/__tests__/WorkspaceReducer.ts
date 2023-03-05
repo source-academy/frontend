@@ -20,7 +20,7 @@ import {
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
-  HIGHLIGHT_LINE
+  UPDATE_EDITOR_HIGHLIGHTED_LINES
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import {
@@ -44,6 +44,7 @@ import {
   EVAL_REPL,
   MOVE_CURSOR,
   PlaygroundWorkspaceState,
+  REMOVE_EDITOR_TAB,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -51,6 +52,7 @@ import {
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
+  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -984,10 +986,10 @@ describe('HANDLE_CONSOLE_LOG', () => {
   });
 });
 
-describe('HIGHLIGHT_LINE', () => {
+describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
   test('sets highlightedLines correctly', () => {
     const highlightedLines = [12, 34, 56];
-    const actions = generateActions(HIGHLIGHT_LINE, { highlightedLines });
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, { highlightedLines });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -1330,6 +1332,78 @@ describe('TOGGLE_MULTIPLE_FILES_MODE', () => {
   });
 });
 
+describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
+  const editorTabs: EditorTabState[] = [
+    {
+      value: 'Hello World!',
+      highlightedLines: [],
+      breakpoints: []
+    },
+    {
+      value: 'Goodbye World!',
+      highlightedLines: [],
+      breakpoints: []
+    }
+  ];
+
+  test('throws an error if the active editor tab index is negative', () => {
+    const activeEditorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB_INDEX, { activeEditorTabIndex });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Active editor tab index must be non-negative!');
+    });
+  });
+
+  test('sets the active editor tab index if it is within bounds', () => {
+    const activeEditorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB_INDEX, { activeEditorTabIndex });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex,
+            editorTabs
+          }
+        })
+      );
+    });
+  });
+
+  test('throws an error if the active editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const activeEditorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB_INDEX, { activeEditorTabIndex });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Active editor tab index must have a corresponding editor tab!');
+    });
+  });
+});
+
 describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
   const activeEditorTabOptions: Partial<EditorTabState> = {
     value: 'Goodbye World!'
@@ -1345,7 +1419,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
           breakpoints: []
         },
         {
-          value: 'Hello World!',
+          value: 'Goodbye World!',
           highlightedLines: [],
           breakpoints: []
         }
@@ -1418,6 +1492,158 @@ describe('UPDATE_EDITOR_VALUE', () => {
           ]
         }
       });
+    });
+  });
+});
+
+describe('REMOVE_EDITOR_TAB', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('removes the editor tab & sets the active editor tab index to null if there is only one editor tab', () => {
+    const editorTabIndex = 0;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs: [zerothEditorTab]
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: null,
+            editorTabs: []
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab & leaves the active editor tab index unchanged if it is not the removed editor tab', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [zerothEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab & sets the active editor tab index to 0 if the removed editor tab index is 0 if the removed tab is the active tab', () => {
+    const editorTabIndex = 0;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [firstEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab & sets the active editor tab index to 1 lower than the removed editor tab index if the removed editor tab index is not 0 if the removed tab is the active tab', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [zerothEditorTab]
+          }
+        })
+      );
     });
   });
 });
