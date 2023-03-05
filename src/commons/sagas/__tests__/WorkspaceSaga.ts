@@ -36,9 +36,9 @@ import {
   clearReplOutput,
   clearReplOutputLast,
   endClearContext,
-  highlightEditorLine,
   moveCursor,
-  sendReplInputToOutput
+  sendReplInputToOutput,
+  setEditorHighlightedLines
 } from '../../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
@@ -297,7 +297,7 @@ describe('DEBUG_RESUME', () => {
       .silentRun();
   });
 
-  test('puts beginInterruptExecution, clearReplOutput, highlightEditorLine and calls evalCode correctly', () => {
+  test('puts beginInterruptExecution, clearReplOutput, setEditorHighlightedLines and calls evalCode correctly', () => {
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [{ value: editorValue }],
       context
@@ -317,7 +317,7 @@ describe('DEBUG_RESUME', () => {
         })
         .put(beginInterruptExecution(workspaceLocation))
         .put(clearReplOutput(workspaceLocation))
-        .put(highlightEditorLine([], workspaceLocation))
+        .put(setEditorHighlightedLines([], workspaceLocation))
         // also calls evalCode here
         .call.like({
           fn: evalCode,
@@ -333,7 +333,7 @@ describe('DEBUG_RESUME', () => {
 });
 
 describe('DEBUG_RESET', () => {
-  test('puts clearReplOutput and highlightEditorLine correctly', () => {
+  test('puts clearReplOutput and highlightHighlightedLine correctly', () => {
     const workspaceLocation = 'assessment';
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [{ value: 'test-value' }]
@@ -342,7 +342,7 @@ describe('DEBUG_RESET', () => {
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
       .put(clearReplOutput(workspaceLocation))
-      .put(highlightEditorLine([], workspaceLocation))
+      .put(setEditorHighlightedLines([], workspaceLocation))
       .dispatch({
         type: DEBUG_RESET,
         payload: { workspaceLocation }

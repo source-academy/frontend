@@ -38,7 +38,7 @@ import {
   BEGIN_INTERRUPT_EXECUTION,
   DEBUG_RESET,
   DEBUG_RESUME,
-  HIGHLIGHT_LINE
+  UPDATE_EDITOR_HIGHLIGHTED_LINES
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
@@ -133,7 +133,6 @@ export default function* WorkspaceSaga(): SagaIterator {
         if (err) {
           console.error(err);
         }
-        console.log(action.payload.newEditorValue);
       });
       yield;
     }
@@ -253,7 +252,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-    yield put(actions.highlightEditorLine([], workspaceLocation));
+    yield put(actions.setEditorHighlightedLines([], workspaceLocation));
     yield call(evalCode, code, context, execTime, workspaceLocation, DEBUG_RESUME);
   });
 
@@ -261,19 +260,21 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
-    yield put(actions.highlightEditorLine([], workspaceLocation));
+    yield put(actions.setEditorHighlightedLines([], workspaceLocation));
     context.runtime.break = false;
     lastDebuggerResult = undefined;
   });
 
   yield takeEvery(
-    HIGHLIGHT_LINE,
-    function* (action: ReturnType<typeof actions.highlightEditorLine>) {
+    UPDATE_EDITOR_HIGHLIGHTED_LINES,
+    function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
       const highlightedLines = action.payload.highlightedLines;
       if (highlightedLines.length === 0) {
         highlightClean();
       } else {
-        highlightLine(highlightedLines[0]);
+        highlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
+          highlightLine(startRow)
+        );
       }
       yield;
     }
@@ -465,10 +466,10 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    yield put(actions.highlightEditorLine([start, end], workspaceLocation));
+    yield put(actions.setEditorHighlightedLines([[start, end]], workspaceLocation));
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
-    yield put(actions.highlightEditorLine([], workspaceLocation));
+    yield put(actions.setEditorHighlightedLines([], workspaceLocation));
     // most likely harmless, we can pretty much ignore this.
     // half of the time this comes from execution ending or a stack overflow and
     // the context goes missing.
