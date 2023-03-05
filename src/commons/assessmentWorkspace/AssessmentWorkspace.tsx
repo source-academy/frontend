@@ -65,7 +65,7 @@ import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
-import { useResponsive } from '../utils/Hooks';
+import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
@@ -80,12 +80,14 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   resetWorkspace,
   runAllTestcases,
+  updateActiveEditorTabIndex,
   updateCurrentAssessmentId,
   updateReplValue
 } from '../workspace/WorkspaceActions';
-import { EditorTabState, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
@@ -108,8 +110,6 @@ export type OwnProps = {
 export type StateProps = {
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
   programPrependValue: string;
   programPostpendValue: string;
   editorTestcases: Testcase[];
@@ -139,6 +139,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const dispatch = useDispatch();
+
+  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+    store => store.workspaces[workspaceLocation]
+  );
 
   React.useEffect(() => {
     props.handleEditorValueChange('');
@@ -273,6 +277,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     pushLog(input);
   };
+
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
 
   /* ================
      Helper Functions
@@ -582,7 +596,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     const onClickSave = () =>
-      props.handleSave(props.assessment!.questions[questionId].id, props.editorTabs[0].value);
+      props.handleSave(props.assessment!.questions[questionId].id, editorTabs[0].value);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -773,7 +787,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
           editorVariant: 'normal',
-          editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+          isMultipleFilesEnabled,
+          activeEditorTabIndex,
+          setActiveEditorTabIndex,
+          removeEditorTabByIndex,
+          editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
