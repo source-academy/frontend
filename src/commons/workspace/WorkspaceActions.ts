@@ -173,16 +173,34 @@ export const updateActiveEditorTab = (
   activeEditorTabOptions?: Partial<EditorTabState>
 ) => action(UPDATE_ACTIVE_EDITOR_TAB, { workspaceLocation, activeEditorTabOptions });
 
-export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
-  action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
+export const updateEditorValue = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newEditorValue: string
+) => action(UPDATE_EDITOR_VALUE, { workspaceLocation, editorTabIndex, newEditorValue });
 
-export const setEditorBreakpoint = (breakpoints: string[], workspaceLocation: WorkspaceLocation) =>
-  action(UPDATE_EDITOR_BREAKPOINTS, { breakpoints, workspaceLocation });
+export const setEditorBreakpoint = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newBreakpoints: string[]
+) => action(UPDATE_EDITOR_BREAKPOINTS, { workspaceLocation, editorTabIndex, newBreakpoints });
 
 export const setEditorHighlightedLines = (
-  highlightedLines: HighlightedLines[],
-  workspaceLocation: WorkspaceLocation
-) => action(UPDATE_EDITOR_HIGHLIGHTED_LINES, { highlightedLines, workspaceLocation });
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newHighlightedLines: HighlightedLines[]
+) =>
+  action(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+    workspaceLocation,
+    editorTabIndex,
+    newHighlightedLines
+  });
+
+export const moveCursor = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newCursorPosition: Position
+) => action(MOVE_CURSOR, { workspaceLocation, editorTabIndex, newCursorPosition });
 
 export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
   action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });
@@ -204,9 +222,6 @@ export const navigateToDeclaration = (
   workspaceLocation: WorkspaceLocation,
   cursorPosition: Position
 ) => action(NAV_DECLARATION, { workspaceLocation, cursorPosition });
-
-export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition: Position) =>
-  action(MOVE_CURSOR, { workspaceLocation, cursorPosition });
 
 /**
  * Resets a workspace to its default properties.

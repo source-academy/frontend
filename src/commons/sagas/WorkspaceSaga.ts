@@ -252,7 +252,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-    yield put(actions.setEditorHighlightedLines([], workspaceLocation));
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     yield call(evalCode, code, context, execTime, workspaceLocation, DEBUG_RESUME);
   });
 
@@ -260,7 +261,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
-    yield put(actions.setEditorHighlightedLines([], workspaceLocation));
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     context.runtime.break = false;
     lastDebuggerResult = undefined;
   });
@@ -268,11 +270,11 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     UPDATE_EDITOR_HIGHLIGHTED_LINES,
     function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
-      const highlightedLines = action.payload.highlightedLines;
-      if (highlightedLines.length === 0) {
+      const newHighlightedLines = action.payload.newHighlightedLines;
+      if (newHighlightedLines.length === 0) {
         highlightClean();
       } else {
-        highlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
+        newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
           highlightLine(startRow)
         );
       }
@@ -420,8 +422,9 @@ export default function* WorkspaceSaga(): SagaIterator {
         column: action.payload.cursorPosition.column
       });
       if (result) {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         yield put(
-          actions.moveCursor(action.payload.workspaceLocation, {
+          actions.moveCursor(action.payload.workspaceLocation, 0, {
             row: result.start.line - 1,
             column: result.start.column
           })
@@ -466,10 +469,12 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
-    yield put(actions.setEditorHighlightedLines([[start, end]], workspaceLocation));
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[start, end]]));
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
-    yield put(actions.setEditorHighlightedLines([], workspaceLocation));
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     // most likely harmless, we can pretty much ignore this.
     // half of the time this comes from execution ending or a stack overflow and
     // the context goes missing.
