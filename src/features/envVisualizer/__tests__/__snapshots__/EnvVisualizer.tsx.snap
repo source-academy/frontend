@@ -991,6 +991,7 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
+    "21": [Function],
     "x": 11,
   },
   "id": Any<String>,
@@ -1068,135 +1069,6 @@ Object {
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 4 4`] = `
-Object {
-  "head": Object {
-    "21": [Function],
-  },
-  "id": Any<String>,
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {},
-    "id": "19",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "callExpression": Object {
-        "arguments": Array [
-          Object {
-            "loc": undefined,
-            "type": "Literal",
-            "value": 11,
-          },
-        ],
-        "callee": Node {
-          "end": 97,
-          "loc": SourceLocation {
-            "end": Position {
-              "column": 15,
-              "line": 7,
-            },
-            "start": Position {
-              "column": 14,
-              "line": 7,
-            },
-          },
-          "name": "f",
-          "start": 96,
-          "type": "Identifier",
-        },
-        "end": 101,
-        "loc": SourceLocation {
-          "end": Position {
-            "column": 19,
-            "line": 7,
-          },
-          "start": Position {
-            "column": 14,
-            "line": 7,
-          },
-        },
-        "start": 96,
-        "type": "CallExpression",
-      },
-      "head": Object {
-        "x": 11,
-      },
-      "id": "18",
-      "name": "f",
-      "tail": Object {
-        "head": Object {
-          "f": [Function],
-          "x": 0,
-          "y": 10,
-          "z": [Function],
-        },
-        "id": "17",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
-            "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
-          },
-          "id": "16",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              ":::pre-declared names::": Symbol(),
-            },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
-          },
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`EnvVisualizer calculates correct layout for code sample 4 5`] = `
 Array [
   0,
   0,
@@ -1216,8 +1088,6 @@ Array [
   2,
   "x: ",
   11,
-  0,
-  3,
   "21:= ",
   [Function],
 ]
@@ -1567,6 +1437,8 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
+    "44": [Function],
+    "53": [Function],
     "n": 1,
   },
   "id": Any<String>,
@@ -1831,127 +1703,6 @@ Object {
 
 exports[`EnvVisualizer calculates correct layout for code sample 7 6`] = `
 Object {
-  "head": Object {
-    "44": [Function],
-    "53": [Function],
-  },
-  "id": Any<String>,
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {},
-    "id": "42",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "callExpression": Object {
-        "arguments": Array [
-          Object {
-            "loc": undefined,
-            "type": "Literal",
-            "value": 1,
-          },
-        ],
-        "callee": Node {
-          "end": 457,
-          "loc": SourceLocation {
-            "end": Position {
-              "column": 29,
-              "line": 17,
-            },
-            "start": Position {
-              "column": 16,
-              "line": 17,
-            },
-          },
-          "name": "integers_from",
-          "start": 444,
-          "type": "Identifier",
-        },
-        "end": 460,
-        "loc": SourceLocation {
-          "end": Position {
-            "column": 32,
-            "line": 17,
-          },
-          "start": Position {
-            "column": 16,
-            "line": 17,
-          },
-        },
-        "start": 444,
-        "type": "CallExpression",
-      },
-      "head": Object {
-        "n": 1,
-      },
-      "id": "41",
-      "name": "integers_from",
-      "tail": Object {
-        "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
-          "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
-        },
-        "id": "26",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
-          },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`EnvVisualizer calculates correct layout for code sample 7 7`] = `
-Object {
   "callExpression": Object {
     "arguments": Array [
       Object {
@@ -2086,7 +1837,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 8`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 7`] = `
 Object {
   "head": Object {
     "_copy_of_i": 1,
@@ -2179,7 +1930,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 9`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 8`] = `
 Object {
   "head": Object {
     "_copy_of_i": 2,
@@ -2272,7 +2023,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 10`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 9`] = `
 Object {
   "head": Object {
     "_copy_of_i": 3,
@@ -2365,7 +2116,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 11`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 10`] = `
 Object {
   "head": Object {
     "_copy_of_i": 4,
@@ -2458,7 +2209,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 12`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 11`] = `
 Object {
   "head": Object {
     "es": [Function],
@@ -2606,7 +2357,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 13`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 12`] = `
 Object {
   "head": Object {
     "i": 1,
@@ -2706,7 +2457,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 14`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 13`] = `
 Object {
   "head": Object {
     "i": 2,
@@ -2806,7 +2557,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 15`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 14`] = `
 Object {
   "head": Object {
     "i": 3,
@@ -2906,7 +2657,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 16`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 15`] = `
 Object {
   "head": Object {
     "i": 4,
@@ -3006,7 +2757,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 17`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 16`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -3211,7 +2962,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 18`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 17`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -3416,7 +3167,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 19`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 18`] = `
 Object {
   "head": Object {
     "x": Array [
@@ -3525,7 +3276,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 20`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 19`] = `
 Object {
   "head": Object {
     "x": Array [
@@ -3634,7 +3385,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 21`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 20`] = `
 Object {
   "head": Object {
     "x": Array [
@@ -3743,7 +3494,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 22`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 21`] = `
 Object {
   "head": Object {
     "x": Array [
@@ -3852,7 +3603,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 23`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 22`] = `
 Object {
   "head": Object {
     "z": Array [
@@ -4078,7 +3829,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 24`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 23`] = `
 Object {
   "head": Object {
     "z": Symbol(Used to implement hoisting),
@@ -4295,7 +4046,7 @@ Object {
 }
 `;
 
-exports[`EnvVisualizer calculates correct layout for code sample 7 25`] = `
+exports[`EnvVisualizer calculates correct layout for code sample 7 24`] = `
 Array [
   0,
   0,
@@ -4322,6 +4073,8 @@ Array [
   1,
   "n: ",
   1,
+  "44:= ",
+  [Function],
   2,
   1,
   "n: ",
@@ -4332,10 +4085,6 @@ Array [
   2,
   "i: ",
   5,
-  1,
-  2,
-  "44:= ",
-  [Function],
   4,
   2,
   "s: ",
