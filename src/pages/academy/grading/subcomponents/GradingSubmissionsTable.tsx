@@ -18,7 +18,6 @@ import {
   Button,
   Flex,
   Footer,
-  Icon,
   Table,
   TableBody,
   TableCell,
@@ -30,6 +29,7 @@ import {
 import { useState } from 'react';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
+import GradingActions from './GradingActions';
 import {
   AssessmentTypeBadge,
   GradingStatusBadge,
@@ -86,10 +86,12 @@ const columns = [
       );
     }
   }),
-  columnHelper.display({
-    id: 'actions',
+  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
     header: 'Actions',
-    cell: () => <GradingActions />
+    cell: info => {
+      const { submissionId } = info.getValue();
+      return <GradingActions submissionId={submissionId} />;
+    }
   })
 ];
 
@@ -203,26 +205,6 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
     <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
       {children || value}
     </button>
-  );
-};
-
-const GradingActions: React.FC = () => {
-  return (
-    <Flex justifyContent="justify-start" spaceX="space-x-2">
-      <button type="button" style={{ padding: 0 }}>
-        <Icon tooltip="Grade" icon={() => <BpIcon icon={IconNames.EDIT} />} variant="light" />
-      </button>
-      <button type="button" style={{ padding: 0 }}>
-        <Icon
-          tooltip="Reautograde"
-          icon={() => <BpIcon icon={IconNames.REFRESH} />}
-          variant="simple"
-        />
-      </button>
-      <button type="button" style={{ padding: 0 }}>
-        <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
-      </button>
-    </Flex>
   );
 };
 
