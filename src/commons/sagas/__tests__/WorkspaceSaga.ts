@@ -317,7 +317,8 @@ describe('DEBUG_RESUME', () => {
         })
         .put(beginInterruptExecution(workspaceLocation))
         .put(clearReplOutput(workspaceLocation))
-        .put(setEditorHighlightedLines([], workspaceLocation))
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .put(setEditorHighlightedLines(workspaceLocation, 0, []))
         // also calls evalCode here
         .call.like({
           fn: evalCode,
@@ -339,18 +340,21 @@ describe('DEBUG_RESET', () => {
       editorTabs: [{ value: 'test-value' }]
     });
 
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .put(clearReplOutput(workspaceLocation))
-      .put(setEditorHighlightedLines([], workspaceLocation))
-      .dispatch({
-        type: DEBUG_RESET,
-        payload: { workspaceLocation }
-      })
-      .silentRun()
-      .then(result => {
-        expect(result.storeState.workspaces[workspaceLocation].context.runtime.break).toBe(false);
-      });
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newDefaultState)
+        .put(clearReplOutput(workspaceLocation))
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .put(setEditorHighlightedLines(workspaceLocation, 0, []))
+        .dispatch({
+          type: DEBUG_RESET,
+          payload: { workspaceLocation }
+        })
+        .silentRun()
+        .then(result => {
+          expect(result.storeState.workspaces[workspaceLocation].context.runtime.break).toBe(false);
+        })
+    );
   });
 });
 
@@ -1016,40 +1020,49 @@ describe('NAV_DECLARATION', () => {
   test('moves cursor to declaration correctly', () => {
     const loc = { row: 0, column: 24 };
     const resultLoc = { row: 0, column: 6 };
-    return expectSaga(workspaceSaga)
-      .withState(state)
-      .dispatch({
-        type: NAV_DECLARATION,
-        payload: { workspaceLocation, cursorPosition: loc }
-      })
-      .put(moveCursor(workspaceLocation, resultLoc))
-      .silentRun();
+    return (
+      expectSaga(workspaceSaga)
+        .withState(state)
+        .dispatch({
+          type: NAV_DECLARATION,
+          payload: { workspaceLocation, cursorPosition: loc }
+        })
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .put(moveCursor(workspaceLocation, 0, resultLoc))
+        .silentRun()
+    );
   });
 
   test('does not move cursor if node is not an identifier', () => {
     const pos = { row: 0, column: 27 };
     const resultPos = { row: 0, column: 6 };
-    return expectSaga(workspaceSaga)
-      .withState(state)
-      .dispatch({
-        type: NAV_DECLARATION,
-        payload: { workspaceLocation, cursorPosition: pos }
-      })
-      .not.put(moveCursor(workspaceLocation, resultPos))
-      .silentRun();
+    return (
+      expectSaga(workspaceSaga)
+        .withState(state)
+        .dispatch({
+          type: NAV_DECLARATION,
+          payload: { workspaceLocation, cursorPosition: pos }
+        })
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .not.put(moveCursor(workspaceLocation, 0, resultPos))
+        .silentRun()
+    );
   });
 
   test('does not move cursor if node is same as declaration', () => {
     const pos = { row: 0, column: 7 };
     const resultPos = { row: 0, column: 6 };
-    return expectSaga(workspaceSaga)
-      .withState(state)
-      .dispatch({
-        type: NAV_DECLARATION,
-        payload: { workspaceLocation, cursorPosition: pos }
-      })
-      .not.put(moveCursor(workspaceLocation, resultPos))
-      .silentRun();
+    return (
+      expectSaga(workspaceSaga)
+        .withState(state)
+        .dispatch({
+          type: NAV_DECLARATION,
+          payload: { workspaceLocation, cursorPosition: pos }
+        })
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        .not.put(moveCursor(workspaceLocation, 0, resultPos))
+        .silentRun()
+    );
   });
 });
 

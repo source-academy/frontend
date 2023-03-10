@@ -27,6 +27,7 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_SHAREDB_CONNECTED
 } from '../../collabEditing/CollabEditingTypes';
+import { HighlightedLines, Position } from '../../editor/EditorTypes';
 import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
 import { WorkspaceReducer } from '../WorkspaceReducer';
@@ -55,6 +56,7 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
@@ -986,25 +988,6 @@ describe('HANDLE_CONSOLE_LOG', () => {
   });
 });
 
-describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
-  test('sets highlightedLines correctly', () => {
-    const highlightedLines = [12, 34, 56];
-    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, { highlightedLines });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          editorTabs: [{ ...defaultWorkspaceManager[location].editorTabs[0], highlightedLines }]
-        }
-      });
-    });
-  });
-});
-
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const defaultPlaygroundState = createDefaultWorkspace('playground');
@@ -1476,19 +1459,314 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
 });
 
 describe('UPDATE_EDITOR_VALUE', () => {
-  test('sets editorValue correctly', () => {
-    const newEditorValue = 'test new editor value';
-    const actions = generateActions(UPDATE_EDITOR_VALUE, { newEditorValue });
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newEditorValue = 'The quick brown fox jumps over the lazy dog.';
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
 
     actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the value of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
       const location = action.payload.workspaceLocation;
       expect(result).toEqual({
-        ...defaultWorkspaceManager,
+        ...defaultWorkspaceState,
         [location]: {
-          ...defaultWorkspaceManager[location],
+          ...defaultWorkspaceState[location],
           editorTabs: [
-            { ...defaultWorkspaceManager[location].editorTabs[0], value: newEditorValue }
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              value: newEditorValue
+            }
+          ]
+        }
+      });
+    });
+  });
+});
+
+describe('UPDATE_EDITOR_BREAKPOINTS', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newBreakpoints = [null, null, 'ace_breakpoint', null, 'ace_breakpoint'];
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the breakpoints of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceState,
+        [location]: {
+          ...defaultWorkspaceState[location],
+          editorTabs: [
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              breakpoints: newBreakpoints
+            }
+          ]
+        }
+      });
+    });
+  });
+});
+
+describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newHighlightedLines: HighlightedLines[] = [
+    [1, 3],
+    [6, 9]
+  ];
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+      editorTabIndex,
+      newHighlightedLines
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+      editorTabIndex,
+      newHighlightedLines
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the highlighted lines of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+      editorTabIndex,
+      newHighlightedLines
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceState,
+        [location]: {
+          ...defaultWorkspaceState[location],
+          editorTabs: [
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              highlightedLines: newHighlightedLines
+            }
+          ]
+        }
+      });
+    });
+  });
+});
+
+describe('MOVE_CURSOR', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+  const newCursorPosition: Position = {
+    row: 2,
+    column: 5
+  };
+
+  test('throws an error if the editor tab index is negative', () => {
+    const editorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(MOVE_CURSOR, {
+      editorTabIndex,
+      newCursorPosition
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const editorTabIndex = 2;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(MOVE_CURSOR, {
+      editorTabIndex,
+      newCursorPosition
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('updates the cursor position of the specified editor tab if the editor tab index is valid', () => {
+    const editorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(MOVE_CURSOR, {
+      editorTabIndex,
+      newCursorPosition
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...defaultWorkspaceState,
+        [location]: {
+          ...defaultWorkspaceState[location],
+          editorTabs: [
+            zerothEditorTab,
+            {
+              ...firstEditorTab,
+              newCursorPosition
+            }
           ]
         }
       });
@@ -1680,26 +1958,6 @@ describe('UPDATE_REPL_VALUE', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           replValue: newReplValue
-        }
-      });
-    });
-  });
-});
-
-describe('MOVE_CURSOR', () => {
-  test('moves cursor correctly', () => {
-    const newCursorPosition = { row: 0, column: 0 };
-    const actions = generateActions(MOVE_CURSOR, { newCursorPosition });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      const cursorPosition = action.payload.cursorPosition;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          newCursorPosition: cursorPosition
         }
       });
     });
