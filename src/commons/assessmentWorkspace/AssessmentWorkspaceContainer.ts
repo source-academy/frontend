@@ -37,9 +37,11 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-        setEditorBreakpoint(breakpoints, workspaceLocation),
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      handleEditorValueChange: (newEditorValue: string) =>
+        updateEditorValue(workspaceLocation, 0, newEditorValue),
+      handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
+        setEditorBreakpoint(workspaceLocation, 0, newBreakpoints),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleSave: submitAnswer,
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>

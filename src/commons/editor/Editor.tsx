@@ -38,8 +38,8 @@ export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps
 type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (newCode: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetSharedbConnected?: (connected: boolean) => void;
@@ -335,6 +335,14 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
   }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
+  React.useEffect(() => {
+    const editor = reactAceRef.current?.editor;
+    if (editor === undefined) {
+      return;
+    }
+    displayBreakpoints(editor, props.breakpoints);
+  }, [props.breakpoints]);
+
   // Handles input into AceEditor causing app to scroll to the top on iOS Safari
   React.useEffect(() => {
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -443,7 +451,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }
 
-  const { onChange, onLoad } = aceEditorProps;
+  const { onChange } = aceEditorProps;
 
   aceEditorProps.onChange = React.useCallback(
     (newCode: string, delta: Ace.Delta) => {
@@ -470,16 +478,6 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       onChange,
       handleEditorEval
     ]
-  );
-
-  aceEditorProps.onLoad = React.useCallback(
-    (editor: IAceEditor) => {
-      displayBreakpoints(editor, props.breakpoints);
-      if (onLoad !== undefined) {
-        onLoad(editor);
-      }
-    },
-    [props.breakpoints, onLoad]
   );
 
   aceEditorProps.commands = Object.entries(keyHandlers)

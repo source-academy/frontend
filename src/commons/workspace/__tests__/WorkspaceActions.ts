@@ -298,40 +298,64 @@ test('updateActiveEditorTab generates correct action object', () => {
 });
 
 test('updateEditorValue generates correct action object', () => {
+  const editorTabIndex = 3;
   const newEditorValue = 'new_editor_value';
-  const action = updateEditorValue(newEditorValue, assessmentWorkspace);
+  const action = updateEditorValue(assessmentWorkspace, editorTabIndex, newEditorValue);
   expect(action).toEqual({
     type: UPDATE_EDITOR_VALUE,
     payload: {
-      newEditorValue,
-      workspaceLocation: assessmentWorkspace
+      workspaceLocation: assessmentWorkspace,
+      editorTabIndex,
+      newEditorValue
     }
   });
 });
 
 test('setEditorBreakpoint generates correct action object', () => {
-  const breakpoints = ['1', '2', '5'];
-  const action = setEditorBreakpoint(breakpoints, gradingWorkspace);
+  const editorTabIndex = 3;
+  const newBreakpoints = ['ace_breakpoint', 'ace_breakpoint'];
+  const action = setEditorBreakpoint(gradingWorkspace, editorTabIndex, newBreakpoints);
   expect(action).toEqual({
     type: UPDATE_EDITOR_BREAKPOINTS,
     payload: {
-      breakpoints,
-      workspaceLocation: gradingWorkspace
+      workspaceLocation: gradingWorkspace,
+      editorTabIndex,
+      newBreakpoints
     }
   });
 });
 
 test('setEditorHighlightedLines generates correct action object', () => {
-  const highlightedLines: HighlightedLines[] = [
+  const editorTabIndex = 3;
+  const newHighlightedLines: HighlightedLines[] = [
     [1, 2],
     [5, 6]
   ];
-  const action = setEditorHighlightedLines(highlightedLines, playgroundWorkspace);
+  const action = setEditorHighlightedLines(
+    playgroundWorkspace,
+    editorTabIndex,
+    newHighlightedLines
+  );
   expect(action).toEqual({
     type: UPDATE_EDITOR_HIGHLIGHTED_LINES,
     payload: {
-      highlightedLines,
-      workspaceLocation: playgroundWorkspace
+      workspaceLocation: playgroundWorkspace,
+      editorTabIndex,
+      newHighlightedLines
+    }
+  });
+});
+
+test('moveCursor generates correct action object', () => {
+  const editorTabIndex = 3;
+  const newCursorPosition = { row: 0, column: 0 };
+  const action = moveCursor(playgroundWorkspace, editorTabIndex, newCursorPosition);
+  expect(action).toEqual({
+    type: MOVE_CURSOR,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      editorTabIndex,
+      newCursorPosition
     }
   });
 });
@@ -450,18 +474,6 @@ test('navigateToDeclaration generates correct action object', () => {
   const action = navigateToDeclaration(playgroundWorkspace, cursorPosition);
   expect(action).toEqual({
     type: NAV_DECLARATION,
-    payload: {
-      workspaceLocation: playgroundWorkspace,
-      cursorPosition
-    }
-  });
-});
-
-test('moveCursor generates correct action object', () => {
-  const cursorPosition = { row: 0, column: 0 };
-  const action = moveCursor(playgroundWorkspace, cursorPosition);
-  expect(action).toEqual({
-    type: MOVE_CURSOR,
     payload: {
       workspaceLocation: playgroundWorkspace,
       cursorPosition

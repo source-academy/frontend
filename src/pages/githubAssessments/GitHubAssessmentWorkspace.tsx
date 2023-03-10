@@ -105,7 +105,7 @@ export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteC
 export type DispatchProps = {
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (val: string) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
@@ -1091,8 +1091,9 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
-    handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-      dispatch(setEditorBreakpoint(breakpoints, workspaceLocation)),
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
+      dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
     handlePromptAutocomplete: (row: number, col: number, callback: any) =>
       dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
     isEditorAutorun: false

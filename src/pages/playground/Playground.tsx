@@ -130,8 +130,8 @@ export type OwnProps = {
 export type DispatchProps = {
   handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleEditorValueChange: (val: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleUsingSubst: (usingSubst: boolean) => void;
@@ -184,6 +184,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
     const program = programLz && decompressFromEncodedURIComponent(programLz);
     if (program) {
       props.handleEditorValueChange(program);
+      props.handleEditorUpdateBreakpoints([]);
     }
     const variant: Variant =
       sourceLanguages.find(
