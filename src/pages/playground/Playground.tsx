@@ -184,6 +184,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
     const program = programLz && decompressFromEncodedURIComponent(programLz);
     if (program) {
       props.handleEditorValueChange(program);
+      props.handleEditorUpdateBreakpoints([]);
     }
     const variant: Variant =
       sourceLanguages.find(
