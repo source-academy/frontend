@@ -192,7 +192,8 @@ export async function openFileInEditor(
 
   if (content) {
     const newEditorValue = Buffer.from(content, 'base64').toString();
-    store.dispatch(actions.updateEditorValue(newEditorValue, 'playground'));
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    store.dispatch(actions.updateEditorValue('playground', 0, newEditorValue));
     store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully loaded file!', 1000);
   }

@@ -13,7 +13,7 @@ type QuestionEditorProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
-  handleEditorValueChange: (val: string) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
 };
 

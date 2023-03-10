@@ -92,8 +92,8 @@ import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleEditorValueChange: (val: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
   handleReplEval: () => void;
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
