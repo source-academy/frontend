@@ -5,7 +5,7 @@ import { Config } from '../Config';
 import DataVisualizer from '../dataVisualizer';
 import { isEmptyList, isList, toText } from '../dataVisualizerUtils';
 import { DataTreeNode, TreeNode } from '../tree/TreeNode';
-import { NullDrawable } from './NullDrawable';
+import { NullDrawable } from './Drawable';
 
 type ArrayProps = {
   nodes: TreeNode[];
@@ -16,7 +16,7 @@ type ArrayProps = {
 /**
  *  Represents an array in a tree.
  */
-export class ArrayDrawable extends React.PureComponent<ArrayProps> {
+class ArrayDrawable extends React.PureComponent<ArrayProps> {
   render() {
     const createChildText = (node: DataTreeNode, index: number) => {
       const nodeValue = node.data;
@@ -78,3 +78,5 @@ export class ArrayDrawable extends React.PureComponent<ArrayProps> {
     );
   }
 }
+
+export default ArrayDrawable;
