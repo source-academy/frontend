@@ -403,7 +403,6 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     acequire('ace/ext/language_tools').setCompleters([
       makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
-    // This should run exactly once.
   }, [props.editorTabIndex]);
 
   React.useLayoutEffect(() => {
