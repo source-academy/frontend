@@ -93,7 +93,7 @@ export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
   handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
+  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handleReplEval: () => void;
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
@@ -350,7 +350,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       programPostpendValue = questionData.postpend;
     }
 
-    props.handleEditorUpdateBreakpoints([]);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    props.handleEditorUpdateBreakpoints(0, []);
     dispatch(updateCurrentAssessmentId(assessmentId, questionId));
     dispatch(
       resetWorkspace(workspaceLocation, {

@@ -39,7 +39,7 @@ type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
+  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetSharedbConnected?: (connected: boolean) => void;
@@ -113,7 +113,10 @@ const getMarkers = (
 };
 
 const makeHandleGutterClick =
-  (handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']) =>
+  (
+    handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints'],
+    editorTabIndex: number
+  ) =>
   (e: AceMouseEvent) => {
     const target = e.domEvent.target! as HTMLDivElement;
     if (
@@ -139,7 +142,7 @@ const makeHandleGutterClick =
       e.editor.session.clearBreakpoint(row);
     }
     e.stop();
-    handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
+    handleEditorUpdateBreakpoints(editorTabIndex, e.editor.session.getBreakpoints());
   };
 
 /**
@@ -387,7 +390,10 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     // hopelessly incomplete
     editor.on(
       'gutterclick' as any,
-      makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
+      makeHandleGutterClick(
+        (...args) => handleEditorUpdateBreakpointsRef.current(...args),
+        props.editorTabIndex
+      ) as any
     );
 
     // Change all info annotations to error annotations
@@ -398,7 +404,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
     // This should run exactly once.
-  }, []);
+  }, [props.editorTabIndex]);
 
   React.useLayoutEffect(() => {
     if (!reactAceRef.current) {

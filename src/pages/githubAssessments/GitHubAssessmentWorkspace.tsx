@@ -105,7 +105,7 @@ export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteC
 export type DispatchProps = {
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
@@ -384,7 +384,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const resetToTemplate = useCallback(() => {
     const originalCode = taskList[currentTaskNumber - 1].starterCode;
-    handleEditorValueChange(originalCode);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    handleEditorValueChange(0, originalCode);
     editCode(currentTaskNumber, originalCode);
   }, [currentTaskNumber, editCode, handleEditorValueChange, taskList]);
 
@@ -720,7 +721,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onEditorValueChange = useCallback(
     val => {
-      handleEditorValueChange(val);
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      handleEditorValueChange(0, val);
       editCode(currentTaskNumber, val);
     },
     [currentTaskNumber, editCode, handleEditorValueChange]
@@ -1091,9 +1093,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
-    handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
-      dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
+    handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+      dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
     handlePromptAutocomplete: (row: number, col: number, callback: any) =>
       dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
     isEditorAutorun: false

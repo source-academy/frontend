@@ -59,9 +59,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         chapterSelect(chapter, variant, workspaceLocation),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
-      handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
-        setEditorBreakpoint(workspaceLocation, 0, newBreakpoints),
+      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+        setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),

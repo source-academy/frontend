@@ -47,7 +47,7 @@ export type DispatchProps = {
   handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
   handleRemoveEditorTabByIndex: (editorTabIndex: number) => void;
   handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
+  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handleGradingFetch: (submissionId: number) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -269,7 +269,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       }
     }
 
-    props.handleEditorUpdateBreakpoints([]);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    props.handleEditorUpdateBreakpoints(0, []);
     props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
