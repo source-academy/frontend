@@ -33,7 +33,7 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
   editorTestcases: [],
   hasUnsavedChanges: false,
   handleEditorValueChange: mockedHandleEditorValueChange,
-  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => {},
+  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
   handleReplEval: () => {},
   handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
