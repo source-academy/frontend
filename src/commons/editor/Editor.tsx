@@ -38,8 +38,8 @@ export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps
 type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
+  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetSharedbConnected?: (connected: boolean) => void;
@@ -56,6 +56,7 @@ type EditorStateProps = {
 };
 
 export type EditorTabStateProps = {
+  editorTabIndex: number;
   editorValue: string;
   highlightedLines: HighlightedLines[];
   breakpoints: string[];
@@ -112,7 +113,10 @@ const getMarkers = (
 };
 
 const makeHandleGutterClick =
-  (handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']) =>
+  (
+    handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints'],
+    editorTabIndex: number
+  ) =>
   (e: AceMouseEvent) => {
     const target = e.domEvent.target! as HTMLDivElement;
     if (
@@ -138,7 +142,7 @@ const makeHandleGutterClick =
       e.editor.session.clearBreakpoint(row);
     }
     e.stop();
-    handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
+    handleEditorUpdateBreakpoints(editorTabIndex, e.editor.session.getBreakpoints());
   };
 
 /**
@@ -386,7 +390,10 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     // hopelessly incomplete
     editor.on(
       'gutterclick' as any,
-      makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
+      makeHandleGutterClick(
+        (...args) => handleEditorUpdateBreakpointsRef.current(...args),
+        props.editorTabIndex
+      ) as any
     );
 
     // Change all info annotations to error annotations
@@ -396,8 +403,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     acequire('ace/ext/language_tools').setCompleters([
       makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
-    // This should run exactly once.
-  }, []);
+  }, [props.editorTabIndex]);
 
   React.useLayoutEffect(() => {
     if (!reactAceRef.current) {
@@ -458,7 +464,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       if (!reactAceRef.current) {
         return;
       }
-      handleEditorValueChange(newCode);
+      handleEditorValueChange(props.editorTabIndex, newCode);
       shiftBreakpointsWithCode(reactAceRef.current.editor, delta);
       if (handleUpdateHasUnsavedChanges) {
         handleUpdateHasUnsavedChanges(true);
@@ -473,6 +479,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     },
     [
       handleEditorValueChange,
+      props.editorTabIndex,
       handleUpdateHasUnsavedChanges,
       isEditorAutorun,
       onChange,

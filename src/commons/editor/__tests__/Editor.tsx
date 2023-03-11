@@ -6,6 +6,7 @@ import { Position } from '../EditorTypes';
 
 test('Editor renders correctly', () => {
   const props: EditorProps = {
+    editorTabIndex: 0,
     breakpoints: [],
     editorSessionId: '',
     editorValue: '',
@@ -13,8 +14,8 @@ test('Editor renders correctly', () => {
     isEditorAutorun: false,
     handleDeclarationNavigate: (cursorPosition: Position) => {},
     handleEditorEval: () => {},
-    handleEditorValueChange: newCode => {},
-    handleEditorUpdateBreakpoints: breakpoints => {},
+    handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => {},
+    handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
     handleSetSharedbConnected: () => {},
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
     handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
