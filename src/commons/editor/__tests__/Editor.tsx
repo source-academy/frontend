@@ -6,7 +6,7 @@ import { Position } from '../EditorTypes';
 
 test('Editor renders correctly', () => {
   const props: EditorProps = {
-    editorTabIndex: 1,
+    editorTabIndex: 0,
     breakpoints: [],
     editorSessionId: '',
     editorValue: '',
