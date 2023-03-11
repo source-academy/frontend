@@ -74,9 +74,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
       handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
         removeEditorTab(workspaceLocation, editorTabIndex),
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
-      handleEditorValueChange: (newEditorValue: string) =>
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         updateEditorValue(workspaceLocation, 0, newEditorValue),
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
       handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
         setEditorBreakpoint(workspaceLocation, 0, newBreakpoints),
       handleGradingFetch: fetchGrading,

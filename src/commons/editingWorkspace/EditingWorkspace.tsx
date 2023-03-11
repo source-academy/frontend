@@ -68,7 +68,7 @@ export type DispatchProps = {
   handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
   handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
   handleInterruptEval: () => void;
   handleReplEval: () => void;
@@ -149,6 +149,13 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const removeEditorTabByIndex = React.useCallback(
     (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
     [dispatch]
+  );
+
+  const { handleEditorValueChange } = props;
+  // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+  const handleFirstEditorValueChange = React.useCallback(
+    (newEditorValue: string) => handleEditorValueChange(0, newEditorValue),
+    [handleEditorValueChange]
   );
 
   if (assessment === null || assessment!.questions.length === 0) {
@@ -285,7 +292,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       programPrependValue,
       programPostpendValue
     });
-    props.handleEditorValueChange(editorValue);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    props.handleEditorValueChange(0, editorValue);
   };
 
   const handleTestcaseEval = (testcase: Testcase) => {
@@ -364,9 +372,9 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             assessment={currentAssessment}
             questionId={questionId}
             updateAssessment={updateEditAssessmentState}
-            // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+            // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
             editorValue={editorTabs[0].value}
-            handleEditorValueChange={props.handleEditorValueChange}
+            handleEditorValueChange={handleFirstEditorValueChange}
             handleUpdateWorkspace={props.handleUpdateWorkspace}
           />
         );

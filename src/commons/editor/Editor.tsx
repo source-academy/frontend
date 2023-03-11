@@ -38,7 +38,7 @@ export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps
 type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
   handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
@@ -459,7 +459,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       if (!reactAceRef.current) {
         return;
       }
-      handleEditorValueChange(newCode);
+      handleEditorValueChange(props.editorTabIndex, newCode);
       shiftBreakpointsWithCode(reactAceRef.current.editor, delta);
       if (handleUpdateHasUnsavedChanges) {
         handleUpdateHasUnsavedChanges(true);
@@ -474,6 +474,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     },
     [
       handleEditorValueChange,
+      props.editorTabIndex,
       handleUpdateHasUnsavedChanges,
       isEditorAutorun,
       onChange,

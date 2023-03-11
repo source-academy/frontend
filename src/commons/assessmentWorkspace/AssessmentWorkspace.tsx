@@ -92,7 +92,7 @@ import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
   handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
   handleReplEval: () => void;
   handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
@@ -145,7 +145,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   );
 
   React.useEffect(() => {
-    props.handleEditorValueChange('');
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    props.handleEditorValueChange(0, '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -181,7 +182,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       }
     }
 
-    props.handleEditorValueChange(answer);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    props.handleEditorValueChange(0, answer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -218,7 +220,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       props.handleUpdateHasUnsavedChanges(true);
     }
 
-    props.handleEditorValueChange(newCode);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    props.handleEditorValueChange(0, newCode);
 
     const input: Input = {
       time: Date.now(),
@@ -374,7 +377,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     dispatch(beginClearContext(workspaceLocation, question.library, true));
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
-      props.handleEditorValueChange(editorValue);
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      props.handleEditorValueChange(0, editorValue);
     }
   };
 
@@ -389,7 +393,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     const isContestVoting = props.assessment!.questions[questionId]?.type === 'voting';
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
-      props.handleEditorValueChange(answer);
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      props.handleEditorValueChange(0, answer);
     };
 
     const tabs: SideContentTab[] = isContestVoting
@@ -765,7 +770,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             label="Confirm"
             onClick={() => {
               closeOverlay();
+              // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
               props.handleEditorValueChange(
+                0,
                 (props.assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
               );
               props.handleUpdateHasUnsavedChanges(true);
