@@ -31,7 +31,7 @@ const baseProps = assertType<PlaygroundProps>()({
   githubSaveInfo: { repoName: '', filePath: '' },
   handleChangeExecTime: (execTime: number) => {},
   handleChapterSelect: (chapter: Chapter) => {},
-  handleEditorValueChange: (newEditorValue: string) => {},
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => {},
   handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
