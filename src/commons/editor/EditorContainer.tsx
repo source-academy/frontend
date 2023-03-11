@@ -34,8 +34,12 @@ export type SourcecastEditorContainerProps = Omit<
 
 export type EditorContainerProps = NormalEditorContainerProps | SourcecastEditorContainerProps;
 
-export const convertEditorTabStateToProps = (editorTab: EditorTabState): EditorTabStateProps => {
+export const convertEditorTabStateToProps = (
+  editorTab: EditorTabState,
+  editorTabIndex: number
+): EditorTabStateProps => {
   return {
+    editorTabIndex,
     editorValue: editorTab.value,
     ..._.pick(editorTab, 'highlightedLines', 'breakpoints', 'newCursorPosition')
   };
