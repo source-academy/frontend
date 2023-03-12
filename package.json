@@ -129,6 +129,11 @@
     "sass": "^1.54.0",
     "typescript": "~4.7.4"
   },
+  "resolutions": {
+    "//": "React 18's types are much stricter and upgrading to it (even if indirectly via a dependency) results in many type errors.",
+    "//": "FIXME: Remove this after upgrading fully to React 18 and fixing all of the type errors.",
+    "@types/react": "^17.0.38"
+  },
   "browserslist": {
     "production": [
       "Firefox ESR",
