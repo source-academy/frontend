@@ -10,6 +10,7 @@ import SourcecastEditor, {
 } from '../sourceRecorder/SourceRecorderEditor';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
+import EditorTabContainer from './tabs/EditorTabContainer';
 
 type OwnProps = {
   isMultipleFilesEnabled: boolean;
@@ -41,7 +42,7 @@ export const convertEditorTabStateToProps = (
   return {
     editorTabIndex,
     editorValue: editorTab.value,
-    ..._.pick(editorTab, 'highlightedLines', 'breakpoints', 'newCursorPosition')
+    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition')
   };
 };
 
@@ -69,7 +70,17 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
     return <></>;
   }
 
-  return createEditorTab(editorTabs[activeEditorTabIndex]);
+  // Editor tabs in workspaces which do not support multiple files mode will not have associated file paths.
+  const filePaths = editorTabs.map(editorTabState => editorTabState.filePath ?? 'UNKNOWN');
+
+  return (
+    <>
+      {isMultipleFilesEnabled && (
+        <EditorTabContainer activeEditorTabIndex={activeEditorTabIndex} filePaths={filePaths} />
+      )}
+      {createEditorTab(editorTabs[activeEditorTabIndex])}
+    </>
+  );
 };
 
 export default EditorContainer;
