@@ -117,7 +117,6 @@
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
     "enzyme": "^3.11.0",
-    "eslint": "7",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "husky": "^8.0.2",
     "npm-run-all": "^4.1.5",
