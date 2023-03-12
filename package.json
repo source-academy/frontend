@@ -53,6 +53,7 @@
     "normalize.css": "^8.0.1",
     "os-browserify": "^0.3.0",
     "phaser": "^3.55.2",
+    "process": "^0.11.10",
     "query-string": "^7.1.1",
     "re-resizable": "^6.9.9",
     "react": "^17.0.2",

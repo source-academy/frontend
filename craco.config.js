@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const webpack = require('webpack');
+
 const cracoConfig = (module.exports = {
   webpack: {
     configure: webpackConfig => {
@@ -61,6 +64,14 @@ const cracoConfig = (module.exports = {
         module: /node_modules/,
         message: /Failed to parse source map/
       }];
+
+      // Make environment variables available in the browser by polyfilling the 'process' Node.js module.
+      webpackConfig.plugins = [
+        ...webpackConfig.plugins,
+        new webpack.ProvidePlugin({
+          process: 'process/browser',
+        })
+      ];
 
       return webpackConfig;
     }
