@@ -65,11 +65,15 @@ const cracoConfig = (module.exports = {
         message: /Failed to parse source map/
       }];
 
-      // Make environment variables available in the browser by polyfilling the 'process' Node.js module.
       webpackConfig.plugins = [
         ...webpackConfig.plugins,
+        // Make environment variables available in the browser by polyfilling the 'process' Node.js module.
         new webpack.ProvidePlugin({
           process: 'process/browser',
+        }),
+        // Make the 'buffer' Node.js module available in the browser.
+        new webpack.ProvidePlugin({
+          Buffer: ['buffer', 'Buffer'],
         })
       ];
 
