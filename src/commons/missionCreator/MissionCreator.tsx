@@ -27,97 +27,74 @@ type OwnProps = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
 };
 
-type State = {
-  fileInputText: string;
-};
+function MissionCreator(props: MissionCreatorProps) {
+  const [fileInputText, setFileInputText] = React.useState('Import XML');
+  let fileReader: FileReader | undefined = undefined;
 
-class MissionCreator extends React.Component<MissionCreatorProps, State> {
-  private fileReader?: FileReader = undefined;
-  public constructor(props: any) {
-    super(props);
-    this.handleFileRead = this.handleFileRead.bind(this);
-    this.handleChangeFile = this.handleChangeFile.bind(this);
-    this.makeMission = this.makeMission.bind(this);
-    this.state = {
-      fileInputText: 'Import XML'
-    };
-  }
-
-  public componentDidMount() {
+  React.useEffect(() => {
     const assessment = retrieveLocalAssessment();
     if (assessment) {
-      this.props.newAssessment(assessment);
+      props.newAssessment(assessment);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.newAssessment]);
 
-  public render() {
-    return (
-      <div>
-        <div>Please ensure that the xml uploaded is trustable.</div>
-        <div>
-          <FileInput
-            text={this.state.fileInputText}
-            inputProps={{ accept: '.xml' }}
-            onChange={this.handleChangeFile}
-          />
-        </div>
-        <div>
-          <ControlButton
-            label="Make New Mission"
-            icon={IconNames.NEW_OBJECT}
-            onClick={this.makeMission}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  private handleFileRead = (file: any) => (e: any) => {
-    if (!this.fileReader) {
+  const handleFileRead = (file: any) => (e: any) => {
+    if (!fileReader) {
       return;
     }
-    const content = this.fileReader.result;
+    const content = fileReader.result;
     if (content) {
       parseString(content, (err: any, result: any) => {
-        // tslint:disable-next-line:no-console
         console.dir(file);
         try {
           const entireAssessment: [AssessmentOverview, Assessment] = makeEntireAssessment(result);
           entireAssessment[0].fileName = file.name.slice(0, -4);
           storeLocalAssessmentOverview(entireAssessment[0]);
-          this.props.updateEditingOverview(entireAssessment[0]);
+          props.updateEditingOverview(entireAssessment[0]);
 
           storeLocalAssessment(entireAssessment[1]);
-          this.props.newAssessment(entireAssessment[1]);
-          this.setState({
-            fileInputText: 'Success!'
-          });
+          props.newAssessment(entireAssessment[1]);
+          setFileInputText('Success!');
         } catch (err) {
-          // tslint:disable-next-line:no-console
           console.log(err);
-          this.setState({
-            fileInputText: 'Invalid XML!'
-          });
+          setFileInputText('Invalid XML!');
         }
       });
     }
   };
 
-  private handleChangeFile = (e: any) => {
+  const handleChangeFile = (e: any) => {
     const files = e.target.files;
     if (e.target.files) {
-      this.fileReader = new FileReader();
-      this.fileReader.onloadend = this.handleFileRead(files[0]);
-      this.fileReader.readAsText(files[0]);
+      fileReader = new FileReader();
+      fileReader.onloadend = handleFileRead(files[0]);
+      fileReader.readAsText(files[0]);
     }
   };
 
-  private makeMission = () => {
+  const makeMission = () => {
     storeLocalAssessmentOverview(overviewTemplate());
-    this.props.updateEditingOverview(overviewTemplate());
+    props.updateEditingOverview(overviewTemplate());
     storeLocalAssessment(assessmentTemplate());
-    this.props.newAssessment(assessmentTemplate());
+    props.newAssessment(assessmentTemplate());
   };
+
+  return (
+    <div>
+      <div>Please ensure that the xml uploaded is trustable.</div>
+      <div>
+        <FileInput
+          text={fileInputText}
+          inputProps={{ accept: '.xml' }}
+          onChange={handleChangeFile}
+        />
+      </div>
+      <div>
+        <ControlButton label="Make New Mission" icon={IconNames.NEW_OBJECT} onClick={makeMission} />
+      </div>
+    </div>
+  );
 }
 
 export default MissionCreator;

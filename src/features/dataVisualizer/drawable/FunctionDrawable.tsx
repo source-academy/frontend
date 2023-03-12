@@ -11,7 +11,7 @@ type FunctionProps = {
 /**
  * Represents a function object drawn using two circles.
  */
-export class FunctionDrawable extends React.PureComponent<FunctionProps> {
+class FunctionDrawable extends React.PureComponent<FunctionProps> {
   render() {
     return (
       <Group {...this.props}>
@@ -60,3 +60,5 @@ export class FunctionDrawable extends React.PureComponent<FunctionProps> {
     );
   }
 }
+
+export default FunctionDrawable;

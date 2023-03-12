@@ -46,8 +46,8 @@ export type DispatchProps = {
   handleEditorEval: () => void;
   handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
   handleRemoveEditorTabByIndex: (editorTabIndex: number) => void;
-  handleEditorValueChange: (newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
+  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handleGradingFetch: (submissionId: number) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -129,7 +129,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       }
     }
 
-    this.props.handleEditorValueChange(answer);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    this.props.handleEditorValueChange(0, answer);
   }
 
   /**
@@ -264,7 +265,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       }
     }
 
-    props.handleEditorUpdateBreakpoints([]);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    props.handleEditorUpdateBreakpoints(0, []);
     props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
@@ -286,7 +288,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     props.handleClearContext(question.library, true);
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
-      props.handleEditorValueChange(editorValue);
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      props.handleEditorValueChange(0, editorValue);
     }
   }
 

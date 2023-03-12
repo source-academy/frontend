@@ -130,8 +130,8 @@ export type OwnProps = {
 export type DispatchProps = {
   handleChangeExecTime: (execTime: number) => void;
   handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleEditorValueChange: (newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
+  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
+  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleUsingSubst: (usingSubst: boolean) => void;
@@ -183,8 +183,9 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
     const programLz = qs.lz ?? qs.prgrm;
     const program = programLz && decompressFromEncodedURIComponent(programLz);
     if (program) {
-      props.handleEditorValueChange(program);
-      props.handleEditorUpdateBreakpoints([]);
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      props.handleEditorValueChange(0, program);
+      props.handleEditorUpdateBreakpoints(0, []);
     }
     const variant: Variant =
       sourceLanguages.find(
@@ -307,9 +308,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [isGreen]
   );
 
-  const onEditorValueChange = React.useCallback(val => {
+  const onEditorValueChange = React.useCallback((editorTabIndex, newEditorValue) => {
     setLastEdit(new Date());
-    propsRef.current.handleEditorValueChange(val);
+    propsRef.current.handleEditorValueChange(editorTabIndex, newEditorValue);
   }, []);
 
   const onChangeTabs = React.useCallback(
@@ -563,8 +564,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [dispatch, props.stepLimit, workspaceLocation]
   );
 
-  const { handleEditorValueChange } = props;
-
   const getEditorValue = React.useCallback(
     () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
     [store, workspaceLocation]
@@ -723,8 +722,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {
-      handleEditorValueChange(newCode);
-
       const input: Input = {
         time: Date.now(),
         type: 'codeDelta',
@@ -733,7 +730,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
       pushLog(input);
     },
-    [handleEditorValueChange, pushLog]
+    [pushLog]
   );
 
   const onCursorChangeMethod = React.useCallback(
@@ -767,7 +764,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const handleEditorUpdateBreakpoints = React.useCallback(
-    (breakpoints: string[]) => {
+    (editorTabIndex: number, breakpoints: string[]) => {
       // get rid of holes in array
       const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
       if (numberOfBreakpoints > 0) {
@@ -789,7 +786,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           propsRef.current.handleUsingSubst(false);
         }
       }
-      propsRef.current.handleEditorUpdateBreakpoints(breakpoints);
+      propsRef.current.handleEditorUpdateBreakpoints(editorTabIndex, breakpoints);
     },
     [selectedTab]
   );
