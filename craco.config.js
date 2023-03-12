@@ -23,7 +23,7 @@ const cracoConfig = (module.exports = {
       webpackConfig.resolve.extensions.push('.wasm');
       webpackConfig.module.rules.forEach(rule => {
         (rule.oneOf || []).forEach(oneOf => {
-          if (oneOf.type === "asset/resource") {
+          if (oneOf.type === 'asset/resource') {
             oneOf.exclude.push(wasmExtensionRegExp);
           }
         });
@@ -33,6 +33,20 @@ const cracoConfig = (module.exports = {
         syncWebAssembly: true
       };
       webpackConfig.output.webassemblyModuleFilename = 'static/[hash].module.wasm';
+
+      // Polyfill Node.js core modules.
+      // An empty implementation (false) is provided when there is no browser equivalent.
+      webpackConfig.resolve.fallback = {
+        'child_process': false,
+        'constants': require.resolve('constants-browserify'),
+        'fs': false,
+        'http': require.resolve('stream-http'),
+        'https': require.resolve('https-browserify'),
+        'os': require.resolve('os-browserify/browser'),
+        'stream': require.resolve('stream-browserify'),
+        'timers': require.resolve('timers-browserify'),
+        'url': require.resolve('url/')
+      };
 
       // workaround .mjs files by Acorn
       webpackConfig.module.rules.push({
