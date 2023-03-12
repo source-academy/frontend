@@ -82,7 +82,7 @@
     "yareco": "^0.1.5"
   },
   "devDependencies": {
-    "@craco/craco": "^6.4.5",
+    "@craco/craco": "^7.1.0",
     "@svgr/webpack": "^6.3.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^14.3.0",
