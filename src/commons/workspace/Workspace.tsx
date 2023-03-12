@@ -42,7 +42,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
   const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState<number>(200);
-  const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(false);
+  const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(true);
 
   const sideBarCollapsedWidth = 40;
 
