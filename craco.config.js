@@ -55,6 +55,13 @@ const cracoConfig = (module.exports = {
         type: 'javascript/auto'
       });
 
+      // Ignore warnings for dependencies that do not ship with a source map.
+      // This is because we cannot do anything about our dependencies.
+      webpackConfig.ignoreWarnings = [{
+        module: /node_modules/,
+        message: /Failed to parse source map/
+      }];
+
       return webpackConfig;
     }
   },
