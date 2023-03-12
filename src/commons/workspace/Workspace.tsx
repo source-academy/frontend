@@ -41,28 +41,13 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const maxDividerHeight = React.useRef<number | null>(null);
   const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
-  const [lastExpandedSideBarWidth, setLastExpandedSideBarWidth] = React.useState<number>(200);
+  const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState<number>(200);
   const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(false);
 
   const sideBarCollapsedWidth = 40;
 
-  const expandSideBar = () => {
-    setIsSideBarExpanded(true);
-    const sideBar = sideBarResizable.current;
-    if (sideBar === null) {
-      throw Error('Reference to SideBar not found when expanding.');
-    }
-    sideBar.updateSize({ width: lastExpandedSideBarWidth, height: '100%' });
-  };
-
-  const collapseSideBar = () => {
-    setIsSideBarExpanded(false);
-    const sideBar = sideBarResizable.current;
-    if (sideBar === null) {
-      throw Error('Reference to SideBar not found when collapsing.');
-    }
-    sideBar.updateSize({ width: sideBarCollapsedWidth, height: '100%' });
-  };
+  const expandSideBar = () => setIsSideBarExpanded(true);
+  const collapseSideBar = () => setIsSideBarExpanded(false);
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -83,7 +68,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     ) => {
       const sideBarWidth = elementRef.clientWidth;
       if (sideBarWidth !== sideBarCollapsedWidth) {
-        setLastExpandedSideBarWidth(sideBarWidth);
+        setExpandedSideBarWidth(sideBarWidth);
       }
     };
     const isSideBarRendered = props.sideBarProps.tabs.length !== 0;
@@ -95,9 +80,10 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       onResize: toggleSideBarDividerDisplay,
       onResizeStop,
       ref: sideBarResizable,
-      // Force update of width when sidebar is not rendered or sidebar is collapsed.
-      size:
-        isSideBarRendered && isSideBarExpanded ? undefined : { width: minWidth, height: '100%' },
+      size: {
+        width: isSideBarRendered && isSideBarExpanded ? expandedSideBarWidth : minWidth,
+        height: '100%'
+      },
       defaultSize: { width: minWidth, height: '100%' }
     };
   };
@@ -139,7 +125,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       if (sideBar === null) {
         throw Error('Reference to SideBar not found when resizing.');
       }
-      sideBar.updateSize({ width: 40, height: '100%' });
+      sideBar.updateSize({ width: sideBarCollapsedWidth, height: '100%' });
       setIsSideBarExpanded(false);
     } else {
       setIsSideBarExpanded(true);
