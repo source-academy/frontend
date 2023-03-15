@@ -28,7 +28,11 @@ import {
 } from 'src/commons/collabEditing/CollabEditingActions';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
-import { showFullJSWarningOnUrlLoad, showFulTSWarningOnUrlLoad, showHTMLDisclaimer } from 'src/commons/utils/WarningDialogHelper';
+import {
+  showFullJSWarningOnUrlLoad,
+  showFulTSWarningOnUrlLoad,
+  showHTMLDisclaimer
+} from 'src/commons/utils/WarningDialogHelper';
 import {
   addHtmlConsoleError,
   browseReplHistoryDown,
@@ -173,7 +177,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else if (chapter === Chapter.FULL_TS) {
-    showFulTSWarningOnUrlLoad()
+    showFulTSWarningOnUrlLoad();
   } else {
     if (chapter === Chapter.HTML) {
       const continueToHtml = await showHTMLDisclaimer();
