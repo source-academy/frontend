@@ -26,10 +26,9 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
-import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { showFullJSWarningOnUrlLoad, showFulTSWarningOnUrlLoad, showHTMLDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 import {
   addHtmlConsoleError,
   browseReplHistoryDown,
@@ -173,6 +172,8 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
   const chapter = stringParamToInt(qs.chap) || undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
+  } else if (chapter === Chapter.FULL_TS) {
+    showFulTSWarningOnUrlLoad()
   } else {
     if (chapter === Chapter.HTML) {
       const continueToHtml = await showHTMLDisclaimer();

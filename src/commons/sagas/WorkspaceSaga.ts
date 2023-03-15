@@ -42,7 +42,6 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
-import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -58,6 +57,7 @@ import {
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
+import { showFullJSDisclaimer, showFullTSDisclaimer } from '../utils/WarningDialogHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   ADD_HTML_CONSOLE_ERROR,
@@ -309,6 +309,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     const toChangeChapter: boolean =
       newChapter === Chapter.FULL_JS
         ? chapterChanged && (yield call(showFullJSDisclaimer))
+        : newChapter === Chapter.FULL_TS
+        ? chapterChanged && (yield call(showFullTSDisclaimer))
         : chapterChanged;
 
     if (toChangeChapter) {
