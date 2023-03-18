@@ -10,6 +10,7 @@ import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
+  ADD_EDITOR_TAB,
   ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
@@ -201,6 +202,12 @@ export const moveCursor = (
   editorTabIndex: number,
   newCursorPosition: Position
 ) => action(MOVE_CURSOR, { workspaceLocation, editorTabIndex, newCursorPosition });
+
+export const addEditorTab = (
+  workspaceLocation: WorkspaceLocation,
+  filePath: string,
+  editorValue: string
+) => action(ADD_EDITOR_TAB, { workspaceLocation, filePath, editorValue });
 
 export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
   action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });

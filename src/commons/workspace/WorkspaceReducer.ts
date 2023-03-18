@@ -32,6 +32,7 @@ import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
+  ADD_EDITOR_TAB,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
@@ -725,6 +726,31 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case ADD_EDITOR_TAB: {
+      const { filePath, editorValue } = action.payload;
+
+      const newEditorTab: EditorTabState = {
+        filePath,
+        value: editorValue,
+        highlightedLines: [],
+        breakpoints: []
+      };
+      const newEditorTabs: EditorTabState[] = [
+        ...state[workspaceLocation].editorTabs,
+        newEditorTab
+      ];
+      // Set the newly added editor tab as the active tab.
+      const newActiveEditorTabIndex = newEditorTabs.length - 1;
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
           editorTabs: newEditorTabs
         }
       };
