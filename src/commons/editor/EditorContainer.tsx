@@ -74,12 +74,12 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
   const filePaths = editorTabs.map(editorTabState => editorTabState.filePath ?? 'UNKNOWN');
 
   return (
-    <>
+    <div className="editor-container">
       {isMultipleFilesEnabled && (
         <EditorTabContainer activeEditorTabIndex={activeEditorTabIndex} filePaths={filePaths} />
       )}
       {createEditorTab(editorTabs[activeEditorTabIndex])}
-    </>
+    </div>
   );
 };
 

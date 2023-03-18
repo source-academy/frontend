@@ -1,0 +1,19 @@
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-right: 8px;
+}
+
+.editor-tab-container {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 4px;
+}
+
+.editor-tab {
+  padding: 5px 10px;
+  // !important is necessary to override the default Card background-color property.
+  background-color: $cadet-color-2 !important;
+  user-select: none;
+}
