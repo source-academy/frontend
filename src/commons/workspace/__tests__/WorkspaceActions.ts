@@ -6,6 +6,7 @@ import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../../application/types/Interpr
 import { Library } from '../../assessment/AssessmentTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import {
+  addEditorTab,
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -42,6 +43,7 @@ import {
   updateSublanguage
 } from '../WorkspaceActions';
 import {
+  ADD_EDITOR_TAB,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -356,6 +358,20 @@ test('moveCursor generates correct action object', () => {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex,
       newCursorPosition
+    }
+  });
+});
+
+test('addEditorTab generates correct action object', () => {
+  const filePath = '/playground/program.js';
+  const editorValue = 'Hello World!';
+  const action = addEditorTab(playgroundWorkspace, filePath, editorValue);
+  expect(action).toEqual({
+    type: ADD_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      filePath,
+      editorValue
     }
   });
 });

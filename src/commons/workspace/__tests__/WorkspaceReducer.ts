@@ -32,6 +32,7 @@ import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
 import { WorkspaceReducer } from '../WorkspaceReducer';
 import {
+  ADD_EDITOR_TAB,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXTERNAL_LIBRARY,
@@ -1770,6 +1771,57 @@ describe('MOVE_CURSOR', () => {
           ]
         }
       });
+    });
+  });
+});
+
+describe('ADD_EDITOR_TAB', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+
+  test('adds a new editor tab to the back & sets it as the active editor tab', () => {
+    const filePath = '/playground/interpreter.js';
+    const editorValue = 'The quick brown fox jumped over the lazy pomeranian.';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(ADD_EDITOR_TAB, { filePath, editorValue });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceState[location],
+            activeEditorTabIndex: 2,
+            editorTabs: [
+              zerothEditorTab,
+              firstEditorTab,
+              {
+                filePath,
+                value: editorValue,
+                highlightedLines: [],
+                breakpoints: []
+              }
+            ]
+          }
+        })
+      );
     });
   });
 });
