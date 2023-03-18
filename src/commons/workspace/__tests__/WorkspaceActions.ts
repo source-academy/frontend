@@ -30,6 +30,7 @@ import {
   sendReplInputToOutput,
   setEditorBreakpoint,
   setEditorHighlightedLines,
+  shiftEditorTab,
   toggleEditorAutorun,
   toggleMultipleFilesMode,
   toggleUsingSubst,
@@ -66,6 +67,7 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
@@ -372,6 +374,20 @@ test('addEditorTab generates correct action object', () => {
       workspaceLocation: playgroundWorkspace,
       filePath,
       editorValue
+    }
+  });
+});
+
+test('shiftEditorTab generates correct action object', () => {
+  const previousEditorTabIndex = 3;
+  const newEditorTabIndex = 1;
+  const action = shiftEditorTab(playgroundWorkspace, previousEditorTabIndex, newEditorTabIndex);
+  expect(action).toEqual({
+    type: SHIFT_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      previousEditorTabIndex,
+      newEditorTabIndex
     }
   });
 });

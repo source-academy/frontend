@@ -50,6 +50,7 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
@@ -1819,6 +1820,174 @@ describe('ADD_EDITOR_TAB', () => {
                 breakpoints: []
               }
             ]
+          }
+        })
+      );
+    });
+  });
+});
+
+describe('SHIFT_EDITOR_TAB', () => {
+  const zerothEditorTab: EditorTabState = {
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const secondEditorTab: EditorTabState = {
+    value: 'Hello World Again!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const thirdEditorTab: EditorTabState = {
+    value: 'Goodbye World Again!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [
+    zerothEditorTab,
+    firstEditorTab,
+    secondEditorTab,
+    thirdEditorTab
+  ];
+
+  test('throws an error if the previous editor tab index is negative', () => {
+    const previousEditorTabIndex = -1;
+    const newEditorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(SHIFT_EDITOR_TAB, {
+      previousEditorTabIndex,
+      newEditorTabIndex
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('Previous editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the previous editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const previousEditorTabIndex = 4;
+    const newEditorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(SHIFT_EDITOR_TAB, {
+      previousEditorTabIndex,
+      newEditorTabIndex
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow(
+        'Previous editor tab index must have a corresponding editor tab!'
+      );
+    });
+  });
+
+  test('throws an error if the new editor tab index is negative', () => {
+    const previousEditorTabIndex = 2;
+    const newEditorTabIndex = -1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(SHIFT_EDITOR_TAB, {
+      previousEditorTabIndex,
+      newEditorTabIndex
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('New editor tab index must be non-negative!');
+    });
+  });
+
+  test('throws an error if the new editor tab index is non-negative but does not have a corresponding editor tab', () => {
+    const previousEditorTabIndex = 2;
+    const newEditorTabIndex = 4;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(SHIFT_EDITOR_TAB, {
+      previousEditorTabIndex,
+      newEditorTabIndex
+    });
+
+    actions.forEach(action => {
+      const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
+      expect(resultThunk).toThrow('New editor tab index must have a corresponding editor tab!');
+    });
+  });
+
+  test('shifts the (inactive) editor tab at the old index to the new index without changing the active editor tab index', () => {
+    const previousEditorTabIndex = 2;
+    const newEditorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(SHIFT_EDITOR_TAB, {
+      previousEditorTabIndex,
+      newEditorTabIndex
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceState[location],
+            editorTabs: [zerothEditorTab, secondEditorTab, firstEditorTab, thirdEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('shifts the (active) editor tab at the old index to the new index without changing the active editor tab index', () => {
+    const previousEditorTabIndex = 2;
+    const newEditorTabIndex = 1;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: previousEditorTabIndex,
+      editorTabs
+    });
+
+    const actions = generateActions(SHIFT_EDITOR_TAB, {
+      previousEditorTabIndex,
+      newEditorTabIndex
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceState[location],
+            activeEditorTabIndex: newEditorTabIndex,
+            editorTabs: [zerothEditorTab, secondEditorTab, firstEditorTab, thirdEditorTab]
           }
         })
       );
