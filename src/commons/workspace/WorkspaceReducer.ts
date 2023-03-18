@@ -51,6 +51,7 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
@@ -745,6 +746,45 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       ];
       // Set the newly added editor tab as the active tab.
       const newActiveEditorTabIndex = newEditorTabs.length - 1;
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case SHIFT_EDITOR_TAB: {
+      const { previousEditorTabIndex, newEditorTabIndex } = action.payload;
+      if (previousEditorTabIndex < 0) {
+        throw new Error('Previous editor tab index must be non-negative!');
+      }
+      if (previousEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Previous editor tab index must have a corresponding editor tab!');
+      }
+      if (newEditorTabIndex < 0) {
+        throw new Error('New editor tab index must be non-negative!');
+      }
+      if (newEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('New editor tab index must have a corresponding editor tab!');
+      }
+
+      const newActiveEditorTabIndex =
+        state[workspaceLocation].activeEditorTabIndex === previousEditorTabIndex
+          ? newEditorTabIndex
+          : state[workspaceLocation].activeEditorTabIndex;
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const shiftedEditorTab = editorTabs[previousEditorTabIndex];
+      const filteredEditorTabs = editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== previousEditorTabIndex
+      );
+      const newEditorTabs = [
+        ...filteredEditorTabs.slice(0, newEditorTabIndex),
+        shiftedEditorTab,
+        ...filteredEditorTabs.slice(newEditorTabIndex)
+      ];
 
       return {
         ...state,
