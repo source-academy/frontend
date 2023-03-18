@@ -7,14 +7,14 @@
   column-gap: 8px;
 }
 
-.tab-container {
+.sidebar-tab-container {
   margin-left: 8px;
   display: flex;
   flex-direction: column;
   row-gap: 8px;
 }
 
-.tab {
+.sidebar-tab {
   // FIXME: Remove if and when all of the major browsers support the CSS property.
   // Not supported in all browsers, see
   // https://developer.mozilla.org/en-US/docs/Web/CSS/text-orientation#browser_compatibility.
@@ -48,11 +48,11 @@
   }
 }
 
-.tab-icon {
+.sidebar-tab-icon {
   transform: rotate(90deg);
 }
 
-.panel {
+.sidebar-panel {
   // !important is necessary to override the default Card background-color property.
   background-color: $cadet-color-2 !important;
   width: 100%;
