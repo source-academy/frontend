@@ -2065,7 +2065,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     });
   });
 
-  test('removes the editor tab & leaves the active editor tab index unchanged if it is not the removed editor tab', () => {
+  test('removes the editor tab & leaves the active editor tab index unchanged if it is not the removed editor tab and has a smaller index', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2086,6 +2086,33 @@ describe('REMOVE_EDITOR_TAB', () => {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
             editorTabs: [zerothEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab & decrements the active editor tab index by 1 if it is not the removed editor tab and has a larger index', () => {
+    const editorTabIndex = 0;
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [firstEditorTab]
           }
         })
       );
