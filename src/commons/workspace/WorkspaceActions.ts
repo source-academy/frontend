@@ -10,6 +10,7 @@ import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
+  ADD_EDITOR_TAB,
   ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
@@ -37,6 +38,7 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_MULTIPLE_FILES_MODE,
   TOGGLE_USING_SUBST,
@@ -201,6 +203,18 @@ export const moveCursor = (
   editorTabIndex: number,
   newCursorPosition: Position
 ) => action(MOVE_CURSOR, { workspaceLocation, editorTabIndex, newCursorPosition });
+
+export const addEditorTab = (
+  workspaceLocation: WorkspaceLocation,
+  filePath: string,
+  editorValue: string
+) => action(ADD_EDITOR_TAB, { workspaceLocation, filePath, editorValue });
+
+export const shiftEditorTab = (
+  workspaceLocation: WorkspaceLocation,
+  previousEditorTabIndex: number,
+  newEditorTabIndex: number
+) => action(SHIFT_EDITOR_TAB, { workspaceLocation, previousEditorTabIndex, newEditorTabIndex });
 
 export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
   action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });
