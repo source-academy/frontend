@@ -34,7 +34,7 @@
   // --- End ---
   padding: 12px 3px;
   // !important is necessary to override the default Card background-color property.
-  background-color: $cadet-color-2 !important;
+  background-color: $cadet-color-1 !important;
   user-select: none;
   display: flex;
   flex-direction: row;
@@ -44,7 +44,7 @@
 
   &.selected {
     // !important is necessary to override the default Card background-color property.
-    background-color: $cadet-color-1 !important;
+    background-color: $cadet-color-2 !important;
   }
 }
 

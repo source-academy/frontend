@@ -29,7 +29,7 @@
 .editor-tab {
   padding: 5px 5px 5px 10px;
   // !important is necessary to override the default Card background-color property.
-  background-color: $cadet-color-2 !important;
+  background-color: $cadet-color-1 !important;
   display: flex;
   flex-direction: row;
   column-gap: 4px;
@@ -43,7 +43,7 @@
 
   &.selected {
     // !important is necessary to override the default Card background-color property.
-    background-color: $cadet-color-1 !important;
+    background-color: $cadet-color-2 !important;
   }
 
   .remove-button {
