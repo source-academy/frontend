@@ -3,8 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
+import { addEditorTab } from '../workspace/WorkspaceActions';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -23,10 +25,21 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   const { fileSystem, basePath, fileName, indentationLevel, refreshDirectory } = props;
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const fullPath = path.join(basePath, fileName);
 
   const handleOpenFile = () => {
-    // TODO: Implement this.
-    console.log(`Opened file ${fileName}!`);
+    fileSystem.readFile(fullPath, 'utf-8', (err, fileContents) => {
+      if (err) {
+        console.error(err);
+      }
+      if (fileContents === undefined) {
+        throw new Error('File contents are undefined.');
+      }
+
+      dispatch(addEditorTab('playground', fullPath, fileContents));
+    });
   };
 
   const handleRenameFile = () => setIsEditing(true);
@@ -50,7 +63,6 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
         return;
       }
 
-      const fullPath = path.join(basePath, fileName);
       fileSystem.unlink(fullPath, err => {
         if (err) {
           console.error(err);
