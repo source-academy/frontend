@@ -56,6 +56,7 @@ function loadStore(loadedStore: SavedState | undefined) {
       ...defaultState.workspaces,
       playground: {
         ...defaultState.workspaces.playground,
+        activeEditorTabIndex: loadedStore.playgroundActiveEditorTabIndex,
         editorTabs: loadedStore.playgroundEditorTabs
           ? loadedStore.playgroundEditorTabs
           : defaultState.workspaces.playground.editorTabs,

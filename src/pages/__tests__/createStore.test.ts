@@ -53,6 +53,7 @@ const mockChangedState: OverallState = {
     ...defaultState.workspaces,
     playground: {
       ...defaultState.workspaces.playground,
+      activeEditorTabIndex: 1,
       editorTabs: [
         {
           filePath: '/playground/a.js',
