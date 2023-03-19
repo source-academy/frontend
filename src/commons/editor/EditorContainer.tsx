@@ -73,8 +73,11 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
       : createNormalEditorTab(editorProps);
 
   if (activeEditorTabIndex === null) {
-    // TODO: Handle the case where there are no editor tabs.
-    return <></>;
+    return (
+      <div className="editor-container">
+        <h1>Double click on a file in the sidebar to start editing!</h1>
+      </div>
+    );
   }
 
   // Editor tabs in workspaces which do not support multiple files mode will not have associated file paths.
