@@ -3,7 +3,10 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding-right: 8px;
+  // Only add right padding for desktop view & not mobile view.
+  .left-parent & {
+    padding-right: 8px;
+  }
 }
 
 .editor-tab-container {
