@@ -237,7 +237,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: propsRef.current.editorTabs[0].value,
+      editorValue: propsRef.current.editorTabs[0]?.value ?? '',
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -271,7 +271,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     setSessionId(
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorValue: propsRef.current.editorTabs[0].value,
+        editorValue: propsRef.current.editorTabs[0]?.value ?? '',
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
