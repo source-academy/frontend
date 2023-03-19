@@ -602,7 +602,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const toggleMultipleFilesModeButton = React.useMemo(() => {
     // TODO: Remove this once the multiple file mode is ready for production.
-    if (false) {
+    if (true) {
       return <></>;
     }
 
