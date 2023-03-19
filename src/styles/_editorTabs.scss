@@ -25,14 +25,31 @@
 }
 
 .editor-tab {
-  padding: 5px 10px;
+  padding: 5px 5px 5px 10px;
   // !important is necessary to override the default Card background-color property.
   background-color: $cadet-color-2 !important;
+  display: flex;
+  flex-direction: row;
+  column-gap: 4px;
   user-select: none;
   white-space: nowrap;
+
+  &:hover {
+    // !important is necessary to override the default Card background-color property.
+    background-color: $cadet-color-3 !important;
+  }
 
   &.selected {
     // !important is necessary to override the default Card background-color property.
     background-color: $cadet-color-1 !important;
+  }
+
+  .remove-button {
+    opacity: 25%;
+
+    &:hover {
+      background: black;
+      border-radius: 10px;
+    }
   }
 }

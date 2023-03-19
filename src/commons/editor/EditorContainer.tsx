@@ -63,6 +63,7 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
     isMultipleFilesEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
+    removeEditorTabByIndex,
     editorTabs,
     ...editorProps
   } = props;
@@ -86,6 +87,7 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
           activeEditorTabIndex={activeEditorTabIndex}
           filePaths={filePaths}
           setActiveEditorTabIndex={setActiveEditorTabIndex}
+          removeEditorTabByIndex={removeEditorTabByIndex}
         />
       )}
       {createEditorTab(editorTabs[activeEditorTabIndex])}
