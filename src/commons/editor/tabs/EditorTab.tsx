@@ -13,6 +13,12 @@ export type EditorTabProps = {
 const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
   const { filePath, isActive, setActive, remove } = props;
 
+  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+    // Stop the click event from propagating to the parent component.
+    e.stopPropagation();
+    remove();
+  };
+
   return (
     <Card
       className={classNames('editor-tab', {
@@ -21,7 +27,7 @@ const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
       onClick={setActive}
     >
       {filePath}
-      <Icon className="remove-button" icon={IconNames.SMALL_CROSS} onClick={remove} />
+      <Icon className="remove-button" icon={IconNames.SMALL_CROSS} onClick={onClick} />
     </Card>
   );
 };
