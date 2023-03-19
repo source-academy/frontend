@@ -11,6 +11,7 @@ import { AchievementItem } from '../features/achievement/AchievementTypes';
 export type SavedState = {
   session: Partial<SessionState>;
   achievements: AchievementItem[];
+  playgroundActiveEditorTabIndex: number | null;
   playgroundEditorTabs: EditorTabState[];
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;
@@ -59,6 +60,7 @@ export const saveState = (state: OverallState) => {
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
+      playgroundActiveEditorTabIndex: state.workspaces.playground.activeEditorTabIndex,
       playgroundEditorTabs: state.workspaces.playground.editorTabs,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
