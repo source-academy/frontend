@@ -1778,6 +1778,7 @@ describe('MOVE_CURSOR', () => {
 
 describe('ADD_EDITOR_TAB', () => {
   const zerothEditorTab: EditorTabState = {
+    filePath: '/helloworld.js',
     value: 'Hello World!',
     highlightedLines: [],
     breakpoints: []
@@ -1823,6 +1824,24 @@ describe('ADD_EDITOR_TAB', () => {
           }
         })
       );
+    });
+  });
+
+  test('does nothing if the file is already open as an editor tab', () => {
+    const filePath = '/helloworld.js';
+    const editorValue = 'The quick brown fox jumped over the lazy pomeranian.';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(ADD_EDITOR_TAB, { filePath, editorValue });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(JSON.stringify(defaultWorkspaceState));
     });
   });
 });
