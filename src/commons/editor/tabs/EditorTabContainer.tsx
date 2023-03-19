@@ -11,8 +11,14 @@ export type EditorTabContainerProps = {
 const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabContainerProps) => {
   const { filePaths, activeEditorTabIndex, setActiveEditorTabIndex } = props;
 
+  const handleHorizontalScroll = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.currentTarget.scrollTo({
+      left: e.currentTarget.scrollLeft + e.deltaY
+    });
+  };
+
   return (
-    <div className="editor-tab-container">
+    <div className="editor-tab-container" onWheel={handleHorizontalScroll}>
       {filePaths.map((filePath, index) => (
         <EditorTab
           key={index}
