@@ -880,7 +880,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           ? [
               {
                 label: 'Files',
-                body: <FileSystemView basePath="/playground" />,
+                body: <FileSystemView workspaceLocation="playground" basePath="/playground" />,
                 iconName: IconNames.FOLDER_CLOSE,
                 id: SideContentType.files
               }

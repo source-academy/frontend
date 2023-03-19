@@ -7,11 +7,13 @@ import { useDispatch } from 'react-redux';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { addEditorTab } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 
 export type FileSystemViewFileNodeProps = {
+  workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
   fileName: string;
@@ -22,7 +24,8 @@ export type FileSystemViewFileNodeProps = {
 const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   props: FileSystemViewFileNodeProps
 ) => {
-  const { fileSystem, basePath, fileName, indentationLevel, refreshDirectory } = props;
+  const { workspaceLocation, fileSystem, basePath, fileName, indentationLevel, refreshDirectory } =
+    props;
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const dispatch = useDispatch();
@@ -38,7 +41,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
         throw new Error('File contents are undefined.');
       }
 
-      dispatch(addEditorTab('playground', fullPath, fileContents));
+      dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
     });
   };
 
