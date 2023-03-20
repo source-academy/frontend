@@ -4,7 +4,7 @@ import { Chapter, Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { showFullJSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
+import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 
 import {
   beginInterruptExecution,
@@ -16,7 +16,12 @@ import {
   evalTestcaseFailure,
   evalTestcaseSuccess
 } from '../../application/actions/InterpreterActions';
-import { defaultState, fullJSLanguage, OverallState } from '../../application/ApplicationTypes';
+import {
+  defaultState,
+  fullJSLanguage,
+  fullTSLanguage,
+  OverallState
+} from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -571,6 +576,59 @@ describe('CHAPTER_SELECT', () => {
           payload: {
             chapter: fullJSLanguage.chapter,
             variant: fullJSLanguage.variant,
+            workspaceLocation
+          }
+        })
+        .silentRun();
+    });
+  });
+
+  describe('show disclaimer when fullTS is chosen', () => {
+    test('correct actions when user proceeds', () => {
+      const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
+      const library: Library = {
+        chapter: fullTSLanguage.chapter,
+        variant: fullTSLanguage.variant,
+        external: {
+          name: 'NONE' as ExternalLibraryName,
+          symbols: context.externalSymbols
+        },
+        globals
+      };
+
+      return expectSaga(workspaceSaga)
+        .provide([[matchers.call.fn(showFullTSDisclaimer), true]])
+        .withState(newDefaultState)
+        .call(showFullTSDisclaimer)
+        .put(beginClearContext(workspaceLocation, library, false))
+        .put(clearReplOutput(workspaceLocation))
+        .call(showSuccessMessage, `Switched to full TypeScript`, 1000)
+        .dispatch({
+          type: CHAPTER_SELECT,
+          payload: {
+            chapter: fullTSLanguage.chapter,
+            variant: fullTSLanguage.variant,
+            workspaceLocation
+          }
+        })
+        .silentRun();
+    });
+
+    test('correct actions when user cancels', () => {
+      const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
+
+      return expectSaga(workspaceSaga)
+        .provide([[matchers.call.fn(showFullTSDisclaimer), false]])
+        .withState(newDefaultState)
+        .call(showFullTSDisclaimer)
+        .not.put.actionType(BEGIN_CLEAR_CONTEXT)
+        .not.put.actionType(CLEAR_REPL_OUTPUT)
+        .not.call.fn(showSuccessMessage)
+        .dispatch({
+          type: CHAPTER_SELECT,
+          payload: {
+            chapter: fullTSLanguage.chapter,
+            variant: fullTSLanguage.variant,
             workspaceLocation
           }
         })
