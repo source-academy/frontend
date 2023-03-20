@@ -733,6 +733,13 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     }
     case ADD_EDITOR_TAB: {
       const { filePath, editorValue } = action.payload;
+      const fileIsAlreadyOpen =
+        state[workspaceLocation].editorTabs.find(
+          (editorTab: EditorTabState) => editorTab.filePath === filePath
+        ) !== undefined;
+      if (fileIsAlreadyOpen) {
+        return state;
+      }
 
       const newEditorTab: EditorTabState = {
         filePath,
@@ -811,8 +818,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       const newActiveEditorTabIndex =
         activeEditorTabIndex !== editorTabIndex
           ? // If the active editor tab is not the one that is removed,
-            // the active editor tab remains the same.
-            activeEditorTabIndex
+            // the active editor tab remains the same if its index is
+            // less than the removed editor tab index or null.
+            activeEditorTabIndex === null || activeEditorTabIndex < editorTabIndex
+            ? activeEditorTabIndex
+            : // Otherwise, the active editor tab index needs to have 1
+              // subtracted because every tab to the right of the editor
+              // tab being removed has their index decremented by 1.
+              activeEditorTabIndex - 1
           : newEditorTabs.length === 0
           ? // If there are no editor tabs after removal, there cannot
             // be an active editor tab.

@@ -6,6 +6,7 @@ import React from 'react';
 
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import { rmdirRecursively } from '../utils/FileSystemUtils';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -13,6 +14,7 @@ import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 
 export type FileSystemViewDirectoryNodeProps = {
+  workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
   directoryName: string;
@@ -23,7 +25,14 @@ export type FileSystemViewDirectoryNodeProps = {
 const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = (
   props: FileSystemViewDirectoryNodeProps
 ) => {
-  const { fileSystem, basePath, directoryName, indentationLevel, refreshParentDirectory } = props;
+  const {
+    workspaceLocation,
+    fileSystem,
+    basePath,
+    directoryName,
+    indentationLevel,
+    refreshParentDirectory
+  } = props;
   const fullPath = path.join(basePath, directoryName);
 
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
@@ -179,6 +188,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
       )}
       {isExpanded && (
         <FileSystemViewList
+          workspaceLocation={workspaceLocation}
           key={fileSystemViewListKey}
           fileSystem={fileSystem}
           basePath={fullPath}

@@ -17,6 +17,9 @@ const mockChangedStoredState: SavedState = {
     userId: 1,
     githubAccessToken: 'githubAccessToken'
   },
+  playgroundActiveEditorTabIndex: {
+    value: 1
+  },
   playgroundEditorTabs: [
     {
       filePath: '/playground/a.js',
@@ -52,6 +55,7 @@ const mockChangedState: OverallState = {
     ...defaultState.workspaces,
     playground: {
       ...defaultState.workspaces.playground,
+      activeEditorTabIndex: 1,
       editorTabs: [
         {
           filePath: '/playground/a.js',

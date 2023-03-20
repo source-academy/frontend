@@ -10,6 +10,7 @@ import SourcecastEditor, {
 } from '../sourceRecorder/SourceRecorderEditor';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
+import EditorTabContainer from './tabs/EditorTabContainer';
 
 type OwnProps = {
   isMultipleFilesEnabled: boolean;
@@ -41,7 +42,7 @@ export const convertEditorTabStateToProps = (
   return {
     editorTabIndex,
     editorValue: editorTab.value,
-    ..._.pick(editorTab, 'highlightedLines', 'breakpoints', 'newCursorPosition')
+    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition')
   };
 };
 
@@ -58,18 +59,43 @@ const createSourcecastEditorTab =
   };
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
-  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs, ...editorProps } = props;
+  const {
+    isMultipleFilesEnabled,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex,
+    editorTabs,
+    ...editorProps
+  } = props;
   const createEditorTab =
     editorProps.editorVariant === 'sourcecast'
       ? createSourcecastEditorTab(editorProps)
       : createNormalEditorTab(editorProps);
 
   if (activeEditorTabIndex === null) {
-    // TODO: Handle the case where there are no editor tabs.
-    return <></>;
+    return (
+      <div className="editor-container">
+        <h1>Double click on a file in the sidebar to start editing!</h1>
+      </div>
+    );
   }
 
-  return createEditorTab(editorTabs[activeEditorTabIndex]);
+  // Editor tabs in workspaces which do not support multiple files mode will not have associated file paths.
+  const filePaths = editorTabs.map(editorTabState => editorTabState.filePath ?? 'UNKNOWN');
+
+  return (
+    <div className="editor-container">
+      {isMultipleFilesEnabled && (
+        <EditorTabContainer
+          activeEditorTabIndex={activeEditorTabIndex}
+          filePaths={filePaths}
+          setActiveEditorTabIndex={setActiveEditorTabIndex}
+          removeEditorTabByIndex={removeEditorTabByIndex}
+        />
+      )}
+      {createEditorTab(editorTabs[activeEditorTabIndex])}
+    </div>
+  );
 };
 
 export default EditorContainer;

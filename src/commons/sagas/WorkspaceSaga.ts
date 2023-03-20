@@ -112,9 +112,11 @@ export default function* WorkspaceSaga(): SagaIterator {
     UPDATE_EDITOR_VALUE,
     function* (action: ReturnType<typeof actions.updateEditorValue>) {
       const workspaceLocation = action.payload.workspaceLocation;
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      const editorTabIndex = action.payload.editorTabIndex;
+
       const filePath: string | undefined = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].filePath
+        (state: OverallState) =>
+          state.workspaces[workspaceLocation].editorTabs[editorTabIndex].filePath
       );
       // If the code does not have an associated file, do nothing.
       if (filePath === undefined) {
