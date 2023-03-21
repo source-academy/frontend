@@ -51,7 +51,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleChapterSelect: (chapter: Chapter) => chapterSelect(chapter, Variant.DEFAULT, location),
       handleEditorEval: () => evalEditor(location),
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange: (newEditorValue: string) =>
         updateEditorValue(location, 0, newEditorValue),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>

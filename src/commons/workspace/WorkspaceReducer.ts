@@ -53,7 +53,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -590,12 +590,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           currentQuestion: action.payload.questionId
         }
       };
-    case TOGGLE_MULTIPLE_FILES_MODE:
+    case TOGGLE_FOLDER_MODE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          isMultipleFilesEnabled: !state[workspaceLocation].isMultipleFilesEnabled
+          isFolderModeEnabled: !state[workspaceLocation].isFolderModeEnabled
         }
       };
     case UPDATE_ACTIVE_EDITOR_TAB_INDEX: {

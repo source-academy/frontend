@@ -32,7 +32,7 @@ import {
   setEditorHighlightedLines,
   shiftEditorTab,
   toggleEditorAutorun,
-  toggleMultipleFilesMode,
+  toggleFolderMode,
   toggleUsingSubst,
   updateActiveEditorTab,
   updateActiveEditorTabIndex,
@@ -69,7 +69,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -267,10 +267,10 @@ test('evalTestcase generates correct action object', () => {
   });
 });
 
-test('toggleMultipleFilesMode generates correct action object', () => {
-  const action = toggleMultipleFilesMode(gradingWorkspace);
+test('toggleFolderMode generates correct action object', () => {
+  const action = toggleFolderMode(gradingWorkspace);
   expect(action).toEqual({
-    type: TOGGLE_MULTIPLE_FILES_MODE,
+    type: TOGGLE_FOLDER_MODE,
     payload: {
       workspaceLocation: gradingWorkspace
     }

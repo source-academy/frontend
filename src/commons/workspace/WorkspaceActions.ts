@@ -40,7 +40,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -162,8 +162,8 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
 
-export const toggleMultipleFilesMode = (workspaceLocation: WorkspaceLocation) =>
-  action(TOGGLE_MULTIPLE_FILES_MODE, { workspaceLocation });
+export const toggleFolderMode = (workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_FOLDER_MODE, { workspaceLocation });
 
 export const updateActiveEditorTabIndex = (
   workspaceLocation: WorkspaceLocation,

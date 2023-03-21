@@ -117,7 +117,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const dispatch = useDispatch();
 
-  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
     store => store.workspaces[workspaceLocation]
   );
 
@@ -281,7 +281,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
-    isMultipleFilesEnabled,
+    isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
@@ -296,7 +296,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     isEditorAutorun: props.isEditorAutorun,
     inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorUpdateBreakpoints: newBreakpoints =>
       dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints))
   };

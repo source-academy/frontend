@@ -52,7 +52,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -1290,9 +1290,9 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
   });
 });
 
-describe('TOGGLE_MULTIPLE_FILES_MODE', () => {
-  test('toggles isMultipleFilesEnabled correctly', () => {
-    const actions = generateActions(TOGGLE_MULTIPLE_FILES_MODE);
+describe('TOGGLE_FOLDER_MODE', () => {
+  test('toggles isFolderModeEnabled correctly', () => {
+    const actions = generateActions(TOGGLE_FOLDER_MODE);
 
     actions.forEach(action => {
       let result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -1301,7 +1301,7 @@ describe('TOGGLE_MULTIPLE_FILES_MODE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isMultipleFilesEnabled: true
+          isFolderModeEnabled: true
         }
       });
 
@@ -1310,7 +1310,7 @@ describe('TOGGLE_MULTIPLE_FILES_MODE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isMultipleFilesEnabled: false
+          isFolderModeEnabled: false
         }
       });
     });
