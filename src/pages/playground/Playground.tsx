@@ -897,14 +897,14 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
+        toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
-          : executionTime,
-        toggleFolderModeButton
+          : executionTime
       ]
     },
     editorContainerProps: editorContainerProps,
