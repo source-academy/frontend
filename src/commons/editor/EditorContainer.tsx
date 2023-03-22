@@ -13,7 +13,7 @@ import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
 
 type OwnProps = {
-  isMultipleFilesEnabled: boolean;
+  isFolderModeEnabled: boolean;
   activeEditorTabIndex: number | null;
   setActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
   removeEditorTabByIndex: (editorTabIndex: number) => void;
@@ -60,7 +60,7 @@ const createSourcecastEditorTab =
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
   const {
-    isMultipleFilesEnabled,
+    isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
@@ -80,12 +80,12 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
     );
   }
 
-  // Editor tabs in workspaces which do not support multiple files mode will not have associated file paths.
+  // Editor tabs in workspaces which do not support Folder mode will not have associated file paths.
   const filePaths = editorTabs.map(editorTabState => editorTabState.filePath ?? 'UNKNOWN');
 
   return (
     <div className="editor-container">
-      {isMultipleFilesEnabled && (
+      {isFolderModeEnabled && (
         <EditorTabContainer
           activeEditorTabIndex={activeEditorTabIndex}
           filePaths={filePaths}
