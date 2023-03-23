@@ -128,6 +128,12 @@ export const fullJSLanguage: SALanguage = {
   displayName: 'full JavaScript'
 };
 
+export const fullTSLanguage: SALanguage = {
+  chapter: Chapter.FULL_TS,
+  variant: Variant.DEFAULT,
+  displayName: 'full TypeScript'
+};
+
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
@@ -138,6 +144,8 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   switch (chapter) {
     case Chapter.FULL_JS:
       return fullJSLanguage.displayName;
+    case Chapter.FULL_TS:
+      return fullTSLanguage.displayName;
     case Chapter.HTML:
       return htmlLanguage.displayName;
     default:
