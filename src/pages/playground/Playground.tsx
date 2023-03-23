@@ -661,7 +661,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     }
 
     // (TEMP) Remove tabs for fullJS until support is integrated
-    if (props.playgroundSourceChapter === Chapter.FULL_JS) {
+    if (
+      props.playgroundSourceChapter === Chapter.FULL_JS ||
+      props.playgroundSourceChapter === Chapter.FULL_TS
+    ) {
       return [...tabs, dataVisualizerTab];
     }
 
