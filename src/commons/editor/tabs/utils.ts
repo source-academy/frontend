@@ -1,7 +1,10 @@
 export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[] => {
   const originalToTransformedFilePaths: Record<string, string> = {};
   const filePathSegments: Record<string, string[]> = originalFilePaths.reduce(
-    (segments, filePath) => ({ ...segments, [filePath]: filePath.split('/') }),
+    (segments, filePath) => ({
+      ...segments,
+      [filePath]: filePath.split('/').filter(segment => segment !== '')
+    }),
     {}
   );
 
