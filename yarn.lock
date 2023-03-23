@@ -2270,6 +2270,23 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
+"@ts-morph/bootstrap@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@ts-morph/bootstrap/-/bootstrap-0.18.0.tgz#23f886caa87575e48b07c9905ddbd56a33ee33f4"
+  integrity sha512-LmYkdorZT7UonhVuATqj8jFBVz/4ykuFdbrA5szk19OAVxEWaytg7TsngC2waUDLfdc93aJrCF9Gs8Extc1Pfg==
+  dependencies:
+    "@ts-morph/common" "~0.18.0"
+
+"@ts-morph/common@~0.18.0":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@ts-morph/common/-/common-0.18.1.tgz#ca40c3a62c3f9e17142e0af42633ad63efbae0ec"
+  integrity sha512-RVE+zSRICWRsfrkAw5qCAK+4ZH9kwEFv5h0+/YeHTLieWP7F4wWq4JsKFuNWG+fYh/KF+8rAtgdj5zb2mm+DVA==
+  dependencies:
+    fast-glob "^3.2.12"
+    minimatch "^5.1.0"
+    mkdirp "^1.0.4"
+    path-browserify "^1.0.1"
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@tsconfig/node10/-/node10-1.0.9.tgz#df4907fc07a886922637b15e02d4cebc4c0021b2"
@@ -7843,13 +7860,14 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.15:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.15.tgz#cc7d1c240d1e9c145b8e2a7ed8dc074c89ee68d5"
-  integrity sha512-wb8zuEU4h3bvBg4MQYC7xLAwBX269hlNnwm8BoVMT2vjV3+GjkTTWzFjc1wfu2Agbl62Ez4sQr1KOtZ8Cgqk4w==
+js-slang@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.16.tgz#8a0d682d95ac19b1b52cb41a2ae24ba9a7b15d9f"
+  integrity sha512-eTbLUZZhe6ndwzchQUXnb+U4wgUTe/elvrYqCuUCyLwKrJsCa+R5Y8vpPZETjWyj5D0QHP4ByJfvSXMegDyjZw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
+    "@ts-morph/bootstrap" "^0.18.0"
     "@types/estree" "0.0.52"
     acorn "^8.0.3"
     acorn-class-fields "^1.0.0"
@@ -8434,7 +8452,7 @@ minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@^5.0.1:
+minimatch@^5.0.1, minimatch@^5.1.0:
   version "5.1.6"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.6.tgz#1cfcb8cf5522ea69952cd2af95ae09477f122a96"
   integrity sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==
@@ -9122,6 +9140,11 @@ pascal-case@^3.1.2:
   dependencies:
     no-case "^3.0.4"
     tslib "^2.0.3"
+
+path-browserify@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/path-browserify/-/path-browserify-1.0.1.tgz#d98454a9c3753d5790860f16f68867b9e46be1fd"
+  integrity sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==
 
 path-case@^3.0.4:
   version "3.0.4"
