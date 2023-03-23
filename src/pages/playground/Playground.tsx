@@ -202,6 +202,8 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
   }
 }
 
+export const BASE_PLAYGROUND_FILE_PATH = '/playground';
+
 const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
   const { isMobileBreakpoint } = useResponsive();
@@ -602,7 +604,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const toggleFolderModeButton = React.useMemo(() => {
     // TODO: Remove this once the Folder mode is ready for production.
-    if (false) {
+    if (true) {
       return <></>;
     }
 
@@ -809,6 +811,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
+    baseFilePath: BASE_PLAYGROUND_FILE_PATH,
     isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
@@ -880,7 +883,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           ? [
               {
                 label: 'Folder',
-                body: <FileSystemView workspaceLocation="playground" basePath="/playground" />,
+                body: (
+                  <FileSystemView
+                    workspaceLocation="playground"
+                    basePath={BASE_PLAYGROUND_FILE_PATH}
+                  />
+                ),
                 iconName: IconNames.FOLDER_CLOSE,
                 id: SideContentType.folder
               }
