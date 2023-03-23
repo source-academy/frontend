@@ -240,7 +240,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     workspaceLocation,
     Constants.defaultSourceVariant
   ),
-  isMultipleFilesEnabled: false,
+  isFolderModeEnabled: false,
   activeEditorTabIndex: 0,
   editorTabs: [
     {

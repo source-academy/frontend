@@ -75,7 +75,7 @@ import {
   PROMPT_AUTOCOMPLETE,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   UPDATE_EDITOR_VALUE,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
@@ -94,15 +94,13 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    TOGGLE_MULTIPLE_FILES_MODE,
-    function* (action: ReturnType<typeof actions.toggleMultipleFilesMode>) {
+    TOGGLE_FOLDER_MODE,
+    function* (action: ReturnType<typeof actions.toggleFolderMode>) {
       const workspaceLocation = action.payload.workspaceLocation;
-      const isMultipleFilesEnabled: boolean = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].isMultipleFilesEnabled
+      const isFolderModeEnabled: boolean = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
       );
-      const warningMessage = `Multiple files mode ${
-        isMultipleFilesEnabled ? 'enabled' : 'disabled'
-      }`;
+      const warningMessage = `Folder mode ${isFolderModeEnabled ? 'enabled' : 'disabled'}`;
       yield call(showWarningMessage, warningMessage, 750);
     }
   );
@@ -112,9 +110,11 @@ export default function* WorkspaceSaga(): SagaIterator {
     UPDATE_EDITOR_VALUE,
     function* (action: ReturnType<typeof actions.updateEditorValue>) {
       const workspaceLocation = action.payload.workspaceLocation;
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      const editorTabIndex = action.payload.editorTabIndex;
+
       const filePath: string | undefined = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].filePath
+        (state: OverallState) =>
+          state.workspaces[workspaceLocation].editorTabs[editorTabIndex].filePath
       );
       // If the code does not have an associated file, do nothing.
       if (filePath === undefined) {

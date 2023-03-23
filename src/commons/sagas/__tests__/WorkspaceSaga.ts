@@ -53,7 +53,7 @@ import {
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   WorkspaceLocation,
   WorkspaceState
 } from '../../workspace/WorkspaceTypes';
@@ -87,36 +87,36 @@ beforeEach(() => {
   (window as any).Inspector.highlightLine = jest.fn();
 });
 
-describe('TOGGLE_MULTIPLE_FILES_MODE', () => {
-  test('calls showWarningMessage correctly when isMultipleFilesMode is false', () => {
+describe('TOGGLE_FOLDER_MODE', () => {
+  test('calls showWarningMessage correctly when isFolderMode is false', () => {
     const workspaceLocation = 'assessment';
     const updatedWorkspaceFields: Partial<WorkspaceState> = {
-      isMultipleFilesEnabled: false
+      isFolderModeEnabled: false
     };
     const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
-      .call(showWarningMessage, 'Multiple files mode disabled', 750)
+      .call(showWarningMessage, 'Folder mode disabled', 750)
       .dispatch({
-        type: TOGGLE_MULTIPLE_FILES_MODE,
+        type: TOGGLE_FOLDER_MODE,
         payload: { workspaceLocation }
       })
       .silentRun();
   });
 
-  test('calls showWarningMessage correctly when isMultipleFilesMode is true', () => {
+  test('calls showWarningMessage correctly when isFolderMode is true', () => {
     const workspaceLocation = 'grading';
     const updatedWorkspaceFields: Partial<WorkspaceState> = {
-      isMultipleFilesEnabled: true
+      isFolderModeEnabled: true
     };
     const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
-      .call(showWarningMessage, 'Multiple files mode enabled', 750)
+      .call(showWarningMessage, 'Folder mode enabled', 750)
       .dispatch({
-        type: TOGGLE_MULTIPLE_FILES_MODE,
+        type: TOGGLE_FOLDER_MODE,
         payload: { workspaceLocation }
       })
       .silentRun();

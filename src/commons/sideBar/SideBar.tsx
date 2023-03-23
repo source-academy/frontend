@@ -50,19 +50,23 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
 
   return (
     <div className="sidebar-container">
-      <div className="tab-container">
+      <div className="sidebar-tab-container">
         {tabs.map((tab, index) => (
           <Card
             key={index}
-            className={classNames('tab', { selected: isExpanded && selectedTabIndex === index })}
+            className={classNames('sidebar-tab', {
+              selected: isExpanded && selectedTabIndex === index
+            })}
             onClick={() => handleTabSelection(index)}
           >
-            <Icon className="tab-icon" icon={tab.iconName} size={14} />
+            <Icon className="sidebar-tab-icon" icon={tab.iconName} size={14} />
             {tab.label}
           </Card>
         ))}
       </div>
-      {selectedTabIndex !== null && <Card className="panel">{tabs[selectedTabIndex].body}</Card>}
+      {selectedTabIndex !== null && (
+        <Card className="sidebar-panel">{tabs[selectedTabIndex].body}</Card>
+      )}
     </div>
   );
 };

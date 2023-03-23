@@ -118,7 +118,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
   const dispatch = useDispatch();
 
-  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
     store => store.workspaces[workspaceLocation]
   );
 
@@ -152,7 +152,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   );
 
   const { handleEditorValueChange } = props;
-  // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+  // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
   const handleFirstEditorValueChange = React.useCallback(
     (newEditorValue: string) => handleEditorValueChange(0, newEditorValue),
     [handleEditorValueChange]
@@ -292,7 +292,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       programPrependValue,
       programPostpendValue
     });
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorValueChange(0, editorValue);
   };
 
@@ -372,7 +372,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             assessment={currentAssessment}
             questionId={questionId}
             updateAssessment={updateEditAssessmentState}
-            // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+            // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
             editorValue={editorTabs[0].value}
             handleEditorValueChange={handleFirstEditorValueChange}
             handleUpdateWorkspace={props.handleUpdateWorkspace}
@@ -622,7 +622,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       question.type === QuestionTypes.programming
         ? {
             editorVariant: 'normal',
-            isMultipleFilesEnabled,
+            isFolderModeEnabled,
             activeEditorTabIndex,
             setActiveEditorTabIndex,
             removeEditorTabByIndex,

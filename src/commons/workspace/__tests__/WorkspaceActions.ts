@@ -6,6 +6,7 @@ import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../../application/types/Interpr
 import { Library } from '../../assessment/AssessmentTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import {
+  addEditorTab,
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -29,8 +30,9 @@ import {
   sendReplInputToOutput,
   setEditorBreakpoint,
   setEditorHighlightedLines,
+  shiftEditorTab,
   toggleEditorAutorun,
-  toggleMultipleFilesMode,
+  toggleFolderMode,
   toggleUsingSubst,
   updateActiveEditorTab,
   updateActiveEditorTabIndex,
@@ -42,6 +44,7 @@ import {
   updateSublanguage
 } from '../WorkspaceActions';
 import {
+  ADD_EDITOR_TAB,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -64,8 +67,9 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -263,10 +267,10 @@ test('evalTestcase generates correct action object', () => {
   });
 });
 
-test('toggleMultipleFilesMode generates correct action object', () => {
-  const action = toggleMultipleFilesMode(gradingWorkspace);
+test('toggleFolderMode generates correct action object', () => {
+  const action = toggleFolderMode(gradingWorkspace);
   expect(action).toEqual({
-    type: TOGGLE_MULTIPLE_FILES_MODE,
+    type: TOGGLE_FOLDER_MODE,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -356,6 +360,34 @@ test('moveCursor generates correct action object', () => {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex,
       newCursorPosition
+    }
+  });
+});
+
+test('addEditorTab generates correct action object', () => {
+  const filePath = '/playground/program.js';
+  const editorValue = 'Hello World!';
+  const action = addEditorTab(playgroundWorkspace, filePath, editorValue);
+  expect(action).toEqual({
+    type: ADD_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      filePath,
+      editorValue
+    }
+  });
+});
+
+test('shiftEditorTab generates correct action object', () => {
+  const previousEditorTabIndex = 3;
+  const newEditorTabIndex = 1;
+  const action = shiftEditorTab(playgroundWorkspace, previousEditorTabIndex, newEditorTabIndex);
+  expect(action).toEqual({
+    type: SHIFT_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      previousEditorTabIndex,
+      newEditorTabIndex
     }
   });
 });
