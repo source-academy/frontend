@@ -9,10 +9,10 @@ exports[`Badge does not render with no notifications 1`] = `
           <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
             <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
               <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                <span disabled={[undefined]} aria-labelledby=\\"tag-1\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                <span disabled={[undefined]} className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
                   <Blueprint4.Icon icon={[undefined]} />
-                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-1\\" tagName=\\"span\\" title={[undefined]}>
-                    <span id=\\"tag-1\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
+                    <span className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
                       4
                     </span>
                   </Blueprint4.Text>
@@ -40,10 +40,10 @@ exports[`Badge renders properly with notifications 1`] = `
           <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
             <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
               <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                <span disabled={[undefined]} aria-labelledby=\\"tag-0\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                <span disabled={[undefined]} className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
                   <Blueprint4.Icon icon={[undefined]} />
-                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-0\\" tagName=\\"span\\" title={[undefined]}>
-                    <span id=\\"tag-0\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
+                    <span className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
                       4
                     </span>
                   </Blueprint4.Text>
@@ -71,10 +71,10 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 1`]
           <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
             <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
               <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                <span disabled={[undefined]} aria-labelledby=\\"tag-2\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                <span disabled={[undefined]} className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
                   <Blueprint4.Icon icon={[undefined]} />
-                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-2\\" tagName=\\"span\\" title={[undefined]}>
-                    <span id=\\"tag-2\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
+                    <span className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
                       4
                     </span>
                   </Blueprint4.Text>
@@ -102,10 +102,10 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 2`]
           <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
             <span aria-haspopup=\\"true\\" className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
               <Blueprint4.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                <span disabled={[undefined]} aria-labelledby=\\"tag-3\\" className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
+                <span disabled={[undefined]} className=\\"bp4-tag bp4-intent-danger bp4-round\\" tabIndex={[undefined]}>
                   <Blueprint4.Icon icon={[undefined]} />
-                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} id=\\"tag-3\\" tagName=\\"span\\" title={[undefined]}>
-                    <span id=\\"tag-3\\" className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
+                  <Blueprint4.Text className=\\"bp4-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
+                    <span className=\\"bp4-fill bp4-text-overflow-ellipsis\\" title={[undefined]}>
                       4
                     </span>
                   </Blueprint4.Text>

@@ -76,7 +76,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -92,7 +92,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -108,7 +108,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -124,7 +124,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -140,7 +140,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -149,7 +149,7 @@ exports[`Sicp index page 1`] = `
                 <li className=\\"bp4-tree-node\\">
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
+                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
                         <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-0\\" role=\\"img\\">
                           <title id=\\"iconTitle-0\\">
                             Expand group
@@ -165,7 +165,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -174,7 +174,7 @@ exports[`Sicp index page 1`] = `
                 <li className=\\"bp4-tree-node\\">
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
+                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
                         <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-1\\" role=\\"img\\">
                           <title id=\\"iconTitle-1\\">
                             Expand group
@@ -190,7 +190,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -199,7 +199,7 @@ exports[`Sicp index page 1`] = `
                 <li className=\\"bp4-tree-node\\">
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
+                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
                         <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-2\\" role=\\"img\\">
                           <title id=\\"iconTitle-2\\">
                             Expand group
@@ -215,7 +215,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -224,7 +224,7 @@ exports[`Sicp index page 1`] = `
                 <li className=\\"bp4-tree-node\\">
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
+                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
                         <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-3\\" role=\\"img\\">
                           <title id=\\"iconTitle-3\\">
                             Expand group
@@ -240,7 +240,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -249,7 +249,7 @@ exports[`Sicp index page 1`] = `
                 <li className=\\"bp4-tree-node\\">
                   <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                     <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span onClick={[Function (anonymous)]} icon=\\"chevron-right\\" aria-hidden={[undefined]} className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
+                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
                         <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-4\\" role=\\"img\\">
                           <title id=\\"iconTitle-4\\">
                             Expand group
@@ -265,7 +265,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -281,7 +281,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>
@@ -297,7 +297,7 @@ exports[`Sicp index page 1`] = `
                   </div>
                   <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                     <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                     </div>
                   </Blueprint4.Collapse>
                 </li>

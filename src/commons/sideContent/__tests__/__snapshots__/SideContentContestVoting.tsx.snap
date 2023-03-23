@@ -5,9 +5,9 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
   <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}} minScore={9} maxScore={10}>
     <div className=\\"ContestEntryVoting\\">
       <Blueprint4.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
-        <button type=\\"button\\" className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: onClick]} disabled={false} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-          <Blueprint4.Icon icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1}>
-            <span icon=\\"caret-down\\" aria-hidden={true} tabIndex={-1} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+        <button type=\\"button\\" className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: onClick]} disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+          <Blueprint4.Icon icon=\\"caret-down\\">
+            <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
               <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                 <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
               </svg>
@@ -17,15 +17,15 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
             <span>
               Contest Voting
             </span>
-            <Blueprint4.Tooltip2 content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+            <Blueprint4.Tooltip2 content={{...}} compact={false} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100}>
               <Tooltip2Provider>
-                <Blueprint4.Popover2 interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
+                <Blueprint4.Popover2 modifiers={{...}} content={{...}} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
                   <Manager>
                     <Reference>
                       <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                         <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                           <Blueprint4.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                            <span icon=\\"help\\" disabled={[undefined]} tabIndex={0} aria-hidden={true} className=\\"bp4-icon bp4-icon-help\\" title={[undefined]}>
+                            <span aria-hidden={true} icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp4-icon bp4-icon-help\\" title={[undefined]}>
                               <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                                 <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
                               </svg>
@@ -53,7 +53,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                 <div className=\\"header-entryid\\">
                   Entry Id
                   <Blueprint4.Icon icon=\\"caret-down\\">
-                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                    <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
                       <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                         <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                       </svg>
@@ -63,7 +63,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                 <div className=\\"header-entryrank\\">
                   Score
                   <Blueprint4.Icon icon=\\"caret-down\\">
-                    <span icon=\\"caret-down\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
+                    <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
                       <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                         <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
                       </svg>
@@ -85,7 +85,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                           <Blueprint4.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter score for entry 1\\" min={9} max={10} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
                             <Blueprint4.ControlGroup className=\\"bp4-numeric-input\\" fill={true}>
                               <div className=\\"bp4-control-group bp4-fill bp4-numeric-input\\">
-                                <Blueprint4.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" id=\\"numericInput-0\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 1\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftElement={[undefined]} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
+                                <Blueprint4.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" id=\\"numericInput-0\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 1\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} intent={[undefined]} inputClassName={[undefined]} inputRef={[Function (anonymous)]} large={false} leftElement={[undefined]} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
                                   <div className=\\"bp4-input-group\\">
                                     <input type=\\"text\\" autoComplete=\\"off\\" id=\\"numericInput-0\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 1\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp4-input\\" style={{...}} />
                                   </div>
@@ -93,9 +93,9 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                                 <Blueprint4.ButtonGroup className=\\"bp4-fixed\\" vertical={true}>
                                   <div className=\\"bp4-button-group bp4-vertical bp4-fixed\\">
                                     <Blueprint4.Button aria-label=\\"increment\\" aria-controls=\\"numericInput-0\\" disabled={false} icon=\\"chevron-up\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"increment\\" aria-controls=\\"numericInput-0\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-up\\" aria-hidden={false} tabIndex={[undefined]}>
-                                          <span icon=\\"chevron-up\\" aria-hidden={true} tabIndex={[undefined]} className=\\"bp4-icon bp4-icon-chevron-up\\" title={[undefined]}>
+                                      <button type=\\"button\\" aria-label=\\"increment\\" aria-controls=\\"numericInput-0\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon=\\"chevron-up\\">
+                                          <span aria-hidden={true} icon=\\"chevron-up\\" className=\\"bp4-icon bp4-icon-chevron-up\\" title={[undefined]}>
                                             <svg fill={[undefined]} data-icon=\\"chevron-up\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                                               <path d=\\"M12.71 9.29l-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 001.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71z\\" fillRule=\\"evenodd\\" />
                                             </svg>
@@ -105,9 +105,9 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                                       </button>
                                     </Blueprint4.Button>
                                     <Blueprint4.Button aria-label=\\"decrement\\" aria-controls=\\"numericInput-0\\" disabled={false} icon=\\"chevron-down\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"decrement\\" aria-controls=\\"numericInput-0\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-down\\" aria-hidden={false} tabIndex={[undefined]}>
-                                          <span icon=\\"chevron-down\\" aria-hidden={true} tabIndex={[undefined]} className=\\"bp4-icon bp4-icon-chevron-down\\" title={[undefined]}>
+                                      <button type=\\"button\\" aria-label=\\"decrement\\" aria-controls=\\"numericInput-0\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon=\\"chevron-down\\">
+                                          <span aria-hidden={true} icon=\\"chevron-down\\" className=\\"bp4-icon bp4-icon-chevron-down\\" title={[undefined]}>
                                             <svg fill={[undefined]} data-icon=\\"chevron-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                                               <path d=\\"M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z\\" fillRule=\\"evenodd\\" />
                                             </svg>
@@ -141,7 +141,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                           <Blueprint4.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter score for entry 2\\" min={9} max={10} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
                             <Blueprint4.ControlGroup className=\\"bp4-numeric-input\\" fill={true}>
                               <div className=\\"bp4-control-group bp4-fill bp4-numeric-input\\">
-                                <Blueprint4.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" id=\\"numericInput-1\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 2\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} intent={[undefined]} inputRef={[Function (anonymous)]} large={false} leftElement={[undefined]} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
+                                <Blueprint4.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" id=\\"numericInput-1\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 2\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} intent={[undefined]} inputClassName={[undefined]} inputRef={[Function (anonymous)]} large={false} leftElement={[undefined]} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
                                   <div className=\\"bp4-input-group\\">
                                     <input type=\\"text\\" autoComplete=\\"off\\" id=\\"numericInput-1\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 2\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp4-input\\" style={{...}} />
                                   </div>
@@ -149,9 +149,9 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                                 <Blueprint4.ButtonGroup className=\\"bp4-fixed\\" vertical={true}>
                                   <div className=\\"bp4-button-group bp4-vertical bp4-fixed\\">
                                     <Blueprint4.Button aria-label=\\"increment\\" aria-controls=\\"numericInput-1\\" disabled={false} icon=\\"chevron-up\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"increment\\" aria-controls=\\"numericInput-1\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-up\\" aria-hidden={false} tabIndex={[undefined]}>
-                                          <span icon=\\"chevron-up\\" aria-hidden={true} tabIndex={[undefined]} className=\\"bp4-icon bp4-icon-chevron-up\\" title={[undefined]}>
+                                      <button type=\\"button\\" aria-label=\\"increment\\" aria-controls=\\"numericInput-1\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon=\\"chevron-up\\">
+                                          <span aria-hidden={true} icon=\\"chevron-up\\" className=\\"bp4-icon bp4-icon-chevron-up\\" title={[undefined]}>
                                             <svg fill={[undefined]} data-icon=\\"chevron-up\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                                               <path d=\\"M12.71 9.29l-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 001.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71z\\" fillRule=\\"evenodd\\" />
                                             </svg>
@@ -161,9 +161,9 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                                       </button>
                                     </Blueprint4.Button>
                                     <Blueprint4.Button aria-label=\\"decrement\\" aria-controls=\\"numericInput-1\\" disabled={false} icon=\\"chevron-down\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"decrement\\" aria-controls=\\"numericInput-1\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-down\\" aria-hidden={false} tabIndex={[undefined]}>
-                                          <span icon=\\"chevron-down\\" aria-hidden={true} tabIndex={[undefined]} className=\\"bp4-icon bp4-icon-chevron-down\\" title={[undefined]}>
+                                      <button type=\\"button\\" aria-label=\\"decrement\\" aria-controls=\\"numericInput-1\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <Blueprint4.Icon icon=\\"chevron-down\\">
+                                          <span aria-hidden={true} icon=\\"chevron-down\\" className=\\"bp4-icon bp4-icon-chevron-down\\" title={[undefined]}>
                                             <svg fill={[undefined]} data-icon=\\"chevron-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                                               <path d=\\"M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z\\" fillRule=\\"evenodd\\" />
                                             </svg>
