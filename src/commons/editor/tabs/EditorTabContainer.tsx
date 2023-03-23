@@ -1,6 +1,7 @@
 import React from 'react';
 
 import EditorTab from './EditorTab';
+import { getShortestUniqueFilePaths } from './utils';
 
 export type EditorTabContainerProps = {
   filePaths: string[];
@@ -19,9 +20,11 @@ const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabC
     });
   };
 
+  const shortenedFilePaths = getShortestUniqueFilePaths(filePaths);
+
   return (
     <div className="editor-tab-container" onWheel={handleHorizontalScroll}>
-      {filePaths.map((filePath, index) => (
+      {shortenedFilePaths.map((filePath, index) => (
         <EditorTab
           key={index}
           filePath={filePath}

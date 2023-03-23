@@ -602,7 +602,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const toggleFolderModeButton = React.useMemo(() => {
     // TODO: Remove this once the Folder mode is ready for production.
-    if (true) {
+    if (false) {
       return <></>;
     }
 
