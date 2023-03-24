@@ -89,7 +89,7 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
     <div className="editor-container">
       {isFolderModeEnabled && (
         <EditorTabContainer
-          baseFilePath={baseFilePath ?? '/'}
+          baseFilePath={baseFilePath ?? ''}
           activeEditorTabIndex={activeEditorTabIndex}
           filePaths={filePaths}
           setActiveEditorTabIndex={setActiveEditorTabIndex}
