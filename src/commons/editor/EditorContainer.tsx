@@ -13,6 +13,7 @@ import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
 
 type OwnProps = {
+  baseFilePath?: string;
   isFolderModeEnabled: boolean;
   activeEditorTabIndex: number | null;
   setActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
@@ -60,6 +61,7 @@ const createSourcecastEditorTab =
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
   const {
+    baseFilePath,
     isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
@@ -87,6 +89,7 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
     <div className="editor-container">
       {isFolderModeEnabled && (
         <EditorTabContainer
+          baseFilePath={baseFilePath ?? ''}
           activeEditorTabIndex={activeEditorTabIndex}
           filePaths={filePaths}
           setActiveEditorTabIndex={setActiveEditorTabIndex}

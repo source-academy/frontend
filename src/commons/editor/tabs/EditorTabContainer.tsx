@@ -1,8 +1,10 @@
 import React from 'react';
 
 import EditorTab from './EditorTab';
+import { getShortestUniqueFilePaths } from './utils';
 
 export type EditorTabContainerProps = {
+  baseFilePath: string;
   filePaths: string[];
   activeEditorTabIndex: number;
   setActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
@@ -10,8 +12,13 @@ export type EditorTabContainerProps = {
 };
 
 const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabContainerProps) => {
-  const { filePaths, activeEditorTabIndex, setActiveEditorTabIndex, removeEditorTabByIndex } =
-    props;
+  const {
+    baseFilePath,
+    filePaths,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex
+  } = props;
 
   const handleHorizontalScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     e.currentTarget.scrollTo({
@@ -19,9 +26,12 @@ const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabC
     });
   };
 
+  const relativeFilePaths = filePaths.map(filePath => filePath.replace(baseFilePath, ''));
+  const shortenedFilePaths = getShortestUniqueFilePaths(relativeFilePaths);
+
   return (
     <div className="editor-tab-container" onWheel={handleHorizontalScroll}>
-      {filePaths.map((filePath, index) => (
+      {shortenedFilePaths.map((filePath, index) => (
         <EditorTab
           key={index}
           filePath={filePath}
