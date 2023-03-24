@@ -49,6 +49,7 @@ import {
   MOVE_CURSOR,
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -851,6 +852,43 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         editorTabIndexToRemove,
         newEditorTabs.length
       );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case REMOVE_EDITOR_TABS_FOR_DIRECTORY: {
+      const removedDirectoryPath = action.payload.removedDirectoryPath;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const editorTabIndicesToRemove = editorTabs
+        .map((editorTab: EditorTabState, index: number) => {
+          if (editorTab.filePath?.startsWith(removedDirectoryPath)) {
+            return index;
+          }
+          return null;
+        })
+        .filter((index: number | null): index is number => index !== null);
+      if (editorTabIndicesToRemove.length === 0) {
+        return state;
+      }
+
+      let newActiveEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newEditorTabs = [...editorTabs];
+      for (let i = editorTabIndicesToRemove.length - 1; i >= 0; i--) {
+        const editorTabIndexToRemove = editorTabIndicesToRemove[i];
+        newEditorTabs.splice(editorTabIndexToRemove, 1);
+        newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+          newActiveEditorTabIndex,
+          editorTabIndexToRemove,
+          newEditorTabs.length
+        );
+      }
 
       return {
         ...state,
