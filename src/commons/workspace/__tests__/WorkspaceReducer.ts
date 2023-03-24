@@ -48,6 +48,7 @@ import {
   PlaygroundWorkspaceState,
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -2355,6 +2356,191 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
             editorTabs: [zerothEditorTab]
+          }
+        })
+      );
+    });
+  });
+});
+
+describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
+  const zerothEditorTab: EditorTabState = {
+    filePath: '/dir1/dir3/a.js',
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    filePath: '/dir1/dir2/a.js',
+    value: 'Hello World Again!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const secondEditorTab: EditorTabState = {
+    filePath: '/dir1/b.js',
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const thirdEditorTab: EditorTabState = {
+    filePath: '/dir1/dir2/b.js',
+    value: 'Goodbye World Again!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [
+    zerothEditorTab,
+    firstEditorTab,
+    secondEditorTab,
+    thirdEditorTab
+  ];
+
+  test('does nothing if there are no editor tabs that correspond to the removed directory path', () => {
+    const removedDirectoryPath = '/dir3';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(JSON.stringify(defaultWorkspaceState));
+    });
+  });
+
+  test('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to null if there are none left', () => {
+    const removedDirectoryPath = '/dir1';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: null,
+            editorTabs: []
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tabs corresponding to the removed directory path & leaves the active editor tab index unchanged if it is not one of the removed editor tabs and has a smaller index', () => {
+    const removedDirectoryPath = '/dir1/dir2';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [zerothEditorTab, secondEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tabs corresponding to the removed directory path & decrements the active editor tab index if it is not one of the removed editor tabs and has a larger index', () => {
+    const removedDirectoryPath = '/dir1/dir2';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 2,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 1,
+            editorTabs: [zerothEditorTab, secondEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to 0 if one of the removed editor tab indices is 0 and is the active tab', () => {
+    const removedDirectoryPath = '/dir1/dir3';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [firstEditorTab, secondEditorTab, thirdEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to 1 lower than the removed editor tab index if the removed editor tab index is not 0 and is the active tab', () => {
+    const removedDirectoryPath = '/dir1/dir2';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [zerothEditorTab, secondEditorTab]
           }
         })
       );
