@@ -48,6 +48,7 @@ import {
   EVAL_REPL,
   MOVE_CURSOR,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -818,6 +819,36 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
         activeEditorTabIndex,
         editorTabIndex,
+        newEditorTabs.length
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case REMOVE_EDITOR_TAB_FOR_FILE: {
+      const removedFilePath = action.payload.removedFilePath;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const editorTabIndexToRemove = editorTabs.findIndex(
+        (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
+      );
+      if (editorTabIndexToRemove === -1) {
+        return state;
+      }
+      const newEditorTabs = editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
+      );
+
+      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+        activeEditorTabIndex,
+        editorTabIndexToRemove,
         newEditorTabs.length
       );
 
