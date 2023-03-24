@@ -78,7 +78,7 @@ const cracoConfig = (module.exports = {
       ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
-      webpackConfig.module.noParse = /typescript\.js$/;
+      webpackConfig.module.noParse = /node_modules\/@ts-morph\/common\/dist\/typescript\.js$/;
 
       return webpackConfig;
     }
