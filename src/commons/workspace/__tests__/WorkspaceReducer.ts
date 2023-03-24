@@ -47,6 +47,7 @@ import {
   MOVE_CURSOR,
   PlaygroundWorkspaceState,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -2173,6 +2174,174 @@ describe('REMOVE_EDITOR_TAB', () => {
     });
 
     const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [zerothEditorTab]
+          }
+        })
+      );
+    });
+  });
+});
+
+describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
+  const zerothEditorTab: EditorTabState = {
+    filePath: '/a.js',
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    filePath: '/b.js',
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+
+  test('does nothing if there are no editor tabs that correspond to the removed file path', () => {
+    const removedFilePath = '/c.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(JSON.stringify(defaultWorkspaceState));
+    });
+  });
+
+  test('removes the editor tab corresponding to the removed file path & sets the active editor tab index to null if there is only one editor tab', () => {
+    const removedFilePath = '/a.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs: [zerothEditorTab]
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: null,
+            editorTabs: []
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab corresponding to the removed file path & leaves the active editor tab index unchanged if it is not the removed editor tab and has a smaller index', () => {
+    const removedFilePath = '/b.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [zerothEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab corresponding to the removed file path & decrements the active editor tab index by 1 if it is not the removed editor tab and has a larger index', () => {
+    const removedFilePath = '/a.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [firstEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab corresponding to the removed file path & sets the active editor tab index to 0 if the removed editor tab index is 0 if the removed tab is the active tab', () => {
+    const removedFilePath = '/a.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [firstEditorTab]
+          }
+        })
+      );
+    });
+  });
+
+  test('removes the editor tab corresponding to the removed file path & sets the active editor tab index to 1 lower than the removed editor tab index if the removed editor tab index is not 0 if the removed tab is the active tab', () => {
+    const removedFilePath = '/b.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 1,
+      editorTabs
+    });
+
+    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
