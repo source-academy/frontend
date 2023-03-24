@@ -18,7 +18,7 @@ const cracoConfig = (module.exports = {
         plugin => plugin.constructor.name === 'InjectManifest'
       );
       if (injectManifestPlugin) {
-        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 10 * 1024 * 1024;
+        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 15 * 1024 * 1024;
       }
 
       // add rules to pack WASM (for Sourceror)
@@ -76,6 +76,9 @@ const cracoConfig = (module.exports = {
           Buffer: ['buffer', 'Buffer'],
         })
       ];
+
+      // Workaround to suppress warnings caused by ts-morph in js-slang
+      webpackConfig.module.noParse = /typescript\.js$/;
 
       return webpackConfig;
     }
