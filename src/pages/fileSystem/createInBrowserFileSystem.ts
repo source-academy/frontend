@@ -5,15 +5,24 @@ import { Store } from 'redux';
 
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
-import { EditorTabState } from '../../commons/workspace/WorkspaceTypes';
-import { BASE_PLAYGROUND_FILE_PATH } from '../playground/Playground';
+import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
+
+export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
+  assessment: '/assessment',
+  githubAssessment: '/githubAssessment',
+  grading: '/grading',
+  playground: '/playground',
+  sicp: '/sicp',
+  sourcecast: '/sourcecast',
+  sourcereel: '/sourcereel'
+};
 
 export const createInBrowserFileSystem = (store: Store<OverallState>) => {
   configure(
     {
       fs: 'MountableFileSystem',
       options: {
-        [BASE_PLAYGROUND_FILE_PATH]: {
+        [WORKSPACE_BASE_PATHS.playground]: {
           fs: 'IndexedDB',
           options: {
             storeName: 'playground'

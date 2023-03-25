@@ -6,6 +6,7 @@ import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import Constants from '../utils/Constants';
@@ -301,7 +302,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     editorTabs: [
       {
-        filePath: '/playground/program.js',
+        filePath: `${WORKSPACE_BASE_PATHS.playground}/program.js`,
         value: defaultEditorValue,
         highlightedLines: [],
         breakpoints: []

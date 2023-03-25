@@ -115,6 +115,7 @@ import {
   Input,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 
 export type PlaygroundProps = OwnProps &
   DispatchProps &
@@ -206,8 +207,6 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
     }
   }
 }
-
-export const BASE_PLAYGROUND_FILE_PATH = '/playground';
 
 const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
@@ -819,7 +818,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
-    baseFilePath: BASE_PLAYGROUND_FILE_PATH,
+    baseFilePath: WORKSPACE_BASE_PATHS.playground,
     isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
@@ -894,7 +893,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
                 body: (
                   <FileSystemView
                     workspaceLocation="playground"
-                    basePath={BASE_PLAYGROUND_FILE_PATH}
+                    basePath={WORKSPACE_BASE_PATHS.playground}
                   />
                 ),
                 iconName: IconNames.FOLDER_CLOSE,
