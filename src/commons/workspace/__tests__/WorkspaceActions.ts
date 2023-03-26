@@ -25,6 +25,8 @@ import {
   moveCursor,
   navigateToDeclaration,
   removeEditorTab,
+  removeEditorTabForFile,
+  removeEditorTabsForDirectory,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
@@ -64,6 +66,8 @@ import {
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -400,6 +404,30 @@ test('removeEditorTab generates correct action object', () => {
     payload: {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex
+    }
+  });
+});
+
+test('removeEditorTabForFile generates correct action object', () => {
+  const removedFilePath = '/dir1/a.js';
+  const action = removeEditorTabForFile(playgroundWorkspace, removedFilePath);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TAB_FOR_FILE,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      removedFilePath
+    }
+  });
+});
+
+test('removeEditorTabsForDirectory generates correct action object', () => {
+  const removedDirectoryPath = '/dir1';
+  const action = removeEditorTabsForDirectory(playgroundWorkspace, removedDirectoryPath);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      removedDirectoryPath
     }
   });
 });
