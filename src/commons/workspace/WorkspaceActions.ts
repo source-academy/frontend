@@ -35,6 +35,8 @@ import {
   PLAYGROUND_EXTERNAL_SELECT,
   PROMPT_AUTOCOMPLETE,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -218,6 +220,16 @@ export const shiftEditorTab = (
 
 export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
   action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });
+
+export const removeEditorTabForFile = (
+  workspaceLocation: WorkspaceLocation,
+  removedFilePath: string
+) => action(REMOVE_EDITOR_TAB_FOR_FILE, { workspaceLocation, removedFilePath });
+
+export const removeEditorTabsForDirectory = (
+  workspaceLocation: WorkspaceLocation,
+  removedDirectoryPath: string
+) => action(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { workspaceLocation, removedDirectoryPath });
 
 export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
