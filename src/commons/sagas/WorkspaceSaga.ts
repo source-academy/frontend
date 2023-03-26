@@ -27,6 +27,7 @@ import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
+import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import {
   isSourceLanguage,
   OverallState,
@@ -64,6 +65,7 @@ import {
   ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
+  EditorTabState,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_EDITOR_AND_TESTCASES,
@@ -603,15 +605,17 @@ function* insertDebuggerStatements(
 export function* evalEditor(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
-  const [prepend, activeEditorTabIndex, execTime, fileSystem, remoteExecutionSession]: [
+  const [prepend, activeEditorTabIndex, editorTabs, execTime, fileSystem, remoteExecutionSession]: [
     string,
     number | null,
+    EditorTabState[],
     number,
     FSModule,
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
     state.workspaces[workspaceLocation].programPrependValue,
     state.workspaces[workspaceLocation].activeEditorTabIndex,
+    state.workspaces[workspaceLocation].editorTabs,
     state.workspaces[workspaceLocation].execTime,
     state.fileSystem.inBrowserFileSystem,
     state.session.remoteExecutionSession
@@ -627,13 +631,16 @@ export function* evalEditor(
     workspaceLocation,
     fileSystem
   );
+  const entrypointFilePath =
+    editorTabs[activeEditorTabIndex].filePath ??
+    `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
   // TODO: Implement this properly.
-  const code = files['/playground/program.js'];
+  const code = editorTabs[activeEditorTabIndex].value;
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    yield put(actions.remoteExecRun(code));
+    yield put(actions.remoteExecRun(files, entrypointFilePath));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
