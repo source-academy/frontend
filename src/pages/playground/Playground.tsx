@@ -617,6 +617,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
+        key="folder"
       />
     );
   }, [dispatch, isFolderModeEnabled, workspaceLocation]);
