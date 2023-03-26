@@ -638,7 +638,6 @@ export function* evalEditor(
     files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
   }
   const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
-  const entrypointCode = files[entrypointFilePath];
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
@@ -647,23 +646,25 @@ export function* evalEditor(
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
+    const entrypointCode = files[entrypointFilePath];
     yield* clearContext(workspaceLocation, entrypointCode);
     yield put(actions.clearReplOutput(workspaceLocation));
     const context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context
     );
-    const breakpoints: string[] = yield select(
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].breakpoints
-    );
 
     // Insert debugger statements at the lines of the program with a breakpoint.
-    const transformedCode = yield* insertDebuggerStatements(
-      workspaceLocation,
-      entrypointCode,
-      breakpoints,
-      context
-    );
+    for (const editorTab of editorTabs) {
+      const filePath = editorTab.filePath ?? defaultFilePath;
+      const code = editorTab.value;
+      const breakpoints = editorTab.breakpoints;
+      files[filePath] = yield* insertDebuggerStatements(
+        workspaceLocation,
+        code,
+        breakpoints,
+        context
+      );
+    }
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
@@ -673,7 +674,7 @@ export function* evalEditor(
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
-    yield call(evalCode, transformedCode, context, execTime, workspaceLocation, EVAL_EDITOR);
+    yield call(evalCode, entrypointCode, context, execTime, workspaceLocation, EVAL_EDITOR);
   }
 }
 
