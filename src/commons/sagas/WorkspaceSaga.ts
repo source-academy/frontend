@@ -985,6 +985,13 @@ export function* evalCode(
             .usingSubst
       )
     : false;
+  const envIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingEnv
+      )
+    : false;
   const stepLimit: number = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
   );
@@ -996,6 +1003,10 @@ export function* evalCode(
     if (icon) {
       icon.classList.add('side-content-tab-alert');
     }
+  }
+  const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
+  if (envActiveAndCorrectChapter) {
+    context.executionMethod = 'ec-evaluator';
   }
 
   const entrypointCode = files[entrypointFilePath];

@@ -1,19 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnvVisualizer component renders correctly 1`] = `
-"<div className=\\"bp4-dark\\">
-  <p id=\\"env-visualizer-default-text\\" className=\\"bp4-running-text\\">
-    The environment model visualizer generates environment model diagrams following a notation introduced in
-     
-    <a href=\\"https://sourceacademy.org/sicpjs/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
-      <i>
-        Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
-      </i>
-    </a>
-    .
+"<HotKeysEnabled keyMap={{...}} handlers={{...}}>
+  <div className=\\"bp4-dark\\">
+    <div className=\\"sa-substituter\\" style={{...}}>
+      <Blueprint4.Slider disabled={true} min={1} max={100} onChange={[Function (anonymous)]} onRelease={[Function (anonymous)]} value={1} showTrackFill={true} stepSize={1} vertical={false} initialValue={0} intent=\\"primary\\" />
+      <div style={{...}}>
+        <Blueprint4.ButtonGroup>
+           
+          <Blueprint4.Button disabled={true} icon=\\"chevron-left\\" onClick={[Function (anonymous)]} />
+          <Blueprint4.Button disabled={true} icon=\\"chevron-right\\" onClick={[Function (anonymous)]} />
+           
+        </Blueprint4.ButtonGroup>
+      </div>
+    </div>
     <br />
-    <br />
-    It is activated by setting breakpoints before you run the program. You can set a breakpoint by clicking on the gutter of the editor (where all the line numbers are, on the left). When the program runs into a breakpoint, the visualizer displays the state of the environments before the statement is evaluated, which starts in the line in which you set the breakpoint. Every breakpoint must be at the beginning of a statement.
-  </p>
-</div>"
+    <p id=\\"env-visualizer-default-text\\" className=\\"bp4-running-text\\">
+      The environment model visualizer generates environment model diagrams following a notation introduced in
+       
+      <a href=\\"https://sourceacademy.org/sicpjs/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
+        <i>
+          Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
+        </i>
+      </a>
+      .
+      <br />
+      <br />
+       On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the environment at different stages in the evaluation of your program.
+      <br />
+      <br />
+      <Blueprint4.Divider />
+      Some useful keyboard shortcuts:
+      <br />
+      <br />
+      a: Move to the first step
+      <br />
+      e: Move to the last step
+      <br />
+      f: Move to the next step
+      <br />
+      b: Move to the previous step
+      <br />
+      <br />
+      Note that these shortcuts are only active when the browser focus is on this tab.
+    </p>
+  </div>
+</HotKeysEnabled>"
 `;

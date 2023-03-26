@@ -37,7 +37,8 @@ const baseProps = assertType<PlaygroundProps>()({
   handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
-  handleUsingSubst: (usingSubst: boolean) => {}
+  handleUsingSubst: (usingSubst: boolean) => {},
+  handleUsingEnv: (usingEnv: boolean) => {}
 });
 
 const testValueProps: PlaygroundProps = {

@@ -13,6 +13,7 @@ import {
   evalRepl,
   externalLibrarySelect,
   setEditorBreakpoint,
+  toggleUsingEnv,
   toggleUsingSubst,
   updateEditorValue
 } from '../../../commons/workspace/WorkspaceActions';
@@ -65,6 +66,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
+      handleUsingEnv: (usingEnv: boolean) => toggleUsingEnv(usingEnv, workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation)
     },
     dispatch

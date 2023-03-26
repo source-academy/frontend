@@ -1,24 +1,39 @@
-import { Classes } from '@blueprintjs/core';
+import { Button, ButtonGroup, Classes, Divider, Slider } from '@blueprintjs/core';
 import { debounce } from 'lodash';
 import * as React from 'react';
+import { HotKeys } from 'react-hotkeys';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import Constants, { Links } from '../utils/Constants';
 
 type State = {
   visualization: React.ReactNode;
+  value: number;
   height: number;
   width: number;
 };
 
-class SideContentEnvVisualizer extends React.Component<
-  { editorWidth?: string; sideContentHeight?: number },
-  State
-> {
-  constructor(props: any) {
+type EnvVisualizerProps = StateProps;
+
+type StateProps = {
+  handleEditorEval: () => void;
+  editorWidth?: string;
+  sideContentHeight?: number;
+};
+
+const envVizKeyMap = {
+  FIRST_STEP: 'a',
+  NEXT_STEP: 'f',
+  PREVIOUS_STEP: 'b',
+  LAST_STEP: 'e'
+};
+
+class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State> {
+  constructor(props: EnvVisualizerProps) {
     super(props);
     this.state = {
       visualization: null,
+      value: 1,
       width: this.calculateWidth(props.editorWidth),
       height: this.calculateHeight(props.sideContentHeight)
     };
@@ -89,33 +104,141 @@ class SideContentEnvVisualizer extends React.Component<
       this.handleResize();
     }
   }
+  numOfSteps: number = 100;
 
   public render() {
+    const envVizHandlers = this.state.visualization
+      ? {
+          FIRST_STEP: this.stepFirst,
+          NEXT_STEP: this.stepNext,
+          PREVIOUS_STEP: this.stepPrevious,
+          LAST_STEP: this.stepLast(this.numOfSteps)
+        }
+      : {
+          FIRST_STEP: () => {},
+          NEXT_STEP: () => {},
+          PREVIOUS_STEP: () => {},
+          LAST_STEP: () => {}
+        };
+
     return (
-      <div className={Classes.DARK}>
-        {this.state.visualization || (
-          <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-            The environment model visualizer generates environment model diagrams following a
-            notation introduced in{' '}
-            <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-              <i>
-                Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
-                Section 2
-              </i>
-            </a>
-            .
-            <br />
-            <br />
-            It is activated by setting breakpoints before you run the program. You can set a
-            breakpoint by clicking on the gutter of the editor (where all the line numbers are, on
-            the left). When the program runs into a breakpoint, the visualizer displays the state of
-            the environments before the statement is evaluated, which starts in the line in which
-            you set the breakpoint. Every breakpoint must be at the beginning of a statement.
-          </p>
-        )}
-      </div>
+      <HotKeys keyMap={envVizKeyMap} handlers={envVizHandlers}>
+        <div className={Classes.DARK}>
+          <div
+            className={'sa-substituter'}
+            style={{ position: 'sticky', top: '0', left: '0', zIndex: '1' }}
+          >
+            <Slider
+              disabled={!this.state.visualization}
+              min={1}
+              max={this.numOfSteps} //this.props.content.length
+              onChange={this.sliderShift}
+              onRelease={this.sliderRelease}
+              value={this.state.value <= this.numOfSteps ? this.state.value : 1}
+            />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <ButtonGroup>
+                {/* <Button
+                  disabled={!this.state.visualization} 
+                  icon="double-chevron-left"
+                  onClick={() => {}} 
+                /> */}{' '}
+                {/* Not sure how to define this yet, or if it is even useful.*/}
+                <Button
+                  disabled={!this.state.visualization}
+                  icon="chevron-left"
+                  onClick={this.stepPrevious}
+                />
+                <Button
+                  disabled={!this.state.visualization}
+                  icon="chevron-right"
+                  onClick={this.stepNext}
+                />
+                {/* <Button
+                  disabled={!this.state.visualization} 
+                  icon="double-chevron-right"
+                  onClick={() => {}} 
+                /> */}{' '}
+                {/* Not sure how to define this yet, or if it is even useful.*/}
+              </ButtonGroup>
+            </div>
+          </div>
+          <br />
+          {this.state.visualization || (
+            <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+              The environment model visualizer generates environment model diagrams following a
+              notation introduced in{' '}
+              <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+                <i>
+                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
+                  Section 2
+                </i>
+              </a>
+              .
+              <br />
+              <br /> On this tab, the REPL will be hidden from view, so do check that your code has
+              no errors before running the stepper. You may use this tool by running your program
+              and then dragging the slider above to see the state of the environment at different
+              stages in the evaluation of your program.
+              <br />
+              <br />
+              <Divider />
+              Some useful keyboard shortcuts:
+              <br />
+              <br />
+              a: Move to the first step
+              <br />
+              e: Move to the last step
+              <br />
+              f: Move to the next step
+              <br />
+              b: Move to the previous step
+              <br />
+              <br />
+              Note that these shortcuts are only active when the browser focus is on this tab.
+            </p>
+          )}
+        </div>
+      </HotKeys>
     );
   }
+
+  private sliderRelease = (newValue: number) => {
+    this.props.handleEditorEval();
+  };
+
+  private sliderShift = (newValue: number) => {
+    this.setState((state: State) => {
+      return { value: newValue };
+    });
+  };
+
+  private stepPrevious = () => {
+    if (this.state.value !== 1) {
+      this.sliderShift(this.state.value - 1);
+      this.props.handleEditorEval();
+    }
+  };
+
+  private stepNext = () => {
+    const lastStepValue = this.numOfSteps;
+    if (this.state.value !== lastStepValue) {
+      this.sliderShift(this.state.value + 1);
+      this.props.handleEditorEval();
+    }
+  };
+
+  private stepFirst = () => {
+    // Move to the first step
+    this.sliderShift(1);
+    this.props.handleEditorEval();
+  };
+
+  private stepLast = (lastStepValue: number) => () => {
+    // Move to the last step
+    this.sliderShift(lastStepValue);
+    this.props.handleEditorEval();
+  };
 }
 
 export default SideContentEnvVisualizer;

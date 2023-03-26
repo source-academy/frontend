@@ -12,13 +12,13 @@ import SideContentEnvVisualizer from '../SideContentEnvVisualizer';
 // Konva.isBrowser = false;
 
 test('EnvVisualizer component renders correctly', () => {
-  const app = <SideContentEnvVisualizer />;
+  const app = <SideContentEnvVisualizer handleEditorEval={() => {}} />;
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
 test('EnvVisualizer sets visualization state', async () => {
-  const app = <SideContentEnvVisualizer />;
+  const app = <SideContentEnvVisualizer handleEditorEval={() => {}} />;
   const tree = mount(app);
   const context = mockContext();
   await runInContext('const hello="world"; debugger;', context);

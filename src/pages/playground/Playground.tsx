@@ -145,6 +145,7 @@ export type DispatchProps = {
   handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
+  handleUsingEnv: (usingEnv: boolean) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
 };
 
@@ -392,7 +393,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         return;
       }
 
-      const { handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } = propsRef.current;
+      const { handleUsingEnv, handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } =
+        propsRef.current;
 
       /**
        * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
@@ -410,6 +412,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
           handleReplOutputClear();
           handleUsingSubst(false);
+        }
+
+        if (playgroundSourceChapter >= 3 && newTabId === SideContentType.envVisualizer) {
+          handleUsingEnv(true);
+        } else {
+          handleUsingEnv(false);
         }
 
         setSelectedTab(newTabId);
@@ -768,7 +776,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       !usingRemoteExecution
     ) {
       // Enable Env Visualizer for Source Chapter 3 and above
-      tabs.push(envVisualizerTab);
+      tabs.push({
+        label: 'Env Visualizer',
+        iconName: IconNames.GLOBE,
+        body: <SideContentEnvVisualizer handleEditorEval={handleEditorEval} />,
+        id: SideContentType.envVisualizer
+      });
     }
 
     if (
@@ -799,7 +812,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     isSicpEditor,
     dispatch,
     workspaceLocation,
-    remoteExecutionTab
+    remoteExecutionTab,
+    handleEditorEval
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -959,7 +973,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     sourceChapter: props.playgroundSourceChapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
-    hidden: selectedTab === SideContentType.substVisualizer,
+    hidden:
+      selectedTab === SideContentType.substVisualizer ||
+      selectedTab === SideContentType.envVisualizer,
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor
@@ -1085,13 +1101,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer
-};
-
-const envVisualizerTab: SideContentTab = {
-  label: 'Env Visualizer',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer
 };
 
 export default Playground;

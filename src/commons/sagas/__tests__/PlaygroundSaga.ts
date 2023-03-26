@@ -79,7 +79,8 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false
         }
       }
     };
@@ -141,7 +142,8 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false
         }
       }
     };
@@ -203,7 +205,8 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false
         }
       }
     };
@@ -248,7 +251,8 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false
         }
       }
     };
@@ -312,7 +316,8 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false
         }
       }
     };
@@ -365,7 +370,8 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false
         }
       }
     };

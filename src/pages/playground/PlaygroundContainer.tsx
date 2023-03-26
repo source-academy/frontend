@@ -11,6 +11,7 @@ import {
   clearReplOutput,
   evalRepl,
   setEditorBreakpoint,
+  toggleUsingEnv,
   toggleUsingSubst,
   updateEditorValue
 } from '../../commons/workspace/WorkspaceActions';
@@ -62,6 +63,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
+      handleUsingEnv: (usingEnv: boolean) => toggleUsingEnv(usingEnv, workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation)
     },
     dispatch

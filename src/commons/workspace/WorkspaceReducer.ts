@@ -58,6 +58,7 @@ import {
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_USING_ENV,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -571,6 +572,18 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           [workspaceLocation]: {
             ...state[workspaceLocation],
             usingSubst: action.payload.usingSubst
+          }
+        };
+      } else {
+        return state;
+      }
+    case TOGGLE_USING_ENV:
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingEnv: action.payload.usingEnv
           }
         };
       } else {
