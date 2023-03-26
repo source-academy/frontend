@@ -6,7 +6,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
-import { addEditorTab } from '../workspace/WorkspaceActions';
+import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
@@ -71,6 +71,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
           console.error(err);
         }
 
+        dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });
     });
