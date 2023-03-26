@@ -486,7 +486,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   }
 }
 
-function* clearContext(workspaceLocation: WorkspaceLocation, program: string) {
+function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
   const [chapter, symbols, externalLibraryName, globals, variant]: [
     number,
     string[],
@@ -519,7 +519,7 @@ function* clearContext(workspaceLocation: WorkspaceLocation, program: string) {
   const context: Context = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].context
   );
-  defineSymbol(context, '__PROGRAM__', program);
+  defineSymbol(context, '__PROGRAM__', entrypointCode);
 }
 
 export function* dumpDisplayBuffer(
@@ -626,16 +626,19 @@ export function* evalEditor(
     throw new Error('To be handled...');
   }
 
-  const files: Record<string, string> = yield call(
-    retrieveFilesInWorkspaceAsRecord,
-    workspaceLocation,
-    fileSystem
-  );
-  const entrypointFilePath =
-    editorTabs[activeEditorTabIndex].filePath ??
-    `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
-  // TODO: Implement this properly.
-  const code = editorTabs[activeEditorTabIndex].value;
+  const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+  let files: Record<string, string>;
+  // A workspace without a base path in the file system is one which has not been
+  // refactored to work with Folder mode.
+  if (WORKSPACE_BASE_PATHS[workspaceLocation] === '') {
+    files = {
+      [defaultFilePath]: editorTabs[activeEditorTabIndex].value
+    };
+  } else {
+    files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
+  }
+  const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
+  const entrypointCode = files[entrypointFilePath];
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
@@ -644,7 +647,7 @@ export function* evalEditor(
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
-    yield* clearContext(workspaceLocation, code);
+    yield* clearContext(workspaceLocation, entrypointCode);
     yield put(actions.clearReplOutput(workspaceLocation));
     const context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context
@@ -657,7 +660,7 @@ export function* evalEditor(
     // Insert debugger statements at the lines of the program with a breakpoint.
     const transformedCode = yield* insertDebuggerStatements(
       workspaceLocation,
-      code,
+      entrypointCode,
       breakpoints,
       context
     );
