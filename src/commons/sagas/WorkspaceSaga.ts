@@ -7,6 +7,7 @@ import {
   parseError,
   Result,
   resume,
+  runFilesInContext,
   runInContext
 } from 'js-slang';
 import { TRY_AGAIN } from 'js-slang/dist/constants';
@@ -239,7 +240,11 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-    yield call(evalCode, code, context, execTime, workspaceLocation, EVAL_REPL);
+    const codeFilePath = '/code.js';
+    const codeFiles = {
+      [codeFilePath]: code
+    };
+    yield call(evalCode, codeFiles, codeFilePath, context, execTime, workspaceLocation, EVAL_REPL);
   });
 
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
@@ -257,7 +262,19 @@ export default function* WorkspaceSaga(): SagaIterator {
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    yield call(evalCode, code, context, execTime, workspaceLocation, DEBUG_RESUME);
+    const codeFilePath = '/code.js';
+    const codeFiles = {
+      [codeFilePath]: code
+    };
+    yield call(
+      evalCode,
+      codeFiles,
+      codeFilePath,
+      context,
+      execTime,
+      workspaceLocation,
+      DEBUG_RESUME
+    );
   });
 
   yield takeEvery(DEBUG_RESET, function* (action: ReturnType<typeof actions.debuggerReset>) {
@@ -669,12 +686,32 @@ export function* evalEditor(
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
       const elevatedContext = makeElevatedContext(context);
-      yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+      const prependFilePath = '/prepend.js';
+      const prependFiles = {
+        [prependFilePath]: prepend
+      };
+      yield call(
+        evalCode,
+        prependFiles,
+        prependFilePath,
+        elevatedContext,
+        execTime,
+        workspaceLocation,
+        EVAL_SILENT
+      );
       // Block use of methods from privileged context
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
-    yield call(evalCode, entrypointCode, context, execTime, workspaceLocation, EVAL_EDITOR);
+    yield call(
+      evalCode,
+      files,
+      entrypointFilePath,
+      context,
+      execTime,
+      workspaceLocation,
+      EVAL_EDITOR
+    );
   }
 }
 
@@ -715,13 +752,37 @@ export function* runTestCase(
 
   // Execute prepend silently in privileged context
   const elevatedContext = makeElevatedContext(context);
-  yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+  const prependFilePath = '/prepend.js';
+  const prependFiles = {
+    [prependFilePath]: prepend
+  };
+  yield call(
+    evalCode,
+    prependFiles,
+    prependFilePath,
+    elevatedContext,
+    execTime,
+    workspaceLocation,
+    EVAL_SILENT
+  );
 
   // Block use of methods from privileged context using a randomly generated blocking key
   // Then execute student program silently in the original workspace context
   const blockKey = String(random(1048576, 68719476736));
   yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-  yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_SILENT);
+  const valueFilePath = '/value.js';
+  const valueFiles = {
+    [valueFilePath]: value
+  };
+  yield call(
+    evalCode,
+    valueFiles,
+    valueFilePath,
+    context,
+    execTime,
+    workspaceLocation,
+    EVAL_SILENT
+  );
 
   // Halt execution if the student's code in the editor results in an error
   if (context.errors.length) {
@@ -734,7 +795,19 @@ export function* runTestCase(
     // TODO: consider doing a swap. If the user has modified any of the variables,
     // i.e. reusing any of the "reserved" names, prevent it from being accessed in the REPL.
     yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-    yield call(evalCode, postpend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+    const postpendFilePath = '/postpend.js';
+    const postpendFiles = {
+      [postpendFilePath]: postpend
+    };
+    yield call(
+      evalCode,
+      postpendFiles,
+      postpendFilePath,
+      elevatedContext,
+      execTime,
+      workspaceLocation,
+      EVAL_SILENT
+    );
     yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
   }
   // Finally execute the testcase function call in the privileged context
@@ -753,11 +826,35 @@ export function* blockExtraMethods(
   const toBeBlocked = getDifferenceInMethods(elevatedContext, context);
   if (unblockKey) {
     const storeValues = getStoreExtraMethodsString(toBeBlocked, unblockKey);
-    yield call(evalCode, storeValues, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+    const storeValuesFilePath = '/storeValues.js';
+    const storeValuesFiles = {
+      [storeValuesFilePath]: storeValues
+    };
+    yield call(
+      evalCode,
+      storeValuesFiles,
+      storeValuesFilePath,
+      elevatedContext,
+      execTime,
+      workspaceLocation,
+      EVAL_SILENT
+    );
   }
 
   const nullifier = getBlockExtraMethodsString(toBeBlocked);
-  yield call(evalCode, nullifier, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+  const nullifierFilePath = '/nullifier.js';
+  const nullifierFiles = {
+    [nullifierFilePath]: nullifier
+  };
+  yield call(
+    evalCode,
+    nullifierFiles,
+    nullifierFilePath,
+    elevatedContext,
+    execTime,
+    workspaceLocation,
+    EVAL_SILENT
+  );
 }
 
 export function* restoreExtraMethods(
@@ -769,11 +866,24 @@ export function* restoreExtraMethods(
 ) {
   const toUnblock = getDifferenceInMethods(elevatedContext, context);
   const restorer = getRestoreExtraMethodsString(toUnblock, unblockKey);
-  yield call(evalCode, restorer, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+  const restorerFilePath = '/restorer.js';
+  const restorerFiles = {
+    [restorerFilePath]: restorer
+  };
+  yield call(
+    evalCode,
+    restorerFiles,
+    restorerFilePath,
+    elevatedContext,
+    execTime,
+    workspaceLocation,
+    EVAL_SILENT
+  );
 }
 
 export function* evalCode(
-  code: string,
+  files: Record<string, string>,
+  entrypointFilePath: string,
   context: Context,
   execTime: number,
   workspaceLocation: WorkspaceLocation,
@@ -804,25 +914,28 @@ export function* evalCode(
     }
   }
 
+  const entrypointCode = files[entrypointFilePath];
+
   function call_variant(variant: Variant) {
     if (variant === Variant.NON_DET) {
-      return code.trim() === TRY_AGAIN
+      return entrypointCode.trim() === TRY_AGAIN
         ? call(resume, lastNonDetResult)
-        : call(runInContext, code, context, {
+        : call(runFilesInContext, files, entrypointFilePath, context, {
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           });
     } else if (variant === Variant.LAZY) {
-      return call(runInContext, code, context, {
+      return call(runFilesInContext, files, entrypointFilePath, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
         stepLimit: stepLimit,
         useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === Variant.WASM) {
-      return call(wasm_compile_and_run, code, context, actionType === EVAL_REPL);
+      // Note: WASM does not support multiple file programs.
+      return call(wasm_compile_and_run, entrypointCode, context, actionType === EVAL_REPL);
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
@@ -868,7 +981,7 @@ export function* evalCode(
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
-        : call(runInContext, code, context, {
+        : call(runFilesInContext, files, entrypointFilePath, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
@@ -921,7 +1034,8 @@ export function* evalCode(
     // we need to parse again, but preserve the errors in context
     const oldErrors = context.errors;
     context.errors = [];
-    const parsed = parse(code, context);
+    // Note: Type checking does not support multiple file programs.
+    const parsed = parse(entrypointCode, context);
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
     // for achievement event tracking
@@ -958,7 +1072,9 @@ export function* evalCode(
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));
     }
-    yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
+    yield put(
+      notifyProgramEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
+    );
   }
 }
 
