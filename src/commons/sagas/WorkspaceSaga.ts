@@ -622,11 +622,20 @@ function* insertDebuggerStatements(
 export function* evalEditor(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
-  const [prepend, activeEditorTabIndex, editorTabs, execTime, fileSystem, remoteExecutionSession]: [
+  const [
+    prepend,
+    activeEditorTabIndex,
+    editorTabs,
+    execTime,
+    isFolderModeEnabled,
+    fileSystem,
+    remoteExecutionSession
+  ]: [
     string,
     number | null,
     EditorTabState[],
     number,
+    boolean,
     FSModule,
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
@@ -634,6 +643,7 @@ export function* evalEditor(
     state.workspaces[workspaceLocation].activeEditorTabIndex,
     state.workspaces[workspaceLocation].editorTabs,
     state.workspaces[workspaceLocation].execTime,
+    state.workspaces[workspaceLocation].isFolderModeEnabled,
     state.fileSystem.inBrowserFileSystem,
     state.session.remoteExecutionSession
   ]);
@@ -645,14 +655,12 @@ export function* evalEditor(
 
   const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
   let files: Record<string, string>;
-  // A workspace without a base path in the file system is one which has not been
-  // refactored to work with Folder mode.
-  if (WORKSPACE_BASE_PATHS[workspaceLocation] === '') {
+  if (isFolderModeEnabled) {
+    files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
+  } else {
     files = {
       [defaultFilePath]: editorTabs[activeEditorTabIndex].value
     };
-  } else {
-    files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
   }
   const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
 
