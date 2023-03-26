@@ -42,6 +42,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
+import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -602,18 +603,32 @@ function* insertDebuggerStatements(
 export function* evalEditor(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
-  const [prepend, code, execTime, remoteExecutionSession]: [
+  const [prepend, activeEditorTabIndex, execTime, fileSystem, remoteExecutionSession]: [
     string,
-    string,
+    number | null,
     number,
+    FSModule,
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
     state.workspaces[workspaceLocation].programPrependValue,
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    state.workspaces[workspaceLocation].editorTabs[0].value,
+    state.workspaces[workspaceLocation].activeEditorTabIndex,
     state.workspaces[workspaceLocation].execTime,
+    state.fileSystem.inBrowserFileSystem,
     state.session.remoteExecutionSession
   ]);
+
+  if (activeEditorTabIndex === null) {
+    // TODO: Implement this.
+    throw new Error('To be handled...');
+  }
+
+  const files: Record<string, string> = yield call(
+    retrieveFilesInWorkspaceAsRecord,
+    workspaceLocation,
+    fileSystem
+  );
+  // TODO: Implement this properly.
+  const code = files['/playground/program.js'];
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
