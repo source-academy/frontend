@@ -36,7 +36,7 @@ const workspaceLocation: WorkspaceLocation = 'grading';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     autogradingResults: state.workspaces.grading.autogradingResults,
-    isMultipleFilesEnabled: state.workspaces.grading.isMultipleFilesEnabled,
+    isFolderModeEnabled: state.workspaces.grading.isFolderModeEnabled,
     activeEditorTabIndex: state.workspaces.grading.activeEditorTabIndex,
     editorTabs: state.workspaces.grading.editorTabs,
     editorTestcases: state.workspaces.grading.editorTestcases,

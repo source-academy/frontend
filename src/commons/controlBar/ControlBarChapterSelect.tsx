@@ -7,6 +7,7 @@ import React from 'react';
 import {
   defaultLanguages,
   fullJSLanguage,
+  fullTSLanguage,
   htmlLanguage,
   SALanguage,
   sourceLanguages,
@@ -31,11 +32,13 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, ren
   const defaultChoices = defaultLanguages.map(renderItem);
   const variantChoices = variantLanguages.map(renderItem);
   const fullJSChoice = renderItem(fullJSLanguage, 0);
+  const fullTSChoice = renderItem(fullTSLanguage, 0);
   const htmlChoice = renderItem(htmlLanguage, 0);
   return (
     <Menu ulRef={itemsParentRef}>
       {defaultChoices}
       {Constants.playgroundOnly && fullJSChoice}
+      {Constants.playgroundOnly && fullTSChoice}
       {Constants.playgroundOnly && htmlChoice}
       <MenuItem key="variant-menu" text="Variants" icon="cog">
         {variantChoices}

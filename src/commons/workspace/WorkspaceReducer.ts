@@ -48,12 +48,14 @@ import {
   EVAL_REPL,
   MOVE_CURSOR,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -590,12 +592,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           currentQuestion: action.payload.questionId
         }
       };
-    case TOGGLE_MULTIPLE_FILES_MODE:
+    case TOGGLE_FOLDER_MODE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          isMultipleFilesEnabled: !state[workspaceLocation].isMultipleFilesEnabled
+          isFolderModeEnabled: !state[workspaceLocation].isFolderModeEnabled
         }
       };
     case UPDATE_ACTIVE_EDITOR_TAB_INDEX: {
@@ -733,6 +735,13 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     }
     case ADD_EDITOR_TAB: {
       const { filePath, editorValue } = action.payload;
+      const fileIsAlreadyOpen =
+        state[workspaceLocation].editorTabs.find(
+          (editorTab: EditorTabState) => editorTab.filePath === filePath
+        ) !== undefined;
+      if (fileIsAlreadyOpen) {
+        return state;
+      }
 
       const newEditorTab: EditorTabState = {
         filePath,
@@ -808,22 +817,78 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       );
 
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
-      const newActiveEditorTabIndex =
-        activeEditorTabIndex !== editorTabIndex
-          ? // If the active editor tab is not the one that is removed,
-            // the active editor tab remains the same.
-            activeEditorTabIndex
-          : newEditorTabs.length === 0
-          ? // If there are no editor tabs after removal, there cannot
-            // be an active editor tab.
-            null
-          : editorTabIndex === 0
-          ? // If the removed editor tab is the leftmost tab, the active
-            // editor tab will be the new leftmost tab.
-            0
-          : // Otherwise, the active editor tab will be the tab to the
-            // left of the removed tab.
-            editorTabIndex - 1;
+      const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+        activeEditorTabIndex,
+        editorTabIndex,
+        newEditorTabs.length
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case REMOVE_EDITOR_TAB_FOR_FILE: {
+      const removedFilePath = action.payload.removedFilePath;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const editorTabIndexToRemove = editorTabs.findIndex(
+        (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
+      );
+      if (editorTabIndexToRemove === -1) {
+        return state;
+      }
+      const newEditorTabs = editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
+      );
+
+      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+        activeEditorTabIndex,
+        editorTabIndexToRemove,
+        newEditorTabs.length
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case REMOVE_EDITOR_TABS_FOR_DIRECTORY: {
+      const removedDirectoryPath = action.payload.removedDirectoryPath;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const editorTabIndicesToRemove = editorTabs
+        .map((editorTab: EditorTabState, index: number) => {
+          if (editorTab.filePath?.startsWith(removedDirectoryPath)) {
+            return index;
+          }
+          return null;
+        })
+        .filter((index: number | null): index is number => index !== null);
+      if (editorTabIndicesToRemove.length === 0) {
+        return state;
+      }
+
+      let newActiveEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newEditorTabs = [...editorTabs];
+      for (let i = editorTabIndicesToRemove.length - 1; i >= 0; i--) {
+        const editorTabIndexToRemove = editorTabIndicesToRemove[i];
+        newEditorTabs.splice(editorTabIndexToRemove, 1);
+        newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+          newActiveEditorTabIndex,
+          editorTabIndexToRemove,
+          newEditorTabs.length
+        );
+      }
 
       return {
         ...state,
@@ -880,4 +945,32 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     default:
       return state;
   }
+};
+
+const getNextActiveEditorTabIndexAfterTabRemoval = (
+  activeEditorTabIndex: number | null,
+  removedEditorTabIndex: number,
+  newEditorTabsLength: number
+) => {
+  return activeEditorTabIndex !== removedEditorTabIndex
+    ? // If the active editor tab is not the one that is removed,
+      // the active editor tab remains the same if its index is
+      // less than the removed editor tab index or null.
+      activeEditorTabIndex === null || activeEditorTabIndex < removedEditorTabIndex
+      ? activeEditorTabIndex
+      : // Otherwise, the active editor tab index needs to have 1
+        // subtracted because every tab to the right of the editor
+        // tab being removed has their index decremented by 1.
+        activeEditorTabIndex - 1
+    : newEditorTabsLength === 0
+    ? // If there are no editor tabs after removal, there cannot
+      // be an active editor tab.
+      null
+    : removedEditorTabIndex === 0
+    ? // If the removed editor tab is the leftmost tab, the active
+      // editor tab will be the new leftmost tab.
+      0
+    : // Otherwise, the active editor tab will be the tab to the
+      // left of the removed tab.
+      removedEditorTabIndex - 1;
 };

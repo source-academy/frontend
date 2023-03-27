@@ -3,9 +3,12 @@ import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import { rmdirRecursively } from '../utils/FileSystemUtils';
+import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -13,6 +16,7 @@ import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 
 export type FileSystemViewDirectoryNodeProps = {
+  workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
   directoryName: string;
@@ -23,7 +27,14 @@ export type FileSystemViewDirectoryNodeProps = {
 const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = (
   props: FileSystemViewDirectoryNodeProps
 ) => {
-  const { fileSystem, basePath, directoryName, indentationLevel, refreshParentDirectory } = props;
+  const {
+    workspaceLocation,
+    fileSystem,
+    basePath,
+    directoryName,
+    indentationLevel,
+    refreshParentDirectory
+  } = props;
   const fullPath = path.join(basePath, directoryName);
 
   const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
@@ -31,6 +42,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState<boolean>(false);
   const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState<number>(0);
+  const dispatch = useDispatch();
 
   const toggleIsExpanded = () => {
     if (isEditing) {
@@ -68,7 +80,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
         return;
       }
 
-      const fullPath = path.join(basePath, directoryName);
+      dispatch(removeEditorTabsForDirectory(workspaceLocation, fullPath));
       rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
     });
   };
@@ -179,6 +191,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
       )}
       {isExpanded && (
         <FileSystemViewList
+          workspaceLocation={workspaceLocation}
           key={fileSystemViewListKey}
           fileSystem={fileSystem}
           basePath={fullPath}

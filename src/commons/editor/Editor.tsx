@@ -57,6 +57,7 @@ type EditorStateProps = {
 
 export type EditorTabStateProps = {
   editorTabIndex: number;
+  filePath?: string;
   editorValue: string;
   highlightedLines: HighlightedLines[];
   breakpoints: string[];

@@ -5,7 +5,7 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
   <div className=\\"bp4-non-ideal-state bp4-non-ideal-state-vertical\\">
     <div className=\\"bp4-non-ideal-state-visual\\" style={{...}}>
       <Blueprint4.Icon icon=\\"error\\" size={48} aria-hidden={true} tabIndex={-1}>
-        <span icon=\\"error\\" aria-hidden={true} tabIndex={-1} className=\\"bp4-icon bp4-icon-error\\" title={[undefined]}>
+        <span aria-hidden={true} icon=\\"error\\" tabIndex={-1} className=\\"bp4-icon bp4-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={48} height={48} viewBox=\\"0 0 20 20\\" aria-labelledby={[undefined]} role=\\"img\\">
             <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
           </svg>
@@ -36,7 +36,7 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
   <div className=\\"bp4-non-ideal-state bp4-non-ideal-state-vertical\\">
     <div className=\\"bp4-non-ideal-state-visual\\" style={{...}}>
       <Blueprint4.Icon icon=\\"error\\" size={48} aria-hidden={true} tabIndex={-1}>
-        <span icon=\\"error\\" aria-hidden={true} tabIndex={-1} className=\\"bp4-icon bp4-icon-error\\" title={[undefined]}>
+        <span aria-hidden={true} icon=\\"error\\" tabIndex={-1} className=\\"bp4-icon bp4-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={48} height={48} viewBox=\\"0 0 20 20\\" aria-labelledby={[undefined]} role=\\"img\\">
             <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
           </svg>
@@ -67,7 +67,7 @@ exports[`Sicp errors: unexpected error renders correctly 2`] = `
   <div className=\\"bp4-non-ideal-state bp4-non-ideal-state-vertical\\">
     <div className=\\"bp4-non-ideal-state-visual\\" style={{...}}>
       <Blueprint4.Icon icon=\\"error\\" size={48} aria-hidden={true} tabIndex={-1}>
-        <span icon=\\"error\\" aria-hidden={true} tabIndex={-1} className=\\"bp4-icon bp4-icon-error\\" title={[undefined]}>
+        <span aria-hidden={true} icon=\\"error\\" tabIndex={-1} className=\\"bp4-icon bp4-icon-error\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"error\\" width={48} height={48} viewBox=\\"0 0 20 20\\" aria-labelledby={[undefined]} role=\\"img\\">
             <path d=\\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm1 16H9v-2h2v2zm0-3H9V4h2v9z\\" fillRule=\\"evenodd\\" />
           </svg>

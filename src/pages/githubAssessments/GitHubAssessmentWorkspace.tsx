@@ -161,7 +161,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const { isMobileBreakpoint } = useResponsive();
 
   const {
-    isMultipleFilesEnabled,
+    isFolderModeEnabled,
     activeEditorTabIndex,
     editorTabs,
     editorTestcases,
@@ -384,7 +384,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const resetToTemplate = useCallback(() => {
     const originalCode = taskList[currentTaskNumber - 1].starterCode;
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorValueChange(0, originalCode);
     editCode(currentTaskNumber, originalCode);
   }, [currentTaskNumber, editCode, handleEditorValueChange, taskList]);
@@ -721,7 +721,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const onEditorValueChange = useCallback(
     val => {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, val);
       editCode(currentTaskNumber, val);
     },
@@ -1082,7 +1082,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
-    isMultipleFilesEnabled,
+    isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,

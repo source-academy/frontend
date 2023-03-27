@@ -3,13 +3,17 @@ import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
+import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 
 export type FileSystemViewFileNodeProps = {
+  workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
   fileName: string;
@@ -20,13 +24,25 @@ export type FileSystemViewFileNodeProps = {
 const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   props: FileSystemViewFileNodeProps
 ) => {
-  const { fileSystem, basePath, fileName, indentationLevel, refreshDirectory } = props;
+  const { workspaceLocation, fileSystem, basePath, fileName, indentationLevel, refreshDirectory } =
+    props;
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const fullPath = path.join(basePath, fileName);
 
   const handleOpenFile = () => {
-    // TODO: Implement this.
-    console.log(`Opened file ${fileName}!`);
+    fileSystem.readFile(fullPath, 'utf-8', (err, fileContents) => {
+      if (err) {
+        console.error(err);
+      }
+      if (fileContents === undefined) {
+        throw new Error('File contents are undefined.');
+      }
+
+      dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
+    });
   };
 
   const handleRenameFile = () => setIsEditing(true);
@@ -50,12 +66,12 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
         return;
       }
 
-      const fullPath = path.join(basePath, fileName);
       fileSystem.unlink(fullPath, err => {
         if (err) {
           console.error(err);
         }
 
+        dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });
     });

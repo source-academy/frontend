@@ -6,6 +6,7 @@ import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import Constants from '../utils/Constants';
@@ -128,6 +129,12 @@ export const fullJSLanguage: SALanguage = {
   displayName: 'full JavaScript'
 };
 
+export const fullTSLanguage: SALanguage = {
+  chapter: Chapter.FULL_TS,
+  variant: Variant.DEFAULT,
+  displayName: 'full TypeScript'
+};
+
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
@@ -138,6 +145,8 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   switch (chapter) {
     case Chapter.FULL_JS:
       return fullJSLanguage.displayName;
+    case Chapter.FULL_TS:
+      return fullTSLanguage.displayName;
     case Chapter.HTML:
       return htmlLanguage.displayName;
     default:
@@ -240,7 +249,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     workspaceLocation,
     Constants.defaultSourceVariant
   ),
-  isMultipleFilesEnabled: false,
+  isFolderModeEnabled: false,
   activeEditorTabIndex: 0,
   editorTabs: [
     {
@@ -293,7 +302,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     editorTabs: [
       {
-        filePath: '/playground/program.js',
+        filePath: `${WORKSPACE_BASE_PATHS.playground}/program.js`,
         value: defaultEditorValue,
         highlightedLines: [],
         breakpoints: []

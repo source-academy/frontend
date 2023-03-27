@@ -4,17 +4,19 @@ import path from 'path';
 import React from 'react';
 
 import Delay from '../delay/Delay';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
 export type FileSystemViewListProps = {
+  workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
   indentationLevel: number;
 };
 
 const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystemViewListProps) => {
-  const { fileSystem, basePath, indentationLevel } = props;
+  const { workspaceLocation, fileSystem, basePath, indentationLevel } = props;
 
   const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
@@ -74,6 +76,7 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
       {dirNames.map(dirName => {
         return (
           <FileSystemViewDirectoryNode
+            workspaceLocation={workspaceLocation}
             key={dirName}
             fileSystem={fileSystem}
             basePath={basePath}
@@ -86,6 +89,7 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
       {fileNames.map(fileName => {
         return (
           <FileSystemViewFileNode
+            workspaceLocation={workspaceLocation}
             key={fileName}
             fileSystem={fileSystem}
             basePath={basePath}

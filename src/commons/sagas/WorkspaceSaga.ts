@@ -42,7 +42,6 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
-import { showFullJSDisclaimer } from '../fullJS/FullJSUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -58,6 +57,7 @@ import {
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
+import { showFullJSDisclaimer, showFullTSDisclaimer } from '../utils/WarningDialogHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   ADD_HTML_CONSOLE_ERROR,
@@ -75,7 +75,7 @@ import {
   PROMPT_AUTOCOMPLETE,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   UPDATE_EDITOR_VALUE,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
@@ -94,15 +94,13 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    TOGGLE_MULTIPLE_FILES_MODE,
-    function* (action: ReturnType<typeof actions.toggleMultipleFilesMode>) {
+    TOGGLE_FOLDER_MODE,
+    function* (action: ReturnType<typeof actions.toggleFolderMode>) {
       const workspaceLocation = action.payload.workspaceLocation;
-      const isMultipleFilesEnabled: boolean = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].isMultipleFilesEnabled
+      const isFolderModeEnabled: boolean = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
       );
-      const warningMessage = `Multiple files mode ${
-        isMultipleFilesEnabled ? 'enabled' : 'disabled'
-      }`;
+      const warningMessage = `Folder mode ${isFolderModeEnabled ? 'enabled' : 'disabled'}`;
       yield call(showWarningMessage, warningMessage, 750);
     }
   );
@@ -112,9 +110,11 @@ export default function* WorkspaceSaga(): SagaIterator {
     UPDATE_EDITOR_VALUE,
     function* (action: ReturnType<typeof actions.updateEditorValue>) {
       const workspaceLocation = action.payload.workspaceLocation;
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      const editorTabIndex = action.payload.editorTabIndex;
+
       const filePath: string | undefined = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].filePath
+        (state: OverallState) =>
+          state.workspaces[workspaceLocation].editorTabs[editorTabIndex].filePath
       );
       // If the code does not have an associated file, do nothing.
       if (filePath === undefined) {
@@ -309,6 +309,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     const toChangeChapter: boolean =
       newChapter === Chapter.FULL_JS
         ? chapterChanged && (yield call(showFullJSDisclaimer))
+        : newChapter === Chapter.FULL_TS
+        ? chapterChanged && (yield call(showFullTSDisclaimer))
         : chapterChanged;
 
     if (toChangeChapter) {

@@ -26,10 +26,13 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { showFullJSWarningOnUrlLoad } from 'src/commons/fullJS/FullJSUtils';
-import { showHTMLDisclaimer } from 'src/commons/html/HTMLUtils';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import {
+  showFullJSWarningOnUrlLoad,
+  showFulTSWarningOnUrlLoad,
+  showHTMLDisclaimer
+} from 'src/commons/utils/WarningDialogHelper';
 import {
   addHtmlConsoleError,
   browseReplHistoryDown,
@@ -42,7 +45,7 @@ import {
   removeEditorTab,
   sendReplInputToOutput,
   toggleEditorAutorun,
-  toggleMultipleFilesMode,
+  toggleFolderMode,
   updateActiveEditorTabIndex,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
@@ -81,7 +84,7 @@ import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBa
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
-import { ControlBarToggleMultipleFilesModeButton } from '../../commons/controlBar/ControlBarToggleMultipleFilesModeButton';
+import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
@@ -112,6 +115,7 @@ import {
   Input,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 
 export type PlaygroundProps = OwnProps &
   DispatchProps &
@@ -173,6 +177,8 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
   const chapter = stringParamToInt(qs.chap) || undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
+  } else if (chapter === Chapter.FULL_TS) {
+    showFulTSWarningOnUrlLoad();
   } else {
     if (chapter === Chapter.HTML) {
       const continueToHtml = await showHTMLDisclaimer();
@@ -183,7 +189,7 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
     const programLz = qs.lz ?? qs.prgrm;
     const program = programLz && decompressFromEncodedURIComponent(programLz);
     if (program) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       props.handleEditorValueChange(0, program);
       props.handleEditorUpdateBreakpoints(0, []);
     }
@@ -217,7 +223,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
-  const { isMultipleFilesEnabled, activeEditorTabIndex } = useTypedSelector(
+  const { isFolderModeEnabled, activeEditorTabIndex } = useTypedSelector(
     state => state.workspaces[workspaceLocation]
   );
 
@@ -237,7 +243,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: propsRef.current.editorTabs[0].value,
+      editorValue: propsRef.current.editorTabs[0]?.value ?? '',
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -271,7 +277,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     setSessionId(
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorValue: propsRef.current.editorTabs[0].value,
+        editorValue: propsRef.current.editorTabs[0]?.value ?? '',
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
@@ -600,19 +606,20 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
-  const toggleMultipleFilesModeButton = React.useMemo(() => {
-    // TODO: Remove this once the multiple file mode is ready for production.
+  const toggleFolderModeButton = React.useMemo(() => {
+    // TODO: Remove this once the Folder mode is ready for production.
     if (true) {
       return <></>;
     }
 
     return (
-      <ControlBarToggleMultipleFilesModeButton
-        isMultipleFilesEnabled={isMultipleFilesEnabled}
-        toggleMultipleFilesMode={() => dispatch(toggleMultipleFilesMode(workspaceLocation))}
+      <ControlBarToggleFolderModeButton
+        isFolderModeEnabled={isFolderModeEnabled}
+        toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
+        key="folder"
       />
     );
-  }, [dispatch, isMultipleFilesEnabled, workspaceLocation]);
+  }, [dispatch, isFolderModeEnabled, workspaceLocation]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
@@ -656,7 +663,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     }
 
     // (TEMP) Remove tabs for fullJS until support is integrated
-    if (props.playgroundSourceChapter === Chapter.FULL_JS) {
+    if (
+      props.playgroundSourceChapter === Chapter.FULL_JS ||
+      props.playgroundSourceChapter === Chapter.FULL_TS
+    ) {
       return [...tabs, dataVisualizerTab];
     }
 
@@ -809,7 +819,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
-    isMultipleFilesEnabled,
+    baseFilePath: WORKSPACE_BASE_PATHS.playground,
+    isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
@@ -876,19 +887,24 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     // determine which sidebar tabs should be rendered here.
     return {
       tabs: [
-        ...(isMultipleFilesEnabled
+        ...(isFolderModeEnabled
           ? [
               {
-                label: 'Files',
-                body: <FileSystemView basePath="/playground" />,
+                label: 'Folder',
+                body: (
+                  <FileSystemView
+                    workspaceLocation="playground"
+                    basePath={WORKSPACE_BASE_PATHS.playground}
+                  />
+                ),
                 iconName: IconNames.FOLDER_CLOSE,
-                id: SideContentType.files
+                id: SideContentType.folder
               }
             ]
           : [])
       ]
     };
-  }, [isMultipleFilesEnabled]);
+  }, [isFolderModeEnabled]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
@@ -897,14 +913,14 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
+        toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
-          : executionTime,
-        toggleMultipleFilesModeButton
+          : executionTime
       ]
     },
     editorContainerProps: editorContainerProps,
@@ -941,7 +957,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           isSicpEditor ? null : sessionButtons,
           persistenceButtons,
           githubButtons,
-          toggleMultipleFilesModeButton
+          toggleFolderModeButton
         ]
       },
       selectedTabId: selectedTab,

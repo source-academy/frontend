@@ -71,7 +71,7 @@ export type OwnProps = {
 export type StateProps = {
   autogradingResults: AutogradingResult[];
   grading?: Grading;
-  isMultipleFilesEnabled: boolean;
+  isFolderModeEnabled: boolean;
   activeEditorTabIndex: number | null;
   editorTabs: EditorTabState[];
   editorTestcases: Testcase[];
@@ -129,7 +129,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       }
     }
 
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     this.props.handleEditorValueChange(0, answer);
   }
 
@@ -183,7 +183,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
           ? {
               editorVariant: 'normal',
-              isMultipleFilesEnabled: this.props.isMultipleFilesEnabled,
+              isFolderModeEnabled: this.props.isFolderModeEnabled,
               activeEditorTabIndex: this.props.activeEditorTabIndex,
               setActiveEditorTabIndex: this.props.handleSetActiveEditorTabIndex,
               removeEditorTabByIndex: this.props.handleRemoveEditorTabByIndex,
@@ -265,7 +265,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       }
     }
 
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorUpdateBreakpoints(0, []);
     props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     props.handleResetWorkspace({
@@ -288,7 +288,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     props.handleClearContext(question.library, true);
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       props.handleEditorValueChange(0, editorValue);
     }
   }

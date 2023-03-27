@@ -25,6 +25,8 @@ import {
   moveCursor,
   navigateToDeclaration,
   removeEditorTab,
+  removeEditorTabForFile,
+  removeEditorTabsForDirectory,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
@@ -32,7 +34,7 @@ import {
   setEditorHighlightedLines,
   shiftEditorTab,
   toggleEditorAutorun,
-  toggleMultipleFilesMode,
+  toggleFolderMode,
   toggleUsingSubst,
   updateActiveEditorTab,
   updateActiveEditorTabIndex,
@@ -64,12 +66,14 @@ import {
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -267,10 +271,10 @@ test('evalTestcase generates correct action object', () => {
   });
 });
 
-test('toggleMultipleFilesMode generates correct action object', () => {
-  const action = toggleMultipleFilesMode(gradingWorkspace);
+test('toggleFolderMode generates correct action object', () => {
+  const action = toggleFolderMode(gradingWorkspace);
   expect(action).toEqual({
-    type: TOGGLE_MULTIPLE_FILES_MODE,
+    type: TOGGLE_FOLDER_MODE,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -400,6 +404,30 @@ test('removeEditorTab generates correct action object', () => {
     payload: {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex
+    }
+  });
+});
+
+test('removeEditorTabForFile generates correct action object', () => {
+  const removedFilePath = '/dir1/a.js';
+  const action = removeEditorTabForFile(playgroundWorkspace, removedFilePath);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TAB_FOR_FILE,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      removedFilePath
+    }
+  });
+});
+
+test('removeEditorTabsForDirectory generates correct action object', () => {
+  const removedDirectoryPath = '/dir1';
+  const action = removeEditorTabsForDirectory(playgroundWorkspace, removedDirectoryPath);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      removedDirectoryPath
     }
   });
 });
