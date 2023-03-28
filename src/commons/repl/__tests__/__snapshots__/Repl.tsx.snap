@@ -17,7 +17,7 @@ exports[`Empty output renders an empty card 1`] = `
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
 "<Blueprint4.Card elevation={0} interactive={false}>
   <Component className=\\"error-output\\">
-    Line &lt;unknown&gt;: Expected , got .
+    Expected , got .
   </Component>
 </Blueprint4.Card>"
 `;
@@ -32,7 +32,7 @@ exports[`Error output (with consoleLogs) renders correctly 1`] = `
   </Component>
   <br />
   <Component className=\\"error-output\\">
-    Line &lt;unknown&gt;: Expected , got .
+    Expected , got .
   </Component>
 </Blueprint4.Card>"
 `;
