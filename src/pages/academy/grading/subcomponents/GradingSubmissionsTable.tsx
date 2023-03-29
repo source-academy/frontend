@@ -27,7 +27,10 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
 import GradingActions from './GradingActions';
@@ -107,15 +110,22 @@ type GradingSubmissionTableProps = {
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ group, submissions }) => {
+  const dispatch = useDispatch();
+  const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
+
   const defaultFilters = [];
-  if (group) {
+  if (group && !tableFilters.columnFilters.find(filter => filter.id === 'groupName')) {
     defaultFilters.push({
       id: 'groupName',
       value: group
     });
   }
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(defaultFilters);
-  const [globalFilter, setGlobalFilter] = useState<string | null>('');
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    ...tableFilters.columnFilters,
+    ...defaultFilters
+  ]);
+  const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
   const table = useReactTable({
     data: submissions,
@@ -135,6 +145,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ group, 
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
     setColumnFilters(newFilters);
   };
+
+  useEffect(() => {
+    dispatch(
+      updateSubmissionsTableFilters({
+        columnFilters,
+        globalFilter
+      })
+    );
+  }, [columnFilters, globalFilter, dispatch]);
 
   return (
     <>
