@@ -1,4 +1,4 @@
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
 import { OverallState } from '../commons/application/ApplicationTypes';
@@ -24,7 +24,7 @@ export type SavedState = {
   playgroundActiveEditorTabIndex: NullableValue<number>;
   playgroundEditorTabs: EditorTabState[];
   playgroundIsEditorAutorun: boolean;
-  playgroundSourceChapter: number;
+  playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
   playgroundExternalLibrary: ExternalLibraryName;
 };
