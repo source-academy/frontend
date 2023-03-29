@@ -2,6 +2,7 @@ import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Flex, Icon } from '@tremor/react';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   reautogradeSubmission,
   unsubmitSubmission
@@ -46,9 +47,9 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
 
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-2">
-      <a href={`/courses/${courseId}/grading/${submissionId}`}>
+      <Link to={`/courses/${courseId}/grading/${submissionId}`}>
         <Icon tooltip="Grade" icon={() => <BpIcon icon={IconNames.EDIT} />} variant="light" />
-      </a>
+      </Link>
 
       <button type="button" style={{ padding: 0 }} onClick={handleReautogradeClick}>
         <Icon
