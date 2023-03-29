@@ -917,7 +917,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
-        toggleFolderModeButton,
+        // Local imports/exports require Source 2+ as Source 1 does not have lists.
+        props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
