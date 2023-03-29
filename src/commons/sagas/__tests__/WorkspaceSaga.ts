@@ -1,4 +1,4 @@
-import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
+import { Context, IOptions, Result, resume, runFilesInContext, runInContext } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
 import { Chapter, Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
@@ -176,9 +176,10 @@ describe('EVAL_EDITOR', () => {
         .put(clearReplOutput(workspaceLocation))
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
-          fn: runInContext,
+          fn: runFilesInContext,
           args: [
-            programPrependValue,
+            { '/prepend.js': programPrependValue },
+            '/prepend.js',
             {
               scheduler: 'preemptive',
               originalMaxExecTime: execTime,
@@ -191,12 +192,13 @@ describe('EVAL_EDITOR', () => {
         // running the prepend block should return 'reeee', but silent run -> not written to REPL
         .not.put(evalInterpreterSuccess('reeee', workspaceLocation))
         // Single call to evalCode made by blockExtraMethods
-        .call.like({ fn: runInContext })
+        .call.like({ fn: runFilesInContext })
         // calls evalCode here with the student's program in normal Context
         .call.like({
-          fn: runInContext,
+          fn: runFilesInContext,
           args: [
-            editorValue,
+            { '/playground/program.js': editorValue },
+            '/playground/program.js',
             context,
             {
               scheduler: 'preemptive',
@@ -210,7 +212,7 @@ describe('EVAL_EDITOR', () => {
         // running the student's program should return -1, which is written to REPL
         .put(evalInterpreterSuccess(-1, workspaceLocation))
         // should NOT attempt to execute the postpend block after above
-        .not.call(runInContext)
+        .not.call(runFilesInContext)
         .dispatch({
           type: EVAL_EDITOR,
           payload: { workspaceLocation }
@@ -266,7 +268,7 @@ describe('EVAL_REPL', () => {
         .put(clearReplInput(workspaceLocation))
         .put(sendReplInputToOutput(replValue, workspaceLocation))
         // also calls evalCode here
-        .call(runInContext, replValue, context, {
+        .call(runFilesInContext, { '/code.js': replValue }, '/code.js', context, {
           scheduler: 'preemptive',
           originalMaxExecTime: 1000,
           stepLimit: 1000,
@@ -285,6 +287,8 @@ describe('EVAL_REPL', () => {
 describe('DEBUG_RESUME', () => {
   let workspaceLocation: WorkspaceLocation;
   let editorValue: string;
+  let editorValueFilePath: string;
+  let files: Record<string, string>;
   let execTime: number;
   let context: Context;
   let state: OverallState;
@@ -293,11 +297,23 @@ describe('DEBUG_RESUME', () => {
     // Ensure that lastDebuggerResult is set correctly before running each of the tests below
     workspaceLocation = 'playground';
     editorValue = 'sample code here';
+    editorValueFilePath = '/playground/program.js';
+    files = {
+      [editorValueFilePath]: editorValue
+    };
     execTime = 1000;
     context = mockRuntimeContext();
     state = generateDefaultState(workspaceLocation);
 
-    return expectSaga(evalCode, editorValue, context, execTime, workspaceLocation, EVAL_EDITOR)
+    return expectSaga(
+      evalCode,
+      files,
+      editorValueFilePath,
+      context,
+      execTime,
+      workspaceLocation,
+      EVAL_EDITOR
+    )
       .withState(state)
       .silentRun();
   });
@@ -327,7 +343,14 @@ describe('DEBUG_RESUME', () => {
         // also calls evalCode here
         .call.like({
           fn: evalCode,
-          args: [editorValue, {}, execTime, workspaceLocation, DEBUG_RESUME]
+          args: [
+            { '/code.js': editorValue },
+            '/code.js',
+            {},
+            execTime,
+            workspaceLocation,
+            DEBUG_RESUME
+          ]
         })
         .dispatch({
           type: DEBUG_RESUME,
@@ -424,31 +447,44 @@ describe('EVAL_TESTCASE', () => {
         // Expect it to shard a new privileged context here and execute chunks in order
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
-          fn: runInContext,
-          args: [programPrependValue, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          fn: runFilesInContext,
+          args: [
+            { '/prepend.js': programPrependValue },
+            '/prepend.js',
+            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+          ]
         })
         // running the prepend block should return 'boink', but silent run -> not written to REPL
         .not.put(evalInterpreterSuccess('boink', workspaceLocation))
         // Single call to evalCode made by blockExtraMethods
-        .call.like({ fn: runInContext })
+        .call.like({ fn: runFilesInContext })
         // calls evalCode here with the student's program in normal Context
         .call.like({
-          fn: runInContext,
-          args: [editorValue, context, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          fn: runFilesInContext,
+          args: [
+            { '/value.js': editorValue },
+            '/value.js',
+            context,
+            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+          ]
         })
         // running the student's program should return 69, which is NOT written to REPL (silent)
         .not.put(evalInterpreterSuccess(69, workspaceLocation))
         // Single call to evalCode made by restoreExtraMethods to enable postpend to run in S4
-        .call.like({ fn: runInContext })
+        .call.like({ fn: runFilesInContext })
         // calls evalCode here again with the postpend now in elevated Context: silent run
         .call.like({
-          fn: runInContext,
-          args: [programPostpendValue, { scheduler: 'preemptive', originalMaxExecTime: execTime }]
+          fn: runFilesInContext,
+          args: [
+            { '/postpend.js': programPostpendValue },
+            '/postpend.js',
+            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+          ]
         })
         // running the postpend block should return true, but silent run -> not written to REPL
         .not.put(evalInterpreterSuccess(true, workspaceLocation))
         // Single call to evalCode made by blockExtraMethods after postpend execution is complete
-        .call.like({ fn: runInContext })
+        .call.like({ fn: runFilesInContext })
         // finally calls evalTestCode on the testcase
         .call.like({
           fn: runInContext,
@@ -771,6 +807,8 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
 describe('evalCode', () => {
   let workspaceLocation: WorkspaceLocation;
   let code: string;
+  let codeFilePath: string;
+  let files: Record<string, string>;
   let execTime: number;
   let actionType: string;
   let context: Context;
@@ -782,6 +820,10 @@ describe('evalCode', () => {
   beforeEach(() => {
     workspaceLocation = 'assessment';
     code = 'sample code';
+    codeFilePath = '/assessment/program.js';
+    files = {
+      [codeFilePath]: code
+    };
     execTime = 1000;
     actionType = EVAL_EDITOR;
     context = createContext(); // mockRuntimeContext();
@@ -799,10 +841,23 @@ describe('evalCode', () => {
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
     test('calls runInContext, puts evalInterpreterSuccess when runInContext returns finished', () => {
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .call(runInContext, code, context, {
+        .provide([
+          [
+            call(runFilesInContext, files, codeFilePath, context, options),
+            { status: 'finished', value }
+          ]
+        ])
+        .call(runFilesInContext, files, codeFilePath, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
@@ -814,10 +869,20 @@ describe('evalCode', () => {
     });
 
     test('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'suspended' }]])
-        .call(runInContext, code, context, {
+        .provide([
+          [call(runFilesInContext, files, codeFilePath, context, options), { status: 'suspended' }]
+        ])
+        .call(runFilesInContext, files, codeFilePath, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
@@ -830,9 +895,17 @@ describe('evalCode', () => {
     });
 
     test('calls runInContext, puts evalInterpreterError when runInContext returns error', () => {
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
-        .call(runInContext, code, context, {
+        .call(runFilesInContext, files, codeFilePath, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
@@ -850,15 +923,23 @@ describe('evalCode', () => {
         programPrependValue: '// Prepend'
       });
 
-      runInContext(code, context, {
+      runFilesInContext(files, codeFilePath, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: 1000,
         useSubst: false
       }).then(result => (context = (result as Finished).context));
 
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
-        .call(runInContext, code, context, {
+        .call(runFilesInContext, files, codeFilePath, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
@@ -873,7 +954,15 @@ describe('evalCode', () => {
   describe('on DEBUG_RESUME action without interruptions or pausing', () => {
     // Ensure that lastDebuggerResult is set correctly before running each of the tests below
     beforeEach(() => {
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, EVAL_EDITOR)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        EVAL_EDITOR
+      )
         .withState(state)
         .silentRun();
     });
@@ -881,7 +970,15 @@ describe('evalCode', () => {
     test('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
       actionType = DEBUG_RESUME;
 
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
         .call(resume, lastDebuggerResult)
@@ -892,7 +989,15 @@ describe('evalCode', () => {
     test('calls resume, puts endDebuggerPause and evalInterpreterSuccess when resume returns suspended', () => {
       actionType = DEBUG_RESUME;
 
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'suspended' }]])
         .call(resume, lastDebuggerResult)
@@ -904,7 +1009,15 @@ describe('evalCode', () => {
     test('calls resume, puts evalInterpreterError when resume returns error', () => {
       actionType = DEBUG_RESUME;
 
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
         .call(resume, lastDebuggerResult)
         .put.like({ action: { type: EVAL_INTERPRETER_ERROR } })
@@ -914,7 +1027,15 @@ describe('evalCode', () => {
 
   describe('on interrupt', () => {
     test('puts debuggerReset, endInterruptExecution and calls showWarningMessage', () => {
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
         .provide({
           race: () => ({
@@ -936,7 +1057,15 @@ describe('evalCode', () => {
 
   describe('on paused', () => {
     test('puts endDebuggerPause and calls showWarningMessage', () => {
-      return expectSaga(evalCode, code, context, execTime, workspaceLocation, actionType)
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
         .withState(state)
         .provide({
           race: () => ({
