@@ -1007,6 +1007,7 @@ export function* evalCode(
   const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
   if (envActiveAndCorrectChapter) {
     context.executionMethod = 'ec-evaluator';
+    context.runtime.envSteps = -1;
   }
 
   const entrypointCode = files[entrypointFilePath];

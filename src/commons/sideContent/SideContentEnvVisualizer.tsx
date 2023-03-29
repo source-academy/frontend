@@ -2,8 +2,10 @@ import { Button, ButtonGroup, Classes, Divider, Slider } from '@blueprintjs/core
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
+import { connect } from 'react-redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
+import { OverallState } from '../application/ApplicationTypes';
 import Constants, { Links } from '../utils/Constants';
 
 type State = {
@@ -11,6 +13,7 @@ type State = {
   value: number;
   height: number;
   width: number;
+  lastStepCount: number;
 };
 
 type EnvVisualizerProps = StateProps;
@@ -19,6 +22,7 @@ type StateProps = {
   handleEditorEval: () => void;
   editorWidth?: string;
   sideContentHeight?: number;
+  numOfSteps?: number;
 };
 
 const envVizKeyMap = {
@@ -35,7 +39,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       visualization: null,
       value: 1,
       width: this.calculateWidth(props.editorWidth),
-      height: this.calculateHeight(props.sideContentHeight)
+      height: this.calculateHeight(props.sideContentHeight),
+      lastStepCount: 0
     };
     EnvVisualizer.init(
       visualization => this.setState({ visualization }),
@@ -96,15 +101,27 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     window.removeEventListener('resize', this.handleResize);
   }
 
-  componentDidUpdate(prevProps: { editorWidth?: string; sideContentHeight?: number }) {
+  componentDidUpdate(
+    prevProps: { editorWidth?: string; sideContentHeight?: number; numOfSteps?: number },
+    prevState: State
+  ) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
       prevProps.editorWidth !== this.props.editorWidth
     ) {
       this.handleResize();
     }
+    if (prevProps.numOfSteps !== this.props.numOfSteps) {
+      this.setState({
+        ...prevState,
+        lastStepCount: this.props.numOfSteps!
+      });
+      EnvVisualizer.redraw();
+      // console.log(this.state.lastStepCount);
+      console.log('update prev', prevProps.numOfSteps);
+      console.log('update after', this.props.numOfSteps);
+    }
   }
-  numOfSteps: number = 100;
 
   public render() {
     const envVizHandlers = this.state.visualization
@@ -112,7 +129,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
           FIRST_STEP: this.stepFirst,
           NEXT_STEP: this.stepNext,
           PREVIOUS_STEP: this.stepPrevious,
-          LAST_STEP: this.stepLast(this.numOfSteps)
+          LAST_STEP: this.stepLast(this.state.lastStepCount)
         }
       : {
           FIRST_STEP: () => {},
@@ -131,10 +148,10 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
             <Slider
               disabled={!this.state.visualization}
               min={1}
-              max={this.numOfSteps} //this.props.content.length
+              max={this.state.lastStepCount} //this.props.content.length
               onChange={this.sliderShift}
               onRelease={this.sliderRelease}
-              value={this.state.value <= this.numOfSteps ? this.state.value : 1}
+              value={this.state.value <= this.state.lastStepCount ? this.state.value : 1}
             />
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <ButtonGroup>
@@ -221,7 +238,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   };
 
   private stepNext = () => {
-    const lastStepValue = this.numOfSteps;
+    const lastStepValue = this.state.lastStepCount;
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.props.handleEditorEval();
@@ -241,4 +258,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   };
 }
 
-export default SideContentEnvVisualizer;
+const mapStateToProps = (state: OverallState, ownProps: EnvVisualizerProps) => {
+  return {
+    ...ownProps,
+    numOfSteps: state.workspaces.playground.context.runtime.envSteps || 101
+  };
+};
+
+export default connect(mapStateToProps)(SideContentEnvVisualizer);
