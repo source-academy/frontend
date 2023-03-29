@@ -1,5 +1,6 @@
 import { Button, Classes, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
@@ -23,6 +24,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
+  isFolderModeEnabled: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   disabled?: boolean;
@@ -35,7 +37,7 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, ren
   const fullTSChoice = renderItem(fullTSLanguage, 0);
   const htmlChoice = renderItem(htmlLanguage, 0);
   return (
-    <Menu ulRef={itemsParentRef}>
+    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
       {defaultChoices}
       {Constants.playgroundOnly && fullJSChoice}
       {Constants.playgroundOnly && fullTSChoice}
@@ -47,13 +49,27 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, ren
   );
 };
 
-const chapterRenderer: ItemRenderer<SALanguage> = (lang, { handleClick }) => (
-  <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
-);
+const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage> =
+  (isFolderModeEnabled: boolean) =>
+  (lang, { handleClick }) => {
+    const isDisabled = isFolderModeEnabled && lang.chapter === Chapter.SOURCE_1;
+    const tooltipContent = isDisabled ? 'Cannot use Source 1 while in Folder mode' : '';
+    return (
+      <Tooltip2 content={tooltipContent}>
+        <MenuItem
+          key={lang.displayName}
+          onClick={handleClick}
+          text={lang.displayName}
+          disabled={isDisabled}
+        />
+      </Tooltip2>
+    );
+  };
 
 const ChapterSelectComponent = Select.ofType<SALanguage>();
 
 export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+  isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
   handleChapterSelect = () => {},
@@ -63,7 +79,7 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
     <ChapterSelectComponent
       items={sourceLanguages}
       onItemSelect={handleChapterSelect}
-      itemRenderer={chapterRenderer}
+      itemRenderer={chapterRenderer(isFolderModeEnabled)}
       itemListRenderer={chapterListRenderer}
       filterable={false}
       disabled={disabled}

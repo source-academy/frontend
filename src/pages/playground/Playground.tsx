@@ -468,6 +468,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     () => (
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
+        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={props.playgroundSourceChapter}
         sourceVariant={props.playgroundSourceVariant}
         key="chapter"
@@ -476,6 +477,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ),
     [
       chapterSelectHandler,
+      isFolderModeEnabled,
       props.playgroundSourceChapter,
       props.playgroundSourceVariant,
       usingRemoteExecution
