@@ -20,6 +20,7 @@ export type NullableValue<T> = {
 export type SavedState = {
   session: Partial<SessionState>;
   achievements: AchievementItem[];
+  playgroundIsFolderModeEnabled: boolean;
   playgroundActiveEditorTabIndex: NullableValue<number>;
   playgroundEditorTabs: EditorTabState[];
   playgroundIsEditorAutorun: boolean;
@@ -69,6 +70,7 @@ export const saveState = (state: OverallState) => {
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
+      playgroundIsFolderModeEnabled: state.workspaces.playground.isFolderModeEnabled,
       playgroundActiveEditorTabIndex: {
         value: state.workspaces.playground.activeEditorTabIndex
       },
