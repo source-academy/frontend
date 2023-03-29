@@ -30,6 +30,7 @@ const FILTER_COLORS = {
 
   // submission status
   submitted: 'green',
+  attempting: 'yellow',
   attempted: 'red',
 
   // grading status

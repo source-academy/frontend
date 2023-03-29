@@ -5,18 +5,19 @@ import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
 
 type AssessmentTypeBadgeProps = {
   type: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 };
 
-const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type }) => {
+const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 'sm' }) => {
   const badgeColor =
     type === 'Missions'
       ? 'indigo'
       : type === 'Quests'
-      ? 'yellow'
+      ? 'emerald'
       : type === 'Paths'
       ? 'sky'
       : 'gray';
-  return <Badge text={type} color={badgeColor} />;
+  return <Badge text={type} size={size} color={badgeColor} />;
 };
 
 type SubmissionStatusBadgeProps = {
@@ -24,7 +25,7 @@ type SubmissionStatusBadgeProps = {
 };
 
 const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
-  const badgeColor = status === 'submitted' ? 'green' : 'red';
+  const badgeColor = status === 'submitted' ? 'green' : status === 'attempting' ? 'yellow' : 'red';
   const statusText = status.charAt(0).toUpperCase() + status.slice(1);
   return <Badge text={statusText} color={badgeColor} />;
 };
@@ -45,7 +46,7 @@ const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
           ? IconNames.TIME
           : status === 'none'
           ? IconNames.CROSS
-          : IconNames.ERROR
+          : IconNames.DISABLE
       }
       style={{ marginRight: '0.5rem' }}
     />

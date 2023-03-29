@@ -24,7 +24,8 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-  Text
+  Text,
+  TextInput
 } from '@tremor/react';
 import { useState } from 'react';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
@@ -54,6 +55,10 @@ const columns = [
   }),
   columnHelper.accessor('studentName', {
     header: 'Student',
+    cell: info => <Filterable column={info.column} value={info.getValue()} />
+  }),
+  columnHelper.accessor('groupName', {
+    header: 'Group',
     cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('submissionStatus', {
@@ -88,6 +93,7 @@ const columns = [
   }),
   columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
     header: 'Actions',
+    enableColumnFilter: false,
     cell: info => {
       const { submissionId } = info.getValue();
       return <GradingActions submissionId={submissionId} />;
@@ -96,19 +102,30 @@ const columns = [
 ];
 
 type GradingSubmissionTableProps = {
+  group: string | null;
   submissions: GradingOverview[];
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ group, submissions }) => {
+  const defaultFilters = [];
+  if (group) {
+    defaultFilters.push({
+      id: 'groupName',
+      value: group
+    });
+  }
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(defaultFilters);
+  const [globalFilter, setGlobalFilter] = useState<string | null>('');
 
   const table = useReactTable({
     data: submissions,
     columns,
     state: {
-      columnFilters
+      columnFilters,
+      globalFilter
     },
     onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel()
@@ -121,22 +138,25 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
 
   return (
     <>
-      {/* TODO: add global filter */}
-      <Flex
-        marginTop="mt-2"
-        justifyContent="justify-start"
-        alignItems="items-center"
-        spaceX="space-x-2"
-      >
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
-          <BpIcon icon={IconNames.FILTER_LIST} />
-          <Text>
-            {columnFilters.length > 0
-              ? 'Filters: '
-              : 'No filters applied. Click a cell to filter by its value.'}{' '}
-          </Text>
-        </div>
-        <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
+      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
+        <Flex alignItems="items-center" spaceX="space-x-2">
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
+            <BpIcon icon={IconNames.FILTER_LIST} />
+            <Text>
+              {columnFilters.length > 0
+                ? 'Filters: '
+                : 'No filters applied. Click on any cell to filter by its value.'}{' '}
+            </Text>
+          </div>
+          <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
+        </Flex>
+
+        <TextInput
+          maxWidth="max-w-sm"
+          icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+          placeholder="Search for any value here..."
+          onChange={e => setGlobalFilter(e.target.value)}
+        />
       </Flex>
       <Table marginTop="mt-2">
         <TableHead>
