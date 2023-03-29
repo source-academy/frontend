@@ -141,6 +141,18 @@ export const htmlLanguage: SALanguage = {
   displayName: 'HTML'
 };
 
+export const schemeLanguage: SALanguage = {
+  chapter: Chapter.SCHEME_1,
+  variant: Variant.DEFAULT,
+  displayName: 'Scheme 1'
+};
+
+export const pyLanguage: SALanguage = {
+  chapter: Chapter.PYTHON_1,
+  variant: Variant.DEFAULT,
+  displayName: 'Python 1'
+};
+
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
   switch (chapter) {
     case Chapter.FULL_JS:
@@ -149,6 +161,10 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
       return fullTSLanguage.displayName;
     case Chapter.HTML:
       return htmlLanguage.displayName;
+    case Chapter.SCHEME_1:
+      return schemeLanguage.displayName;
+    case Chapter.PYTHON_1:
+      return pyLanguage.displayName;
     default:
       return `Source \xa7${chapter}${
         variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
@@ -230,7 +246,8 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultPlayground: PlaygroundState = {
-  githubSaveInfo: { repoName: '', filePath: '' }
+  githubSaveInfo: { repoName: '', filePath: '' },
+  lang: 'Source'
 };
 
 export const defaultEditorValue = '// Type your program in here!';

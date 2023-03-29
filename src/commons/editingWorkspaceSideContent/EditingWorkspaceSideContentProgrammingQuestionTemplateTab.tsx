@@ -25,7 +25,7 @@ type StateProps = {
 
 const questionEditorPaths = ['prepend', 'postpend', 'solutionTemplate', 'answer'] as const;
 
-export type QuestionEditorId = (typeof questionEditorPaths)[number];
+export type QuestionEditorId = typeof questionEditorPaths[number];
 
 const QuestionEditorSelect = Select.ofType<QuestionEditor>();
 

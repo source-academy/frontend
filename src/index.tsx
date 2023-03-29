@@ -13,6 +13,7 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
+// import newStore from './commons/Store'
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
 if (Constants.sentryDsn) {
@@ -38,9 +39,11 @@ console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 
 render(
   <Provider store={store}>
+    {/* <Provider store = {newStore}> */}
     <Router history={history}>
       <ApplicationContainer />
     </Router>
+    {/* </Provider> */}
   </Provider>,
   rootContainer
 );

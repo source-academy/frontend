@@ -16,6 +16,7 @@ import { Popover2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { Location } from 'history';
 import * as React from 'react';
+// import { Provider } from 'react-redux';
 import { match, NavLink, Route, Switch, useLocation } from 'react-router-dom';
 
 import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
@@ -25,9 +26,11 @@ import { AssessmentType } from '../assessment/AssessmentTypes';
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
+// import store from '../Store';
 import Constants from '../utils/Constants';
 import { useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
+import NavigationBarLangSelectButton from './NavigationBarLangSelectButton';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
@@ -347,6 +350,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
   const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
+      <NavigationBarLangSelectButton />
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
