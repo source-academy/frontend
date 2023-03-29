@@ -54,6 +54,8 @@ import {
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_ENVSTEPS,
+  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -370,3 +372,9 @@ export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: Workspa
 
 export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
+
+export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPS, { steps, workspaceLocation });
+
+export const updateEnvStepsTotal = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPSTOTAL, { steps, workspaceLocation });

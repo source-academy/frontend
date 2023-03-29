@@ -66,6 +66,8 @@ import {
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_ENVSTEPS,
+  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -990,6 +992,22 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             chapter: action.payload.sublang.chapter,
             variant: action.payload.sublang.variant
           }
+        }
+      };
+    case UPDATE_ENVSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          envSteps: action.payload.steps
+        }
+      };
+    case UPDATE_ENVSTEPSTOTAL:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          envStepsTotal: action.payload.steps
         }
       };
     case NOTIFY_PROGRAM_EVALUATED:

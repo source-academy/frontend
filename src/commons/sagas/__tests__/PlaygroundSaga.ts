@@ -80,7 +80,9 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false
+          usingEnv: false,
+          envSteps: -1,
+          envStepsTotal: 0
         }
       }
     };
@@ -143,7 +145,9 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false
+          usingEnv: false,
+          envSteps: -1,
+          envStepsTotal: 0
         }
       }
     };
@@ -206,7 +210,9 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false
+          usingEnv: false,
+          envSteps: -1,
+          envStepsTotal: 0
         }
       }
     };
@@ -252,7 +258,9 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false
+          usingEnv: false,
+          envSteps: -1,
+          envStepsTotal: 0
         }
       }
     };
@@ -317,7 +325,9 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false
+          usingEnv: false,
+          envSteps: -1,
+          envStepsTotal: 0
         }
       }
     };
@@ -371,7 +381,9 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false
+          usingEnv: false,
+          envSteps: -1,
+          envStepsTotal: 0
         }
       }
     };

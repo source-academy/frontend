@@ -2,27 +2,32 @@ import { Button, ButtonGroup, Classes, Divider, Slider } from '@blueprintjs/core
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { connect } from 'react-redux';
+import { connect, MapDispatchToProps } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import { OverallState } from '../application/ApplicationTypes';
 import Constants, { Links } from '../utils/Constants';
+import { updateEnvSteps } from '../workspace/WorkspaceActions';
 
 type State = {
   visualization: React.ReactNode;
   value: number;
   height: number;
   width: number;
-  lastStepCount: number;
 };
 
-type EnvVisualizerProps = StateProps;
+type EnvVisualizerProps = StateProps & DispatchProps;
 
 type StateProps = {
   handleEditorEval: () => void;
   editorWidth?: string;
   sideContentHeight?: number;
   numOfSteps?: number;
+};
+
+type DispatchProps = {
+  handleStepUpdate?: (steps: number) => void;
 };
 
 const envVizKeyMap = {
@@ -39,8 +44,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       visualization: null,
       value: 1,
       width: this.calculateWidth(props.editorWidth),
-      height: this.calculateHeight(props.sideContentHeight),
-      lastStepCount: 0
+      height: this.calculateHeight(props.sideContentHeight)
     };
     EnvVisualizer.init(
       visualization => this.setState({ visualization }),
@@ -111,16 +115,6 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     ) {
       this.handleResize();
     }
-    if (prevProps.numOfSteps !== this.props.numOfSteps) {
-      this.setState({
-        ...prevState,
-        lastStepCount: this.props.numOfSteps!
-      });
-      EnvVisualizer.redraw();
-      // console.log(this.state.lastStepCount);
-      console.log('update prev', prevProps.numOfSteps);
-      console.log('update after', this.props.numOfSteps);
-    }
   }
 
   public render() {
@@ -129,7 +123,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
           FIRST_STEP: this.stepFirst,
           NEXT_STEP: this.stepNext,
           PREVIOUS_STEP: this.stepPrevious,
-          LAST_STEP: this.stepLast(this.state.lastStepCount)
+          LAST_STEP: this.stepLast(this.props.numOfSteps!)
         }
       : {
           FIRST_STEP: () => {},
@@ -148,10 +142,10 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
             <Slider
               disabled={!this.state.visualization}
               min={1}
-              max={this.state.lastStepCount} //this.props.content.length
+              max={this.props.numOfSteps}
               onChange={this.sliderShift}
               onRelease={this.sliderRelease}
-              value={this.state.value <= this.state.lastStepCount ? this.state.value : 1}
+              value={this.state.value}
             />
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <ButtonGroup>
@@ -225,6 +219,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   };
 
   private sliderShift = (newValue: number) => {
+    this.props.handleStepUpdate!(newValue);
     this.setState((state: State) => {
       return { value: newValue };
     });
@@ -238,7 +233,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   };
 
   private stepNext = () => {
-    const lastStepValue = this.state.lastStepCount;
+    const lastStepValue = this.props.numOfSteps;
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.props.handleEditorEval();
@@ -261,8 +256,16 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
 const mapStateToProps = (state: OverallState, ownProps: EnvVisualizerProps) => {
   return {
     ...ownProps,
-    numOfSteps: state.workspaces.playground.context.runtime.envSteps || 101
+    numOfSteps: state.workspaces.playground.envStepsTotal
   };
 };
 
-export default connect(mapStateToProps)(SideContentEnvVisualizer);
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      handleStepUpdate: (steps: number) => updateEnvSteps(steps, 'playground') // TODO: Pass workspace location as a prop, so this can be done for any workspace location
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideContentEnvVisualizer);

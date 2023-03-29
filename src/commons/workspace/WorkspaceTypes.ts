@@ -55,6 +55,8 @@ export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE';
 export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
 export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
+export const UPDATE_ENVSTEPS = 'UPDATE_ENVSTEPS';
+export const UPDATE_ENVSTEPSTOTAL = 'UPDATE_ENVSTEPSTOTAL';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
@@ -76,6 +78,8 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
   readonly usingEnv: boolean;
+  readonly envSteps: number;
+  readonly envStepsTotal: number;
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
 

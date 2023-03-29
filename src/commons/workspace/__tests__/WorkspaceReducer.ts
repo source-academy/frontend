@@ -1012,7 +1012,9 @@ describe('LOG_OUT', () => {
       replValue: 'test repl value here',
       sharedbConnected: false,
       usingSubst: false,
-      usingEnv: false
+      usingEnv: false,
+      envSteps: -1,
+      envStepsTotal: 0
     };
 
     const logoutDefaultState: WorkspaceManagerState = {

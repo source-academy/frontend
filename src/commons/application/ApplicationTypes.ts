@@ -308,6 +308,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
     usingEnv: false,
+    envSteps: -1,
+    envStepsTotal: 0,
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -356,7 +358,9 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sicp: {
     ...createDefaultWorkspace('sicp'),
     usingSubst: false,
-    usingEnv: false
+    usingEnv: false,
+    envSteps: -1,
+    envStepsTotal: 0
     activeEditorTabIndex: 0,
     editorTabs: [
       {
