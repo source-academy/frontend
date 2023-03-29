@@ -468,6 +468,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     () => (
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
+        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={props.playgroundSourceChapter}
         sourceVariant={props.playgroundSourceVariant}
         key="chapter"
@@ -476,6 +477,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ),
     [
       chapterSelectHandler,
+      isFolderModeEnabled,
       props.playgroundSourceChapter,
       props.playgroundSourceVariant,
       usingRemoteExecution
@@ -917,7 +919,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
-        toggleFolderModeButton,
+        // Local imports/exports require Source 2+ as Source 1 does not have lists.
+        props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
@@ -959,9 +962,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           chapterSelect,
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
+          // Local imports/exports require Source 2+ as Source 1 does not have lists.
+          props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
           persistenceButtons,
-          githubButtons,
-          toggleFolderModeButton
+          githubButtons
         ]
       },
       selectedTabId: selectedTab,
