@@ -962,9 +962,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           chapterSelect,
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
+          // Local imports/exports require Source 2+ as Source 1 does not have lists.
+          props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
           persistenceButtons,
-          githubButtons,
-          toggleFolderModeButton
+          githubButtons
         ]
       },
       selectedTabId: selectedTab,
