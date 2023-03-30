@@ -104,44 +104,39 @@ export const overwriteFilesInWorkspace = (
   workspaceLocation: WorkspaceLocation,
   fileSystem: FSModule,
   files: Record<string, string>
-): Promise<undefined> => {
-  return rmdirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]).then(() => {
+): Promise<void> => {
+  return rmFilesInDirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]).then(() => {
     return new Promise((resolve, reject) => {
       const promises = Object.entries(files).map(
-        ([filePath, fileContents]: [string, string]): Promise<undefined> => {
+        ([filePath, fileContents]: [string, string]): Promise<void> => {
           return new Promise((resolve, reject) => {
             fileSystem.writeFile(filePath, fileContents, err => {
               if (err) {
                 reject();
               }
-              resolve(undefined);
+              resolve();
             });
           });
         }
       );
-      Promise.all(promises).then(() => resolve(undefined));
+      Promise.all(promises).then(() => resolve());
     });
   });
 };
 
 /**
- * Removes a directory recursively.
- *
- * BrowserFS's `rmdir` function is unable to remove non-empty directories despite being modelled
- * after Node.js's file system API. In Node.js, the `rmdir` function takes in an `options` object
- * where recursive directory removal can be set (https://nodejs.org/api/fs.html#fspromisesrmdirpath-options).
- * The BrowserFS equivalent however does not support these options and will fail with ENOTEMPTY
- * when trying to remove a non-empty directory.
+ * Removes the files & directories in a directory recursively, but leave
+ * the directory itself intact.
  *
  * @param fileSystem    The file system instance.
  * @param directoryPath The path of the directory to be removed.
  */
-export const rmdirRecursively = (
+export const rmFilesInDirRecursively = (
   fileSystem: FSModule,
   directoryPath: string
-): Promise<undefined> => {
+): Promise<void> => {
   return new Promise((resolve, reject) => {
-    fileSystem.readdir(directoryPath, async (err, fileNames) => {
+    fileSystem.readdir(directoryPath, async (err, fileNames): Promise<void> => {
       if (err) {
         reject(err);
       }
@@ -179,14 +174,31 @@ export const rmdirRecursively = (
       };
 
       // Remove each file/directory in parallel.
-      Promise.all(fileNames.map(removeFile)).then(() => {
-        fileSystem.rmdir(directoryPath, err => {
-          if (err) {
-            console.error(err);
-          }
+      Promise.all(fileNames.map(removeFile)).then(() => resolve());
+    });
+  });
+};
 
-          resolve(undefined);
-        });
+/**
+ * Removes a directory recursively.
+ *
+ * BrowserFS's `rmdir` function is unable to remove non-empty directories despite being modelled
+ * after Node.js's file system API. In Node.js, the `rmdir` function takes in an `options` object
+ * where recursive directory removal can be set (https://nodejs.org/api/fs.html#fspromisesrmdirpath-options).
+ * The BrowserFS equivalent however does not support these options and will fail with ENOTEMPTY
+ * when trying to remove a non-empty directory.
+ *
+ * @param fileSystem    The file system instance.
+ * @param directoryPath The path of the directory to be removed.
+ */
+export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    rmFilesInDirRecursively(fileSystem, directoryPath).then(() => {
+      fileSystem.rmdir(directoryPath, err => {
+        if (err) {
+          reject();
+        }
+        resolve();
       });
     });
   });
