@@ -27,7 +27,8 @@ export const retrieveFilesInWorkspaceAsRecord = (
     return new Promise((resolve, reject) => {
       fileSystem.readFile(filePath, 'utf-8', (err, fileContents) => {
         if (err) {
-          reject();
+          reject(err);
+          return;
         }
         if (fileContents === undefined) {
           return;
@@ -45,7 +46,8 @@ export const retrieveFilesInWorkspaceAsRecord = (
     return new Promise((resolve, reject) => {
       fileSystem.readdir(directoryPath, (err, fileNames) => {
         if (err) {
-          reject();
+          reject(err);
+          return;
         }
         if (fileNames === undefined) {
           return;
@@ -58,7 +60,8 @@ export const retrieveFilesInWorkspaceAsRecord = (
             new Promise((resolve, reject) => {
               fileSystem.lstat(fullPath, (err, stats) => {
                 if (err) {
-                  reject();
+                  reject(err);
+                  return;
                 }
                 if (stats === undefined) {
                   return;
@@ -112,14 +115,17 @@ export const overwriteFilesInWorkspace = (
           return new Promise((resolve, reject) => {
             fileSystem.writeFile(filePath, fileContents, err => {
               if (err) {
-                reject();
+                reject(err);
+                return;
               }
               resolve();
             });
           });
         }
       );
-      Promise.all(promises).then(() => resolve());
+      Promise.all(promises)
+        .then(() => resolve())
+        .catch(err => reject(err));
     });
   });
 };
@@ -139,6 +145,7 @@ export const rmFilesInDirRecursively = (
     fileSystem.readdir(directoryPath, async (err, fileNames): Promise<void> => {
       if (err) {
         reject(err);
+        return;
       }
       if (fileNames === undefined) {
         return;
@@ -149,7 +156,8 @@ export const rmFilesInDirRecursively = (
         return new Promise((resolve, reject) => {
           fileSystem.lstat(fullPath, async (err, stats) => {
             if (err) {
-              return reject(err);
+              reject(err);
+              return;
             }
             if (stats === undefined) {
               return;
@@ -160,6 +168,7 @@ export const rmFilesInDirRecursively = (
                 fileSystem.unlink(fullPath, err => {
                   if (err) {
                     reject(err);
+                    return;
                   }
                   resolve(true);
                 });
@@ -174,7 +183,9 @@ export const rmFilesInDirRecursively = (
       };
 
       // Remove each file/directory in parallel.
-      Promise.all(fileNames.map(removeFile)).then(() => resolve());
+      Promise.all(fileNames.map(removeFile))
+        .then(() => resolve())
+        .catch(err => reject(err));
     });
   });
 };
@@ -193,13 +204,16 @@ export const rmFilesInDirRecursively = (
  */
 export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    rmFilesInDirRecursively(fileSystem, directoryPath).then(() => {
-      fileSystem.rmdir(directoryPath, err => {
-        if (err) {
-          reject();
-        }
-        resolve();
-      });
-    });
+    rmFilesInDirRecursively(fileSystem, directoryPath)
+      .then(() => {
+        fileSystem.rmdir(directoryPath, err => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      })
+      .catch(err => reject(err));
   });
 };
