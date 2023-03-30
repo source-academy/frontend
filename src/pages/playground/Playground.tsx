@@ -108,7 +108,7 @@ import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSub
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
-import { queryParamToBoolean, stringParamToInt } from '../../commons/utils/ParamParseHelper';
+import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
@@ -184,7 +184,7 @@ export async function handleHash(
   // Make the parsed query string object a Partial because we might access keys which are not set.
   const qs: Partial<IParsedQuery> = parseQuery(hash);
 
-  const chapter = stringParamToInt(qs.chap) || undefined;
+  const chapter = convertParamToInt(qs.chap) || undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else if (chapter === Chapter.FULL_TS) {
@@ -197,12 +197,16 @@ export async function handleHash(
       }
     }
 
-    const isFolderModeEnabled = queryParamToBoolean(qs.isFolder) ?? false;
+    const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
     dispatch(setFolderMode('playground', isFolderModeEnabled));
 
     const files: Record<string, string> =
       qs.files === undefined ? {} : parseQuery(decompressFromEncodedURIComponent(qs.files));
     await overwriteFilesInWorkspace('playground', fileSystem, files);
+
+    // By default, use the first editor tab.
+    const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
+    dispatch(updateActiveEditorTabIndex('playground', activeEditorTabIndex));
 
     const variant: Variant =
       sourceLanguages.find(
@@ -213,7 +217,7 @@ export async function handleHash(
       props.handleChapterSelect(chapter, variant);
     }
 
-    const execTime = Math.max(stringParamToInt(qs.exec || '1000') || 1000, 1000);
+    const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
     if (execTime) {
       props.handleChangeExecTime(execTime);
     }
@@ -643,7 +647,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const toggleFolderModeButton = React.useMemo(() => {
     // TODO: Remove this once the Folder mode is ready for production.
-    if (true) {
+    if (false) {
       return <></>;
     }
 
