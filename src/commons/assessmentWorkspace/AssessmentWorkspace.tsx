@@ -659,7 +659,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
-        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={props.assessment!.questions[questionId].library.chapter}
         sourceVariant={
           props.assessment!.questions[questionId].library.variant ?? Constants.defaultSourceVariant

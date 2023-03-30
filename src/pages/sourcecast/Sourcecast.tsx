@@ -211,7 +211,6 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const chapterSelect = (
     <ControlBarChapterSelect
       handleChapterSelect={chapterSelectHandler}
-      isFolderModeEnabled={isFolderModeEnabled}
       sourceChapter={props.sourceChapter}
       sourceVariant={props.sourceVariant}
       key="chapter"

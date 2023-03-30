@@ -40,7 +40,6 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
-  SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
@@ -167,9 +166,6 @@ export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
 
 export const toggleFolderMode = (workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_FOLDER_MODE, { workspaceLocation });
-
-export const setFolderMode = (workspaceLocation: WorkspaceLocation, isFolderModeEnabled: boolean) =>
-  action(SET_FOLDER_MODE, { workspaceLocation, isFolderModeEnabled });
 
 export const updateActiveEditorTabIndex = (
   workspaceLocation: WorkspaceLocation,

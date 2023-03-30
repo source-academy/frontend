@@ -44,7 +44,6 @@ import {
   promptAutocomplete,
   removeEditorTab,
   sendReplInputToOutput,
-  setFolderMode,
   toggleEditorAutorun,
   toggleFolderMode,
   updateActiveEditorTabIndex,
@@ -291,14 +290,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (props.courseSourceChapter && props.courseSourceVariant) {
         propsRef.current.handleChapterSelect(props.courseSourceChapter, props.courseSourceVariant);
-        // Disable Folder mode when forcing the Source chapter and variant to follow the current course's.
-        // This is because Folder mode only works in Source 2+.
-        dispatch(setFolderMode(workspaceLocation, false));
       }
       return;
     }
     handleHash(hash, propsRef.current);
-  }, [dispatch, hash, props.courseSourceChapter, props.courseSourceVariant, workspaceLocation]);
+  }, [hash, props.courseSourceChapter, props.courseSourceVariant]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -468,7 +464,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     () => (
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
-        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={props.playgroundSourceChapter}
         sourceVariant={props.playgroundSourceVariant}
         key="chapter"
@@ -477,7 +472,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ),
     [
       chapterSelectHandler,
-      isFolderModeEnabled,
       props.playgroundSourceChapter,
       props.playgroundSourceVariant,
       usingRemoteExecution
@@ -919,8 +913,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
-        // Local imports/exports require Source 2+ as Source 1 does not have lists.
-        props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
+        toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
@@ -962,10 +955,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           chapterSelect,
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
-          // Local imports/exports require Source 2+ as Source 1 does not have lists.
-          props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
           persistenceButtons,
-          githubButtons
+          githubButtons,
+          toggleFolderModeButton
         ]
       },
       selectedTabId: selectedTab,

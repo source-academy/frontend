@@ -7,19 +7,14 @@ import { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
 
-/**
- * Maps workspaces to their file system base path.
- * An empty path indicates that the workspace is not
- * linked to the file system.
- */
 export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
-  assessment: '',
-  githubAssessment: '',
-  grading: '',
+  assessment: '/assessment',
+  githubAssessment: '/githubAssessment',
+  grading: '/grading',
   playground: '/playground',
-  sicp: '',
-  sourcecast: '',
-  sourcereel: ''
+  sicp: '/sicp',
+  sourcecast: '/sourcecast',
+  sourcereel: '/sourcereel'
 };
 
 export const createInBrowserFileSystem = (store: Store<OverallState>) => {

@@ -52,7 +52,6 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
-  SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
@@ -1314,25 +1313,6 @@ describe('TOGGLE_FOLDER_MODE', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           isFolderModeEnabled: false
-        }
-      });
-    });
-  });
-});
-
-describe('SET_FOLDER_MODE', () => {
-  test('sets isFolderModeEnabled correctly', () => {
-    const isFolderModeEnabled = true;
-    const actions = generateActions(SET_FOLDER_MODE, { isFolderModeEnabled });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          isFolderModeEnabled
         }
       });
     });

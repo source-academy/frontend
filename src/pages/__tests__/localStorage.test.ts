@@ -24,7 +24,6 @@ const mockShortDefaultState: SavedState = {
     assessmentConfigurations: defaultState.session.assessmentConfigurations
   },
   achievements: defaultState.achievement.achievements,
-  playgroundIsFolderModeEnabled: defaultState.workspaces.playground.isFolderModeEnabled,
   playgroundActiveEditorTabIndex: {
     value: defaultState.workspaces.playground.activeEditorTabIndex
   },
