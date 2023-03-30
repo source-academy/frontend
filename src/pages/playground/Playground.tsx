@@ -12,7 +12,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
-import { Dispatch } from 'redux';
+import { AnyAction, Dispatch } from 'redux';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -181,7 +181,7 @@ const keyMap = { goGreen: 'h u l k' };
 export async function handleHash(
   hash: string,
   props: PlaygroundProps,
-  dispatch: Dispatch,
+  dispatch: Dispatch<AnyAction>,
   fileSystem: FSModule
 ) {
   // Make the parsed query string object a Partial because we might access keys which are not set.

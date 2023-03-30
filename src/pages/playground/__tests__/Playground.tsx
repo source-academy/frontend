@@ -1,6 +1,8 @@
+import { FSModule } from 'browserfs/dist/node/core/FS';
 import { shallow } from 'enzyme';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
+import { Dispatch } from 'redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
@@ -80,12 +82,20 @@ describe('handleHash', () => {
     const mockHandleChapterSelect = jest.fn();
     const mockHandleChangeExecTime = jest.fn();
 
-    handleHash(testHash, {
-      ...playgroundLinkProps, // dummy props (will not be used)
-      handleEditorValueChange: mockHandleEditorValueChanged,
-      handleChapterSelect: mockHandleChapterSelect,
-      handleChangeExecTime: mockHandleChangeExecTime
-    });
+    handleHash(
+      testHash,
+      {
+        ...playgroundLinkProps, // dummy props (will not be used)
+        handleEditorValueChange: mockHandleEditorValueChanged,
+        handleChapterSelect: mockHandleChapterSelect,
+        handleChangeExecTime: mockHandleChangeExecTime
+      },
+      // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
+      // behaviour being tested here does not actually invoke either of these. As
+      // a workaround, we pass in 'undefined' instead & cast to the expected types.
+      undefined as unknown as Dispatch,
+      undefined as unknown as FSModule
+    );
 
     expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
     expect(mockHandleChapterSelect).not.toHaveBeenCalled();
