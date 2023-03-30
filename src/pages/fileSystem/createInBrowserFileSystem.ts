@@ -22,37 +22,44 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   sourcereel: ''
 };
 
-export const createInBrowserFileSystem = (store: Store<OverallState>) => {
-  configure(
-    {
-      fs: 'MountableFileSystem',
-      options: {
-        [WORKSPACE_BASE_PATHS.playground]: {
-          fs: 'IndexedDB',
-          options: {
-            storeName: 'playground'
+export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    configure(
+      {
+        fs: 'MountableFileSystem',
+        options: {
+          [WORKSPACE_BASE_PATHS.playground]: {
+            fs: 'IndexedDB',
+            options: {
+              storeName: 'playground'
+            }
           }
         }
+      },
+      (err: ApiError | null | undefined) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        // Set the browser file system reference in the Redux store for retrieval
+        // in other parts of the codebase.
+        const fileSystem = BFSRequire('fs');
+        store.dispatch(setInBrowserFileSystem(fileSystem));
+        // Create files for editor tabs if they do not exist. This can happen when
+        // editor tabs are initialised from the Redux store defaults, as opposed to
+        // being created by the user.
+        const workspaceStates = store.getState().workspaces;
+        const promises: Promise<void>[] = [];
+        for (const [, workspaceState] of Object.entries(workspaceStates)) {
+          const editorTabs = workspaceState.editorTabs;
+          promises.push(createFilesForEditorTabs(fileSystem, editorTabs));
+        }
+        Promise.all(promises)
+          .then(() => resolve())
+          .catch(err => reject(err));
       }
-    },
-    (err: ApiError | null | undefined) => {
-      if (err) {
-        console.error(err);
-      }
-      // Set the browser file system reference in the Redux store for retrieval
-      // in other parts of the codebase.
-      const fileSystem = BFSRequire('fs');
-      store.dispatch(setInBrowserFileSystem(fileSystem));
-      // Create files for editor tabs if they do not exist. This can happen when
-      // editor tabs are initialised from the Redux store defaults, as opposed to
-      // being created by the user.
-      const workspaceStates = store.getState().workspaces;
-      Object.entries(workspaceStates).forEach(([_workspaceLocation, workspaceState]) => {
-        const editorTabs = workspaceState.editorTabs;
-        createFilesForEditorTabs(fileSystem, editorTabs);
-      });
-    }
-  );
+    );
+  });
 };
 
 // An EditorTabWithFile is an editor tab with an associated file path.
@@ -60,21 +67,27 @@ type EditorTabWithFile = EditorTabState & {
   filePath: string;
 };
 
-const createFilesForEditorTabs = (fileSystem: FSModule, editorTabs: EditorTabState[]) => {
+const createFilesForEditorTabs = async (fileSystem: FSModule, editorTabs: EditorTabState[]) => {
   const editorTabsWithFile = editorTabs.filter(
     (editorTab): editorTab is EditorTabWithFile => editorTab.filePath !== undefined
   );
-  editorTabsWithFile.forEach(editorTab => {
-    fileSystem.exists(editorTab.filePath, filePathExists => {
-      if (filePathExists) {
-        return;
-      }
-
-      fileSystem.writeFile(editorTab.filePath, editorTab.value, err => {
-        if (err) {
-          console.error(err);
+  const promises = editorTabsWithFile.map((editorTab): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      fileSystem.exists(editorTab.filePath, filePathExists => {
+        if (filePathExists) {
+          resolve();
+          return;
         }
+
+        fileSystem.writeFile(editorTab.filePath, editorTab.value, err => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
       });
     });
   });
+  await Promise.all(promises);
 };

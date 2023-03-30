@@ -36,14 +36,19 @@ console.log(
 setModulesStaticURL(Constants.moduleBackendUrl);
 console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 
-render(
-  <Provider store={store}>
-    <Router history={history}>
-      <ApplicationContainer />
-    </Router>
-  </Provider>,
-  rootContainer
-);
+// Initialise the browser file system before rendering to avoid race conditions on the file system.
+createInBrowserFileSystem(store)
+  .then(() => {
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <ApplicationContainer />
+        </Router>
+      </Provider>,
+      rootContainer
+    );
+  })
+  .catch(err => console.error(err));
 
 registerServiceWorker({
   onUpdate: () => {
@@ -62,5 +67,3 @@ if (Constants.cadetLoggerUrl) {
     setInterval(sync, Constants.cadetLoggerInterval);
   });
 }
-
-createInBrowserFileSystem(store);
