@@ -251,14 +251,6 @@ export async function handleHash(
     if (execTime) {
       props.handleChangeExecTime(execTime);
     }
-
-    // const programLz = qs.lz ?? qs.prgrm;
-    // const program = programLz && decompressFromEncodedURIComponent(programLz);
-    // if (program) {
-    //   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    //   props.handleEditorValueChange(0, program);
-    //   props.handleEditorUpdateBreakpoints(0, []);
-    // }
   }
 }
 
