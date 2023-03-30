@@ -1,4 +1,5 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import Stats from 'browserfs/dist/node/core/node_fs_stats';
 import path from 'path';
 
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
@@ -26,10 +27,9 @@ export const retrieveFilesInWorkspaceAsRecord = (
     return new Promise((resolve, reject) => {
       fileSystem.readFile(filePath, 'utf-8', (err, fileContents) => {
         if (err) {
-          console.error(err);
+          reject();
         }
         if (fileContents === undefined) {
-          reject();
           return;
         }
 
@@ -45,10 +45,9 @@ export const retrieveFilesInWorkspaceAsRecord = (
     return new Promise((resolve, reject) => {
       fileSystem.readdir(directoryPath, (err, fileNames) => {
         if (err) {
-          console.error(err);
+          reject();
         }
         if (fileNames === undefined) {
-          reject();
           return;
         }
 
@@ -59,10 +58,9 @@ export const retrieveFilesInWorkspaceAsRecord = (
             new Promise((resolve, reject) => {
               fileSystem.lstat(fullPath, (err, stats) => {
                 if (err) {
-                  console.error(err);
+                  reject();
                 }
                 if (stats === undefined) {
-                  reject();
                   return;
                 }
 
@@ -94,6 +92,39 @@ export const retrieveFilesInWorkspaceAsRecord = (
 };
 
 /**
+ * Overwrites the files in the workspace with the ones specified. Because BrowserFS
+ * lacks an equivalent to Node.js's Promises API, we need to wrap each asynchronous
+ * call to the file system with promises ourselves.
+ *
+ * @param workspaceLocation The location of the workspace.
+ * @param fileSystem        The file system instance.
+ * @param files             A mapping from file paths to file contents.
+ */
+export const overwriteFilesInWorkspace = (
+  workspaceLocation: WorkspaceLocation,
+  fileSystem: FSModule,
+  files: Record<string, string>
+): Promise<undefined> => {
+  return rmdirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]).then(() => {
+    return new Promise((resolve, reject) => {
+      const promises = Object.entries(files).map(
+        ([filePath, fileContents]: [string, string]): Promise<undefined> => {
+          return new Promise((resolve, reject) => {
+            fileSystem.writeFile(filePath, fileContents, err => {
+              if (err) {
+                reject();
+              }
+              resolve(undefined);
+            });
+          });
+        }
+      );
+      Promise.all(promises).then(() => resolve(undefined));
+    });
+  });
+};
+
+/**
  * Removes a directory recursively.
  *
  * BrowserFS's `rmdir` function is unable to remove non-empty directories despite being modelled
@@ -105,7 +136,10 @@ export const retrieveFilesInWorkspaceAsRecord = (
  * @param fileSystem    The file system instance.
  * @param directoryPath The path of the directory to be removed.
  */
-export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): Promise<boolean> => {
+export const rmdirRecursively = (
+  fileSystem: FSModule,
+  directoryPath: string
+): Promise<undefined> => {
   return new Promise((resolve, reject) => {
     fileSystem.readdir(directoryPath, async (err, fileNames) => {
       if (err) {
@@ -115,7 +149,7 @@ export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): P
         return;
       }
 
-      const removeFile = (fileName: string) => {
+      const removeFile = (fileName: string): Promise<Stats> => {
         const fullPath = path.join(directoryPath, fileName);
         return new Promise((resolve, reject) => {
           fileSystem.lstat(fullPath, async (err, stats) => {
@@ -151,7 +185,7 @@ export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): P
             console.error(err);
           }
 
-          resolve(true);
+          resolve(undefined);
         });
       });
     });
