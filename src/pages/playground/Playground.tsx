@@ -2,6 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import { Ace, Range } from 'ace-builds';
+import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Chapter, Variant } from 'js-slang/dist/types';
@@ -11,6 +12,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
+import { Dispatch } from 'redux';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -92,6 +94,7 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
+import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -105,8 +108,8 @@ import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSub
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
-import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
-import { parseQuery } from '../../commons/utils/QueryHelper';
+import { queryParamToBoolean, stringParamToInt } from '../../commons/utils/ParamParseHelper';
+import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
@@ -172,8 +175,14 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
-export async function handleHash(hash: string, props: PlaygroundProps) {
-  const qs = parseQuery(hash);
+export async function handleHash(
+  hash: string,
+  props: PlaygroundProps,
+  dispatch: Dispatch,
+  fileSystem: FSModule
+) {
+  // Make the parsed query string object a Partial because we might access keys which are not set.
+  const qs: Partial<IParsedQuery> = parseQuery(hash);
 
   const chapter = stringParamToInt(qs.chap) || undefined;
   if (chapter === Chapter.FULL_JS) {
@@ -187,17 +196,19 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
         return;
       }
     }
-    const programLz = qs.lz ?? qs.prgrm;
-    const program = programLz && decompressFromEncodedURIComponent(programLz);
-    if (program) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      props.handleEditorValueChange(0, program);
-      props.handleEditorUpdateBreakpoints(0, []);
-    }
+
+    const isFolderModeEnabled = queryParamToBoolean(qs.isFolder) ?? false;
+    dispatch(setFolderMode('playground', isFolderModeEnabled));
+
+    const files: Record<string, string> =
+      qs.files === undefined ? {} : parseQuery(decompressFromEncodedURIComponent(qs.files));
+    await overwriteFilesInWorkspace('playground', fileSystem, files);
+
     const variant: Variant =
       sourceLanguages.find(
         language => language.chapter === chapter && language.variant === qs.variant
       )?.variant ?? Variant.DEFAULT;
+
     if (chapter) {
       props.handleChapterSelect(chapter, variant);
     }
@@ -206,6 +217,14 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
     if (execTime) {
       props.handleChangeExecTime(execTime);
     }
+
+    // const programLz = qs.lz ?? qs.prgrm;
+    // const program = programLz && decompressFromEncodedURIComponent(programLz);
+    // if (program) {
+    //   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+    //   props.handleEditorValueChange(0, program);
+    //   props.handleEditorUpdateBreakpoints(0, []);
+    // }
   }
 }
 
@@ -227,6 +246,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const { isFolderModeEnabled, activeEditorTabIndex } = useTypedSelector(
     state => state.workspaces[workspaceLocation]
   );
+  const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
@@ -297,8 +317,17 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       }
       return;
     }
-    handleHash(hash, propsRef.current);
-  }, [dispatch, hash, props.courseSourceChapter, props.courseSourceVariant, workspaceLocation]);
+    if (fileSystem !== null) {
+      handleHash(hash, propsRef.current, dispatch, fileSystem);
+    }
+  }, [
+    dispatch,
+    fileSystem,
+    hash,
+    props.courseSourceChapter,
+    props.courseSourceVariant,
+    workspaceLocation
+  ]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit

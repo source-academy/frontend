@@ -19,3 +19,16 @@ export const stringParamToInt = (str?: string): number | null => {
   const num = parseInt(str, 10);
   return Number.isInteger(num) ? num : null;
 };
+
+/**
+ * Converts a query string parameter into a boolean.
+ * Returns null if the query string parameter is undefined.
+ *
+ * @param param The parameter to convert to a boolean.
+ */
+export const queryParamToBoolean = (param?: string): boolean | null => {
+  if (param === undefined) {
+    return null;
+  }
+  return param.toLowerCase() === 'true';
+};
