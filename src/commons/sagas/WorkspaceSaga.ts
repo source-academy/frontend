@@ -576,10 +576,11 @@ function* insertDebuggerStatements(
   // corresponding debugger statements.
   const lines = code.split('\n');
   let transformedCode = code;
-  for (const breakpoint in breakpoints) {
+  for (let i = 0; i < breakpoints.length; i++) {
     // Add a debugger statement to the line with the breakpoint.
-    const breakpointLineNum: number = parseInt(breakpoint);
-    lines[breakpointLineNum] = 'debugger;' + lines[breakpointLineNum];
+    // const breakpointLineNum: number = parseInt(breakpoint);
+    if (!breakpoints[i]) continue;
+    lines[i] = 'debugger;' + lines[i];
     // Reconstruct the code & check that the code is still syntactically valid.
     // The insertion of the debugger statement is potentially invalid if it
     // happens within an existing statement (that is split across lines).
@@ -589,7 +590,7 @@ function* insertDebuggerStatements(
     }
     // If the resulting code is no longer syntactically valid, throw an error.
     if (context.errors.length > 0) {
-      const errorMessage = `Hint: Misplaced breakpoint at line ${breakpointLineNum + 1}.`;
+      const errorMessage = `Hint: Misplaced breakpoint at line ${i + 1}.`;
       yield put(actions.sendReplInputToOutput(errorMessage, workspaceLocation));
       return code;
     }
@@ -928,7 +929,11 @@ export function* evalCode(
   }
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
-  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+  if (
+    actionType === EVAL_EDITOR ||
+    actionType === EVAL_REPL ||
+    (actionType === DEBUG_RESUME && result.status === 'finished')
+  ) {
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));
     }
