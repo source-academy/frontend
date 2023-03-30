@@ -64,6 +64,10 @@ export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_
 export const UPDATE_USER_ROLE = 'UPDATE_USER_ROLE';
 export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
 export const DELETE_USER_COURSE_REGISTRATION = 'DELETE_USER_COURSE_REGISTRATION';
+export const FETCH_NOTIFICATION_CONFIGS = 'FETCH_NOTIFICATION_CONFIGS';
+export const SET_NOTIFICATION_CONFIGS = 'SET_NOTIFICATION_CONFIGS';
+export const UPDATE_NOTIFICATION_CONFIG = 'UPDATE_NOTIFICATION_CONFIG';
+export const DELETE_TIME_OPTION = 'DELETE_TIME_OPTION';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -102,6 +106,8 @@ export type SessionState = {
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
+
+  readonly notificationConfigs?: NotificationConfiguration[];
 
   // For research data collection
   readonly agreedToResearch?: boolean | null;
@@ -170,6 +176,30 @@ export type AdminPanelCourseRegistration = {
   username: string;
   role: Role;
   group?: string;
+};
+
+export type TimeOption = {
+  id: number;
+  isDefault: boolean;
+  minutes: number;
+};
+
+export type NotificationConfiguration = {
+  id: number;
+  isEnabled: boolean;
+  notificationType: {
+    id: number;
+    name: string;
+    isEnabled: boolean;
+    forStaff: boolean;
+  };
+  timeOptions: TimeOption[];
+  assessmentConfig: {
+    id: number;
+    type: string;
+  } | null;
+  notificationPreference: any;
+  course: any;
 };
 
 export type UpdateCourseConfiguration = Partial<CourseConfiguration>;

@@ -18,6 +18,7 @@ import {
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
+  SET_NOTIFICATION_CONFIGS,
   SET_TOKENS,
   SET_USER,
   UPDATE_ALL_USER_XP,
@@ -80,6 +81,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         assessmentConfigurations: action.payload
+      };
+    case SET_NOTIFICATION_CONFIGS:
+      return {
+        ...state,
+        notificationConfigs: action.payload
       };
     case SET_ADMIN_PANEL_COURSE_REGISTRATIONS:
       return {

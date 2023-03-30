@@ -198,9 +198,11 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
 
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
+    console.log(params.api);
     params.api.sizeColumnsToFit();
   };
 
+  // console.log(props.assessmentConfig);
   const grid = (
     <div className="Grid ag-grid-parent ag-theme-balham">
       <AgGridReact

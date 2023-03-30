@@ -28,6 +28,8 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
+  NotificationConfiguration,
+  TimeOption,
   Tokens,
   UpdateCourseConfiguration,
   User
@@ -1089,6 +1091,69 @@ export const putAssessmentConfigs = async (
   return resp;
 };
 
+export const putNotificationConfig = async (
+  tokens: Tokens,
+  notificationConfig: NotificationConfiguration
+) => {
+  // for each time option in notificationConfig, if id = -1, post to create new time option
+  // else, put to update existing time option
+
+  notificationConfig.timeOptions.forEach(async timeOption => {
+    if (timeOption.id === -1) {
+      return await postTimeOption(tokens, timeOption, notificationConfig.id);
+    } else {
+      return await putTimeOption(tokens, timeOption);
+    }
+  });
+
+  return await request(`notifications/config/${notificationConfig.id}`, 'PUT', {
+    ...tokens,
+    body: {
+      isEnabled: notificationConfig.isEnabled
+    },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+};
+
+export const putTimeOption = async (
+  tokens: Tokens,
+  timeOption: TimeOption
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options/${timeOption.id}`, 'PUT', {
+    ...tokens,
+    body: {
+      isDefault: timeOption.isDefault
+    },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+export const postTimeOption = async (
+  tokens: Tokens,
+  timeOption: TimeOption,
+  notificationConfigId: number
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options`, 'POST', {
+    ...tokens,
+    body: {
+      isDefault: timeOption.isDefault,
+      minutes: timeOption.minutes,
+      notification_config_id: notificationConfigId
+    },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
 /**
  * DELETE /courses/{courseId}/admin/config/assessment_config/{assessmentConfigId}
  */
@@ -1108,6 +1173,34 @@ export const removeAssessmentConfig = async (
   );
 
   return resp;
+};
+
+export const removeTimeOption = async (
+  tokens: Tokens,
+  timeOption: TimeOption
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options/${timeOption.id}`, 'DELETE', {
+    ...tokens,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+export const getNotificationConfigs = async (
+  tokens: Tokens
+): Promise<NotificationConfiguration[] | null> => {
+  const resp = await request(`notifications/config/${courseIdWithoutPrefix()}`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
 };
 
 /**
@@ -1429,6 +1522,17 @@ const courseId: () => string = () => {
   const id = store.getState().session.courseId;
   if (id) {
     return `courses/${id}`;
+  } else {
+    // TODO: Rewrite this logic
+    showWarningMessage(`No course selected!`, 1000);
+    throw new Error(`No course selected`);
+  }
+};
+
+const courseIdWithoutPrefix: () => string = () => {
+  const id = store.getState().session.courseId;
+  if (id) {
+    return `${id}`;
   } else {
     // TODO: Rewrite this logic
     showWarningMessage(`No course selected!`, 1000);
