@@ -36,6 +36,7 @@ import {
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
 import {
+  addEditorTab,
   addHtmlConsoleError,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -203,6 +204,12 @@ export async function handleHash(
     const files: Record<string, string> =
       qs.files === undefined ? {} : parseQuery(decompressFromEncodedURIComponent(qs.files));
     await overwriteFilesInWorkspace('playground', fileSystem, files);
+
+    const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [];
+    editorTabFilePaths.forEach(filePath =>
+      // Fall back on the empty string if the file contents do not exist.
+      dispatch(addEditorTab('playground', filePath, files[filePath] ?? ''))
+    );
 
     // By default, use the first editor tab.
     const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
@@ -647,7 +654,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   const toggleFolderModeButton = React.useMemo(() => {
     // TODO: Remove this once the Folder mode is ready for production.
-    if (false) {
+    if (true) {
       return <></>;
     }
 
