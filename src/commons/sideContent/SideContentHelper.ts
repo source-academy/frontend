@@ -1,4 +1,5 @@
 import React from 'react';
+import JSXRuntime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -50,9 +51,23 @@ export const getModuleTabs = (debuggerContext: DebuggerContext): ModuleSideConte
     return [];
   }
 
+  const requireProvider = (x: string) => {
+    const result = {
+      react: React,
+      'react-dom': ReactDOM,
+      'react/jsx-runtime': JSXRuntime
+    }[x];
+
+    if (result === undefined) {
+      throw new Error(`Dynamic require of ${x} is not supported`);
+    }
+
+    return result;
+  };
+
   // Pass React into functions
   const moduleTabs: ModuleSideContent[] = Object.values(rawModuleContexts).flatMap(
-    context => context.tabs?.map((tab: any) => tab(React, ReactDOM)) ?? []
+    context => context.tabs?.map((tab: any) => tab(requireProvider)) ?? []
   );
 
   return moduleTabs;
