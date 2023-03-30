@@ -46,6 +46,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   removeEditorTab,
+  removeEditorTabsForDirectory,
   sendReplInputToOutput,
   setFolderMode,
   toggleEditorAutorun,
@@ -206,6 +207,9 @@ export async function handleHash(
     await overwriteFilesInWorkspace('playground', fileSystem, files);
 
     const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [];
+    // Remove all editor tabs before populating with the ones from the query string.
+    dispatch(removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS.playground));
+    // Add editor tabs from the query string.
     editorTabFilePaths.forEach(filePath =>
       // Fall back on the empty string if the file contents do not exist.
       dispatch(addEditorTab('playground', filePath, files[filePath] ?? ''))
