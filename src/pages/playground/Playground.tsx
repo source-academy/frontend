@@ -203,9 +203,6 @@ export async function handleHash(
     // For backward compatibility with old share links - 'prgrm' is no longer used.
     const program = qs.prgrm === undefined ? '' : decompressFromEncodedURIComponent(qs.prgrm);
 
-    const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
-    dispatch(setFolderMode('playground', isFolderModeEnabled));
-
     // By default, create just the default playground file.
     const files: Record<string, string> =
       qs.files === undefined
@@ -214,6 +211,16 @@ export async function handleHash(
           }
         : parseQuery(decompressFromEncodedURIComponent(qs.files));
     await overwriteFilesInWorkspace('playground', fileSystem, files);
+
+    // BrowserFS does not provide a way of listening to changes in the file system, which makes
+    // updating the file system view troublesome. To force the file system view to re-render
+    // (and thus display the updated file system), we first disable Folder mode.
+    dispatch(setFolderMode('playground', false));
+    const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
+    // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
+    // newly-added files to be shown. Note that this has to take place after the files are
+    // already added to the file system.
+    dispatch(setFolderMode('playground', isFolderModeEnabled));
 
     // By default, open a single editor tab containing the default playground file.
     const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
