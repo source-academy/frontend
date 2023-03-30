@@ -5,8 +5,8 @@ import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import { rmdirRecursively } from '../fileSystem/utils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
-import { rmdirRecursively } from '../utils/FileSystemUtils';
 import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
