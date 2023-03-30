@@ -56,6 +56,9 @@ function loadStore(loadedStore: SavedState | undefined) {
       ...defaultState.workspaces,
       playground: {
         ...defaultState.workspaces.playground,
+        isFolderModeEnabled: loadedStore.playgroundIsFolderModeEnabled
+          ? loadedStore.playgroundIsFolderModeEnabled
+          : defaultState.workspaces.playground.isFolderModeEnabled,
         activeEditorTabIndex: loadedStore.playgroundActiveEditorTabIndex
           ? loadedStore.playgroundActiveEditorTabIndex.value
           : defaultState.workspaces.playground.activeEditorTabIndex,

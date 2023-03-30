@@ -17,6 +17,7 @@ const mockChangedStoredState: SavedState = {
     userId: 1,
     githubAccessToken: 'githubAccessToken'
   },
+  playgroundIsFolderModeEnabled: true,
   playgroundActiveEditorTabIndex: {
     value: 1
   },
@@ -55,6 +56,7 @@ const mockChangedState: OverallState = {
     ...defaultState.workspaces,
     playground: {
       ...defaultState.workspaces.playground,
+      isFolderModeEnabled: true,
       activeEditorTabIndex: 1,
       editorTabs: [
         {

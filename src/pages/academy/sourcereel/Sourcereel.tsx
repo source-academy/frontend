@@ -222,6 +222,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   const chapterSelect = (
     <ControlBarChapterSelect
       handleChapterSelect={chapterSelectHandler}
+      isFolderModeEnabled={isFolderModeEnabled}
       sourceChapter={props.sourceChapter}
       sourceVariant={props.sourceVariant}
       key="chapter"

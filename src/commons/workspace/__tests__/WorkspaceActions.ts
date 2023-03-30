@@ -32,6 +32,7 @@ import {
   sendReplInputToOutput,
   setEditorBreakpoint,
   setEditorHighlightedLines,
+  setFolderMode,
   shiftEditorTab,
   toggleEditorAutorun,
   toggleFolderMode,
@@ -71,6 +72,7 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
@@ -277,6 +279,18 @@ test('toggleFolderMode generates correct action object', () => {
     type: TOGGLE_FOLDER_MODE,
     payload: {
       workspaceLocation: gradingWorkspace
+    }
+  });
+});
+
+test('setFolderMode generates correct action object', () => {
+  const isFolderModeEnabled = true;
+  const action = setFolderMode(gradingWorkspace, isFolderModeEnabled);
+  expect(action).toEqual({
+    type: SET_FOLDER_MODE,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      isFolderModeEnabled
     }
   });
 });
