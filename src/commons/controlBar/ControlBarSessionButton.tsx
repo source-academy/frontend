@@ -138,6 +138,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
               {this.props.editorSessionId === '' ? joinButton : leaveButton}
             </Menu>
           }
+          disabled={this.props.isFolderModeEnabled}
         >
           <ControlButton
             label="Session"
