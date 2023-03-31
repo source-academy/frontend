@@ -109,23 +109,11 @@ export const overwriteFilesInWorkspace = (
   files: Record<string, string>
 ): Promise<void> => {
   return rmFilesInDirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]).then(() => {
-    return new Promise((resolve, reject) => {
-      const promises = Object.entries(files).map(
-        ([filePath, fileContents]: [string, string]): Promise<void> => {
-          return new Promise((resolve, reject) => {
-            fileSystem.writeFile(filePath, fileContents, err => {
-              if (err) {
-                reject(err);
-                return;
-              }
-              resolve();
-            });
-          });
-        }
-      );
-      Promise.all(promises)
-        .then(() => resolve())
-        .catch(err => reject(err));
+    return new Promise(async (resolve, reject) => {
+      for (const [filePath, fileContents] of Object.entries(files)) {
+        await writeFileRecursively(fileSystem, filePath, fileContents).catch(err => reject(err));
+      }
+      resolve();
     });
   });
 };
@@ -215,5 +203,63 @@ export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): P
         });
       })
       .catch(err => reject(err));
+  });
+};
+
+/**
+ * Writes a file recursively by creating all parent directories if they do not exist.
+ *
+ * BrowserFS's `mkdir` function is unable to recursively create directories despite being modelled
+ * after Node.js's file system API. In Node.js, the `mkdir` function takes in an `options` object
+ * where recursive directory creation can be set (https://nodejs.org/api/fs.html#fspromisesmkdirpath-options).
+ * The BrowserFS equivalent however does not support these options and will fail with ENOENT
+ * when trying to create directories recursively.
+ *
+ * @param fileSystem   The file system instance.
+ * @param filePath     The path of the file to be written to.
+ * @param fileContents The contents of the file to be written to.
+ */
+export const writeFileRecursively = (
+  fileSystem: FSModule,
+  filePath: string,
+  fileContents: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    // Create directories along the path if they do not exist.
+    // Remove empty path segments.
+    const pathSegments = filePath.split(path.sep).filter(path => path !== '');
+    // The last path segment is not a directory but the name of the file, so we ignore it.
+    for (let i = 1; i < pathSegments.length; i++) {
+      const dirPath = '/' + path.join(...pathSegments.slice(0, i));
+      const promise: Promise<void> = new Promise((resolve, reject) => {
+        // Check whether the directory path already exists to prevent overwriting of existing files & directories.
+        fileSystem.exists(dirPath, dirPathExists => {
+          if (dirPathExists) {
+            resolve();
+            return;
+          }
+
+          fileSystem.mkdir(dirPath, 777, err => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve();
+          });
+        });
+      });
+      promise.catch(err => reject(err));
+    }
+
+    // Write to the file.
+    fileSystem.writeFile(filePath, fileContents, err => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve();
+    });
   });
 };

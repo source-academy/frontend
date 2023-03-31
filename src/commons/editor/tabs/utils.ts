@@ -1,3 +1,5 @@
+import path from 'path';
+
 /**
  * Returns the shortest file paths that is uniquely identifiable among
  * all open editor tabs. This is similar to how most code editors available
@@ -30,7 +32,7 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
       ...segments,
       // It is necessary to remove empty segments to deal with the very first '/' in
       // file paths.
-      [filePath]: filePath.split('/').filter(segment => segment !== '')
+      [filePath]: filePath.split(path.sep).filter(segment => segment !== '')
     }),
     {}
   );

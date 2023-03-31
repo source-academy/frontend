@@ -5,6 +5,7 @@ import { Store } from 'redux';
 
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
+import { writeFileRecursively } from '../../commons/fileSystem/utils';
 import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
 
 /**
@@ -79,13 +80,9 @@ const createFilesForEditorTabs = async (fileSystem: FSModule, editorTabs: Editor
           return;
         }
 
-        fileSystem.writeFile(editorTab.filePath, editorTab.value, err => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve();
-        });
+        writeFileRecursively(fileSystem, editorTab.filePath, editorTab.value)
+          .then(() => resolve())
+          .catch(err => reject(err));
       });
     });
   });
