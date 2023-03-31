@@ -684,11 +684,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return (
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
+        isSessionActive={props.editorSessionId !== ''}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
     );
-  }, [dispatch, isFolderModeEnabled, workspaceLocation]);
+  }, [dispatch, isFolderModeEnabled, props.editorSessionId, workspaceLocation]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({

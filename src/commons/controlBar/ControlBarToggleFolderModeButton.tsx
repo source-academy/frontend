@@ -7,14 +7,18 @@ import ControlButton from '../ControlButton';
 
 type ControlBarToggleFolderModeButtonProps = {
   isFolderModeEnabled: boolean;
+  isSessionActive: boolean;
   toggleFolderMode: () => void;
 };
 
 export const ControlBarToggleFolderModeButton: React.FC<ControlBarToggleFolderModeButtonProps> = ({
   isFolderModeEnabled,
+  isSessionActive,
   toggleFolderMode
 }) => {
-  const tooltipContent = `${isFolderModeEnabled ? 'Disable' : 'Enable'} Folder mode`;
+  const tooltipContent = isSessionActive
+    ? 'Currently unsupported while a collaborative session is active'
+    : `${isFolderModeEnabled ? 'Disable' : 'Enable'} Folder mode`;
   return (
     <Tooltip2 content={tooltipContent}>
       <ControlButton
@@ -24,6 +28,7 @@ export const ControlBarToggleFolderModeButton: React.FC<ControlBarToggleFolderMo
           iconColor: isFolderModeEnabled ? Colors.BLUE4 : undefined
         }}
         onClick={toggleFolderMode}
+        isDisabled={isSessionActive}
       />
     </Tooltip2>
   );
