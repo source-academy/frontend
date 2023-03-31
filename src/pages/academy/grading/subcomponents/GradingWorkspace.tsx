@@ -416,7 +416,13 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       <ControlBarQuestionViewButton questionProgress={questionProgress} key="question_view" />
     );
 
-    const runButton = <ControlBarRunButton handleEditorEval={this.handleEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton
+        isEntrypointFileDefined={this.props.activeEditorTabIndex !== null}
+        handleEditorEval={this.handleEval}
+        key="run"
+      />
+    );
 
     return {
       editorButtons: [runButton],

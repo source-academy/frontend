@@ -649,8 +649,7 @@ export function* evalEditor(
   ]);
 
   if (activeEditorTabIndex === null) {
-    // TODO: Implement this.
-    throw new Error('To be handled...');
+    throw new Error('Cannot evaluate program without an entrypoint file.');
   }
 
   const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
