@@ -104,6 +104,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       const isFolderModeEnabled: boolean = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
       );
+      yield put(actions.setFolderMode(workspaceLocation, !isFolderModeEnabled));
       const warningMessage = `Folder mode ${isFolderModeEnabled ? 'enabled' : 'disabled'}`;
       yield call(showWarningMessage, warningMessage, 750);
     }

@@ -43,7 +43,8 @@ import {
   endClearContext,
   moveCursor,
   sendReplInputToOutput,
-  setEditorHighlightedLines
+  setEditorHighlightedLines,
+  setFolderMode
 } from '../../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
@@ -93,7 +94,7 @@ beforeEach(() => {
 });
 
 describe('TOGGLE_FOLDER_MODE', () => {
-  test('calls showWarningMessage correctly when isFolderMode is false', () => {
+  test('enables Folder mode & calls showWarningMessage correctly when isFolderMode is false', () => {
     const workspaceLocation = 'assessment';
     const updatedWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: false
@@ -102,6 +103,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
+      .put(setFolderMode(workspaceLocation, true))
       .call(showWarningMessage, 'Folder mode disabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,
@@ -110,7 +112,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
       .silentRun();
   });
 
-  test('calls showWarningMessage correctly when isFolderMode is true', () => {
+  test('disables Folder mode & calls showWarningMessage correctly when isFolderMode is true', () => {
     const workspaceLocation = 'grading';
     const updatedWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: true
@@ -119,6 +121,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
+      .put(setFolderMode(workspaceLocation, false))
       .call(showWarningMessage, 'Folder mode enabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,

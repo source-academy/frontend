@@ -56,7 +56,6 @@ import {
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -591,14 +590,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
-        }
-      };
-    case TOGGLE_FOLDER_MODE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isFolderModeEnabled: !state[workspaceLocation].isFolderModeEnabled
         }
       };
     case SET_FOLDER_MODE:
