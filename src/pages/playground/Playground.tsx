@@ -632,6 +632,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const getEditorValue = React.useCallback(
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
     [store, workspaceLocation]
   );
@@ -639,15 +640,22 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const sessionButtons = React.useMemo(
     () => (
       <ControlBarSessionButtons
+        isFolderModeEnabled={isFolderModeEnabled}
         editorSessionId={props.editorSessionId}
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         getEditorValue={getEditorValue}
         handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
         sharedbConnected={props.sharedbConnected}
         key="session"
       />
     ),
-    [dispatch, getEditorValue, props.editorSessionId, props.sharedbConnected, workspaceLocation]
+    [
+      dispatch,
+      getEditorValue,
+      isFolderModeEnabled,
+      props.editorSessionId,
+      props.sharedbConnected,
+      workspaceLocation
+    ]
   );
 
   const shareButton = React.useMemo(() => {
