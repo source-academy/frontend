@@ -2,7 +2,7 @@ import * as qs from 'query-string';
 import { isArray } from 'util';
 
 export interface IParsedQuery {
-  [key: string]: string | undefined;
+  [key: string]: string;
 }
 
 /**

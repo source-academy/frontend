@@ -284,6 +284,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   debuggerContext: {} as DebuggerContext
 });
 
+export const defaultPlaygroundFilePath = `${WORKSPACE_BASE_PATHS.playground}/program.js`;
+
 export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {
     ...createDefaultWorkspace('assessment'),
@@ -302,7 +304,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     editorTabs: [
       {
-        filePath: `${WORKSPACE_BASE_PATHS.playground}/program.js`,
+        filePath: defaultPlaygroundFilePath,
         value: defaultEditorValue,
         highlightedLines: [],
         breakpoints: []
