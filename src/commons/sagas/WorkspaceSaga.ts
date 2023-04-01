@@ -928,7 +928,11 @@ export function* evalCode(
   }
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
-  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+  if (
+    actionType === EVAL_EDITOR ||
+    actionType === EVAL_REPL ||
+    (actionType === DEBUG_RESUME && !result.status.startsWith('suspended'))
+  ) {
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));
     }
