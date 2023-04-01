@@ -37,6 +37,7 @@ import {
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
   REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+  RENAME_EDITOR_TAB_FOR_FILE,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -234,6 +235,12 @@ export const removeEditorTabsForDirectory = (
   workspaceLocation: WorkspaceLocation,
   removedDirectoryPath: string
 ) => action(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { workspaceLocation, removedDirectoryPath });
+
+export const renameEditorTabForFile = (
+  workspaceLocation: WorkspaceLocation,
+  oldFilePath: string,
+  newFilePath: string
+) => action(RENAME_EDITOR_TAB_FOR_FILE, { workspaceLocation, oldFilePath, newFilePath });
 
 export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
