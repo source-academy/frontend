@@ -55,7 +55,6 @@ import {
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -1289,33 +1288,6 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
         currentSubmission: submissionId,
         currentQuestion: questionId
       }
-    });
-  });
-});
-
-describe('TOGGLE_FOLDER_MODE', () => {
-  test('toggles isFolderModeEnabled correctly', () => {
-    const actions = generateActions(TOGGLE_FOLDER_MODE);
-
-    actions.forEach(action => {
-      let result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          isFolderModeEnabled: true
-        }
-      });
-
-      result = WorkspaceReducer(result, action);
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          isFolderModeEnabled: false
-        }
-      });
     });
   });
 });

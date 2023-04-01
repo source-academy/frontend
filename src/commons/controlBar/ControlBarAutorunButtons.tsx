@@ -18,6 +18,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
+  isEntrypointFileDefined: boolean;
   isDebugging: boolean;
   isEditorAutorun?: boolean;
   isRunning: boolean;
@@ -31,6 +32,7 @@ export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = 
   const showRunButton = !props.isDebugging && (
     <ControlBarRunButton
       handleEditorEval={props.handleEditorEval}
+      isEntrypointFileDefined={props.isEntrypointFileDefined}
       // Neon Green: #39FF14
       color={props.isRunning ? '#39FF14' : undefined}
       className={props.isRunning ? 'WaitingCursor' : undefined}

@@ -572,7 +572,13 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
     );
 
-    const runButton = <ControlBarRunButton handleEditorEval={props.handleEditorEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
+        handleEditorEval={props.handleEditorEval}
+        key="run"
+      />
+    );
 
     const saveButton = (
       <ControlButtonSaveButton

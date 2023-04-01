@@ -93,7 +93,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
           <ControlBar editorButtons={{...}} flowButtons={{...}}>
             <div className=\\"ControlBar\\">
               <div className=\\"ControlBar_editor bp4-button-group\\">
-                <ControlBarRunButton handleEditorEval={[Function: handleEval]}>
+                <ControlBarRunButton isEntrypointFileDefined={true} handleEditorEval={[Function: handleEval]}>
                   <Blueprint4.Tooltip2 content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" compact={false} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100}>
                     <Tooltip2Provider>
                       <Blueprint4.Popover2 modifiers={{...}} content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
@@ -101,7 +101,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                                   <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
                                     <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
@@ -850,7 +850,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
           <ControlBar editorButtons={{...}} flowButtons={{...}}>
             <div className=\\"ControlBar\\">
               <div className=\\"ControlBar_editor bp4-button-group\\">
-                <ControlBarRunButton handleEditorEval={[Function: handleEval]}>
+                <ControlBarRunButton isEntrypointFileDefined={true} handleEditorEval={[Function: handleEval]}>
                   <Blueprint4.Tooltip2 content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" compact={false} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100}>
                     <Tooltip2Provider>
                       <Blueprint4.Popover2 modifiers={{...}} content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
@@ -858,7 +858,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                                   <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
                                     <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
@@ -1429,7 +1429,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
           <ControlBar editorButtons={{...}} flowButtons={{...}}>
             <div className=\\"ControlBar\\">
               <div className=\\"ControlBar_editor bp4-button-group\\">
-                <ControlBarRunButton handleEditorEval={[Function: handleEval]}>
+                <ControlBarRunButton isEntrypointFileDefined={true} handleEditorEval={[Function: handleEval]}>
                   <Blueprint4.Tooltip2 content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" compact={false} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100}>
                     <Tooltip2Provider>
                       <Blueprint4.Popover2 modifiers={{...}} content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
@@ -1437,7 +1437,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                                   <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
                                     <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
@@ -1964,7 +1964,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
           <ControlBar editorButtons={{...}} flowButtons={{...}}>
             <div className=\\"ControlBar\\">
               <div className=\\"ControlBar_editor bp4-button-group\\">
-                <ControlBarRunButton handleEditorEval={[Function: handleEval]}>
+                <ControlBarRunButton isEntrypointFileDefined={true} handleEditorEval={[Function: handleEval]}>
                   <Blueprint4.Tooltip2 content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" compact={false} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100}>
                     <Tooltip2Provider>
                       <Blueprint4.Popover2 modifiers={{...}} content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
@@ -1972,7 +1972,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                                   <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
                                     <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
@@ -2520,7 +2520,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
           <ControlBar editorButtons={{...}} flowButtons={{...}}>
             <div className=\\"ControlBar\\">
               <div className=\\"ControlBar_editor bp4-button-group\\">
-                <ControlBarRunButton handleEditorEval={[Function: handleEval]}>
+                <ControlBarRunButton isEntrypointFileDefined={true} handleEditorEval={[Function: handleEval]}>
                   <Blueprint4.Tooltip2 content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" compact={false} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100}>
                     <Tooltip2Provider>
                       <Blueprint4.Popover2 modifiers={{...}} content=\\"...or press shift-enter in the editor\\" placement=\\"top\\" hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
@@ -2528,7 +2528,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                           <Reference>
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} className=\\"\\" disabled={[undefined]} tabIndex={0}>
+                                <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                                   <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
                                     <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>

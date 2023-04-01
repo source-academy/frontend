@@ -465,6 +465,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
         isDebugging={props.isDebugging}
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
@@ -482,6 +483,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       />
     );
   }, [
+    activeEditorTabIndex,
     handleDebuggerPause,
     handleDebuggerReset,
     handleDebuggerResume,
