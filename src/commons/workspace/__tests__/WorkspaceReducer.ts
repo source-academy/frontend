@@ -49,6 +49,8 @@ import {
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
   REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+  RENAME_EDITOR_TAB_FOR_FILE,
+  RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -2533,6 +2535,149 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
             editorTabs: [zerothEditorTab, secondEditorTab]
+          }
+        })
+      );
+    });
+  });
+});
+
+describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
+  const zerothEditorTab: EditorTabState = {
+    filePath: '/a.js',
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    filePath: '/b.js',
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
+
+  test('does nothing if there are no editor tabs that correspond to the old file path', () => {
+    const oldFilePath = '/c.js';
+    const newFilePath = '/d.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      editorTabs
+    });
+
+    const actions = generateActions(RENAME_EDITOR_TAB_FOR_FILE, { oldFilePath, newFilePath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(JSON.stringify(defaultWorkspaceState));
+    });
+  });
+
+  test('renames the file path of the editor tab corresponding to the old file path to the new file path', () => {
+    const oldFilePath = '/b.js';
+    const newFilePath = '/d.js';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs
+    });
+
+    const actions = generateActions(RENAME_EDITOR_TAB_FOR_FILE, { oldFilePath, newFilePath });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            editorTabs: [
+              zerothEditorTab,
+              {
+                ...firstEditorTab,
+                filePath: newFilePath
+              }
+            ]
+          }
+        })
+      );
+    });
+  });
+});
+
+describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
+  const zerothEditorTab: EditorTabState = {
+    filePath: '/dir1/a.js',
+    value: 'Hello World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const firstEditorTab: EditorTabState = {
+    filePath: '/dir2/b.js',
+    value: 'Goodbye World!',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const secondEditorTab: EditorTabState = {
+    value: 'The quick brown fox jumped over the lazy pomeranian.',
+    highlightedLines: [],
+    breakpoints: []
+  };
+  const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab, secondEditorTab];
+
+  test('does nothing if there are no editor tabs that correspond to the old directory path', () => {
+    const oldDirectoryPath = '/dir3';
+    const newDirectoryPath = '/dir4';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      editorTabs
+    });
+
+    const actions = generateActions(RENAME_EDITOR_TABS_FOR_DIRECTORY, {
+      oldDirectoryPath,
+      newDirectoryPath
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(JSON.stringify(defaultWorkspaceState));
+    });
+  });
+
+  test('renames the file path of editor tabs that start with the old directory path by replacing with the new directory path', () => {
+    const oldDirectoryPath = '/dir2';
+    const newDirectoryPath = '/dir4';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      editorTabs
+    });
+
+    const actions = generateActions(RENAME_EDITOR_TABS_FOR_DIRECTORY, {
+      oldDirectoryPath,
+      newDirectoryPath
+    });
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            editorTabs: [
+              zerothEditorTab,
+              {
+                ...firstEditorTab,
+                filePath: firstEditorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath)
+              },
+              secondEditorTab
+            ]
           }
         })
       );

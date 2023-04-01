@@ -159,6 +159,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
           {isExpanded && <Icon icon={IconNames.CHEVRON_DOWN} />}
           {!isExpanded && <Icon icon={IconNames.CHEVRON_RIGHT} />}
           <FileSystemViewFileName
+            workspaceLocation={workspaceLocation}
             fileSystem={fileSystem}
             basePath={basePath}
             fileName={directoryName}

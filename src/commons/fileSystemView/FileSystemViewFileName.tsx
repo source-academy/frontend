@@ -1,10 +1,17 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
+import {
+  renameEditorTabForFile,
+  renameEditorTabsForDirectory
+} from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export type FileSystemViewFileNameProps = {
+  workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
   fileName: string;
@@ -17,10 +24,19 @@ export type FileSystemViewFileNameProps = {
 const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
   props: FileSystemViewFileNameProps
 ) => {
-  const { fileSystem, basePath, fileName, isDirectory, isEditing, setIsEditing, refreshDirectory } =
-    props;
+  const {
+    workspaceLocation,
+    fileSystem,
+    basePath,
+    fileName,
+    isDirectory,
+    isEditing,
+    setIsEditing,
+    refreshDirectory
+  } = props;
 
   const [editedFileName, setEditedFileName] = React.useState<string>(fileName);
+  const dispatch = useDispatch();
 
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEditedFileName(e.target.value);
@@ -53,6 +69,12 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
         fileSystem.rename(oldPath, newPath, err => {
           if (err) {
             console.error(err);
+          }
+
+          if (isDirectory) {
+            dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
+          } else {
+            dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
           }
           refreshDirectory();
         });
