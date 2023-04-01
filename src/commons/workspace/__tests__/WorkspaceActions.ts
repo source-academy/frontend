@@ -28,6 +28,7 @@ import {
   removeEditorTabForFile,
   removeEditorTabsForDirectory,
   renameEditorTabForFile,
+  renameEditorTabsForDirectory,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
@@ -71,6 +72,7 @@ import {
   REMOVE_EDITOR_TAB_FOR_FILE,
   REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RENAME_EDITOR_TAB_FOR_FILE,
+  RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -458,6 +460,24 @@ test('renameEditorTabForFile generates correct action object', () => {
       workspaceLocation: playgroundWorkspace,
       oldFilePath,
       newFilePath
+    }
+  });
+});
+
+test('renameEditorTabsForDirectory generates correct action object', () => {
+  const oldDirectoryPath = '/dir1';
+  const newDirectoryPath = '/dir2';
+  const action = renameEditorTabsForDirectory(
+    playgroundWorkspace,
+    oldDirectoryPath,
+    newDirectoryPath
+  );
+  expect(action).toEqual({
+    type: RENAME_EDITOR_TABS_FOR_DIRECTORY,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      oldDirectoryPath,
+      newDirectoryPath
     }
   });
 });
