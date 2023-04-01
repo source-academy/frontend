@@ -51,6 +51,7 @@ import {
   REMOVE_EDITOR_TAB_FOR_FILE,
   REMOVE_EDITOR_TABS_FOR_DIRECTORY,
   RENAME_EDITOR_TAB_FOR_FILE,
+  RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
@@ -909,6 +910,27 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ? {
               ...editorTab,
               filePath: newFilePath
+            }
+          : editorTab
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case RENAME_EDITOR_TABS_FOR_DIRECTORY: {
+      const { oldDirectoryPath, newDirectoryPath } = action.payload;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
+        editorTab.filePath?.startsWith(oldDirectoryPath)
+          ? {
+              ...editorTab,
+              filePath: editorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath)
             }
           : editorTab
       );
