@@ -94,6 +94,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
         <Icon icon={IconNames.DOCUMENT} />
         <FileSystemViewFileName
+          workspaceLocation={workspaceLocation}
           fileSystem={fileSystem}
           basePath={basePath}
           fileName={fileName}
