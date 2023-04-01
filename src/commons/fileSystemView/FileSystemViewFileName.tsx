@@ -4,7 +4,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
-import { renameEditorTabForFile } from '../workspace/WorkspaceActions';
+import {
+  renameEditorTabForFile,
+  renameEditorTabsForDirectory
+} from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export type FileSystemViewFileNameProps = {
@@ -68,7 +71,11 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
             console.error(err);
           }
 
-          dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
+          if (isDirectory) {
+            dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
+          } else {
+            dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
+          }
           refreshDirectory();
         });
       });
