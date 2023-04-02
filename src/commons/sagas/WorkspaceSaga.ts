@@ -650,7 +650,7 @@ function* insertDebuggerStatements(
   const lines = code.split('\n');
   let transformedCode = code;
   for (let i = 0; i < breakpoints.length; i++) {
-    if (!breakpoints[i]) continue
+    if (!breakpoints[i]) continue;
     lines[i] = 'debugger;' + lines[i];
     // Reconstruct the code & check that the code is still syntactically valid.
     // The insertion of the debugger statement is potentially invalid if it
@@ -666,7 +666,6 @@ function* insertDebuggerStatements(
       return code;
     }
   }
-
 
   /*
   Not sure how this works, but there were some issues with breakpoints

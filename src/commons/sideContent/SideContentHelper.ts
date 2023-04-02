@@ -1,5 +1,5 @@
 import React from 'react';
-import JSXRuntime from 'react/jsx-runtime'
+import JSXRuntime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
 
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
@@ -12,14 +12,14 @@ import { ModuleSideContent, SideContentTab, SideContentType } from './SideConten
 
 const requireProvider = (x: string) => {
   const exports = {
-   react: React,
-   'react-dom': ReactDOM,
-   'react/jsx-runtime': JSXRuntime,
-  }
+    react: React,
+    'react-dom': ReactDOM,
+    'react/jsx-runtime': JSXRuntime
+  };
 
-  if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`)
-  return exports[x]
-}
+  if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
+  return exports[x];
+};
 
 type RawTab = (provider: typeof requireProvider) => ModuleSideContent;
 
@@ -30,15 +30,15 @@ type RawTab = (provider: typeof requireProvider) => ModuleSideContent;
 export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
   const moduleContexts = debuggerContext?.context?.moduleContexts;
 
-  if (!moduleContexts) return []
+  if (!moduleContexts) return [];
 
-  return Object.values(moduleContexts).flatMap(({ tabs }) => tabs ?? [])
+  return Object.values(moduleContexts)
+    .flatMap(({ tabs }) => tabs ?? [])
     .map((rawTab: RawTab) => rawTab(requireProvider))
     .filter(({ toSpawn }) => !toSpawn || toSpawn(debuggerContext))
     .map(tab => ({
       ...tab,
       body: tab.body(debuggerContext),
       id: SideContentType.module
-    }))
-}
-
+    }));
+};
