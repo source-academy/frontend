@@ -104,7 +104,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
       .put(setFolderMode(workspaceLocation, true))
-      .call(showWarningMessage, 'Folder mode disabled', 750)
+      .call(showWarningMessage, 'Folder mode enabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,
         payload: { workspaceLocation }
@@ -122,7 +122,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
       .put(setFolderMode(workspaceLocation, false))
-      .call(showWarningMessage, 'Folder mode enabled', 750)
+      .call(showWarningMessage, 'Folder mode disabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,
         payload: { workspaceLocation }
