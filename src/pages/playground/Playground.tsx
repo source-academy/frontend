@@ -695,11 +695,19 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={props.editorSessionId !== ''}
+        isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
     );
-  }, [dispatch, isFolderModeEnabled, props.editorSessionId, workspaceLocation]);
+  }, [
+    dispatch,
+    githubSaveInfo.repoName,
+    isFolderModeEnabled,
+    persistenceFile,
+    props.editorSessionId,
+    workspaceLocation
+  ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
