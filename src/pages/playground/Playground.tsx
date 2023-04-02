@@ -571,6 +571,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const persistenceButtons = React.useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
+        isFolderModeEnabled={isFolderModeEnabled}
         currentFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
@@ -584,7 +585,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [dispatch, persistenceUser, persistenceFile, persistenceIsDirty]);
+  }, [isFolderModeEnabled, persistenceFile, persistenceUser, persistenceIsDirty, dispatch]);
 
   const githubOctokitObject = useTypedSelector(store => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
@@ -594,6 +595,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return (
       <ControlBarGitHubButtons
         key="github"
+        isFolderModeEnabled={isFolderModeEnabled}
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
@@ -604,7 +606,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         onClickLogOut={() => dispatch(logoutGitHub())}
       />
     );
-  }, [dispatch, githubOctokitObject, githubPersistenceIsDirty, githubSaveInfo]);
+  }, [
+    dispatch,
+    githubOctokitObject.octokit,
+    githubPersistenceIsDirty,
+    githubSaveInfo,
+    isFolderModeEnabled
+  ]);
 
   const executionTime = React.useMemo(
     () => (
@@ -687,11 +695,19 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={props.editorSessionId !== ''}
+        isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
     );
-  }, [dispatch, isFolderModeEnabled, props.editorSessionId, workspaceLocation]);
+  }, [
+    dispatch,
+    githubSaveInfo.repoName,
+    isFolderModeEnabled,
+    persistenceFile,
+    props.editorSessionId,
+    workspaceLocation
+  ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
