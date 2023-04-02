@@ -90,6 +90,7 @@ describe('handleHash', () => {
         handleChapterSelect: mockHandleChapterSelect,
         handleChangeExecTime: mockHandleChangeExecTime
       },
+      'playground',
       // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
       // behaviour being tested here does not actually invoke either of these. As
       // a workaround, we pass in 'undefined' instead & cast to the expected types.
