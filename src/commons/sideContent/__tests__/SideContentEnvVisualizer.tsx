@@ -1,5 +1,7 @@
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { runInContext } from 'js-slang/dist/';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import { mockContext } from '../../mocks/ContextMocks';
 import { visualizeEnv } from '../../utils/JsSlangHelper';
@@ -10,19 +12,27 @@ import SideContentEnvVisualizer from '../SideContentEnvVisualizer';
  * See https://github.com/konvajs/konva/issues/200
  */
 // Konva.isBrowser = false;
+const mockStore = mockInitialStore();
 
-//TODO: FIX THESE TESTS
-xtest('EnvVisualizer component renders correctly', () => {
-  const app = <SideContentEnvVisualizer handleEditorEval={() => {}} />;
-  const tree = shallow(app);
+test('EnvVisualizer component renders correctly', () => {
+  const app = (
+    <Provider store={mockStore}>
+      <SideContentEnvVisualizer workspaceLocation="playground" />
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
-xtest('EnvVisualizer sets visualization state', async () => {
-  const app = <SideContentEnvVisualizer handleEditorEval={() => {}} />;
+test('EnvVisualizer sets visualization state', async () => {
+  const app = (
+    <Provider store={mockStore}>
+      <SideContentEnvVisualizer workspaceLocation="playground" />
+    </Provider>
+  );
   const tree = mount(app);
   const context = mockContext();
   await runInContext('const hello="world"; debugger;', context);
   visualizeEnv({ context });
-  expect(tree.state('visualization')).not.toBeNull();
+  expect(tree.find('SideContentEnvVisualizer').state('visualization')).not.toBeNull();
 });

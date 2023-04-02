@@ -27,6 +27,7 @@ const baseProps = assertType<PlaygroundProps>()({
   replValue: '',
   sharedbConnected: false,
   usingSubst: false,
+  usingEnv: false,
   persistenceUser: undefined,
   persistenceFile: undefined,
   githubOctokitObject: { octokit: undefined },

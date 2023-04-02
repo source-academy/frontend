@@ -33,7 +33,11 @@ export function mockRuntimeContext(): Context {
         raw: '0',
         range: [0, 1]
       }
-    ]
+    ],
+    agenda: null,
+    stash: null,
+    envSteps: -1,
+    envStepsTotal: 0
   };
   return context;
 }

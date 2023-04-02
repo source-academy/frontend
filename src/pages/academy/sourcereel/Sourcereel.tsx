@@ -295,7 +295,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   const envVisualizerTab: SideContentTab = {
     label: 'Env Visualizer',
     iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer handleEditorEval={editorEvalHandler} />,
+    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
     id: SideContentType.envVisualizer
   };
 

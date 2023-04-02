@@ -2,13 +2,15 @@ import { Button, ButtonGroup, Classes, Divider, Slider } from '@blueprintjs/core
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { connect, MapDispatchToProps } from 'react-redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import { OverallState } from '../application/ApplicationTypes';
 import Constants, { Links } from '../utils/Constants';
 import { updateEnvSteps } from '../workspace/WorkspaceActions';
+import { evalEditor } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -17,17 +19,22 @@ type State = {
   width: number;
 };
 
-type EnvVisualizerProps = StateProps & DispatchProps;
+type EnvVisualizerProps = OwnProps & StateProps & DispatchProps;
 
 type StateProps = {
-  handleEditorEval: () => void;
   editorWidth?: string;
   sideContentHeight?: number;
-  numOfSteps?: number;
+  numOfStepsTotal: number;
+  numOfSteps: number;
+};
+
+type OwnProps = {
+  workspaceLocation: WorkspaceLocation;
 };
 
 type DispatchProps = {
-  handleStepUpdate?: (steps: number) => void;
+  handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
+  handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
 };
 
 const envVizKeyMap = {
@@ -42,7 +49,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     super(props);
     this.state = {
       visualization: null,
-      value: 1,
+      value: -1,
       width: this.calculateWidth(props.editorWidth),
       height: this.calculateHeight(props.sideContentHeight)
     };
@@ -106,7 +113,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   }
 
   componentDidUpdate(
-    prevProps: { editorWidth?: string; sideContentHeight?: number; numOfSteps?: number },
+    prevProps: { editorWidth?: string; sideContentHeight?: number; numOfSteps: number },
     prevState: State
   ) {
     if (
@@ -114,6 +121,9 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       prevProps.editorWidth !== this.props.editorWidth
     ) {
       this.handleResize();
+    }
+    if (prevProps.numOfSteps !== this.props.numOfSteps) {
+      this.sliderShift(this.props.numOfSteps);
     }
   }
 
@@ -123,7 +133,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
           FIRST_STEP: this.stepFirst,
           NEXT_STEP: this.stepNext,
           PREVIOUS_STEP: this.stepPrevious,
-          LAST_STEP: this.stepLast(this.props.numOfSteps!)
+          LAST_STEP: this.stepLast(this.props.numOfStepsTotal)
         }
       : {
           FIRST_STEP: () => {},
@@ -142,19 +152,18 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
             <Slider
               disabled={!this.state.visualization}
               min={1}
-              max={this.props.numOfSteps}
+              max={this.props.numOfStepsTotal}
               onChange={this.sliderShift}
               onRelease={this.sliderRelease}
-              value={this.state.value}
+              value={this.state.value < 1 ? 1 : this.state.value}
             />
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <ButtonGroup>
-                {/* <Button
-                  disabled={!this.state.visualization} 
+                <Button
+                  disabled={!this.state.visualization}
                   icon="double-chevron-left"
-                  onClick={() => {}} 
-                /> */}{' '}
-                {/* Not sure how to define this yet, or if it is even useful.*/}
+                  onClick={() => {}}
+                />
                 <Button
                   disabled={!this.state.visualization}
                   icon="chevron-left"
@@ -165,12 +174,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   icon="chevron-right"
                   onClick={this.stepNext}
                 />
-                {/* <Button
-                  disabled={!this.state.visualization} 
+                <Button
+                  disabled={!this.state.visualization}
                   icon="double-chevron-right"
-                  onClick={() => {}} 
-                /> */}{' '}
-                {/* Not sure how to define this yet, or if it is even useful.*/}
+                  onClick={() => {}}
+                />
               </ButtonGroup>
             </div>
           </div>
@@ -190,7 +198,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
               <br /> On this tab, the REPL will be hidden from view, so do check that your code has
               no errors before running the stepper. You may use this tool by running your program
               and then dragging the slider above to see the state of the environment at different
-              stages in the evaluation of your program.
+              stages in the evaluation of your program. Clicking on the fast-forward button (double
+              chevron) will take you to the next breakpoint in your program.
               <br />
               <br />
               <Divider />
@@ -215,11 +224,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   }
 
   private sliderRelease = (newValue: number) => {
-    this.props.handleEditorEval();
+    this.props.handleEditorEval(this.props.workspaceLocation);
   };
 
   private sliderShift = (newValue: number) => {
-    this.props.handleStepUpdate!(newValue);
+    this.props.handleEnvStepUpdate(newValue, this.props.workspaceLocation);
     this.setState((state: State) => {
       return { value: newValue };
     });
@@ -228,44 +237,55 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   private stepPrevious = () => {
     if (this.state.value !== 1) {
       this.sliderShift(this.state.value - 1);
-      this.props.handleEditorEval();
+      this.props.handleEditorEval(this.props.workspaceLocation);
     }
   };
 
   private stepNext = () => {
-    const lastStepValue = this.props.numOfSteps;
+    const lastStepValue = this.props.numOfStepsTotal;
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
-      this.props.handleEditorEval();
+      this.props.handleEditorEval(this.props.workspaceLocation);
     }
   };
 
   private stepFirst = () => {
     // Move to the first step
     this.sliderShift(1);
-    this.props.handleEditorEval();
+    this.props.handleEditorEval(this.props.workspaceLocation);
   };
 
   private stepLast = (lastStepValue: number) => () => {
     // Move to the last step
     this.sliderShift(lastStepValue);
-    this.props.handleEditorEval();
+    this.props.handleEditorEval(this.props.workspaceLocation);
   };
 }
 
-const mapStateToProps = (state: OverallState, ownProps: EnvVisualizerProps) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
+  state: OverallState,
+  ownProps: OwnProps
+) => {
   return {
     ...ownProps,
-    numOfSteps: state.workspaces.playground.envStepsTotal
+    numOfStepsTotal: state.workspaces.playground.envStepsTotal,
+    numOfSteps: state.workspaces.playground.envSteps
   };
 };
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleStepUpdate: (steps: number) => updateEnvSteps(steps, 'playground') // TODO: Pass workspace location as a prop, so this can be done for any workspace location
+      handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
+      handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
+        updateEnvSteps(steps, workspaceLocation)
     },
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideContentEnvVisualizer);
+const SideContentEnvVisualizerContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SideContentEnvVisualizer);
+
+export default SideContentEnvVisualizerContainer;

@@ -48,13 +48,17 @@ import {
   removeEditorTab,
   removeEditorTabsForDirectory,
   sendReplInputToOutput,
+  setEditorHighlightedLines,
   setFolderMode,
   toggleEditorAutorun,
   toggleFolderMode,
   updateActiveEditorTabIndex,
+  updateEnvSteps,
+  updateEnvStepsTotal,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { EditorTabState, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -170,6 +174,7 @@ export type StateProps = {
   courseSourceVariant?: Variant;
   stepLimit: number;
   sharedbConnected: boolean;
+  usingEnv: boolean;
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
@@ -383,6 +388,15 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     propsRef.current.handleEditorValueChange(editorTabIndex, newEditorValue);
   }, []);
 
+  const handleEnvVisualiserReset = React.useCallback(() => {
+    const { handleUsingEnv } = propsRef.current;
+    handleUsingEnv(false);
+    EnvVisualizer.clearEnv();
+    dispatch(updateEnvSteps(-1, workspaceLocation));
+    dispatch(updateEnvStepsTotal(0, workspaceLocation));
+    dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
+  }, [dispatch, workspaceLocation]);
+
   const onChangeTabs = React.useCallback(
     (
       newTabId: SideContentType,
@@ -417,13 +431,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         if (playgroundSourceChapter >= 3 && newTabId === SideContentType.envVisualizer) {
           handleUsingEnv(true);
         } else {
-          handleUsingEnv(false);
+          handleEnvVisualiserReset();
         }
 
         setSelectedTab(newTabId);
       }
     },
-    [hasBreakpoints]
+    [hasBreakpoints, handleEnvVisualiserReset]
   );
 
   const processStepperOutput = (output: InterpreterOutput[]) => {
@@ -448,10 +462,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [sessionId]
   );
 
-  const handleEditorEval = React.useCallback(
-    () => dispatch(evalEditor(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
+  const handleEditorEval = React.useCallback(() => {
+    if (props.usingEnv) {
+      dispatch(updateEnvSteps(-1, workspaceLocation));
+    }
+    dispatch(evalEditor(workspaceLocation));
+  }, [dispatch, workspaceLocation, props.usingEnv]);
 
   const handleInterruptEval = React.useCallback(
     () => dispatch(beginInterruptExecution(workspaceLocation)),
@@ -779,7 +795,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       tabs.push({
         label: 'Env Visualizer',
         iconName: IconNames.GLOBE,
-        body: <SideContentEnvVisualizer handleEditorEval={handleEditorEval} />,
+        body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
         id: SideContentType.envVisualizer
       });
     }
@@ -812,8 +828,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     isSicpEditor,
     dispatch,
     workspaceLocation,
-    remoteExecutionTab,
-    handleEditorEval
+    remoteExecutionTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile

@@ -244,7 +244,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const envVisualizerTab: SideContentTab = {
     label: 'Env Visualizer',
     iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer handleEditorEval={props.handleEditorEval} />,
+    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
     id: SideContentType.envVisualizer
   };
 

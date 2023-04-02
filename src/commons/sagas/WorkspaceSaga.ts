@@ -1184,8 +1184,10 @@ export function* evalCode(
   }
 
   if (envActiveAndCorrectChapter) {
-    if (context.runtime.envStepsTotal) {
+    // envSteps < 0 means that it is the first time the EnvViz is evaluating the code
+    if (envSteps < 0) {
       yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
+      yield put(actions.updateEnvSteps(context.runtime.envStepsTotal, workspaceLocation));
     }
   }
 }

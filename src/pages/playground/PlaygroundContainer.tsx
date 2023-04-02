@@ -35,7 +35,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     'replValue',
     'sideContentHeight',
     'sharedbConnected',
-    'usingSubst'
+    'usingSubst',
+    'usingEnv'
   ),
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,

@@ -95,4 +95,11 @@ export default class EnvVisualizer {
       Layout.updateDimensions(width, height);
     }
   }
+
+  static clearEnv() {
+    if (this.setVis) {
+      this.setVis(undefined);
+    }
+    this.clear();
+  }
 }
