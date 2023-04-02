@@ -96,10 +96,10 @@ beforeEach(() => {
 describe('TOGGLE_FOLDER_MODE', () => {
   test('enables Folder mode & calls showWarningMessage correctly when isFolderMode is false', () => {
     const workspaceLocation = 'assessment';
-    const updatedWorkspaceFields: Partial<WorkspaceState> = {
+    const currentWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: false
     };
-    const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
+    const updatedDefaultState = generateDefaultState(workspaceLocation, currentWorkspaceFields);
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
@@ -114,10 +114,10 @@ describe('TOGGLE_FOLDER_MODE', () => {
 
   test('disables Folder mode & calls showWarningMessage correctly when isFolderMode is true', () => {
     const workspaceLocation = 'grading';
-    const updatedWorkspaceFields: Partial<WorkspaceState> = {
+    const currentWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: true
     };
-    const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
+    const updatedDefaultState = generateDefaultState(workspaceLocation, currentWorkspaceFields);
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
