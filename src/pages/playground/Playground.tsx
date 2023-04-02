@@ -595,6 +595,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return (
       <ControlBarGitHubButtons
         key="github"
+        isFolderModeEnabled={isFolderModeEnabled}
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
@@ -605,7 +606,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         onClickLogOut={() => dispatch(logoutGitHub())}
       />
     );
-  }, [dispatch, githubOctokitObject, githubPersistenceIsDirty, githubSaveInfo]);
+  }, [
+    dispatch,
+    githubOctokitObject.octokit,
+    githubPersistenceIsDirty,
+    githubSaveInfo,
+    isFolderModeEnabled
+  ]);
 
   const executionTime = React.useMemo(
     () => (
