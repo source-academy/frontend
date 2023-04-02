@@ -18,7 +18,7 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   githubAssessment: '',
   grading: '',
   playground: '/playground',
-  sicp: '',
+  sicp: '/sicp',
   sourcecast: '',
   sourcereel: ''
 };
@@ -33,6 +33,12 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
             fs: 'IndexedDB',
             options: {
               storeName: 'playground'
+            }
+          },
+          [WORKSPACE_BASE_PATHS.sicp]: {
+            fs: 'IndexedDB',
+            options: {
+              storeName: 'sicp'
             }
           }
         }

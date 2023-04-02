@@ -8,9 +8,9 @@ import { updateShortURL } from '../../../features/playground/PlaygroundActions';
 import { SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
 import {
   createDefaultWorkspace,
-  defaultPlaygroundFilePath,
   defaultState,
   defaultWorkspaceManager,
+  getDefaultFilePath,
   OverallState
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
@@ -21,6 +21,7 @@ import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 describe('Playground saga tests', () => {
   Constants.urlShortenerBase = 'http://url-shortener.com/';
   const errMsg = 'Something went wrong trying to create the link.';
+  const defaultPlaygroundFilePath = getDefaultFilePath('playground');
 
   // This test relies on BrowserFS which works in browser environments and not Node.js.
   // FIXME: Uncomment this test if BrowserFS adds support for running in Node.js.
