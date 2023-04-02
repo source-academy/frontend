@@ -571,6 +571,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const persistenceButtons = React.useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
+        isFolderModeEnabled={isFolderModeEnabled}
         currentFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
@@ -584,7 +585,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [dispatch, persistenceUser, persistenceFile, persistenceIsDirty]);
+  }, [isFolderModeEnabled, persistenceFile, persistenceUser, persistenceIsDirty, dispatch]);
 
   const githubOctokitObject = useTypedSelector(store => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
