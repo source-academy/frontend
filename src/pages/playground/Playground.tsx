@@ -686,11 +686,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
   const toggleFolderModeButton = React.useMemo(() => {
-    // TODO: Remove this once the Folder mode is ready for production.
-    if (true) {
-      return <></>;
-    }
-
     return (
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
