@@ -73,7 +73,7 @@ import {
 } from 'src/features/playground/PlaygroundActions';
 
 import {
-  defaultPlaygroundFilePath,
+  getDefaultFilePath,
   InterpreterOutput,
   isSourceLanguage,
   OverallState,
@@ -204,11 +204,12 @@ export async function handleHash(
     // For backward compatibility with old share links - 'prgrm' is no longer used.
     const program = qs.prgrm === undefined ? '' : decompressFromEncodedURIComponent(qs.prgrm);
 
-    // By default, create just the default playground file.
+    // By default, create just the default file.
+    const defaultFilePath = getDefaultFilePath(workspaceLocation);
     const files: Record<string, string> =
       qs.files === undefined
         ? {
-            [defaultPlaygroundFilePath]: program
+            [defaultFilePath]: program
           }
         : parseQuery(decompressFromEncodedURIComponent(qs.files));
     await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
@@ -225,7 +226,7 @@ export async function handleHash(
 
     // By default, open a single editor tab containing the default playground file.
     const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
-      defaultPlaygroundFilePath
+      defaultFilePath
     ];
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
