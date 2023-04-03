@@ -23,6 +23,12 @@ const ContributorsDetails: React.FC = () => (
           </strong>
         </H5>
         <p>
+          Richard Dominick
+          <br />
+          <strong>(CTO)</strong>
+        </p>
+        {dot}
+        <p>
           Chow En Rong,
           <br />
           Shen Yi Hong
