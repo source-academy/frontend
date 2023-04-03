@@ -1,4 +1,4 @@
-import { Button, Icon, IconName, Intent } from '@blueprintjs/core';
+import { AnchorButton, Icon, IconName, Intent } from '@blueprintjs/core';
 import React from 'react';
 
 type ButtonOptions = {
@@ -38,7 +38,7 @@ const ControlButton: React.FC<ControlButtonProps> = ({
   const iconElement = icon && <Icon icon={icon} color={buttonOptions.iconColor} />;
 
   return (
-    <Button
+    <AnchorButton
       disabled={isDisabled}
       fill={buttonOptions.fullWidth}
       intent={buttonOptions.intent}
@@ -50,7 +50,7 @@ const ControlButton: React.FC<ControlButtonProps> = ({
       rightIcon={buttonOptions.iconOnRight && iconElement}
     >
       {label}
-    </Button>
+    </AnchorButton>
   );
 };
 
