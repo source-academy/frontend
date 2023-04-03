@@ -12,8 +12,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                 <Blueprint4.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp4-card bp4-elevation-3 contentdisplay-content\\">
                     <ControlButton label=\\"Upcoming\\" icon=\\"caret-down\\" onClick={[Function: toggleUpcomingAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -27,8 +27,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                             Upcoming
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -111,8 +111,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Open\\" icon=\\"caret-down\\" onClick={[Function: toggleOpenAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -126,8 +126,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                             Open
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -366,8 +366,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Closed\\" icon=\\"caret-right\\" onClick={[Function: toggleClosedAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-right\\" className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
@@ -381,8 +381,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                             Closed
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -416,8 +416,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                 <Blueprint4.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp4-card bp4-elevation-3 contentdisplay-content\\">
                     <ControlButton label=\\"Upcoming\\" icon=\\"caret-down\\" onClick={[Function: toggleUpcomingAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -431,8 +431,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             Upcoming
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -515,8 +515,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Open\\" icon=\\"caret-down\\" onClick={[Function: toggleOpenAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -530,8 +530,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             Open
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -770,8 +770,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Closed\\" icon=\\"caret-right\\" onClick={[Function: toggleClosedAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-right\\" className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
@@ -785,8 +785,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             Closed
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -820,8 +820,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                 <Blueprint4.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp4-card bp4-elevation-3 contentdisplay-content\\">
                     <ControlButton label=\\"Upcoming\\" icon=\\"caret-down\\" onClick={[Function: toggleUpcomingAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -835,8 +835,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                             Upcoming
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -919,8 +919,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Open\\" icon=\\"caret-down\\" onClick={[Function: toggleOpenAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -934,8 +934,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                             Open
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -1174,8 +1174,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Closed\\" icon=\\"caret-right\\" onClick={[Function: toggleClosedAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-right\\" className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
@@ -1189,8 +1189,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                             Closed
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -1224,8 +1224,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                 <Blueprint4.Card className=\\"contentdisplay-content\\" elevation={3} interactive={false}>
                   <div className=\\"bp4-card bp4-elevation-3 contentdisplay-content\\">
                     <ControlButton label=\\"Upcoming\\" icon=\\"caret-down\\" onClick={[Function: toggleUpcomingAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleUpcomingAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -1239,8 +1239,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             Upcoming
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -1323,8 +1323,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Open\\" icon=\\"caret-down\\" onClick={[Function: toggleOpenAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleOpenAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -1338,8 +1338,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             Open
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -1578,8 +1578,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </Blueprint4.Collapse>
                     <ControlButton label=\\"Closed\\" icon=\\"caret-right\\" onClick={[Function: toggleClosedAssessments]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} icon={{...}} rightIcon={false}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function: toggleClosedAssessments]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={{...}}>
                             <Blueprint4.Icon icon=\\"caret-right\\" color={[undefined]}>
                               <span aria-hidden={true} icon=\\"caret-right\\" className=\\"bp4-icon bp4-icon-caret-right\\" title={[undefined]}>
@@ -1593,8 +1593,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             Closed
                           </span>
                           <Blueprint4.Icon icon={false} />
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                     <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                       <div className=\\"bp4-collapse\\" style={{...}}>
