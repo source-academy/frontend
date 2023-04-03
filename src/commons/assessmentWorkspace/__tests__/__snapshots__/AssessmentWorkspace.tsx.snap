@@ -102,8 +102,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                 <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
                                         <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
                                           <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
@@ -117,8 +117,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                         Run
                                       </span>
                                       <Blueprint4.Icon icon={false} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                    </a>
+                                  </Blueprint4.AnchorButton>
                                 </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
@@ -133,8 +133,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                 </ControlBarRunButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
                   <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={{...}}>
                           <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
                             <span aria-hidden={true} icon=\\"repeat\\" className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
@@ -148,8 +148,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                           Reset
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
@@ -189,22 +189,22 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
                   <ControlButton label=\\"Question 1 of 1  \\" isDisabled={true}>
-                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
-                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                    <Blueprint4.AnchorButton disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <a role=\\"button\\" disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" type={[undefined]} onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1} href={[undefined]}>
                         <Blueprint4.Icon icon={[undefined]} />
                         <span className=\\"bp4-button-text\\">
                           Question 1 of 1  
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
                   <ControlBarReturnToAcademyButton onClick={[Function: onClickReturn]}>
                     <ControlButton label=\\"Return to Academy\\" icon=\\"arrow-right\\" onClick={[Function: onClickReturn]} options={{...}}>
-                      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickReturn]} icon={false} rightIcon={{...}}>
-                        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickReturn]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickReturn]} icon={false} rightIcon={{...}}>
+                        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickReturn]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                           <Blueprint4.Icon icon={false} />
                           <span className=\\"bp4-button-text\\">
                             Return to Academy
@@ -218,8 +218,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                               </span>
                             </Blueprint4.Icon>
                           </Blueprint4.Icon>
-                        </button>
-                      </Blueprint4.Button>
+                        </a>
+                      </Blueprint4.AnchorButton>
                     </ControlButton>
                   </ControlBarReturnToAcademyButton>
                 </ControlBarNextButton>
@@ -766,8 +766,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                                 <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
-                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                       <Blueprint4.Icon icon={{...}}>
                                                         <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
                                                           <span aria-hidden={true} icon=\\"code\\" className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
@@ -781,8 +781,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                                         Eval
                                                       </span>
                                                       <Blueprint4.Icon icon={false} />
-                                                    </button>
-                                                  </Blueprint4.Button>
+                                                    </a>
+                                                  </Blueprint4.AnchorButton>
                                                 </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
@@ -797,8 +797,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
                                   <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
-                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
-                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                         <Blueprint4.Icon icon={{...}}>
                                           <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
                                             <span aria-hidden={true} icon=\\"remove\\" className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
@@ -812,8 +812,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                           Clear
                                         </span>
                                         <Blueprint4.Icon icon={false} />
-                                      </button>
-                                    </Blueprint4.Button>
+                                      </a>
+                                    </Blueprint4.AnchorButton>
                                   </ControlButton>
                                 </ControlBarClearButton>
                               </div>
@@ -859,8 +859,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                 <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
                                         <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
                                           <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
@@ -874,8 +874,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                         Run
                                       </span>
                                       <Blueprint4.Icon icon={false} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                    </a>
+                                  </Blueprint4.AnchorButton>
                                 </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
@@ -924,8 +924,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
               <div className=\\"ControlBar_flow bp4-button-group\\">
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}}>
                   <ControlButton label=\\"Previous\\" icon=\\"arrow-left\\" onClick={[Function: onClickPrevious]}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickPrevious]} icon={{...}} rightIcon={false}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickPrevious]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickPrevious]} icon={{...}} rightIcon={false}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickPrevious]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={{...}}>
                           <Blueprint4.Icon icon=\\"arrow-left\\" color={[undefined]}>
                             <span aria-hidden={true} icon=\\"arrow-left\\" className=\\"bp4-icon bp4-icon-arrow-left\\" title={[undefined]}>
@@ -939,27 +939,27 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                           Previous
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarPreviousButton>
                 <ControlBarQuestionViewButton questionProgress={{...}}>
                   <ControlButton label=\\"Question 3 of 5  \\" isDisabled={true}>
-                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
-                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                    <Blueprint4.AnchorButton disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <a role=\\"button\\" disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" type={[undefined]} onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1} href={[undefined]}>
                         <Blueprint4.Icon icon={[undefined]} />
                         <span className=\\"bp4-button-text\\">
                           Question 3 of 5  
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
                   <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={false} />
                         <span className=\\"bp4-button-text\\">
                           Next
@@ -973,8 +973,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                             </span>
                           </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarNextButton>
               </div>
@@ -1230,8 +1230,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                              <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                   <Blueprint4.Icon icon={{...}}>
                                                     <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                                                       <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -1245,8 +1245,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                                     Autograder Results
                                                   </span>
                                                   <Blueprint4.Icon icon={false} />
-                                                </button>
-                                              </Blueprint4.Button>
+                                                </a>
+                                              </Blueprint4.AnchorButton>
                                             </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
@@ -1297,8 +1297,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                                 <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
-                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                       <Blueprint4.Icon icon={{...}}>
                                                         <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
                                                           <span aria-hidden={true} icon=\\"code\\" className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
@@ -1312,8 +1312,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                                         Eval
                                                       </span>
                                                       <Blueprint4.Icon icon={false} />
-                                                    </button>
-                                                  </Blueprint4.Button>
+                                                    </a>
+                                                  </Blueprint4.AnchorButton>
                                                 </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
@@ -1328,8 +1328,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
                                   <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
-                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
-                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                         <Blueprint4.Icon icon={{...}}>
                                           <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
                                             <span aria-hidden={true} icon=\\"remove\\" className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
@@ -1343,8 +1343,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                                           Clear
                                         </span>
                                         <Blueprint4.Icon icon={false} />
-                                      </button>
-                                    </Blueprint4.Button>
+                                      </a>
+                                    </Blueprint4.AnchorButton>
                                   </ControlButton>
                                 </ControlBarClearButton>
                               </div>
@@ -1438,8 +1438,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                 <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
                                         <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
                                           <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
@@ -1453,8 +1453,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                         Run
                                       </span>
                                       <Blueprint4.Icon icon={false} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                    </a>
+                                  </Blueprint4.AnchorButton>
                                 </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
@@ -1469,8 +1469,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                 </ControlBarRunButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
                   <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={{...}}>
                           <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
                             <span aria-hidden={true} icon=\\"repeat\\" className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
@@ -1484,8 +1484,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                           Reset
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
@@ -1525,21 +1525,21 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
                   <ControlButton label=\\"Question 1 of 5  \\" isDisabled={true}>
-                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
-                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                    <Blueprint4.AnchorButton disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <a role=\\"button\\" disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" type={[undefined]} onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1} href={[undefined]}>
                         <Blueprint4.Icon icon={[undefined]} />
                         <span className=\\"bp4-button-text\\">
                           Question 1 of 5  
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
                   <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={false} />
                         <span className=\\"bp4-button-text\\">
                           Next
@@ -1553,8 +1553,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                             </span>
                           </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarNextButton>
               </div>
@@ -1765,8 +1765,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                              <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                   <Blueprint4.Icon icon={{...}}>
                                                     <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                                                       <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -1780,8 +1780,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                                     Autograder Results
                                                   </span>
                                                   <Blueprint4.Icon icon={false} />
-                                                </button>
-                                              </Blueprint4.Button>
+                                                </a>
+                                              </Blueprint4.AnchorButton>
                                             </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
@@ -1832,8 +1832,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                                 <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
-                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                       <Blueprint4.Icon icon={{...}}>
                                                         <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
                                                           <span aria-hidden={true} icon=\\"code\\" className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
@@ -1847,8 +1847,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                                         Eval
                                                       </span>
                                                       <Blueprint4.Icon icon={false} />
-                                                    </button>
-                                                  </Blueprint4.Button>
+                                                    </a>
+                                                  </Blueprint4.AnchorButton>
                                                 </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
@@ -1863,8 +1863,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
                                   <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
-                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
-                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                         <Blueprint4.Icon icon={{...}}>
                                           <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
                                             <span aria-hidden={true} icon=\\"remove\\" className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
@@ -1878,8 +1878,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                                           Clear
                                         </span>
                                         <Blueprint4.Icon icon={false} />
-                                      </button>
-                                    </Blueprint4.Button>
+                                      </a>
+                                    </Blueprint4.AnchorButton>
                                   </ControlButton>
                                 </ControlBarClearButton>
                               </div>
@@ -1973,8 +1973,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                 <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
                                         <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
                                           <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
@@ -1988,8 +1988,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                         Run
                                       </span>
                                       <Blueprint4.Icon icon={false} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                    </a>
+                                  </Blueprint4.AnchorButton>
                                 </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
@@ -2004,8 +2004,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                 </ControlBarRunButton>
                 <ControlButtonSaveButton hasUnsavedChanges={false} onClickSave={[Function: onClickSave]}>
                   <ControlButton label=\\"Save\\" icon=\\"floppy-disk\\" onClick={[Function: onClickSave]} options={{...}}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickSave]} icon={{...}} rightIcon={false}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickSave]} icon={{...}} rightIcon={false}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={{...}}>
                           <Blueprint4.Icon icon=\\"floppy-disk\\" color={[undefined]}>
                             <span aria-hidden={true} icon=\\"floppy-disk\\" className=\\"bp4-icon bp4-icon-floppy-disk\\" title={[undefined]}>
@@ -2019,14 +2019,14 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                           Save
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlButtonSaveButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
                   <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={{...}}>
                           <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
                             <span aria-hidden={true} icon=\\"repeat\\" className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
@@ -2040,8 +2040,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                           Reset
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
@@ -2081,21 +2081,21 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
                   <ControlButton label=\\"Question 1 of 5  \\" isDisabled={true}>
-                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
-                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                    <Blueprint4.AnchorButton disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <a role=\\"button\\" disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" type={[undefined]} onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1} href={[undefined]}>
                         <Blueprint4.Icon icon={[undefined]} />
                         <span className=\\"bp4-button-text\\">
                           Question 1 of 5  
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
                   <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={false} />
                         <span className=\\"bp4-button-text\\">
                           Next
@@ -2109,8 +2109,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                             </span>
                           </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarNextButton>
               </div>
@@ -2321,8 +2321,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                              <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                   <Blueprint4.Icon icon={{...}}>
                                                     <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                                                       <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -2336,8 +2336,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                                     Autograder Results
                                                   </span>
                                                   <Blueprint4.Icon icon={false} />
-                                                </button>
-                                              </Blueprint4.Button>
+                                                </a>
+                                              </Blueprint4.AnchorButton>
                                             </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
@@ -2388,8 +2388,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                                 <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
-                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                       <Blueprint4.Icon icon={{...}}>
                                                         <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
                                                           <span aria-hidden={true} icon=\\"code\\" className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
@@ -2403,8 +2403,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                                         Eval
                                                       </span>
                                                       <Blueprint4.Icon icon={false} />
-                                                    </button>
-                                                  </Blueprint4.Button>
+                                                    </a>
+                                                  </Blueprint4.AnchorButton>
                                                 </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
@@ -2419,8 +2419,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
                                   <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
-                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
-                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                         <Blueprint4.Icon icon={{...}}>
                                           <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
                                             <span aria-hidden={true} icon=\\"remove\\" className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
@@ -2434,8 +2434,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                                           Clear
                                         </span>
                                         <Blueprint4.Icon icon={false} />
-                                      </button>
-                                    </Blueprint4.Button>
+                                      </a>
+                                    </Blueprint4.AnchorButton>
                                   </ControlButton>
                                 </ControlBarClearButton>
                               </div>
@@ -2529,8 +2529,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                 <ControlButton label=\\"Run\\" icon=\\"play\\" onClick={[Function: handleEval]} options={{...}} isDisabled={false} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
-                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className={[undefined]} type={[undefined]} onClick={[Function: handleEval]} icon={{...}} rightIcon={false}>
+                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                       <Blueprint4.Icon icon={{...}}>
                                         <Blueprint4.Icon icon=\\"play\\" color={[undefined]}>
                                           <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
@@ -2544,8 +2544,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                         Run
                                       </span>
                                       <Blueprint4.Icon icon={false} />
-                                    </button>
-                                  </Blueprint4.Button>
+                                    </a>
+                                  </Blueprint4.AnchorButton>
                                 </ControlButton>
                               </span>
                             </Blueprint4.ResizeSensor2>
@@ -2560,8 +2560,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                 </ControlBarRunButton>
                 <ControlButtonSaveButton hasUnsavedChanges={false} onClickSave={[Function: onClickSave]}>
                   <ControlButton label=\\"Save\\" icon=\\"floppy-disk\\" onClick={[Function: onClickSave]} options={{...}}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickSave]} icon={{...}} rightIcon={false}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickSave]} icon={{...}} rightIcon={false}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickSave]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={{...}}>
                           <Blueprint4.Icon icon=\\"floppy-disk\\" color={[undefined]}>
                             <span aria-hidden={true} icon=\\"floppy-disk\\" className=\\"bp4-icon bp4-icon-floppy-disk\\" title={[undefined]}>
@@ -2575,14 +2575,14 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                           Save
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlButtonSaveButton>
                 <ControlBarResetButton onClick={[Function: onClickResetTemplate]}>
                   <ControlButton label=\\"Reset\\" icon=\\"repeat\\" onClick={[Function: onClickResetTemplate]}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} icon={{...}} rightIcon={false}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickResetTemplate]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={{...}}>
                           <Blueprint4.Icon icon=\\"repeat\\" color={[undefined]}>
                             <span aria-hidden={true} icon=\\"repeat\\" className=\\"bp4-icon bp4-icon-repeat\\" title={[undefined]}>
@@ -2596,8 +2596,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                           Reset
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
@@ -2637,21 +2637,21 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                 <ControlBarPreviousButton onClick={[Function: onClickPrevious]} questionProgress={{...}} />
                 <ControlBarQuestionViewButton questionProgress={{...}}>
                   <ControlButton label=\\"Question 1 of 2  \\" isDisabled={true}>
-                    <Blueprint4.Button disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
-                      <button type={[undefined]} disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1}>
+                    <Blueprint4.AnchorButton disabled={true} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[undefined]} icon={[undefined]} rightIcon={false}>
+                      <a role=\\"button\\" disabled={true} className=\\"bp4-button bp4-disabled bp4-minimal\\" type={[undefined]} onClick={[undefined]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={-1} href={[undefined]}>
                         <Blueprint4.Icon icon={[undefined]} />
                         <span className=\\"bp4-button-text\\">
                           Question 1 of 2  
                         </span>
                         <Blueprint4.Icon icon={false} />
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarQuestionViewButton>
                 <ControlBarNextButton onClickNext={[Function: onClickNext]} onClickReturn={[Function: onClickReturn]} questionProgress={{...}}>
                   <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClickNext]} options={{...}}>
-                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
-                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: onClickNext]} icon={false} rightIcon={{...}}>
+                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: onClickNext]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                         <Blueprint4.Icon icon={false} />
                         <span className=\\"bp4-button-text\\">
                           Next
@@ -2665,8 +2665,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                             </span>
                           </Blueprint4.Icon>
                         </Blueprint4.Icon>
-                      </button>
-                    </Blueprint4.Button>
+                      </a>
+                    </Blueprint4.AnchorButton>
                   </ControlButton>
                 </ControlBarNextButton>
               </div>
@@ -2907,8 +2907,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                               </div>
                                             </Blueprint4.Collapse>
                                             <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-                                              <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-                                                <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                              <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+                                                <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                   <Blueprint4.Icon icon={{...}}>
                                                     <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
                                                       <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -2922,8 +2922,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                                     Autograder Results
                                                   </span>
                                                   <Blueprint4.Icon icon={false} />
-                                                </button>
-                                              </Blueprint4.Button>
+                                                </a>
+                                              </Blueprint4.AnchorButton>
                                             </ControlButton>
                                             <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
                                               <div className=\\"bp4-collapse\\" style={{...}}>
@@ -3042,8 +3042,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                             <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
                                               <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
                                                 <ControlButton label=\\"Eval\\" icon=\\"code\\" onClick={[Function: handleReplEval]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                                  <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
-                                                    <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                  <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplEval]} icon={{...}} rightIcon={false}>
+                                                    <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplEval]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                                       <Blueprint4.Icon icon={{...}}>
                                                         <Blueprint4.Icon icon=\\"code\\" color={[undefined]}>
                                                           <span aria-hidden={true} icon=\\"code\\" className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
@@ -3057,8 +3057,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                                         Eval
                                                       </span>
                                                       <Blueprint4.Icon icon={false} />
-                                                    </button>
-                                                  </Blueprint4.Button>
+                                                    </a>
+                                                  </Blueprint4.AnchorButton>
                                                 </ControlButton>
                                               </span>
                                             </Blueprint4.ResizeSensor2>
@@ -3073,8 +3073,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                 </ControlBarEvalButton>
                                 <ControlBarClearButton handleReplOutputClear={[Function: handleReplOutputClear]}>
                                   <ControlButton label=\\"Clear\\" icon=\\"remove\\" onClick={[Function: handleReplOutputClear]}>
-                                    <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
-                                      <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal\\" onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                    <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} icon={{...}} rightIcon={false}>
+                                      <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal\\" type={[undefined]} onClick={[Function: handleReplOutputClear]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
                                         <Blueprint4.Icon icon={{...}}>
                                           <Blueprint4.Icon icon=\\"remove\\" color={[undefined]}>
                                             <span aria-hidden={true} icon=\\"remove\\" className=\\"bp4-icon bp4-icon-remove\\" title={[undefined]}>
@@ -3088,8 +3088,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                                           Clear
                                         </span>
                                         <Blueprint4.Icon icon={false} />
-                                      </button>
-                                    </Blueprint4.Button>
+                                      </a>
+                                    </Blueprint4.AnchorButton>
                                   </ControlButton>
                                 </ControlBarClearButton>
                               </div>
