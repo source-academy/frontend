@@ -198,8 +198,14 @@ export type NotificationConfiguration = {
     id: number;
     type: string;
   } | null;
-  notificationPreference: any;
+  notificationPreference: NotificationPreference[];
   course: any;
 };
+
+export type NotificationPreference = {
+  id: number;
+  isEnabled: boolean | null;
+  timeOptionId: number | null;
+}
 
 export type UpdateCourseConfiguration = Partial<CourseConfiguration>;

@@ -39,10 +39,27 @@ const SelectCell: React.FC<SelectCellProps> = props => {
     );
   };
 
+  // look for default time option
+  let defaultTimeOption: TimeOption | undefined;
   const defaultTimeOptions = timeOptions.filter(to => to.isDefault);
   if (defaultTimeOptions.length === 1) {
-    if (!selectedOption || selectedOption.id !== defaultTimeOptions[0].id) {
-      setSelectedOption(defaultTimeOptions[0]);
+    defaultTimeOption = defaultTimeOptions[0];
+  }
+
+  // look for preferred time option
+  let prefTimeOption: TimeOption | undefined;
+  if (props.data.notificationPreference.length === 1) {
+    const filteredTimeOptions = timeOptions.filter(to => to.id === props.data.notificationPreference[0].timeOptionId);
+    if (filteredTimeOptions.length === 1) {
+        prefTimeOption = filteredTimeOptions[0];
+    }
+  }
+  
+  // initial value prioritises preferred time option, fallback on default
+  if (prefTimeOption || defaultTimeOption) {
+    const timeOption = prefTimeOption ? prefTimeOption : defaultTimeOption;
+    if (!selectedOption || selectedOption.id !== timeOption!.id) {
+      setSelectedOption(timeOption);
     }
   }
 

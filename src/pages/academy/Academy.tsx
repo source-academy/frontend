@@ -20,6 +20,7 @@ import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
 import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
+import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
 import XpCalculation from './xpCalculation/XpCalculation';
@@ -60,6 +61,7 @@ const Academy: React.FC<{}> = () => {
           </Route>
         ))}
         {enableGame && <Route path={`${path}/game`} component={Game} />}
+        <Route path={`${path}/notipreference`} component={NotiPreference} />
         <Route path={`${path}/sourcecast/:sourcecastId?`} component={Sourcecast} />
         <Route path={`${path}/achievements`} component={Achievement} />
         <Route exact={true} path={path}>
