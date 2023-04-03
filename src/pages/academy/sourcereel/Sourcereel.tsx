@@ -200,6 +200,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       handleEditorEval={editorEvalHandler}
       handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
       handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+      isEntrypointFileDefined={activeEditorTabIndex !== null}
       isDebugging={props.isDebugging}
       isEditorAutorun={props.isEditorAutorun}
       isRunning={props.isRunning}

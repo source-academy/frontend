@@ -5,8 +5,8 @@ import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import { rmdirRecursively } from '../fileSystem/utils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
-import { rmdirRecursively } from '../utils/FileSystemUtils';
 import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
@@ -159,6 +159,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
           {isExpanded && <Icon icon={IconNames.CHEVRON_DOWN} />}
           {!isExpanded && <Icon icon={IconNames.CHEVRON_RIGHT} />}
           <FileSystemViewFileName
+            workspaceLocation={workspaceLocation}
             fileSystem={fileSystem}
             basePath={basePath}
             fileName={directoryName}

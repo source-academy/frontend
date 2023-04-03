@@ -2,6 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import { Ace, Range } from 'ace-builds';
+import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Chapter, Variant } from 'js-slang/dist/types';
@@ -11,6 +12,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
+import { AnyAction, Dispatch } from 'redux';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -34,6 +36,7 @@ import {
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
 import {
+  addEditorTab,
   addHtmlConsoleError,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -43,6 +46,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   removeEditorTab,
+  removeEditorTabsForDirectory,
   sendReplInputToOutput,
   setFolderMode,
   toggleEditorAutorun,
@@ -69,6 +73,7 @@ import {
 } from 'src/features/playground/PlaygroundActions';
 
 import {
+  getDefaultFilePath,
   InterpreterOutput,
   isSourceLanguage,
   OverallState,
@@ -92,6 +97,7 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
+import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
@@ -105,8 +111,8 @@ import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSub
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
-import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
-import { parseQuery } from '../../commons/utils/QueryHelper';
+import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
+import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
 import { GitHubSaveInfo } from '../../features/github/GitHubTypes';
@@ -172,10 +178,17 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
-export async function handleHash(hash: string, props: PlaygroundProps) {
-  const qs = parseQuery(hash);
+export async function handleHash(
+  hash: string,
+  props: PlaygroundProps,
+  workspaceLocation: WorkspaceLocation,
+  dispatch: Dispatch<AnyAction>,
+  fileSystem: FSModule
+) {
+  // Make the parsed query string object a Partial because we might access keys which are not set.
+  const qs: Partial<IParsedQuery> = parseQuery(hash);
 
-  const chapter = stringParamToInt(qs.chap) || undefined;
+  const chapter = convertParamToInt(qs.chap) || undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else if (chapter === Chapter.FULL_TS) {
@@ -187,22 +200,58 @@ export async function handleHash(hash: string, props: PlaygroundProps) {
         return;
       }
     }
-    const programLz = qs.lz ?? qs.prgrm;
-    const program = programLz && decompressFromEncodedURIComponent(programLz);
-    if (program) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      props.handleEditorValueChange(0, program);
-      props.handleEditorUpdateBreakpoints(0, []);
-    }
+
+    // For backward compatibility with old share links - 'prgrm' is no longer used.
+    const program = qs.prgrm === undefined ? '' : decompressFromEncodedURIComponent(qs.prgrm);
+
+    // By default, create just the default file.
+    const defaultFilePath = getDefaultFilePath(workspaceLocation);
+    const files: Record<string, string> =
+      qs.files === undefined
+        ? {
+            [defaultFilePath]: program
+          }
+        : parseQuery(decompressFromEncodedURIComponent(qs.files));
+    await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
+
+    // BrowserFS does not provide a way of listening to changes in the file system, which makes
+    // updating the file system view troublesome. To force the file system view to re-render
+    // (and thus display the updated file system), we first disable Folder mode.
+    dispatch(setFolderMode(workspaceLocation, false));
+    const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
+    // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
+    // newly-added files to be shown. Note that this has to take place after the files are
+    // already added to the file system.
+    dispatch(setFolderMode(workspaceLocation, isFolderModeEnabled));
+
+    // By default, open a single editor tab containing the default playground file.
+    const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
+      defaultFilePath
+    ];
+    // Remove all editor tabs before populating with the ones from the query string.
+    dispatch(
+      removeEditorTabsForDirectory(workspaceLocation, WORKSPACE_BASE_PATHS[workspaceLocation])
+    );
+    // Add editor tabs from the query string.
+    editorTabFilePaths.forEach(filePath =>
+      // Fall back on the empty string if the file contents do not exist.
+      dispatch(addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
+    );
+
+    // By default, use the first editor tab.
+    const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
+    dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
+
     const variant: Variant =
       sourceLanguages.find(
         language => language.chapter === chapter && language.variant === qs.variant
       )?.variant ?? Variant.DEFAULT;
+
     if (chapter) {
       props.handleChapterSelect(chapter, variant);
     }
 
-    const execTime = Math.max(stringParamToInt(qs.exec || '1000') || 1000, 1000);
+    const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
     if (execTime) {
       props.handleChangeExecTime(execTime);
     }
@@ -227,6 +276,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const { isFolderModeEnabled, activeEditorTabIndex } = useTypedSelector(
     state => state.workspaces[workspaceLocation]
   );
+  const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
@@ -297,8 +347,17 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       }
       return;
     }
-    handleHash(hash, propsRef.current);
-  }, [dispatch, hash, props.courseSourceChapter, props.courseSourceVariant, workspaceLocation]);
+    if (fileSystem !== null) {
+      handleHash(hash, propsRef.current, workspaceLocation, dispatch, fileSystem);
+    }
+  }, [
+    dispatch,
+    fileSystem,
+    hash,
+    props.courseSourceChapter,
+    props.courseSourceVariant,
+    workspaceLocation
+  ]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -410,6 +469,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
         isDebugging={props.isDebugging}
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
@@ -427,6 +487,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       />
     );
   }, [
+    activeEditorTabIndex,
     handleDebuggerPause,
     handleDebuggerReset,
     handleDebuggerResume,
@@ -514,6 +575,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const persistenceButtons = React.useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
+        isFolderModeEnabled={isFolderModeEnabled}
         currentFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
@@ -527,7 +589,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [dispatch, persistenceUser, persistenceFile, persistenceIsDirty]);
+  }, [isFolderModeEnabled, persistenceFile, persistenceUser, persistenceIsDirty, dispatch]);
 
   const githubOctokitObject = useTypedSelector(store => store.session.githubOctokitObject);
   const githubSaveInfo = props.githubSaveInfo;
@@ -537,6 +599,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return (
       <ControlBarGitHubButtons
         key="github"
+        isFolderModeEnabled={isFolderModeEnabled}
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
@@ -547,7 +610,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         onClickLogOut={() => dispatch(logoutGitHub())}
       />
     );
-  }, [dispatch, githubOctokitObject, githubPersistenceIsDirty, githubSaveInfo]);
+  }, [
+    dispatch,
+    githubOctokitObject.octokit,
+    githubPersistenceIsDirty,
+    githubSaveInfo,
+    isFolderModeEnabled
+  ]);
 
   const executionTime = React.useMemo(
     () => (
@@ -577,6 +646,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const getEditorValue = React.useCallback(
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
     [store, workspaceLocation]
   );
@@ -584,15 +654,22 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const sessionButtons = React.useMemo(
     () => (
       <ControlBarSessionButtons
+        isFolderModeEnabled={isFolderModeEnabled}
         editorSessionId={props.editorSessionId}
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         getEditorValue={getEditorValue}
         handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
         sharedbConnected={props.sharedbConnected}
         key="session"
       />
     ),
-    [dispatch, getEditorValue, props.editorSessionId, props.sharedbConnected, workspaceLocation]
+    [
+      dispatch,
+      getEditorValue,
+      isFolderModeEnabled,
+      props.editorSessionId,
+      props.sharedbConnected,
+      workspaceLocation
+    ]
   );
 
   const shareButton = React.useMemo(() => {
@@ -613,19 +690,23 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
 
   const toggleFolderModeButton = React.useMemo(() => {
-    // TODO: Remove this once the Folder mode is ready for production.
-    if (true) {
-      return <></>;
-    }
-
     return (
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
+        isSessionActive={props.editorSessionId !== ''}
+        isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
     );
-  }, [dispatch, isFolderModeEnabled, workspaceLocation]);
+  }, [
+    dispatch,
+    githubSaveInfo.repoName,
+    isFolderModeEnabled,
+    persistenceFile,
+    props.editorSessionId,
+    workspaceLocation
+  ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
@@ -825,7 +906,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const editorContainerProps: NormalEditorContainerProps = {
     ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
-    baseFilePath: WORKSPACE_BASE_PATHS.playground,
+    baseFilePath: WORKSPACE_BASE_PATHS[workspaceLocation],
     isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
@@ -900,7 +981,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
                 body: (
                   <FileSystemView
                     workspaceLocation="playground"
-                    basePath={WORKSPACE_BASE_PATHS.playground}
+                    basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
                   />
                 ),
                 iconName: IconNames.FOLDER_CLOSE,
@@ -910,7 +991,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           : [])
       ]
     };
-  }, [isFolderModeEnabled]);
+  }, [isFolderModeEnabled, workspaceLocation]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {

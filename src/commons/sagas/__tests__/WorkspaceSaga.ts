@@ -43,7 +43,8 @@ import {
   endClearContext,
   moveCursor,
   sendReplInputToOutput,
-  setEditorHighlightedLines
+  setEditorHighlightedLines,
+  setFolderMode
 } from '../../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
@@ -93,16 +94,17 @@ beforeEach(() => {
 });
 
 describe('TOGGLE_FOLDER_MODE', () => {
-  test('calls showWarningMessage correctly when isFolderMode is false', () => {
+  test('enables Folder mode & calls showWarningMessage correctly when isFolderMode is false', () => {
     const workspaceLocation = 'assessment';
-    const updatedWorkspaceFields: Partial<WorkspaceState> = {
+    const currentWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: false
     };
-    const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
+    const updatedDefaultState = generateDefaultState(workspaceLocation, currentWorkspaceFields);
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
-      .call(showWarningMessage, 'Folder mode disabled', 750)
+      .put(setFolderMode(workspaceLocation, true))
+      .call(showWarningMessage, 'Folder mode enabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,
         payload: { workspaceLocation }
@@ -110,16 +112,17 @@ describe('TOGGLE_FOLDER_MODE', () => {
       .silentRun();
   });
 
-  test('calls showWarningMessage correctly when isFolderMode is true', () => {
+  test('disables Folder mode & calls showWarningMessage correctly when isFolderMode is true', () => {
     const workspaceLocation = 'grading';
-    const updatedWorkspaceFields: Partial<WorkspaceState> = {
+    const currentWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: true
     };
-    const updatedDefaultState = generateDefaultState(workspaceLocation, updatedWorkspaceFields);
+    const updatedDefaultState = generateDefaultState(workspaceLocation, currentWorkspaceFields);
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
-      .call(showWarningMessage, 'Folder mode enabled', 750)
+      .put(setFolderMode(workspaceLocation, false))
+      .call(showWarningMessage, 'Folder mode disabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,
         payload: { workspaceLocation }

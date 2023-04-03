@@ -50,13 +50,14 @@ import {
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
   REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+  RENAME_EDITOR_TAB_FOR_FILE,
+  RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -593,14 +594,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           currentQuestion: action.payload.questionId
         }
       };
-    case TOGGLE_FOLDER_MODE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isFolderModeEnabled: !state[workspaceLocation].isFolderModeEnabled
-        }
-      };
     case SET_FOLDER_MODE:
       return {
         ...state,
@@ -904,6 +897,48 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case RENAME_EDITOR_TAB_FOR_FILE: {
+      const { oldFilePath, newFilePath } = action.payload;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
+        editorTab.filePath === oldFilePath
+          ? {
+              ...editorTab,
+              filePath: newFilePath
+            }
+          : editorTab
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case RENAME_EDITOR_TABS_FOR_DIRECTORY: {
+      const { oldDirectoryPath, newDirectoryPath } = action.payload;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
+        editorTab.filePath?.startsWith(oldDirectoryPath)
+          ? {
+              ...editorTab,
+              filePath: editorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath)
+            }
+          : editorTab
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           editorTabs: newEditorTabs
         }
       };

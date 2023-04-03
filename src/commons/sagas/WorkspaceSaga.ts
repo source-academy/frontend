@@ -30,6 +30,7 @@ import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import {
+  defaultEditorValue,
   isSourceLanguage,
   OverallState,
   styliseSublanguage
@@ -44,7 +45,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
-import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
+import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/utils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -77,6 +78,7 @@ import {
   PLAYGROUND_EXTERNAL_SELECT,
   PlaygroundWorkspaceState,
   PROMPT_AUTOCOMPLETE,
+  SET_FOLDER_MODE,
   SicpWorkspaceState,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
@@ -104,10 +106,61 @@ export default function* WorkspaceSaga(): SagaIterator {
       const isFolderModeEnabled: boolean = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
       );
-      const warningMessage = `Folder mode ${isFolderModeEnabled ? 'enabled' : 'disabled'}`;
+      yield put(actions.setFolderMode(workspaceLocation, !isFolderModeEnabled));
+      const warningMessage = `Folder mode ${!isFolderModeEnabled ? 'enabled' : 'disabled'}`;
       yield call(showWarningMessage, warningMessage, 750);
     }
   );
+
+  yield takeEvery(SET_FOLDER_MODE, function* (action: ReturnType<typeof actions.setFolderMode>) {
+    const workspaceLocation = action.payload.workspaceLocation;
+    const isFolderModeEnabled: boolean = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
+    );
+    // Do nothing if Folder mode is enabled.
+    if (isFolderModeEnabled) {
+      return;
+    }
+
+    const editorTabs: EditorTabState[] = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs
+    );
+    // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
+    if (editorTabs.length === 0) {
+      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+      const fileSystem: FSModule | null = yield select(
+        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+      );
+      // If the file system is not initialised, add an editor tab with the default editor value.
+      if (fileSystem === null) {
+        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue));
+        return;
+      }
+      const editorValue: string = yield new Promise((resolve, reject) => {
+        fileSystem.exists(defaultFilePath, fileExists => {
+          if (!fileExists) {
+            // If the file does not exist, we need to also create it in the file system.
+            writeFileRecursively(fileSystem, defaultFilePath, defaultEditorValue)
+              .then(() => resolve(defaultEditorValue))
+              .catch(err => reject(err));
+            return;
+          }
+          fileSystem.readFile(defaultFilePath, 'utf-8', (err, fileContents) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            if (fileContents === undefined) {
+              reject(new Error('File exists but has no contents.'));
+              return;
+            }
+            resolve(fileContents);
+          });
+        });
+      });
+      yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, editorValue));
+    }
+  });
 
   // Mirror editor updates to the associated file in the filesystem.
   yield takeEvery(
@@ -596,6 +649,29 @@ function* insertDebuggerStatements(
   // corresponding debugger statements.
   const lines = code.split('\n');
   let transformedCode = code;
+  for (let i = 0; i < breakpoints.length; i++) {
+    if (!breakpoints[i]) continue;
+    lines[i] = 'debugger;' + lines[i];
+    // Reconstruct the code & check that the code is still syntactically valid.
+    // The insertion of the debugger statement is potentially invalid if it
+    // happens within an existing statement (that is split across lines).
+    transformedCode = lines.join('\n');
+    if (isSourceLanguage(context.chapter)) {
+      parse(transformedCode, context);
+    }
+    // If the resulting code is no longer syntactically valid, throw an error.
+    if (context.errors.length > 0) {
+      const errorMessage = `Hint: Misplaced breakpoint at line ${i + 1}.`;
+      yield put(actions.sendReplInputToOutput(errorMessage, workspaceLocation));
+      return code;
+    }
+  }
+
+  /*
+  Not sure how this works, but there were some issues with breakpoints
+  I'm not sure why `in` is being used here, given that it's usually not
+  the intended effect
+
   for (const breakpoint in breakpoints) {
     // Add a debugger statement to the line with the breakpoint.
     const breakpointLineNum: number = parseInt(breakpoint);
@@ -614,6 +690,7 @@ function* insertDebuggerStatements(
       return code;
     }
   }
+  */
 
   // Finally, return the transformed code with debugger statements added.
   return transformedCode;
@@ -649,8 +726,7 @@ export function* evalEditor(
   ]);
 
   if (activeEditorTabIndex === null) {
-    // TODO: Implement this.
-    throw new Error('To be handled...');
+    throw new Error('Cannot evaluate program without an entrypoint file.');
   }
 
   const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
@@ -1076,7 +1152,7 @@ export function* evalCode(
   }
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
-  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL || actionType === DEBUG_RESUME) {
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));
     }

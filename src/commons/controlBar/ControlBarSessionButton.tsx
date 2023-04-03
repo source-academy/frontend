@@ -1,6 +1,6 @@
 import { Classes, Colors, Menu } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -15,6 +15,7 @@ type DispatchProps = {
 };
 
 type StateProps = {
+  isFolderModeEnabled: boolean;
   editorSessionId?: string;
   getEditorValue: () => string;
   sharedbConnected?: boolean;
@@ -124,28 +125,36 @@ export class ControlBarSessionButtons extends React.PureComponent<
       />
     );
 
+    const tooltipContent = this.props.isFolderModeEnabled
+      ? 'Currently unsupported in Folder mode'
+      : undefined;
+
     return (
-      <Popover2
-        content={
-          <Menu large={true}>
-            {inviteButton}
-            {this.props.editorSessionId === '' ? joinButton : leaveButton}
-          </Menu>
-        }
-      >
-        <ControlButton
-          label="Session"
-          icon={IconNames.SOCIAL_MEDIA}
-          options={{
-            iconColor:
-              this.props.editorSessionId === ''
-                ? undefined
-                : this.props.sharedbConnected
-                ? Colors.GREEN3
-                : Colors.RED3
-          }}
-        />
-      </Popover2>
+      <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
+        <Popover2
+          content={
+            <Menu large={true}>
+              {inviteButton}
+              {this.props.editorSessionId === '' ? joinButton : leaveButton}
+            </Menu>
+          }
+          disabled={this.props.isFolderModeEnabled}
+        >
+          <ControlButton
+            label="Session"
+            icon={IconNames.SOCIAL_MEDIA}
+            options={{
+              iconColor:
+                this.props.editorSessionId === ''
+                  ? undefined
+                  : this.props.sharedbConnected
+                  ? Colors.GREEN3
+                  : Colors.RED3
+            }}
+            isDisabled={this.props.isFolderModeEnabled}
+          />
+        </Popover2>
+      </Tooltip2>
     );
   }
 

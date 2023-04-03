@@ -28,7 +28,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../../commons/notificationBadge/NotificationBadgeTypes';
-import { stringParamToInt } from '../../../commons/utils/ParamParseHelper';
+import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import {
   GradingOverview,
   GradingOverviewWithNotifications
@@ -176,9 +176,9 @@ class Grading extends React.Component<GradingProps, State> {
   }
 
   public render() {
-    const submissionId: number | null = stringParamToInt(this.props.match.params.submissionId);
+    const submissionId: number | null = convertParamToInt(this.props.match.params.submissionId);
     // default questionId is 0 (the first question)
-    const questionId: number = stringParamToInt(this.props.match.params.questionId) || 0;
+    const questionId: number = convertParamToInt(this.props.match.params.questionId) || 0;
 
     /* Create a workspace to grade a submission. */
     if (submissionId !== null) {

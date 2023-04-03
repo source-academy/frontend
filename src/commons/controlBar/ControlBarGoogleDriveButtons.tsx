@@ -8,6 +8,7 @@ import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
 
 export type ControlBarGoogleDriveButtonsProps = {
+  isFolderModeEnabled: boolean;
   loggedInAs?: string;
   currentFile?: PersistenceFile;
   isDirty?: boolean;
@@ -36,6 +37,7 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
       label={(props.currentFile && props.currentFile.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
       options={{ intent: stateToIntent[state] }}
+      isDisabled={props.isFolderModeEnabled}
     />
   );
   const openButton = (
@@ -58,24 +60,30 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
       <ControlButton label="Log out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
     </Tooltip2>
   );
+  const tooltipContent = props.isFolderModeEnabled
+    ? 'Currently unsupported in Folder mode'
+    : undefined;
 
   return (
-    <Popover2
-      autoFocus={false}
-      content={
-        <div>
-          <ButtonGroup large={!isMobileBreakpoint}>
-            {openButton}
-            {saveButton}
-            {saveAsButton}
-            {logoutButton}
-          </ButtonGroup>
-        </div>
-      }
-      onOpening={props.onPopoverOpening}
-      popoverClassName={Classes.POPOVER_DISMISS}
-    >
-      {mainButton}
-    </Popover2>
+    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
+      <Popover2
+        autoFocus={false}
+        content={
+          <div>
+            <ButtonGroup large={!isMobileBreakpoint}>
+              {openButton}
+              {saveButton}
+              {saveAsButton}
+              {logoutButton}
+            </ButtonGroup>
+          </div>
+        }
+        onOpening={props.onPopoverOpening}
+        popoverClassName={Classes.POPOVER_DISMISS}
+        disabled={props.isFolderModeEnabled}
+      >
+        {mainButton}
+      </Popover2>
+    </Tooltip2>
   );
 };

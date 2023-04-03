@@ -253,6 +253,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   activeEditorTabIndex: 0,
   editorTabs: [
     {
+      filePath: ['playground', 'sicp'].includes(workspaceLocation)
+        ? getDefaultFilePath(workspaceLocation)
+        : undefined,
       value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
         ? defaultEditorValue
         : '',
@@ -284,6 +287,10 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   debuggerContext: {} as DebuggerContext
 });
 
+const defaultFileName = 'program.js';
+export const getDefaultFilePath = (workspaceLocation: WorkspaceLocation) =>
+  `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${defaultFileName}`;
+
 export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {
     ...createDefaultWorkspace('assessment'),
@@ -300,9 +307,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
+    activeEditorTabIndex: 0,
     editorTabs: [
       {
-        filePath: `${WORKSPACE_BASE_PATHS.playground}/program.js`,
+        filePath: getDefaultFilePath('playground'),
         value: defaultEditorValue,
         highlightedLines: [],
         breakpoints: []
@@ -346,7 +354,16 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   sicp: {
     ...createDefaultWorkspace('sicp'),
-    usingSubst: false
+    usingSubst: false,
+    activeEditorTabIndex: 0,
+    editorTabs: [
+      {
+        filePath: getDefaultFilePath('sicp'),
+        value: defaultEditorValue,
+        highlightedLines: [],
+        breakpoints: []
+      }
+    ]
   },
   githubAssessment: {
     ...createDefaultWorkspace('githubAssessment'),

@@ -41,7 +41,7 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
-import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
+import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
   AssessmentConfiguration,
@@ -252,8 +252,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
       assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
     [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
   );
-  const assessmentId: number | null = stringParamToInt(params.assessmentId);
-  const questionId: number = stringParamToInt(params.questionId) || Constants.defaultQuestionId;
+  const assessmentId: number | null = convertParamToInt(params.assessmentId);
+  const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
 
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.

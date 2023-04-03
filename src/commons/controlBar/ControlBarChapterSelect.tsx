@@ -55,15 +55,14 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
     const isDisabled = isFolderModeEnabled && lang.chapter === Chapter.SOURCE_1;
     const tooltipContent = isDisabled
       ? 'Folder mode makes use of lists which are not available in Source 1. To switch to Source 1, disable Folder mode.'
-      : '';
+      : undefined;
     return (
-      <Tooltip2 content={tooltipContent}>
-        <MenuItem
-          key={lang.displayName}
-          onClick={handleClick}
-          text={lang.displayName}
-          disabled={isDisabled}
-        />
+      <Tooltip2
+        key={lang.displayName}
+        content={tooltipContent}
+        disabled={tooltipContent === undefined}
+      >
+        <MenuItem onClick={handleClick} text={lang.displayName} disabled={isDisabled} />
       </Tooltip2>
     );
   };

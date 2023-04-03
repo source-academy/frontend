@@ -7860,10 +7860,10 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.17:
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.17.tgz#95bb3fbc8aa631815cc15191c39aa9e8094893cc"
-  integrity sha512-b3xLXUD6XGsT8Bj9+3rHD41RDWXXZBamU3n/bYM+p5EgTM9VMh9Yeb57nG/DArrPyRF0g8Al4zsPGhfObEm7fw==
+js-slang@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.18.tgz#576e3e29803a223f69ed8c103c75327b4fd02f59"
+  integrity sha512-PJpO9r0psW51BpDhwSoPUFvmsxYUfvB5UOoDaxQFLXDIz52PFd+m/PlAr/kzNUoA0NE4N/IPqlRX7Sl4fgvzlw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
