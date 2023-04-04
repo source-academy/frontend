@@ -18,15 +18,15 @@ const SelectCell: React.FC<SelectCellProps> = props => {
   const timeOptions: TimeOption[] = props.data[props.field];
   timeOptions.sort((to1, to2) => to1.minutes - to2.minutes);
 
-  const getUserFriendlyText = (option: TimeOption) => option.minutes >= 60
-    ? `${Math.round(option.minutes / 60 * 100) / 100} hour(s)`
-    : `${option.minutes} minute(s)`
+  const getUserFriendlyText = (option: TimeOption) =>
+    option.minutes >= 60
+      ? `${Math.round((option.minutes / 60) * 100) / 100} hour(s)`
+      : `${option.minutes} minute(s)`;
 
   const renderOption: ItemRenderer<TimeOption> = (
     option: TimeOption,
     { handleClick, handleFocus, modifiers, query }
   ) => {
-
     return (
       <MenuItem
         active={modifiers.active}

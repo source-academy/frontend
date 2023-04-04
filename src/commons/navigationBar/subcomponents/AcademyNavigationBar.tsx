@@ -34,7 +34,6 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           />
         </NavLink>
       ))}
-
     </NavbarGroup>
 
     <NavbarGroup align={Alignment.RIGHT}>

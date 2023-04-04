@@ -1206,7 +1206,7 @@ export const getNotificationConfigs = async (
 
 export const getConfigurableNotificationConfigs = async (
   tokens: Tokens,
-  courseRegId: number,
+  courseRegId: number
 ): Promise<NotificationConfiguration[] | null> => {
   const resp = await request(`notifications/config/user/${courseRegId}`, 'GET', {
     ...tokens,
@@ -1223,7 +1223,7 @@ export const postNotificationPreference = async (
   tokens: Tokens,
   notiPref: NotificationPreference,
   notificationConfigId: number,
-  courseRegId: number,
+  courseRegId: number
 ): Promise<Response | null> => {
   const resp = await request(`notifications/preference`, 'POST', {
     ...tokens,
@@ -1231,7 +1231,7 @@ export const postNotificationPreference = async (
       is_enabled: notiPref.isEnabled,
       time_option_id: notiPref.timeOptionId,
       notification_config_id: notificationConfigId,
-      course_reg_id: courseRegId,
+      course_reg_id: courseRegId
     },
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -1245,18 +1245,17 @@ export const putNotificationPreference = async (
   tokens: Tokens,
   notiPref: NotificationPreference,
   notificationConfigId: number,
-  courseRegId: number,
+  courseRegId: number
 ): Promise<Response | null> => {
-
   if (notiPref.id === -1) {
     return await postNotificationPreference(tokens, notiPref, notificationConfigId, courseRegId);
-  } 
+  }
 
   const resp = await request(`notifications/preference/${notiPref.id}`, 'PUT', {
     ...tokens,
     body: {
       is_enabled: notiPref.isEnabled,
-      time_option_id: notiPref.timeOptionId,
+      time_option_id: notiPref.timeOptionId
     },
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -1265,8 +1264,6 @@ export const putNotificationPreference = async (
 
   return resp;
 };
-
-
 
 /**
  * GET /courses/{courseId}/admin/users

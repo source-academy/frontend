@@ -1,16 +1,19 @@
-import { Button, H1, Intent } from "@blueprintjs/core";
-import { GridApi, GridReadyEvent, ValueFormatterFunc } from "ag-grid-community";
-import { AgGridReact } from "ag-grid-react";
-import { cloneDeep } from "lodash";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { fetchConfigurableNotificationConfigs, updateNotificationPreference } from "src/commons/application/actions/SessionActions";
-import { NotificationConfiguration, TimeOption } from "src/commons/application/types/SessionTypes";
-import ContentDisplay from "src/commons/ContentDisplay";
-import { useTypedSelector } from "src/commons/utils/Hooks";
+import { Button, H1, Intent } from '@blueprintjs/core';
+import { GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import { cloneDeep } from 'lodash';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  fetchConfigurableNotificationConfigs,
+  updateNotificationPreference
+} from 'src/commons/application/actions/SessionActions';
+import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import BooleanCell from "./subcomponents/BooleanCell";
-import SelectCell from "./subcomponents/SelectCell";
+import BooleanCell from './subcomponents/BooleanCell';
+import SelectCell from './subcomponents/SelectCell';
 
 const NotiPreference: React.FC = () => {
   const gridApi = React.useRef<GridApi>();
@@ -20,13 +23,13 @@ const NotiPreference: React.FC = () => {
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
 
-  const configurableNotificationConfigs = React.useRef(session.configurableNotificationConfigs) as React.MutableRefObject<
-    NotificationConfiguration[]
-  >;
+  const configurableNotificationConfigs = React.useRef(
+    session.configurableNotificationConfigs
+  ) as React.MutableRefObject<NotificationConfiguration[]>;
 
   React.useEffect(() => {
     if (!session.courseRegId) return;
-    
+
     dispatch(fetchConfigurableNotificationConfigs(session.courseRegId));
   }, [dispatch, session.courseRegId]);
 
@@ -40,13 +43,13 @@ const NotiPreference: React.FC = () => {
   const setIsEnabled = (index: number, value: boolean) => {
     const temp = [...configurableNotificationConfigs.current];
     const pref = temp[index]['notificationPreference'];
-    
-    temp[index]["notificationPreference"] = {
+
+    temp[index]['notificationPreference'] = {
       id: pref === null ? -1 : pref.id, // assumes -1 is not a valid id
       timeOptionId: pref === null ? null : pref.timeOptionId,
-      isEnabled: value,
-    }
-    
+      isEnabled: value
+    };
+
     configurableNotificationConfigs.current = temp;
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isEnabled', value);
     setHasChanges(true);
@@ -55,13 +58,13 @@ const NotiPreference: React.FC = () => {
   const setTimeOption = (index: number, value: TimeOption) => {
     const temp = [...configurableNotificationConfigs.current];
     const pref = temp[index]['notificationPreference'];
-    
-    temp[index]["notificationPreference"] = {
+
+    temp[index]['notificationPreference'] = {
       id: pref === null ? -1 : pref.id, // assumes -1 is not a valid id
       timeOptionId: value.id,
-      isEnabled: pref === null ? null : pref.isEnabled,
-    }
-    
+      isEnabled: pref === null ? null : pref.isEnabled
+    };
+
     configurableNotificationConfigs.current = temp;
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isEnabled', value);
     setHasChanges(true);
@@ -124,12 +127,14 @@ const NotiPreference: React.FC = () => {
 
   const submitHandler = () => {
     if (!hasChanges) return;
-    
+
     configurableNotificationConfigs.current.forEach(config => {
       if (config.notificationPreference === null) return;
       if (!session.courseRegId) return;
 
-      dispatch(updateNotificationPreference(config.notificationPreference, config.id, session.courseRegId))
+      dispatch(
+        updateNotificationPreference(config.notificationPreference, config.id, session.courseRegId)
+      );
     });
 
     setHasChanges(false);

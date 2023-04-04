@@ -16,7 +16,10 @@ const BooleanCell: React.FC<BooleanCellProps> = props => {
   const { data } = props;
   let checked = data[props.field];
 
-  if (props.data.notificationPreference !== null && props.data.notificationPreference.isEnabled !== null) {
+  if (
+    props.data.notificationPreference !== null &&
+    props.data.notificationPreference.isEnabled !== null
+  ) {
     checked = props.data.notificationPreference.isEnabled;
   }
 

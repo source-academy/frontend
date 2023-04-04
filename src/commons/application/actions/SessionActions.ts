@@ -137,8 +137,9 @@ export const setCourseRegistration = (courseRegistration: Partial<CourseRegistra
 export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
   action(SET_ASSESSMENT_CONFIGURATIONS, assessmentConfigurations);
 
-export const setConfigurableNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
-  action(SET_CONFIGURABLE_NOTIFICATION_CONFIGS, notificationConfigs);
+export const setConfigurableNotificationConfigs = (
+  notificationConfigs: NotificationConfiguration[]
+) => action(SET_CONFIGURABLE_NOTIFICATION_CONFIGS, notificationConfigs);
 
 export const setNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
   action(SET_NOTIFICATION_CONFIGS, notificationConfigs);
@@ -256,8 +257,16 @@ export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfigurati
 export const updateNotificationConfig = (notificationConfig: NotificationConfiguration) =>
   action(UPDATE_NOTIFICATION_CONFIG, notificationConfig);
 
-export const updateNotificationPreference = (notificationPreference: NotificationPreference, notificationConfigId: number, courseRegId: number) =>
-  action(UPDATE_NOTIFICATION_PREFERENCE, {notificationPreference, notificationConfigId, courseRegId});
+export const updateNotificationPreference = (
+  notificationPreference: NotificationPreference,
+  notificationConfigId: number,
+  courseRegId: number
+) =>
+  action(UPDATE_NOTIFICATION_PREFERENCE, {
+    notificationPreference,
+    notificationConfigId,
+    courseRegId
+  });
 
 export const deleteAssessmentConfig = (assessmentConfig: AssessmentConfiguration) =>
   action(DELETE_ASSESSMENT_CONFIG, assessmentConfig);
@@ -265,7 +274,7 @@ export const deleteAssessmentConfig = (assessmentConfig: AssessmentConfiguration
 export const fetchAdminPanelCourseRegistrations = () =>
   action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);
 
-export const fetchConfigurableNotificationConfigs = (courseRegId: number) => 
+export const fetchConfigurableNotificationConfigs = (courseRegId: number) =>
   action(FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS, { courseRegId });
 
 export const fetchNotificationConfigs = () => action(FETCH_NOTIFICATION_CONFIGS);

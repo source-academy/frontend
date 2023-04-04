@@ -727,22 +727,23 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-
-  yield takeEvery(FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS, 
+  yield takeEvery(
+    FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
     function* (action: ReturnType<typeof actions.fetchConfigurableNotificationConfigs>): any {
-    const tokens: Tokens = yield selectTokens();
-    const { courseRegId }: { courseRegId: number } = action.payload;
+      const tokens: Tokens = yield selectTokens();
+      const { courseRegId }: { courseRegId: number } = action.payload;
 
-    const notificationConfigs: NotificationConfiguration[] | null = yield call(
-      getConfigurableNotificationConfigs,
-      tokens,
-      courseRegId
-    );
+      const notificationConfigs: NotificationConfiguration[] | null = yield call(
+        getConfigurableNotificationConfigs,
+        tokens,
+        courseRegId
+      );
 
-    if (notificationConfigs) {
-      yield put(actions.setConfigurableNotificationConfigs(notificationConfigs));
+      if (notificationConfigs) {
+        yield put(actions.setConfigurableNotificationConfigs(notificationConfigs));
+      }
     }
-  });
+  );
 
   yield takeEvery(FETCH_NOTIFICATION_CONFIGS, function* (): any {
     const tokens: Tokens = yield selectTokens();
@@ -808,9 +809,15 @@ function* BackendSaga(): SagaIterator {
     UPDATE_NOTIFICATION_PREFERENCE,
     function* (action: ReturnType<typeof actions.updateNotificationPreference>): any {
       const tokens: Tokens = yield selectTokens();
-      const {notificationPreference, notificationConfigId, courseRegId} = action.payload;
+      const { notificationPreference, notificationConfigId, courseRegId } = action.payload;
 
-      const resp: Response | null = yield call(putNotificationPreference, tokens, notificationPreference, notificationConfigId, courseRegId);
+      const resp: Response | null = yield call(
+        putNotificationPreference,
+        tokens,
+        notificationPreference,
+        notificationConfigId,
+        courseRegId
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
