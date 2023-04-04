@@ -126,13 +126,13 @@ const variantDisplay: Map<Variant, string> = new Map([
 export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
-  displayName: 'full JavaScript'
+  displayName: 'Full JavaScript'
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
-  displayName: 'full TypeScript'
+  displayName: 'Full TypeScript'
 };
 
 export const htmlLanguage: SALanguage = {
@@ -141,17 +141,21 @@ export const htmlLanguage: SALanguage = {
   displayName: 'HTML'
 };
 
-export const schemeLanguage: SALanguage = {
-  chapter: Chapter.SCHEME_1,
-  variant: Variant.DEFAULT,
-  displayName: 'Scheme 1'
-};
+export const schemeLanguages: SALanguage[] = [
+  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
+  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
+  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
+  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
+  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
+];
 
-export const pyLanguage: SALanguage = {
-  chapter: Chapter.PYTHON_1,
-  variant: Variant.DEFAULT,
-  displayName: 'Python 1'
-};
+export const pyLanguages: SALanguage[] = [
+  { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' },
+  { chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
+  { chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
+  { chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' },
+  //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
+];
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
   switch (chapter) {
@@ -162,9 +166,13 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
     case Chapter.HTML:
       return htmlLanguage.displayName;
     case Chapter.SCHEME_1:
-      return schemeLanguage.displayName;
+    case Chapter.SCHEME_2:
+    case Chapter.SCHEME_3:
+    case Chapter.SCHEME_4:
+    case Chapter.FULL_SCHEME:
+      return schemeLanguages.find(lang => lang.chapter === chapter)!.displayName;
     case Chapter.PYTHON_1:
-      return pyLanguage.displayName;
+      return pyLanguages.find(lang => lang.chapter === chapter)!.displayName;
     default:
       return `Source \xa7${chapter}${
         variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''

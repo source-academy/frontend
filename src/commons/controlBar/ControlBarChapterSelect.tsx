@@ -12,9 +12,9 @@ import {
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
-  pyLanguage,
+  pyLanguages,
   SALanguage,
-  schemeLanguage,
+  schemeLanguages,
   sourceLanguages,
   styliseSublanguage,
   variantLanguages
@@ -57,22 +57,18 @@ const chapterListRendererA: ItemListRenderer<SALanguage> = ({ itemsParentRef, re
 };
 
 const chapterListRendererB: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const defaultChoices = defaultLanguages.map(renderItem);
-  const schemeChoice = renderItem(schemeLanguage, 0);
+  const schemeChoice = schemeLanguages.map(renderItem);
   return (
-    <Menu ulRef={itemsParentRef}>
-      {defaultChoices}
+    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
       {Constants.playgroundOnly && schemeChoice}
     </Menu>
   );
 };
 
 const chapterListRendererC: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const defaultChoices = defaultLanguages.map(renderItem);
-  const pyChoice = renderItem(pyLanguage, 0);
+  const pyChoice = pyLanguages.map(renderItem);
   return (
-    <Menu ulRef={itemsParentRef}>
-      {defaultChoices}
+    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
       {Constants.playgroundOnly && pyChoice}
     </Menu>
   );
