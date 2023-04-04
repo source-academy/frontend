@@ -115,8 +115,7 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   console.log('HELLO:', selectedLang);
 
   let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
-  // const [chapterListRenderer, setChapterListRenderer] = useState<ItemListRenderer<SALanguage>>(chapterListRendererA);
-
+  
   // useEffect(() => {
   if (selectedLang === 'Source') {
     // setChapterListRenderer(chapterListRendererA);
