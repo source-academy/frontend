@@ -26,6 +26,7 @@ export type SavedState = {
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
+  playgroungLang: string;
   playgroundExternalLibrary: ExternalLibraryName;
 };
 
@@ -78,6 +79,7 @@ export const saveState = (state: OverallState) => {
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
+      playgroungLang: state.playground.lang,
       playgroundExternalLibrary: state.workspaces.playground.externalLibrary
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));

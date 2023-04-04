@@ -78,7 +78,7 @@ function loadStore(loadedStore: SavedState | undefined) {
             : defaultState.workspaces.playground.context.chapter,
           variant: loadedStore.playgroundSourceVariant
             ? loadedStore.playgroundSourceVariant
-            : defaultState.workspaces.playground.context.variant
+            : defaultState.workspaces.playground.context.variant,
         }
       }
     }

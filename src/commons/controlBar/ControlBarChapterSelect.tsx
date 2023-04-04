@@ -4,7 +4,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
 // import { useSelector } from 'react-redux';
-// import React, { useEffect} from 'react';
+import React, { useEffect, useState} from 'react';
 import { store } from 'src/pages/createStore';
 
 import {
@@ -105,8 +105,17 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
-  const selectedLang = store.getState().playground.lang;
-  // const selectedLang = useSelector((state) => state)
+  // const selectedLang = store.getState().playground.lang;
+  const [selectedLang, setSelectedLang] = useState(store.getState().playground.lang);
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => {
+      const newSelectedLang = store.getState().playground.lang;
+      setSelectedLang(newSelectedLang);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   console.log('HELLO:', selectedLang);
 
   let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
