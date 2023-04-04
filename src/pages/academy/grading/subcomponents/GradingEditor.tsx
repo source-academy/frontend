@@ -22,7 +22,7 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from '../../../../commons/utils/NotificationsHelper';
-import { stringParamToInt } from '../../../../commons/utils/ParamParseHelper';
+import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
 type GradingEditorProps = DispatchProps & OwnProps;
 
@@ -116,7 +116,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
   const validateXpBeforeSave =
     (handleSaving: GradingSaveFunction): (() => void) =>
     () => {
-      const newXpAdjustmentInput = stringParamToInt(xpAdjustmentInput || undefined) || undefined;
+      const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined) || undefined;
       const xp = props.initialXp + (newXpAdjustmentInput || 0);
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
@@ -186,7 +186,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
   };
 
   const checkHasUnsavedChanges = () => {
-    const newXpAdjustmentInput = stringParamToInt(xpAdjustmentInput || undefined);
+    const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined);
     return props.xpAdjustment !== newXpAdjustmentInput || props.comments !== editorValue;
   };
 
@@ -221,7 +221,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
   const onTabChange = (tab: ReactMdeProps['selectedTab']) => setSelectedTab(tab);
 
   // Derived values
-  const totalXp = props.initialXp + (stringParamToInt(xpAdjustmentInput || undefined) || 0);
+  const totalXp = props.initialXp + (convertParamToInt(xpAdjustmentInput || undefined) || 0);
   const xpPlaceholder = `${props.initialXp > 0 ? '-' : ''}${props.initialXp} to ${
     props.maxXp - props.initialXp
   }`;

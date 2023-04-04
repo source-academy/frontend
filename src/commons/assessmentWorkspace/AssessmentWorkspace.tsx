@@ -642,7 +642,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
+        handleEditorEval={handleEval}
+        key="run"
+      />
+    );
 
     const saveButton =
       props.canSave &&
@@ -659,6 +665,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
+        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={props.assessment!.questions[questionId].library.chapter}
         sourceVariant={
           props.assessment!.questions[questionId].library.variant ?? Constants.defaultSourceVariant

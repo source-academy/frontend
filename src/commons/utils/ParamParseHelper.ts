@@ -6,16 +6,29 @@ import { AssessmentType } from '../assessment/AssessmentTypes';
 export const assessmentTypeLink = (assessmentType: AssessmentType): string =>
   assessmentType.toLowerCase().replace(/\W+/g, '_');
 
-/** Converts an optional string
- *  parameter into an integer or null value.
+/**
+ * Converts a string parameter into an integer.
+ * Returns null if the string parameter is undefined.
  *
- *  @param {string} str - An optional string to be
- *    converted to an integer.
+ * @param param The parameter to convert to an integer.
  */
-export const stringParamToInt = (str?: string): number | null => {
-  if (str === undefined) {
+export const convertParamToInt = (param?: string): number | null => {
+  if (param === undefined) {
     return null;
   }
-  const num = parseInt(str, 10);
+  const num = parseInt(param, 10);
   return Number.isInteger(num) ? num : null;
+};
+
+/**
+ * Converts a string parameter into a boolean.
+ * Returns null if the string parameter is undefined.
+ *
+ * @param param The parameter to convert to a boolean.
+ */
+export const convertParamToBoolean = (param?: string): boolean | null => {
+  if (param === undefined) {
+    return null;
+  }
+  return param.toLowerCase() === 'true';
 };

@@ -4,12 +4,13 @@ import * as qs from 'query-string';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
-import { changeQueryString, updateShortURL } from '../../../features/playground/PlaygroundActions';
-import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
+import { updateShortURL } from '../../../features/playground/PlaygroundActions';
+import { SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
 import {
   createDefaultWorkspace,
   defaultState,
   defaultWorkspaceManager,
+  getDefaultFilePath,
   OverallState
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
@@ -20,68 +21,48 @@ import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 describe('Playground saga tests', () => {
   Constants.urlShortenerBase = 'http://url-shortener.com/';
   const errMsg = 'Something went wrong trying to create the link.';
+  const defaultPlaygroundFilePath = getDefaultFilePath('playground');
 
-  test('puts changeQueryString action with undefined argument when passed the default value', () => {
-    return expectSaga(PlaygroundSaga)
-      .withState(defaultState)
-      .put(changeQueryString(''))
-      .dispatch({
-        type: GENERATE_LZ_STRING
-      })
-      .silentRun();
-  });
-
-  test('puts changeQueryString action with undefined argument when passed an empty string', () => {
-    const dummyEditorValue: string = '';
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
-          usingSubst: false
-        }
-      }
-    };
-    return expectSaga(PlaygroundSaga)
-      .withState(dummyState)
-      .put(changeQueryString(''))
-      .dispatch({
-        type: GENERATE_LZ_STRING
-      })
-      .silentRun();
-  });
-
-  test('puts changeQueryString action with correct string argument when passed a dummy string', () => {
-    const dummyEditorValue: string = '1 + 1;';
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
-          usingSubst: false
-        }
-      }
-    };
-    const expectedString: string = createQueryString(dummyEditorValue, dummyState);
-    return expectSaga(PlaygroundSaga)
-      .withState(dummyState)
-      .put(changeQueryString(expectedString))
-      .dispatch({
-        type: GENERATE_LZ_STRING
-      })
-      .silentRun();
-  });
+  // This test relies on BrowserFS which works in browser environments and not Node.js.
+  // FIXME: Uncomment this test if BrowserFS adds support for running in Node.js.
+  // test('puts changeQueryString action with correct string argument when passed a dummy program', () => {
+  //   const dummyFiles: Record<string, string> = {
+  //     [defaultPlaygroundFilePath]: '1 + 1;'
+  //   };
+  //   const defaultPlaygroundState = createDefaultWorkspace('playground');
+  //   const dummyState: OverallState = {
+  //     ...defaultState,
+  //     workspaces: {
+  //       ...defaultWorkspaceManager,
+  //       playground: {
+  //         ...defaultPlaygroundState,
+  //         externalLibrary: ExternalLibraryName.NONE,
+  //         editorTabs: [
+  //           {
+  //             filePath: defaultPlaygroundFilePath,
+  //             value: dummyFiles[defaultPlaygroundFilePath],
+  //             breakpoints: [],
+  //             highlightedLines: []
+  //           }
+  //         ],
+  //         usingSubst: false
+  //       }
+  //     }
+  //   };
+  //   const expectedString: string = createQueryString(dummyFiles, dummyState);
+  //   return expectSaga(PlaygroundSaga)
+  //     .withState(dummyState)
+  //     .put(changeQueryString(expectedString))
+  //     .dispatch({
+  //       type: GENERATE_LZ_STRING
+  //     })
+  //     .silentRun();
+  // });
 
   test('puts updateShortURL with correct params when shorten request is successful', () => {
-    const dummyEditorValue: string = '1 + 1;';
+    const dummyFiles: Record<string, string> = {
+      [defaultPlaygroundFilePath]: '1 + 1;'
+    };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
@@ -90,12 +71,19 @@ describe('Playground saga tests', () => {
         playground: {
           ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
+          editorTabs: [
+            {
+              filePath: defaultPlaygroundFilePath,
+              value: dummyFiles[defaultPlaygroundFilePath],
+              breakpoints: [],
+              highlightedLines: []
+            }
+          ],
           usingSubst: false
         }
       }
     };
-    const queryString = createQueryString(dummyEditorValue, dummyState);
+    const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
@@ -134,7 +122,9 @@ describe('Playground saga tests', () => {
   });
 
   test('puts updateShortURL with correct params when shorten request with keyword is successful', () => {
-    const dummyEditorValue: string = '1 + 1;';
+    const dummyFiles: Record<string, string> = {
+      [defaultPlaygroundFilePath]: '1 + 1;'
+    };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
@@ -143,12 +133,19 @@ describe('Playground saga tests', () => {
         playground: {
           ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
+          editorTabs: [
+            {
+              filePath: defaultPlaygroundFilePath,
+              value: dummyFiles[defaultPlaygroundFilePath],
+              breakpoints: [],
+              highlightedLines: []
+            }
+          ],
           usingSubst: false
         }
       }
     };
-    const queryString = createQueryString(dummyEditorValue, dummyState);
+    const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
@@ -187,7 +184,9 @@ describe('Playground saga tests', () => {
   });
 
   test('shows warning message when shorten request failed', () => {
-    const dummyEditorValue: string = '1 + 1;';
+    const dummyFiles: Record<string, string> = {
+      [defaultPlaygroundFilePath]: '1 + 1;'
+    };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
@@ -196,12 +195,19 @@ describe('Playground saga tests', () => {
         playground: {
           ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
+          editorTabs: [
+            {
+              filePath: defaultPlaygroundFilePath,
+              value: dummyFiles[defaultPlaygroundFilePath],
+              breakpoints: [],
+              highlightedLines: []
+            }
+          ],
           usingSubst: false
         }
       }
     };
-    const queryString = createQueryString(dummyEditorValue, dummyState);
+    const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
@@ -223,7 +229,9 @@ describe('Playground saga tests', () => {
   });
 
   test('shows message and gives url when shorten request returns duplicate error', () => {
-    const dummyEditorValue: string = '1 + 1;';
+    const dummyFiles: Record<string, string> = {
+      [defaultPlaygroundFilePath]: '1 + 1;'
+    };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
@@ -232,12 +240,19 @@ describe('Playground saga tests', () => {
         playground: {
           ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
+          editorTabs: [
+            {
+              filePath: defaultPlaygroundFilePath,
+              value: dummyFiles[defaultPlaygroundFilePath],
+              breakpoints: [],
+              highlightedLines: []
+            }
+          ],
           usingSubst: false
         }
       }
     };
-    const queryString = createQueryString(dummyEditorValue, dummyState);
+    const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
@@ -278,7 +293,9 @@ describe('Playground saga tests', () => {
   });
 
   test('shows warning when shorten request returns some error without url', () => {
-    const dummyEditorValue: string = '1 + 1;';
+    const dummyFiles: Record<string, string> = {
+      [defaultPlaygroundFilePath]: '1 + 1;'
+    };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
@@ -287,12 +304,19 @@ describe('Playground saga tests', () => {
         playground: {
           ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
+          editorTabs: [
+            {
+              filePath: defaultPlaygroundFilePath,
+              value: dummyFiles[defaultPlaygroundFilePath],
+              breakpoints: [],
+              highlightedLines: []
+            }
+          ],
           usingSubst: false
         }
       }
     };
-    const queryString = createQueryString(dummyEditorValue, dummyState);
+    const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
@@ -322,7 +346,9 @@ describe('Playground saga tests', () => {
   });
 
   test('returns errMsg when API call timesout', () => {
-    const dummyEditorValue: string = '1 + 1;';
+    const dummyFiles: Record<string, string> = {
+      [defaultPlaygroundFilePath]: '1 + 1;'
+    };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
       ...defaultState,
@@ -331,12 +357,19 @@ describe('Playground saga tests', () => {
         playground: {
           ...defaultPlaygroundState,
           externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [{ ...defaultPlaygroundState.editorTabs[0], value: dummyEditorValue }],
+          editorTabs: [
+            {
+              filePath: defaultPlaygroundFilePath,
+              value: dummyFiles[defaultPlaygroundFilePath],
+              breakpoints: [],
+              highlightedLines: []
+            }
+          ],
           usingSubst: false
         }
       }
     };
-    const queryString = createQueryString(dummyEditorValue, dummyState);
+    const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
@@ -363,13 +396,21 @@ describe('Playground saga tests', () => {
   });
 });
 
-function createQueryString(code: string, state: OverallState): string {
+function createQueryString(files: Record<string, string>, state: OverallState): string {
+  const isFolderModeEnabled: boolean = state.workspaces.playground.isFolderModeEnabled;
+  const editorTabFilePaths: string[] = state.workspaces.playground.editorTabs
+    .map(editorTab => editorTab.filePath)
+    .filter((filePath): filePath is string => filePath !== undefined);
+  const activeEditorTabIndex: number | null = state.workspaces.playground.activeEditorTabIndex;
   const chapter: Chapter = state.workspaces.playground.context.chapter;
   const variant: Variant = state.workspaces.playground.context.variant;
   const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const execTime: number = state.workspaces.playground.execTime;
   const newQueryString: string = qs.stringify({
-    prgrm: compressToEncodedURIComponent(code),
+    isFolder: isFolderModeEnabled,
+    files: compressToEncodedURIComponent(qs.stringify(files)),
+    tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
+    tabIdx: activeEditorTabIndex,
     chap: chapter,
     variant,
     ext: external,

@@ -198,6 +198,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       handleEditorEval={props.handleEditorEval}
       handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
       handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+      isEntrypointFileDefined={activeEditorTabIndex !== null}
       isDebugging={props.isDebugging}
       isEditorAutorun={props.isEditorAutorun}
       isRunning={props.isRunning}
@@ -211,6 +212,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const chapterSelect = (
     <ControlBarChapterSelect
       handleChapterSelect={chapterSelectHandler}
+      isFolderModeEnabled={isFolderModeEnabled}
       sourceChapter={props.sourceChapter}
       sourceVariant={props.sourceVariant}
       key="chapter"

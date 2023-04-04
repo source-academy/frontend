@@ -1,3 +1,4 @@
+import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
@@ -10,10 +11,12 @@ import {
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { defaultEditorValue, OverallState } from '../application/ApplicationTypes';
+import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
@@ -55,14 +58,26 @@ export default function* PlaygroundSaga(): SagaIterator {
 }
 
 function* updateQueryString() {
-  const code: string = yield select(
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    (state: OverallState) => state.workspaces.playground.editorTabs[0].value
+  const isFolderModeEnabled: boolean = yield select(
+    (state: OverallState) => state.workspaces.playground.isFolderModeEnabled
   );
-  if (!code || code === defaultEditorValue) {
-    yield put(changeQueryString(''));
-    return;
-  }
+  const fileSystem: FSModule = yield select(
+    (state: OverallState) => state.fileSystem.inBrowserFileSystem
+  );
+  const files: Record<string, string> = yield call(
+    retrieveFilesInWorkspaceAsRecord,
+    'playground',
+    fileSystem
+  );
+  const editorTabs: EditorTabState[] = yield select(
+    (state: OverallState) => state.workspaces.playground.editorTabs
+  );
+  const editorTabFilePaths = editorTabs
+    .map((editorTab: EditorTabState) => editorTab.filePath)
+    .filter((filePath): filePath is string => filePath !== undefined);
+  const activeEditorTabIndex: number | null = yield select(
+    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+  );
   const chapter: Chapter = yield select(
     (state: OverallState) => state.workspaces.playground.context.chapter
   );
@@ -75,8 +90,11 @@ function* updateQueryString() {
   const execTime: number = yield select(
     (state: OverallState) => state.workspaces.playground.execTime
   );
-  const newQueryString: string = qs.stringify({
-    prgrm: compressToEncodedURIComponent(code),
+  const newQueryString = qs.stringify({
+    isFolder: isFolderModeEnabled,
+    files: compressToEncodedURIComponent(qs.stringify(files)),
+    tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
+    tabIdx: activeEditorTabIndex,
     chap: chapter,
     variant,
     ext: external,

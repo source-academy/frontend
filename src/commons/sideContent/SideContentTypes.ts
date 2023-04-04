@@ -79,5 +79,5 @@ export type ModuleSideContent = {
   label: string;
   iconName: IconName;
   body: (props: any) => JSX.Element;
-  toSpawn: (context: DebuggerContext) => boolean;
+  toSpawn?: (context: DebuggerContext) => boolean;
 };

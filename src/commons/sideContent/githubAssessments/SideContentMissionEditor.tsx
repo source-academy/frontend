@@ -8,6 +8,7 @@ import { MissionMetadata } from '../../githubAssessments/GitHubMissionTypes';
 import Constants from '../../utils/Constants';
 
 export type SideContentMissionEditorProps = {
+  isFolderModeEnabled: boolean;
   missionMetadata: MissionMetadata;
   setMissionMetadata: (missionMetadata: MissionMetadata) => void;
 };
@@ -21,6 +22,7 @@ const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props 
         </div>
         <div className="SideContentMissionEditorOptionColumn">
           <ControlBarChapterSelect
+            isFolderModeEnabled={props.isFolderModeEnabled}
             sourceChapter={props.missionMetadata.sourceVersion}
             sourceVariant={Constants.defaultSourceVariant}
             key="chapter"

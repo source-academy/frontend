@@ -871,6 +871,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         iconName: IconNames.BUILD,
         body: (
           <SideContentMissionEditor
+            isFolderModeEnabled={isFolderModeEnabled}
             missionMetadata={missionMetadata}
             setMissionMetadata={setMissionMetadataWrapper}
           />
@@ -914,7 +915,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   const controlBarProps: () => ControlBarProps = () => {
-    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
+        handleEditorEval={handleEval}
+        key="run"
+      />
+    );
 
     const saveButton = (
       <ControlButtonSaveButton
@@ -929,6 +936,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={() => {}}
+        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={missionMetadata.sourceVersion}
         sourceVariant={Constants.defaultSourceVariant}
         disabled={true}
