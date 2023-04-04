@@ -112,7 +112,6 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
       unsubscribe();
     };
   }, []);
-  console.log('HELLO:', selectedLang);
 
   let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
   

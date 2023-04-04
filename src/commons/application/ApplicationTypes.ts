@@ -172,6 +172,9 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
     case Chapter.FULL_SCHEME:
       return schemeLanguages.find(lang => lang.chapter === chapter)!.displayName;
     case Chapter.PYTHON_1:
+    case Chapter.PYTHON_2:
+    case Chapter.PYTHON_3:
+    case Chapter.PYTHON_4:
       return pyLanguages.find(lang => lang.chapter === chapter)!.displayName;
     default:
       return `Source \xa7${chapter}${
