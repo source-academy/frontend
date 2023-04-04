@@ -64,9 +64,12 @@ export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_
 export const UPDATE_USER_ROLE = 'UPDATE_USER_ROLE';
 export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
 export const DELETE_USER_COURSE_REGISTRATION = 'DELETE_USER_COURSE_REGISTRATION';
+export const FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS = 'FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS';
 export const FETCH_NOTIFICATION_CONFIGS = 'FETCH_NOTIFICATION_CONFIGS';
 export const SET_NOTIFICATION_CONFIGS = 'SET_NOTIFICATION_CONFIGS';
+export const SET_CONFIGURABLE_NOTIFICATION_CONFIGS = 'SET_CONFIGURABLE_NOTIFICATION_CONFIG'
 export const UPDATE_NOTIFICATION_CONFIG = 'UPDATE_NOTIFICATION_CONFIG';
+export const UPDATE_NOTIFICATION_PREFERENCE = 'UPDATE_NOTIFICATION_PREFERENCE';
 export const DELETE_TIME_OPTION = 'DELETE_TIME_OPTION';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
@@ -108,6 +111,7 @@ export type SessionState = {
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
 
   readonly notificationConfigs?: NotificationConfiguration[];
+  readonly configurableNotificationConfigs?: NotificationConfiguration[];
 
   // For research data collection
   readonly agreedToResearch?: boolean | null;
@@ -178,11 +182,19 @@ export type AdminPanelCourseRegistration = {
   group?: string;
 };
 
+export type UpdateCourseConfiguration = Partial<CourseConfiguration>;
+
 export type TimeOption = {
   id: number;
   isDefault: boolean;
   minutes: number;
 };
+
+export type NotificationPreference = {
+  id: number;
+  isEnabled: boolean | null;
+  timeOptionId: number | null;
+}
 
 export type NotificationConfiguration = {
   id: number;
@@ -198,14 +210,6 @@ export type NotificationConfiguration = {
     id: number;
     type: string;
   } | null;
-  notificationPreference: NotificationPreference[];
+  notificationPreference: NotificationPreference;
   course: any;
 };
-
-export type NotificationPreference = {
-  id: number;
-  isEnabled: boolean | null;
-  timeOptionId: number | null;
-}
-
-export type UpdateCourseConfiguration = Partial<CourseConfiguration>;

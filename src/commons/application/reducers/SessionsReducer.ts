@@ -12,6 +12,7 @@ import {
   SessionState,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
+  SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
@@ -86,6 +87,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         notificationConfigs: action.payload
+      };
+    case SET_CONFIGURABLE_NOTIFICATION_CONFIGS:
+      return {
+        ...state,
+        configurableNotificationConfigs: action.payload
       };
     case SET_ADMIN_PANEL_COURSE_REGISTRATIONS:
       return {

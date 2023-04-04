@@ -37,6 +37,7 @@ import {
   FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
+  FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
   FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
@@ -59,6 +60,7 @@ import {
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
+  UPDATE_NOTIFICATION_PREFERENCE,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
@@ -88,6 +90,7 @@ import {
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
+  getConfigurableNotificationConfigs,
   getCourseConfig,
   getGrading,
   getGradingOverviews,
@@ -116,6 +119,7 @@ import {
   putLatestViewedCourse,
   putNewUsers,
   putNotificationConfig,
+  putNotificationPreference,
   putUserRole,
   removeAssessmentConfig,
   removeTimeOption,
@@ -723,6 +727,23 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
+
+  yield takeEvery(FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS, 
+    function* (action: ReturnType<typeof actions.fetchConfigurableNotificationConfigs>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { courseRegId }: { courseRegId: number } = action.payload;
+
+    const notificationConfigs: NotificationConfiguration[] | null = yield call(
+      getConfigurableNotificationConfigs,
+      tokens,
+      courseRegId
+    );
+
+    if (notificationConfigs) {
+      yield put(actions.setConfigurableNotificationConfigs(notificationConfigs));
+    }
+  });
+
   yield takeEvery(FETCH_NOTIFICATION_CONFIGS, function* (): any {
     const tokens: Tokens = yield selectTokens();
 
@@ -777,6 +798,21 @@ function* BackendSaga(): SagaIterator {
 
       if (updatedNotificationConfigs) {
         yield put(actions.setNotificationConfigs(updatedNotificationConfigs));
+      }
+
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_NOTIFICATION_PREFERENCE,
+    function* (action: ReturnType<typeof actions.updateNotificationPreference>): any {
+      const tokens: Tokens = yield selectTokens();
+      const {notificationPreference, notificationConfigId, courseRegId} = action.payload;
+
+      const resp: Response | null = yield call(putNotificationPreference, tokens, notificationPreference, notificationConfigId, courseRegId);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
       }
 
       yield call(showSuccessMessage, 'Updated successfully!', 1000);

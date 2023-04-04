@@ -1,10 +1,13 @@
-import { Button, H1 } from "@blueprintjs/core";
+import { Button, H1, Intent } from "@blueprintjs/core";
 import { GridApi, GridReadyEvent, ValueFormatterFunc } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
-import React from "react";
-// import { useDispatch } from "react-redux";
-import { NotificationConfiguration } from "src/commons/application/types/SessionTypes";
+import { cloneDeep } from "lodash";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { fetchConfigurableNotificationConfigs, updateNotificationPreference } from "src/commons/application/actions/SessionActions";
+import { NotificationConfiguration, TimeOption } from "src/commons/application/types/SessionTypes";
 import ContentDisplay from "src/commons/ContentDisplay";
+import { useTypedSelector } from "src/commons/utils/Hooks";
 
 import BooleanCell from "./subcomponents/BooleanCell";
 import SelectCell from "./subcomponents/SelectCell";
@@ -12,22 +15,56 @@ import SelectCell from "./subcomponents/SelectCell";
 const NotiPreference: React.FC = () => {
   const gridApi = React.useRef<GridApi>();
 
-  // const dispatch = useDispatch();
-  // const session = useTypedSelector(state => state.session);
+  const dispatch = useDispatch();
+  const session = useTypedSelector(state => state.session);
 
-  // const notificationConfig = React.useRef(session.notificationConfigs) as React.MutableRefObject<
-  //   NotificationConfiguration[]
-  // >;
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
+
+  const configurableNotificationConfigs = React.useRef(session.configurableNotificationConfigs) as React.MutableRefObject<
+    NotificationConfiguration[]
+  >;
+
+  React.useEffect(() => {
+    if (!session.courseRegId) return;
+    
+    dispatch(fetchConfigurableNotificationConfigs(session.courseRegId));
+  }, [dispatch, session.courseRegId]);
+
+  // After updated configs have been loaded from the backend, put them into local React state
+  React.useEffect(() => {
+    if (session.configurableNotificationConfigs !== undefined) {
+      configurableNotificationConfigs.current = cloneDeep(session.configurableNotificationConfigs);
+    }
+  }, [session]);
 
   const setIsEnabled = (index: number, value: boolean) => {
-    const temp = [...rowData];
-    temp[index] = {
-      ...temp[index],
-      isEnabled: value
-    };
-    // setNotificationConfig(temp);
+    const temp = [...configurableNotificationConfigs.current];
+    const pref = temp[index]['notificationPreference'];
+    
+    temp[index]["notificationPreference"] = {
+      id: pref === null ? -1 : pref.id, // assumes -1 is not a valid id
+      timeOptionId: pref === null ? null : pref.timeOptionId,
+      isEnabled: value,
+    }
+    
+    configurableNotificationConfigs.current = temp;
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isEnabled', value);
-    // setHasChangesNotificationConfig(true);
+    setHasChanges(true);
+  };
+
+  const setTimeOption = (index: number, value: TimeOption) => {
+    const temp = [...configurableNotificationConfigs.current];
+    const pref = temp[index]['notificationPreference'];
+    
+    temp[index]["notificationPreference"] = {
+      id: pref === null ? -1 : pref.id, // assumes -1 is not a valid id
+      timeOptionId: value.id,
+      isEnabled: pref === null ? null : pref.isEnabled,
+    }
+    
+    configurableNotificationConfigs.current = temp;
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isEnabled', value);
+    setHasChanges(true);
   };
 
   const assessmentTypeFormatter: ValueFormatterFunc<NotificationConfiguration> = params => {
@@ -55,11 +92,11 @@ const NotiPreference: React.FC = () => {
       valueFormatter: recipientFormatter
     },
     {
-      headerName: 'Reminder (hours)',
+      headerName: 'Reminder',
       field: 'timeOptions',
       cellRendererFramework: SelectCell,
       cellRendererParams: {
-        // setStateHandler: setStudentReminderHours,
+        setStateHandler: setTimeOption,
         field: 'timeOptions'
       }
     },
@@ -85,67 +122,18 @@ const NotiPreference: React.FC = () => {
     params.api.sizeColumnsToFit();
   };
 
-  const rowData = [
-    {
-      "assessmentConfig": null,
-      "course": {
-          "courseName": "Programming Methodology",
-          "courseShortName": "CS1101S",
-          "id": 2
-      },
-      "id": 1,
-      "isEnabled": true,
-      "notificationPreference": [
-        {
-          "id": 1,
-          "isEnabled": true,
-          "timeOptionId": 16
-        },
-      ],
-      "notificationType": {
-        "forStaff": true,
-        "id": 2,
-        "isEnabled": false,
-        "name": "AVENGER BACKLOG"
-      },
-      "timeOptions": [
-        {
-          "id": 16,
-          "isDefault": true,
-          "minutes": 10
-        },
-        {
-          "id": 15,
-          "isDefault": false,
-          "minutes": 5
-        },
-      ]
-  },
-  {
-      "assessmentConfig": null,
-      "course": {
-          "courseName": "Programming Methodology",
-          "courseShortName": "CS1101S",
-          "id": 2
-      },
-      "id": 1,
-      "isEnabled": true,
-      "notificationPreference": [
-          {
-              "id": 1,
-              "isEnabled": false,
-              "timeOptionId": null
-          },
-      ],
-      "notificationType": {
-          "forStaff": true,
-          "id": 2,
-          "isEnabled": false,
-          "name": "AVENGER BACKLOG"
-      },
-      "timeOptions": []
-    }
-  ];
+  const submitHandler = () => {
+    if (!hasChanges) return;
+    
+    configurableNotificationConfigs.current.forEach(config => {
+      if (config.notificationPreference === null) return;
+      if (!session.courseRegId) return;
+
+      dispatch(updateNotificationPreference(config.notificationPreference, config.id, session.courseRegId))
+    });
+
+    setHasChanges(false);
+  };
 
   const data = (
     <div>
@@ -157,8 +145,7 @@ const NotiPreference: React.FC = () => {
           defaultColDef={defaultColumnDefs}
           onGridReady={onGridReady}
           onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
-          // rowData={notificationConfig.current}
-          rowData={rowData}
+          rowData={configurableNotificationConfigs.current}
           rowHeight={36}
           rowDragManaged={true}
           suppressCellSelection={true}
@@ -169,8 +156,9 @@ const NotiPreference: React.FC = () => {
       <Button
         text="Save"
         style={{ marginTop: '15px' }}
-        // intent={hasChangesNotificationConfig ? Intent.WARNING : Intent.NONE}
-        // onClick={submitHandler}
+        disabled={!hasChanges}
+        intent={hasChanges ? Intent.WARNING : Intent.NONE}
+        onClick={submitHandler}
       />
     </div>
   );
