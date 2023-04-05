@@ -78,6 +78,12 @@ exports[`NavigationBar renders correctly for student with course 1`] = `
           SICP JS
         </div>
       </NavLink>
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/stories/\\">
+        <Blueprint4.Icon icon=\\"git-repo\\" />
+        <div className=\\"navbar-button-text\\">
+          Stories
+        </div>
+      </NavLink>
       <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/courses/1/achievements\\">
         <Blueprint4.Icon icon=\\"mountain\\" />
         <div className=\\"navbar-button-text\\">
@@ -134,6 +140,12 @@ exports[`NavigationBar renders correctly for student without course 1`] = `
         <Blueprint4.Icon icon=\\"book\\" />
         <div className=\\"navbar-button-text\\">
           SICP JS
+        </div>
+      </NavLink>
+      <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/stories/\\">
+        <Blueprint4.Icon icon=\\"git-repo\\" />
+        <div className=\\"navbar-button-text\\">
+          Stories
         </div>
       </NavLink>
     </Blueprint4.NavbarGroup>

@@ -42,6 +42,7 @@ import ManageQuestionTab from '../editingWorkspaceSideContent/EditingWorkspaceSi
 import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
+import { EditorTabStateProps } from '../editor/Editor';
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
@@ -634,7 +635,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             removeEditorTabByIndex,
             editorTabs: editorTabs
               .map(convertEditorTabStateToProps)
-              .map((editorTabStateProps, index) => {
+              .map((editorTabStateProps: EditorTabStateProps, index: number) => {
                 // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
                 //       Specifically, need to update questions such that they can span multiple files.
                 if (index !== 0) {

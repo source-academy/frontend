@@ -25,6 +25,12 @@ exports[`NavigationBarMobileSideMenu renders correctly when logged in (no course
       SICP JS
     </div>
   </NavLink>
+  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link_mobile bp4-button bp4-minimal bp4-large\\" to=\\"/stories/\\" onClick={[Function: onClose]}>
+    <Blueprint4.Icon icon=\\"git-repo\\" />
+    <div className=\\"navbar-button-text\\">
+      Stories
+    </div>
+  </NavLink>
 </Blueprint4.Drawer>"
 `;
 
@@ -81,6 +87,12 @@ exports[`NavigationBarMobileSideMenu renders correctly when logged in (with cour
     <Blueprint4.Icon icon=\\"book\\" />
     <div className=\\"navbar-button-text\\">
       SICP JS
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link_mobile bp4-button bp4-minimal bp4-large\\" to=\\"/stories/\\" onClick={[Function: onClose]}>
+    <Blueprint4.Icon icon=\\"git-repo\\" />
+    <div className=\\"navbar-button-text\\">
+      Stories
     </div>
   </NavLink>
 </Blueprint4.Drawer>"

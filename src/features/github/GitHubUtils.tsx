@@ -1,3 +1,4 @@
+import { request } from '@octokit/request';
 import { Octokit } from '@octokit/rest';
 import {
   GetResponseDataTypeFromEndpointMethod,
@@ -5,9 +6,11 @@ import {
 } from '@octokit/types';
 
 import { actions } from '../../commons/utils/ActionsHelper';
+import Constants from '../../commons/utils/Constants';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import { showSuccessMessage, showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { store } from '../../pages/createStore';
+import { GithubGetRepoRespData } from './GitHubTypes';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -177,7 +180,8 @@ export async function openFileInEditor(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string
+  filePath: string,
+  isStories = false
 ) {
   if (octokit === undefined) return;
 
@@ -192,12 +196,17 @@ export async function openFileInEditor(
 
   if (content) {
     const newEditorValue = Buffer.from(content, 'base64').toString();
-    const activeEditorTabIndex = store.getState().workspaces.playground.activeEditorTabIndex;
-    if (activeEditorTabIndex === null) {
-      throw new Error('No active editor tab found.');
+    if (isStories) {
+      store.dispatch(actions.updateStoriesContent(newEditorValue));
+      store.dispatch(actions.storiesUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    } else {
+      const activeEditorTabIndex = store.getState().workspaces.playground.activeEditorTabIndex;
+      if (activeEditorTabIndex === null) {
+        throw new Error('No active editor tab found.');
+      }
+      store.dispatch(actions.updateEditorValue('playground', activeEditorTabIndex, newEditorValue));
+      store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     }
-    store.dispatch(actions.updateEditorValue('playground', activeEditorTabIndex, newEditorValue));
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully loaded file!', 1000);
   }
 }
@@ -210,7 +219,8 @@ export async function performOverwritingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string
+  content: string,
+  isStories = false
 ) {
   if (octokit === undefined) return;
 
@@ -249,7 +259,11 @@ export async function performOverwritingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    if (isStories) {
+      store.dispatch(actions.storiesUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    } else {
+      store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    }
     showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
     console.error(err);
@@ -265,7 +279,8 @@ export async function performCreatingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string
+  content: string,
+  isStories = false
 ) {
   if (octokit === undefined) return;
 
@@ -286,7 +301,11 @@ export async function performCreatingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    if (isStories) {
+      store.dispatch(actions.storiesUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    } else {
+      store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    }
     showSuccessMessage('Successfully created file!', 1000);
   } catch (err) {
     console.error(err);
@@ -340,5 +359,44 @@ export async function performFolderDeletion(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
+  }
+}
+
+/**
+ * Gets Files from the fixed story repo. No need for octokit as the repo should be
+ * publicly accessible. Returns an object of the repo.
+ */
+export async function getFilesFromStoryRepo(user: string): Promise<GithubGetRepoRespData[]> {
+  try {
+    const response = await request(`GET /repos/${user}/${Constants.storiesRepoName}/contents`);
+    return response.data as GithubGetRepoRespData[];
+  } catch (err) {
+    if (err.status !== 404) {
+      showWarningMessage('Something went wrong when trying to access the repo.');
+    }
+    return [];
+  }
+}
+
+/**
+ * Gets Blog Content from markdown Files.
+ */
+export async function getStory(user: string, filePath: string): Promise<string | null> {
+  try {
+    const response = await request(
+      `GET /repos/${user}/${Constants.storiesRepoName}/contents/${filePath}`
+    );
+    const content = response.data.content;
+    if (content) {
+      return Buffer.from(content, 'base64').toString();
+    }
+    return null;
+  } catch (err) {
+    if (err.status !== 404) {
+      showWarningMessage('Something went wrong when trying to access the file.');
+      return null;
+    }
+    // if err status is 404 means file is not found
+    return null;
   }
 }

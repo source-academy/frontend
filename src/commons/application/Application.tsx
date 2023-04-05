@@ -13,6 +13,10 @@ import MissionControlContainer from '../../pages/missionControl/MissionControlCo
 import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
+import NewStory from '../../pages/stories/NewStory';
+import Stories from '../../pages/stories/Stories';
+import UserBlog from '../../pages/stories/UserBlog';
+import UserBlogDir from '../../pages/stories/UserBlogDir';
 import Welcome from '../../pages/welcome/Welcome';
 import { AssessmentConfiguration } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
@@ -137,6 +141,10 @@ const Application: React.FC<ApplicationProps> = props => {
       key="oldToNewSicpRedirect"
     />,
     <Route path="/sicpjs/:section?" component={Sicp} key="sicp" />,
+    <Route path="/stories/view/:user/:fileName" component={UserBlog} />,
+    <Route path="/stories/view/:user" component={UserBlogDir} />,
+    <Route path="/stories/new" component={NewStory} />,
+    <Route path="/stories" component={Stories} />,
     Constants.enableGitHubAssessments ? (
       <Route
         path="/githubassessments"

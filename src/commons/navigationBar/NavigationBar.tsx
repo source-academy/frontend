@@ -138,6 +138,20 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
               <Icon icon={IconNames.BOOK} />
               <div>SICP JS</div>
             </NavLink>
+            <NavLink
+              activeClassName={Classes.ACTIVE}
+              className={classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE
+              )}
+              to={`/sicpjs/`}
+              onClick={() => setMobileSideMenuOpen(false)}
+            >
+              <Icon icon={IconNames.GIT_REPO} />
+              <div>Stories</div>
+            </NavLink>
           </Drawer>
         </NavbarGroup>
       </>
@@ -167,6 +181,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           <Icon icon={IconNames.BOOK} />
           <div>SICP JS</div>
         </NavLink>
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+          to={`/stories/`}
+        >
+          <Icon icon={IconNames.GIT_REPO} />
+          <div>Stories</div>
+        </NavLink>
       </NavbarGroup>
     )
   ) : (
@@ -186,6 +208,14 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       >
         <Icon icon={IconNames.BOOK} />
         <div>SICP JS</div>
+      </NavLink>
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+        to={`/stories/`}
+      >
+        <Icon icon={IconNames.GIT_REPO} />
+        <div>Stories</div>
       </NavLink>
     </NavbarGroup>
   );
@@ -330,6 +360,16 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         >
           <Icon icon={IconNames.BOOK} />
           <div className="navbar-button-text">SICP JS</div>
+        </NavLink>
+      )}
+      {props.name && (
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to={`/stories/`}
+        >
+          <Icon icon={IconNames.GIT_REPO} />
+          <div className="navbar-button-text">Stories</div>
         </NavLink>
       )}
       {props.role && props.enableAchievements && (

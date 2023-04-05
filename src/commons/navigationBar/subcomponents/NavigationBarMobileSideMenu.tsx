@@ -130,6 +130,22 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         <div className="navbar-button-text">SICP JS</div>
       </NavLink>
     )}
+    {props.name && (
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames(
+          'NavigationBar__link_mobile',
+          Classes.BUTTON,
+          Classes.MINIMAL,
+          Classes.LARGE
+        )}
+        to={`/stories/`}
+        onClick={props.onClose}
+      >
+        <Icon icon={IconNames.GIT_REPO} />
+        <div className="navbar-button-text">Stories</div>
+      </NavLink>
+    )}
     {props.role && props.enableAchievements && (
       <NavLink
         activeClassName={Classes.ACTIVE}

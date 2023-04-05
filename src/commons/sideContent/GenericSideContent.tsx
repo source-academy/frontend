@@ -47,6 +47,7 @@ type StateProps = {
     afterDynamicTabs: SideContentTab[];
   };
   workspaceLocation?: WorkspaceLocation;
+  isStories?: boolean;
 };
 
 const GenericSideContent = (props: GenericSideContentProps) => {
@@ -56,9 +57,12 @@ const GenericSideContent = (props: GenericSideContentProps) => {
   );
 
   // Fetch debuggerContext from store
-  const debuggerContext = useTypedSelector(
-    state => props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
+  const debuggerContext = useTypedSelector(state =>
+    props.isStories
+      ? props.workspaceLocation && state.stories.envs[props.workspaceLocation].debuggerContext
+      : props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
+
   React.useEffect(() => {
     const allActiveTabs = tabs.beforeDynamicTabs
       .concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)))

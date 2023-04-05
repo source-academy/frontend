@@ -56,7 +56,7 @@ export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
 export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
-export type WorkspaceLocation = keyof WorkspaceManagerState;
+export type WorkspaceLocation = keyof WorkspaceManagerState | string;
 
 type AssessmentWorkspaceAttr = {
   readonly currentAssessment?: number;
