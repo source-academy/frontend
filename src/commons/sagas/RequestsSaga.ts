@@ -1092,26 +1092,13 @@ export const putAssessmentConfigs = async (
   return resp;
 };
 
-export const putNotificationConfig = async (
+export const putNotificationConfigs = async (
   tokens: Tokens,
-  notificationConfig: NotificationConfiguration
+  notificationConfigs: NotificationConfiguration[]
 ) => {
-  // for each time option in notificationConfig, if id = -1, post to create new time option
-  // else, put to update existing time option
-
-  notificationConfig.timeOptions.forEach(async timeOption => {
-    if (timeOption.id === -1) {
-      return await postTimeOption(tokens, timeOption, notificationConfig.id);
-    } else {
-      return await putTimeOption(tokens, timeOption);
-    }
-  });
-
-  return await request(`notifications/config/${notificationConfig.id}`, 'PUT', {
+  return await request(`notifications/config`, 'PUT', {
     ...tokens,
-    body: {
-      isEnabled: notificationConfig.isEnabled
-    },
+    body: notificationConfigs,
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -1176,12 +1163,28 @@ export const removeAssessmentConfig = async (
   return resp;
 };
 
-export const removeTimeOption = async (
+export const removeTimeOptions = async (
   tokens: Tokens,
-  timeOption: TimeOption
+  timeOptionIds: number[]
 ): Promise<Response | null> => {
-  const resp = await request(`notifications/options/${timeOption.id}`, 'DELETE', {
+  const resp = await request(`notifications/options`, 'DELETE', {
     ...tokens,
+    body: timeOptionIds,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+export const putTimeOptions = async (
+  tokens: Tokens,
+  timeOptions: TimeOption[]
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options`, 'PUT', {
+    ...tokens,
+    body: timeOptions,
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

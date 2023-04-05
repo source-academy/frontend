@@ -70,7 +70,8 @@ export const SET_NOTIFICATION_CONFIGS = 'SET_NOTIFICATION_CONFIGS';
 export const SET_CONFIGURABLE_NOTIFICATION_CONFIGS = 'SET_CONFIGURABLE_NOTIFICATION_CONFIG';
 export const UPDATE_NOTIFICATION_CONFIG = 'UPDATE_NOTIFICATION_CONFIG';
 export const UPDATE_NOTIFICATION_PREFERENCE = 'UPDATE_NOTIFICATION_PREFERENCE';
-export const DELETE_TIME_OPTION = 'DELETE_TIME_OPTION';
+export const DELETE_TIME_OPTIONS = 'DELETE_TIME_OPTIONS';
+export const UPDATE_TIME_OPTIONS = 'UPDATE_TIME_OPTIONS';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -188,6 +189,7 @@ export type TimeOption = {
   id: number;
   isDefault: boolean;
   minutes: number;
+  notificationConfigId?: number;
 };
 
 export type NotificationPreference = {

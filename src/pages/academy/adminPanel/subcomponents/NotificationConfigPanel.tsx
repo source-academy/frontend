@@ -6,9 +6,10 @@ import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
-  deleteTimeOption,
+  deleteTimeOptions,
   fetchNotificationConfigs,
-  updateNotificationConfig
+  updateNotificationConfigs,
+  updateTimeOptions
 } from 'src/commons/application/actions/SessionActions';
 import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -23,6 +24,15 @@ const NotificationConfigPanel = () => {
   const dispatch = useDispatch();
   const session = useTypedSelector(state => state.session);
 
+  /**
+   * Mutable ref to track the assessment configuration form state instead of useState. This is
+   * because ag-grid does not update the cellRendererParams whenever there is an update in rowData,
+   * leading to a stale closure problem where the handlers in AssessmentConfigPanel capture the old
+   * value of assessmentConfig.
+   *
+   * Also, useState causes a flicker in ag-grid during rerenders. Thus we use this mutable ref and
+   * ag-grid's API to update cell values instead.
+   */
   const notificationConfig = React.useRef(session.notificationConfigs) as React.MutableRefObject<
     NotificationConfiguration[]
   >;
@@ -123,12 +133,12 @@ const NotificationConfigPanel = () => {
       field: 'timeOptions',
       cellRendererFramework: SelectCell,
       cellRendererParams: {
-        // setStateHandler: setStudentReminderHours,
+        setStateHandler: setTimeOptions,
         field: 'timeOptions'
       }
     },
     {
-      headername: 'Enabled',
+      headerName: 'Enabled',
       field: 'isEnabled',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
@@ -149,24 +159,30 @@ const NotificationConfigPanel = () => {
     params.api.sizeColumnsToFit();
   };
 
-  // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
-  // Changes made to users are handled separately.
+  // Handler to submit changes to Notification Configration to the backend.
+  // Changes made to users, Course Configration and Assessment Configuration are handled separately.
   const submitHandler = () => {
-    console.log(0);
     if (hasChangesNotificationConfig) {
-      notificationConfig.current?.forEach(notificationConfig => {
-        console.log(1);
-        dispatch(updateNotificationConfig(notificationConfig));
-      });
-
       setHasChangesNotificationConfig(false);
+      const allTimeOptions = notificationConfig.current.reduce((acc, curr) => {
+        const timeOptions = curr.timeOptions.map(timeOption => {
+          return {
+            ...timeOption,
+            notificationConfigId: curr.id
+          };
+        });
+        return acc.concat(timeOptions);
+      }, [] as TimeOption[]);
+
+      if (allTimeOptions.length > 0) {
+        dispatch(updateTimeOptions(allTimeOptions));
+      }
 
       if (timeOptionsToDelete.length > 0) {
-        timeOptionsToDelete.forEach(timeOption => {
-          dispatch(deleteTimeOption(timeOption));
-        });
+        dispatch(deleteTimeOptions(timeOptionsToDelete.map(timeOption => timeOption.id)));
         setTimeOptionsToDelete([]);
       }
+      dispatch(updateNotificationConfigs(notificationConfig.current));
     }
   };
 

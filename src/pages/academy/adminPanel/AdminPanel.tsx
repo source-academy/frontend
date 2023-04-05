@@ -11,7 +11,6 @@ import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
 
 import {
   deleteAssessmentConfig,
-  deleteTimeOption,
   deleteUserCourseRegistration,
   fetchAdminPanelCourseRegistrations,
   fetchAssessmentConfigs,
@@ -20,14 +19,9 @@ import {
   setAssessmentConfigurations,
   updateAssessmentConfigs,
   updateCourseConfig,
-  updateNotificationConfig,
   updateUserRole
 } from '../../../commons/application/actions/SessionActions';
-import {
-  NotificationConfiguration,
-  TimeOption,
-  UpdateCourseConfiguration
-} from '../../../commons/application/types/SessionTypes';
+import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
@@ -39,7 +33,6 @@ import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 const AdminPanel: React.FC = () => {
   const [hasChangesCourseConfig, setHasChangesCourseConfig] = React.useState(false);
   const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = React.useState(false);
-  const [hasChangesNotificationConfig, setHasChangesNotificationConfig] = React.useState(false);
 
   const [courseConfiguration, setCourseConfiguration] = React.useState<UpdateCourseConfiguration>({
     courseName: '',
@@ -65,13 +58,11 @@ const AdminPanel: React.FC = () => {
    * ag-grid's API to update cell values instead.
    */
   const assessmentConfig = React.useRef(session.assessmentConfigurations);
-  const notificationConfig = React.useRef(session.notificationConfigs);
 
   // Tracks the assessment configurations to be deleted in the backend when the save button is clicked
   const [assessmentConfigsToDelete, setAssessmentConfigsToDelete] = React.useState<
     AssessmentConfiguration[]
   >([]);
-  const [timeOptionsToDelete, setTimeOptionsToDelete] = React.useState<TimeOption[]>([]);
 
   React.useEffect(() => {
     dispatch(fetchCourseConfig());
@@ -94,7 +85,6 @@ const AdminPanel: React.FC = () => {
 
     // IMPT: To prevent mutation of props
     assessmentConfig.current = cloneDeep(session.assessmentConfigurations);
-    notificationConfig.current = cloneDeep(session.notificationConfigs);
   }, [session]);
 
   const courseConfigPanelProps = {
@@ -124,26 +114,6 @@ const AdminPanel: React.FC = () => {
       setHasChangesAssessmentConfig: setHasChangesAssessmentConfig
     };
   }, [assessmentConfigsToDelete]);
-
-  const notificationConfigPanelProps = React.useMemo(() => {
-    return {
-      // Would have been loaded by the useEffect above
-      notificationConfig: notificationConfig as React.MutableRefObject<NotificationConfiguration[]>,
-      setNotificationConfig: (val: NotificationConfiguration[]) => {
-        notificationConfig.current = val;
-        setHasChangesNotificationConfig(true);
-      },
-      setTimeOptionsToDelete: (deletedElement: TimeOption) => {
-        // If it is not a newly created row that is yet to be persisted in the backend
-        if (deletedElement.id !== -1) {
-          const temp = [...timeOptionsToDelete];
-          temp.push(deletedElement);
-          setTimeOptionsToDelete(temp);
-        }
-      },
-      setHasChangesNotificationConfig: setHasChangesNotificationConfig
-    };
-  }, [timeOptionsToDelete]);
 
   const userConfigPanelProps = {
     courseRegId: session.courseRegId,
@@ -180,22 +150,8 @@ const AdminPanel: React.FC = () => {
       dispatch(updateAssessmentConfigs(assessmentConfig.current!));
       setHasChangesAssessmentConfig(false);
     }
-    if (hasChangesNotificationConfig) {
-      notificationConfig.current?.forEach(notificationConfig => {
-        dispatch(updateNotificationConfig(notificationConfig));
-      });
-      setHasChangesNotificationConfig(false);
-
-      if (timeOptionsToDelete.length > 0) {
-        timeOptionsToDelete.forEach(timeOption => {
-          dispatch(deleteTimeOption(timeOption));
-        });
-        setTimeOptionsToDelete([]);
-      }
-    }
   };
 
-  console.log(notificationConfigPanelProps);
   const data = (
     <div className="admin-panel">
       <H1>Admin Panel</H1>

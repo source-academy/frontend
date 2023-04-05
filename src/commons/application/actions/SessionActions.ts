@@ -19,7 +19,7 @@ import {
   AdminPanelCourseRegistration,
   CourseRegistration,
   DELETE_ASSESSMENT_CONFIG,
-  DELETE_TIME_OPTION,
+  DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ALL_USER_XP,
@@ -77,6 +77,7 @@ import {
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCE,
   UPDATE_NOTIFICATIONS,
+  UPDATE_TIME_OPTIONS,
   UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -254,8 +255,8 @@ export const fetchAssessmentConfigs = () => action(FETCH_ASSESSMENT_CONFIGS);
 export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfiguration[]) =>
   action(UPDATE_ASSESSMENT_CONFIGS, assessmentConfigs);
 
-export const updateNotificationConfig = (notificationConfig: NotificationConfiguration) =>
-  action(UPDATE_NOTIFICATION_CONFIG, notificationConfig);
+export const updateNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
+  action(UPDATE_NOTIFICATION_CONFIG, notificationConfigs);
 
 export const updateNotificationPreference = (
   notificationPreference: NotificationPreference,
@@ -279,7 +280,11 @@ export const fetchConfigurableNotificationConfigs = (courseRegId: number) =>
 
 export const fetchNotificationConfigs = () => action(FETCH_NOTIFICATION_CONFIGS);
 
-export const deleteTimeOption = (timeOption: TimeOption) => action(DELETE_TIME_OPTION, timeOption);
+export const updateTimeOptions = (timeOptions: TimeOption[]) =>
+  action(UPDATE_TIME_OPTIONS, timeOptions);
+
+export const deleteTimeOptions = (timeOptionIds: number[]) =>
+  action(DELETE_TIME_OPTIONS, timeOptionIds);
 
 export const updateUserRole = (courseRegId: number, role: Role) =>
   action(UPDATE_USER_ROLE, { courseRegId, role });

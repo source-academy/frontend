@@ -29,7 +29,7 @@ import {
   CourseConfiguration,
   CourseRegistration,
   DELETE_ASSESSMENT_CONFIG,
-  DELETE_TIME_OPTION,
+  DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ALL_USER_XP,
@@ -61,6 +61,7 @@ import {
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCE,
+  UPDATE_TIME_OPTIONS,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
@@ -118,11 +119,12 @@ import {
   putCourseResearchAgreement,
   putLatestViewedCourse,
   putNewUsers,
-  putNotificationConfig,
+  putNotificationConfigs,
   putNotificationPreference,
+  putTimeOptions,
   putUserRole,
   removeAssessmentConfig,
-  removeTimeOption,
+  removeTimeOptions,
   removeUserCourseRegistration,
   updateAssessment,
   uploadAssessment
@@ -783,11 +785,11 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     UPDATE_NOTIFICATION_CONFIG,
-    function* (action: ReturnType<typeof actions.updateNotificationConfig>): any {
+    function* (action: ReturnType<typeof actions.updateNotificationConfigs>): any {
       const tokens: Tokens = yield selectTokens();
-      const notificationConfig: NotificationConfiguration = action.payload;
+      const notificationConfigs: NotificationConfiguration[] = action.payload;
 
-      const resp: Response | null = yield call(putNotificationConfig, tokens, notificationConfig);
+      const resp: Response | null = yield call(putNotificationConfigs, tokens, notificationConfigs);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -840,12 +842,25 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    DELETE_TIME_OPTION,
-    function* (action: ReturnType<typeof actions.deleteTimeOption>): any {
+    UPDATE_TIME_OPTIONS,
+    function* (action: ReturnType<typeof actions.updateTimeOptions>): any {
       const tokens: Tokens = yield selectTokens();
-      const timeOption: TimeOption = action.payload;
+      const timeOptions: TimeOption[] = action.payload;
 
-      const resp: Response | null = yield call(removeTimeOption, tokens, timeOption);
+      const resp: Response | null = yield call(putTimeOptions, tokens, timeOptions);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+    }
+  );
+
+  yield takeEvery(
+    DELETE_TIME_OPTIONS,
+    function* (action: ReturnType<typeof actions.deleteTimeOptions>): any {
+      const tokens: Tokens = yield selectTokens();
+      const timeOptionIds: number[] = action.payload;
+
+      const resp: Response | null = yield call(removeTimeOptions, tokens, timeOptionIds);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }

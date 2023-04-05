@@ -31,7 +31,7 @@ const SelectCell: React.FC<SelectCellProps> = props => {
       <MenuItem
         active={modifiers.active}
         disabled={modifiers.disabled}
-        key={option.id}
+        key={option.id + '' + option.minutes}
         onClick={handleClick}
         onFocus={handleFocus}
         roleStructure="listoption"
@@ -50,7 +50,10 @@ const SelectCell: React.FC<SelectCellProps> = props => {
   const handleSelect = (option: TimeOption) => {
     setSelectedOption(option);
     const updatedTimeOptions: TimeOption[] = timeOptions.map(timeOption => {
-      return { ...timeOption, default: timeOption.id === option.id };
+      return {
+        ...timeOption,
+        isDefault: timeOption.id === option.id && timeOption.minutes === option.minutes
+      };
     });
     props.setStateHandler(props.rowIndex, updatedTimeOptions);
   };

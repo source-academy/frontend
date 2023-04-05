@@ -104,7 +104,7 @@ const NotiPreference: React.FC = () => {
       }
     },
     {
-      headername: 'Enabled',
+      headerName: 'Enabled',
       field: 'isEnabled',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
