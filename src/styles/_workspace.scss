@@ -903,14 +903,89 @@ $code-color-error: #ff4444;
       }
     }
 
-    .contestentries-header {
-      .header-entryid {
-        width: 55%;
-      }
-
-      .header-entryrank {
-        width: 45%;
-      }
+    #tier-list {
+      width: 80%;
+      padding: 10px;
+      background-color: rgb(30, 30, 30);
+    }
+    
+    .tier {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      background-color: rgb(56, 56, 56);
+    }
+    
+    .tier h2 {
+      margin: 0;
+      padding: 0;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #000000;
+      font-size: 1rem;
+      font-weight: normal;
+    }
+    
+    #tier-s h2 {
+      background-color: rgb(255, 127, 127);
+    }
+    
+    #tier-a h2 {
+      background-color: rgb(255, 223, 127);
+    }
+    
+    #tier-b h2 {
+      background-color: rgb(255,255,127);
+    }
+    
+    #tier-c h2 {
+      background-color: rgb(191, 255, 127);
+    }
+    
+    #tier-d h2 {
+      background-color: rgb(127, 191, 255);
+    }
+    
+    .item-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      min-height: 60px;
+      width: calc(100% - 60px);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    
+    #bank .item-container {
+      min-height: auto;
+      width: 100%;
+    }
+    
+    .item {
+      padding: 0;
+      margin-left: 20px;
+      min-width: 55px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffffff;
+      cursor: move;
+      color: #000000;
+    }
+    
+    .item-over {
+      border: 2px dashed #ccc;
+    }
+    
+    .placeholder {
+      min-width: 55px;
+      height: 60px;
+      margin-left: 20px;
+      background-color: #999999;
     }
 
     .leaderboard-header {
@@ -996,16 +1071,14 @@ $code-color-error: #ff4444;
     }
   }
 
-  .ContestEntryCard {
+  .item {
     /* Nested Blueprint Card component for Contest Entry Card */
+    margin: 0;
     .#{$ns}-card {
+      margin: 0;
+      border-radius: 0;
       .contestentry-entryid {
-        width: 55%;
-        text-align: center;
-      }
-
-      .contestentry-rank {
-        width: 45%;
+        margin: 0;
         text-align: center;
       }
     }
