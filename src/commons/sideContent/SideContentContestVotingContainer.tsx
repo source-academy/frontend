@@ -62,9 +62,7 @@ const SideContentContestVotingContainer: React.FunctionComponent<
 
       setIsValid(true);
     } else {
-      showWarningMessage(
-        `Please assign every entry to a tier.`
-      );
+      showWarningMessage(`Please assign every entry to a tier.`);
       setIsValid(false);
     }
   };
