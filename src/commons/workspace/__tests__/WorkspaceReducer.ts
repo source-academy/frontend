@@ -1780,6 +1780,7 @@ describe('ADD_EDITOR_TAB', () => {
     breakpoints: []
   };
   const firstEditorTab: EditorTabState = {
+    filePath: '/goodbyeworld.js',
     value: 'Goodbye World!',
     highlightedLines: [],
     breakpoints: []
@@ -1823,8 +1824,8 @@ describe('ADD_EDITOR_TAB', () => {
     });
   });
 
-  test('does nothing if the file is already open as an editor tab', () => {
-    const filePath = '/helloworld.js';
+  test('sets the active editor tab index if the file is already open as an editor tab', () => {
+    const filePath = '/goodbyeworld.js';
     const editorValue = 'The quick brown fox jumped over the lazy pomeranian.';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1835,9 +1836,18 @@ describe('ADD_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
-      expect(JSON.stringify(result)).toEqual(JSON.stringify(defaultWorkspaceState));
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceState[location],
+            activeEditorTabIndex: 1
+          }
+        })
+      );
     });
   });
 });
