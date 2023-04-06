@@ -19,6 +19,7 @@ type StateProps = {
 /**
  * Container to separate behaviour concerns from rendering concerns
  * Stores component-level voting ranking state
+ * Removed minScore and maxScore due to invalid scores no longer being possible
  */
 const SideContentContestVotingContainer: React.FunctionComponent<
   SideContentContestVotingContainerProps
@@ -26,23 +27,21 @@ const SideContentContestVotingContainer: React.FunctionComponent<
   const { canSave, contestEntries, handleSave, handleContestEntryClick } = props;
   const [isValid, setIsValid] = useState<boolean>(true);
   const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>([]);
-  const minScore = 11 - contestEntries.length;
-  const maxScore = 10;
+  // const minScore;
+  // const maxScore;
 
   useEffect(() => {
     setVotingSubmission(contestEntries);
   }, [contestEntries]);
 
   /**
-   * Validates input value and clamps the value within the min-max range [1, number of entries].
+   * Validates input value.
    * @param votingSubmission voting scores by user for each contest entry.
    * @returns boolean value for whether the scores are within the min-max range.
+   * Removed minScore and maxScore constraints.
    */
   const isSubmissionValid = (votingSubmission: ContestEntry[]) => {
-    return votingSubmission.reduce((isValid, vote) => {
-      const score = vote.score!;
-      return isValid && score >= minScore && score <= maxScore;
-    }, true);
+    return votingSubmission.reduce((isValid, vote) => isValid, true);
   };
 
   const submissionHasNoNull = (votingSubmission: ContestEntry[]) => {
@@ -57,23 +56,15 @@ const SideContentContestVotingContainer: React.FunctionComponent<
       vote.submission_id === submissionId ? { ...vote, score: score } : vote
     );
     setVotingSubmission(updatedSubmission);
-    const noDuplicates =
-      new Set(updatedSubmission.map(vote => vote.score)).size === updatedSubmission.length;
-    // validate that scores are unique
     const noNull = submissionHasNoNull(updatedSubmission);
-    if (noDuplicates && noNull && isSubmissionValid(updatedSubmission)) {
+    if (noNull && isSubmissionValid(updatedSubmission)) {
       handleSave(updatedSubmission);
 
       setIsValid(true);
-    } else if (noDuplicates && noNull) {
-      showWarningMessage(
-        `Vote rankings invalid. Please input scores between ${minScore} - ${maxScore}.`
-      );
-      setIsValid(false);
-    } else if (!noDuplicates && noNull) {
-      showWarningMessage('Vote scores are not unique. Please input unique rankings.');
-      setIsValid(false);
     } else {
+      showWarningMessage(
+        `Please assign every entry to a tier.`
+      );
       setIsValid(false);
     }
   };
@@ -85,8 +76,6 @@ const SideContentContestVotingContainer: React.FunctionComponent<
       handleContestEntryClick={handleContestEntryClick}
       handleVotingSubmissionChange={handleVotingSubmissionChange}
       contestEntries={votingSubmission}
-      minScore={minScore}
-      maxScore={maxScore}
     />
   );
 };
