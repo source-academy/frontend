@@ -14,9 +14,11 @@ type OwnProps = {
 
 const BooleanCell: React.FC<BooleanCellProps> = props => {
   const { data } = props;
-  let checked = data[props.field];
+  const systemEnabled = data[props.field];
+  let checked = systemEnabled;
 
   if (
+    systemEnabled &&
     props.data.notificationPreference !== null &&
     props.data.notificationPreference.isEnabled !== null
   ) {
@@ -27,7 +29,7 @@ const BooleanCell: React.FC<BooleanCellProps> = props => {
     props.setStateHandler(props.rowIndex, !checked);
   }, [props, checked]);
 
-  return <Switch checked={checked} onChange={changeHandler} />;
+  return <Switch checked={checked} onChange={changeHandler} disabled={!systemEnabled} />;
 };
 
 export default BooleanCell;

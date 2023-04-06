@@ -57,12 +57,13 @@ const NotiPreference: React.FC = () => {
 
   const setTimeOption = (index: number, value: TimeOption) => {
     const temp = [...configurableNotificationConfigs.current];
+    const config = temp[index];
     const pref = temp[index]['notificationPreference'];
 
     temp[index]['notificationPreference'] = {
       id: pref === null ? -1 : pref.id, // assumes -1 is not a valid id
-      timeOptionId: value.id,
-      isEnabled: pref === null ? null : pref.isEnabled
+      timeOptionId: value.id, 
+      isEnabled: pref === null ? config.isEnabled : pref.isEnabled
     };
 
     configurableNotificationConfigs.current = temp;

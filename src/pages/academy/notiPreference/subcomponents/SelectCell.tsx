@@ -40,6 +40,8 @@ const SelectCell: React.FC<SelectCellProps> = props => {
     );
   };
 
+  const systemEnabled = props.data["isEnabled"];
+
   // look for default time option
   let defaultTimeOption: TimeOption | undefined;
   const defaultTimeOptions = timeOptions.filter(to => to.isDefault);
@@ -78,11 +80,13 @@ const SelectCell: React.FC<SelectCellProps> = props => {
       itemRenderer={renderOption}
       onItemSelect={handleSelect}
       noResults={<MenuItem disabled={true} text="No results." roleStructure="listoption" />}
+      disabled={!systemEnabled}
     >
       <Button
         text={selectedOption ? getUserFriendlyText(selectedOption) : 'NA'}
         rightIcon="caret-down"
         placeholder="Choose default"
+        disabled={!systemEnabled}
       />
     </Select2>
   );
