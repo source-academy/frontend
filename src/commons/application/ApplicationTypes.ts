@@ -310,6 +310,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingEnv: false,
     envSteps: -1,
     envStepsTotal: 0,
+    breakpointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -360,7 +361,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     usingEnv: false,
     envSteps: -1,
-    envStepsTotal: 0
+    envStepsTotal: 0,
+    breakpointSteps: []
     activeEditorTabIndex: 0,
     editorTabs: [
       {

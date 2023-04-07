@@ -1188,6 +1188,7 @@ export function* evalCode(
     if (envSteps < 0) {
       yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
       yield put(actions.updateEnvSteps(context.runtime.envStepsTotal, workspaceLocation));
+      yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
     }
   }
 }

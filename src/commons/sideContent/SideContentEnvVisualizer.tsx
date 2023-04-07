@@ -26,6 +26,7 @@ type StateProps = {
   sideContentHeight?: number;
   numOfStepsTotal: number;
   numOfSteps: number;
+  breakpointSteps: number[];
 };
 
 type OwnProps = {
@@ -112,10 +113,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     window.removeEventListener('resize', this.handleResize);
   }
 
-  componentDidUpdate(
-    prevProps: { editorWidth?: string; sideContentHeight?: number; numOfSteps: number },
-    prevState: State
-  ) {
+  componentDidUpdate(prevProps: {
+    editorWidth?: string;
+    sideContentHeight?: number;
+    numOfSteps: number;
+  }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
       prevProps.editorWidth !== this.props.editorWidth
@@ -162,7 +164,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 <Button
                   disabled={!this.state.visualization}
                   icon="double-chevron-left"
-                  onClick={() => {}}
+                  onClick={this.stepPrevBreakpoint}
                 />
                 <Button
                   disabled={!this.state.visualization}
@@ -177,7 +179,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 <Button
                   disabled={!this.state.visualization}
                   icon="double-chevron-right"
-                  onClick={() => {}}
+                  onClick={this.stepNextBreakpoint}
                 />
               </ButtonGroup>
             </div>
@@ -260,6 +262,31 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     this.sliderShift(lastStepValue);
     this.props.handleEditorEval(this.props.workspaceLocation);
   };
+
+  private stepNextBreakpoint = () => {
+    for (const step of this.props.breakpointSteps) {
+      if (step > this.state.value) {
+        this.sliderShift(step);
+        this.props.handleEditorEval(this.props.workspaceLocation);
+        return;
+      }
+    }
+    this.sliderShift(this.props.numOfStepsTotal);
+    this.props.handleEditorEval(this.props.workspaceLocation);
+  };
+
+  private stepPrevBreakpoint = () => {
+    for (let i = this.props.breakpointSteps.length - 1; i >= 0; i--) {
+      const step = this.props.breakpointSteps[i];
+      if (step < this.state.value) {
+        this.sliderShift(step);
+        this.props.handleEditorEval(this.props.workspaceLocation);
+        return;
+      }
+    }
+    this.sliderShift(1);
+    this.props.handleEditorEval(this.props.workspaceLocation);
+  };
 }
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
@@ -269,7 +296,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   return {
     ...ownProps,
     numOfStepsTotal: state.workspaces.playground.envStepsTotal,
-    numOfSteps: state.workspaces.playground.envSteps
+    numOfSteps: state.workspaces.playground.envSteps,
+    breakpointSteps: state.workspaces.playground.breakpointSteps
   };
 };
 

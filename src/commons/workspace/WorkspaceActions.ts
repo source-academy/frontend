@@ -50,6 +50,7 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -378,3 +379,8 @@ export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocati
 
 export const updateEnvStepsTotal = (steps: number, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_ENVSTEPSTOTAL, { steps, workspaceLocation });
+
+export const updateBreakpointSteps = (
+  breakpointSteps: number[],
+  workspaceLocation: WorkspaceLocation
+) => action(UPDATE_BREAKPOINTSTEPS, { breakpointSteps, workspaceLocation });

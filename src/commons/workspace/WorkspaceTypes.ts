@@ -57,6 +57,7 @@ export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
 export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
 export const UPDATE_ENVSTEPS = 'UPDATE_ENVSTEPS';
 export const UPDATE_ENVSTEPSTOTAL = 'UPDATE_ENVSTEPSTOTAL';
+export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
@@ -80,6 +81,7 @@ type PlaygroundWorkspaceAttr = {
   readonly usingEnv: boolean;
   readonly envSteps: number;
   readonly envStepsTotal: number;
+  readonly breakpointSteps: number[];
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
 

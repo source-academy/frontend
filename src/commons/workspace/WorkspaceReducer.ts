@@ -62,6 +62,7 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -1008,6 +1009,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           envStepsTotal: action.payload.steps
+        }
+      };
+    case UPDATE_BREAKPOINTSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          breakpointSteps: action.payload.breakpointSteps
         }
       };
     case NOTIFY_PROGRAM_EVALUATED:

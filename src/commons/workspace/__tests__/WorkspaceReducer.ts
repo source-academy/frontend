@@ -1014,7 +1014,8 @@ describe('LOG_OUT', () => {
       usingSubst: false,
       usingEnv: false,
       envSteps: -1,
-      envStepsTotal: 0
+      envStepsTotal: 0,
+      breakpointSteps: []
     };
 
     const logoutDefaultState: WorkspaceManagerState = {
