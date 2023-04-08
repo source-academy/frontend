@@ -2,6 +2,7 @@
 
 exports[`Navbar renders correctly 1`] = `
 "
+
 <Fragment>
   <Blueprint4.Navbar className="SicpNavigationBar secondary-navbar">
     <Blueprint4.NavbarGroup align="left">
@@ -34,5 +35,6 @@ exports[`Navbar renders correctly 1`] = `
   </Blueprint4.Drawer>
   <Blueprint4.Drawer style={{...}} onClose={[Function: handleCloseSearch]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position="left" usePortal={false} className="sicp-toc-drawer" />
 </Fragment>
+
 "
 `;
