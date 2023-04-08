@@ -153,6 +153,7 @@ The regression tests are generated using `jest` and stored as snapshots in `src/
 $ yarn test --updateSnapshot
 ```
 and then typing `a` to update all snapshots.
+（if you run this on a macBook with ARM chip, you may run into errors; try to do this on a computer with x86 chip instead)
 
 ## License
 
