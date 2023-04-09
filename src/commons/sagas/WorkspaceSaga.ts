@@ -347,9 +347,14 @@ export default function* WorkspaceSaga(): SagaIterator {
       if (newHighlightedLines.length === 0) {
         highlightClean();
       } else {
-        newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
-          highlightLine(startRow)
-        );
+        try {
+          newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
+            highlightLine(startRow)
+          );
+        } catch (e) {
+          // Error most likely caused by trying to highlight the lines of the prelude
+          // in Env Viz. Can be ignored.
+        }
       }
       yield;
     }
@@ -993,6 +998,13 @@ export function* evalCode(
             .usingEnv
       )
     : false;
+  const needUpdateEnv: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .updateEnv
+      )
+    : false;
   const envSteps: number = correctWorkspace
     ? yield select(
         (state: OverallState) =>
@@ -1015,7 +1027,7 @@ export function* evalCode(
   const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
   if (envActiveAndCorrectChapter) {
     context.executionMethod = 'ec-evaluator';
-    context.runtime.envSteps = envSteps;
+    context.runtime.envSteps = needUpdateEnv ? -1 : envSteps;
   } else {
     context.runtime.envSteps = -1;
   }
@@ -1184,10 +1196,9 @@ export function* evalCode(
   }
 
   if (envActiveAndCorrectChapter) {
-    // envSteps < 0 means that it is the first time the EnvViz is evaluating the code
-    if (envSteps < 0) {
+    if (needUpdateEnv) {
       yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
-      yield put(actions.updateEnvSteps(context.runtime.envStepsTotal, workspaceLocation));
+      yield put(actions.toggleUpdateEnv(false, workspaceLocation));
       yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
     }
   }

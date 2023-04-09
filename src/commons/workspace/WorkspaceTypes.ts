@@ -36,6 +36,7 @@ export const SEND_REPL_INPUT_TO_OUTPUT = 'SEND_REPL_INPUT_TO_OUTPUT';
 export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const TOGGLE_USING_ENV = 'TOGGLE_USING_ENV';
+export const TOGGLE_UPDATE_ENV = 'TOGGLE_UPDATE_ENV';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
 export const TOGGLE_FOLDER_MODE = 'TOGGLE_FOLDER_MODE';
@@ -79,6 +80,7 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
   readonly usingEnv: boolean;
+  readonly updateEnv: boolean;
   readonly envSteps: number;
   readonly envStepsTotal: number;
   readonly breakpointSteps: number[];

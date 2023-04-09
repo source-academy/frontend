@@ -46,6 +46,7 @@ import {
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
+  TOGGLE_UPDATE_ENV,
   TOGGLE_USING_ENV,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
@@ -373,6 +374,9 @@ export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: Workspa
 
 export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
+
+export const toggleUpdateEnv = (updateEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
 
 export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_ENVSTEPS, { steps, workspaceLocation });

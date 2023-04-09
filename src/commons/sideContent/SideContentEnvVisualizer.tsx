@@ -27,6 +27,7 @@ type StateProps = {
   numOfStepsTotal: number;
   numOfSteps: number;
   breakpointSteps: number[];
+  needEnvUpdate: boolean;
 };
 
 type OwnProps = {
@@ -116,7 +117,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   componentDidUpdate(prevProps: {
     editorWidth?: string;
     sideContentHeight?: number;
-    numOfSteps: number;
+    numOfStepsTotal: number;
+    needEnvUpdate: boolean;
   }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
@@ -124,8 +126,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     ) {
       this.handleResize();
     }
-    if (prevProps.numOfSteps !== this.props.numOfSteps) {
-      this.sliderShift(this.props.numOfSteps);
+    if (prevProps.needEnvUpdate && !this.props.needEnvUpdate) {
+      this.stepFirst();
     }
   }
 
@@ -297,7 +299,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     ...ownProps,
     numOfStepsTotal: state.workspaces.playground.envStepsTotal,
     numOfSteps: state.workspaces.playground.envSteps,
-    breakpointSteps: state.workspaces.playground.breakpointSteps
+    breakpointSteps: state.workspaces.playground.breakpointSteps,
+    needEnvUpdate: state.workspaces.playground.updateEnv
   };
 };
 

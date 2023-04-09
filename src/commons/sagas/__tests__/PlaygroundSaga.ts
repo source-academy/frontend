@@ -81,6 +81,7 @@ describe('Playground saga tests', () => {
           ],
           usingSubst: false,
           usingEnv: false,
+          updateEnv: true,
           envSteps: -1,
           envStepsTotal: 0,
           breakpointSteps: []
@@ -147,6 +148,7 @@ describe('Playground saga tests', () => {
           ],
           usingSubst: false,
           usingEnv: false,
+          updateEnv: true,
           envSteps: -1,
           envStepsTotal: 0,
           breakpointSteps: []
@@ -213,6 +215,7 @@ describe('Playground saga tests', () => {
           ],
           usingSubst: false,
           usingEnv: false,
+          updateEnv: true,
           envSteps: -1,
           envStepsTotal: 0,
           breakpointSteps: []
@@ -262,6 +265,7 @@ describe('Playground saga tests', () => {
           ],
           usingSubst: false,
           usingEnv: false,
+          updateEnv: true,
           envSteps: -1,
           envStepsTotal: 0,
           breakpointSteps: []
@@ -330,6 +334,7 @@ describe('Playground saga tests', () => {
           ],
           usingSubst: false,
           usingEnv: false,
+          updateEnv: true,
           envSteps: -1,
           envStepsTotal: 0,
           breakpointSteps: []
@@ -387,6 +392,7 @@ describe('Playground saga tests', () => {
           ],
           usingSubst: false,
           usingEnv: false,
+          updateEnv: true,
           envSteps: -1,
           envStepsTotal: 0,
           breakpointSteps: []

@@ -1013,6 +1013,7 @@ describe('LOG_OUT', () => {
       sharedbConnected: false,
       usingSubst: false,
       usingEnv: false,
+      updateEnv: true,
       envSteps: -1,
       envStepsTotal: 0,
       breakpointSteps: []

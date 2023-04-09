@@ -52,6 +52,7 @@ import {
   setFolderMode,
   toggleEditorAutorun,
   toggleFolderMode,
+  toggleUpdateEnv,
   updateActiveEditorTabIndex,
   updateEnvSteps,
   updateEnvStepsTotal,
@@ -463,11 +464,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const handleEditorEval = React.useCallback(() => {
-    if (props.usingEnv) {
-      dispatch(updateEnvSteps(-1, workspaceLocation));
-    }
     dispatch(evalEditor(workspaceLocation));
-  }, [dispatch, workspaceLocation, props.usingEnv]);
+  }, [dispatch, workspaceLocation]);
 
   const handleInterruptEval = React.useCallback(
     () => dispatch(beginInterruptExecution(workspaceLocation)),
@@ -855,8 +853,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       };
 
       pushLog(input);
+      dispatch(toggleUpdateEnv(true, workspaceLocation));
+      dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
     },
-    [pushLog]
+    [pushLog, dispatch, workspaceLocation]
   );
 
   const onCursorChangeMethod = React.useCallback(
@@ -913,8 +913,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         }
       }
       propsRef.current.handleEditorUpdateBreakpoints(editorTabIndex, breakpoints);
+      dispatch(toggleUpdateEnv(true, workspaceLocation));
     },
-    [selectedTab]
+    [selectedTab, dispatch, workspaceLocation]
   );
 
   const replDisabled =
