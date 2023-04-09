@@ -395,6 +395,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     EnvVisualizer.clearEnv();
     dispatch(updateEnvSteps(-1, workspaceLocation));
     dispatch(updateEnvStepsTotal(0, workspaceLocation));
+    dispatch(toggleUpdateEnv(true, workspaceLocation));
     dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
   }, [dispatch, workspaceLocation]);
 

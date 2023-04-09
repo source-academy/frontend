@@ -295,12 +295,18 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   state: OverallState,
   ownProps: OwnProps
 ) => {
+  let workspaceLocation: WorkspaceLocation;
+  if (ownProps.workspaceLocation === 'playground' || ownProps.workspaceLocation === 'sicp') {
+    workspaceLocation = ownProps.workspaceLocation;
+  } else {
+    workspaceLocation = 'playground';
+  }
   return {
     ...ownProps,
-    numOfStepsTotal: state.workspaces.playground.envStepsTotal,
-    numOfSteps: state.workspaces.playground.envSteps,
-    breakpointSteps: state.workspaces.playground.breakpointSteps,
-    needEnvUpdate: state.workspaces.playground.updateEnv
+    numOfStepsTotal: state.workspaces[workspaceLocation].envStepsTotal,
+    numOfSteps: state.workspaces[workspaceLocation].envSteps,
+    breakpointSteps: state.workspaces[workspaceLocation].breakpointSteps,
+    needEnvUpdate: state.workspaces[workspaceLocation].updateEnv
   };
 };
 
