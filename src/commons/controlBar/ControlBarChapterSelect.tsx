@@ -3,7 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-// import { useSelector } from 'react-redux';
 import React, { useEffect, useState} from 'react';
 import { store } from 'src/pages/createStore';
 
@@ -19,8 +18,6 @@ import {
   styliseSublanguage,
   variantLanguages
 } from '../application/ApplicationTypes';
-// import { getCurLang } from '../navigationBar/NavigationBarLangSelectButton';
-// import type { RootState } from '../Store'
 import Constants from '../utils/Constants';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
@@ -101,7 +98,6 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
-  // const selectedLang = store.getState().playground.lang;
   const [selectedLang, setSelectedLang] = useState(store.getState().playground.lang);
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
@@ -115,18 +111,13 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
 
   let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
   
-  // useEffect(() => {
   if (selectedLang === 'Source') {
-    // setChapterListRenderer(chapterListRendererA);
     chapterListRenderer = chapterListRendererA;
   } else if (selectedLang === 'Scheme') {
-    // setChapterListRenderer(chapterListRendererB);
     chapterListRenderer = chapterListRendererB;
   } else if (selectedLang === 'Python') {
-    // setChapterListRenderer(chapterListRendererC);
     chapterListRenderer = chapterListRendererC;
   }
-  // }, [selectedLang])
 
   return (
     <ChapterSelectComponent
