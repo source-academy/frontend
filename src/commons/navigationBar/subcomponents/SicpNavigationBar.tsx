@@ -203,7 +203,7 @@ const SicpNavigationBar: React.FC = () => {
       if (node == null || limit < 0) {
         return;
       }
-      if (node.value) {
+      if (node.value && voidSearch(path).length > 0) {
         ans.push(path);
         limit--;
       }
@@ -229,7 +229,7 @@ const SicpNavigationBar: React.FC = () => {
     const SearchUrl = '..';
     let words = str.toLowerCase().split(' ');
     words = words.filter(word => word !== '');
-    if (searchQuery.length === 0 || words.length === 0) {
+    if (words.length === 0) {
       setQueryResult([]);
       return;
     }
@@ -245,7 +245,8 @@ const SicpNavigationBar: React.FC = () => {
       .split(' ')
       .filter(word => word !== '');
     if (words.length < 2) {
-      return autoComplete(str, limit, jsonData);
+      return autoComplete(str, 250, jsonData);
+      console.log('1');
     }
     let pre = words[0];
     for (let i = 1; i < words.length - 1; i++) {
@@ -350,12 +351,12 @@ const SicpNavigationBar: React.FC = () => {
       <div className="userSearch-inner">
         <div style={{ display: 'inline-flex' }}>
           <InputGroup
-            placeholder="..."
+            placeholder="Search"
             value={searchQuery}
             onChange={event => handleUserSearchChange(event.target.value)}
           />
           <ControlButton
-            label="Search"
+            label="Text"
             icon={IconNames.SEARCH}
             onClick={() => handleSearchButton()}
           />
@@ -398,12 +399,12 @@ const SicpNavigationBar: React.FC = () => {
       <div className="indexSearch-inner">
         <div style={{ display: 'inline-flex' }}>
           <InputGroup
-            placeholder="..."
+            placeholder="Search"
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
           <ControlButton
-            label="Search index"
+            label="Index"
             icon={IconNames.SEARCH}
             onClick={handleIndexSearchButton}
           />
@@ -483,7 +484,7 @@ const SicpNavigationBar: React.FC = () => {
       <div>
         <h3>Results for "{query}"</h3>
         <ul>
-          {highlightedResults.map((result, index) => (
+            {highlightedResults.map((result, index) => (
             <SearchResult key={index} {...result} />
           ))}
         </ul>
