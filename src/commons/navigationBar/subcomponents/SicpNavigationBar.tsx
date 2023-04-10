@@ -246,25 +246,21 @@ const SicpNavigationBar: React.FC = () => {
       .filter(word => word !== '');
     if (words.length < 2) {
       return autoComplete(str, 250, jsonData);
-      console.log('1');
     }
     let pre = words[0];
     for (let i = 1; i < words.length - 1; i++) {
       pre += ' ' + words[i];
     }
-    console.log(pre);
     const lastWord = words[words.length - 1];
     let preResults = voidSearch(pre);
     if (preResults == null) {
       return [];
     }
     preResults = preResults.filter((obj: any) => obj.title.includes(lastWord));
-    console.log(preResults);
     if (preResults.length < 1) {
       return [];
     }
     let lastwords = autoComplete(lastWord, 3000, jsonData);
-    console.log(lastwords);
     lastwords = lastwords.filter(
       (word: string) =>
         preResults.filter((obj: any) => obj.title.toLowerCase().includes(pre + ' ' + word)).length >
@@ -423,12 +419,10 @@ const SicpNavigationBar: React.FC = () => {
                 handleAutoIndexSearch(result);
               }}
               onMouseOver={e => {
-                console.log(e);
                 const element = e!.nativeEvent!.srcElement as any;
                 element.style.backgroundColor = 'rgba(0,0,0,0.5)';
               }}
               onMouseOut={e => {
-                console.log(e);
                 const element = e!.nativeEvent!.srcElement as any;
                 element.style.backgroundColor = 'rgba(0,0,0,0)';
               }}
