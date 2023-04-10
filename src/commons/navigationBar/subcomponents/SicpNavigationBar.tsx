@@ -399,11 +399,7 @@ const SicpNavigationBar: React.FC = () => {
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
-          <ControlButton
-            label="Index"
-            icon={IconNames.SEARCH}
-            onClick={handleIndexSearchButton}
-          />
+          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
         </div>
       </div>
       {indexAutocompleteResults.length !== 0 && (
@@ -478,7 +474,7 @@ const SicpNavigationBar: React.FC = () => {
       <div>
         <h3>Results for "{query}"</h3>
         <ul>
-            {highlightedResults.map((result, index) => (
+          {highlightedResults.map((result, index) => (
             <SearchResult key={index} {...result} />
           ))}
         </ul>
