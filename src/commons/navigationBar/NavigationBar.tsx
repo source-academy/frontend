@@ -30,8 +30,8 @@ import { filterNotificationsByType } from '../notificationBadge/NotificationBadg
 import Constants from '../utils/Constants';
 import { useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
-import NavigationBarLangSelectButton from './NavigationBarLangSelectButton';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
+import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
 type NavigationBarProps = DispatchProps & StateProps;

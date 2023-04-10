@@ -18,6 +18,7 @@ const NavigationBarLangSelectButton = () => {
   
   return (
     <Popover2
+      hasBackdrop
       interactionKind="click"
       position={Position.BOTTOM_RIGHT}
       isOpen={isOpen}
