@@ -1,11 +1,11 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
+import CommonCheckBox from '../commons/CommonCheckBox';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import CommonRadioButton from '../commons/CommonRadioButton';
+import CommonSlider from '../commons/CommonSlider';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import SettingsConstants from '../scenes/settings/SettingsConstants';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
@@ -20,9 +20,13 @@ import EscapeConstants, {
  * Manager in charge of rendering and destroying the escape manager in a scene
  */
 class GameEscapeManager implements IGameUI {
-  private bgmVolumeRadioButtons: CommonRadioButton | undefined;
-  private sfxVolumeRadioButtons: CommonRadioButton | undefined;
+  
   private scene: IBaseScene;
+
+  // Volume buttons and mute button.
+  private bgmVomlumeSlider: CommonSlider | undefined;
+  private sfxVolumeSlider: CommonSlider | undefined;
+  private muteButton: CommonCheckBox | undefined;
 
   /**
    * Initialises the escape manager UI
@@ -73,20 +77,22 @@ class GameEscapeManager implements IGameUI {
     );
 
     // Get user settings, to use as default choice in the radio buttons
-    const { bgmVolume, sfxVolume } = this.getSettingsSaveManager().getSettings();
-    const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === sfxVolume
-    );
-    const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === bgmVolume
-    );
-
-    // SFX Radio buttons
-    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(sfxVolIdx, settingsPos[0][1]);
-    // BGM Radio buttons
-    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(bgmVolIdx, settingsPos[1][1]);
-    escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons]);
-
+    const { bgmVolume, sfxVolume, isMuted } = this.getSettingsSaveManager().getSettings();
+    
+    // Initialize the volume buttons and add them to the container
+    this.sfxVolumeSlider = this.createSettingsSlider(sfxVolume, settingsPos[0][1] + 95);
+    this.bgmVomlumeSlider = this.createSettingsSlider(bgmVolume, settingsPos[1][1] + 15);
+    this.muteButton = new CommonCheckBox(
+      this.scene, 
+      isMuted, 
+      {sideLength: 50, outlineThickness: 3},
+      { x: 0, y: 0, oriX: -0.5, oriY: 0.5 },
+      volumeRadioOptTextStyle,
+      700, 
+      200,
+      "Mute audio");
+    escapeMenuContainer.add([this.sfxVolumeSlider, this.bgmVomlumeSlider, this.muteButton]);
+    
     // Get all the buttons
     const buttons = this.getOptButtons();
     const buttonPositions = calcTableFormatPos({
@@ -116,31 +122,31 @@ class GameEscapeManager implements IGameUI {
   private getSettings() {
     return ['SFX', 'BGM'];
   }
-
+  
   /**
-   * Create radio buttons matching the escape menu style.
+   * Create sliders matching the escape menu style.
    *
-   * @param defaultChoiceIdx default option for the radio button
-   * @param yPos y position of the radio buttons
+   * @param defaultChoiceValue default option for the radio button
+   * @param yPos y position of the slider
    */
-  private createSettingsRadioOptions(defaultChoiceIdx: number, yPos: number) {
-    return new CommonRadioButton(
+  private createSettingsSlider(value: number, yPos: number) {
+    return new CommonSlider(
       this.scene,
       {
-        choices: SettingsConstants.volContainerOpts,
-        defaultChoiceIdx: defaultChoiceIdx,
+        minMax: [0.0, 2.0],
+        defaultChoiceValue: value,
         maxXSpace: EscapeConstants.radioButtons.xSpace,
-        radioChoiceConfig: {
-          circleDim: 15,
-          checkedDim: 10,
-          outlineThickness: 3
+        sliderButtonConfig: {
+          circleDim: 50,
+          dragDim: 40,
+          outlineThickness: 5
         },
         choiceTextConfig: EscapeConstants.radioChoiceTextConfig,
-        bitmapTextStyle: volumeRadioOptTextStyle
+        bitmapTextStyle: volumeRadioOptTextStyle,
       },
-      EscapeConstants.volOpt.x,
-      -screenCenter.y + yPos + EscapeConstants.settings.yOffset
-    );
+      EscapeConstants.volOpt.x + 350,
+      yPos + EscapeConstants.settings.yOffset - 300
+    )
   }
 
   /**
@@ -200,15 +206,18 @@ class GameEscapeManager implements IGameUI {
    * Escape Menu is responsible in contacting various managers to apply the settings.
    */
   private async applySettings() {
-    const sfxVol = this.sfxVolumeRadioButtons
-      ? parseFloat(this.sfxVolumeRadioButtons.getChosenChoice())
+    const sfxVol = this.sfxVolumeSlider
+      ? this.sfxVolumeSlider.getValue()
       : 1;
-    const bgmVol = this.bgmVolumeRadioButtons
-      ? parseFloat(this.bgmVolumeRadioButtons.getChosenChoice())
+    const bgmVol = this.bgmVomlumeSlider
+      ? this.bgmVomlumeSlider.getValue()
       : 1;
-
+    const muted = this.muteButton
+      ? this.muteButton.getChoice()
+      : false;
+    
     // Save settings
-    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol };
+    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol, isMuted: muted };
     await this.getSettingsSaveManager().saveSettings(newSettings);
 
     // Apply settings

@@ -14,6 +14,7 @@ class GameSoundManager {
   private soundAssetMap: Map<AssetKey, SoundAsset>;
   private bgmVol: number;
   private sfxVol: number;
+  private muted: number;
 
   private currBgMusicKey: AssetKey;
   private currBgMusic: Phaser.Sound.WebAudioSound | undefined;
@@ -22,6 +23,7 @@ class GameSoundManager {
     this.soundAssetMap = new Map<AssetKey, SoundAsset>();
     this.bgmVol = 1;
     this.sfxVol = 1;
+    this.muted = 1;
     this.currBgMusicKey = Constants.nullInteractionId;
   }
 
@@ -37,6 +39,9 @@ class GameSoundManager {
   public applyUserSettings(settings: SettingsJson) {
     this.bgmVol = settings.bgmVolume !== undefined ? settings.bgmVolume : 1;
     this.sfxVol = settings.sfxVolume !== undefined ? settings.sfxVolume : 1;
+    this.muted = settings.isMuted !== undefined ? settings.isMuted ? 0 : 1 : 1;
+    this.bgmVol *= this.muted;
+    this.sfxVol *= this.muted;
 
     // Modify currently playing BGM, if any
     if (this.currBgMusic && this.currBgMusic.isPlaying) {
