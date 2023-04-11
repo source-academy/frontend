@@ -17,7 +17,13 @@ const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 
       : type === 'Paths'
       ? 'sky'
       : 'gray';
-  return <Badge text={type} size={size} color={badgeColor} />;
+  return (
+    <Badge
+      text={size === 'xs' ? type.charAt(0).toUpperCase() : type}
+      size={size}
+      color={badgeColor}
+    />
+  );
 };
 
 type SubmissionStatusBadgeProps = {

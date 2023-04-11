@@ -25,7 +25,7 @@ const GradingSubmissionFilters: React.FC<GradingSubmissinoFiltersProps> = ({
 const FILTER_COLORS = {
   // assessments
   missions: 'indigo',
-  quests: 'yellow',
+  quests: 'emerald',
   paths: 'sky',
 
   // submission status
@@ -46,9 +46,9 @@ type FilterBadgeProps = {
 
 const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   let filterValue = filter.value as string;
+  filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
   const filterColor = FILTER_COLORS[filterValue.toLowerCase()] || 'gray';
 
-  filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
   return (
     <button type="button" onClick={() => onRemove(filter)} style={{ padding: 0 }}>
       <Badge
