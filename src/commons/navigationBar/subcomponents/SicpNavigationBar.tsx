@@ -203,7 +203,7 @@ const SicpNavigationBar: React.FC = () => {
       if (node == null || limit < 0) {
         return;
       }
-      if (node.value) {
+      if (node.value && voidSearch(path).length > 0) {
         ans.push(path);
         limit--;
       }
@@ -229,7 +229,7 @@ const SicpNavigationBar: React.FC = () => {
     const SearchUrl = '..';
     let words = str.toLowerCase().split(' ');
     words = words.filter(word => word !== '');
-    if (searchQuery.length === 0 || words.length === 0) {
+    if (words.length === 0) {
       setQueryResult([]);
       return;
     }
@@ -245,25 +245,22 @@ const SicpNavigationBar: React.FC = () => {
       .split(' ')
       .filter(word => word !== '');
     if (words.length < 2) {
-      return autoComplete(str, limit, jsonData);
+      return autoComplete(str, 250, jsonData);
     }
     let pre = words[0];
     for (let i = 1; i < words.length - 1; i++) {
       pre += ' ' + words[i];
     }
-    console.log(pre);
     const lastWord = words[words.length - 1];
     let preResults = voidSearch(pre);
     if (preResults == null) {
       return [];
     }
     preResults = preResults.filter((obj: any) => obj.title.includes(lastWord));
-    console.log(preResults);
     if (preResults.length < 1) {
       return [];
     }
     let lastwords = autoComplete(lastWord, 3000, jsonData);
-    console.log(lastwords);
     lastwords = lastwords.filter(
       (word: string) =>
         preResults.filter((obj: any) => obj.title.toLowerCase().includes(pre + ' ' + word)).length >
@@ -350,12 +347,12 @@ const SicpNavigationBar: React.FC = () => {
       <div className="userSearch-inner">
         <div style={{ display: 'inline-flex' }}>
           <InputGroup
-            placeholder="..."
+            placeholder="Search"
             value={searchQuery}
             onChange={event => handleUserSearchChange(event.target.value)}
           />
           <ControlButton
-            label="Search"
+            label="Text"
             icon={IconNames.SEARCH}
             onClick={() => handleSearchButton()}
           />
@@ -398,15 +395,11 @@ const SicpNavigationBar: React.FC = () => {
       <div className="indexSearch-inner">
         <div style={{ display: 'inline-flex' }}>
           <InputGroup
-            placeholder="..."
+            placeholder="Search"
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
-          <ControlButton
-            label="Search index"
-            icon={IconNames.SEARCH}
-            onClick={handleIndexSearchButton}
-          />
+          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
         </div>
       </div>
       {indexAutocompleteResults.length !== 0 && (
@@ -422,12 +415,10 @@ const SicpNavigationBar: React.FC = () => {
                 handleAutoIndexSearch(result);
               }}
               onMouseOver={e => {
-                console.log(e);
                 const element = e!.nativeEvent!.srcElement as any;
                 element.style.backgroundColor = 'rgba(0,0,0,0.5)';
               }}
               onMouseOut={e => {
-                console.log(e);
                 const element = e!.nativeEvent!.srcElement as any;
                 element.style.backgroundColor = 'rgba(0,0,0,0)';
               }}
