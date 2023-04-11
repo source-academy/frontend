@@ -29,7 +29,7 @@ const SideContentHtmlDisplay: React.FC<SideContentHtmlDisplayProps> = props => {
       className="sa-html-display"
       title="HTML Display"
       sandbox="allow-scripts"
-      srcDoc={content}
+      srcDoc={JSON.parse(content)}
       src="about:blank"
     />
   );
