@@ -1,5 +1,7 @@
 import '@tremor/react/dist/esm/tremor.css';
 
+import { Icon as BpIcon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { Button, Card, Col, ColGrid, Flex, Title, Toggle, ToggleItem } from '@tremor/react';
 import { useState } from 'react';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
@@ -38,8 +40,18 @@ const GradingDashboard: React.FC<GradingDashboardProps> = ({ submissions, handle
       <Col numColSpanLg={6}>
         <Card>
           <Flex justifyContent="justify-between">
-            <Title>Submissions</Title>
-            <Button onClick={handleCsvExport}>Export to CSV</Button>
+            <Flex justifyContent="justify-start" spaceX="space-x-6">
+              <Title>Submissions</Title>
+              <Button
+                variant="light"
+                size="xs"
+                icon={() => <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />}
+                onClick={handleCsvExport}
+              >
+                Export to CSV
+              </Button>
+            </Flex>
+
             <Toggle color="gray" defaultValue={false} handleSelect={handleShowGradedChange}>
               <ToggleItem value={false} text="Ungraded" />
               <ToggleItem value={true} text="All" />
