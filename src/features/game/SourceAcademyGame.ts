@@ -14,6 +14,7 @@ import Settings from 'src/features/game/scenes/settings/Settings';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
+
 import { AchievementGoal, AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
 import GameChapterMocks from './chapter/GameChapterMocks';
