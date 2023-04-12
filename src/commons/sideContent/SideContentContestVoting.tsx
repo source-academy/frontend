@@ -19,6 +19,8 @@ type StateProps = {
   contestEntries: ContestEntry[];
 };
 
+const TIERS = ['S', 'A', 'B', 'C', 'D'] as const;
+
 /**
  * Main contest voting tab
  * @param props contestEntries for student to vote for : ContestEntry[],
@@ -37,7 +39,6 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   const [placeholder, setPlaceholder] = useState<HTMLElement | null>(null);
 
   const handleDragStart: React.DragEventHandler = e => {
-    console.log('Drag Start');
     setCurrentDraggedItem(e.currentTarget as HTMLElement);
     e.dataTransfer.effectAllowed = 'move';
   };
@@ -45,7 +46,6 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   const handleDragEnd = useCallback(
     (contestEntry: ContestEntry): React.DragEventHandler =>
       e => {
-        console.log('Drag End');
         (e.currentTarget as HTMLElement).style.opacity = '';
 
         let tierElement: HTMLElement | null = e.currentTarget as HTMLElement;
@@ -71,13 +71,11 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   );
 
   const handleDragOver: React.DragEventHandler = e => {
-    console.log('Drag Over');
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
   };
 
   const createPlaceholder = (): HTMLElement => {
-    console.log('create placeholder');
     const el = document.createElement('div');
     el.classList.add('placeholder');
     setPlaceholder(el); // update the placeholder state with the new element
@@ -86,7 +84,6 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
 
   const handleDragEnter = useCallback(
     (e: React.DragEvent): void => {
-      console.log('Drag Enter');
       if (e.currentTarget.classList.contains('item-container')) {
         if (!placeholder) {
           setPlaceholder(createPlaceholder());
@@ -117,7 +114,6 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
 
   const handleDragLeave = useCallback(
     (e: React.DragEvent): void => {
-      console.log('Drag Leave');
       const container = e.currentTarget as HTMLElement;
       if (
         container.classList.contains('item-container') &&
@@ -133,7 +129,6 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
 
   const handleDrop = useCallback(
     (e: React.DragEvent): void => {
-      console.log('Drop');
       e.preventDefault();
       const container = (e.currentTarget as HTMLElement).closest('.item-container');
       if (container && container.contains(placeholder)) {
@@ -144,8 +139,8 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     [currentDraggedItem, placeholder]
   );
 
-  const tierBoard = ['S', 'A', 'B', 'C', 'D'].map(tier => (
-    <div className={'tier'} key={`tier-${tier.toLowerCase()}`} id={`tier-${tier.toLowerCase()}`}>
+  const tierBoard = TIERS.map(tier => (
+    <div className="tier" key={`tier-${tier.toLowerCase()}`} id={`tier-${tier.toLowerCase()}`}>
       <h2>{tier}</h2>
       <div
         className="item-container"
