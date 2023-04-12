@@ -34,11 +34,7 @@ import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceAc
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
 import GradingActions from './GradingActions';
-import {
-  AssessmentTypeBadge,
-  GradingStatusBadge,
-  SubmissionStatusBadge
-} from './GradingStatusBadges';
+import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();

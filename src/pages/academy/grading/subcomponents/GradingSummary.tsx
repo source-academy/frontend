@@ -13,7 +13,7 @@ import {
 import { AssessmentOverview, GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
-import { AssessmentTypeBadge } from './GradingStatusBadges';
+import { AssessmentTypeBadge } from './GradingBadges';
 
 type GradingSummaryProps = {
   group: string | null;

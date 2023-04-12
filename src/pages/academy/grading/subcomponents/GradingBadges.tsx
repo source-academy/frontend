@@ -3,25 +3,19 @@ import { IconNames } from '@blueprintjs/icons';
 import { Badge } from '@tremor/react';
 import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
 
+import { badgeColor } from './colors';
+
 type AssessmentTypeBadgeProps = {
   type: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 };
 
 const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 'sm' }) => {
-  const badgeColor =
-    type === 'Missions'
-      ? 'indigo'
-      : type === 'Quests'
-      ? 'emerald'
-      : type === 'Paths'
-      ? 'sky'
-      : 'gray';
   return (
     <Badge
       text={size === 'xs' ? type.charAt(0).toUpperCase() : type}
       size={size}
-      color={badgeColor}
+      color={badgeColor(type)}
     />
   );
 };
@@ -41,7 +35,6 @@ type GradingStatusBadgeProps = {
 };
 
 const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
-  const badgeColor = status === 'graded' ? 'green' : status === 'grading' ? 'yellow' : 'red';
   const statusText = status.charAt(0).toUpperCase() + status.slice(1);
   const badgeIcon = () => (
     <Icon
@@ -57,7 +50,7 @@ const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
       style={{ marginRight: '0.5rem' }}
     />
   );
-  return <Badge text={statusText} color={badgeColor} icon={badgeIcon} />;
+  return <Badge text={statusText} color={badgeColor(status)} icon={badgeIcon} />;
 };
 
 export { AssessmentTypeBadge, SubmissionStatusBadge, GradingStatusBadge };
