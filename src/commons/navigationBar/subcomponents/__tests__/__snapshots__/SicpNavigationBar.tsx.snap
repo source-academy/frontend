@@ -8,16 +8,16 @@ exports[`Navbar renders correctly 1`] = `
       <div className=\\"userSearch\\" style={{...}}>
         <div className=\\"userSearch-inner\\">
           <div style={{...}}>
-            <Blueprint4.InputGroup placeholder=\\"...\\" value=\\"\\" onChange={[Function: onChange]} />
-            <ControlButton label=\\"Search\\" icon=\\"search\\" onClick={[Function: onClick]} />
+            <Blueprint4.InputGroup placeholder=\\"Search\\" value=\\"\\" onChange={[Function: onChange]} />
+            <ControlButton label=\\"Text\\" icon=\\"search\\" onClick={[Function: onClick]} />
           </div>
         </div>
       </div>
       <div className=\\"indexSearch\\" style={{...}}>
         <div className=\\"indexSearch-inner\\">
           <div style={{...}}>
-            <Blueprint4.InputGroup placeholder=\\"...\\" value=\\"\\" onChange={[Function: onChange]} />
-            <ControlButton label=\\"Search index\\" icon=\\"search\\" onClick={[Function: handleIndexSearchButton]} />
+            <Blueprint4.InputGroup placeholder=\\"Search\\" value=\\"\\" onChange={[Function: onChange]} />
+            <ControlButton label=\\"Index\\" icon=\\"search\\" onClick={[Function: handleIndexSearchButton]} />
           </div>
         </div>
       </div>
