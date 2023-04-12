@@ -41,13 +41,13 @@ import {
   toggleUsingSubst,
   updateActiveEditorTab,
   updateActiveEditorTabIndex,
-  updateSubmissionsTableFilters,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  updateSublanguage
+  updateSublanguage,
+  updateSubmissionsTableFilters
 } from '../WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
@@ -84,7 +84,6 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
-  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -92,6 +91,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   WorkspaceLocation
 } from '../WorkspaceTypes';
 
