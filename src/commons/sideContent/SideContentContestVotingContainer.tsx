@@ -19,7 +19,6 @@ type StateProps = {
 /**
  * Container to separate behaviour concerns from rendering concerns
  * Stores component-level voting ranking state
- * Removed minScore and maxScore due to invalid scores no longer being possible
  */
 const SideContentContestVotingContainer: React.FunctionComponent<
   SideContentContestVotingContainerProps
@@ -27,22 +26,10 @@ const SideContentContestVotingContainer: React.FunctionComponent<
   const { canSave, contestEntries, handleSave, handleContestEntryClick } = props;
   const [isValid, setIsValid] = useState<boolean>(true);
   const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>([]);
-  // const minScore;
-  // const maxScore;
 
   useEffect(() => {
     setVotingSubmission(contestEntries);
   }, [contestEntries]);
-
-  /**
-   * Validates input value.
-   * @param votingSubmission voting scores by user for each contest entry.
-   * @returns boolean value for whether the scores are within the min-max range.
-   * Removed minScore and maxScore constraints.
-   */
-  const isSubmissionValid = (votingSubmission: ContestEntry[]) => {
-    return votingSubmission.reduce((isValid, vote) => isValid, true);
-  };
 
   const submissionHasNoNull = (votingSubmission: ContestEntry[]) => {
     return votingSubmission.reduce((noNull, vote) => {
@@ -57,9 +44,8 @@ const SideContentContestVotingContainer: React.FunctionComponent<
     );
     setVotingSubmission(updatedSubmission);
     const noNull = submissionHasNoNull(updatedSubmission);
-    if (noNull && isSubmissionValid(updatedSubmission)) {
+    if (noNull) {
       handleSave(updatedSubmission);
-
       setIsValid(true);
     } else {
       showWarningMessage(`Please assign every entry to a tier.`);
