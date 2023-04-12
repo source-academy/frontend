@@ -21,6 +21,12 @@ type GradingSummaryProps = {
   assessments: AssessmentOverview[];
 };
 
+type AssessmentSummary = {
+  id: number;
+  type: string;
+  title: string;
+};
+
 const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, assessments }) => {
   submissions = submissions.filter(({ assessmentType }) => assessmentType !== 'Paths');
   const groupSubmissions = submissions.filter(
@@ -29,17 +35,21 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
   const ungraded = groupSubmissions.filter(
     ({ gradingStatus }) => gradingStatus !== GradingStatuses.graded
   );
-  const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))]
-    .map(assessmentId => {
+  const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))].reduce(
+    (acc: AssessmentSummary[], assessmentId) => {
       const assessment = assessments.find(assessment => assessment.id === assessmentId);
-      if (!assessment) throw new Error('Assessment not found');
-      return {
-        id: assessmentId,
-        type: assessment.type,
-        title: assessment.title
-      };
-    })
-    .filter(({ type }) => type !== 'Path');
+      if (!assessment || assessment.type === 'Path') return acc;
+      return [
+        ...acc,
+        {
+          id: assessmentId,
+          type: assessment.type,
+          title: assessment.title
+        }
+      ];
+    },
+    []
+  );
 
   const numSubmissions = groupSubmissions.length;
   const numGraded = numSubmissions - ungraded.length;
