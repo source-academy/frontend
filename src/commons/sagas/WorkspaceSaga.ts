@@ -347,9 +347,14 @@ export default function* WorkspaceSaga(): SagaIterator {
       if (newHighlightedLines.length === 0) {
         highlightClean();
       } else {
-        newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
-          highlightLine(startRow)
-        );
+        try {
+          newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
+            highlightLine(startRow)
+          );
+        } catch (e) {
+          // Error most likely caused by trying to highlight the lines of the prelude
+          // in Env Viz. Can be ignored.
+        }
       }
       yield;
     }
@@ -545,6 +550,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[start, end]]));
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
@@ -985,6 +991,27 @@ export function* evalCode(
             .usingSubst
       )
     : false;
+  const envIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingEnv
+      )
+    : false;
+  const needUpdateEnv: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .updateEnv
+      )
+    : false;
+  const envSteps: number = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .envSteps
+      )
+    : -1;
   const stepLimit: number = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
   );
@@ -996,6 +1023,13 @@ export function* evalCode(
     if (icon) {
       icon.classList.add('side-content-tab-alert');
     }
+  }
+  const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
+  if (envActiveAndCorrectChapter) {
+    context.executionMethod = 'ec-evaluator';
+    context.runtime.envSteps = needUpdateEnv ? -1 : envSteps;
+  } else {
+    context.runtime.envSteps = -1;
   }
 
   const entrypointCode = files[entrypointFilePath];
@@ -1159,6 +1193,14 @@ export function* evalCode(
     yield put(
       notifyProgramEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
     );
+  }
+
+  if (envActiveAndCorrectChapter) {
+    if (needUpdateEnv) {
+      yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
+      yield put(actions.toggleUpdateEnv(false, workspaceLocation));
+      yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
+    }
   }
 }
 

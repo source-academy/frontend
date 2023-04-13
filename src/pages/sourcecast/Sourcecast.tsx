@@ -234,6 +234,20 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     />
   );
 
+  const dataVisualizerTab: SideContentTab = {
+    label: 'Data Visualizer',
+    iconName: IconNames.EYE_OPEN,
+    body: <SideContentDataVisualizer />,
+    id: SideContentType.dataVisualizer
+  };
+
+  const envVisualizerTab: SideContentTab = {
+    label: 'Env Visualizer',
+    iconName: IconNames.GLOBE,
+    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+    id: SideContentType.envVisualizer
+  };
+
   const tabs: SideContentTab[] = [
     {
       label: 'Sourcecast Table',
@@ -398,19 +412,5 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 };
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
-
-const dataVisualizerTab: SideContentTab = {
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer
-};
-
-const envVisualizerTab: SideContentTab = {
-  label: 'Env Visualizer',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer
-};
 
 export default Sourcecast;
