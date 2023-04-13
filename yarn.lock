@@ -7855,15 +7855,20 @@ jest@^27.4.3:
     import-local "^3.0.2"
     jest-cli "^27.5.1"
 
+js-base64@^3.7.5:
+  version "3.7.5"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-3.7.5.tgz#21e24cf6b886f76d6f5f165bfcd69cc55b9e3fca"
+  integrity sha512-3MEt5DTINKqfScXKfJFrRbxkrnk2AxPWGBL/ycjz4dK8iqiSJ06UxD8jh8xuh6p10TX4t2+7FsBYVxxQbMg+qA==
+
 js-sdsl@4.3.0, js-sdsl@^4.1.4:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.20.tgz#458c8e67234dde8eded2c5e21521efa3a3cea8a8"
-  integrity sha512-T/a2OX/xQYDPADhJq5vqD9wScJCz2aVIgroV8rB5vPEyPscfDWoxUhnAcQ4AXJY6eNMbr1hqII/e+kGPKesNlA==
+js-slang@^1.0.21:
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.21.tgz#4311404553d04fbc7180a998e63723ffb6900928"
+  integrity sha512-rFcSJlYwZN7PBr+7X7E5Wi+J/wVRNxTtpMLUle6Rr4qiRVyr6tvWcFbTHsmhmAOqZI1f2bCWLsXdCrTka8Hq2w==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -7875,6 +7880,7 @@ js-slang@^1.0.20:
     acorn-walk "^8.0.0"
     astring "^1.4.3"
     gpu.js "^2.10.4"
+    js-base64 "^3.7.5"
     lodash "^4.17.20"
     node-getopt "^0.3.2"
     source-map "0.7.3"
