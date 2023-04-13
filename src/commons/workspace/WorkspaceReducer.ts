@@ -737,12 +737,20 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     }
     case ADD_EDITOR_TAB: {
       const { filePath, editorValue } = action.payload;
-      const fileIsAlreadyOpen =
-        state[workspaceLocation].editorTabs.find(
-          (editorTab: EditorTabState) => editorTab.filePath === filePath
-        ) !== undefined;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const openedEditorTabIndex = editorTabs.findIndex(
+        (editorTab: EditorTabState) => editorTab.filePath === filePath
+      );
+      const fileIsAlreadyOpen = openedEditorTabIndex !== -1;
       if (fileIsAlreadyOpen) {
-        return state;
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            activeEditorTabIndex: openedEditorTabIndex
+          }
+        };
       }
 
       const newEditorTab: EditorTabState = {
