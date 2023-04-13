@@ -126,13 +126,13 @@ const variantDisplay: Map<Variant, string> = new Map([
 export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
-  displayName: 'Full JavaScript'
+  displayName: 'full JavaScript'
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
-  displayName: 'Full TypeScript'
+  displayName: 'full TypeScript'
 };
 
 export const htmlLanguage: SALanguage = {
@@ -153,7 +153,7 @@ export const pyLanguages: SALanguage[] = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' },
   { chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
   { chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
-  { chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' },
+  { chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
   //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
 ];
 

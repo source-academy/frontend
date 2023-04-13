@@ -32,7 +32,8 @@ const mockShortDefaultState: SavedState = {
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
   playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
-  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary
+  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
+  playgroundLang: defaultState.playground.lang,
 };
 
 describe('loadStoredState() function', () => {

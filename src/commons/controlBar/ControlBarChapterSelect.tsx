@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { store } from 'src/pages/createStore';
 
 import {
@@ -110,7 +110,7 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   }, []);
 
   let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
-  
+
   if (selectedLang === 'Source') {
     chapterListRenderer = chapterListRendererA;
   } else if (selectedLang === 'Scheme') {

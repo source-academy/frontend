@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { playgroundChangeLang } from 'src/features/playground/PlaygroundActions';
 import { store } from 'src/pages/createStore';
 
-
 const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const lang = store.getState().playground.lang;
@@ -15,7 +14,7 @@ const NavigationBarLangSelectButton = () => {
     setIsOpen(false);
     console.log('LANG:', lang);
   };
-  
+
   return (
     <Popover2
       hasBackdrop
@@ -38,8 +37,5 @@ const NavigationBarLangSelectButton = () => {
     </Popover2>
   );
 };
-
-
-
 
 export default NavigationBarLangSelectButton;
