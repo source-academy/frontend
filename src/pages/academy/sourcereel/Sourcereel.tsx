@@ -285,6 +285,20 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     });
   };
 
+  const dataVisualizerTab: SideContentTab = {
+    label: 'Data Visualizer',
+    iconName: IconNames.EYE_OPEN,
+    body: <SideContentDataVisualizer />,
+    id: SideContentType.dataVisualizer
+  };
+
+  const envVisualizerTab: SideContentTab = {
+    label: 'Env Visualizer',
+    iconName: IconNames.GLOBE,
+    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+    id: SideContentType.envVisualizer
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect]
@@ -429,19 +443,5 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
 };
 
 const INTRODUCTION = 'Welcome to Sourcereel!';
-
-const dataVisualizerTab: SideContentTab = {
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer
-};
-
-const envVisualizerTab: SideContentTab = {
-  label: 'Env Visualizer',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer
-};
 
 export default Sourcereel;
