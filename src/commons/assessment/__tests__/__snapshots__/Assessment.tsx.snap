@@ -97,7 +97,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opens: 18th June, 13:24
+                                          Opens: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -196,7 +196,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th July, 13:24
+                                          Opened: 18th July, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -208,7 +208,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -311,7 +311,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th June, 13:24
+                                          Opened: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -323,7 +323,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -501,7 +501,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opens: 18th June, 13:24
+                                          Opens: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -600,7 +600,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th July, 13:24
+                                          Opened: 18th July, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -612,7 +612,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -715,7 +715,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th June, 13:24
+                                          Opened: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -727,7 +727,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -905,7 +905,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opens: 18th June, 13:24
+                                          Opens: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -1004,7 +1004,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th July, 13:24
+                                          Opened: 18th July, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -1016,7 +1016,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -1119,7 +1119,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th June, 13:24
+                                          Opened: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -1131,7 +1131,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -1309,7 +1309,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opens: 18th June, 13:24
+                                          Opens: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -1408,7 +1408,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th July, 13:24
+                                          Opened: 18th July, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -1420,7 +1420,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
@@ -1523,7 +1523,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Opened: 18th June, 13:24
+                                          Opened: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                       <Blueprint4.Text className=\\"listing-due-date\\" ellipsize={false}>
@@ -1535,7 +1535,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                               </svg>
                                             </span>
                                           </Blueprint4.Icon>
-                                          Due: 18th June, 13:24
+                                          Due: 18th June, 05:24
                                         </div>
                                       </Blueprint4.Text>
                                     </div>
