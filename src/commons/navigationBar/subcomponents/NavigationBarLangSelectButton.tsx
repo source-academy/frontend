@@ -28,6 +28,7 @@ const NavigationBarLangSelectButton = () => {
           <MenuItem onClick={() => selectLang('Python')} text="Python" />
         </Menu>
       }
+      onClose={() => setIsOpen(false)}
     >
       <>
         <Button rightIcon="caret-down" onClick={() => setIsOpen(true)}>
