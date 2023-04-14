@@ -6,7 +6,6 @@ import { ExternalLibraryName } from '../../commons/application/types/ExternalTyp
 import Constants from '../../commons/utils/Constants';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
-import { playgroundChangeLang } from 'src/features/playground/PlaygroundActions';
 
 const mockChangedStoredState: SavedState = {
   achievements: [],
