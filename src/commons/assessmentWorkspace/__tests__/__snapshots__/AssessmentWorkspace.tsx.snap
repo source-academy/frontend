@@ -153,8 +153,8 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
-                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
-                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
+                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} filterable={false} disabled={true}>
+                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
                       <Blueprint4.Popover autoFocus={false} enforceFocus={false} isOpen={false} disabled={true} position=\\"bottom-left\\" className=\\"\\" onInteraction={[Function (anonymous)]} popoverClassName=\\"bp4-select-popover\\" onOpening={[Function (anonymous)]} onOpened={[Function (anonymous)]} onClosing={[Function (anonymous)]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                         <Manager>
                           <span className=\\"bp4-popover-wrapper\\">
@@ -889,8 +889,8 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
                   </Blueprint4.Tooltip2>
                 </ControlBarRunButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
-                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
-                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
+                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} filterable={false} disabled={true}>
+                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
                       <Blueprint4.Popover autoFocus={false} enforceFocus={false} isOpen={false} disabled={true} position=\\"bottom-left\\" className=\\"\\" onInteraction={[Function (anonymous)]} popoverClassName=\\"bp4-select-popover\\" onOpening={[Function (anonymous)]} onOpened={[Function (anonymous)]} onClosing={[Function (anonymous)]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                         <Manager>
                           <span className=\\"bp4-popover-wrapper\\">
@@ -1489,8 +1489,8 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
-                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
-                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
+                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} filterable={false} disabled={true}>
+                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
                       <Blueprint4.Popover autoFocus={false} enforceFocus={false} isOpen={false} disabled={true} position=\\"bottom-left\\" className=\\"\\" onInteraction={[Function (anonymous)]} popoverClassName=\\"bp4-select-popover\\" onOpening={[Function (anonymous)]} onOpened={[Function (anonymous)]} onClosing={[Function (anonymous)]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                         <Manager>
                           <span className=\\"bp4-popover-wrapper\\">
@@ -2045,8 +2045,8 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
-                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
-                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
+                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} filterable={false} disabled={true}>
+                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
                       <Blueprint4.Popover autoFocus={false} enforceFocus={false} isOpen={false} disabled={true} position=\\"bottom-left\\" className=\\"\\" onInteraction={[Function (anonymous)]} popoverClassName=\\"bp4-select-popover\\" onOpening={[Function (anonymous)]} onOpened={[Function (anonymous)]} onClosing={[Function (anonymous)]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                         <Manager>
                           <span className=\\"bp4-popover-wrapper\\">
@@ -2601,8 +2601,8 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
                   </ControlButton>
                 </ControlBarResetButton>
                 <ControlBarChapterSelect handleChapterSelect={[Function: handleChapterSelect]} isFolderModeEnabled={false} sourceChapter={1} sourceVariant=\\"default\\" disabled={true}>
-                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} filterable={false} disabled={true}>
-                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRenderer]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
+                  <Blueprint4.Select items={{...}} onItemSelect={[Function: handleChapterSelect]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} filterable={false} disabled={true}>
+                    <Blueprint4.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function (anonymous)]} itemListRenderer={[Function: chapterListRendererA]} disabled={true} renderer={[Function (anonymous)]} resetOnQuery={true}>
                       <Blueprint4.Popover autoFocus={false} enforceFocus={false} isOpen={false} disabled={true} position=\\"bottom-left\\" className=\\"\\" onInteraction={[Function (anonymous)]} popoverClassName=\\"bp4-select-popover\\" onOpening={[Function (anonymous)]} onOpened={[Function (anonymous)]} onClosing={[Function (anonymous)]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
                         <Manager>
                           <span className=\\"bp4-popover-wrapper\\">

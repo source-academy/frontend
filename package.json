@@ -30,6 +30,7 @@
     "@blueprintjs/popover2": "^1.4.3",
     "@blueprintjs/select": "^4.5.1",
     "@octokit/rest": "^19.0.5",
+    "@reduxjs/toolkit": "^1.9.3",
     "@sentry/browser": "^7.8.0",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.1.0",
