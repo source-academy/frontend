@@ -6,6 +6,7 @@ import { ExternalLibraryName } from '../../commons/application/types/ExternalTyp
 import Constants from '../../commons/utils/Constants';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
+import { playgroundChangeLang } from 'src/features/playground/PlaygroundActions';
 
 const mockChangedStoredState: SavedState = {
   achievements: [],
@@ -38,7 +39,8 @@ const mockChangedStoredState: SavedState = {
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
-  playgroundExternalLibrary: 'NONE' as ExternalLibraryName
+  playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
+  playgroundLang: 'Source'
 };
 
 const mockChangedState: OverallState = {
