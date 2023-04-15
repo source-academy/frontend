@@ -39,7 +39,7 @@ const mockChangedStoredState: SavedState = {
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
-  playgroundLang: 'Source'
+  playgroundLang: 'JavaScript'
 };
 
 const mockChangedState: OverallState = {

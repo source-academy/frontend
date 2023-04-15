@@ -111,7 +111,7 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
 
   let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
 
-  if (selectedLang === 'Source') {
+  if (selectedLang === 'JavaScript') {
     chapterListRenderer = chapterListRendererA;
   } else if (selectedLang === 'Scheme') {
     chapterListRenderer = chapterListRendererB;
