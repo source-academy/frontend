@@ -23,7 +23,7 @@ const NavigationBarLangSelectButton = () => {
       isOpen={isOpen}
       content={
         <Menu>
-          <MenuItem onClick={() => selectLang('Source')} text="Source" />
+          <MenuItem onClick={() => selectLang('JavaScript')} text="JavaScript" />
           <MenuItem onClick={() => selectLang('Scheme')} text="Scheme" />
           <MenuItem onClick={() => selectLang('Python')} text="Python" />
         </Menu>

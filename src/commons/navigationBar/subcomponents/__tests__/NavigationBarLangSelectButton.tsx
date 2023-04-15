@@ -45,7 +45,7 @@ describe('NavigationBarLangSelectButton', () => {
     expect(store.getState().playground.lang).toEqual('Python');
   });
 
-  it('should call selectLang with "Source" when "Source" menu item is clicked', () => {
+  it('should call selectLang with "JavaScript" when "JavaScript" menu item is clicked', () => {
     const wrapper = mount(
       <Provider store={store}>
         <NavigationBarLangSelectButton />
@@ -54,9 +54,9 @@ describe('NavigationBarLangSelectButton', () => {
     console.log(wrapper.debug());
     wrapper.find('button').simulate('click');
     wrapper
-      .findWhere(node => node.type() === 'li' && node.text() === 'Source')
+      .findWhere(node => node.type() === 'li' && node.text() === 'JavaScript')
       .find('a[role="menuitem"]')
       .simulate('click');
-    expect(store.getState().playground.lang).toEqual('Source');
+    expect(store.getState().playground.lang).toEqual('JavaScript');
   });
 });

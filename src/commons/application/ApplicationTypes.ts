@@ -258,7 +258,7 @@ export const defaultAchievement: AchievementState = {
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  lang: 'Source'
+  lang: 'JavaScript'
 };
 
 export const defaultEditorValue = '// Type your program in here!';
