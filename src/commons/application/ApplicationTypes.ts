@@ -151,9 +151,9 @@ export const schemeLanguages: SALanguage[] = [
 
 export const pyLanguages: SALanguage[] = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' },
-  { chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
-  { chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
-  { chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
+  //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
+  //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
+  //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
   //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
 ];
 
@@ -172,9 +172,9 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
     case Chapter.FULL_SCHEME:
       return schemeLanguages.find(lang => lang.chapter === chapter)!.displayName;
     case Chapter.PYTHON_1:
-    case Chapter.PYTHON_2:
-    case Chapter.PYTHON_3:
-    case Chapter.PYTHON_4:
+    // case Chapter.PYTHON_2:
+    // case Chapter.PYTHON_3:
+    // case Chapter.PYTHON_4:
       return pyLanguages.find(lang => lang.chapter === chapter)!.displayName;
     default:
       return `Source \xa7${chapter}${
