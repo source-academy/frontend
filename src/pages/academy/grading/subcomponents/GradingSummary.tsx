@@ -38,7 +38,7 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
   const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))].reduce(
     (acc: AssessmentSummary[], assessmentId) => {
       const assessment = assessments.find(assessment => assessment.id === assessmentId);
-      if (!assessment || assessment.type === 'Path') return acc;
+      if (!assessment) return acc;
       return [
         ...acc,
         {
