@@ -39,7 +39,7 @@ const Grading: React.FC<GradingProps> = ({ match }) => {
   const data =
     gradingOverviews?.map(e =>
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
-    ) || [];
+    ) ?? [];
 
   const exportCSV = () => {
     if (!gradingOverviews) return;
