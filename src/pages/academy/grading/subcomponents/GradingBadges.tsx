@@ -1,9 +1,29 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
 import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
 
-import { badgeColor } from './colors';
+const BADGE_COLORS = {
+  // assessment types
+  missions: 'indigo',
+  quests: 'emerald',
+  paths: 'sky',
+
+  // submission status
+  submitted: 'green',
+  attempting: 'yellow',
+  attempted: 'red',
+
+  // grading status
+  graded: 'green',
+  grading: 'yellow',
+  none: 'red'
+};
+
+export function getBadgeColorFromLabel(label: string) {
+  return BADGE_COLORS[label.toLowerCase()] || 'gray';
+}
 
 type AssessmentTypeBadgeProps = {
   type: string;
@@ -15,7 +35,7 @@ const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 
     <Badge
       text={size === 'xs' ? type.charAt(0).toUpperCase() : type}
       size={size}
-      color={badgeColor(type)}
+      color={getBadgeColorFromLabel(type)}
     />
   );
 };
@@ -25,9 +45,8 @@ type SubmissionStatusBadgeProps = {
 };
 
 const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
-  const badgeColor = status === 'submitted' ? 'green' : status === 'attempting' ? 'yellow' : 'red';
   const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-  return <Badge text={statusText} color={badgeColor} />;
+  return <Badge text={statusText} color={getBadgeColorFromLabel(status)} />;
 };
 
 type GradingStatusBadgeProps = {
@@ -50,7 +69,26 @@ const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
       style={{ marginRight: '0.5rem' }}
     />
   );
-  return <Badge text={statusText} color={badgeColor(status)} icon={badgeIcon} />;
+  return <Badge text={statusText} color={getBadgeColorFromLabel(status)} icon={badgeIcon} />;
 };
 
-export { AssessmentTypeBadge, SubmissionStatusBadge, GradingStatusBadge };
+type FilterBadgeProps = {
+  filter: ColumnFilter;
+  onRemove: (filter: ColumnFilter) => void;
+};
+
+const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
+  let filterValue = filter.value as string;
+  filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
+  return (
+    <button type="button" onClick={() => onRemove(filter)} style={{ padding: 0 }}>
+      <Badge
+        text={filterValue}
+        icon={() => <Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
+        color={getBadgeColorFromLabel(filterValue)}
+      />
+    </button>
+  );
+};
+
+export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, SubmissionStatusBadge };
