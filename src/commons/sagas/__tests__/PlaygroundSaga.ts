@@ -79,7 +79,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -141,7 +146,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -203,7 +213,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -248,7 +263,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -312,7 +332,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -365,7 +390,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };

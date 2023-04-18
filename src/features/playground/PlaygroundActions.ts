@@ -5,6 +5,7 @@ import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
+  PLAYGROUND_UPDATE_LANG,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   SHORTEN_URL,
   UPDATE_SHORT_URL
@@ -26,3 +27,5 @@ export const playgroundUpdateGitHubSaveInfo = (
   filePath: string,
   lastSaved: Date
 ) => action(PLAYGROUND_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath, lastSaved });
+
+export const playgroundChangeLang = (lang: string) => action(PLAYGROUND_UPDATE_LANG, lang);

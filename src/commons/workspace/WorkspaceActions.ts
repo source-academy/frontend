@@ -47,13 +47,18 @@ import {
   SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
+  TOGGLE_UPDATE_ENV,
+  TOGGLE_USING_ENV,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_ENVSTEPS,
+  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -371,3 +376,20 @@ export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: Workspa
 
 export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: WorkspaceLocation) =>
   action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation });
+
+export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
+
+export const toggleUpdateEnv = (updateEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
+
+export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPS, { steps, workspaceLocation });
+
+export const updateEnvStepsTotal = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPSTOTAL, { steps, workspaceLocation });
+
+export const updateBreakpointSteps = (
+  breakpointSteps: number[],
+  workspaceLocation: WorkspaceLocation
+) => action(UPDATE_BREAKPOINTSTEPS, { breakpointSteps, workspaceLocation });

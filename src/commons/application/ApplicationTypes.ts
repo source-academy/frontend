@@ -141,6 +141,22 @@ export const htmlLanguage: SALanguage = {
   displayName: 'HTML'
 };
 
+export const schemeLanguages: SALanguage[] = [
+  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
+  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
+  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
+  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
+  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
+];
+
+export const pyLanguages: SALanguage[] = [
+  { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
+  //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
+  //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
+  //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
+  //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
+];
+
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
   switch (chapter) {
     case Chapter.FULL_JS:
@@ -149,6 +165,17 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
       return fullTSLanguage.displayName;
     case Chapter.HTML:
       return htmlLanguage.displayName;
+    case Chapter.SCHEME_1:
+    case Chapter.SCHEME_2:
+    case Chapter.SCHEME_3:
+    case Chapter.SCHEME_4:
+    case Chapter.FULL_SCHEME:
+      return schemeLanguages.find(lang => lang.chapter === chapter)!.displayName;
+    case Chapter.PYTHON_1:
+      // case Chapter.PYTHON_2:
+      // case Chapter.PYTHON_3:
+      // case Chapter.PYTHON_4:
+      return pyLanguages.find(lang => lang.chapter === chapter)!.displayName;
     default:
       return `Source \xa7${chapter}${
         variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
@@ -230,7 +257,8 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultPlayground: PlaygroundState = {
-  githubSaveInfo: { repoName: '', filePath: '' }
+  githubSaveInfo: { repoName: '', filePath: '' },
+  lang: 'JavaScript'
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -311,6 +339,11 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
+    usingEnv: false,
+    updateEnv: true,
+    envSteps: -1,
+    envStepsTotal: 0,
+    breakpointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -359,6 +392,11 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sicp: {
     ...createDefaultWorkspace('sicp'),
     usingSubst: false,
+    usingEnv: false,
+    updateEnv: true,
+    envSteps: -1,
+    envStepsTotal: 0,
+    breakpointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {

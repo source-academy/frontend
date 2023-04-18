@@ -58,13 +58,18 @@ import {
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
+  TOGGLE_UPDATE_ENV,
+  TOGGLE_USING_ENV,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_ENVSTEPS,
+  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -577,6 +582,30 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
+    case TOGGLE_USING_ENV:
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingEnv: action.payload.usingEnv
+          }
+        };
+      } else {
+        return state;
+      }
+    case TOGGLE_UPDATE_ENV:
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            updateEnv: action.payload.updateEnv
+          }
+        };
+      } else {
+        return state;
+      }
     case UPDATE_SUBMISSIONS_TABLE_FILTERS:
       return {
         ...state,
@@ -986,6 +1015,30 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             chapter: action.payload.sublang.chapter,
             variant: action.payload.sublang.variant
           }
+        }
+      };
+    case UPDATE_ENVSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          envSteps: action.payload.steps
+        }
+      };
+    case UPDATE_ENVSTEPSTOTAL:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          envStepsTotal: action.payload.steps
+        }
+      };
+    case UPDATE_BREAKPOINTSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          breakpointSteps: action.payload.breakpointSteps
         }
       };
     case NOTIFY_PROGRAM_EVALUATED:
