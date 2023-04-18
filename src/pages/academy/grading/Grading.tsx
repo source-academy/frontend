@@ -68,7 +68,9 @@ const Grading: React.FC<GradingProps> = ({ match }) => {
               e.currentXp,
               e.maxXp,
               e.xpBonus
-            ].join(',') + '\n'
+            ]
+              .map(field => `"${field}"`) // wrap each field in double quotes in case it contains a comma
+              .join(',') + '\n'
         )
       ],
       { type: 'text/csv' }
