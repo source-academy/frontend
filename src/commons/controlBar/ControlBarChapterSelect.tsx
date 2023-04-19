@@ -3,14 +3,17 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { store } from 'src/pages/createStore';
 
 import {
   defaultLanguages,
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
+  pyLanguages,
   SALanguage,
+  schemeLanguages,
   sourceLanguages,
   styliseSublanguage,
   variantLanguages
@@ -30,12 +33,13 @@ type StateProps = {
   disabled?: boolean;
 };
 
-const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
+const chapterListRendererA: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
   const defaultChoices = defaultLanguages.map(renderItem);
   const variantChoices = variantLanguages.map(renderItem);
   const fullJSChoice = renderItem(fullJSLanguage, 0);
   const fullTSChoice = renderItem(fullTSLanguage, 0);
   const htmlChoice = renderItem(htmlLanguage, 0);
+
   return (
     <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
       {defaultChoices}
@@ -45,6 +49,24 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, ren
       <MenuItem key="variant-menu" text="Variants" icon="cog">
         {variantChoices}
       </MenuItem>
+    </Menu>
+  );
+};
+
+const chapterListRendererB: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
+  const schemeChoice = schemeLanguages.map(renderItem);
+  return (
+    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
+      {Constants.playgroundOnly && schemeChoice}
+    </Menu>
+  );
+};
+
+const chapterListRendererC: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
+  const pyChoice = pyLanguages.map(renderItem);
+  return (
+    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
+      {Constants.playgroundOnly && pyChoice}
     </Menu>
   );
 };
@@ -76,6 +98,27 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
+  const [selectedLang, setSelectedLang] = useState(store.getState().playground.lang);
+  useEffect(() => {
+    const unsubscribe = store.subscribe(() => {
+      const newSelectedLang = store.getState().playground.lang;
+      setSelectedLang(newSelectedLang);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
+
+  if (selectedLang === 'JavaScript') {
+    chapterListRenderer = chapterListRendererA;
+  } else if (selectedLang === 'Scheme') {
+    chapterListRenderer = chapterListRendererB;
+  } else if (selectedLang === 'Python') {
+    chapterListRenderer = chapterListRendererC;
+  }
+
   return (
     <ChapterSelectComponent
       items={sourceLanguages}

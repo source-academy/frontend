@@ -38,7 +38,8 @@ const mockChangedStoredState: SavedState = {
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
-  playgroundExternalLibrary: 'NONE' as ExternalLibraryName
+  playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
+  playgroundLang: 'JavaScript'
 };
 
 const mockChangedState: OverallState = {
