@@ -37,6 +37,7 @@ export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const TOGGLE_USING_ENV = 'TOGGLE_USING_ENV';
 export const TOGGLE_UPDATE_ENV = 'TOGGLE_UPDATE_ENV';
+export const UPDATE_SUBMISSIONS_TABLE_FILTERS = 'UPDATE_SUBMISSIONS_TABLE_FILTERS';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
 export const TOGGLE_FOLDER_MODE = 'TOGGLE_FOLDER_MODE';
@@ -71,6 +72,7 @@ type AssessmentWorkspaceAttr = {
 type AssessmentWorkspaceState = AssessmentWorkspaceAttr & WorkspaceState;
 
 type GradingWorkspaceAttr = {
+  readonly submissionsTableFilters: SubmissionsTableFilters;
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
@@ -146,4 +148,9 @@ export type DebuggerContext = {
   code: string;
   context: Context;
   workspaceLocation?: WorkspaceLocation;
+};
+
+export type SubmissionsTableFilters = {
+  columnFilters: { id: string; value: unknown }[];
+  globalFilter: string | null;
 };

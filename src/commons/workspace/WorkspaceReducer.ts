@@ -73,6 +73,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
@@ -605,6 +606,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
+    case UPDATE_SUBMISSIONS_TABLE_FILTERS:
+      return {
+        ...state,
+        grading: {
+          ...state.grading,
+          submissionsTableFilters: action.payload.filters
+        }
+      };
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
         ...state,

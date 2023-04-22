@@ -4,12 +4,12 @@ import React, { useEffect } from 'react';
 export type ContentDisplayProps = {
   fullWidth?: boolean;
   display: JSX.Element;
-  loadContentDispatch: () => void;
+  loadContentDispatch?: () => void;
 };
 
 const ContentDisplay: React.FC<ContentDisplayProps> = props => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => props.loadContentDispatch(), []);
+  useEffect(() => props.loadContentDispatch?.(), []);
 
   return (
     <div className="ContentDisplay row center-xs">
