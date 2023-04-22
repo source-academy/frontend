@@ -44,6 +44,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
+  SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
   TOGGLE_UPDATE_ENV,
@@ -61,6 +62,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceState
@@ -312,6 +314,9 @@ export const setIsEditorReadonly = (
     workspaceLocation,
     isEditorReadonly: isEditorReadonly
   });
+
+export const updateSubmissionsTableFilters = (filters: SubmissionsTableFilters) =>
+  action(UPDATE_SUBMISSIONS_TABLE_FILTERS, { filters });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>
   action(UPDATE_CURRENT_ASSESSMENT_ID, {
