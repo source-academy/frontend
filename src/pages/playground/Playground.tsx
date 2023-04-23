@@ -48,13 +48,18 @@ import {
   removeEditorTab,
   removeEditorTabsForDirectory,
   sendReplInputToOutput,
+  setEditorHighlightedLines,
   setFolderMode,
   toggleEditorAutorun,
   toggleFolderMode,
+  toggleUpdateEnv,
   updateActiveEditorTabIndex,
+  updateEnvSteps,
+  updateEnvStepsTotal,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { EditorTabState, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -145,6 +150,7 @@ export type DispatchProps = {
   handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
+  handleUsingEnv: (usingEnv: boolean) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
 };
 
@@ -169,6 +175,7 @@ export type StateProps = {
   courseSourceVariant?: Variant;
   stepLimit: number;
   sharedbConnected: boolean;
+  usingEnv: boolean;
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
@@ -382,6 +389,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     propsRef.current.handleEditorValueChange(editorTabIndex, newEditorValue);
   }, []);
 
+  const handleEnvVisualiserReset = React.useCallback(() => {
+    const { handleUsingEnv } = propsRef.current;
+    handleUsingEnv(false);
+    EnvVisualizer.clearEnv();
+    dispatch(updateEnvSteps(-1, workspaceLocation));
+    dispatch(updateEnvStepsTotal(0, workspaceLocation));
+    dispatch(toggleUpdateEnv(true, workspaceLocation));
+    dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
+  }, [dispatch, workspaceLocation]);
+
   const onChangeTabs = React.useCallback(
     (
       newTabId: SideContentType,
@@ -392,7 +409,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         return;
       }
 
-      const { handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } = propsRef.current;
+      const { handleUsingEnv, handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } =
+        propsRef.current;
 
       /**
        * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
@@ -412,10 +430,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           handleUsingSubst(false);
         }
 
+        if (playgroundSourceChapter >= 3 && newTabId === SideContentType.envVisualizer) {
+          handleUsingEnv(true);
+        } else {
+          handleEnvVisualiserReset();
+        }
+
         setSelectedTab(newTabId);
       }
     },
-    [hasBreakpoints]
+    [hasBreakpoints, handleEnvVisualiserReset]
   );
 
   const processStepperOutput = (output: InterpreterOutput[]) => {
@@ -440,10 +464,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [sessionId]
   );
 
-  const handleEditorEval = React.useCallback(
-    () => dispatch(evalEditor(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
+  const handleEditorEval = React.useCallback(() => {
+    dispatch(evalEditor(workspaceLocation));
+  }, [dispatch, workspaceLocation]);
 
   const handleInterruptEval = React.useCallback(
     () => dispatch(beginInterruptExecution(workspaceLocation)),
@@ -768,7 +791,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       !usingRemoteExecution
     ) {
       // Enable Env Visualizer for Source Chapter 3 and above
-      tabs.push(envVisualizerTab);
+      tabs.push({
+        label: 'Env Visualizer',
+        iconName: IconNames.GLOBE,
+        body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+        id: SideContentType.envVisualizer
+      });
     }
 
     if (
@@ -826,8 +854,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       };
 
       pushLog(input);
+      dispatch(toggleUpdateEnv(true, workspaceLocation));
+      dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
     },
-    [pushLog]
+    [pushLog, dispatch, workspaceLocation]
   );
 
   const onCursorChangeMethod = React.useCallback(
@@ -884,8 +914,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         }
       }
       propsRef.current.handleEditorUpdateBreakpoints(editorTabIndex, breakpoints);
+      dispatch(toggleUpdateEnv(true, workspaceLocation));
     },
-    [selectedTab]
+    [selectedTab, dispatch, workspaceLocation]
   );
 
   const replDisabled =
@@ -959,7 +990,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     sourceChapter: props.playgroundSourceChapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
-    hidden: selectedTab === SideContentType.substVisualizer,
+    hidden:
+      selectedTab === SideContentType.substVisualizer ||
+      selectedTab === SideContentType.envVisualizer,
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor
@@ -1085,13 +1118,6 @@ const dataVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer
-};
-
-const envVisualizerTab: SideContentTab = {
-  label: 'Env Visualizer',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer
 };
 
 export default Playground;

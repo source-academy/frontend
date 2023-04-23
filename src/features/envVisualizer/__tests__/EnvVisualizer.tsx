@@ -65,14 +65,15 @@ const codeSamples = [
     y[1][2] = y[1];
     function eval_stream(s, n) {
         function es(s, n) {
-            if (n === 1) { debugger; }
             const z = [y];
             return n === 1 ? list(head(s)) : pair(head(s), es(stream_tail(s), n - 1));
         }
         return n === 0 ? null : es(s, n);
     }
     eval_stream(integers_from(1), 2);
-    let x = 1;`
+    let x = 1;
+    debugger;
+    `
 ];
 
 codeSamples.forEach((code, idx) => {

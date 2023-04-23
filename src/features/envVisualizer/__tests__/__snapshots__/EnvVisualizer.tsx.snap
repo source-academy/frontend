@@ -1320,8 +1320,9 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 2`] = `
 Object {
   "head": Object {
+    "42": [Function],
     "eval_stream": [Function],
-    "x": Symbol(Used to implement hoisting),
+    "x": 1,
     "y": Array [
       [Circular],
       Array [
@@ -1407,38 +1408,38 @@ Object {
       },
     ],
     "callee": Node {
-      "end": 457,
+      "end": 418,
       "loc": SourceLocation {
         "end": Position {
           "column": 29,
-          "line": 17,
+          "line": 16,
         },
         "start": Position {
           "column": 16,
-          "line": 17,
+          "line": 16,
         },
       },
       "name": "integers_from",
-      "start": 444,
+      "start": 405,
       "type": "Identifier",
     },
-    "end": 460,
+    "end": 421,
     "loc": SourceLocation {
       "end": Position {
         "column": 32,
-        "line": 17,
+        "line": 16,
       },
       "start": Position {
         "column": 16,
-        "line": 17,
+        "line": 16,
       },
     },
-    "start": 444,
+    "start": 405,
     "type": "CallExpression",
   },
   "head": Object {
-    "44": [Function],
-    "53": [Function],
+    "45": [Function],
+    "54": [Function],
     "n": 1,
   },
   "id": Any<String>,
@@ -1547,7 +1548,7 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "57": [Function],
+    "58": [Function],
     "n": 2,
   },
   "id": Any<String>,
@@ -1624,8 +1625,9 @@ Object {
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
+      "42": [Function],
       "eval_stream": [Function],
-      "x": Symbol(Used to implement hoisting),
+      "x": 1,
       "y": Array [
         [Circular],
         Array [
@@ -1720,33 +1722,33 @@ Object {
       },
     ],
     "callee": Node {
-      "end": 443,
+      "end": 404,
       "loc": SourceLocation {
         "end": Position {
           "column": 15,
-          "line": 17,
+          "line": 16,
         },
         "start": Position {
           "column": 4,
-          "line": 17,
+          "line": 16,
         },
       },
       "name": "eval_stream",
-      "start": 432,
+      "start": 393,
       "type": "Identifier",
     },
-    "end": 464,
+    "end": 425,
     "loc": SourceLocation {
       "end": Position {
         "column": 36,
-        "line": 17,
+        "line": 16,
       },
       "start": Position {
         "column": 4,
-        "line": 17,
+        "line": 16,
       },
     },
-    "start": 432,
+    "start": 393,
     "type": "CallExpression",
   },
   "head": Object {
@@ -1760,8 +1762,9 @@ Object {
   "name": "eval_stream",
   "tail": Object {
     "head": Object {
+      "42": [Function],
       "eval_stream": [Function],
-      "x": Symbol(Used to implement hoisting),
+      "x": 1,
       "y": Array [
         [Circular],
         Array [
@@ -1852,8 +1855,9 @@ Object {
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
+        "42": [Function],
         "eval_stream": [Function],
-        "x": Symbol(Used to implement hoisting),
+        "x": 1,
         "y": Array [
           [Circular],
           Array [
@@ -1945,8 +1949,9 @@ Object {
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
+        "42": [Function],
         "eval_stream": [Function],
-        "x": Symbol(Used to implement hoisting),
+        "x": 1,
         "y": Array [
           [Circular],
           Array [
@@ -2038,8 +2043,9 @@ Object {
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
+        "42": [Function],
         "eval_stream": [Function],
-        "x": Symbol(Used to implement hoisting),
+        "x": 1,
         "y": Array [
           [Circular],
           Array [
@@ -2131,8 +2137,9 @@ Object {
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
+        "42": [Function],
         "eval_stream": [Function],
-        "x": Symbol(Used to implement hoisting),
+        "x": 1,
         "y": Array [
           [Circular],
           Array [
@@ -2234,33 +2241,33 @@ Object {
         },
       ],
       "callee": Node {
-        "end": 443,
+        "end": 404,
         "loc": SourceLocation {
           "end": Position {
             "column": 15,
-            "line": 17,
+            "line": 16,
           },
           "start": Position {
             "column": 4,
-            "line": 17,
+            "line": 16,
           },
         },
         "name": "eval_stream",
-        "start": 432,
+        "start": 393,
         "type": "Identifier",
       },
-      "end": 464,
+      "end": 425,
       "loc": SourceLocation {
         "end": Position {
           "column": 36,
-          "line": 17,
+          "line": 16,
         },
         "start": Position {
           "column": 4,
-          "line": 17,
+          "line": 16,
         },
       },
-      "start": 432,
+      "start": 393,
       "type": "CallExpression",
     },
     "head": Object {
@@ -2270,12 +2277,13 @@ Object {
         [Function],
       ],
     },
-    "id": "45",
+    "id": "46",
     "name": "eval_stream",
     "tail": Object {
       "head": Object {
+        "42": [Function],
         "eval_stream": [Function],
-        "x": Symbol(Used to implement hoisting),
+        "x": 1,
         "y": Array [
           [Circular],
           Array [
@@ -2373,8 +2381,9 @@ Object {
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
+          "42": [Function],
           "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
+          "x": 1,
           "y": Array [
             [Circular],
             Array [
@@ -2473,8 +2482,9 @@ Object {
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
+          "42": [Function],
           "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
+          "x": 1,
           "y": Array [
             [Circular],
             Array [
@@ -2573,8 +2583,9 @@ Object {
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
+          "42": [Function],
           "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
+          "x": 1,
           "y": Array [
             [Circular],
             Array [
@@ -2673,8 +2684,9 @@ Object {
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
+          "42": [Function],
           "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
+          "x": 1,
           "y": Array [
             [Circular],
             Array [
@@ -2771,33 +2783,33 @@ Object {
       },
     ],
     "callee": Node {
-      "end": 414,
+      "end": 375,
       "loc": SourceLocation {
         "end": Position {
           "column": 34,
-          "line": 15,
+          "line": 14,
         },
         "start": Position {
           "column": 32,
-          "line": 15,
+          "line": 14,
         },
       },
       "name": "es",
-      "start": 412,
+      "start": 373,
       "type": "Identifier",
     },
-    "end": 420,
+    "end": 381,
     "loc": SourceLocation {
       "end": Position {
         "column": 40,
-        "line": 15,
+        "line": 14,
       },
       "start": Position {
         "column": 32,
-        "line": 15,
+        "line": 14,
       },
     },
-    "start": 412,
+    "start": 373,
     "type": "CallExpression",
   },
   "head": Object {
@@ -2813,7 +2825,7 @@ Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "47",
+    "id": "48",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -2833,33 +2845,33 @@ Object {
           },
         ],
         "callee": Node {
-          "end": 443,
+          "end": 404,
           "loc": SourceLocation {
             "end": Position {
               "column": 15,
-              "line": 17,
+              "line": 16,
             },
             "start": Position {
               "column": 4,
-              "line": 17,
+              "line": 16,
             },
           },
           "name": "eval_stream",
-          "start": 432,
+          "start": 393,
           "type": "Identifier",
         },
-        "end": 464,
+        "end": 425,
         "loc": SourceLocation {
           "end": Position {
             "column": 36,
-            "line": 17,
+            "line": 16,
           },
           "start": Position {
             "column": 4,
-            "line": 17,
+            "line": 16,
           },
         },
-        "start": 432,
+        "start": 393,
         "type": "CallExpression",
       },
       "head": Object {
@@ -2869,12 +2881,13 @@ Object {
           [Function],
         ],
       },
-      "id": "45",
+      "id": "46",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
+          "42": [Function],
           "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
+          "x": 1,
           "y": Array [
             [Circular],
             Array [
@@ -2971,33 +2984,33 @@ Object {
       },
     ],
     "callee": Node {
-      "end": 344,
+      "end": 305,
       "loc": SourceLocation {
         "end": Position {
           "column": 61,
-          "line": 13,
+          "line": 12,
         },
         "start": Position {
           "column": 59,
-          "line": 13,
+          "line": 12,
         },
       },
       "name": "es",
-      "start": 342,
+      "start": 303,
       "type": "Identifier",
     },
-    "end": 367,
+    "end": 328,
     "loc": SourceLocation {
       "end": Position {
         "column": 84,
-        "line": 13,
+        "line": 12,
       },
       "start": Position {
         "column": 59,
-        "line": 13,
+        "line": 12,
       },
     },
-    "start": 342,
+    "start": 303,
     "type": "CallExpression",
   },
   "head": Object {
@@ -3013,7 +3026,7 @@ Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "47",
+    "id": "48",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -3033,33 +3046,33 @@ Object {
           },
         ],
         "callee": Node {
-          "end": 443,
+          "end": 404,
           "loc": SourceLocation {
             "end": Position {
               "column": 15,
-              "line": 17,
+              "line": 16,
             },
             "start": Position {
               "column": 4,
-              "line": 17,
+              "line": 16,
             },
           },
           "name": "eval_stream",
-          "start": 432,
+          "start": 393,
           "type": "Identifier",
         },
-        "end": 464,
+        "end": 425,
         "loc": SourceLocation {
           "end": Position {
             "column": 36,
-            "line": 17,
+            "line": 16,
           },
           "start": Position {
             "column": 4,
-            "line": 17,
+            "line": 16,
           },
         },
-        "start": 432,
+        "start": 393,
         "type": "CallExpression",
       },
       "head": Object {
@@ -3069,12 +3082,13 @@ Object {
           [Function],
         ],
       },
-      "id": "45",
+      "id": "46",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
+          "42": [Function],
           "eval_stream": [Function],
-          "x": Symbol(Used to implement hoisting),
+          "x": 1,
           "y": Array [
             [Circular],
             Array [
@@ -3181,8 +3195,9 @@ Object {
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
+            "42": [Function],
             "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
+            "x": 1,
             "y": Array [
               [Circular],
               Array [
@@ -3290,8 +3305,9 @@ Object {
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
+            "42": [Function],
             "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
+            "x": 1,
             "y": Array [
               [Circular],
               Array [
@@ -3399,8 +3415,9 @@ Object {
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
+            "42": [Function],
             "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
+            "x": 1,
             "y": Array [
               [Circular],
               Array [
@@ -3508,8 +3525,9 @@ Object {
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
+            "42": [Function],
             "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
+            "x": 1,
             "y": Array [
               [Circular],
               Array [
@@ -3622,33 +3640,33 @@ Object {
         },
       ],
       "callee": Node {
-        "end": 414,
+        "end": 375,
         "loc": SourceLocation {
           "end": Position {
             "column": 34,
-            "line": 15,
+            "line": 14,
           },
           "start": Position {
             "column": 32,
-            "line": 15,
+            "line": 14,
           },
         },
         "name": "es",
-        "start": 412,
+        "start": 373,
         "type": "Identifier",
       },
-      "end": 420,
+      "end": 381,
       "loc": SourceLocation {
         "end": Position {
           "column": 40,
-          "line": 15,
+          "line": 14,
         },
         "start": Position {
           "column": 32,
-          "line": 15,
+          "line": 14,
         },
       },
-      "start": 412,
+      "start": 373,
       "type": "CallExpression",
     },
     "head": Object {
@@ -3658,13 +3676,13 @@ Object {
         [Function],
       ],
     },
-    "id": "48",
+    "id": "49",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "47",
+      "id": "48",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -3684,33 +3702,33 @@ Object {
             },
           ],
           "callee": Node {
-            "end": 443,
+            "end": 404,
             "loc": SourceLocation {
               "end": Position {
                 "column": 15,
-                "line": 17,
+                "line": 16,
               },
               "start": Position {
                 "column": 4,
-                "line": 17,
+                "line": 16,
               },
             },
             "name": "eval_stream",
-            "start": 432,
+            "start": 393,
             "type": "Identifier",
           },
-          "end": 464,
+          "end": 425,
           "loc": SourceLocation {
             "end": Position {
               "column": 36,
-              "line": 17,
+              "line": 16,
             },
             "start": Position {
               "column": 4,
-              "line": 17,
+              "line": 16,
             },
           },
-          "start": 432,
+          "start": 393,
           "type": "CallExpression",
         },
         "head": Object {
@@ -3720,12 +3738,13 @@ Object {
             [Function],
           ],
         },
-        "id": "45",
+        "id": "46",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
+            "42": [Function],
             "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
+            "x": 1,
             "y": Array [
               [Circular],
               Array [
@@ -3807,7 +3826,16 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 23`] = `
 Object {
   "head": Object {
-    "z": Symbol(Used to implement hoisting),
+    "z": Array [
+      Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    ],
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -3829,33 +3857,33 @@ Object {
         },
       ],
       "callee": Node {
-        "end": 344,
+        "end": 305,
         "loc": SourceLocation {
           "end": Position {
             "column": 61,
-            "line": 13,
+            "line": 12,
           },
           "start": Position {
             "column": 59,
-            "line": 13,
+            "line": 12,
           },
         },
         "name": "es",
-        "start": 342,
+        "start": 303,
         "type": "Identifier",
       },
-      "end": 367,
+      "end": 328,
       "loc": SourceLocation {
         "end": Position {
           "column": 84,
-          "line": 13,
+          "line": 12,
         },
         "start": Position {
           "column": 59,
-          "line": 13,
+          "line": 12,
         },
       },
-      "start": 342,
+      "start": 303,
       "type": "CallExpression",
     },
     "head": Object {
@@ -3865,13 +3893,13 @@ Object {
         [Function],
       ],
     },
-    "id": "58",
+    "id": "59",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "47",
+      "id": "48",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -3891,33 +3919,33 @@ Object {
             },
           ],
           "callee": Node {
-            "end": 443,
+            "end": 404,
             "loc": SourceLocation {
               "end": Position {
                 "column": 15,
-                "line": 17,
+                "line": 16,
               },
               "start": Position {
                 "column": 4,
-                "line": 17,
+                "line": 16,
               },
             },
             "name": "eval_stream",
-            "start": 432,
+            "start": 393,
             "type": "Identifier",
           },
-          "end": 464,
+          "end": 425,
           "loc": SourceLocation {
             "end": Position {
               "column": 36,
-              "line": 17,
+              "line": 16,
             },
             "start": Position {
               "column": 4,
-              "line": 17,
+              "line": 16,
             },
           },
-          "start": 432,
+          "start": 393,
           "type": "CallExpression",
         },
         "head": Object {
@@ -3927,12 +3955,13 @@ Object {
             [Function],
           ],
         },
-        "id": "45",
+        "id": "46",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
+            "42": [Function],
             "eval_stream": [Function],
-            "x": Symbol(Used to implement hoisting),
+            "x": 1,
             "y": Array [
               [Circular],
               Array [
@@ -4033,18 +4062,18 @@ Array [
   "eval_stream:= ",
   [Function],
   "x: ",
-  Symbol(Used to implement hoisting),
+  1,
   1,
   1,
   "n: ",
   1,
-  "44:= ",
+  "45:= ",
   [Function],
   2,
   1,
   "n: ",
   2,
-  "57:= ",
+  "58:= ",
   [Function],
   0,
   2,
@@ -4152,7 +4181,16 @@ Array [
   ],
   5,
   5,
-  "z: ",
-  Symbol(Used to implement hoisting),
+  "z:= ",
+  Array [
+    Array [
+      [Circular],
+      Array [
+        1,
+        [Circular],
+        [Circular],
+      ],
+    ],
+  ],
 ]
 `;

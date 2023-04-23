@@ -11,6 +11,7 @@ import {
   clearReplOutput,
   evalRepl,
   setEditorBreakpoint,
+  toggleUsingEnv,
   toggleUsingSubst,
   updateEditorValue
 } from '../../commons/workspace/WorkspaceActions';
@@ -34,7 +35,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     'replValue',
     'sideContentHeight',
     'sharedbConnected',
-    'usingSubst'
+    'usingSubst',
+    'usingEnv'
   ),
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
@@ -62,6 +64,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
+      handleUsingEnv: (usingEnv: boolean) => toggleUsingEnv(usingEnv, workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation)
     },
     dispatch

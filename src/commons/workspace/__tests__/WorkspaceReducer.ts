@@ -1011,7 +1011,12 @@ describe('LOG_OUT', () => {
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       sharedbConnected: false,
-      usingSubst: false
+      usingSubst: false,
+      usingEnv: false,
+      updateEnv: true,
+      envSteps: -1,
+      envStepsTotal: 0,
+      breakpointSteps: []
     };
 
     const logoutDefaultState: WorkspaceManagerState = {

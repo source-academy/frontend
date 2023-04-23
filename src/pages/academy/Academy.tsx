@@ -6,6 +6,7 @@ import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router'
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import {
+  fetchGradingOverviews,
   fetchNotifications,
   updateLatestViewedCourse
 } from '../../commons/application/actions/SessionActions';
@@ -18,7 +19,7 @@ import NotFound from '../notFound/NotFound';
 import AdminPanel from './adminPanel/AdminPanel';
 import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
-import Grading from './grading/GradingContainer';
+import Grading from './grading/Grading';
 import GroundControl from './groundControl/GroundControlContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
@@ -29,6 +30,7 @@ const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(fetchNotifications());
+    dispatch(fetchGradingOverviews(false));
   }, [dispatch]);
 
   const assessmentConfigurations = useTypedSelector(
