@@ -1,24 +1,57 @@
-import { Classes } from '@blueprintjs/core';
+import { Button, ButtonGroup, Classes, Divider, Slider } from '@blueprintjs/core';
 import { debounce } from 'lodash';
 import * as React from 'react';
+import { HotKeys } from 'react-hotkeys';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
+import { OverallState } from '../application/ApplicationTypes';
 import Constants, { Links } from '../utils/Constants';
+import { updateEnvSteps } from '../workspace/WorkspaceActions';
+import { evalEditor } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type State = {
   visualization: React.ReactNode;
+  value: number;
   height: number;
   width: number;
 };
 
-class SideContentEnvVisualizer extends React.Component<
-  { editorWidth?: string; sideContentHeight?: number },
-  State
-> {
-  constructor(props: any) {
+type EnvVisualizerProps = OwnProps & StateProps & DispatchProps;
+
+type StateProps = {
+  editorWidth?: string;
+  sideContentHeight?: number;
+  numOfStepsTotal: number;
+  numOfSteps: number;
+  breakpointSteps: number[];
+  needEnvUpdate: boolean;
+};
+
+type OwnProps = {
+  workspaceLocation: WorkspaceLocation;
+};
+
+type DispatchProps = {
+  handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
+  handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
+};
+
+const envVizKeyMap = {
+  FIRST_STEP: 'a',
+  NEXT_STEP: 'f',
+  PREVIOUS_STEP: 'b',
+  LAST_STEP: 'e'
+};
+
+class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State> {
+  constructor(props: EnvVisualizerProps) {
     super(props);
     this.state = {
       visualization: null,
+      value: -1,
       width: this.calculateWidth(props.editorWidth),
       height: this.calculateHeight(props.sideContentHeight)
     };
@@ -81,41 +114,215 @@ class SideContentEnvVisualizer extends React.Component<
     window.removeEventListener('resize', this.handleResize);
   }
 
-  componentDidUpdate(prevProps: { editorWidth?: string; sideContentHeight?: number }) {
+  componentDidUpdate(prevProps: {
+    editorWidth?: string;
+    sideContentHeight?: number;
+    numOfStepsTotal: number;
+    needEnvUpdate: boolean;
+  }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
       prevProps.editorWidth !== this.props.editorWidth
     ) {
       this.handleResize();
     }
+    if (prevProps.needEnvUpdate && !this.props.needEnvUpdate) {
+      this.stepFirst();
+    }
   }
 
   public render() {
+    const envVizHandlers = this.state.visualization
+      ? {
+          FIRST_STEP: this.stepFirst,
+          NEXT_STEP: this.stepNext,
+          PREVIOUS_STEP: this.stepPrevious,
+          LAST_STEP: this.stepLast(this.props.numOfStepsTotal)
+        }
+      : {
+          FIRST_STEP: () => {},
+          NEXT_STEP: () => {},
+          PREVIOUS_STEP: () => {},
+          LAST_STEP: () => {}
+        };
+
     return (
-      <div className={Classes.DARK}>
-        {this.state.visualization || (
-          <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-            The environment model visualizer generates environment model diagrams following a
-            notation introduced in{' '}
-            <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-              <i>
-                Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
-                Section 2
-              </i>
-            </a>
-            .
-            <br />
-            <br />
-            It is activated by setting breakpoints before you run the program. You can set a
-            breakpoint by clicking on the gutter of the editor (where all the line numbers are, on
-            the left). When the program runs into a breakpoint, the visualizer displays the state of
-            the environments before the statement is evaluated, which starts in the line in which
-            you set the breakpoint. Every breakpoint must be at the beginning of a statement.
-          </p>
-        )}
-      </div>
+      <HotKeys keyMap={envVizKeyMap} handlers={envVizHandlers}>
+        <div className={Classes.DARK}>
+          <div
+            className={'sa-substituter'}
+            style={{ position: 'sticky', top: '0', left: '0', zIndex: '1' }}
+          >
+            <Slider
+              disabled={!this.state.visualization}
+              min={1}
+              max={this.props.numOfStepsTotal}
+              onChange={this.sliderShift}
+              onRelease={this.sliderRelease}
+              value={this.state.value < 1 ? 1 : this.state.value}
+            />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <ButtonGroup>
+                <Button
+                  disabled={!this.state.visualization}
+                  icon="double-chevron-left"
+                  onClick={this.stepPrevBreakpoint}
+                />
+                <Button
+                  disabled={!this.state.visualization}
+                  icon="chevron-left"
+                  onClick={this.stepPrevious}
+                />
+                <Button
+                  disabled={!this.state.visualization}
+                  icon="chevron-right"
+                  onClick={this.stepNext}
+                />
+                <Button
+                  disabled={!this.state.visualization}
+                  icon="double-chevron-right"
+                  onClick={this.stepNextBreakpoint}
+                />
+              </ButtonGroup>
+            </div>
+          </div>
+          <br />
+          {this.state.visualization || (
+            <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+              The environment model visualizer generates environment model diagrams following a
+              notation introduced in{' '}
+              <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+                <i>
+                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
+                  Section 2
+                </i>
+              </a>
+              .
+              <br />
+              <br /> On this tab, the REPL will be hidden from view, so do check that your code has
+              no errors before running the stepper. You may use this tool by running your program
+              and then dragging the slider above to see the state of the environment at different
+              stages in the evaluation of your program. Clicking on the fast-forward button (double
+              chevron) will take you to the next breakpoint in your program.
+              <br />
+              <br />
+              <Divider />
+              Some useful keyboard shortcuts:
+              <br />
+              <br />
+              a: Move to the first step
+              <br />
+              e: Move to the last step
+              <br />
+              f: Move to the next step
+              <br />
+              b: Move to the previous step
+              <br />
+              <br />
+              Note that these shortcuts are only active when the browser focus is on this tab.
+            </p>
+          )}
+        </div>
+      </HotKeys>
     );
   }
+
+  private sliderRelease = (newValue: number) => {
+    this.props.handleEditorEval(this.props.workspaceLocation);
+  };
+
+  private sliderShift = (newValue: number) => {
+    this.props.handleEnvStepUpdate(newValue, this.props.workspaceLocation);
+    this.setState((state: State) => {
+      return { value: newValue };
+    });
+  };
+
+  private stepPrevious = () => {
+    if (this.state.value !== 1) {
+      this.sliderShift(this.state.value - 1);
+      this.props.handleEditorEval(this.props.workspaceLocation);
+    }
+  };
+
+  private stepNext = () => {
+    const lastStepValue = this.props.numOfStepsTotal;
+    if (this.state.value !== lastStepValue) {
+      this.sliderShift(this.state.value + 1);
+      this.props.handleEditorEval(this.props.workspaceLocation);
+    }
+  };
+
+  private stepFirst = () => {
+    // Move to the first step
+    this.sliderShift(1);
+    this.props.handleEditorEval(this.props.workspaceLocation);
+  };
+
+  private stepLast = (lastStepValue: number) => () => {
+    // Move to the last step
+    this.sliderShift(lastStepValue);
+    this.props.handleEditorEval(this.props.workspaceLocation);
+  };
+
+  private stepNextBreakpoint = () => {
+    for (const step of this.props.breakpointSteps) {
+      if (step > this.state.value) {
+        this.sliderShift(step);
+        this.props.handleEditorEval(this.props.workspaceLocation);
+        return;
+      }
+    }
+    this.sliderShift(this.props.numOfStepsTotal);
+    this.props.handleEditorEval(this.props.workspaceLocation);
+  };
+
+  private stepPrevBreakpoint = () => {
+    for (let i = this.props.breakpointSteps.length - 1; i >= 0; i--) {
+      const step = this.props.breakpointSteps[i];
+      if (step < this.state.value) {
+        this.sliderShift(step);
+        this.props.handleEditorEval(this.props.workspaceLocation);
+        return;
+      }
+    }
+    this.sliderShift(1);
+    this.props.handleEditorEval(this.props.workspaceLocation);
+  };
 }
 
-export default SideContentEnvVisualizer;
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
+  state: OverallState,
+  ownProps: OwnProps
+) => {
+  let workspaceLocation: WorkspaceLocation;
+  if (ownProps.workspaceLocation === 'playground' || ownProps.workspaceLocation === 'sicp') {
+    workspaceLocation = ownProps.workspaceLocation;
+  } else {
+    workspaceLocation = 'playground';
+  }
+  return {
+    ...ownProps,
+    numOfStepsTotal: state.workspaces[workspaceLocation].envStepsTotal,
+    numOfSteps: state.workspaces[workspaceLocation].envSteps,
+    breakpointSteps: state.workspaces[workspaceLocation].breakpointSteps,
+    needEnvUpdate: state.workspaces[workspaceLocation].updateEnv
+  };
+};
+
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
+      handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
+        updateEnvSteps(steps, workspaceLocation)
+    },
+    dispatch
+  );
+
+const SideContentEnvVisualizerContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SideContentEnvVisualizer);
+
+export default SideContentEnvVisualizerContainer;

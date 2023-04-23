@@ -13,6 +13,7 @@ import {
   evalRepl,
   externalLibrarySelect,
   setEditorBreakpoint,
+  toggleUsingEnv,
   toggleUsingSubst,
   updateEditorValue
 } from '../../../commons/workspace/WorkspaceActions';
@@ -36,7 +37,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     'replValue',
     'sideContentHeight',
     'sharedbConnected',
-    'usingSubst'
+    'usingSubst',
+    'usingEnv'
   ),
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
@@ -65,6 +67,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
+      handleUsingEnv: (usingEnv: boolean) => toggleUsingEnv(usingEnv, workspaceLocation),
       handleUsingSubst: (usingSubst: boolean) => toggleUsingSubst(usingSubst, workspaceLocation)
     },
     dispatch

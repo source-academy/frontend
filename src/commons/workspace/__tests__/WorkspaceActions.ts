@@ -46,7 +46,8 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  updateSublanguage
+  updateSublanguage,
+  updateSubmissionsTableFilters
 } from '../WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
@@ -90,6 +91,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   WorkspaceLocation
 } from '../WorkspaceTypes';
 
@@ -537,6 +539,30 @@ test('resetWorkspace generates correct action object with provided workspace', (
     payload: {
       workspaceLocation: assessmentWorkspace,
       workspaceOptions
+    }
+  });
+});
+
+test('updateSubmissionsTableFilters generates correct action object', () => {
+  const columnFilters = [
+    {
+      id: 'groupName',
+      value: '1A'
+    },
+    {
+      id: 'assessmentType',
+      value: 'Missions'
+    }
+  ];
+  const globalFilter = 'runes';
+  const action = updateSubmissionsTableFilters({ columnFilters, globalFilter });
+  expect(action).toEqual({
+    type: UPDATE_SUBMISSIONS_TABLE_FILTERS,
+    payload: {
+      filters: {
+        columnFilters,
+        globalFilter
+      }
     }
   });
 });
