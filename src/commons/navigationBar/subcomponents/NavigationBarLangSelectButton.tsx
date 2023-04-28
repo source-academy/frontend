@@ -2,6 +2,7 @@ import { Button, Menu, MenuItem, Position } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { SUPPORTED_LANGUAGES } from 'src/commons/application/ApplicationTypes';
 import { playgroundChangeLang } from 'src/features/playground/PlaygroundActions';
 import { store } from 'src/pages/createStore';
 
@@ -22,9 +23,9 @@ const NavigationBarLangSelectButton = () => {
       isOpen={isOpen}
       content={
         <Menu>
-          <MenuItem onClick={() => selectLang('JavaScript')} text="JavaScript" />
-          <MenuItem onClick={() => selectLang('Scheme')} text="Scheme" />
-          <MenuItem onClick={() => selectLang('Python')} text="Python" />
+          {SUPPORTED_LANGUAGES.map(language => (
+            <MenuItem key={language} onClick={() => selectLang(language)} text={language} />
+          ))}
         </Menu>
       }
       onClose={() => setIsOpen(false)}

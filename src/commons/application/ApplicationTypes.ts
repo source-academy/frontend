@@ -103,6 +103,18 @@ export enum Role {
   Admin = 'admin'
 }
 
+export enum SupportedLanguage {
+  JAVASCRIPT = 'JavaScript',
+  SCHEME = 'Scheme',
+  PYTHON = 'Python'
+}
+
+export const SUPPORTED_LANGUAGES = [
+  SupportedLanguage.JAVASCRIPT,
+  SupportedLanguage.SCHEME,
+  SupportedLanguage.PYTHON
+];
+
 /**
  * Defines the languages available for use on Source Academy,
  * including Source sublanguages and other languages e.g. full JS.
@@ -110,7 +122,7 @@ export enum Role {
  */
 export interface SALanguage extends Language {
   displayName: string;
-  mainLanguage: string;
+  mainLanguage: SupportedLanguage;
 }
 
 const variantDisplay: Map<Variant, string> = new Map([
@@ -128,51 +140,51 @@ export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
   displayName: 'full JavaScript',
-  mainLanguage: 'JavaScript' // TODO: Refactor
+  mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
   displayName: 'full TypeScript',
-  mainLanguage: 'JavaScript' // TODO: Refactor
+  mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
   displayName: 'HTML',
-  mainLanguage: 'JavaScript' // TODO: Refactor
+  mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
 // TODO: Refactor
 export const schemeLanguages: SALanguage[] = [
   {
-    mainLanguage: 'Scheme',
+    mainLanguage: SupportedLanguage.SCHEME,
     chapter: Chapter.SCHEME_1,
     variant: Variant.DEFAULT,
     displayName: 'Scheme \xa71'
   },
   {
-    mainLanguage: 'Scheme',
+    mainLanguage: SupportedLanguage.SCHEME,
     chapter: Chapter.SCHEME_2,
     variant: Variant.DEFAULT,
     displayName: 'Scheme \xa72'
   },
   {
-    mainLanguage: 'Scheme',
+    mainLanguage: SupportedLanguage.SCHEME,
     chapter: Chapter.SCHEME_3,
     variant: Variant.DEFAULT,
     displayName: 'Scheme \xa73'
   },
   {
-    mainLanguage: 'Scheme',
+    mainLanguage: SupportedLanguage.SCHEME,
     chapter: Chapter.SCHEME_4,
     variant: Variant.DEFAULT,
     displayName: 'Scheme \xa74'
   },
   {
-    mainLanguage: 'Scheme',
+    mainLanguage: SupportedLanguage.SCHEME,
     chapter: Chapter.FULL_SCHEME,
     variant: Variant.DEFAULT,
     displayName: 'Full Scheme'
@@ -182,15 +194,15 @@ export const schemeLanguages: SALanguage[] = [
 // TODO: Refactor
 export const pyLanguages: SALanguage[] = [
   {
-    mainLanguage: 'Python',
+    mainLanguage: SupportedLanguage.PYTHON,
     chapter: Chapter.PYTHON_1,
     variant: Variant.DEFAULT,
     displayName: 'Python \xa71'
   }
-  //{ mainLanguage: 'Python', chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
-  //{ mainLanguage: 'Python', chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
-  //{ mainLanguage: 'Python', chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
-  //{ mainLanguage: 'Python', chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
+  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
+  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
+  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
+  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
 ];
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
@@ -245,7 +257,7 @@ export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
   return {
     ...sublang,
     displayName: styliseSublanguage(sublang.chapter, sublang.variant),
-    mainLanguage: 'JavaScript' // TODO: Refactor
+    mainLanguage: SupportedLanguage.JAVASCRIPT
   };
 });
 

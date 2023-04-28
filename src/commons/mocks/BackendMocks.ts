@@ -7,8 +7,8 @@ import {
   OverallState,
   Role,
   SALanguage,
-  styliseSublanguage
-} from '../application/ApplicationTypes';
+  styliseSublanguage,
+  SupportedLanguage} from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -83,8 +83,7 @@ export function* mockBackendSaga(): SagaIterator {
         courseConfiguration.sourceChapter,
         courseConfiguration.sourceVariant
       ),
-      // TODO: Refactor
-      mainLanguage: 'JavaScript'
+      mainLanguage: SupportedLanguage.JAVASCRIPT
     };
 
     yield put(actions.setUser(user));
@@ -314,8 +313,7 @@ export function* mockBackendSaga(): SagaIterator {
             courseConfiguration.sourceChapter,
             courseConfiguration.sourceVariant
           ),
-          // TODO: Refactor
-          mainLanguage: 'JavaScript'
+          mainLanguage: SupportedLanguage.JAVASCRIPT
         })
       );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
