@@ -1,5 +1,6 @@
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
+import { SupportedLanguage } from 'src/commons/application/ApplicationTypes';
 import { store } from 'src/pages/createStore';
 
 import NavigationBarLangSelectButton from '../NavigationBarLangSelectButton';
@@ -21,14 +22,11 @@ describe('NavigationBarLangSelectButton', () => {
       </Provider>
     );
     wrapper.find('button').simulate('click');
-    console.log(
-      wrapper.findWhere(node => node.type() === 'li' && node.text() === 'Scheme').debug()
-    );
     wrapper
-      .findWhere(node => node.type() === 'li' && node.text() === 'Scheme')
+      .findWhere(node => node.type() === 'li' && node.text() === SupportedLanguage.SCHEME)
       .find('a[role="menuitem"]')
       .simulate('click');
-    expect(store.getState().playground.lang).toEqual('Scheme');
+    expect(store.getState().playground.lang).toEqual(SupportedLanguage.SCHEME);
   });
 
   it('should call selectLang with "Python" when "Python" menu item is clicked', () => {
@@ -39,10 +37,10 @@ describe('NavigationBarLangSelectButton', () => {
     );
     wrapper.find('button').simulate('click');
     wrapper
-      .findWhere(node => node.type() === 'li' && node.text() === 'Python')
+      .findWhere(node => node.type() === 'li' && node.text() === SupportedLanguage.PYTHON)
       .find('a[role="menuitem"]')
       .simulate('click');
-    expect(store.getState().playground.lang).toEqual('Python');
+    expect(store.getState().playground.lang).toEqual(SupportedLanguage.PYTHON);
   });
 
   it('should call selectLang with "JavaScript" when "JavaScript" menu item is clicked', () => {
@@ -54,9 +52,9 @@ describe('NavigationBarLangSelectButton', () => {
     console.log(wrapper.debug());
     wrapper.find('button').simulate('click');
     wrapper
-      .findWhere(node => node.type() === 'li' && node.text() === 'JavaScript')
+      .findWhere(node => node.type() === 'li' && node.text() === SupportedLanguage.JAVASCRIPT)
       .find('a[role="menuitem"]')
       .simulate('click');
-    expect(store.getState().playground.lang).toEqual('JavaScript');
+    expect(store.getState().playground.lang).toEqual(SupportedLanguage.JAVASCRIPT);
   });
 });
