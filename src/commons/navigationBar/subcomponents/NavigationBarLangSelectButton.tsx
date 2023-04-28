@@ -12,7 +12,6 @@ const NavigationBarLangSelectButton = () => {
   const selectLang = (language: string) => {
     dispatch(playgroundChangeLang(language));
     setIsOpen(false);
-    console.log('LANG:', lang);
   };
 
   return (
@@ -30,11 +29,9 @@ const NavigationBarLangSelectButton = () => {
       }
       onClose={() => setIsOpen(false)}
     >
-      <>
-        <Button rightIcon="caret-down" onClick={() => setIsOpen(true)}>
-          {lang}
-        </Button>
-      </>
+      <Button rightIcon="caret-down" onClick={() => setIsOpen(true)}>
+        {lang}
+      </Button>
     </Popover2>
   );
 };
