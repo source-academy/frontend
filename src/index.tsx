@@ -13,7 +13,6 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
-// import newStore from './commons/Store'
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
 if (Constants.sentryDsn) {
