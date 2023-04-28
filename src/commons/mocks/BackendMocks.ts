@@ -8,7 +8,8 @@ import {
   Role,
   SALanguage,
   styliseSublanguage,
-  SupportedLanguage} from '../application/ApplicationTypes';
+  SupportedLanguage
+} from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
