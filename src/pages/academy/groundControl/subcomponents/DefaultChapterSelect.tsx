@@ -5,11 +5,9 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import {
-  defaultLanguages,
   SALanguage,
   sourceLanguages,
-  styliseSublanguage,
-  variantLanguages
+  styliseSublanguage
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
@@ -54,16 +52,18 @@ const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> =
   );
 
   const chapterListRenderer: ItemListRenderer<SALanguage> = React.useCallback(
-    ({ itemsParentRef, renderItem }) => {
-      const defaultChoices = defaultLanguages.map(renderItem);
-      const variantChoices = variantLanguages.map(renderItem);
+    ({ itemsParentRef, renderItem, items }) => {
+      const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
+      const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
 
       return (
         <Menu ulRef={itemsParentRef}>
-          {defaultChoices}
-          <MenuItem key="variant-menu" text="Variants" icon="cog">
-            {variantChoices}
-          </MenuItem>
+          {defaultChoices.map(renderItem)}
+          {variantChoices.length > 0 && (
+            <MenuItem key="variant-menu" text="Variants" icon="cog">
+              {variantChoices.map(renderItem)}
+            </MenuItem>
+          )}
         </Menu>
       );
     },

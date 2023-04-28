@@ -237,14 +237,6 @@ export const sourceLanguages: SALanguage[] = sourceSublanguages.map(sublang => {
   };
 });
 
-export const defaultLanguages = sourceLanguages.filter(
-  sublang => sublang.variant === Variant.DEFAULT
-);
-
-export const variantLanguages = sourceLanguages.filter(
-  sublang => sublang.variant !== Variant.DEFAULT
-);
-
 export const isSourceLanguage = (chapter: Chapter) =>
   [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
 

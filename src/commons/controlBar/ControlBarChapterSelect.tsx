@@ -6,15 +6,14 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 
 import {
-  defaultLanguages,
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
   pyLanguages,
   SALanguage,
   schemeLanguages,
-  styliseSublanguage,
-  variantLanguages
+  sourceLanguages,
+  styliseSublanguage
 } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
@@ -82,11 +81,10 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   const selectedLang = useTypedSelector(store => store.playground.lang);
 
   const choices = [
-    ...defaultLanguages,
+    ...sourceLanguages,
     ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
     ...schemeLanguages,
-    ...pyLanguages,
-    ...variantLanguages
+    ...pyLanguages
   ];
 
   return (
