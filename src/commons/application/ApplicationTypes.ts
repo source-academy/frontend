@@ -157,53 +157,29 @@ export const htmlLanguage: SALanguage = {
   mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
-// TODO: Refactor
-export const schemeLanguages: SALanguage[] = [
-  {
-    mainLanguage: SupportedLanguage.SCHEME,
-    chapter: Chapter.SCHEME_1,
-    variant: Variant.DEFAULT,
-    displayName: 'Scheme \xa71'
-  },
-  {
-    mainLanguage: SupportedLanguage.SCHEME,
-    chapter: Chapter.SCHEME_2,
-    variant: Variant.DEFAULT,
-    displayName: 'Scheme \xa72'
-  },
-  {
-    mainLanguage: SupportedLanguage.SCHEME,
-    chapter: Chapter.SCHEME_3,
-    variant: Variant.DEFAULT,
-    displayName: 'Scheme \xa73'
-  },
-  {
-    mainLanguage: SupportedLanguage.SCHEME,
-    chapter: Chapter.SCHEME_4,
-    variant: Variant.DEFAULT,
-    displayName: 'Scheme \xa74'
-  },
-  {
-    mainLanguage: SupportedLanguage.SCHEME,
-    chapter: Chapter.FULL_SCHEME,
-    variant: Variant.DEFAULT,
-    displayName: 'Full Scheme'
-  }
+const schemeSubLanguages = [
+  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
+  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
+  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
+  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
+  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
 ];
 
-// TODO: Refactor
-export const pyLanguages: SALanguage[] = [
-  {
-    mainLanguage: SupportedLanguage.PYTHON,
-    chapter: Chapter.PYTHON_1,
-    variant: Variant.DEFAULT,
-    displayName: 'Python \xa71'
-  }
-  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
-  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
-  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
-  //{ mainLanguage: SupportedLanguage.PYTHON, chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
+export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
+  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME };
+});
+
+const pySubLanguages = [
+  { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
+  //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
+  //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
+  //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
+  //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
 ];
+
+export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
+  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON };
+});
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
   switch (chapter) {
@@ -231,7 +207,7 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   }
 };
 
-export const sublanguages: Language[] = [
+export const sourceSublanguages: Language[] = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
@@ -253,7 +229,7 @@ export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ];
 
-export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
+export const sourceLanguages: SALanguage[] = sourceSublanguages.map(sublang => {
   return {
     ...sublang,
     displayName: styliseSublanguage(sublang.chapter, sublang.variant),
