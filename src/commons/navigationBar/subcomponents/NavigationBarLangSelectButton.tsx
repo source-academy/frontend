@@ -2,7 +2,7 @@ import { Button, Menu, MenuItem, Position } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { SUPPORTED_LANGUAGES } from 'src/commons/application/ApplicationTypes';
+import { SUPPORTED_LANGUAGES, SupportedLanguage } from 'src/commons/application/ApplicationTypes';
 import { playgroundChangeLang } from 'src/features/playground/PlaygroundActions';
 import { store } from 'src/pages/createStore';
 
@@ -10,7 +10,7 @@ const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const lang = store.getState().playground.lang;
   const dispatch = useDispatch();
-  const selectLang = (language: string) => {
+  const selectLang = (language: SupportedLanguage) => {
     dispatch(playgroundChangeLang(language));
     setIsOpen(false);
   };
