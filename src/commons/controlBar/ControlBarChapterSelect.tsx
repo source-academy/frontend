@@ -84,8 +84,8 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   const choices = [
     ...defaultLanguages,
     ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
-    ...(Constants.playgroundOnly ? schemeLanguages : []),
-    ...(Constants.playgroundOnly ? pyLanguages : []),
+    ...schemeLanguages,
+    ...pyLanguages,
     ...variantLanguages
   ];
 
