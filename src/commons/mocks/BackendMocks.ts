@@ -82,7 +82,9 @@ export function* mockBackendSaga(): SagaIterator {
       displayName: styliseSublanguage(
         courseConfiguration.sourceChapter,
         courseConfiguration.sourceVariant
-      )
+      ),
+      // TODO: Refactor
+      mainLanguage: 'JavaScript'
     };
 
     yield put(actions.setUser(user));
@@ -311,7 +313,9 @@ export function* mockBackendSaga(): SagaIterator {
           displayName: styliseSublanguage(
             courseConfiguration.sourceChapter,
             courseConfiguration.sourceVariant
-          )
+          ),
+          // TODO: Refactor
+          mainLanguage: 'JavaScript'
         })
       );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);

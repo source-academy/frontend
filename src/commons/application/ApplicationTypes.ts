@@ -110,6 +110,7 @@ export enum Role {
  */
 export interface SALanguage extends Language {
   displayName: string;
+  mainLanguage: string;
 }
 
 const variantDisplay: Map<Variant, string> = new Map([
@@ -126,35 +127,70 @@ const variantDisplay: Map<Variant, string> = new Map([
 export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
-  displayName: 'full JavaScript'
+  displayName: 'full JavaScript',
+  mainLanguage: 'JavaScript' // TODO: Refactor
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
-  displayName: 'full TypeScript'
+  displayName: 'full TypeScript',
+  mainLanguage: 'JavaScript' // TODO: Refactor
 };
 
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
-  displayName: 'HTML'
+  displayName: 'HTML',
+  mainLanguage: 'JavaScript' // TODO: Refactor
 };
 
+// TODO: Refactor
 export const schemeLanguages: SALanguage[] = [
-  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
-  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
-  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
-  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
-  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
+  {
+    mainLanguage: 'Scheme',
+    chapter: Chapter.SCHEME_1,
+    variant: Variant.DEFAULT,
+    displayName: 'Scheme \xa71'
+  },
+  {
+    mainLanguage: 'Scheme',
+    chapter: Chapter.SCHEME_2,
+    variant: Variant.DEFAULT,
+    displayName: 'Scheme \xa72'
+  },
+  {
+    mainLanguage: 'Scheme',
+    chapter: Chapter.SCHEME_3,
+    variant: Variant.DEFAULT,
+    displayName: 'Scheme \xa73'
+  },
+  {
+    mainLanguage: 'Scheme',
+    chapter: Chapter.SCHEME_4,
+    variant: Variant.DEFAULT,
+    displayName: 'Scheme \xa74'
+  },
+  {
+    mainLanguage: 'Scheme',
+    chapter: Chapter.FULL_SCHEME,
+    variant: Variant.DEFAULT,
+    displayName: 'Full Scheme'
+  }
 ];
 
+// TODO: Refactor
 export const pyLanguages: SALanguage[] = [
-  { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
-  //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
-  //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
-  //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
-  //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
+  {
+    mainLanguage: 'Python',
+    chapter: Chapter.PYTHON_1,
+    variant: Variant.DEFAULT,
+    displayName: 'Python \xa71'
+  }
+  //{ mainLanguage: 'Python', chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
+  //{ mainLanguage: 'Python', chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
+  //{ mainLanguage: 'Python', chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
+  //{ mainLanguage: 'Python', chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
 ];
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
@@ -208,7 +244,8 @@ export const sublanguages: Language[] = [
 export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
   return {
     ...sublang,
-    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
+    displayName: styliseSublanguage(sublang.chapter, sublang.variant),
+    mainLanguage: 'JavaScript' // TODO: Refactor
   };
 });
 

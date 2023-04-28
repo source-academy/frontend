@@ -13,7 +13,6 @@ import {
   pyLanguages,
   SALanguage,
   schemeLanguages,
-  sourceLanguages,
   styliseSublanguage,
   variantLanguages
 } from '../application/ApplicationTypes';
@@ -33,40 +32,22 @@ type StateProps = {
   disabled?: boolean;
 };
 
-const chapterListRendererA: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const defaultChoices = defaultLanguages.map(renderItem);
-  const variantChoices = variantLanguages.map(renderItem);
-  const fullJSChoice = renderItem(fullJSLanguage, 0);
-  const fullTSChoice = renderItem(fullTSLanguage, 0);
-  const htmlChoice = renderItem(htmlLanguage, 0);
+const chapterListRenderer: ItemListRenderer<SALanguage> = ({
+  itemsParentRef,
+  renderItem,
+  items
+}) => {
+  const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
+  const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
 
   return (
     <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {defaultChoices}
-      {Constants.playgroundOnly && fullJSChoice}
-      {Constants.playgroundOnly && fullTSChoice}
-      {Constants.playgroundOnly && htmlChoice}
-      <MenuItem key="variant-menu" text="Variants" icon="cog">
-        {variantChoices}
-      </MenuItem>
-    </Menu>
-  );
-};
-
-const chapterListRendererB: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const schemeChoice = schemeLanguages.map(renderItem);
-  return (
-    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {Constants.playgroundOnly && schemeChoice}
-    </Menu>
-  );
-};
-
-const chapterListRendererC: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const pyChoice = pyLanguages.map(renderItem);
-  return (
-    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {Constants.playgroundOnly && pyChoice}
+      {defaultChoices.map(renderItem)}
+      {variantChoices.length > 0 && (
+        <MenuItem key="variant-menu" text="Variants" icon="cog">
+          {variantChoices.map(renderItem)}
+        </MenuItem>
+      )}
     </Menu>
   );
 };
@@ -100,19 +81,17 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
 }) => {
   const selectedLang = useTypedSelector(store => store.playground.lang);
 
-  let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
-
-  if (selectedLang === 'JavaScript') {
-    chapterListRenderer = chapterListRendererA;
-  } else if (selectedLang === 'Scheme') {
-    chapterListRenderer = chapterListRendererB;
-  } else if (selectedLang === 'Python') {
-    chapterListRenderer = chapterListRendererC;
-  }
+  const choices = [
+    ...defaultLanguages,
+    ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
+    ...(Constants.playgroundOnly ? schemeLanguages : []),
+    ...(Constants.playgroundOnly ? pyLanguages : []),
+    ...variantLanguages
+  ];
 
   return (
     <ChapterSelectComponent
-      items={sourceLanguages}
+      items={choices.filter(({ mainLanguage }) => mainLanguage === selectedLang)}
       onItemSelect={handleChapterSelect}
       itemRenderer={chapterRenderer(isFolderModeEnabled)}
       itemListRenderer={chapterListRenderer}
