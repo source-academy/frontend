@@ -3,8 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useState } from 'react';
-import { store } from 'src/pages/createStore';
+import React from 'react';
 
 import {
   defaultLanguages,
@@ -19,6 +18,7 @@ import {
   variantLanguages
 } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
+import { useTypedSelector } from '../utils/Hooks';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
@@ -98,16 +98,7 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
-  const [selectedLang, setSelectedLang] = useState(store.getState().playground.lang);
-  useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
-      const newSelectedLang = store.getState().playground.lang;
-      setSelectedLang(newSelectedLang);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const selectedLang = useTypedSelector(store => store.playground.lang);
 
   let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
 
