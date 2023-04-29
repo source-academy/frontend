@@ -756,24 +756,22 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    // For HTML Chapter, HTML Display tab is added only after code is run
-    if (props.playgroundSourceChapter === Chapter.HTML) {
-      if (props.output.length > 0 && props.output[0].type === 'result') {
-        tabs.push({
-          label: 'HTML Display',
-          iconName: IconNames.MODAL,
-          body: (
-            <SideContentHtmlDisplay
-              content={(props.output[0] as ResultOutput).value}
-              handleAddHtmlConsoleError={errorMsg =>
-                dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
-              }
-            />
-          ),
-          id: SideContentType.htmlDisplay
-        });
-      }
-      return tabs;
+    const currentLang = props.playgroundSourceChapter;
+
+    switch (true) {
+      case !isSourceLanguage(currentLang):
+        // For now, disable other tabs when not running Source
+        return tabs;
+      case currentLang === Chapter.HTML:
+        // For HTML Chapter, HTML Display tab is added only after code is run
+        if (props.output.length > 0 && props.output[0].type === 'result') {
+          tabs.push(
+            makeHtmlDisplayTabFrom(props.output[0] as ResultOutput, errorMsg =>
+              dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
+            )
+          );
+        }
+        return tabs;
     }
 
     // (TEMP) Remove tabs for fullJS until support is integrated
@@ -1123,5 +1121,15 @@ const dataVisualizerTab: SideContentTab = {
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer
 };
+
+const makeHtmlDisplayTabFrom = (
+  output: ResultOutput,
+  handleError: (errorMsg: string) => void
+): SideContentTab => ({
+  label: 'HTML Display',
+  iconName: IconNames.MODAL,
+  body: <SideContentHtmlDisplay content={output.value} handleAddHtmlConsoleError={handleError} />,
+  id: SideContentType.htmlDisplay
+});
 
 export default Playground;
