@@ -348,7 +348,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
   const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
-      <NavigationBarLangSelectButton />
+      {location.pathname.startsWith('/playground') && <NavigationBarLangSelectButton />}
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
