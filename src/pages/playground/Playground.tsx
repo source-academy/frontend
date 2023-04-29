@@ -18,7 +18,11 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { logoutGoogle } from 'src/commons/application/actions/SessionActions';
+import {
+  loginGitHub,
+  logoutGitHub,
+  logoutGoogle
+} from 'src/commons/application/actions/SessionActions';
 import {
   setEditorSessionId,
   setSharedbConnected
@@ -55,6 +59,11 @@ import {
 import { EditorTabState, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import {
+  githubOpenFile,
+  githubSaveFile,
+  githubSaveFileAs
+} from 'src/features/github/GitHubActions';
+import {
   persistenceInitialise,
   persistenceOpenPicker,
   persistenceSaveFile,
@@ -85,6 +94,7 @@ import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSes
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
+import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
   NormalEditorContainerProps
@@ -115,7 +125,6 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
-import { makeGithubButtons } from './PlaygroundControlBarButtons';
 import {
   dataVisualizerTab,
   desktopOnlyTabIds,
@@ -567,12 +576,19 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
   const githubButtons = React.useMemo(() => {
-    return makeGithubButtons(
-      isFolderModeEnabled,
-      githubOctokitObject.octokit,
-      githubSaveInfo,
-      githubPersistenceIsDirty,
-      dispatch
+    return (
+      <ControlBarGitHubButtons
+        key="github"
+        isFolderModeEnabled={isFolderModeEnabled}
+        loggedInAs={githubOctokitObject.octokit}
+        githubSaveInfo={githubSaveInfo}
+        isDirty={githubPersistenceIsDirty}
+        onClickOpen={() => dispatch(githubOpenFile())}
+        onClickSaveAs={() => dispatch(githubSaveFileAs())}
+        onClickSave={() => dispatch(githubSaveFile())}
+        onClickLogIn={() => dispatch(loginGitHub())}
+        onClickLogOut={() => dispatch(logoutGitHub())}
+      />
     );
   }, [
     dispatch,
