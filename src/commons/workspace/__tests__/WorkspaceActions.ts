@@ -1,6 +1,10 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { createDefaultWorkspace, SALanguage } from '../../application/ApplicationTypes';
+import {
+  createDefaultWorkspace,
+  SALanguage,
+  SupportedLanguage
+} from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
@@ -621,7 +625,8 @@ test('changeSublanguage generates correct action object', () => {
   const sublang: SALanguage = {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
-    displayName: 'Source \xa72'
+    displayName: 'Source \xa72',
+    mainLanguage: SupportedLanguage.JAVASCRIPT
   };
   const action = changeSublanguage(sublang);
   expect(action).toEqual({
@@ -636,7 +641,8 @@ test('updateChapter generates correct action object', () => {
   const sublang: SALanguage = {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
-    displayName: 'Source \xa72'
+    displayName: 'Source \xa72',
+    mainLanguage: SupportedLanguage.JAVASCRIPT
   };
   const action = updateSublanguage(sublang);
   expect(action).toEqual({

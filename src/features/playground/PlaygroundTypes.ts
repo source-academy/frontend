@@ -1,3 +1,5 @@
+import { SupportedLanguage } from 'src/commons/application/ApplicationTypes';
+
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
@@ -13,5 +15,5 @@ export type PlaygroundState = {
   readonly shortURL?: string;
   readonly persistenceFile?: PersistenceFile;
   readonly githubSaveInfo: { repoName: string; filePath: string };
-  readonly lang: string;
+  readonly lang: SupportedLanguage;
 };
