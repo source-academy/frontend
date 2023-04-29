@@ -240,6 +240,15 @@ export const sourceLanguages: SALanguage[] = sourceSublanguages.map(sublang => {
 export const isSourceLanguage = (chapter: Chapter) =>
   [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
 
+export const ALL_LANGUAGES: readonly SALanguage[] = [
+  ...sourceLanguages,
+  fullJSLanguage,
+  fullTSLanguage,
+  htmlLanguage,
+  ...schemeLanguages,
+  ...pyLanguages
+];
+
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
     case 'development':
@@ -273,9 +282,16 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
+export const defaultLanguageConfig: SALanguage = ALL_LANGUAGES.find(
+  sublang =>
+    sublang.chapter === Constants.defaultSourceChapter &&
+    sublang.variant === Constants.defaultSourceVariant
+)!;
+
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  lang: SupportedLanguage.JAVASCRIPT
+  lang: SupportedLanguage.JAVASCRIPT,
+  languageConfig: defaultLanguageConfig
 };
 
 export const defaultEditorValue = '// Type your program in here!';
