@@ -757,6 +757,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     const currentLang = props.playgroundSourceChapter;
+    const currentVariant = props.playgroundSourceVariant;
 
     switch (true) {
       case !isSourceLanguage(currentLang):
@@ -772,47 +773,45 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           );
         }
         return tabs;
-    }
+      case currentLang === Chapter.FULL_JS:
+      case currentLang === Chapter.FULL_TS:
+        // (TEMP) Remove tabs for fullJS until support is integrated
+        return [...tabs, dataVisualizerTab];
+      case !usingRemoteExecution:
+        // Don't show the following when using remote execution
 
-    // (TEMP) Remove tabs for fullJS until support is integrated
-    if (
-      props.playgroundSourceChapter === Chapter.FULL_JS ||
-      props.playgroundSourceChapter === Chapter.FULL_TS
-    ) {
-      return [...tabs, dataVisualizerTab];
-    }
+        // Enable Data Visualizer for Source Chapter 2 and above
+        const shouldShowDataVisualizer = currentLang >= Chapter.SOURCE_2;
+        if (shouldShowDataVisualizer) {
+          tabs.push(dataVisualizerTab);
+        }
 
-    if (props.playgroundSourceChapter >= 2 && !usingRemoteExecution) {
-      // Enable Data Visualizer for Source Chapter 2 and above
-      tabs.push(dataVisualizerTab);
-    }
-    if (
-      props.playgroundSourceChapter >= 3 &&
-      props.playgroundSourceVariant !== Variant.CONCURRENT &&
-      props.playgroundSourceVariant !== Variant.NON_DET &&
-      !usingRemoteExecution
-    ) {
-      // Enable Env Visualizer for Source Chapter 3 and above
-      tabs.push({
-        label: 'Env Visualizer',
-        iconName: IconNames.GLOBE,
-        body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-        id: SideContentType.envVisualizer
-      });
-    }
+        // Enable Env Visualizer for Source Chapter 3 and above
+        const shouldShowEnvVisualizer =
+          currentLang >= Chapter.SOURCE_3 &&
+          currentVariant !== Variant.CONCURRENT &&
+          currentVariant !== Variant.NON_DET;
+        if (shouldShowEnvVisualizer) {
+          tabs.push({
+            label: 'Env Visualizer',
+            iconName: IconNames.GLOBE,
+            body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+            id: SideContentType.envVisualizer
+          });
+        }
 
-    if (
-      props.playgroundSourceChapter <= 2 &&
-      (props.playgroundSourceVariant === Variant.DEFAULT ||
-        props.playgroundSourceVariant === Variant.NATIVE)
-    ) {
-      // Enable Subst Visualizer only for default Source 1 & 2
-      tabs.push({
-        label: 'Stepper',
-        iconName: IconNames.FLOW_REVIEW,
-        body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
-        id: SideContentType.substVisualizer
-      });
+        // Enable Subst Visualizer only for default Source 1 & 2
+        const shouldShowSubstVisualizer =
+          currentLang <= Chapter.SOURCE_2 &&
+          (currentVariant === Variant.DEFAULT || currentVariant === Variant.NATIVE);
+        if (shouldShowSubstVisualizer) {
+          tabs.push({
+            label: 'Stepper',
+            iconName: IconNames.FLOW_REVIEW,
+            body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
+            id: SideContentType.substVisualizer
+          });
+        }
     }
 
     if (!isSicpEditor) {
