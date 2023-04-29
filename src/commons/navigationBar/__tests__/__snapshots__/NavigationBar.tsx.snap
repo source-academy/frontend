@@ -18,7 +18,6 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
-      <NavigationBarLangSelectButton />
       <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
         <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
@@ -87,7 +86,6 @@ exports[`NavigationBar renders correctly for student with course 1`] = `
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
-      <NavigationBarLangSelectButton />
       <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
         <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
@@ -140,7 +138,6 @@ exports[`NavigationBar renders correctly for student without course 1`] = `
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
-      <NavigationBarLangSelectButton />
       <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\" to=\\"/contributors\\">
         <Blueprint4.Icon icon=\\"heart\\" />
       </NavLink>
