@@ -445,30 +445,25 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [sessionId]
   );
 
-  const handleEditorEval = React.useCallback(() => {
-    dispatch(evalEditor(workspaceLocation));
+  const memoizedHandlers = React.useMemo(() => {
+    return {
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation)),
+      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation))
+    };
   }, [dispatch, workspaceLocation]);
 
-  const handleInterruptEval = React.useCallback(
-    () => dispatch(beginInterruptExecution(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleToggleEditorAutorun = React.useCallback(
-    () => dispatch(toggleEditorAutorun(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleDebuggerPause = React.useCallback(
-    () => dispatch(beginDebuggerPause(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleDebuggerReset = React.useCallback(
-    () => dispatch(debuggerReset(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleDebuggerResume = React.useCallback(
-    () => dispatch(debuggerResume(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
+  const {
+    handleEditorEval,
+    handleInterruptEval,
+    handleToggleEditorAutorun,
+    handleDebuggerPause,
+    handleDebuggerReset,
+    handleDebuggerResume
+  } = memoizedHandlers;
 
   const autorunButtons = React.useMemo(() => {
     return (
