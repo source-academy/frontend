@@ -123,6 +123,8 @@ export const SUPPORTED_LANGUAGES = [
 export interface SALanguage extends Language {
   displayName: string;
   mainLanguage: SupportedLanguage;
+  usesSubstVisualizer?: boolean;
+  usesEnvVisualizer?: boolean;
 }
 
 const variantDisplay: Map<Variant, string> = new Map([
@@ -207,26 +209,29 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   }
 };
 
-export const sourceSublanguages: Language[] = [
-  { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
+export const sourceSublanguages = [
+  { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT, usesSubstVisualizer: true },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
   { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
-  { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
-  { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE, usesSubstVisualizer: true },
+
+  { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT, usesSubstVisualizer: true },
   { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
-  { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
-  { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
-  { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
+  { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE, usesSubstVisualizer: true },
+
+  { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT, usesEnvVisualizer: true },
+  { chapter: Chapter.SOURCE_3, variant: Variant.TYPED, usesEnvVisualizer: true },
   { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
   { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
-  { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
-  { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
-  { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_4, variant: Variant.GPU },
-  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE },
-  { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
+  { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE, usesEnvVisualizer: true },
+
+  { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT, usesEnvVisualizer: true },
+  { chapter: Chapter.SOURCE_4, variant: Variant.TYPED, usesEnvVisualizer: true },
+  { chapter: Chapter.SOURCE_4, variant: Variant.GPU, usesEnvVisualizer: true },
+  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE, usesEnvVisualizer: true },
+  { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL, usesEnvVisualizer: true }
 ];
 
 export const sourceLanguages: SALanguage[] = sourceSublanguages.map(sublang => {
