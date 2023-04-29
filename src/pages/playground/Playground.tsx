@@ -456,15 +456,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     };
   }, [dispatch, workspaceLocation]);
 
-  const {
-    handleEditorEval,
-    handleInterruptEval,
-    handleToggleEditorAutorun,
-    handleDebuggerPause,
-    handleDebuggerReset,
-    handleDebuggerResume
-  } = memoizedHandlers;
-
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
@@ -472,31 +463,21 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         isDebugging={props.isDebugging}
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
-        handleInterruptEval={handleInterruptEval}
-        handleToggleEditorAutorun={handleToggleEditorAutorun}
-        handleEditorEval={handleEditorEval}
-        handleDebuggerPause={handleDebuggerPause}
-        handleDebuggerReset={handleDebuggerReset}
-        handleDebuggerResume={handleDebuggerResume}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         sourceChapter={props.playgroundSourceChapter}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
+        {...memoizedHandlers}
       />
     );
   }, [
     activeEditorTabIndex,
-    handleDebuggerPause,
-    handleDebuggerReset,
-    handleDebuggerResume,
-    handleEditorEval,
-    handleInterruptEval,
-    handleToggleEditorAutorun,
     props.isDebugging,
     props.isEditorAutorun,
     props.isRunning,
     props.playgroundSourceChapter,
+    memoizedHandlers,
     usingRemoteExecution
   ]);
 
@@ -901,7 +882,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
       [dispatch, workspaceLocation]
     ),
-    handleEditorEval,
+    handleEditorEval: memoizedHandlers.handleEditorEval,
     handlePromptAutocomplete: React.useCallback(
       (row: number, col: number, callback: any) =>
         dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
