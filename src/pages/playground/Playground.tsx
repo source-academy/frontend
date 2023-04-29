@@ -4,7 +4,6 @@ import { Octokit } from '@octokit/rest';
 import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
-import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
@@ -108,8 +107,6 @@ import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
-import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import {
   isVisualizerTab,
   SideContentTab,
@@ -132,8 +129,10 @@ import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   dataVisualizerTab,
   desktopOnlyTabIds,
+  makeEnvVisualizerTabFrom,
   makeHtmlDisplayTabFrom,
   makeRemoteExecutionTabFrom,
+  makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
 
@@ -438,21 +437,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     },
     [hasBreakpoints, handleEnvVisualiserReset]
   );
-
-  const processStepperOutput = (output: InterpreterOutput[]) => {
-    const editorOutput = output[0];
-    if (
-      editorOutput &&
-      editorOutput.type === 'result' &&
-      editorOutput.value instanceof Array &&
-      editorOutput.value[0] === Object(editorOutput.value[0]) &&
-      isStepperOutput(editorOutput.value[0])
-    ) {
-      return editorOutput.value;
-    } else {
-      return [];
-    }
-  };
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
@@ -785,12 +769,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           currentVariant !== Variant.CONCURRENT &&
           currentVariant !== Variant.NON_DET;
         if (shouldShowEnvVisualizer) {
-          tabs.push({
-            label: 'Env Visualizer',
-            iconName: IconNames.GLOBE,
-            body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-            id: SideContentType.envVisualizer
-          });
+          tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
         }
 
         // Enable Subst Visualizer only for default Source 1 & 2
@@ -798,12 +777,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           currentLang <= Chapter.SOURCE_2 &&
           (currentVariant === Variant.DEFAULT || currentVariant === Variant.NATIVE);
         if (shouldShowSubstVisualizer) {
-          tabs.push({
-            label: 'Stepper',
-            iconName: IconNames.FLOW_REVIEW,
-            body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
-            id: SideContentType.substVisualizer
-          });
+          tabs.push(makeSubstVisualizerTabFrom(props.output));
         }
     }
 

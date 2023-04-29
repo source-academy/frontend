@@ -1,7 +1,11 @@
 import { IconNames } from '@blueprintjs/icons';
+import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import SideContentRemoteExecution from 'src/commons/sideContent/remoteExecution/SideContentRemoteExecution';
+import SideContentEnvVisualizer from 'src/commons/sideContent/SideContentEnvVisualizer';
+import SideContentSubstVisualizer from 'src/commons/sideContent/SideContentSubstVisualizer';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { ResultOutput } from '../../commons/application/ApplicationTypes';
+import { InterpreterOutput, ResultOutput } from '../../commons/application/ApplicationTypes';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentHtmlDisplay from '../../commons/sideContent/SideContentHtmlDisplay';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -18,6 +22,13 @@ export const dataVisualizerTab: SideContentTab = {
   body: <SideContentDataVisualizer />,
   id: SideContentType.dataVisualizer
 };
+
+export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
+  label: 'Env Visualizer',
+  iconName: IconNames.GLOBE,
+  body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+  id: SideContentType.envVisualizer
+});
 
 export const makeHtmlDisplayTabFrom = (
   output: ResultOutput,
@@ -44,3 +55,27 @@ export const makeRemoteExecutionTabFrom = (
   ),
   id: SideContentType.remoteExecution
 });
+
+export const makeSubstVisualizerTabFrom = (output: InterpreterOutput[]): SideContentTab => {
+  const processStepperOutput = (output: InterpreterOutput[]) => {
+    const editorOutput = output[0];
+    if (
+      editorOutput &&
+      editorOutput.type === 'result' &&
+      editorOutput.value instanceof Array &&
+      editorOutput.value[0] === Object(editorOutput.value[0]) &&
+      isStepperOutput(editorOutput.value[0])
+    ) {
+      return editorOutput.value;
+    } else {
+      return [];
+    }
+  };
+
+  return {
+    label: 'Stepper',
+    iconName: IconNames.FLOW_REVIEW,
+    body: <SideContentSubstVisualizer content={processStepperOutput(output)} />,
+    id: SideContentType.substVisualizer
+  };
+};
