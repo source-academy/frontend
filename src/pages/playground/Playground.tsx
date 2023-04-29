@@ -409,35 +409,33 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         return;
       }
 
+      // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+      if (
+        prevTabId === SideContentType.substVisualizer &&
+        newTabId === SideContentType.mobileEditorRun
+      ) {
+        return;
+      }
+
       const { handleUsingEnv, handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } =
         propsRef.current;
 
-      /**
-       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-       */
-      if (
-        !(
-          prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun
-        )
-      ) {
-        if (playgroundSourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
-          handleUsingSubst(true);
-        }
-
-        if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
-          handleReplOutputClear();
-          handleUsingSubst(false);
-        }
-
-        if (playgroundSourceChapter >= 3 && newTabId === SideContentType.envVisualizer) {
-          handleUsingEnv(true);
-        } else {
-          handleEnvVisualiserReset();
-        }
-
-        setSelectedTab(newTabId);
+      if (playgroundSourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
+        handleUsingSubst(true);
       }
+
+      if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
+        handleReplOutputClear();
+        handleUsingSubst(false);
+      }
+
+      if (playgroundSourceChapter >= 3 && newTabId === SideContentType.envVisualizer) {
+        handleUsingEnv(true);
+      } else {
+        handleEnvVisualiserReset();
+      }
+
+      setSelectedTab(newTabId);
     },
     [hasBreakpoints, handleEnvVisualiserReset]
   );
