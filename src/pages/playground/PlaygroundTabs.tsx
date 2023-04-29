@@ -6,6 +6,7 @@ import SideContentSubstVisualizer from 'src/commons/sideContent/SideContentSubst
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, ResultOutput } from '../../commons/application/ApplicationTypes';
+import Markdown from '../../commons/Markdown';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentHtmlDisplay from '../../commons/sideContent/SideContentHtmlDisplay';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -38,6 +39,13 @@ export const makeHtmlDisplayTabFrom = (
   iconName: IconNames.MODAL,
   body: <SideContentHtmlDisplay content={output.value} handleAddHtmlConsoleError={handleError} />,
   id: SideContentType.htmlDisplay
+});
+
+export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
+  label: 'Introduction',
+  iconName: IconNames.HOME,
+  body: <Markdown content={content} openLinksInNewWindow={true} />,
+  id: SideContentType.introduction
 });
 
 export const makeRemoteExecutionTabFrom = (

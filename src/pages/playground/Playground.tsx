@@ -102,7 +102,6 @@ import {
 import { Position } from '../../commons/editor/EditorTypes';
 import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
-import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
@@ -131,6 +130,7 @@ import {
   desktopOnlyTabIds,
   makeEnvVisualizerTabFrom,
   makeHtmlDisplayTabFrom,
+  makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
@@ -713,20 +713,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
-    () => ({
-      label: 'Introduction',
-      iconName: IconNames.HOME,
-      body: (
-        <Markdown
-          content={generateSourceIntroduction(
-            props.playgroundSourceChapter,
-            props.playgroundSourceVariant
-          )}
-          openLinksInNewWindow={true}
-        />
+    () =>
+      makeIntroductionTabFrom(
+        generateSourceIntroduction(props.playgroundSourceChapter, props.playgroundSourceVariant)
       ),
-      id: SideContentType.introduction
-    }),
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
