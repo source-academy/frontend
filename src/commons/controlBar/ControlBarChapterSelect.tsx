@@ -3,11 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useState } from 'react';
-import { store } from 'src/pages/createStore';
+import React from 'react';
 
 import {
-  defaultLanguages,
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
@@ -15,10 +13,10 @@ import {
   SALanguage,
   schemeLanguages,
   sourceLanguages,
-  styliseSublanguage,
-  variantLanguages
+  styliseSublanguage
 } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
+import { useTypedSelector } from '../utils/Hooks';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
@@ -33,40 +31,22 @@ type StateProps = {
   disabled?: boolean;
 };
 
-const chapterListRendererA: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const defaultChoices = defaultLanguages.map(renderItem);
-  const variantChoices = variantLanguages.map(renderItem);
-  const fullJSChoice = renderItem(fullJSLanguage, 0);
-  const fullTSChoice = renderItem(fullTSLanguage, 0);
-  const htmlChoice = renderItem(htmlLanguage, 0);
+const chapterListRenderer: ItemListRenderer<SALanguage> = ({
+  itemsParentRef,
+  renderItem,
+  items
+}) => {
+  const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
+  const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
 
   return (
     <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {defaultChoices}
-      {Constants.playgroundOnly && fullJSChoice}
-      {Constants.playgroundOnly && fullTSChoice}
-      {Constants.playgroundOnly && htmlChoice}
-      <MenuItem key="variant-menu" text="Variants" icon="cog">
-        {variantChoices}
-      </MenuItem>
-    </Menu>
-  );
-};
-
-const chapterListRendererB: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const schemeChoice = schemeLanguages.map(renderItem);
-  return (
-    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {Constants.playgroundOnly && schemeChoice}
-    </Menu>
-  );
-};
-
-const chapterListRendererC: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const pyChoice = pyLanguages.map(renderItem);
-  return (
-    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {Constants.playgroundOnly && pyChoice}
+      {defaultChoices.map(renderItem)}
+      {variantChoices.length > 0 && (
+        <MenuItem key="variant-menu" text="Variants" icon="cog">
+          {variantChoices.map(renderItem)}
+        </MenuItem>
+      )}
     </Menu>
   );
 };
@@ -98,30 +78,18 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
-  const [selectedLang, setSelectedLang] = useState(store.getState().playground.lang);
-  useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
-      const newSelectedLang = store.getState().playground.lang;
-      setSelectedLang(newSelectedLang);
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const selectedLang = useTypedSelector(store => store.playground.lang);
 
-  let chapterListRenderer: ItemListRenderer<SALanguage> = chapterListRendererA;
-
-  if (selectedLang === 'JavaScript') {
-    chapterListRenderer = chapterListRendererA;
-  } else if (selectedLang === 'Scheme') {
-    chapterListRenderer = chapterListRendererB;
-  } else if (selectedLang === 'Python') {
-    chapterListRenderer = chapterListRendererC;
-  }
+  const choices = [
+    ...sourceLanguages,
+    ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
+    ...schemeLanguages,
+    ...pyLanguages
+  ];
 
   return (
     <ChapterSelectComponent
-      items={sourceLanguages}
+      items={choices.filter(({ mainLanguage }) => mainLanguage === selectedLang)}
       onItemSelect={handleChapterSelect}
       itemRenderer={chapterRenderer(isFolderModeEnabled)}
       itemListRenderer={chapterListRenderer}
