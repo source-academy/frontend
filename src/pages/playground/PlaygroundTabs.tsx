@@ -1,4 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
+import SideContentRemoteExecution from 'src/commons/sideContent/remoteExecution/SideContentRemoteExecution';
 
 import { ResultOutput } from '../../commons/application/ApplicationTypes';
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
@@ -26,4 +27,20 @@ export const makeHtmlDisplayTabFrom = (
   iconName: IconNames.MODAL,
   body: <SideContentHtmlDisplay content={output.value} handleAddHtmlConsoleError={handleError} />,
   id: SideContentType.htmlDisplay
+});
+
+export const makeRemoteExecutionTabFrom = (
+  deviceSecret: string | undefined,
+  callback: React.Dispatch<React.SetStateAction<string | undefined>>
+): SideContentTab => ({
+  label: 'Remote Execution',
+  iconName: IconNames.SATELLITE,
+  body: (
+    <SideContentRemoteExecution
+      workspace="playground"
+      secretParams={deviceSecret || undefined}
+      callbackFunction={callback}
+    />
+  ),
+  id: SideContentType.remoteExecution
 });

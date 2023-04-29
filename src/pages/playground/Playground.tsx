@@ -108,7 +108,6 @@ import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
-import SideContentRemoteExecution from '../../commons/sideContent/remoteExecution/SideContentRemoteExecution';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import {
@@ -134,6 +133,7 @@ import {
   dataVisualizerTab,
   desktopOnlyTabIds,
   makeHtmlDisplayTabFrom,
+  makeRemoteExecutionTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
 
@@ -315,18 +315,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const remoteExecutionTab: SideContentTab = React.useMemo(
-    () => ({
-      label: 'Remote Execution',
-      iconName: IconNames.SATELLITE,
-      body: (
-        <SideContentRemoteExecution
-          workspace="playground"
-          secretParams={deviceSecret || undefined}
-          callbackFunction={setDeviceSecret}
-        />
-      ),
-      id: SideContentType.remoteExecution
-    }),
+    () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
     [deviceSecret]
   );
 
