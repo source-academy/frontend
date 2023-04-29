@@ -169,7 +169,7 @@ export type StateProps = {
   shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
-  playgroundSourceChapter: number;
+  playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
   courseSourceChapter?: number;
   courseSourceVariant?: Variant;
