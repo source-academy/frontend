@@ -113,7 +113,11 @@ import SideContentRemoteExecution from '../../commons/sideContent/remoteExecutio
 import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
+import {
+  isVisualizerTab,
+  SideContentTab,
+  SideContentType
+} from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
@@ -420,19 +424,21 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       const { handleUsingEnv, handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } =
         propsRef.current;
 
-      if (playgroundSourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
-        handleUsingSubst(true);
+      if (newTabId !== SideContentType.envVisualizer) {
+        handleEnvVisualiserReset();
+      }
+
+      if (isSourceLanguage(playgroundSourceChapter) && isVisualizerTab(newTabId)) {
+        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+          handleUsingSubst(true);
+        } else {
+          handleUsingEnv(true);
+        }
       }
 
       if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
         handleReplOutputClear();
         handleUsingSubst(false);
-      }
-
-      if (playgroundSourceChapter >= 3 && newTabId === SideContentType.envVisualizer) {
-        handleUsingEnv(true);
-      } else {
-        handleEnvVisualiserReset();
       }
 
       setSelectedTab(newTabId);

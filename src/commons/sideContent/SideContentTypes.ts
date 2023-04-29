@@ -37,6 +37,10 @@ export enum SideContentType {
   htmlDisplay = 'html_display'
 }
 
+export const isVisualizerTab = (tab: SideContentType) => {
+  return tab === SideContentType.substVisualizer || tab === SideContentType.envVisualizer;
+};
+
 /**
  * @property label A string that will appear as the tooltip.
  *
