@@ -28,7 +28,6 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -110,7 +109,6 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import SideContentRemoteExecution from '../../commons/sideContent/remoteExecution/SideContentRemoteExecution';
-import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import {
@@ -132,6 +130,12 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
+import {
+  dataVisualizerTab,
+  desktopOnlyTabIds,
+  makeHtmlDisplayTabFrom,
+  mobileOnlyTabIds
+} from './PlaygroundTabs';
 
 export type PlaygroundProps = OwnProps &
   DispatchProps &
@@ -1107,28 +1111,5 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     </HotKeys>
   );
 };
-
-const mobileOnlyTabIds: readonly SideContentType[] = [
-  SideContentType.mobileEditor,
-  SideContentType.mobileEditorRun
-];
-const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
-
-const dataVisualizerTab: SideContentTab = {
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer
-};
-
-const makeHtmlDisplayTabFrom = (
-  output: ResultOutput,
-  handleError: (errorMsg: string) => void
-): SideContentTab => ({
-  label: 'HTML Display',
-  iconName: IconNames.MODAL,
-  body: <SideContentHtmlDisplay content={output.value} handleAddHtmlConsoleError={handleError} />,
-  id: SideContentType.htmlDisplay
-});
 
 export default Playground;
