@@ -282,10 +282,13 @@ export const getLanguageConfig = (
   chapter: Chapter,
   variant: Variant = Variant.DEFAULT
 ): SALanguage => {
-  return (
-    ALL_LANGUAGES.find(lang => lang.chapter === chapter && lang.variant === variant) ??
-    defaultLanguageConfig
+  const languageConfig = ALL_LANGUAGES.find(
+    lang => lang.chapter === chapter && lang.variant === variant
   );
+  if (!languageConfig) {
+    throw new Error(`Language config not found for chapter ${chapter} variant ${variant}`);
+  }
+  return languageConfig;
 };
 
 const currentEnvironment = (): ApplicationEnvironment => {
