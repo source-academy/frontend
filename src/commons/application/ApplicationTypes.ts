@@ -124,11 +124,12 @@ export interface SALanguage extends Language {
   displayName: string;
   mainLanguage: SupportedLanguage;
   /** Whether the language supports the given features */
-  supports?: {
-    substVisualizer?: boolean;
-    envVisualizer?: boolean;
-  };
+  supports?: LanguageFeatures;
 }
+type LanguageFeatures = {
+  substVisualizer?: boolean;
+  envVisualizer?: boolean;
+};
 
 const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
@@ -212,40 +213,48 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   }
 };
 
-const sourceSubLanguages = [
-  { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT, supports: { substVisualizer: true } },
+const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
+  { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
   { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
-  { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE, supports: { substVisualizer: true } },
+  { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
 
-  { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT, supports: { substVisualizer: true } },
+  { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
-  { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE, supports: { substVisualizer: true } },
+  { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
 
-  { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT, supports: { envVisualizer: true } },
-  { chapter: Chapter.SOURCE_3, variant: Variant.TYPED, supports: { envVisualizer: true } },
+  { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
   { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
-  { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE, supports: { envVisualizer: true } },
+  { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
 
-  { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT, supports: { envVisualizer: true } },
-  { chapter: Chapter.SOURCE_4, variant: Variant.TYPED, supports: { envVisualizer: true } },
-  { chapter: Chapter.SOURCE_4, variant: Variant.GPU, supports: { envVisualizer: true } },
-  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE, supports: { envVisualizer: true } },
-  {
-    chapter: Chapter.SOURCE_4,
-    variant: Variant.EXPLICIT_CONTROL,
-    supports: { envVisualizer: true }
-  }
+  { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
+  { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
+  { chapter: Chapter.SOURCE_4, variant: Variant.GPU },
+  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE },
+  { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ];
 
 export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
+  const { chapter, variant } = sublang;
+  const supportedFeatures: LanguageFeatures = sublang['supports'] ?? {};
+
+  // Enable Subst Visualizer only for default Source 1 & 2
+  supportedFeatures.substVisualizer =
+    chapter <= Chapter.SOURCE_2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE);
+
+  // Enable Env Visualizer for Source Chapter 3 and above
+  supportedFeatures.envVisualizer =
+    chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET;
+
   return {
     ...sublang,
     displayName: styliseSublanguage(sublang.chapter, sublang.variant),
-    mainLanguage: SupportedLanguage.JAVASCRIPT
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: supportedFeatures
   };
 });
 
