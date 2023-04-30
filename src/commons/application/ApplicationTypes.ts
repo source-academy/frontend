@@ -209,7 +209,7 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   }
 };
 
-export const sourceSublanguages = [
+const sourceSublanguages = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT, usesSubstVisualizer: true },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
