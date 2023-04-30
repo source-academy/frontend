@@ -715,6 +715,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
     if (!isSourceLanguage(currentLang)) {
       // For now, disable other tabs when not running Source
+      // TODO: Remove this when fully migrated to language config
       return tabs;
     }
 
@@ -744,12 +745,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         tabs.push(dataVisualizerTab);
       }
 
-      // Enable Env Visualizer for Source Chapter 3 and above
       if (shouldShowEnvVisualizer) {
         tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
       }
 
-      // Enable Subst Visualizer only for default Source 1 & 2
       if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(props.output));
       }
