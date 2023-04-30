@@ -702,49 +702,53 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     const currentLang = props.playgroundSourceChapter;
     const currentVariant = props.playgroundSourceVariant;
 
-    switch (true) {
-      case !isSourceLanguage(currentLang):
-        // For now, disable other tabs when not running Source
-        return tabs;
-      case currentLang === Chapter.HTML:
-        // For HTML Chapter, HTML Display tab is added only after code is run
-        if (props.output.length > 0 && props.output[0].type === 'result') {
-          tabs.push(
-            makeHtmlDisplayTabFrom(props.output[0] as ResultOutput, errorMsg =>
-              dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
-            )
-          );
-        }
-        return tabs;
-      case currentLang === Chapter.FULL_JS:
-      case currentLang === Chapter.FULL_TS:
-        // (TEMP) Remove tabs for fullJS until support is integrated
-        return [...tabs, dataVisualizerTab];
-      case !usingRemoteExecution:
-        // Don't show the following when using remote execution
+    if (!isSourceLanguage(currentLang)) {
+      // For now, disable other tabs when not running Source
+      return tabs;
+    }
 
-        // Enable Data Visualizer for Source Chapter 2 and above
-        const shouldShowDataVisualizer = currentLang >= Chapter.SOURCE_2;
-        if (shouldShowDataVisualizer) {
-          tabs.push(dataVisualizerTab);
-        }
+    if (currentLang === Chapter.HTML) {
+      // For HTML Chapter, HTML Display tab is added only after code is run
+      if (props.output.length > 0 && props.output[0].type === 'result') {
+        tabs.push(
+          makeHtmlDisplayTabFrom(props.output[0] as ResultOutput, errorMsg =>
+            dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
+          )
+        );
+      }
+      return tabs;
+    }
 
-        // Enable Env Visualizer for Source Chapter 3 and above
-        const shouldShowEnvVisualizer =
-          currentLang >= Chapter.SOURCE_3 &&
-          currentVariant !== Variant.CONCURRENT &&
-          currentVariant !== Variant.NON_DET;
-        if (shouldShowEnvVisualizer) {
-          tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
-        }
+    if (currentLang === Chapter.FULL_JS || currentLang === Chapter.FULL_TS) {
+      // (TEMP) Remove tabs for fullJS until support is integrated
+      return [...tabs, dataVisualizerTab];
+    }
 
-        // Enable Subst Visualizer only for default Source 1 & 2
-        const shouldShowSubstVisualizer =
-          currentLang <= Chapter.SOURCE_2 &&
-          (currentVariant === Variant.DEFAULT || currentVariant === Variant.NATIVE);
-        if (shouldShowSubstVisualizer) {
-          tabs.push(makeSubstVisualizerTabFrom(props.output));
-        }
+    if (!usingRemoteExecution) {
+      // Don't show the following when using remote execution
+
+      // Enable Data Visualizer for Source Chapter 2 and above
+      const shouldShowDataVisualizer = currentLang >= Chapter.SOURCE_2;
+      if (shouldShowDataVisualizer) {
+        tabs.push(dataVisualizerTab);
+      }
+
+      // Enable Env Visualizer for Source Chapter 3 and above
+      const shouldShowEnvVisualizer =
+        currentLang >= Chapter.SOURCE_3 &&
+        currentVariant !== Variant.CONCURRENT &&
+        currentVariant !== Variant.NON_DET;
+      if (shouldShowEnvVisualizer) {
+        tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
+      }
+
+      // Enable Subst Visualizer only for default Source 1 & 2
+      const shouldShowSubstVisualizer =
+        currentLang <= Chapter.SOURCE_2 &&
+        (currentVariant === Variant.DEFAULT || currentVariant === Variant.NATIVE);
+      if (shouldShowSubstVisualizer) {
+        tabs.push(makeSubstVisualizerTabFrom(props.output));
+      }
     }
 
     if (!isSicpEditor) {
