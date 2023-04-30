@@ -701,15 +701,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
-  const shouldShowDataVisualizer = useTypedSelector(
-    state => state.playground.languageConfig.supports?.dataVisualizer ?? false
-  );
-  const shouldShowEnvVisualizer = useTypedSelector(
-    state => state.playground.languageConfig.supports?.envVisualizer ?? false
-  );
-  const shouldShowSubstVisualizer = useTypedSelector(
-    state => state.playground.languageConfig.supports?.substVisualizer ?? false
-  );
+  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
+  const shouldShowDataVisualizer = languageConfig.supports?.dataVisualizer ?? false;
+  const shouldShowEnvVisualizer = languageConfig.supports?.envVisualizer ?? false;
+  const shouldShowSubstVisualizer = languageConfig.supports?.substVisualizer ?? false;
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
