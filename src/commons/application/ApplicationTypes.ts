@@ -287,11 +287,18 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
-export const defaultLanguageConfig: SALanguage = ALL_LANGUAGES.find(
-  sublang =>
-    sublang.chapter === Constants.defaultSourceChapter &&
-    sublang.variant === Constants.defaultSourceVariant
-)!;
+const getDefaultLanguageConfig = (): SALanguage => {
+  const languageConfig = ALL_LANGUAGES.find(
+    sublang =>
+      sublang.chapter === Constants.defaultSourceChapter &&
+      sublang.variant === Constants.defaultSourceVariant
+  );
+  if (!languageConfig) {
+    throw new Error('Cannot find language config to match default chapter and variant');
+  }
+  return languageConfig;
+};
+export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
