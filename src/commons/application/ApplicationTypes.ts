@@ -163,7 +163,7 @@ export const htmlLanguage: SALanguage = {
   mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
-const schemeSubLanguages = [
+const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
   { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
   { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
   { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
@@ -175,7 +175,7 @@ export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
   return { ...sublang, mainLanguage: SupportedLanguage.SCHEME };
 });
 
-const pySubLanguages = [
+const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
   //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
   //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
