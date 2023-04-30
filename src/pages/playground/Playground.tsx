@@ -760,6 +760,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     isSicpEditor,
     dispatch,
     workspaceLocation,
+    shouldShowDataVisualizer,
     shouldShowEnvVisualizer,
     shouldShowSubstVisualizer,
     remoteExecutionTab
