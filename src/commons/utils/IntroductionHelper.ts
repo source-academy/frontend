@@ -2,6 +2,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 
 import {
   pyLanguages,
+  SALanguage,
   schemeLanguages,
   sourceLanguages,
   styliseSublanguage
@@ -65,6 +66,11 @@ const generateIntroductionText = (sourceChapter: Chapter, sourceVariant: Variant
   );
 };
 
+// TODO: Remove this after migrated to language config
 export const generateSourceIntroduction = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return generateIntroductionText(sourceChapter, sourceVariant);
+};
+
+export const generateLanguageIntroduction = (language: SALanguage) => {
+  return generateSourceIntroduction(language.chapter, language.variant);
 };
