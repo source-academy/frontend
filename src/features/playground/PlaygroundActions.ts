@@ -1,3 +1,4 @@
+import { SupportedLanguage } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
 
 import { PersistenceFile } from '../persistence/PersistenceTypes';
@@ -28,4 +29,5 @@ export const playgroundUpdateGitHubSaveInfo = (
   lastSaved: Date
 ) => action(PLAYGROUND_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath, lastSaved });
 
-export const playgroundChangeLang = (lang: string) => action(PLAYGROUND_UPDATE_LANG, lang);
+export const playgroundChangeLang = (lang: SupportedLanguage) =>
+  action(PLAYGROUND_UPDATE_LANG, lang);

@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { OverallState } from '../commons/application/ApplicationTypes';
+import { OverallState, SupportedLanguage } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/NotificationsHelper';
@@ -26,7 +26,7 @@ export type SavedState = {
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
-  playgroundLang: string;
+  playgroundLang: SupportedLanguage;
   playgroundExternalLibrary: ExternalLibraryName;
 };
 

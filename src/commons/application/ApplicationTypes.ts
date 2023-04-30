@@ -103,6 +103,18 @@ export enum Role {
   Admin = 'admin'
 }
 
+export enum SupportedLanguage {
+  JAVASCRIPT = 'JavaScript',
+  SCHEME = 'Scheme',
+  PYTHON = 'Python'
+}
+
+export const SUPPORTED_LANGUAGES = [
+  SupportedLanguage.JAVASCRIPT,
+  SupportedLanguage.SCHEME,
+  SupportedLanguage.PYTHON
+];
+
 /**
  * Defines the languages available for use on Source Academy,
  * including Source sublanguages and other languages e.g. full JS.
@@ -110,6 +122,7 @@ export enum Role {
  */
 export interface SALanguage extends Language {
   displayName: string;
+  mainLanguage: SupportedLanguage;
 }
 
 const variantDisplay: Map<Variant, string> = new Map([
@@ -126,22 +139,25 @@ const variantDisplay: Map<Variant, string> = new Map([
 export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
-  displayName: 'full JavaScript'
+  displayName: 'full JavaScript',
+  mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
-  displayName: 'full TypeScript'
+  displayName: 'full TypeScript',
+  mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
-  displayName: 'HTML'
+  displayName: 'HTML',
+  mainLanguage: SupportedLanguage.JAVASCRIPT
 };
 
-export const schemeLanguages: SALanguage[] = [
+const schemeSubLanguages = [
   { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
   { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
   { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
@@ -149,13 +165,21 @@ export const schemeLanguages: SALanguage[] = [
   { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
 ];
 
-export const pyLanguages: SALanguage[] = [
+export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
+  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME };
+});
+
+const pySubLanguages = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
   //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
   //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
   //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
   //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
 ];
+
+export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
+  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON };
+});
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
   switch (chapter) {
@@ -183,7 +207,7 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   }
 };
 
-export const sublanguages: Language[] = [
+export const sourceSublanguages: Language[] = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
@@ -205,20 +229,13 @@ export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ];
 
-export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
+export const sourceLanguages: SALanguage[] = sourceSublanguages.map(sublang => {
   return {
     ...sublang,
-    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
+    displayName: styliseSublanguage(sublang.chapter, sublang.variant),
+    mainLanguage: SupportedLanguage.JAVASCRIPT
   };
 });
-
-export const defaultLanguages = sourceLanguages.filter(
-  sublang => sublang.variant === Variant.DEFAULT
-);
-
-export const variantLanguages = sourceLanguages.filter(
-  sublang => sublang.variant !== Variant.DEFAULT
-);
 
 export const isSourceLanguage = (chapter: Chapter) =>
   [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
@@ -258,7 +275,7 @@ export const defaultAchievement: AchievementState = {
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  lang: 'JavaScript'
+  lang: SupportedLanguage.JAVASCRIPT
 };
 
 export const defaultEditorValue = '// Type your program in here!';
