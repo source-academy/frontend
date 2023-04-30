@@ -295,6 +295,17 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
+  const languageConfig: SALanguage =
+    useTypedSelector(state => state.playground.languageConfig) ??
+    // TODO: To migrate the state logic away from playgroundSourceChapter
+    //       and playgroundSourceVariant into the language config instead
+    ALL_LANGUAGES.find(
+      language =>
+        language.chapter === props.playgroundSourceChapter &&
+        language.variant === props.playgroundSourceVariant
+    ) ??
+    defaultLanguageConfig;
+
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
   if (shouldAddDevice && !deviceSecret) {
@@ -343,18 +354,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
 
   React.useEffect(() => {
-    // TODO: To migrate the state logic away from playgroundSourceChapter
-    //       and playgroundSourceVariant into the language config instead
-    const languageConfig: SALanguage =
-      ALL_LANGUAGES.find(
-        language =>
-          language.chapter === props.playgroundSourceChapter &&
-          language.variant === props.playgroundSourceVariant
-      ) ?? defaultLanguageConfig;
     // Hardcoded for Playground only for now, while we await workspace refactoring
     // to decouple the SicpWorkspace from the Playground.
     dispatch(playgroundConfigLanguage(languageConfig));
-  }, []);
+  }, [dispatch, languageConfig]);
 
   React.useEffect(() => {
     if (!hash) {
@@ -731,7 +734,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
-  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
   const shouldShowDataVisualizer = languageConfig.supports?.dataVisualizer ?? false;
   const shouldShowEnvVisualizer = languageConfig.supports?.envVisualizer ?? false;
   const shouldShowSubstVisualizer = languageConfig.supports?.substVisualizer ?? false;
