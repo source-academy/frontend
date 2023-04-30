@@ -71,6 +71,7 @@ import {
 } from 'src/features/persistence/PersistenceActions';
 import {
   generateLzString,
+  playgroundConfigLanguage,
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
@@ -81,6 +82,7 @@ import {
   isSourceLanguage,
   OverallState,
   ResultOutput,
+  SALanguage,
   sourceLanguages
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -481,7 +483,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   ]);
 
   const chapterSelectHandler = React.useCallback(
-    ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
+    (sublanguage: SALanguage, e: any) => {
+      const { chapter, variant } = sublanguage;
       const { handleUsingSubst, handleReplOutputClear, handleChapterSelect } = propsRef.current;
       if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
         handleUsingSubst(true);
@@ -500,8 +503,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       pushLog(input);
 
       handleChapterSelect(chapter, variant);
+      // Hardcoded for Playground only for now, while we await workspace refactoring
+      // to decouple the SicpWorkspace from the Playground.
+      dispatch(playgroundConfigLanguage(sublanguage));
     },
-    [hasBreakpoints, selectedTab, pushLog]
+    [dispatch, hasBreakpoints, selectedTab, pushLog]
   );
 
   const chapterSelect = React.useMemo(
