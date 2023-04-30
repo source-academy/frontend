@@ -188,10 +188,6 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
-const isVisualizerTab = (tab: SideContentType) => {
-  return tab === SideContentType.substVisualizer || tab === SideContentType.envVisualizer;
-};
-
 export async function handleHash(
   hash: string,
   props: PlaygroundProps,
@@ -420,7 +416,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         handleEnvVisualiserReset();
       }
 
-      if (isSourceLanguage(playgroundSourceChapter) && isVisualizerTab(newTabId)) {
+      if (
+        isSourceLanguage(playgroundSourceChapter) &&
+        (newTabId === SideContentType.substVisualizer || newTabId === SideContentType.envVisualizer)
+      ) {
         if (playgroundSourceChapter <= Chapter.SOURCE_2) {
           handleUsingSubst(true);
         } else {
