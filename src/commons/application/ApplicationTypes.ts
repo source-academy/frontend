@@ -207,7 +207,7 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   }
 };
 
-export const sourceSublanguages: Language[] = [
+const sourceSubLanguages: Language[] = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
@@ -229,7 +229,7 @@ export const sourceSublanguages: Language[] = [
   { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ];
 
-export const sourceLanguages: SALanguage[] = sourceSublanguages.map(sublang => {
+export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
   return {
     ...sublang,
     displayName: styliseSublanguage(sublang.chapter, sublang.variant),
