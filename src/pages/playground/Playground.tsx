@@ -78,6 +78,7 @@ import {
 
 import {
   ALL_LANGUAGES,
+  defaultLanguageConfig,
   getDefaultFilePath,
   InterpreterOutput,
   isSourceLanguage,
@@ -253,14 +254,18 @@ export async function handleHash(
     // By default, use the first editor tab.
     const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
     dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
-
-    const variant: Variant =
+    // TODO: To migrate the state logic away from playgroundSourceChapter
+    //       and playgroundSourceVariant into the language config instead
+    const languageConfig: SALanguage =
       ALL_LANGUAGES.find(
         language => language.chapter === chapter && language.variant === qs.variant
-      )?.variant ?? Variant.DEFAULT;
+      ) ?? defaultLanguageConfig;
 
     if (chapter) {
-      props.handleChapterSelect(chapter, variant);
+      props.handleChapterSelect(chapter, languageConfig.variant);
+      // Hardcoded for Playground only for now, while we await workspace refactoring
+      // to decouple the SicpWorkspace from the Playground.
+      dispatch(playgroundConfigLanguage(languageConfig));
     }
 
     const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
@@ -338,10 +343,35 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
 
   React.useEffect(() => {
+    // TODO: To migrate the state logic away from playgroundSourceChapter
+    //       and playgroundSourceVariant into the language config instead
+    const languageConfig: SALanguage =
+      ALL_LANGUAGES.find(
+        language =>
+          language.chapter === props.playgroundSourceChapter &&
+          language.variant === props.playgroundSourceVariant
+      ) ?? defaultLanguageConfig;
+    // Hardcoded for Playground only for now, while we await workspace refactoring
+    // to decouple the SicpWorkspace from the Playground.
+    dispatch(playgroundConfigLanguage(languageConfig));
+  }, []);
+
+  React.useEffect(() => {
     if (!hash) {
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (props.courseSourceChapter && props.courseSourceVariant) {
         propsRef.current.handleChapterSelect(props.courseSourceChapter, props.courseSourceVariant);
+        // TODO: To migrate the state logic away from playgroundSourceChapter
+        //       and playgroundSourceVariant into the language config instead
+        const languageConfig: SALanguage =
+          ALL_LANGUAGES.find(
+            language =>
+              language.chapter === props.courseSourceChapter &&
+              language.variant === props.courseSourceVariant
+          ) ?? defaultLanguageConfig;
+        // Hardcoded for Playground only for now, while we await workspace refactoring
+        // to decouple the SicpWorkspace from the Playground.
+        dispatch(playgroundConfigLanguage(languageConfig));
         // Disable Folder mode when forcing the Source chapter and variant to follow the current course's.
         // This is because Folder mode only works in Source 2+.
         dispatch(setFolderMode(workspaceLocation, false));
