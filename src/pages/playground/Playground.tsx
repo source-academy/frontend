@@ -106,11 +106,7 @@ import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
-import {
-  isVisualizerTab,
-  SideContentTab,
-  SideContentType
-} from '../../commons/sideContent/SideContentTypes';
+import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
@@ -191,6 +187,10 @@ export type StateProps = {
 };
 
 const keyMap = { goGreen: 'h u l k' };
+
+const isVisualizerTab = (tab: SideContentType) => {
+  return tab === SideContentType.substVisualizer || tab === SideContentType.envVisualizer;
+};
 
 export async function handleHash(
   hash: string,
