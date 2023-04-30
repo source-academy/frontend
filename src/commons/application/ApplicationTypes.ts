@@ -130,6 +130,7 @@ type LanguageFeatures = {
   dataVisualizer?: boolean;
   substVisualizer?: boolean;
   envVisualizer?: boolean;
+  multiFile?: boolean;
 };
 
 const variantDisplay: Map<Variant, string> = new Map([
@@ -253,6 +254,9 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
   // Enable Env Visualizer for Source Chapter 3 and above
   supportedFeatures.envVisualizer =
     chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET;
+
+  // Local imports/exports require Source 2+ as Source 1 does not have lists.
+  supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
 
   return {
     ...sublang,

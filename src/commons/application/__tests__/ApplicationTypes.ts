@@ -76,4 +76,8 @@ describe('available Source language configurations', () => {
 
     expect(sourceLanguages).toMatchObject(expectedSourceConfigs);
   });
+
+  test('matches snapshot', () => {
+    expect(sourceLanguages).toMatchSnapshot();
+  });
 });
