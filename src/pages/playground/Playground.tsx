@@ -77,13 +77,13 @@ import {
 } from 'src/features/playground/PlaygroundActions';
 
 import {
+  ALL_LANGUAGES,
   getDefaultFilePath,
   InterpreterOutput,
   isSourceLanguage,
   OverallState,
   ResultOutput,
-  SALanguage,
-  sourceLanguages
+  SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
@@ -255,7 +255,7 @@ export async function handleHash(
     dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
 
     const variant: Variant =
-      sourceLanguages.find(
+      ALL_LANGUAGES.find(
         language => language.chapter === chapter && language.variant === qs.variant
       )?.variant ?? Variant.DEFAULT;
 
