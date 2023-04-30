@@ -701,6 +701,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
+  const shouldShowDataVisualizer = useTypedSelector(
+    state => state.playground.languageConfig.supports?.dataVisualizer ?? false
+  );
   const shouldShowEnvVisualizer = useTypedSelector(
     state => state.playground.languageConfig.supports?.envVisualizer ?? false
   );
@@ -738,17 +741,12 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-
-      // Enable Data Visualizer for Source Chapter 2 and above
-      const shouldShowDataVisualizer = currentLang >= Chapter.SOURCE_2;
       if (shouldShowDataVisualizer) {
         tabs.push(dataVisualizerTab);
       }
-
       if (shouldShowEnvVisualizer) {
         tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
       }
-
       if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(props.output));
       }

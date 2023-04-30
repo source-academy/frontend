@@ -127,6 +127,7 @@ export interface SALanguage extends Language {
   supports?: LanguageFeatures;
 }
 type LanguageFeatures = {
+  dataVisualizer?: boolean;
   substVisualizer?: boolean;
   envVisualizer?: boolean;
 };
@@ -241,6 +242,9 @@ const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
 export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
   const { chapter, variant } = sublang;
   const supportedFeatures: LanguageFeatures = sublang['supports'] ?? {};
+
+  // Enable Data Visualizer for Source Chapter 2 and above
+  supportedFeatures.dataVisualizer = chapter >= Chapter.SOURCE_2;
 
   // Enable Subst Visualizer only for default Source 1 & 2
   supportedFeatures.substVisualizer =
