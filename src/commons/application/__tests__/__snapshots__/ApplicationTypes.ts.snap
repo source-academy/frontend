@@ -1,5 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`available Python language configurations matches snapshot 1`] = `
+Array [
+  Object {
+    "chapter": -4,
+    "displayName": "Python §1",
+    "mainLanguage": "Python",
+    "variant": "default",
+  },
+]
+`;
+
+exports[`available Scheme language configurations matches snapshot 1`] = `
+Array [
+  Object {
+    "chapter": -9,
+    "displayName": "Scheme §1",
+    "mainLanguage": "Scheme",
+    "variant": "default",
+  },
+  Object {
+    "chapter": -10,
+    "displayName": "Scheme §2",
+    "mainLanguage": "Scheme",
+    "variant": "default",
+  },
+  Object {
+    "chapter": -11,
+    "displayName": "Scheme §3",
+    "mainLanguage": "Scheme",
+    "variant": "default",
+  },
+  Object {
+    "chapter": -12,
+    "displayName": "Scheme §4",
+    "mainLanguage": "Scheme",
+    "variant": "default",
+  },
+  Object {
+    "chapter": -13,
+    "displayName": "Full Scheme",
+    "mainLanguage": "Scheme",
+    "variant": "default",
+  },
+]
+`;
+
 exports[`available Source language configurations matches snapshot 1`] = `
 Array [
   Object {
