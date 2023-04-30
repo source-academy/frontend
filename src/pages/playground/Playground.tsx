@@ -701,11 +701,17 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
+  const shouldShowEnvVisualizer = useTypedSelector(
+    state => state.playground.languageConfig.supports?.envVisualizer ?? false
+  );
+  const shouldShowSubstVisualizer = useTypedSelector(
+    state => state.playground.languageConfig.supports?.substVisualizer ?? false
+  );
+
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     const currentLang = props.playgroundSourceChapter;
-    const currentVariant = props.playgroundSourceVariant;
 
     if (!isSourceLanguage(currentLang)) {
       // For now, disable other tabs when not running Source
@@ -739,18 +745,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       }
 
       // Enable Env Visualizer for Source Chapter 3 and above
-      const shouldShowEnvVisualizer =
-        currentLang >= Chapter.SOURCE_3 &&
-        currentVariant !== Variant.CONCURRENT &&
-        currentVariant !== Variant.NON_DET;
       if (shouldShowEnvVisualizer) {
         tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
       }
 
       // Enable Subst Visualizer only for default Source 1 & 2
-      const shouldShowSubstVisualizer =
-        currentLang <= Chapter.SOURCE_2 &&
-        (currentVariant === Variant.DEFAULT || currentVariant === Variant.NATIVE);
       if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(props.output));
       }
@@ -764,12 +763,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   }, [
     playgroundIntroductionTab,
     props.playgroundSourceChapter,
-    props.playgroundSourceVariant,
     props.output,
     usingRemoteExecution,
     isSicpEditor,
     dispatch,
     workspaceLocation,
+    shouldShowEnvVisualizer,
+    shouldShowSubstVisualizer,
     remoteExecutionTab
   ]);
 
