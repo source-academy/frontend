@@ -77,9 +77,8 @@ import {
 } from 'src/features/playground/PlaygroundActions';
 
 import {
-  ALL_LANGUAGES,
-  defaultLanguageConfig,
   getDefaultFilePath,
+  getLanguageConfig,
   InterpreterOutput,
   isSourceLanguage,
   OverallState,
@@ -254,14 +253,10 @@ export async function handleHash(
     // By default, use the first editor tab.
     const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
     dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
-    // TODO: To migrate the state logic away from playgroundSourceChapter
-    //       and playgroundSourceVariant into the language config instead
-    const languageConfig: SALanguage =
-      ALL_LANGUAGES.find(
-        language => language.chapter === chapter && language.variant === qs.variant
-      ) ?? defaultLanguageConfig;
-
     if (chapter) {
+      // TODO: To migrate the state logic away from playgroundSourceChapter
+      //       and playgroundSourceVariant into the language config instead
+      const languageConfig = getLanguageConfig(chapter, qs.variant as Variant);
       props.handleChapterSelect(chapter, languageConfig.variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
@@ -343,32 +338,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
 
   React.useEffect(() => {
-    // TODO: To migrate the state logic away from playgroundSourceChapter
-    //       and playgroundSourceVariant into the language config instead
-    const languageConfig: SALanguage =
-      ALL_LANGUAGES.find(
-        language =>
-          language.chapter === props.playgroundSourceChapter &&
-          language.variant === props.playgroundSourceVariant
-      ) ?? defaultLanguageConfig;
-    // Hardcoded for Playground only for now, while we await workspace refactoring
-    // to decouple the SicpWorkspace from the Playground.
-    dispatch(playgroundConfigLanguage(languageConfig));
-  }, []);
-
-  React.useEffect(() => {
     if (!hash) {
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (props.courseSourceChapter && props.courseSourceVariant) {
         propsRef.current.handleChapterSelect(props.courseSourceChapter, props.courseSourceVariant);
         // TODO: To migrate the state logic away from playgroundSourceChapter
         //       and playgroundSourceVariant into the language config instead
-        const languageConfig: SALanguage =
-          ALL_LANGUAGES.find(
-            language =>
-              language.chapter === props.courseSourceChapter &&
-              language.variant === props.courseSourceVariant
-          ) ?? defaultLanguageConfig;
+        const languageConfig = getLanguageConfig(
+          props.courseSourceChapter,
+          props.courseSourceVariant
+        );
         // Hardcoded for Playground only for now, while we await workspace refactoring
         // to decouple the SicpWorkspace from the Playground.
         dispatch(playgroundConfigLanguage(languageConfig));
@@ -730,6 +709,18 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       ),
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
+
+  React.useEffect(() => {
+    // TODO: To migrate the state logic away from playgroundSourceChapter
+    //       and playgroundSourceVariant into the language config instead
+    const languageConfigToSet = getLanguageConfig(
+      props.playgroundSourceChapter,
+      props.playgroundSourceVariant
+    );
+    // Hardcoded for Playground only for now, while we await workspace refactoring
+    // to decouple the SicpWorkspace from the Playground.
+    dispatch(playgroundConfigLanguage(languageConfigToSet));
+  }, [dispatch, props.playgroundSourceChapter, props.playgroundSourceVariant]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
   const shouldShowDataVisualizer = languageConfig.supports?.dataVisualizer ?? false;

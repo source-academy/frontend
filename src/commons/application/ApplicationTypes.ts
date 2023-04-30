@@ -277,6 +277,16 @@ export const ALL_LANGUAGES: readonly SALanguage[] = [
   ...schemeLanguages,
   ...pyLanguages
 ];
+// TODO: Remove this function once logic has been fully migrated
+export const getLanguageConfig = (
+  chapter: Chapter,
+  variant: Variant = Variant.DEFAULT
+): SALanguage => {
+  return (
+    ALL_LANGUAGES.find(lang => lang.chapter === chapter && lang.variant === variant) ??
+    defaultLanguageConfig
+  );
+};
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
