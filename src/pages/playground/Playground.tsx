@@ -723,9 +723,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   }, [dispatch, props.playgroundSourceChapter, props.playgroundSourceVariant]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
-  const shouldShowDataVisualizer = languageConfig.supports?.dataVisualizer ?? false;
-  const shouldShowEnvVisualizer = languageConfig.supports?.envVisualizer ?? false;
-  const shouldShowSubstVisualizer = languageConfig.supports?.substVisualizer ?? false;
+  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer ?? false;
+  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer ?? false;
+  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer ?? false;
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
@@ -990,7 +990,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
-        languageConfig.supports?.multiFile ? toggleFolderModeButton : null,
+        languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
@@ -1032,7 +1032,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           chapterSelect,
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
-          languageConfig.supports?.multiFile ? toggleFolderModeButton : null,
+          languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,
           githubButtons
         ]

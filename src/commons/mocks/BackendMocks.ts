@@ -84,7 +84,8 @@ export function* mockBackendSaga(): SagaIterator {
         courseConfiguration.sourceChapter,
         courseConfiguration.sourceVariant
       ),
-      mainLanguage: SupportedLanguage.JAVASCRIPT
+      mainLanguage: SupportedLanguage.JAVASCRIPT,
+      supports: {}
     };
 
     yield put(actions.setUser(user));
@@ -314,7 +315,8 @@ export function* mockBackendSaga(): SagaIterator {
             courseConfiguration.sourceChapter,
             courseConfiguration.sourceVariant
           ),
-          mainLanguage: SupportedLanguage.JAVASCRIPT
+          mainLanguage: SupportedLanguage.JAVASCRIPT,
+          supports: {}
         })
       );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);

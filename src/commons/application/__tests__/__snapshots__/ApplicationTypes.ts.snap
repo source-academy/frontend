@@ -6,6 +6,7 @@ Array [
     "chapter": -4,
     "displayName": "Python §1",
     "mainLanguage": "Python",
+    "supports": Object {},
     "variant": "default",
   },
 ]
@@ -17,30 +18,35 @@ Array [
     "chapter": -9,
     "displayName": "Scheme §1",
     "mainLanguage": "Scheme",
+    "supports": Object {},
     "variant": "default",
   },
   Object {
     "chapter": -10,
     "displayName": "Scheme §2",
     "mainLanguage": "Scheme",
+    "supports": Object {},
     "variant": "default",
   },
   Object {
     "chapter": -11,
     "displayName": "Scheme §3",
     "mainLanguage": "Scheme",
+    "supports": Object {},
     "variant": "default",
   },
   Object {
     "chapter": -12,
     "displayName": "Scheme §4",
     "mainLanguage": "Scheme",
+    "supports": Object {},
     "variant": "default",
   },
   Object {
     "chapter": -13,
     "displayName": "Full Scheme",
     "mainLanguage": "Scheme",
+    "supports": Object {},
     "variant": "default",
   },
 ]

@@ -124,7 +124,7 @@ export interface SALanguage extends Language {
   displayName: string;
   mainLanguage: SupportedLanguage;
   /** Whether the language supports the given features */
-  supports?: LanguageFeatures;
+  supports: LanguageFeatures;
 }
 type LanguageFeatures = {
   dataVisualizer?: boolean;
@@ -148,21 +148,24 @@ export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
   displayName: 'full JavaScript',
-  mainLanguage: SupportedLanguage.JAVASCRIPT
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: {}
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
   displayName: 'full TypeScript',
-  mainLanguage: SupportedLanguage.JAVASCRIPT
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: {}
 };
 
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
   displayName: 'HTML',
-  mainLanguage: SupportedLanguage.JAVASCRIPT
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: {}
 };
 
 const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
@@ -174,7 +177,7 @@ const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displa
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME };
+  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: {} };
 });
 
 const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
@@ -186,7 +189,7 @@ const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayNam
 ];
 
 export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON };
+  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: {} };
 });
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
