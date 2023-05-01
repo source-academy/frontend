@@ -732,12 +732,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
     const currentLang = props.playgroundSourceChapter;
 
-    if (!isSourceLanguage(currentLang)) {
-      // For now, disable other tabs when not running Source
-      // TODO: Remove this when fully migrated to language config
-      return tabs;
-    }
-
     if (currentLang === Chapter.HTML) {
       // For HTML Chapter, HTML Display tab is added only after code is run
       if (props.output.length > 0 && props.output[0].type === 'result') {
@@ -748,11 +742,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         );
       }
       return tabs;
-    }
-
-    if (currentLang === Chapter.FULL_JS || currentLang === Chapter.FULL_TS) {
-      // (TEMP) Remove tabs for fullJS until support is integrated
-      return [...tabs, dataVisualizerTab];
     }
 
     if (!usingRemoteExecution) {

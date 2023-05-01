@@ -149,7 +149,7 @@ export const fullJSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full JavaScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: {}
+  supports: { dataVisualizer: true }
 };
 
 export const fullTSLanguage: SALanguage = {
@@ -157,7 +157,7 @@ export const fullTSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full TypeScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: {}
+  supports: { dataVisualizer: true }
 };
 
 export const htmlLanguage: SALanguage = {
