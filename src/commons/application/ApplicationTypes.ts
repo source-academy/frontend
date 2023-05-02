@@ -245,7 +245,7 @@ const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
 
 export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
   const { chapter, variant } = sublang;
-  const supportedFeatures: LanguageFeatures = sublang['supports'] ?? {};
+  const supportedFeatures: LanguageFeatures = {};
 
   // Enable Data Visualizer for Source Chapter 2 and above
   supportedFeatures.dataVisualizer = chapter >= Chapter.SOURCE_2;
