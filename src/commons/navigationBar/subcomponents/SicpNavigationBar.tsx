@@ -52,11 +52,11 @@ function queryTrie(startingNode: any, query: string) {
 const SicpNavigationBar: React.FC = () => {
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
   const [isTocOpen, setIsTocOpen] = React.useState(false);
-  const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState([] as string[]);
+  const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
   const [displayedQuery, setDisplayedQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [indexSearchQuery, setIndexSearchQuery] = React.useState('');
-  const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState([] as string[]);
+  const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
 
   const [queryResult, setQueryResult] = React.useState([{ title: 'no result found', url: '' }]);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
