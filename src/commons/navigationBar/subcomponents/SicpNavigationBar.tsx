@@ -35,8 +35,7 @@ const memoizedFetchData = memoize(fetchData);
 // FIXME: Remove this any type
 function queryTrie(startingNode: any, query: string) {
   let node = startingNode;
-  for (let i = 0; i < query.length; i++) {
-    const char = query[i];
+  for (const char of query) {
     if (node[char]) {
       node = node[char];
     } else {
@@ -138,8 +137,7 @@ const SicpNavigationBar: React.FC = () => {
 
     function toEnd(query: any) {
       let node = trie;
-      for (let i = 0; i < query.length; i++) {
-        const char = query[i];
+      for (const char of query) {
         if (node[char]) {
           node = node[char];
         } else {
