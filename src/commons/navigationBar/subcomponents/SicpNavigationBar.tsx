@@ -65,7 +65,9 @@ const SicpNavigationBar: React.FC = () => {
   const [indexSearchQuery, setIndexSearchQuery] = React.useState('');
   const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
 
-  const [queryResult, setQueryResult] = React.useState([{ title: 'no result found', url: '' }]);
+  const [queryResult, setQueryResult] = React.useState<SearchResultProps[]>([
+    { title: 'no result found', url: '' }
+  ]);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();
   const history = useHistory();
@@ -235,22 +237,21 @@ const SicpNavigationBar: React.FC = () => {
     handleOpenSearch();
     setDisplayedQuery(str);
     const SearchUrl = '..';
-    const tem = [];
+    const tem: SearchResultProps[] = [];
     const ans = queryTrie(indexTrie, str.toLowerCase());
     if (ans == null) {
       tem.push({ title: 'no result found', url: '' });
     } else {
-      const pure = ans['pureIndex'];
-      for (let i = 0; i < pure.length; i++) {
-        tem.push({ title: ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
-      }
-      const subindex = ans['subIndex'];
-      for (let i = 0; i < subindex.length; i++) {
+      const { pure, subindex, value } = ans;
+      pure.forEach((p: any) => {
+        tem.push({ title: value, url: SearchUrl + p[0] + p[1] });
+      });
+      subindex.forEach((sub: any) => {
         tem.push({
-          title: ans['value'] + ': ' + subindex[i]['value'],
-          url: SearchUrl + subindex[i]['id'][0] + subindex[i]['id'][1]
+          title: value + ': ' + sub['value'],
+          url: SearchUrl + sub['id'][0] + sub['id'][1]
         });
-      }
+      });
     }
     setQueryResult(tem);
   };
