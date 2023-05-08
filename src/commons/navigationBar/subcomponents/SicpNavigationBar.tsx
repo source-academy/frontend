@@ -173,7 +173,7 @@ const SicpNavigationBar: React.FC = () => {
     return ans;
   }
 
-  const voidSearch = (query: string) => {
+  const voidSearch = (query: string): SearchResultProps[] => {
     function toSearchResult(array: any[]): SearchResultProps {
       if (array == null || array[0] == null || array[1] == null || array[2] == null) {
         return { title: '', url: '' };
@@ -190,10 +190,11 @@ const SicpNavigationBar: React.FC = () => {
       .filter(word => word !== '');
     if (words.length === 0) {
       setQueryResult([]);
-      return;
+      return [];
     }
-    const globalAns = queryTrie(textTrie, words[0]).map(toSearchResult);
-    return globalAns.filter((obj: any) => obj.title.toLowerCase().includes(query.toLowerCase()));
+    return queryTrie(textTrie, words[0])
+      .map(toSearchResult)
+      .filter((obj: SearchResultProps) => obj.title.toLowerCase().includes(query.toLowerCase()));
   };
 
   function sentenceAutoComplete(str: string, limit: number, trie: any) {
