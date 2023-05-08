@@ -45,6 +45,17 @@ function queryTrie(startingNode: any, query: string) {
   return node.value || [];
 }
 
+type SearchResultProps = {
+  title: string;
+  url: string;
+};
+
+type SearchResultsProps = {
+  query: string;
+  results: Array<SearchResultProps>;
+  handleCloseSearch: () => void;
+};
+
 const SicpNavigationBar: React.FC = () => {
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
   const [isTocOpen, setIsTocOpen] = React.useState(false);
@@ -378,18 +389,6 @@ const SicpNavigationBar: React.FC = () => {
     query: displayedQuery,
     results: queryResult,
     handleCloseSearch: handleCloseSearch
-  };
-
-  // TODO: Move nested type out
-  type SearchResultProps = {
-    title: string;
-    url: string;
-  };
-
-  type SearchResultsProps = {
-    query: string;
-    results: Array<SearchResultProps>;
-    handleCloseSearch: () => void;
   };
 
   // TODO: Remove nested component
