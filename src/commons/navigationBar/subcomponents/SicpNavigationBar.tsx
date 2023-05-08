@@ -187,10 +187,8 @@ const SicpNavigationBar: React.FC = () => {
       setQueryResult([]);
       return;
     }
-    let globalAns = queryTrie(textTrie, words[0]).map((array: any) => lineMap(array));
-
-    globalAns = globalAns.filter((obj: any) => obj.title.toLowerCase().includes(str.toLowerCase()));
-    return globalAns;
+    const globalAns = queryTrie(textTrie, words[0]).map((array: any) => lineMap(array));
+    return globalAns.filter((obj: any) => obj.title.toLowerCase().includes(str.toLowerCase()));
   };
 
   function sentenceAutoComplete(str: string, limit: number, jsonData: any) {
@@ -214,13 +212,14 @@ const SicpNavigationBar: React.FC = () => {
     if (preResults.length < 1) {
       return [];
     }
-    let lastwords = autoComplete(lastWord, 3000, jsonData);
-    lastwords = lastwords.filter(
-      (word: string) =>
-        preResults.filter((obj: any) => obj.title.toLowerCase().includes(pre + ' ' + word)).length >
-        0
-    );
-    return lastwords.map(word => pre + ' ' + word);
+    const lastwords = autoComplete(lastWord, 3000, jsonData);
+    return lastwords
+      .filter(
+        (word: string) =>
+          preResults.filter((obj: any) => obj.title.toLowerCase().includes(pre + ' ' + word))
+            .length > 0
+      )
+      .map(word => pre + ' ' + word);
   }
 
   const handleSearchButton = () => {
