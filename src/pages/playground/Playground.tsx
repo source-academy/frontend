@@ -110,7 +110,7 @@ import MobileWorkspace, {
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
-import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
+import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
@@ -702,14 +702,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     workspaceLocation
   ]);
 
-  const playgroundIntroductionTab: SideContentTab = React.useMemo(
-    () =>
-      makeIntroductionTabFrom(
-        generateSourceIntroduction(props.playgroundSourceChapter, props.playgroundSourceVariant)
-      ),
-    [props.playgroundSourceChapter, props.playgroundSourceVariant]
-  );
-
   React.useEffect(() => {
     // TODO: To migrate the state logic away from playgroundSourceChapter
     //       and playgroundSourceVariant into the language config instead
@@ -727,6 +719,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer ?? false;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer ?? false;
 
+  const playgroundIntroductionTab: SideContentTab = React.useMemo(
+    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
+    [languageConfig]
+  );
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
