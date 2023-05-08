@@ -157,7 +157,7 @@ const SicpNavigationBar: React.FC = () => {
         ans.push(path);
         limit--;
       }
-      for (let i = 0; i < 27; i++) {
+      for (let i = 0; i < letters.length; i++) {
         recur(next(node, i), path + letters[i]);
       }
     }
