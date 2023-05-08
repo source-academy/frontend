@@ -43,8 +43,8 @@ function queryTrie(startingNode: any, query: string) {
       return [];
     }
   }
-  if (node['value']) {
-    return node['value'];
+  if (node.value) {
+    return node.value;
   }
   return [];
 }
