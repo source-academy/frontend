@@ -126,12 +126,13 @@ export interface SALanguage extends Language {
   /** Whether the language supports the given features */
   supports: LanguageFeatures;
 }
-type LanguageFeatures = {
-  dataVisualizer?: boolean;
-  substVisualizer?: boolean;
-  envVisualizer?: boolean;
-  multiFile?: boolean;
-};
+// TODO: Remove Partial type when fully migrated
+type LanguageFeatures = Partial<{
+  dataVisualizer: boolean;
+  substVisualizer: boolean;
+  envVisualizer: boolean;
+  multiFile: boolean;
+}>;
 
 const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],

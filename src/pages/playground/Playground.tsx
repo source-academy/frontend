@@ -715,9 +715,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   }, [dispatch, props.playgroundSourceChapter, props.playgroundSourceVariant]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
-  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer ?? false;
-  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer ?? false;
-  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer ?? false;
+  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
+  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer;
+  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
