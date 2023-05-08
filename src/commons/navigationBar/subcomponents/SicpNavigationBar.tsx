@@ -32,6 +32,23 @@ const fetchData = () => {
 };
 const memoizedFetchData = memoize(fetchData);
 
+// FIXME: Remove this any type
+function queryTrie(startingNode: any, query: string) {
+  let node = startingNode;
+  for (let i = 0; i < query.length; i++) {
+    const char = query[i];
+    if (node[char]) {
+      node = node[char];
+    } else {
+      return [];
+    }
+  }
+  if (node['value']) {
+    return node['value'];
+  }
+  return [];
+}
+
 const SicpNavigationBar: React.FC = () => {
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
   const [isTocOpen, setIsTocOpen] = React.useState(false);
@@ -107,38 +124,6 @@ const SicpNavigationBar: React.FC = () => {
     usePortal: false
   };
 
-  function queryIndexTrie(query: string) {
-    let node = indexTrie;
-    for (let i = 0; i < query.length; i++) {
-      const char = query[i];
-      if (node[char]) {
-        node = node[char];
-      } else {
-        return [];
-      }
-    }
-    if (node['value']) {
-      return node['value'];
-    }
-    return [];
-  }
-
-  function queryTextTrie(query: string) {
-    let node = textTrie;
-    for (let i = 0; i < query.length; i++) {
-      const char = query[i];
-      if (node[char]) {
-        node = node[char];
-      } else {
-        return [];
-      }
-    }
-    if (node['value']) {
-      return node['value'];
-    }
-    return [];
-  }
-
   function autoComplete(str: string, limit: number, jsonData: any) {
     if (str.length === 0) {
       return [];
@@ -202,7 +187,7 @@ const SicpNavigationBar: React.FC = () => {
       setQueryResult([]);
       return;
     }
-    let globalAns = queryTextTrie(words[0]).map((array: any) => lineMap(array));
+    let globalAns = queryTrie(textTrie, words[0]).map((array: any) => lineMap(array));
 
     globalAns = globalAns.filter((obj: any) => obj.title.toLowerCase().includes(str.toLowerCase()));
     return globalAns;
@@ -254,7 +239,7 @@ const SicpNavigationBar: React.FC = () => {
     setDisplayedQuery(str);
     const SearchUrl = '..';
     const tem = [];
-    const ans = queryIndexTrie(str.toLowerCase());
+    const ans = queryTrie(indexTrie, str.toLowerCase());
     if (ans == null) {
       tem.push({ title: 'no result found', url: '' });
     } else {
@@ -278,7 +263,7 @@ const SicpNavigationBar: React.FC = () => {
     setDisplayedQuery(indexSearchQuery);
     const SearchUrl = '..';
     const tem = [];
-    const ans = queryIndexTrie(indexSearchQuery.toLowerCase());
+    const ans = queryTrie(indexTrie, indexSearchQuery.toLowerCase());
     if (ans == null) {
       tem.push({ title: 'no result found', url: '' });
     } else {
