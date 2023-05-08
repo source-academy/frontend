@@ -132,11 +132,7 @@ const SicpNavigationBar: React.FC = () => {
     const trie = jsonData;
 
     function next(node: any, i: number) {
-      if (i === 26) return node[' '];
-      else if (i >= 0 && i <= 25) {
-        return node[String.fromCharCode(i + 97)];
-      }
-      return null;
+      return letters[i] ? node[letters[i]] : null;
     }
     const letters = [...'abcdefghijklmnopqrstuvwxyz'.split(''), ' '];
 
