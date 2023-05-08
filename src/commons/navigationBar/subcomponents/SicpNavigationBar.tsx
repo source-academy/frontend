@@ -197,30 +197,26 @@ const SicpNavigationBar: React.FC = () => {
       .filter((obj: SearchResultProps) => obj.title.toLowerCase().includes(query.toLowerCase()));
   };
 
-  function sentenceAutoComplete(str: string, limit: number, trie: any) {
-    const words = str
+  function sentenceAutoComplete(query: string, limit: number, trie: any): string[] {
+    const words = query
       .toLowerCase()
       .split(' ')
       .filter(word => word !== '');
     if (words.length < 2) {
-      return autoComplete(str, 250, trie);
+      return autoComplete(query, 250, trie);
     }
     const pre = words.join(' ');
     const lastWord = words[words.length - 1];
-    let preResults = voidSearch(pre);
-    if (preResults == null) {
-      return [];
-    }
-    preResults = preResults.filter((obj: any) => obj.title.includes(lastWord));
-    if (preResults.length < 1) {
+    const preResults = voidSearch(pre).filter((obj: any) => obj.title.includes(lastWord));
+    if (preResults.length === 0) {
       return [];
     }
     const lastwords = autoComplete(lastWord, 3000, trie);
     return lastwords
       .filter(
         word =>
-          preResults.filter((obj: any) => obj.title.toLowerCase().includes(pre + ' ' + word))
-            .length > 0
+          // Not sure why the length attribute is accessed here
+          preResults.filter(obj => obj.title.toLowerCase().includes(`${pre} ${word}`)).length > 0
       )
       .map(word => pre + ' ' + word);
   }
