@@ -161,7 +161,7 @@ const SicpNavigationBar: React.FC = () => {
         recur(next(node, i), path + letters[i]);
       }
     }
-    const ans = [] as any[];
+    const ans: string[] = [];
     recur(toEnd(str), str);
     return ans;
   }
