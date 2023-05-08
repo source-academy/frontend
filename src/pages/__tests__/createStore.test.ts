@@ -2,6 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { compressToUTF16 } from 'lz-string';
 
 import {
+  defaultLanguageConfig,
   defaultState,
   OverallState,
   SupportedLanguage
@@ -43,7 +44,8 @@ const mockChangedStoredState: SavedState = {
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
-  playgroundLang: SupportedLanguage.JAVASCRIPT
+  playgroundLang: SupportedLanguage.JAVASCRIPT,
+  playgroundLanguage: defaultLanguageConfig
 };
 
 const mockChangedState: OverallState = {

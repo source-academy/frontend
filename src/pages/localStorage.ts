@@ -1,7 +1,11 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { OverallState, SupportedLanguage } from '../commons/application/ApplicationTypes';
+import {
+  OverallState,
+  SALanguage,
+  SupportedLanguage
+} from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/NotificationsHelper';
@@ -27,6 +31,7 @@ export type SavedState = {
   playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
   playgroundLang: SupportedLanguage;
+  playgroundLanguage: SALanguage;
   playgroundExternalLibrary: ExternalLibraryName;
 };
 
@@ -80,6 +85,7 @@ export const saveState = (state: OverallState) => {
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
       playgroundLang: state.playground.lang,
+      playgroundLanguage: state.playground.languageConfig,
       playgroundExternalLibrary: state.workspaces.playground.externalLibrary
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
