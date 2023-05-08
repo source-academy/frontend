@@ -780,7 +780,8 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
       chapter: Chapter.SOURCE_4,
       variant: Variant.GPU,
       displayName: 'Source \xa74 GPU',
-      mainLanguage: SupportedLanguage.JAVASCRIPT
+      mainLanguage: SupportedLanguage.JAVASCRIPT,
+      supports: {}
     };
 
     return expectSaga(BackendSaga)
