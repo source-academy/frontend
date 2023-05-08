@@ -120,12 +120,11 @@ const SicpNavigationBar: React.FC = () => {
     usePortal: false
   };
 
-  function autoComplete(str: string, limit: number, jsonData: any) {
+  function autoComplete(str: string, limit: number, trie: any) {
     if (str.length === 0) {
       return [];
     }
     str = str.toLowerCase();
-    const trie = jsonData;
 
     function next(node: any, i: number) {
       return letters[i] ? node[letters[i]] : null;
@@ -182,13 +181,13 @@ const SicpNavigationBar: React.FC = () => {
     return globalAns.filter((obj: any) => obj.title.toLowerCase().includes(str.toLowerCase()));
   };
 
-  function sentenceAutoComplete(str: string, limit: number, jsonData: any) {
+  function sentenceAutoComplete(str: string, limit: number, trie: any) {
     const words = str
       .toLowerCase()
       .split(' ')
       .filter(word => word !== '');
     if (words.length < 2) {
-      return autoComplete(str, 250, jsonData);
+      return autoComplete(str, 250, trie);
     }
     let pre = words[0];
     for (let i = 1; i < words.length - 1; i++) {
@@ -203,7 +202,7 @@ const SicpNavigationBar: React.FC = () => {
     if (preResults.length < 1) {
       return [];
     }
-    const lastwords = autoComplete(lastWord, 3000, jsonData);
+    const lastwords = autoComplete(lastWord, 3000, trie);
     return lastwords
       .filter(
         word =>
