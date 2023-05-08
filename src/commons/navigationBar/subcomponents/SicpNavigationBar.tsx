@@ -237,23 +237,23 @@ const SicpNavigationBar: React.FC = () => {
     handleOpenSearch();
     setDisplayedQuery(str);
     const SearchUrl = '..';
-    const tem: SearchResultProps[] = [];
+    const results: SearchResultProps[] = [];
     const ans = queryTrie(indexTrie, str.toLowerCase());
     if (ans == null) {
-      tem.push({ title: 'no result found', url: '' });
+      results.push({ title: 'no result found', url: '' });
     } else {
       const { pure, subindex, value } = ans;
       pure.forEach((p: any) => {
-        tem.push({ title: value, url: SearchUrl + p[0] + p[1] });
+        results.push({ title: value, url: SearchUrl + p[0] + p[1] });
       });
       subindex.forEach((sub: any) => {
-        tem.push({
-          title: value + ': ' + sub['value'],
-          url: SearchUrl + sub['id'][0] + sub['id'][1]
+        results.push({
+          title: `${value}: ${sub.value}`,
+          url: SearchUrl + sub.id[0] + sub.id[1]
         });
       });
     }
-    setQueryResult(tem);
+    setQueryResult(results);
   };
 
   const handleIndexSearchButton = () => {
