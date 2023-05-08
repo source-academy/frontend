@@ -391,6 +391,7 @@ const SicpNavigationBar: React.FC = () => {
     handleCloseSearch: handleCloseSearch
   };
 
+  // TODO: Move nested type out
   type SearchResultProps = {
     title: string;
     url: string;
@@ -402,6 +403,7 @@ const SicpNavigationBar: React.FC = () => {
     handleCloseSearch: () => void;
   };
 
+  // TODO: Remove nested component
   const SearchResults: React.FC<SearchResultsProps> = ({ query, results, handleCloseSearch }) => {
     const highlightedResults = results.map((result, index) => {
       const regex = new RegExp(`(${query})`, 'gi');
