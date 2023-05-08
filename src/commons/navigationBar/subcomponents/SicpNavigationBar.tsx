@@ -206,7 +206,7 @@ const SicpNavigationBar: React.FC = () => {
     const lastwords = autoComplete(lastWord, 3000, jsonData);
     return lastwords
       .filter(
-        (word: string) =>
+        word =>
           preResults.filter((obj: any) => obj.title.toLowerCase().includes(pre + ' ' + word))
             .length > 0
       )
