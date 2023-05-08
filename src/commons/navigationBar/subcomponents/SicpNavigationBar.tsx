@@ -2,8 +2,6 @@ import { Alignment, Drawer, InputGroup, Navbar, NavbarGroup, Position } from '@b
 import { IconNames } from '@blueprintjs/icons';
 import { memoize } from 'lodash';
 import * as React from 'react';
-//import React, {useEffect} from 'react';
-//import Highlighter from 'react-highlight-words';
 import { useHistory, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
 import Constants from 'src/commons/utils/Constants';
@@ -56,7 +54,6 @@ const SicpNavigationBar: React.FC = () => {
   const handleNavigation = (sect: string) => {
     history.push('/sicpjs/' + sect);
   };
-  //const handleSearch = () => {};
   const handleOpenSearch = () => setIsSearchOpen(true);
   const handleCloseSearch = () => setIsSearchOpen(false);
 
