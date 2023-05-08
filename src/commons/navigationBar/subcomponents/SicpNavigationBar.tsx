@@ -42,10 +42,7 @@ function queryTrie(startingNode: any, query: string) {
       return [];
     }
   }
-  if (node.value) {
-    return node.value;
-  }
-  return [];
+  return node.value || [];
 }
 
 const SicpNavigationBar: React.FC = () => {
