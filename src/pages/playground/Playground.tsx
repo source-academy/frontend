@@ -4,7 +4,6 @@ import { Octokit } from '@octokit/rest';
 import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
-import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
@@ -28,7 +27,6 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -104,15 +102,10 @@ import {
 import { Position } from '../../commons/editor/EditorTypes';
 import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
-import Markdown from '../../commons/Markdown';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
-import SideContentRemoteExecution from '../../commons/sideContent/remoteExecution/SideContentRemoteExecution';
-import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
@@ -128,6 +121,16 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
+import {
+  dataVisualizerTab,
+  desktopOnlyTabIds,
+  makeEnvVisualizerTabFrom,
+  makeHtmlDisplayTabFrom,
+  makeIntroductionTabFrom,
+  makeRemoteExecutionTabFrom,
+  makeSubstVisualizerTabFrom,
+  mobileOnlyTabIds
+} from './PlaygroundTabs';
 
 export type PlaygroundProps = OwnProps &
   DispatchProps &
@@ -169,7 +172,7 @@ export type StateProps = {
   shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
-  playgroundSourceChapter: number;
+  playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
   courseSourceChapter?: number;
   courseSourceVariant?: Variant;
@@ -307,18 +310,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const remoteExecutionTab: SideContentTab = React.useMemo(
-    () => ({
-      label: 'Remote Execution',
-      iconName: IconNames.SATELLITE,
-      body: (
-        <SideContentRemoteExecution
-          workspace="playground"
-          secretParams={deviceSecret || undefined}
-          callbackFunction={setDeviceSecret}
-        />
-      ),
-      id: SideContentType.remoteExecution
-    }),
+    () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
     [deviceSecret]
   );
 
@@ -409,53 +401,41 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         return;
       }
 
+      // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+      if (
+        prevTabId === SideContentType.substVisualizer &&
+        newTabId === SideContentType.mobileEditorRun
+      ) {
+        return;
+      }
+
       const { handleUsingEnv, handleUsingSubst, handleReplOutputClear, playgroundSourceChapter } =
         propsRef.current;
 
-      /**
-       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-       */
-      if (
-        !(
-          prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun
-        )
-      ) {
-        if (playgroundSourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
-          handleUsingSubst(true);
-        }
-
-        if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
-          handleReplOutputClear();
-          handleUsingSubst(false);
-        }
-
-        if (playgroundSourceChapter >= 3 && newTabId === SideContentType.envVisualizer) {
-          handleUsingEnv(true);
-        } else {
-          handleEnvVisualiserReset();
-        }
-
-        setSelectedTab(newTabId);
+      if (newTabId !== SideContentType.envVisualizer) {
+        handleEnvVisualiserReset();
       }
+
+      if (
+        isSourceLanguage(playgroundSourceChapter) &&
+        (newTabId === SideContentType.substVisualizer || newTabId === SideContentType.envVisualizer)
+      ) {
+        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+          handleUsingSubst(true);
+        } else {
+          handleUsingEnv(true);
+        }
+      }
+
+      if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
+        handleReplOutputClear();
+        handleUsingSubst(false);
+      }
+
+      setSelectedTab(newTabId);
     },
     [hasBreakpoints, handleEnvVisualiserReset]
   );
-
-  const processStepperOutput = (output: InterpreterOutput[]) => {
-    const editorOutput = output[0];
-    if (
-      editorOutput &&
-      editorOutput.type === 'result' &&
-      editorOutput.value instanceof Array &&
-      editorOutput.value[0] === Object(editorOutput.value[0]) &&
-      isStepperOutput(editorOutput.value[0])
-    ) {
-      return editorOutput.value;
-    } else {
-      return [];
-    }
-  };
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
@@ -464,30 +444,16 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [sessionId]
   );
 
-  const handleEditorEval = React.useCallback(() => {
-    dispatch(evalEditor(workspaceLocation));
+  const memoizedHandlers = React.useMemo(() => {
+    return {
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation)),
+      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation))
+    };
   }, [dispatch, workspaceLocation]);
-
-  const handleInterruptEval = React.useCallback(
-    () => dispatch(beginInterruptExecution(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleToggleEditorAutorun = React.useCallback(
-    () => dispatch(toggleEditorAutorun(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleDebuggerPause = React.useCallback(
-    () => dispatch(beginDebuggerPause(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleDebuggerReset = React.useCallback(
-    () => dispatch(debuggerReset(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleDebuggerResume = React.useCallback(
-    () => dispatch(debuggerResume(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
 
   const autorunButtons = React.useMemo(() => {
     return (
@@ -496,31 +462,21 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         isDebugging={props.isDebugging}
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
-        handleInterruptEval={handleInterruptEval}
-        handleToggleEditorAutorun={handleToggleEditorAutorun}
-        handleEditorEval={handleEditorEval}
-        handleDebuggerPause={handleDebuggerPause}
-        handleDebuggerReset={handleDebuggerReset}
-        handleDebuggerResume={handleDebuggerResume}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         sourceChapter={props.playgroundSourceChapter}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
+        {...memoizedHandlers}
       />
     );
   }, [
     activeEditorTabIndex,
-    handleDebuggerPause,
-    handleDebuggerReset,
-    handleDebuggerResume,
-    handleEditorEval,
-    handleInterruptEval,
-    handleToggleEditorAutorun,
     props.isDebugging,
     props.isEditorAutorun,
     props.isRunning,
     props.playgroundSourceChapter,
+    memoizedHandlers,
     usingRemoteExecution
   ]);
 
@@ -732,85 +688,66 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   ]);
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
-    () => ({
-      label: 'Introduction',
-      iconName: IconNames.HOME,
-      body: (
-        <Markdown
-          content={generateSourceIntroduction(
-            props.playgroundSourceChapter,
-            props.playgroundSourceVariant
-          )}
-          openLinksInNewWindow={true}
-        />
+    () =>
+      makeIntroductionTabFrom(
+        generateSourceIntroduction(props.playgroundSourceChapter, props.playgroundSourceVariant)
       ),
-      id: SideContentType.introduction
-    }),
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    // For HTML Chapter, HTML Display tab is added only after code is run
-    if (props.playgroundSourceChapter === Chapter.HTML) {
+    const currentLang = props.playgroundSourceChapter;
+    const currentVariant = props.playgroundSourceVariant;
+
+    if (!isSourceLanguage(currentLang)) {
+      // For now, disable other tabs when not running Source
+      return tabs;
+    }
+
+    if (currentLang === Chapter.HTML) {
+      // For HTML Chapter, HTML Display tab is added only after code is run
       if (props.output.length > 0 && props.output[0].type === 'result') {
-        tabs.push({
-          label: 'HTML Display',
-          iconName: IconNames.MODAL,
-          body: (
-            <SideContentHtmlDisplay
-              content={(props.output[0] as ResultOutput).value}
-              handleAddHtmlConsoleError={errorMsg =>
-                dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
-              }
-            />
-          ),
-          id: SideContentType.htmlDisplay
-        });
+        tabs.push(
+          makeHtmlDisplayTabFrom(props.output[0] as ResultOutput, errorMsg =>
+            dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
+          )
+        );
       }
       return tabs;
     }
 
-    // (TEMP) Remove tabs for fullJS until support is integrated
-    if (
-      props.playgroundSourceChapter === Chapter.FULL_JS ||
-      props.playgroundSourceChapter === Chapter.FULL_TS
-    ) {
+    if (currentLang === Chapter.FULL_JS || currentLang === Chapter.FULL_TS) {
+      // (TEMP) Remove tabs for fullJS until support is integrated
       return [...tabs, dataVisualizerTab];
     }
 
-    if (props.playgroundSourceChapter >= 2 && !usingRemoteExecution) {
-      // Enable Data Visualizer for Source Chapter 2 and above
-      tabs.push(dataVisualizerTab);
-    }
-    if (
-      props.playgroundSourceChapter >= 3 &&
-      props.playgroundSourceVariant !== Variant.CONCURRENT &&
-      props.playgroundSourceVariant !== Variant.NON_DET &&
-      !usingRemoteExecution
-    ) {
-      // Enable Env Visualizer for Source Chapter 3 and above
-      tabs.push({
-        label: 'Env Visualizer',
-        iconName: IconNames.GLOBE,
-        body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-        id: SideContentType.envVisualizer
-      });
-    }
+    if (!usingRemoteExecution) {
+      // Don't show the following when using remote execution
 
-    if (
-      props.playgroundSourceChapter <= 2 &&
-      (props.playgroundSourceVariant === Variant.DEFAULT ||
-        props.playgroundSourceVariant === Variant.NATIVE)
-    ) {
+      // Enable Data Visualizer for Source Chapter 2 and above
+      const shouldShowDataVisualizer = currentLang >= Chapter.SOURCE_2;
+      if (shouldShowDataVisualizer) {
+        tabs.push(dataVisualizerTab);
+      }
+
+      // Enable Env Visualizer for Source Chapter 3 and above
+      const shouldShowEnvVisualizer =
+        currentLang >= Chapter.SOURCE_3 &&
+        currentVariant !== Variant.CONCURRENT &&
+        currentVariant !== Variant.NON_DET;
+      if (shouldShowEnvVisualizer) {
+        tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
+      }
+
       // Enable Subst Visualizer only for default Source 1 & 2
-      tabs.push({
-        label: 'Stepper',
-        iconName: IconNames.FLOW_REVIEW,
-        body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
-        id: SideContentType.substVisualizer
-      });
+      const shouldShowSubstVisualizer =
+        currentLang <= Chapter.SOURCE_2 &&
+        (currentVariant === Variant.DEFAULT || currentVariant === Variant.NATIVE);
+      if (shouldShowSubstVisualizer) {
+        tabs.push(makeSubstVisualizerTabFrom(props.output));
+      }
     }
 
     if (!isSicpEditor) {
@@ -948,7 +885,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
       [dispatch, workspaceLocation]
     ),
-    handleEditorEval,
+    handleEditorEval: memoizedHandlers.handleEditorEval,
     handlePromptAutocomplete: React.useCallback(
       (row: number, col: number, callback: any) =>
         dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
@@ -1105,19 +1042,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <Workspace {...workspaceProps} />
     </HotKeys>
   );
-};
-
-const mobileOnlyTabIds: readonly SideContentType[] = [
-  SideContentType.mobileEditor,
-  SideContentType.mobileEditorRun
-];
-const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
-
-const dataVisualizerTab: SideContentTab = {
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer
 };
 
 export default Playground;
