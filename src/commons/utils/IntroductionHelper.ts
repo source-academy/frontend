@@ -3,8 +3,8 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import {
   pyLanguages,
   schemeLanguages,
-  styliseSublanguage,
-  sublanguages
+  sourceLanguages,
+  styliseSublanguage
 } from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
@@ -21,7 +21,7 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
 
-const ALL_LANGUAGES = [...schemeLanguages, ...sublanguages, ...pyLanguages];
+const ALL_LANGUAGES = [...schemeLanguages, ...sourceLanguages, ...pyLanguages];
 
 const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) => {
   if (sourceChapter === Chapter.FULL_JS) {
