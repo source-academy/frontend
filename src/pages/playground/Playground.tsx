@@ -198,7 +198,7 @@ export async function handleHash(
   // Make the parsed query string object a Partial because we might access keys which are not set.
   const qs: Partial<IParsedQuery> = parseQuery(hash);
 
-  const chapter = convertParamToInt(qs.chap) || undefined;
+  const chapter = convertParamToInt(qs.chap) ?? undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else if (chapter === Chapter.FULL_TS) {
