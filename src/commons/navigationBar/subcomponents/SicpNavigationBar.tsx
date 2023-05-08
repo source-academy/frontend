@@ -359,11 +359,11 @@ const SicpNavigationBar: React.FC = () => {
                 handleAutoIndexSearch(result);
               }}
               onMouseOver={e => {
-                const element = e!.nativeEvent!.srcElement as any;
+                const element = e.target as HTMLDivElement;
                 element.style.backgroundColor = 'rgba(0,0,0,0.5)';
               }}
               onMouseOut={e => {
-                const element = e!.nativeEvent!.srcElement as any;
+                const element = e.target as HTMLDivElement;
                 element.style.backgroundColor = 'rgba(0,0,0,0)';
               }}
             >
