@@ -392,8 +392,8 @@ const SicpNavigationBar: React.FC = () => {
   };
 
   type SearchResultProps = {
-    title: any;
-    url: any;
+    title: string;
+    url: string;
   };
 
   type SearchResultsProps = {
@@ -402,23 +402,16 @@ const SicpNavigationBar: React.FC = () => {
     handleCloseSearch: () => void;
   };
 
-  const SearchResult: React.FC<SearchResultProps> = ({ title, url }) => {
-    return (
-      <li>
-        <a href={url}>{title}</a>
-      </li>
-    );
-  };
-
   const SearchResults: React.FC<SearchResultsProps> = ({ query, results, handleCloseSearch }) => {
     const highlightedResults = results.map((result, index) => {
       const regex = new RegExp(`(${query})`, 'gi');
       const titleParts = result.title.split(regex);
-      const highlightedTitle = titleParts.map((part: any, i: any) => {
+      const highlightedTitle = titleParts.map((part, i) => {
         if (part.toLowerCase() === query.toLowerCase()) {
+          // TODO: Use a guaranteed unique value (not the index) as the key
           return <mark key={i}>{part}</mark>;
         } else {
-          return part;
+          return <>part</>;
         }
       });
       return { ...result, title: highlightedTitle };
@@ -428,8 +421,10 @@ const SicpNavigationBar: React.FC = () => {
       <div>
         <h3>Results for "{query}"</h3>
         <ul>
-          {highlightedResults.map((result, index) => (
-            <SearchResult key={index} {...result} />
+          {highlightedResults.map(result => (
+            <li>
+              <a href={result.url}>{result.title}</a>
+            </li>
           ))}
         </ul>
         <button onClick={handleCloseSearch}>Close</button>
