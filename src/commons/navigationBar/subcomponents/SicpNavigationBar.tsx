@@ -160,7 +160,7 @@ const SicpNavigationBar: React.FC = () => {
       if (node == null || limit < 0) {
         return;
       }
-      if (node.value && (voidSearch(path) ?? []).length > 0) {
+      if (node.value && voidSearch(path).length > 0) {
         ans.push(path);
         limit--;
       }
@@ -173,7 +173,7 @@ const SicpNavigationBar: React.FC = () => {
     return ans;
   }
 
-  const voidSearch = (query: string): SearchResultProps[] | undefined => {
+  const voidSearch = (query: string): SearchResultProps[] => {
     function toSearchResult(array: any[]): SearchResultProps {
       if (array == null || array[0] == null || array[1] == null || array[2] == null) {
         return { title: '', url: '' };
@@ -190,7 +190,7 @@ const SicpNavigationBar: React.FC = () => {
       .filter(word => word !== '');
     if (words.length === 0) {
       setQueryResult([]);
-      return;
+      return [];
     }
     return queryTrie(textTrie, words[0])
       .map(toSearchResult)
@@ -207,11 +207,7 @@ const SicpNavigationBar: React.FC = () => {
     }
     const pre = words.join(' ');
     const lastWord = words[words.length - 1];
-    const preResults = voidSearch(pre)?.filter((obj: any) => obj.title.includes(lastWord));
-    // FIXME: Do not use loose equality here
-    if (preResults == null) {
-      return [];
-    }
+    const preResults = voidSearch(pre).filter((obj: any) => obj.title.includes(lastWord));
     if (preResults.length === 0) {
       return [];
     }
@@ -228,12 +224,12 @@ const SicpNavigationBar: React.FC = () => {
   const handleSearchButton = () => {
     handleOpenSearch();
     setDisplayedQuery(searchQuery);
-    setQueryResult(voidSearch(searchQuery) ?? []);
+    setQueryResult(voidSearch(searchQuery));
   };
   const handleAutoSearch = (str: string) => {
     handleOpenSearch();
     setDisplayedQuery(str);
-    setQueryResult(voidSearch(str) ?? []);
+    setQueryResult(voidSearch(str));
     setSearchQuery(str);
   };
   const handleAutoIndexSearch = (str: string) => {
