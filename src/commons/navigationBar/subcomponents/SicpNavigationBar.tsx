@@ -398,7 +398,7 @@ const SicpNavigationBar: React.FC = () => {
           // TODO: Use a guaranteed unique value (not the index) as the key
           return <mark key={i}>{part}</mark>;
         } else {
-          return <>part</>;
+          return <>{part}</>;
         }
       });
       return { ...result, title: highlightedTitle };
