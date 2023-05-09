@@ -205,7 +205,7 @@ const SicpNavigationBar: React.FC = () => {
     if (words.length < 2) {
       return autoComplete(query, 250, trie);
     }
-    const pre = words.join(' ');
+    const pre = words.slice(0, -1).join(' ');
     const lastWord = words[words.length - 1];
     const preResults = voidSearch(pre).filter((obj: any) => obj.title.includes(lastWord));
     if (preResults.length === 0) {
