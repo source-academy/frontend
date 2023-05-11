@@ -71,17 +71,19 @@ import {
 } from 'src/features/persistence/PersistenceActions';
 import {
   generateLzString,
+  playgroundConfigLanguage,
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
 
 import {
   getDefaultFilePath,
+  getLanguageConfig,
   InterpreterOutput,
   isSourceLanguage,
   OverallState,
   ResultOutput,
-  sourceLanguages
+  SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
@@ -198,7 +200,7 @@ export async function handleHash(
   // Make the parsed query string object a Partial because we might access keys which are not set.
   const qs: Partial<IParsedQuery> = parseQuery(hash);
 
-  const chapter = convertParamToInt(qs.chap) || undefined;
+  const chapter = convertParamToInt(qs.chap) ?? undefined;
   if (chapter === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
   } else if (chapter === Chapter.FULL_TS) {
@@ -251,14 +253,14 @@ export async function handleHash(
     // By default, use the first editor tab.
     const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
     dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
-
-    const variant: Variant =
-      sourceLanguages.find(
-        language => language.chapter === chapter && language.variant === qs.variant
-      )?.variant ?? Variant.DEFAULT;
-
     if (chapter) {
-      props.handleChapterSelect(chapter, variant);
+      // TODO: To migrate the state logic away from playgroundSourceChapter
+      //       and playgroundSourceVariant into the language config instead
+      const languageConfig = getLanguageConfig(chapter, qs.variant as Variant);
+      props.handleChapterSelect(chapter, languageConfig.variant);
+      // Hardcoded for Playground only for now, while we await workspace refactoring
+      // to decouple the SicpWorkspace from the Playground.
+      dispatch(playgroundConfigLanguage(languageConfig));
     }
 
     const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
@@ -340,6 +342,15 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (props.courseSourceChapter && props.courseSourceVariant) {
         propsRef.current.handleChapterSelect(props.courseSourceChapter, props.courseSourceVariant);
+        // TODO: To migrate the state logic away from playgroundSourceChapter
+        //       and playgroundSourceVariant into the language config instead
+        const languageConfig = getLanguageConfig(
+          props.courseSourceChapter,
+          props.courseSourceVariant
+        );
+        // Hardcoded for Playground only for now, while we await workspace refactoring
+        // to decouple the SicpWorkspace from the Playground.
+        dispatch(playgroundConfigLanguage(languageConfig));
         // Disable Folder mode when forcing the Source chapter and variant to follow the current course's.
         // This is because Folder mode only works in Source 2+.
         dispatch(setFolderMode(workspaceLocation, false));
@@ -481,7 +492,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   ]);
 
   const chapterSelectHandler = React.useCallback(
-    ({ chapter, variant }: { chapter: Chapter; variant: Variant }, e: any) => {
+    (sublanguage: SALanguage, e: any) => {
+      const { chapter, variant } = sublanguage;
       const { handleUsingSubst, handleReplOutputClear, handleChapterSelect } = propsRef.current;
       if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
         handleUsingSubst(true);
@@ -500,8 +512,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       pushLog(input);
 
       handleChapterSelect(chapter, variant);
+      // Hardcoded for Playground only for now, while we await workspace refactoring
+      // to decouple the SicpWorkspace from the Playground.
+      dispatch(playgroundConfigLanguage(sublanguage));
     },
-    [hasBreakpoints, selectedTab, pushLog]
+    [dispatch, hasBreakpoints, selectedTab, pushLog]
   );
 
   const chapterSelect = React.useMemo(
@@ -695,16 +710,27 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [props.playgroundSourceChapter, props.playgroundSourceVariant]
   );
 
+  React.useEffect(() => {
+    // TODO: To migrate the state logic away from playgroundSourceChapter
+    //       and playgroundSourceVariant into the language config instead
+    const languageConfigToSet = getLanguageConfig(
+      props.playgroundSourceChapter,
+      props.playgroundSourceVariant
+    );
+    // Hardcoded for Playground only for now, while we await workspace refactoring
+    // to decouple the SicpWorkspace from the Playground.
+    dispatch(playgroundConfigLanguage(languageConfigToSet));
+  }, [dispatch, props.playgroundSourceChapter, props.playgroundSourceVariant]);
+
+  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
+  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer ?? false;
+  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer ?? false;
+  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer ?? false;
+
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     const currentLang = props.playgroundSourceChapter;
-    const currentVariant = props.playgroundSourceVariant;
-
-    if (!isSourceLanguage(currentLang)) {
-      // For now, disable other tabs when not running Source
-      return tabs;
-    }
 
     if (currentLang === Chapter.HTML) {
       // For HTML Chapter, HTML Display tab is added only after code is run
@@ -718,33 +744,14 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       return tabs;
     }
 
-    if (currentLang === Chapter.FULL_JS || currentLang === Chapter.FULL_TS) {
-      // (TEMP) Remove tabs for fullJS until support is integrated
-      return [...tabs, dataVisualizerTab];
-    }
-
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-
-      // Enable Data Visualizer for Source Chapter 2 and above
-      const shouldShowDataVisualizer = currentLang >= Chapter.SOURCE_2;
       if (shouldShowDataVisualizer) {
         tabs.push(dataVisualizerTab);
       }
-
-      // Enable Env Visualizer for Source Chapter 3 and above
-      const shouldShowEnvVisualizer =
-        currentLang >= Chapter.SOURCE_3 &&
-        currentVariant !== Variant.CONCURRENT &&
-        currentVariant !== Variant.NON_DET;
       if (shouldShowEnvVisualizer) {
         tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
       }
-
-      // Enable Subst Visualizer only for default Source 1 & 2
-      const shouldShowSubstVisualizer =
-        currentLang <= Chapter.SOURCE_2 &&
-        (currentVariant === Variant.DEFAULT || currentVariant === Variant.NATIVE);
       if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(props.output));
       }
@@ -758,12 +765,14 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   }, [
     playgroundIntroductionTab,
     props.playgroundSourceChapter,
-    props.playgroundSourceVariant,
     props.output,
     usingRemoteExecution,
     isSicpEditor,
     dispatch,
     workspaceLocation,
+    shouldShowDataVisualizer,
+    shouldShowEnvVisualizer,
+    shouldShowSubstVisualizer,
     remoteExecutionTab
   ]);
 
@@ -970,8 +979,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
-        // Local imports/exports require Source 2+ as Source 1 does not have lists.
-        props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
+        languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
@@ -1013,8 +1021,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           chapterSelect,
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
-          // Local imports/exports require Source 2+ as Source 1 does not have lists.
-          props.playgroundSourceChapter === Chapter.SOURCE_1 ? null : toggleFolderModeButton,
+          languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,
           githubButtons
         ]

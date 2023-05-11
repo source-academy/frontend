@@ -626,7 +626,8 @@ test('changeSublanguage generates correct action object', () => {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
     displayName: 'Source \xa72',
-    mainLanguage: SupportedLanguage.JAVASCRIPT
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: {}
   };
   const action = changeSublanguage(sublang);
   expect(action).toEqual({
@@ -642,7 +643,8 @@ test('updateChapter generates correct action object', () => {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
     displayName: 'Source \xa72',
-    mainLanguage: SupportedLanguage.JAVASCRIPT
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: {}
   };
   const action = updateSublanguage(sublang);
   expect(action).toEqual({

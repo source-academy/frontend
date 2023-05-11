@@ -123,7 +123,15 @@ export const SUPPORTED_LANGUAGES = [
 export interface SALanguage extends Language {
   displayName: string;
   mainLanguage: SupportedLanguage;
+  /** Whether the language supports the given features */
+  supports: LanguageFeatures;
 }
+type LanguageFeatures = {
+  dataVisualizer?: boolean;
+  substVisualizer?: boolean;
+  envVisualizer?: boolean;
+  multiFile?: boolean;
+};
 
 const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
@@ -140,24 +148,27 @@ export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
   displayName: 'full JavaScript',
-  mainLanguage: SupportedLanguage.JAVASCRIPT
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: { dataVisualizer: true }
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
   displayName: 'full TypeScript',
-  mainLanguage: SupportedLanguage.JAVASCRIPT
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: { dataVisualizer: true }
 };
 
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
   displayName: 'HTML',
-  mainLanguage: SupportedLanguage.JAVASCRIPT
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: {}
 };
 
-const schemeSubLanguages = [
+const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
   { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
   { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
   { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
@@ -166,10 +177,10 @@ const schemeSubLanguages = [
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME };
+  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: {} };
 });
 
-const pySubLanguages = [
+const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
   //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
   //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
@@ -178,7 +189,7 @@ const pySubLanguages = [
 ];
 
 export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON };
+  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: {} };
 });
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
@@ -207,21 +218,24 @@ export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.
   }
 };
 
-const sourceSubLanguages: Language[] = [
+const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
   { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
+
   { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
+
   { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
   { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
   { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
+
   { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_4, variant: Variant.GPU },
@@ -230,15 +244,55 @@ const sourceSubLanguages: Language[] = [
 ];
 
 export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
+  const { chapter, variant } = sublang;
+  const supportedFeatures: LanguageFeatures = {};
+
+  // Enable Data Visualizer for Source Chapter 2 and above
+  supportedFeatures.dataVisualizer = chapter >= Chapter.SOURCE_2;
+
+  // Enable Subst Visualizer only for default Source 1 & 2
+  supportedFeatures.substVisualizer =
+    chapter <= Chapter.SOURCE_2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE);
+
+  // Enable Env Visualizer for Source Chapter 3 and above
+  supportedFeatures.envVisualizer =
+    chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET;
+
+  // Local imports/exports require Source 2+ as Source 1 does not have lists.
+  supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
+
   return {
     ...sublang,
     displayName: styliseSublanguage(sublang.chapter, sublang.variant),
-    mainLanguage: SupportedLanguage.JAVASCRIPT
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: supportedFeatures
   };
 });
 
 export const isSourceLanguage = (chapter: Chapter) =>
   [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
+
+export const ALL_LANGUAGES: readonly SALanguage[] = [
+  ...sourceLanguages,
+  fullJSLanguage,
+  fullTSLanguage,
+  htmlLanguage,
+  ...schemeLanguages,
+  ...pyLanguages
+];
+// TODO: Remove this function once logic has been fully migrated
+export const getLanguageConfig = (
+  chapter: Chapter,
+  variant: Variant = Variant.DEFAULT
+): SALanguage => {
+  const languageConfig = ALL_LANGUAGES.find(
+    lang => lang.chapter === chapter && lang.variant === variant
+  );
+  if (!languageConfig) {
+    throw new Error(`Language config not found for chapter ${chapter} variant ${variant}`);
+  }
+  return languageConfig;
+};
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -273,9 +327,23 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
+const getDefaultLanguageConfig = (): SALanguage => {
+  const languageConfig = ALL_LANGUAGES.find(
+    sublang =>
+      sublang.chapter === Constants.defaultSourceChapter &&
+      sublang.variant === Constants.defaultSourceVariant
+  );
+  if (!languageConfig) {
+    throw new Error('Cannot find language config to match default chapter and variant');
+  }
+  return languageConfig;
+};
+export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
+
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  lang: SupportedLanguage.JAVASCRIPT
+  lang: SupportedLanguage.JAVASCRIPT,
+  languageConfig: defaultLanguageConfig
 };
 
 export const defaultEditorValue = '// Type your program in here!';
