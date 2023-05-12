@@ -26,33 +26,24 @@ jobs:
       - name: Install dependencies
         run: |
           JOBS=$(nproc) yarn install --frozen-lockfile
-  compile:
-    name: Compile
+  lint:
     needs: deps
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        commands: [tsc, format:ci, eslint, build]
     steps:
-      - run: yarn run tsc
-  format_ci:
-    name:
-    needs: deps
-    runs-on: ubuntu-latest
-    steps:
-      - run: yarn run format:ci
-  eslint:
-    name: Eslint
-    needs: deps
-    runs-on: ubuntu-latest
-    steps:
-      - run: yarn run eslint
-  build:
-    name: Build
-    needs: deps
-    runs-on: ubuntu-latest
-    steps:
-      - run: yarn run build
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup repository
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+      - run: yarn run ${{ matrix.commands }}
   coveralls:
     name: Check code coverage
-    needs: [deps, compile, format_ci, eslint, build]
+    needs: [deps, lint]
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls
