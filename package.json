@@ -121,6 +121,7 @@
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
     "enzyme": "^3.11.0",
+    "eslint-plugin-no-relative-import-paths": "^1.5.2",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "https-browserify": "^1.0.0",
     "husky": "^8.0.2",
