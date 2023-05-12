@@ -2,9 +2,9 @@ import { Spinner, SpinnerSize } from '@blueprintjs/core';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import Delay from 'src/commons/delay/Delay';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import Delay from '../delay/Delay';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 

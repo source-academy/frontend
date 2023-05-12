@@ -1,12 +1,12 @@
 import React from 'react';
+import { ArrayNullUnit } from 'src/features/envVisualizer/compactComponents/ArrayNullUnit';
+import { Binding } from 'src/features/envVisualizer/compactComponents/Binding';
+import { Text } from 'src/features/envVisualizer/compactComponents/Text';
+import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { CompactReferenceType, PrimitiveTypes } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { getTextWidth, isNull } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { CompactConfig } from '../../EnvVisualizerCompactConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { CompactReferenceType, PrimitiveTypes } from '../../EnvVisualizerTypes';
-import { getTextWidth, isNull } from '../../EnvVisualizerUtils';
-import { ArrayNullUnit } from '../ArrayNullUnit';
-import { Binding } from '../Binding';
-import { Text } from '../Text';
 import { Value } from './Value';
 
 /** this classes encapsulates a primitive value in Source: number, string or null */

@@ -1,6 +1,5 @@
 import React from 'react';
-
-import ControlButton from '../../commons/ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 
 type TableOfContentsButtonProps = {
   handleOpenToc: () => void;

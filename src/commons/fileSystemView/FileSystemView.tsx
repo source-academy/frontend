@@ -2,10 +2,10 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import path from 'path';
 import React from 'react';
+import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { showSimpleErrorDialog } from '../utils/DialogHelper';
-import { useTypedSelector } from '../utils/Hooks';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';

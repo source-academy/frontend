@@ -1,9 +1,10 @@
-import { IBaseScene } from '../commons/CommonTypes';
-import DashboardConstants from '../dashboard/GameDashboardConstants';
-import { DashboardPageManager } from '../dashboard/GameDashboardTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { limitNumber } from '../utils/GameUtils';
-import { createBitmapText } from '../utils/TextUtils';
+import { IBaseScene } from 'src/features/game/commons/CommonTypes';
+import DashboardConstants from 'src/features/game/dashboard/GameDashboardConstants';
+import { DashboardPageManager } from 'src/features/game/dashboard/GameDashboardTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { limitNumber } from 'src/features/game/utils/GameUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+
 import TaskLogConstants, { taskTextStyle } from './GameTaskLogConstants';
 
 /**

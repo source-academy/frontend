@@ -1,7 +1,8 @@
-import { GameAction, GameActionType } from '../action/GameActionTypes';
-import { ItemId } from '../commons/CommonTypes';
-import { GameItemType } from '../location/GameMapTypes';
-import StringUtils from '../utils/StringUtils';
+import { GameAction, GameActionType } from 'src/features/game/action/GameActionTypes';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
+import { GameItemType } from 'src/features/game/location/GameMapTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import ConditionParser from './ConditionParser';
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';

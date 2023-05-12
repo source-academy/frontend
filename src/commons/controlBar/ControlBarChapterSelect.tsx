@@ -4,7 +4,6 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
-
 import {
   fullJSLanguage,
   fullTSLanguage,
@@ -14,9 +13,9 @@ import {
   schemeLanguages,
   sourceLanguages,
   styliseSublanguage
-} from '../application/ApplicationTypes';
-import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+} from 'src/commons/application/ApplicationTypes';
+import Constants from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 

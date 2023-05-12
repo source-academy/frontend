@@ -1,7 +1,8 @@
-import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
-import { Role } from '../application/ApplicationTypes';
-import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import { Testcase, TestcaseTypes } from 'src/commons/assessment/AssessmentTypes';
+import { GradingSummary } from 'src/features/dashboard/DashboardTypes';
+import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
+
 import { mockLibrary } from './AssessmentMocks';
 import { mockFetchRole } from './UserMocks';
 

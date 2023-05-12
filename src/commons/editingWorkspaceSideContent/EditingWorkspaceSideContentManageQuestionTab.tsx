@@ -1,11 +1,10 @@
 import { Button, ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
-
-import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
-import Markdown from '../Markdown';
-import { history } from '../utils/HistoryHelper';
+import { Assessment, mcqTemplate, programmingTemplate } from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
+import Markdown from 'src/commons/Markdown';
+import { history } from 'src/commons/utils/HistoryHelper';
 
 type ManageQuestionTabProps = DispatchProps & StateProps;
 

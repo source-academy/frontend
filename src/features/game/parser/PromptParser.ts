@@ -1,5 +1,5 @@
-import { Prompt } from '../dialogue/GameDialogueTypes';
-import StringUtils from '../utils/StringUtils';
+import { Prompt } from 'src/features/game/dialogue/GameDialogueTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
 
 /**
  * This class parses prompt and creates Prompt

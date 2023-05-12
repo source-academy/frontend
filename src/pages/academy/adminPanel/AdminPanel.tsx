@@ -5,10 +5,6 @@ import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
-
 import {
   deleteAssessmentConfig,
   deleteUserCourseRegistration,
@@ -19,10 +15,14 @@ import {
   updateAssessmentConfigs,
   updateCourseConfig,
   updateUserRole
-} from '../../../commons/application/actions/SessionActions';
-import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
-import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
-import ContentDisplay from '../../../commons/ContentDisplay';
+} from 'src/commons/application/actions/SessionActions';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
+
 import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';

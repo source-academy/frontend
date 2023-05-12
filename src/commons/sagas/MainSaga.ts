@@ -1,8 +1,8 @@
 import { SagaIterator } from 'redux-saga';
 import { fork } from 'redux-saga/effects';
+import { mockBackendSaga } from 'src/commons/mocks/BackendMocks';
+import Constants from 'src/commons/utils/Constants';
 
-import { mockBackendSaga } from '../mocks/BackendMocks';
-import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
 import BackendSaga from './BackendSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';

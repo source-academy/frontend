@@ -1,12 +1,12 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import EnvVisualizer from '../EnvVisualizer';
-import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Data, IHoverable } from '../EnvVisualizerTypes';
-import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
 import { Frame } from './Frame';
 import { Visible } from './Visible';
 

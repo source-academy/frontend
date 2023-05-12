@@ -1,7 +1,7 @@
 import { Card, Elevation, H2, H3, H5 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
+import { Contributor, Repo } from 'src/features/contributors/ContributorsTypes';
 
-import { Contributor, Repo } from '../../../features/contributors/ContributorsTypes';
 import { fetchContributors, fetchRepos } from './ContributorsGithubApi';
 
 const ContributorsList: React.FC = () => {

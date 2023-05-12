@@ -5,13 +5,13 @@ import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { MissionRepoData } from 'src/commons/githubAssessments/GitHubMissionTypes';
+import GitHubAssessmentsNavigationBar from 'src/commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
-import ContentDisplay from '../../commons/ContentDisplay';
-import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
-import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
-import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
-import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspaceContainer from './GitHubAssessmentWorkspaceContainer';
 import GitHubClassroomWelcome from './GitHubClassroomWelcome';

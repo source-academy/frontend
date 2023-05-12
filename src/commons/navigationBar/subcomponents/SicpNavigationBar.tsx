@@ -5,10 +5,9 @@ import * as React from 'react';
 import { useHistory, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
 import Constants from 'src/commons/utils/Constants';
+import { TableOfContentsButton } from 'src/features/sicp/TableOfContentsButton';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
-
-import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
-import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
+import SicpToc from 'src/pages/sicp/subcomponents/SicpToc';
 
 /**
  * Secondary navbar for SICP, should only be displayed when on pages related to interactive /SICP.

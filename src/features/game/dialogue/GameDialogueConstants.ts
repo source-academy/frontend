@@ -1,7 +1,7 @@
-import FontAssets from '../assets/FontAssets';
-import { screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
-import { Color } from '../utils/StyleUtils';
+import FontAssets from 'src/features/game/assets/FontAssets';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
+import { Color } from 'src/features/game/utils/StyleUtils';
 
 const dialogueRectMargin = 10;
 

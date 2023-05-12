@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
+import { defaultAchievement } from 'src/commons/application/ApplicationTypes';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
-import { defaultAchievement } from '../../commons/application/ApplicationTypes';
-import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   AchievementState,
   SAVE_ACHIEVEMENTS,

@@ -1,8 +1,8 @@
-import { AnimType, AssetType, ImageAsset } from '../assets/AssetsTypes';
-import { AssetKey } from '../commons/CommonTypes';
-import { GameItemType } from '../location/GameMapTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { mandatory } from '../utils/GameUtils';
+import { AnimType, AssetType, ImageAsset } from 'src/features/game/assets/AssetsTypes';
+import { AssetKey } from 'src/features/game/commons/CommonTypes';
+import { GameItemType } from 'src/features/game/location/GameMapTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 /**
  * Manager for game animations.

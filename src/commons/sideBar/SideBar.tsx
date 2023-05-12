@@ -1,8 +1,7 @@
 import { Card, Icon, IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
-
-import { SideContentType } from '../sideContent/SideContentTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 
 /**
  * @property label The displayed name of the tab.

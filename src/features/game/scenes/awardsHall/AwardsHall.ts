@@ -1,19 +1,20 @@
-import ImageAssets from '../../assets/ImageAssets';
-import { getAwardProps } from '../../awards/GameAwardsHelper';
-import { AwardProperty } from '../../awards/GameAwardsTypes';
-import CommonBackButton from '../../commons/CommonBackButton';
-import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
-import { putWorkerMessage } from '../../effects/WorkerMessage';
-import GameInputManager from '../../input/GameInputManager';
-import GameLayerManager from '../../layer/GameLayerManager';
-import { Layer } from '../../layer/GameLayerTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
-import { createButton } from '../../utils/ButtonUtils';
-import { limitNumber, mandatory } from '../../utils/GameUtils';
-import { resizeUnderflow } from '../../utils/SpriteUtils';
-import { calcTableFormatPos, Direction, HexColor } from '../../utils/StyleUtils';
-import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { getAwardProps } from 'src/features/game/awards/GameAwardsHelper';
+import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
+import CommonBackButton from 'src/features/game/commons/CommonBackButton';
+import { Constants, screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
+import { putWorkerMessage } from 'src/features/game/effects/WorkerMessage';
+import GameInputManager from 'src/features/game/input/GameInputManager';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { limitNumber, mandatory } from 'src/features/game/utils/GameUtils';
+import { resizeUnderflow } from 'src/features/game/utils/SpriteUtils';
+import { calcTableFormatPos, Direction, HexColor } from 'src/features/game/utils/StyleUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+
 import {
   awardBannerTextStyle,
   awardNoAssetTitleStyle,

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Arrow } from 'react-konva';
-
-import { Config } from '../Config';
+import { Config } from 'src/features/dataVisualizer/Config';
 
 type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number } };
 

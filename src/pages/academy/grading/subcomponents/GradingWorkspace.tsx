@@ -3,12 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
-
 import {
   defaultWorkspaceManager,
   InterpreterOutput
-} from '../../../../commons/application/ApplicationTypes';
+} from 'src/commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -16,24 +14,26 @@ import {
   Question,
   QuestionTypes,
   Testcase
-} from '../../../../commons/assessment/AssessmentTypes';
-import { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
-import { ControlBarClearButton } from '../../../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
-import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
-import { Position } from '../../../../commons/editor/EditorTypes';
-import Markdown from '../../../../commons/Markdown';
-import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
-import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
-import { history } from '../../../../commons/utils/HistoryHelper';
-import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { EditorTabState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
-import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
+} from 'src/commons/assessment/AssessmentTypes';
+import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from 'src/commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from 'src/commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from 'src/commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { convertEditorTabStateToProps } from 'src/commons/editor/EditorContainer';
+import { Position } from 'src/commons/editor/EditorTypes';
+import Markdown from 'src/commons/Markdown';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import SideContentAutograder from 'src/commons/sideContent/SideContentAutograder';
+import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { history } from 'src/commons/utils/HistoryHelper';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
+import { EditorTabState, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { AnsweredQuestion, Grading } from 'src/features/grading/GradingTypes';
+
 import GradingEditor from './GradingEditorContainer';
 
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;

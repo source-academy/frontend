@@ -21,8 +21,8 @@ import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import useTypeInference from './UseTypeInference';
-import { getModeString, selectMode } from '../utils/AceHelper';
-import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
+import { getModeString, selectMode } from 'src/commons/utils/AceHelper';
+import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { IAceEditor } from 'react-ace/lib/types';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };

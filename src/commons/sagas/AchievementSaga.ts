@@ -1,6 +1,12 @@
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, select } from 'redux-saga/effects';
-
+import { updateGoalProcessed } from 'src/commons/achievement/AchievementManualEditor';
+import AchievementInferencer from 'src/commons/achievement/utils/AchievementInferencer';
+import { goalIncludesEvents, incrementCount } from 'src/commons/achievement/utils/EventHandler';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { Tokens } from 'src/commons/application/types/SessionTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import Constants from 'src/commons/utils/Constants';
 import {
   AchievementGoal,
   ADD_EVENT,
@@ -17,14 +23,8 @@ import {
   REMOVE_GOAL,
   UPDATE_GOAL_PROGRESS,
   UPDATE_OWN_GOAL_PROGRESS
-} from '../../features/achievement/AchievementTypes';
-import { updateGoalProcessed } from '../achievement/AchievementManualEditor';
-import AchievementInferencer from '../achievement/utils/AchievementInferencer';
-import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
-import { OverallState } from '../application/ApplicationTypes';
-import { Tokens } from '../application/types/SessionTypes';
-import { actions } from '../utils/ActionsHelper';
-import Constants from '../utils/Constants';
+} from 'src/features/achievement/AchievementTypes';
+
 import {
   bulkUpdateAchievements,
   bulkUpdateGoals,

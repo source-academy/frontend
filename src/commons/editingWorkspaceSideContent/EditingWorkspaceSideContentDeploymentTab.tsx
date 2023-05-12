@@ -3,15 +3,15 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
-
-import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
+import { SALanguage, sourceLanguages, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import {
   External,
   externalLibraries,
   ExternalLibraryName
-} from '../application/types/ExternalTypes';
-import { Assessment, emptyLibrary, Library } from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
+} from 'src/commons/application/types/ExternalTypes';
+import { Assessment, emptyLibrary, Library } from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
+
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 

@@ -1,11 +1,11 @@
 import {
   cardBackgroundUrl,
   coverImageUrl
-} from '../../../../features/achievement/AchievementConstants';
+} from 'src/features/achievement/AchievementConstants';
 import {
   AchievementItem,
   AchievementView
-} from '../../../../features/achievement/AchievementTypes';
+} from 'src/features/achievement/AchievementTypes';
 
 export const viewTemplate: AchievementView = {
   coverImage: `${coverImageUrl}/default.png`,

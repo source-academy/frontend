@@ -1,6 +1,7 @@
-import { SpeakerDetail } from '../character/GameCharacterTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
+import { SpeakerDetail } from 'src/features/game/character/GameCharacterTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+
 import { DialogueStorageLine } from './GameDialogueTypes';
 
 /**

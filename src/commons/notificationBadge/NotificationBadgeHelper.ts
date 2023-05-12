@@ -1,4 +1,5 @@
-import { AssessmentType } from '../assessment/AssessmentTypes';
+import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+
 import { Notification, NotificationFilterFunction } from './NotificationBadgeTypes';
 
 /**

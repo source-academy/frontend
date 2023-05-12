@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
-
-import { screenSize } from '../commons/CommonConstants';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
 
 export const Color = {
   navy: '#03092c',

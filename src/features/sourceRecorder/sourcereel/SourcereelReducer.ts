@@ -1,5 +1,6 @@
-import { SourceActionType } from '../../../commons/utils/ActionsHelper';
-import { RecordingStatus } from '../SourceRecorderTypes';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import { RecordingStatus } from 'src/features/sourceRecorder/SourceRecorderTypes';
+
 import {
   RECORD_INIT,
   RECORD_INPUT,

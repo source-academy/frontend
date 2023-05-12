@@ -1,15 +1,12 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-
-import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
   OverallState,
   Role,
   SALanguage,
   styliseSublanguage,
   SupportedLanguage
-} from '../application/ApplicationTypes';
+} from 'src/commons/application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -29,22 +26,25 @@ import {
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE
-} from '../application/types/SessionTypes';
+} from 'src/commons/application/types/SessionTypes';
 import {
   AssessmentOverview,
   AssessmentStatuses,
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
   SUBMIT_ASSESSMENT
-} from '../assessment/AssessmentTypes';
+} from 'src/commons/assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
-} from '../notificationBadge/NotificationBadgeTypes';
-import { actions } from '../utils/ActionsHelper';
-import { history } from '../utils/HistoryHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+} from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import { history } from 'src/commons/utils/HistoryHelper';
+import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { FETCH_GROUP_GRADING_SUMMARY } from 'src/features/dashboard/DashboardTypes';
+import { Grading, GradingOverview, GradingQuestion } from 'src/features/grading/GradingTypes';
+
 import {
   mockAssessmentConfigurations,
   mockAssessmentOverviews,

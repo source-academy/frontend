@@ -1,11 +1,11 @@
 import { EditableText } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import { useContext, useMemo, useReducer, useState } from 'react';
+import ItemDeleter from 'src/commons/achievement/control/common/ItemDeleter';
+import ItemSaver from 'src/commons/achievement/control/common/ItemSaver';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
-import ItemDeleter from '../common/ItemDeleter';
-import ItemSaver from '../common/ItemSaver';
 import {
   EditableGoalAction as Action,
   EditableGoalActionType as ActionType,

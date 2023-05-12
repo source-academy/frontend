@@ -1,4 +1,4 @@
-import { AssetKey, GamePosition, ItemId } from '../commons/CommonTypes';
+import { AssetKey, GamePosition, ItemId } from 'src/features/game/commons/CommonTypes';
 
 export type SpeakerDetail = {
   speakerId: ItemId;

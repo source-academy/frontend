@@ -3,9 +3,8 @@ import _ from 'lodash';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { OverallState } from '../../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   changeExecTime,
   chapterSelect,
@@ -16,9 +15,9 @@ import {
   toggleUsingEnv,
   toggleUsingSubst,
   updateEditorValue
-} from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import Playground, { DispatchProps, StateProps } from 'src/pages/playground/Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   ..._.pick(

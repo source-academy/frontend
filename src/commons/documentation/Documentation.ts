@@ -1,7 +1,6 @@
 import { SourceDocumentation } from 'js-slang';
+import { externalLibraries } from 'src/commons/application/types/ExternalTypes';
 import { deviceTypes } from 'src/features/remoteExecution/RemoteExecutionTypes';
-
-import { externalLibraries } from '../application/types/ExternalTypes';
 
 const externalLibrariesDocumentation = {};
 

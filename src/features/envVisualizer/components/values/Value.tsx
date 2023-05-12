@@ -1,8 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-
-import { Data, IHoverable, ReferenceType } from '../../EnvVisualizerTypes';
-import { Visible } from '../Visible';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import { Data, IHoverable, ReferenceType } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
 /** the value of a `Binding` or an `ArrayUnit` */
 export abstract class Value extends Visible implements IHoverable {

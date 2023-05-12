@@ -1,8 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Shape } from 'react-konva';
-
-import { ShapeDefaultProps } from '../../EnvVisualizerConfig';
+import { ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
 
 interface Props {
   x: number;

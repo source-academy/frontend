@@ -4,10 +4,10 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { addEditorTab, removeEditorTabForFile } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { showSimpleConfirmDialog } from '../utils/DialogHelper';
-import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';

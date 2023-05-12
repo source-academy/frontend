@@ -1,4 +1,4 @@
-import { BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
+import { BitmapFontStyle, TextConfig } from 'src/features/game/commons/CommonTypes';
 
 /**
  * Create bitmap text with the given style.

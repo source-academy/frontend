@@ -7,8 +7,8 @@ import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
+import { CodeSnippetContext } from 'src/pages/sicp/Sicp';
 
-import { CodeSnippetContext } from '../Sicp';
 import SicpWorkspaceContainer from './SicpWorkspaceContainer';
 
 export type CodeSnippetProps = OwnProps;

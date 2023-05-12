@@ -1,7 +1,4 @@
 import { SourceError, Value } from 'js-slang/dist/types';
-import { action } from 'typesafe-actions';
-
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -14,7 +11,9 @@ import {
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG
-} from '../types/InterpreterTypes';
+} from 'src/commons/application/types/InterpreterTypes';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { action } from 'typesafe-actions';
 
 export const handleConsoleLog = (workspaceLocation: WorkspaceLocation, ...logString: string[]) =>
   action(HANDLE_CONSOLE_LOG, { logString, workspaceLocation });

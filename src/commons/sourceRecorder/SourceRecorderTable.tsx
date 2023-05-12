@@ -12,9 +12,9 @@ import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
 import * as React from 'react';
+import { getStandardDate } from 'src/commons/utils/DateHelper';
+import { PlaybackData, SourcecastData } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
-import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { getStandardDate } from '../utils/DateHelper';
 import SourcastDeleteCell from './SourceRecorderDeleteCell';
 import SourceRecorderSelectCell from './SourceRecorderSelectCell';
 import SourceRecorderShareCell from './SourceRecorderShareCell';

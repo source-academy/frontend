@@ -1,6 +1,7 @@
-import ImageAssets from '../../assets/ImageAssets';
-import { AwardProperty } from '../../awards/GameAwardsTypes';
-import { HexColor } from '../../utils/StyleUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
+
 import {
   awardHoverDescStyle,
   awardHoverKeyStyle,

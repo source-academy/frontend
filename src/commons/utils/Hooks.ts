@@ -1,8 +1,8 @@
 import React, { RefObject } from 'react';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 
-import { OverallState } from '../application/ApplicationTypes';
 import Constants from './Constants';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 

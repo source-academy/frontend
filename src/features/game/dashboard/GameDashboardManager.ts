@@ -1,15 +1,16 @@
-import ImageAssets from '../assets/ImageAssets';
-import SoundAssets from '../assets/SoundAssets';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { IBaseScene, IGameUI } from '../commons/CommonTypes';
-import { fadeAndDestroy } from '../effects/FadeEffect';
-import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
-import { Layer } from '../layer/GameLayerTypes';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
-import SourceAcademyGame from '../SourceAcademyGame';
-import { createButton } from '../utils/ButtonUtils';
-import { sleep } from '../utils/GameUtils';
-import { calcListFormatPos } from '../utils/StyleUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { IBaseScene, IGameUI } from 'src/features/game/commons/CommonTypes';
+import { fadeAndDestroy } from 'src/features/game/effects/FadeEffect';
+import { entryTweenProps, exitTweenProps } from 'src/features/game/effects/FlyEffect';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { sleep } from 'src/features/game/utils/GameUtils';
+import { calcListFormatPos } from 'src/features/game/utils/StyleUtils';
+
 import DashboardConstants, { pageBannerTextStyle } from './GameDashboardConstants';
 import { DashboardPage, DashboardPageManager } from './GameDashboardTypes';
 

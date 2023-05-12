@@ -1,4 +1,5 @@
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+
 import { consoleOverloads } from './ConsoleOverload';
 
 class BufferService {

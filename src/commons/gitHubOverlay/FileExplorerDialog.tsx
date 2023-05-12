@@ -12,7 +12,6 @@ import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-
 import {
   checkIfFileCanBeOpened,
   checkIfFileCanBeSavedAndGetSaveType,
@@ -21,7 +20,8 @@ import {
   openFileInEditor,
   performCreatingSave,
   performOverwritingSave
-} from '../../features/github/GitHubUtils';
+} from 'src/features/github/GitHubUtils';
+
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 

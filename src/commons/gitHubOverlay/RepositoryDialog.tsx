@@ -9,8 +9,7 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 export type RepositoryDialogProps = {
   userRepos: any[];

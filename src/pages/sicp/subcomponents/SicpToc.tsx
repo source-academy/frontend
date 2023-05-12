@@ -3,8 +3,7 @@ import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-
-import toc from '../../../features/sicp/data/toc.json';
+import toc from 'src/features/sicp/data/toc.json';
 
 type TocProps = OwnProps;
 

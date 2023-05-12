@@ -1,9 +1,10 @@
-import SoundAssets from '../assets/SoundAssets';
-import { ItemId } from '../commons/CommonTypes';
-import { promptWithChoices } from '../effects/Prompt';
-import { Layer } from '../layer/GameLayerTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
+import { promptWithChoices } from 'src/features/game/effects/Prompt';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+
 import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';

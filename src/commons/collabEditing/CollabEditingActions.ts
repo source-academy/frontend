@@ -1,6 +1,6 @@
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { action } from 'typesafe-actions'; // EDITING
 
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from './CollabEditingTypes';
 
 export const setEditorSessionId = (workspaceLocation: WorkspaceLocation, editorSessionId: string) =>

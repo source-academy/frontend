@@ -3,19 +3,19 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-
 import {
   fetchGradingOverviews,
   fetchNotifications,
   updateLatestViewedCourse
-} from '../../commons/application/actions/SessionActions';
-import Assessment from '../../commons/assessment/Assessment';
-import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
-import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
-import Achievement from '../../pages/achievement/Achievement';
-import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
-import NotFound from '../notFound/NotFound';
+} from 'src/commons/application/actions/SessionActions';
+import Assessment from 'src/commons/assessment/Assessment';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
+import { assessmentRegExp, gradingRegExp } from 'src/features/academy/AcademyTypes';
+import Achievement from 'src/pages/achievement/Achievement';
+import NotFound from 'src/pages/notFound/NotFound';
+import Sourcecast from 'src/pages/sourcecast/SourcecastContainer';
+
 import AdminPanel from './adminPanel/AdminPanel';
 import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';

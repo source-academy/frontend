@@ -1,16 +1,15 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from '../../../../commons/application/actions/InterpreterActions';
-import { fetchGrading } from '../../../../commons/application/actions/SessionActions';
-import { OverallState } from '../../../../commons/application/ApplicationTypes';
-import { Library } from '../../../../commons/assessment/AssessmentTypes';
-import { Position } from '../../../../commons/editor/EditorTypes';
+} from 'src/commons/application/actions/InterpreterActions';
+import { fetchGrading } from 'src/commons/application/actions/SessionActions';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { Library } from 'src/commons/assessment/AssessmentTypes';
+import { Position } from 'src/commons/editor/EditorTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -33,8 +32,9 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
-} from '../../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspace';
 
 const workspaceLocation: WorkspaceLocation = 'grading';

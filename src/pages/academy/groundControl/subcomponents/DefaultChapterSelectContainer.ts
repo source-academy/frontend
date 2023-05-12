@@ -1,9 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import Constants from 'src/commons/utils/Constants';
+import { changeSublanguage } from 'src/commons/workspace/WorkspaceActions';
 
-import { OverallState } from '../../../../commons/application/ApplicationTypes';
-import { changeSublanguage } from '../../../../commons/workspace/WorkspaceActions';
 import DefaultChapterSelect, { DispatchProps, StateProps } from './DefaultChapterSelect';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

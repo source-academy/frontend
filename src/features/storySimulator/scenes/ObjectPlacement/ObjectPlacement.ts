@@ -6,16 +6,16 @@ import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { mandatory } from 'src/features/game/utils/GameUtils';
+import SSImageAssets from 'src/features/storySimulator/assets/ImageAssets';
+import SSBackgroundManager from 'src/features/storySimulator/background/SSBackgroundManager';
+import SSBBoxManager from 'src/features/storySimulator/boundingBoxes/SSBBoxManager';
+import SSCursorMode from 'src/features/storySimulator/cursorMode/SSCursorMode';
+import { CursorMode } from 'src/features/storySimulator/cursorMode/SSCursorModeTypes';
+import SSLogManager from 'src/features/storySimulator/logger/SSLogManager';
+import SSObjectManager from 'src/features/storySimulator/objects/SSObjectManager';
+import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
+import SSTransformManager from 'src/features/storySimulator/transform/SSTransformManager';
 
-import SSImageAssets from '../../assets/ImageAssets';
-import SSBackgroundManager from '../../background/SSBackgroundManager';
-import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
-import SSCursorMode from '../../cursorMode/SSCursorMode';
-import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
-import SSLogManager from '../../logger/SSLogManager';
-import SSObjectManager from '../../objects/SSObjectManager';
-import { StorySimState } from '../../StorySimulatorTypes';
-import SSTransformManager from '../../transform/SSTransformManager';
 import ObjPlacementConstants from './ObjectPlacementConstants';
 
 /**

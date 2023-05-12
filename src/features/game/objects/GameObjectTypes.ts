@@ -1,6 +1,6 @@
-import { IGameActionable } from '../action/GameActionTypes';
-import { AssetKey, ItemId, TrackInteraction } from '../commons/CommonTypes';
-import GlowingImage from '../effects/GlowingObject';
+import { IGameActionable } from 'src/features/game/action/GameActionTypes';
+import { AssetKey, ItemId, TrackInteraction } from 'src/features/game/commons/CommonTypes';
+import GlowingImage from 'src/features/game/effects/GlowingObject';
 
 /**
  * @typedef {ObjectProperty} - encapsulates data about an object in a location

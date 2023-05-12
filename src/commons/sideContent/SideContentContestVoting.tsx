@@ -2,8 +2,8 @@ import { Button, Collapse, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
+import { ContestEntry } from 'src/commons/assessment/AssessmentTypes';
 
-import { ContestEntry } from '../assessment/AssessmentTypes';
 import SideContentContestEntryCard from './SideContentContestEntryCard';
 
 export type SideContentContestVotingProps = DispatchProps & StateProps;

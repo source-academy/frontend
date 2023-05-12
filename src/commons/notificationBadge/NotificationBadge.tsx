@@ -2,9 +2,9 @@ import { Intent, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core
 import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { acknowledgeNotifications } from 'src/commons/application/actions/SessionActions';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import { acknowledgeNotifications } from '../application/actions/SessionActions';
-import { useTypedSelector } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
 import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
 

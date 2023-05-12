@@ -1,8 +1,8 @@
+import { Constants } from 'src/features/game/commons/CommonConstants';
+import { fadeIn, fadeOut } from 'src/features/game/effects/FadeEffect';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { sleep } from 'src/features/game/utils/GameUtils';
 
-import { Constants } from '../commons/CommonConstants';
-import { fadeIn, fadeOut } from '../effects/FadeEffect';
-import { sleep } from '../utils/GameUtils';
 import { defaultLayerSequence, Layer } from './GameLayerTypes';
 
 /**

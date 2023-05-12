@@ -8,6 +8,8 @@ import { RouteComponentProps, useHistory, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
+import SicpErrorBoundary from 'src/features/sicp/errors/SicpErrorBoundary';
+import getSicpError, { SicpErrorType } from 'src/features/sicp/errors/SicpErrors';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
@@ -17,8 +19,6 @@ import {
   SICP_INDEX
 } from 'src/features/sicp/utils/SicpUtils';
 
-import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
-import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 type SicpProps = RouteComponentProps<{}>;

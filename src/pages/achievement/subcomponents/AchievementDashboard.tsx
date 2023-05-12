@@ -1,24 +1,23 @@
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
+import AchievementFilter from 'src/commons/achievement/AchievementFilter';
+import AchievementManualEditor from 'src/commons/achievement/AchievementManualEditor';
+import AchievementOverview from 'src/commons/achievement/AchievementOverview';
+import AchievementTask from 'src/commons/achievement/AchievementTask';
+import AchievementView from 'src/commons/achievement/AchievementView';
+import AchievementInferencer from 'src/commons/achievement/utils/AchievementInferencer';
+import insertFakeAchievements from 'src/commons/achievement/utils/InsertFakeAchievements';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
   AssessmentOverview
 } from 'src/commons/assessment/AssessmentTypes';
-
-import AchievementFilter from '../../../commons/achievement/AchievementFilter';
-import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
-import AchievementOverview from '../../../commons/achievement/AchievementOverview';
-import AchievementTask from '../../../commons/achievement/AchievementTask';
-import AchievementView from '../../../commons/achievement/AchievementView';
-import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import insertFakeAchievements from '../../../commons/achievement/utils/InsertFakeAchievements';
-import { AchievementContext } from '../../../features/achievement/AchievementConstants';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import {
   AchievementUser,
   FilterStatus,
   GoalProgress
-} from '../../../features/achievement/AchievementTypes';
+} from 'src/features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   fetchAssessmentOverviews: () => void;

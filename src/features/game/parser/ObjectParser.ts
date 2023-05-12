@@ -1,7 +1,8 @@
-import { AnimType, AssetType } from '../assets/AssetsTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import StringUtils from '../utils/StringUtils';
+import { AnimType, AssetType } from 'src/features/game/assets/AssetsTypes';
+import { GameItemType, LocationId } from 'src/features/game/location/GameMapTypes';
+import { ObjectProperty } from 'src/features/game/objects/GameObjectTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import ActionParser from './ActionParser';
 import Parser from './Parser';
 

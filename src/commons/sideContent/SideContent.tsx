@@ -1,10 +1,10 @@
 import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
+import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
+import { assertType } from 'src/commons/utils/TypeHelper';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { propsAreEqual } from '../utils/MemoizeHelper';
-import { assertType } from '../utils/TypeHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import GenericSideContent, { generateIconId, GenericSideContentProps } from './GenericSideContent';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 

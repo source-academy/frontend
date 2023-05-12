@@ -5,9 +5,9 @@ import {
 } from '@octokit/types';
 import { Chapter } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
+import { IMCQQuestion, Testcase } from 'src/commons/assessment/AssessmentTypes';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
-import { IMCQQuestion, Testcase } from '../assessment/AssessmentTypes';
-import { showWarningMessage } from '../utils/NotificationsHelper';
 import { MissionData, MissionMetadata, MissionRepoData, TaskData } from './GitHubMissionTypes';
 
 export const maximumTasksPerMission = 20;

@@ -2,9 +2,8 @@ import { Callout, ProgressBar } from '@blueprintjs/core';
 import { IconName } from '@blueprintjs/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
-import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
-import { assessmentTypeLink } from '../utils/ParamParseHelper';
+import { AssessmentOverview, AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 type ProfileCardProps = DispatchProps & StateProps;
 

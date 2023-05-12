@@ -1,7 +1,8 @@
-import ImageAssets from '../assets/ImageAssets';
-import { screenSize } from '../commons/CommonConstants';
-import { blink, fadeAndDestroy } from '../effects/FadeEffect';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { blink, fadeAndDestroy } from 'src/features/game/effects/FadeEffect';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+
 import dialogueConstants from './GameDialogueConstants';
 import { createDialogueBox, createTypewriter } from './GameDialogueHelper';
 

@@ -1,19 +1,18 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
-
-import EnvVisualizer from '../../EnvVisualizer';
-import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { IHoverable, IVisible, StepsArray } from '../../EnvVisualizerTypes';
+import { Frame } from 'src/features/envVisualizer/components/Frame';
+import { Text } from 'src/features/envVisualizer/components/Text';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { IHoverable, IVisible, StepsArray } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle
-} from '../../EnvVisualizerUtils';
-import { Frame } from '../Frame';
-import { Text } from '../Text';
-import { Visible } from '../Visible';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible>

@@ -1,24 +1,25 @@
-import { GameAction } from '../../action/GameActionTypes';
-import { SoundAsset } from '../../assets/AssetsTypes';
-import { getAwardProp } from '../../awards/GameAwardsHelper';
-import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
-import { Character, SpeakerDetail } from '../../character/GameCharacterTypes';
-import { GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
-import { AssetKey } from '../../commons/CommonTypes';
-import { Dialogue } from '../../dialogue/GameDialogueTypes';
-import { displayMiniMessage } from '../../effects/MiniMessage';
-import { displayNotification } from '../../effects/Notification';
-import { promptWithChoices } from '../../effects/Prompt';
-import { Layer } from '../../layer/GameLayerTypes';
-import { AnyId, GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
-import { GameMode } from '../../mode/GameModeTypes';
-import { ObjectProperty } from '../../objects/GameObjectTypes';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { SettingsJson } from '../../save/GameSaveTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
-import { StateObserver, UserStateType } from '../../state/GameStateTypes';
-import { TaskDetail } from '../../task/GameTaskTypes';
-import { courseId, mandatory } from '../../utils/GameUtils';
+import { GameAction } from 'src/features/game/action/GameActionTypes';
+import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
+import { getAwardProp } from 'src/features/game/awards/GameAwardsHelper';
+import { BBoxProperty } from 'src/features/game/boundingBoxes/GameBoundingBoxTypes';
+import { Character, SpeakerDetail } from 'src/features/game/character/GameCharacterTypes';
+import { GamePosition, GameSize, ItemId } from 'src/features/game/commons/CommonTypes';
+import { AssetKey } from 'src/features/game/commons/CommonTypes';
+import { Dialogue } from 'src/features/game/dialogue/GameDialogueTypes';
+import { displayMiniMessage } from 'src/features/game/effects/MiniMessage';
+import { displayNotification } from 'src/features/game/effects/Notification';
+import { promptWithChoices } from 'src/features/game/effects/Prompt';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { AnyId, GameItemType, GameLocation, LocationId } from 'src/features/game/location/GameMapTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import { ObjectProperty } from 'src/features/game/objects/GameObjectTypes';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
+import { SettingsJson } from 'src/features/game/save/GameSaveTypes';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { StateObserver, UserStateType } from 'src/features/game/state/GameStateTypes';
+import { TaskDetail } from 'src/features/game/task/GameTaskTypes';
+import { courseId, mandatory } from 'src/features/game/utils/GameUtils';
+
 import GameManager from './GameManager';
 
 /**

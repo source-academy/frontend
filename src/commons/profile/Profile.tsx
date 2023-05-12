@@ -2,18 +2,18 @@ import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
-import { Role } from '../application/ApplicationTypes';
+import { fetchAssessmentOverviews, fetchTotalXp } from 'src/commons/application/actions/SessionActions';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentType,
   GradingStatuses
-} from '../assessment/AssessmentTypes';
-import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+} from 'src/commons/assessment/AssessmentTypes';
+import Constants from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+
 import ProfileCard from './ProfileCard';
 
 export type ProfileProps = OwnProps;

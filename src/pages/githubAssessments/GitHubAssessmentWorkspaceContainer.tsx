@@ -2,8 +2,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { OverallState } from '../../commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import {
   chapterSelect,
   clearReplOutput,
@@ -12,8 +11,9 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateWorkspace
-} from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+
 import MissionEditor, { DispatchProps, StateProps } from './GitHubAssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => {

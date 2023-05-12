@@ -1,8 +1,8 @@
 import { TabId } from '@blueprintjs/core';
 import React from 'react';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { DebuggerContext, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { useTypedSelector } from '../utils/Hooks';
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs } from './SideContentHelper';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 

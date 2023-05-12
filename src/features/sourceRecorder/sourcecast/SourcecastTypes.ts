@@ -1,11 +1,11 @@
-import { WorkspaceState } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
   PlaybackData,
   PlaybackStatus,
   SourcecastData
-} from '../SourceRecorderTypes';
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 export const FETCH_SOURCECAST_INDEX = 'FETCH_SOURCECAST_INDEX';
 export const SET_IS_EDITOR_READONLY = 'SET_IS_EDITOR_READONLY';

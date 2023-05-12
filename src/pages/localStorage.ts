@@ -1,16 +1,15 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
-
 import {
   OverallState,
   SALanguage,
   SupportedLanguage
-} from '../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
-import { SessionState } from '../commons/application/types/SessionTypes';
-import { showWarningMessage } from '../commons/utils/NotificationsHelper';
-import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
-import { AchievementItem } from '../features/achievement/AchievementTypes';
+} from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { SessionState } from 'src/commons/application/types/SessionTypes';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
+import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 // In JSON, missing keys & keys with the value 'null' are both
 // deserialised into 'null'. In order to differentiate between

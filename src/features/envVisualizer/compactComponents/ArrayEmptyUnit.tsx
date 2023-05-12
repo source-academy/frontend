@@ -1,11 +1,11 @@
 import React from 'react';
 import { Rect } from 'react-konva';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { CompactConfig, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
-import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
-import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Data } from '../EnvVisualizerTypes';
 import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */

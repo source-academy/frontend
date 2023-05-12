@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
+import { defaultFileSystem } from 'src/commons/application/ApplicationTypes';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
-import { defaultFileSystem } from '../application/ApplicationTypes';
-import { SourceActionType } from '../utils/ActionsHelper';
 import { FileSystemState, SET_IN_BROWSER_FILE_SYSTEM } from './FileSystemTypes';
 
 export const FileSystemReducer: Reducer<FileSystemState> = (

@@ -1,6 +1,7 @@
-import FontAssets from '../assets/FontAssets';
-import ImageAssets from '../assets/ImageAssets';
-import { createButton } from '../utils/ButtonUtils';
+import FontAssets from 'src/features/game/assets/FontAssets';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+
 import { screenCenter } from './CommonConstants';
 import { BitmapFontStyle } from './CommonTypes';
 

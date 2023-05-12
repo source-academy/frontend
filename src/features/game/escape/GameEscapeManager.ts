@@ -1,15 +1,16 @@
-import ImageAssets from '../assets/ImageAssets';
-import SoundAssets from '../assets/SoundAssets';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
-import CommonRadioButton from '../commons/CommonRadioButton';
-import { IBaseScene, IGameUI } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
-import SettingsConstants from '../scenes/settings/SettingsConstants';
-import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
-import { createButton } from '../utils/ButtonUtils';
-import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
-import { createBitmapText } from '../utils/TextUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import CommonRadioButton from 'src/features/game/commons/CommonRadioButton';
+import { IBaseScene, IGameUI } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
+import SettingsConstants from 'src/features/game/scenes/settings/SettingsConstants';
+import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { calcTableFormatPos, Direction } from 'src/features/game/utils/StyleUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+
 import EscapeConstants, {
   escapeOptButtonStyle,
   optTextStyle,

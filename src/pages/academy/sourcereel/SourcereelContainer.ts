@@ -1,9 +1,8 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { OverallState } from '../../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   chapterSelect,
   evalEditor,
@@ -11,11 +10,12 @@ import {
   externalLibrarySelect,
   setIsEditorReadonly,
   updateEditorValue
-} from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import { setSourcecastStatus } from '../../../features/sourceRecorder/SourceRecorderActions';
-import { Input, PlaybackStatus } from '../../../features/sourceRecorder/SourceRecorderTypes';
-import { recordInput } from '../../../features/sourceRecorder/sourcereel/SourcereelActions';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { setSourcecastStatus } from 'src/features/sourceRecorder/SourceRecorderActions';
+import { Input, PlaybackStatus } from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { recordInput } from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
+
 import Sourcereel, { DispatchProps, StateProps } from './Sourcereel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

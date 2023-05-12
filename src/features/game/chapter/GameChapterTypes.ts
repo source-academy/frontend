@@ -1,6 +1,6 @@
-import GameMap from '../location/GameMap';
-import GameObjective from '../objective/GameObjective';
-import GameTask from '../task/GameTask';
+import GameMap from 'src/features/game/location/GameMap';
+import GameObjective from 'src/features/game/objective/GameObjective';
+import GameTask from 'src/features/game/task/GameTask';
 
 /**
  * Encapsulates information about a checkpoint

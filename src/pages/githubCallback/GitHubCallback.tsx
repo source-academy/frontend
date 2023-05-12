@@ -4,10 +4,9 @@ import classNames from 'classnames';
 import * as qs from 'query-string';
 import { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
-
-import Constants from '../../commons/utils/Constants';
-import { parseQuery } from '../../commons/utils/QueryHelper';
-import * as GitHubUtils from '../../features/github/GitHubUtils';
+import Constants from 'src/commons/utils/Constants';
+import { parseQuery } from 'src/commons/utils/QueryHelper';
+import * as GitHubUtils from 'src/features/github/GitHubUtils';
 
 /**
  * The page that the user is redirected to after they have approved the app through GitHub.

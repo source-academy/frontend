@@ -1,11 +1,11 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
-
 import {
   pyLanguages,
   schemeLanguages,
   sourceLanguages,
   styliseSublanguage
-} from '../application/ApplicationTypes';
+} from 'src/commons/application/ApplicationTypes';
+
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { FETCH_TOTAL_XP, FETCH_TOTAL_XP_ADMIN } from 'src/commons/application/types/SessionTypes';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { AchievementUser } from 'src/features/achievement/AchievementTypes';
 
-import { FETCH_TOTAL_XP, FETCH_TOTAL_XP_ADMIN } from '../application/types/SessionTypes';
-import { useTypedSelector } from '../utils/Hooks';
 import AchievementLevel from './overview/AchievementLevel';
 
 type AchievementOverviewProps = {

@@ -1,11 +1,11 @@
 import React from 'react';
+import { ArrayEmptyUnit } from 'src/features/envVisualizer/compactComponents/ArrayEmptyUnit';
+import { ArrayUnit } from 'src/features/envVisualizer/compactComponents/ArrayUnit';
+import { Binding } from 'src/features/envVisualizer/compactComponents/Binding';
+import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { CompactReferenceType, Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
-import { CompactConfig } from '../../EnvVisualizerCompactConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { CompactReferenceType, Data } from '../../EnvVisualizerTypes';
-import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
-import { ArrayUnit } from '../ArrayUnit';
-import { Binding } from '../Binding';
 import { PrimitiveValue } from './PrimitiveValue';
 import { Value } from './Value';
 

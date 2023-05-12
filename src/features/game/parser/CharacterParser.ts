@@ -1,8 +1,9 @@
-import { AssetType } from '../assets/AssetsTypes';
-import { Character } from '../character/GameCharacterTypes';
-import { AssetKey, ItemId } from '../commons/CommonTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import StringUtils from '../utils/StringUtils';
+import { AssetType } from 'src/features/game/assets/AssetsTypes';
+import { Character } from 'src/features/game/character/GameCharacterTypes';
+import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
+import { GameItemType, LocationId } from 'src/features/game/location/GameMapTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';
 

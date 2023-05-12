@@ -1,12 +1,11 @@
 import { Context } from 'js-slang';
-
-import { GitHubAssessmentWorkspaceState } from '../../features/githubAssessment/GitHubAssessmentTypes';
-import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
-import { InterpreterOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { AutogradingResult, Testcase } from 'src/commons/assessment/AssessmentTypes';
+import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
+import { GitHubAssessmentWorkspaceState } from 'src/features/githubAssessment/GitHubAssessmentTypes';
+import { SourcecastWorkspaceState } from 'src/features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SourcereelWorkspaceState } from 'src/features/sourceRecorder/sourcereel/SourcereelTypes';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';

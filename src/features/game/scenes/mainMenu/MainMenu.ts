@@ -1,14 +1,15 @@
-import ImageAssets from '../../assets/ImageAssets';
-import SoundAssets from '../../assets/SoundAssets';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { blackScreen } from '../../effects/FadeEffect';
-import { putWorkerMessage } from '../../effects/WorkerMessage';
-import GameLayerManager from '../../layer/GameLayerManager';
-import { Layer } from '../../layer/GameLayerTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
-import { createButton } from '../../utils/ButtonUtils';
-import { mandatory } from '../../utils/GameUtils';
-import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { blackScreen } from 'src/features/game/effects/FadeEffect';
+import { putWorkerMessage } from 'src/features/game/effects/WorkerMessage';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { mandatory } from 'src/features/game/utils/GameUtils';
+import { calcTableFormatPos, Direction } from 'src/features/game/utils/StyleUtils';
+
 import MainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
 /**

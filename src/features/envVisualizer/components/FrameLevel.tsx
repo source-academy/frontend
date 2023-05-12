@@ -1,9 +1,9 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { EnvTreeNode } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
-import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { EnvTreeNode } from '../EnvVisualizerTypes';
 import { ArrayLevel } from './ArrayLevel';
 import { Frame } from './Frame';
 import { Level } from './Level';

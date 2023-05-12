@@ -1,6 +1,5 @@
 import { Context } from 'js-slang/dist/types';
-
-import { handleConsoleLog } from '../application/actions/InterpreterActions';
+import { handleConsoleLog } from 'src/commons/application/actions/InterpreterActions';
 
 export function makeExternalBuiltins(context: Context): any {
   return {

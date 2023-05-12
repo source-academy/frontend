@@ -1,10 +1,10 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import { CompactConfig, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { EnvTreeNode } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
-import { Visible } from '../components/Visible';
-import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { EnvTreeNode } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */

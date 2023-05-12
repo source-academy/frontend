@@ -2,17 +2,17 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
+import { FETCH_ASSESSMENT, FETCH_ASSESSMENT_ADMIN } from 'src/commons/application/types/SessionTypes';
+import { FETCH_ASSESSMENT_OVERVIEWS } from 'src/commons/assessment/AssessmentTypes';
+import { Assessment } from 'src/commons/assessment/AssessmentTypes';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   AchievementContext,
   getAbilityBackground,
   getAbilityGlow
-} from '../../features/achievement/AchievementConstants';
-import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
-import { FETCH_ASSESSMENT, FETCH_ASSESSMENT_ADMIN } from '../application/types/SessionTypes';
-import { FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
-import { Assessment } from '../assessment/AssessmentTypes';
-import { useTypedSelector } from '../utils/Hooks';
+} from 'src/features/achievement/AchievementConstants';
+import { AchievementStatus, AchievementUser } from 'src/features/achievement/AchievementTypes';
+
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';

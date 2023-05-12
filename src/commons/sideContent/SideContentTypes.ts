@@ -1,6 +1,5 @@
 import { IconName } from '@blueprintjs/core';
-
-import { DebuggerContext } from '../workspace/WorkspaceTypes';
+import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 

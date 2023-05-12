@@ -3,10 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
-
-import { checkSessionIdExists, createNewSession } from '../collabEditing/CollabEditingHelper';
-import ControlButton from '../ControlButton';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { checkSessionIdExists, createNewSession } from 'src/commons/collabEditing/CollabEditingHelper';
+import ControlButton from 'src/commons/ControlButton';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 

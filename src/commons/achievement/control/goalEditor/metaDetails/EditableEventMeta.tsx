@@ -2,10 +2,9 @@ import { Button, MenuItem, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
+import EditableDate from 'src/commons/achievement/control/goalEditor/EditableDate';
+import EditableTime from 'src/commons/achievement/control/goalEditor/EditableTime';
 import { EventMeta, EventType, GoalMeta } from 'src/features/achievement/AchievementTypes';
-
-import EditableDate from '../EditableDate';
-import EditableTime from '../EditableTime';
 
 type EditableEventMetaProps = {
   changeMeta: (meta: GoalMeta) => void;

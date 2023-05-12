@@ -1,10 +1,11 @@
-import SoundAssets from '../assets/SoundAssets';
-import { Constants, screenCenter } from '../commons/CommonConstants';
-import { ILayeredScene } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import SourceAcademyGame from '../SourceAcademyGame';
-import { sleep } from '../utils/GameUtils';
-import { calcListFormatPos } from '../utils/StyleUtils';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
+import { ILayeredScene } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { sleep } from 'src/features/game/utils/GameUtils';
+import { calcListFormatPos } from 'src/features/game/utils/StyleUtils';
+
 import { blackScreen, fadeAndDestroy, fadeIn } from './FadeEffect';
 import { createGlitchBitmapText } from './Glitch';
 

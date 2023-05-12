@@ -1,4 +1,4 @@
-import { screenSize } from '../commons/CommonConstants';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
 
 /**
  * A tween config that makes the object fly in

@@ -1,4 +1,5 @@
-import { GameSoundType } from '../sound/GameSoundTypes';
+import { GameSoundType } from 'src/features/game/sound/GameSoundTypes';
+
 import { AssetMap, SoundAsset } from './AssetsTypes';
 
 const SoundAssets: AssetMap<SoundAsset> = {

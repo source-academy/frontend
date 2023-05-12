@@ -1,6 +1,7 @@
-import GameManager from '../scenes/gameManager/GameManager';
-import SourceAcademyGame from '../SourceAcademyGame';
-import { mandatory } from '../utils/GameUtils';
+import GameManager from 'src/features/game/scenes/gameManager/GameManager';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { mandatory } from 'src/features/game/utils/GameUtils';
+
 import { createEmptyGameSaveState, createEmptySaveState, gameStateToJson } from './GameSaveHelper';
 import { loadData, saveData } from './GameSaveRequests';
 import { FullSaveState, GameSaveState, SettingsJson } from './GameSaveTypes';

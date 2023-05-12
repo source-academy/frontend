@@ -1,11 +1,11 @@
 import { Collapse } from '@blueprintjs/core';
 import React, { useContext, useState } from 'react';
-
 import {
   AchievementContext,
   getAbilityColor
-} from '../../features/achievement/AchievementConstants';
-import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
+} from 'src/features/achievement/AchievementConstants';
+import { AchievementStatus, FilterStatus } from 'src/features/achievement/AchievementTypes';
+
 import AchievementCard from './AchievementCard';
 
 type AchievementTaskProps = {

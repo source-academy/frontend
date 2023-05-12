@@ -1,6 +1,7 @@
-import { AssetType } from '../assets/AssetsTypes';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
-import StringUtils from '../utils/StringUtils';
+import { AssetType } from 'src/features/game/assets/AssetsTypes';
+import { SpeakerDetail } from 'src/features/game/character/GameCharacterTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import CharacterParser from './CharacterParser';
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';

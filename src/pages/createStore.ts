@@ -1,11 +1,11 @@
 import { throttle } from 'lodash';
 import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { defaultState } from 'src/commons/application/ApplicationTypes';
+import createRootReducer from 'src/commons/application/reducers/RootReducer';
+import MainSaga from 'src/commons/sagas/MainSaga';
+import { generateOctokitInstance } from 'src/commons/utils/GitHubPersistenceHelper';
 
-import { defaultState } from '../commons/application/ApplicationTypes';
-import createRootReducer from '../commons/application/reducers/RootReducer';
-import MainSaga from '../commons/sagas/MainSaga';
-import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
 
 export const store = createStore();

@@ -1,14 +1,14 @@
 import { Card, Elevation, H6 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-
 import {
   Assessment,
   IProgrammingQuestion,
   Testcase,
   testcaseTemplate
-} from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
+} from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
+
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 

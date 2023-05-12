@@ -1,6 +1,6 @@
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { action } from 'typesafe-actions';
 
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,

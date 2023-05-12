@@ -1,6 +1,6 @@
-import GameInputManager from '../input/GameInputManager';
-import GameLayerManager from '../layer/GameLayerManager';
-import GamePhaseManager from '../phase/GamePhaseManager';
+import GameInputManager from 'src/features/game/input/GameInputManager';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import GamePhaseManager from 'src/features/game/phase/GamePhaseManager';
 
 /**
  * Encapsulate style of bitmap text.

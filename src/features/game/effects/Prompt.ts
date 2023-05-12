@@ -1,14 +1,15 @@
-import FontAssets from '../assets/FontAssets';
-import ImageAssets from '../assets/ImageAssets';
-import SoundAssets from '../assets/SoundAssets';
-import { Constants, screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
-import { createButton } from '../utils/ButtonUtils';
-import { sleep } from '../utils/GameUtils';
-import { calcListFormatPos, Color, HexColor } from '../utils/StyleUtils';
+import FontAssets from 'src/features/game/assets/FontAssets';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
+import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { sleep } from 'src/features/game/utils/GameUtils';
+import { calcListFormatPos, Color, HexColor } from 'src/features/game/utils/StyleUtils';
+
 import { fadeAndDestroy } from './FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from './FlyEffect';
 

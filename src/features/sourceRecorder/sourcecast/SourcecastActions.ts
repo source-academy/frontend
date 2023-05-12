@@ -1,7 +1,7 @@
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { SourcecastData } from 'src/features/sourceRecorder/SourceRecorderTypes';
 import { action } from 'typesafe-actions';
 
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import { SourcecastData } from '../SourceRecorderTypes';
 import { FETCH_SOURCECAST_INDEX, UPDATE_SOURCECAST_INDEX } from './SourcecastTypes';
 
 export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>

@@ -1,8 +1,7 @@
 import { Switch } from '@blueprintjs/core';
 import React from 'react';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
-
-import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
 
 type BooleanCellProps = OwnProps;
 

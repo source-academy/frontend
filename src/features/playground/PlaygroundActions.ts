@@ -1,7 +1,7 @@
 import { SALanguage, SupportedLanguage } from 'src/commons/application/ApplicationTypes';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import { action } from 'typesafe-actions';
 
-import { PersistenceFile } from '../persistence/PersistenceTypes';
 import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,

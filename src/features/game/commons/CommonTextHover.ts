@@ -1,4 +1,4 @@
-import { Color, HexColor } from '../utils/StyleUtils';
+import { Color, HexColor } from 'src/features/game/utils/StyleUtils';
 
 const textPad = 10;
 const defaultTextHoverWidth = 300;

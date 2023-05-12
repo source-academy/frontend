@@ -1,10 +1,10 @@
 import React, { RefObject } from 'react';
 import { Rect } from 'react-konva';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
-import EnvVisualizer from '../EnvVisualizer';
-import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Data } from '../EnvVisualizerTypes';
 import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
 

@@ -7,20 +7,20 @@ import {
   Tag as KonvaTag,
   Text as KonvaText
 } from 'react-konva';
-
-import EnvVisualizer from '../../EnvVisualizer';
-import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { CompactReferenceType, IHoverable } from '../../EnvVisualizerTypes';
+import { ArrowFromFn } from 'src/features/envVisualizer/compactComponents/arrows/ArrowFromFn';
+import { Binding } from 'src/features/envVisualizer/compactComponents/Binding';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { CompactConfig, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { CompactReferenceType, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   getBodyText,
   getParamsText,
   getTextWidth,
   setHoveredStyle,
   setUnhoveredStyle
-} from '../../EnvVisualizerUtils';
-import { ArrowFromFn } from '../arrows/ArrowFromFn';
-import { Binding } from '../Binding';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame

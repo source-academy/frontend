@@ -1,7 +1,8 @@
-import { Dialogue, DialogueLine, PartName } from '../dialogue/GameDialogueTypes';
-import { GameItemType } from '../location/GameMapTypes';
-import { mapValues } from '../utils/GameUtils';
-import StringUtils from '../utils/StringUtils';
+import { Dialogue, DialogueLine, PartName } from 'src/features/game/dialogue/GameDialogueTypes';
+import { GameItemType } from 'src/features/game/location/GameMapTypes';
+import { mapValues } from 'src/features/game/utils/GameUtils';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import ActionParser from './ActionParser';
 import ConditionParser from './ConditionParser';
 import Parser from './Parser';

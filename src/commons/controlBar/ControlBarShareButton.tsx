@@ -3,9 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
-
-import ControlButton from '../ControlButton';
-import Constants from '../utils/Constants';
+import ControlButton from 'src/commons/ControlButton';
+import Constants from 'src/commons/utils/Constants';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
 

@@ -1,8 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
-
-import ControlButton from '../ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 
 type ControlBarEvalButtonProps = {
   handleReplEval: () => void;

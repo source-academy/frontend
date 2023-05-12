@@ -3,8 +3,8 @@ import { mandatory } from 'src/features/game/utils/GameUtils';
 import StringUtils from 'src/features/game/utils/StringUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
+import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { loggableStyle } from './SSLogConstants';
 import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
 import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';

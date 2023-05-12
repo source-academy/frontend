@@ -2,8 +2,8 @@ import {
   AchievementGoal,
   AchievementItem,
   GoalType
-} from '../../features/achievement/AchievementTypes';
-import { AND, EventTypes } from '../../features/achievement/ExpressionTypes';
+} from 'src/features/achievement/AchievementTypes';
+import { AND, EventTypes } from 'src/features/achievement/ExpressionTypes';
 
 export const mockAchievements: AchievementItem[] = [
   {

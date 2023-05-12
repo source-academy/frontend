@@ -1,4 +1,4 @@
-import { toS3Path } from '../../utils/GameUtils';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
 
 const ExploreModeConstants = {
   normal: `url(${toS3Path('/ui/magnifying.png', false)}), pointer`,

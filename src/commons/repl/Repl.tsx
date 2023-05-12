@@ -5,9 +5,9 @@ import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
-import { InterpreterOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { ReplInput } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 

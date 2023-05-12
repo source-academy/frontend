@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router';
-
 import {
   AssessmentStatuses,
   AssessmentType,
   AssessmentWorkspaceParams
-} from '../../commons/assessment/AssessmentTypes';
-import ContentDisplay from '../../commons/ContentDisplay';
-import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
-import { OwnProps as EditingWorkspaceOwnProps } from '../../commons/editingWorkspace/EditingWorkspace';
-import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWorkspaceContainer';
-import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
-import Constants from '../../commons/utils/Constants';
-import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
+} from 'src/commons/assessment/AssessmentTypes';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCard';
+import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspace';
+import EditingWorkspaceContainer from 'src/commons/editingWorkspace/EditingWorkspaceContainer';
+import MissionCreator from 'src/commons/missionCreator/MissionCreatorContainer';
+import Constants from 'src/commons/utils/Constants';
+import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
+import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
 
 export type MissionControlProps = StateProps & RouteComponentProps<AssessmentWorkspaceParams>;
 

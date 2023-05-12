@@ -1,6 +1,7 @@
-import { ItemId } from '../commons/CommonTypes';
-import { GameItemType } from '../location/GameMapTypes';
-import { GameSoundType } from '../sound/GameSoundTypes';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
+import { GameItemType } from 'src/features/game/location/GameMapTypes';
+import { GameSoundType } from 'src/features/game/sound/GameSoundTypes';
+
 import Parser from './Parser';
 
 export enum GameEntityType {

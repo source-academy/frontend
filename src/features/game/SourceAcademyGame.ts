@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { AchievementGoal, AchievementItem } from 'src/features/achievement/AchievementTypes';
 import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
 import { AssetPath, ItemId } from 'src/features/game/commons/CommonTypes';
@@ -15,7 +16,6 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import { AchievementGoal, AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
 import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';

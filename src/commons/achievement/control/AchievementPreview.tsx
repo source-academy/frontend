@@ -1,11 +1,10 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext, useReducer, useState } from 'react';
+import AchievementView from 'src/commons/achievement/AchievementView';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/AchievementDashboard';
-
-import AchievementView from '../AchievementView';
 
 type AchievementPreviewProps = {
   awaitPublish: boolean;

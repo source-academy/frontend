@@ -2,22 +2,22 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { OverallState } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   chapterSelect,
   evalEditor,
   evalRepl,
   externalLibrarySelect,
   updateEditorValue
-} from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   setSourcecastData,
   setSourcecastStatus
-} from '../../features/sourceRecorder/SourceRecorderActions';
-import { PlaybackData, PlaybackStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+} from 'src/features/sourceRecorder/SourceRecorderActions';
+import { PlaybackData, PlaybackStatus } from 'src/features/sourceRecorder/SourceRecorderTypes';
+
 import Sourcecast, { DispatchProps, StateProps } from './Sourcecast';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

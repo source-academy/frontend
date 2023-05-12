@@ -12,15 +12,15 @@ import classNames from 'classnames';
 import React from 'react';
 import { QrReader } from 'react-qr-reader';
 import { useDispatch } from 'react-redux';
-
-import { editDevice, registerDevice } from '../../commons/sagas/RequestsSaga';
-import { actions } from '../../commons/utils/ActionsHelper';
+import { editDevice, registerDevice } from 'src/commons/sagas/RequestsSaga';
+import { actions } from 'src/commons/utils/ActionsHelper';
 import {
   checkFieldValidity,
   collectFieldValues,
   useField,
   validateNotEmpty
-} from '../../commons/utils/FormHelper';
+} from 'src/commons/utils/FormHelper';
+
 import { Device, deviceTypes } from './RemoteExecutionTypes';
 
 export interface RemoteExecutionDeviceDialogProps {

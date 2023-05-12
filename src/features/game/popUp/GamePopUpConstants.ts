@@ -1,4 +1,4 @@
-import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 
 const popUpXOffset = 400;
 

@@ -1,12 +1,6 @@
 import { Reducer } from 'redux';
-
-import {
-  REMOTE_EXEC_UPDATE_DEVICES,
-  REMOTE_EXEC_UPDATE_SESSION
-} from '../../../features/remoteExecution/RemoteExecutionTypes';
-import { SourceActionType } from '../../utils/ActionsHelper';
-import { defaultSession } from '../ApplicationTypes';
-import { LOG_OUT } from '../types/CommonsTypes';
+import { defaultSession } from 'src/commons/application/ApplicationTypes';
+import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
   SessionState,
@@ -27,7 +21,12 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_NOTIFICATIONS,
   UPDATE_TOTAL_XP
-} from '../types/SessionTypes';
+} from 'src/commons/application/types/SessionTypes';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import {
+  REMOTE_EXEC_UPDATE_DEVICES,
+  REMOTE_EXEC_UPDATE_SESSION
+} from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 export const SessionsReducer: Reducer<SessionState> = (
   state = defaultSession,

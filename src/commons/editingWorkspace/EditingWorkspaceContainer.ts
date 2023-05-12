@@ -1,17 +1,16 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from '../application/actions/InterpreterActions';
-import { submitAnswer } from '../application/actions/SessionActions';
-import { OverallState } from '../application/ApplicationTypes';
-import { Library } from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
+} from 'src/commons/application/actions/InterpreterActions';
+import { submitAnswer } from 'src/commons/application/actions/SessionActions';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { Library } from 'src/commons/assessment/AssessmentTypes';
+import { Position } from 'src/commons/editor/EditorTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -31,8 +30,9 @@ import {
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace
-} from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {

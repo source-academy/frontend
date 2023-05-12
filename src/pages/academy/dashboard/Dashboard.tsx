@@ -6,10 +6,9 @@ import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
+import ContentDisplay from 'src/commons/ContentDisplay';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-
-import ContentDisplay from '../../../commons/ContentDisplay';
-import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
+import { fetchGroupGradingSummary } from 'src/features/dashboard/DashboardActions';
 
 type DashboardProps = StateProps;
 

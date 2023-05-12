@@ -1,6 +1,7 @@
-import { Constants } from '../commons/CommonConstants';
-import { IGameUI } from '../commons/CommonTypes';
-import GameInputManager from '../input/GameInputManager';
+import { Constants } from 'src/features/game/commons/CommonConstants';
+import { IGameUI } from 'src/features/game/commons/CommonTypes';
+import GameInputManager from 'src/features/game/input/GameInputManager';
+
 import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';
 
 /**

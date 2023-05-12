@@ -1,6 +1,7 @@
-import { IBaseScene } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import { createButton } from '../utils/ButtonUtils';
+import { IBaseScene } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+
 import ToolbarConstants, { ToolbarButtonConfig } from './GameToolbarConstants';
 
 /**

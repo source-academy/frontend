@@ -1,6 +1,6 @@
-import FontAssets from '../../assets/FontAssets';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
+import FontAssets from 'src/features/game/assets/FontAssets';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
 export const mainMenuStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,

@@ -1,6 +1,6 @@
-import Constants from '../../commons/utils/Constants';
-import SourceAcademyGame from '../game/SourceAcademyGame';
-import { courseId } from '../game/utils/GameUtils';
+import Constants from 'src/commons/utils/Constants';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { courseId } from 'src/features/game/utils/GameUtils';
 
 const sendRequest =
   (route: string) =>

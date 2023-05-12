@@ -1,7 +1,7 @@
-import { AwardProperty } from '../awards/GameAwardsTypes';
-import { ItemId } from '../commons/CommonTypes';
-import { toS3Path } from '../utils/GameUtils';
-import StringUtils from '../utils/StringUtils';
+import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
+import StringUtils from 'src/features/game/utils/StringUtils';
 
 /**
  * This class parses the awardsMapping.txt, and creates a

@@ -1,10 +1,10 @@
+import { ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GameItemType, LocationId } from 'src/features/game/location/GameMapTypes';
+import { ActivatableSprite } from 'src/features/game/objects/GameObjectTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { StateObserver } from 'src/features/game/state/GameStateTypes';
 
-import { ItemId } from '../commons/CommonTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { ActivatableSprite } from '../objects/GameObjectTypes';
-import { StateObserver } from '../state/GameStateTypes';
 import { BBoxProperty } from './GameBoundingBoxTypes';
 
 /**

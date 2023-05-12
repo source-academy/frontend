@@ -6,12 +6,12 @@ import { IconNames } from '@blueprintjs/icons';
 import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import * as React from 'react';
-
 import {
   AssessmentConfiguration,
   AssessmentOverview
-} from '../../../commons/assessment/AssessmentTypes';
-import ContentDisplay from '../../../commons/ContentDisplay';
+} from 'src/commons/assessment/AssessmentTypes';
+import ContentDisplay from 'src/commons/ContentDisplay';
+
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';

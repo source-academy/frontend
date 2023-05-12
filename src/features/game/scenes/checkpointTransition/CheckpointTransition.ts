@@ -1,8 +1,9 @@
-import { GameChapter } from '../../chapter/GameChapterTypes';
-import SourceAcademyGame, { GameType } from '../../SourceAcademyGame';
-import { sleep } from '../../utils/GameUtils';
-import { createBitmapText } from '../../utils/TextUtils';
-import { callGameManagerForSim, callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
+import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
+import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
+import { sleep } from 'src/features/game/utils/GameUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+import { callGameManagerForSim, callGameManagerOnTxtLoad } from 'src/features/game/utils/TxtLoaderUtils';
+
 import CheckpointConstants, { transitionTextStyle } from './CheckpointTransitionConstants';
 
 /**

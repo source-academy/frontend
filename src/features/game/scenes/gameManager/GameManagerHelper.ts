@@ -1,9 +1,9 @@
-import GameModeExplore from '../../mode/explore/GameModeExplore';
-import GameModeMenu from '../../mode/menu/GameModeMenu';
-import GameModeMove from '../../mode/move/GameModeMove';
-import GameModeSequence from '../../mode/sequence/GameModeSequence';
-import GameModeTalk from '../../mode/talk/GameModeTalk';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import GameModeExplore from 'src/features/game/mode/explore/GameModeExplore';
+import GameModeMenu from 'src/features/game/mode/menu/GameModeMenu';
+import GameModeMove from 'src/features/game/mode/move/GameModeMove';
+import GameModeSequence from 'src/features/game/mode/sequence/GameModeSequence';
+import GameModeTalk from 'src/features/game/mode/talk/GameModeTalk';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
 
 /**
  * Game Manager phases, for the phase manager.

@@ -1,4 +1,4 @@
-import { Constants } from '../commons/CommonConstants';
+import { Constants } from 'src/features/game/commons/CommonConstants';
 
 export default class StringUtils {
   /**

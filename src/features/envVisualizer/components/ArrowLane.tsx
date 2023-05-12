@@ -1,5 +1,6 @@
-import { Config } from '../EnvVisualizerConfig';
-import { Data, IVisible } from '../EnvVisualizerTypes';
+import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Data, IVisible } from 'src/features/envVisualizer/EnvVisualizerTypes';
+
 import { Frame } from './Frame';
 import { Grid } from './Grid';
 import { Value } from './values/Value';

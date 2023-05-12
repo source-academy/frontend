@@ -1,7 +1,6 @@
 import { Icon, IconName } from '@blueprintjs/core';
-
-import { getFilterColor } from '../../features/achievement/AchievementConstants';
-import { FilterStatus } from '../../features/achievement/AchievementTypes';
+import { getFilterColor } from 'src/features/achievement/AchievementConstants';
+import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 
 type AchievementFilterProps = {
   filterState: [FilterStatus, any];

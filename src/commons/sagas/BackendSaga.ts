@@ -2,27 +2,7 @@
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
-import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
-
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  GradingSummary
-} from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import {
-  CHANGE_DATE_ASSESSMENT,
-  DELETE_ASSESSMENT,
-  PUBLISH_ASSESSMENT,
-  UPLOAD_ASSESSMENT
-} from '../../features/groundControl/GroundControlTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import {
-  SAVE_SOURCECAST_DATA,
-  SourcecastData
-} from '../../features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
-import { OverallState, Role } from '../application/ApplicationTypes';
+import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -57,7 +37,7 @@ import {
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
-} from '../application/types/SessionTypes';
+} from 'src/commons/application/types/SessionTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -66,16 +46,36 @@ import {
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
   SUBMIT_ASSESSMENT
-} from '../assessment/AssessmentTypes';
+} from 'src/commons/assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
-} from '../notificationBadge/NotificationBadgeTypes';
-import { actions } from '../utils/ActionsHelper';
-import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
-import { history } from '../utils/HistoryHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
-import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+} from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import { computeRedirectUri, getClientId, getDefaultProvider } from 'src/commons/utils/AuthHelper';
+import { history } from 'src/commons/utils/HistoryHelper';
+import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
+import {
+  FETCH_GROUP_GRADING_SUMMARY,
+  GradingSummary
+} from 'src/features/dashboard/DashboardTypes';
+import { Grading, GradingOverview, GradingQuestion } from 'src/features/grading/GradingTypes';
+import {
+  CHANGE_DATE_ASSESSMENT,
+  DELETE_ASSESSMENT,
+  PUBLISH_ASSESSMENT,
+  UPLOAD_ASSESSMENT
+} from 'src/features/groundControl/GroundControlTypes';
+import { FETCH_SOURCECAST_INDEX } from 'src/features/sourceRecorder/sourcecast/SourcecastTypes';
+import {
+  SAVE_SOURCECAST_DATA,
+  SourcecastData
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { DELETE_SOURCECAST_ENTRY } from 'src/features/sourceRecorder/sourcereel/SourcereelTypes';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+
 import {
   deleteAssessment,
   deleteSourcecastEntry,

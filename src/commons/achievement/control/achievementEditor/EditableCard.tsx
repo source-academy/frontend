@@ -3,14 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { cloneDeep } from 'lodash';
 import { useContext, useMemo, useReducer, useState } from 'react';
-
-import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
+import ItemDeleter from 'src/commons/achievement/control/common/ItemDeleter';
+import ItemSaver from 'src/commons/achievement/control/common/ItemSaver';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import {
   AchievementItem,
   AchievementView
-} from '../../../../features/achievement/AchievementTypes';
-import ItemDeleter from '../common/ItemDeleter';
-import ItemSaver from '../common/ItemSaver';
+} from 'src/features/achievement/AchievementTypes';
+
 import AchievementSettings from './AchievementSettings';
 import AchievementUuidCopier from './AchievementUuidCopier';
 import {

@@ -4,13 +4,12 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import Constants, { Links } from 'src/commons/utils/Constants';
+import { updateEnvSteps } from 'src/commons/workspace/WorkspaceActions';
+import { evalEditor } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-
-import { OverallState } from '../application/ApplicationTypes';
-import Constants, { Links } from '../utils/Constants';
-import { updateEnvSteps } from '../workspace/WorkspaceActions';
-import { evalEditor } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type State = {
   visualization: React.ReactNode;

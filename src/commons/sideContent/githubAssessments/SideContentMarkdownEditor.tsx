@@ -1,7 +1,6 @@
 import { TextArea } from '@blueprintjs/core';
 import React, { useEffect } from 'react';
-
-import Markdown from '../../Markdown';
+import Markdown from 'src/commons/Markdown';
 
 export type SideContentMarkdownEditorProps = {
   allowEdits: boolean;

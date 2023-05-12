@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import * as React from 'react';
+import { checkSessionIdExists, getSessionUrl } from 'src/commons/collabEditing/CollabEditingHelper';
 
-import { checkSessionIdExists, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { EditorHook } from './Editor';
 
 // EditorHook structure:

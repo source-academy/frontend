@@ -1,13 +1,13 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
+import { RoundedRect } from 'src/features/envVisualizer/components/shapes/RoundedRect';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { RoundedRect } from '../components/shapes/RoundedRect';
-import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
-import { CompactConfig } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Data } from '../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { ArrayValue } from './values/ArrayValue';

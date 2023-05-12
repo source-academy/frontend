@@ -1,6 +1,7 @@
-import { ActionCondition } from '../action/GameActionTypes';
-import { GameStateStorage } from '../state/GameStateTypes';
-import StringUtils from '../utils/StringUtils';
+import { ActionCondition } from 'src/features/game/action/GameActionTypes';
+import { GameStateStorage } from 'src/features/game/state/GameStateTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';
 import { GameEntityType } from './ParserValidator';

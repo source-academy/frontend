@@ -14,10 +14,9 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router';
-
-import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
-import Constants from '../../commons/utils/Constants';
-import { parseQuery } from '../../commons/utils/QueryHelper';
+import { fetchAuth, login } from 'src/commons/application/actions/SessionActions';
+import Constants from 'src/commons/utils/Constants';
+import { parseQuery } from 'src/commons/utils/QueryHelper';
 
 const providers = [...Constants.authProviders.entries()].map(([id, { name }]) => ({
   id,

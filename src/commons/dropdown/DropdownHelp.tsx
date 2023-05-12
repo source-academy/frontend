@@ -1,10 +1,9 @@
 import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-
-import Markdown from '../Markdown';
-import { Links } from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import Markdown from 'src/commons/Markdown';
+import { Links } from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type DialogProps = {
   isOpen: boolean;

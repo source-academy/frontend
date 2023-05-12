@@ -14,12 +14,11 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-
-import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
-import { sourceLanguages } from '../application/ApplicationTypes';
-import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
-import Markdown from '../Markdown';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { sourceLanguages } from 'src/commons/application/ApplicationTypes';
+import { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
+import Markdown from 'src/commons/Markdown';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { CourseHelpTextEditorTab } from 'src/pages/academy/adminPanel/subcomponents/CourseConfigPanel';
 
 type DialogProps = {
   isOpen: boolean;

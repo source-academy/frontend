@@ -1,12 +1,13 @@
-import ImageAssets from '../assets/ImageAssets';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
-import StringUtils from '../utils/StringUtils';
-import { createBitmapText } from '../utils/TextUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { SpeakerDetail } from 'src/features/game/character/GameCharacterTypes';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { GamePosition, ItemId } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import StringUtils from 'src/features/game/utils/StringUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+
 import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
 
 /**

@@ -4,11 +4,11 @@ import 'ace-builds/src-noconflict/ace';
 
 import _ from 'lodash';
 import React from 'react';
-
 import SourcecastEditor, {
   SourceRecorderEditorProps
-} from '../sourceRecorder/SourceRecorderEditor';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
+} from 'src/commons/sourceRecorder/SourceRecorderEditor';
+import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
+
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
 

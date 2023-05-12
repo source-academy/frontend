@@ -1,6 +1,5 @@
 import { Links } from 'src/commons/utils/Constants';
-
-import FontAssets from '../assets/FontAssets';
+import FontAssets from 'src/features/game/assets/FontAssets';
 
 export const Constants = {
   assetsFolder: Links.sourceAcademyAssets,

@@ -1,15 +1,15 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { submitAnswer } from '../application/actions/SessionActions';
-import { OverallState } from '../application/ApplicationTypes';
+import { submitAnswer } from 'src/commons/application/actions/SessionActions';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import {
   evalRepl,
   setEditorBreakpoint,
   updateEditorValue,
   updateHasUnsavedChanges
-} from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+
 import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './AssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {

@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { request } from 'src/commons/sagas/RequestsSaga';
+import { toTxtPath } from 'src/features/game/assets/TextAssets';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { store } from 'src/pages/createStore';
 
-import { store } from '../../../pages/createStore';
-import { toTxtPath } from '../assets/TextAssets';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { GameChapter } from './GameChapterTypes';
 
 /**

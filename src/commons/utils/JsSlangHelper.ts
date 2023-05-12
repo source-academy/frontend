@@ -3,10 +3,10 @@ import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist
 import { Chapter, Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
+import DataVisualizer from 'src/features/dataVisualizer/dataVisualizer';
+import { Data } from 'src/features/dataVisualizer/dataVisualizerTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
-import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
-import { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
 import DisplayBufferService from './DisplayBufferService';
 
 /**

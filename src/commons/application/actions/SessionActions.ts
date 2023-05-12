@@ -1,19 +1,4 @@
-import { action } from 'typesafe-actions'; // EDITED
-
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import {
-  Assessment,
-  AssessmentConfiguration,
-  AssessmentOverview,
-  ContestEntry
-} from '../../assessment/AssessmentTypes';
-import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
-import {
-  Notification,
-  NotificationFilterFunction
-} from '../../notificationBadge/NotificationBadgeTypes';
-import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
-import { Role } from '../ApplicationTypes';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -71,7 +56,21 @@ import {
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
-} from '../types/SessionTypes';
+} from 'src/commons/application/types/SessionTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  ContestEntry
+} from 'src/commons/assessment/AssessmentTypes';
+import { MissionRepoData } from 'src/commons/githubAssessments/GitHubMissionTypes';
+import {
+  Notification,
+  NotificationFilterFunction
+} from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { generateOctokitInstance } from 'src/commons/utils/GitHubPersistenceHelper';
+import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
+import { action } from 'typesafe-actions'; // EDITED
 
 export const fetchAuth = (code: string, providerId?: string) =>
   action(FETCH_AUTH, { code, providerId });

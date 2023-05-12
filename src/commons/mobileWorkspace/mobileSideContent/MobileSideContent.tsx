@@ -2,15 +2,15 @@ import { Classes, Icon, Tab, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
-
-import { ControlBarProps } from '../../controlBar/ControlBar';
+import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import GenericSideContent, {
   generateIconId,
   GenericSideContentProps
-} from '../../sideContent/GenericSideContent';
-import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
-import { propsAreEqual } from '../../utils/MemoizeHelper';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+} from 'src/commons/sideContent/GenericSideContent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+
 import MobileControlBar from './MobileControlBar';
 
 export type MobileSideContentProps = Omit<GenericSideContentProps, 'renderFunction'> &

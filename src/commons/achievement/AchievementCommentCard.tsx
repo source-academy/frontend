@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
-
-import { Assessment } from '../assessment/AssessmentTypes';
-import { history } from '../utils/HistoryHelper';
-import { useTypedSelector } from '../utils/Hooks';
-import { showWarningMessage } from '../utils/NotificationsHelper';
-import { assessmentTypeLink } from '../utils/ParamParseHelper';
+import { Assessment } from 'src/commons/assessment/AssessmentTypes';
+import { history } from 'src/commons/utils/HistoryHelper';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 const AchievementCommentCard = ({
   assessment,

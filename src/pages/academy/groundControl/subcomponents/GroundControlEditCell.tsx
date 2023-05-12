@@ -3,10 +3,9 @@ import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import * as moment from 'moment';
 import * as React from 'react';
-
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
-import ControlButton from '../../../../commons/ControlButton';
-import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
+import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 export type EditCellProps = DispatchProps & StateProps;
 

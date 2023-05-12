@@ -3,10 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
+import ControlButton from 'src/commons/ControlButton';
 import { useResponsive } from 'src/commons/utils/Hooks';
-
-import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
-import ControlButton from '../../ControlButton';
+import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
 
 export type ControlBarGitHubButtonsProps = {
   isFolderModeEnabled: boolean;

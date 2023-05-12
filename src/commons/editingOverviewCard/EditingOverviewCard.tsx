@@ -17,14 +17,13 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
-
-import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
-import Markdown from '../Markdown';
-import Constants from '../utils/Constants';
-import { getPrettyDate } from '../utils/DateHelper';
-import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
+import defaultCoverImage from 'src/assets/default_cover_image.jpg';
+import { AssessmentOverview, AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
+import Markdown from 'src/commons/Markdown';
+import Constants from 'src/commons/utils/Constants';
+import { getPrettyDate } from 'src/commons/utils/DateHelper';
+import { exportXml, storeLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
 
 type EditingOverviewCardProps = DispatchProps & StateProps;
 

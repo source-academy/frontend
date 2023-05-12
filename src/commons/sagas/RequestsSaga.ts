@@ -1,29 +1,12 @@
 import { call } from 'redux-saga/effects';
-
-import {
-  AchievementGoal,
-  AchievementItem,
-  AchievementUser,
-  GoalDefinition,
-  GoalProgress
-} from '../../features/achievement/AchievementTypes';
-import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import {
-  Device,
-  WebSocketEndpointInformation
-} from '../../features/remoteExecution/RemoteExecutionTypes';
-import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
-import { store } from '../../pages/createStore';
 import {
   backendifyAchievementItem,
   backendifyGoalDefinition,
   frontendifyAchievementGoal,
   frontendifyAchievementItem
-} from '../achievement/utils/AchievementBackender';
-import { Role } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
+} from 'src/commons/achievement/utils/AchievementBackender';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
@@ -31,7 +14,7 @@ import {
   Tokens,
   UpdateCourseConfiguration,
   User
-} from '../application/types/SessionTypes';
+} from 'src/commons/application/types/SessionTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -42,12 +25,28 @@ import {
   IProgrammingQuestion,
   QuestionType,
   QuestionTypes
-} from '../assessment/AssessmentTypes';
-import { Notification } from '../notificationBadge/NotificationBadgeTypes';
-import { actions } from '../utils/ActionsHelper';
-import { castLibrary } from '../utils/CastBackend';
-import Constants from '../utils/Constants';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+} from 'src/commons/assessment/AssessmentTypes';
+import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import { castLibrary } from 'src/commons/utils/CastBackend';
+import Constants from 'src/commons/utils/Constants';
+import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import {
+  AchievementGoal,
+  AchievementItem,
+  AchievementUser,
+  GoalDefinition,
+  GoalProgress
+} from 'src/features/achievement/AchievementTypes';
+import { GradingSummary } from 'src/features/dashboard/DashboardTypes';
+import { Grading, GradingOverview, GradingQuestion } from 'src/features/grading/GradingTypes';
+import {
+  Device,
+  WebSocketEndpointInformation
+} from 'src/features/remoteExecution/RemoteExecutionTypes';
+import { PlaybackData, SourcecastData } from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { store } from 'src/pages/createStore';
 
 /**
  * @property accessToken - backend access token

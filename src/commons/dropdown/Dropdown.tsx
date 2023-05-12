@@ -2,10 +2,10 @@ import { Menu, MenuItem, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
+import { UpdateCourseConfiguration, UserCourse } from 'src/commons/application/types/SessionTypes';
+import ControlButton from 'src/commons/ControlButton';
+import Profile from 'src/commons/profile/Profile';
 
-import { UpdateCourseConfiguration, UserCourse } from '../application/types/SessionTypes';
-import ControlButton from '../ControlButton';
-import Profile from '../profile/Profile';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';

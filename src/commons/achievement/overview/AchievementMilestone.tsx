@@ -1,4 +1,4 @@
-import Constants from '../../utils/Constants';
+import Constants from 'src/commons/utils/Constants';
 
 type AchievementMilestoneProps = {
   studentXp: number;

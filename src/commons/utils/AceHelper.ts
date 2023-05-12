@@ -1,8 +1,7 @@
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Chapter, Variant } from 'js-slang/dist/types';
-
-import { HighlightRulesSelector_native } from '../../features/fullJS/fullJSHighlight';
-import { Documentation } from '../documentation/Documentation';
+import { Documentation } from 'src/commons/documentation/Documentation';
+import { HighlightRulesSelector_native } from 'src/features/fullJS/fullJSHighlight';
 /**
  * This _modifies global state_ and defines a new Ace mode globally, if it does not already exist.
  *
