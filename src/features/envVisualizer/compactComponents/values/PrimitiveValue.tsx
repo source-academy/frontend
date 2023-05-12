@@ -4,7 +4,10 @@ import { Binding } from 'src/features/envVisualizer/compactComponents/Binding';
 import { Text } from 'src/features/envVisualizer/compactComponents/Text';
 import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { CompactReferenceType, PrimitiveTypes } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import {
+  CompactReferenceType,
+  PrimitiveTypes
+} from 'src/features/envVisualizer/EnvVisualizerTypes';
 import { getTextWidth, isNull } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 import { Value } from './Value';

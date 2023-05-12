@@ -17,7 +17,10 @@ import { isEqual } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchAssessment } from 'src/commons/application/actions/SessionActions';
-import { defaultWorkspaceManager, InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import {
+  defaultWorkspaceManager,
+  InterpreterOutput
+} from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentConfiguration,

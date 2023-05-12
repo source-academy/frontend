@@ -57,10 +57,7 @@ import { history } from 'src/commons/utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  GradingSummary
-} from 'src/features/dashboard/DashboardTypes';
+import { FETCH_GROUP_GRADING_SUMMARY, GradingSummary } from 'src/features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from 'src/features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,

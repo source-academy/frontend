@@ -3,7 +3,10 @@ import { Layer, Text } from 'react-konva';
 import { Config } from 'src/features/dataVisualizer/Config';
 import { Data, Pair } from 'src/features/dataVisualizer/dataVisualizerTypes';
 import { isArray, isFunction, toText } from 'src/features/dataVisualizer/dataVisualizerUtils';
-import { ArrowDrawable, BackwardArrowDrawable } from 'src/features/dataVisualizer/drawable/Drawable';
+import {
+  ArrowDrawable,
+  BackwardArrowDrawable
+} from 'src/features/dataVisualizer/drawable/Drawable';
 
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import {

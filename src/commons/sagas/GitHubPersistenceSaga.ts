@@ -6,8 +6,12 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from 'src/commons/application/types/SessionTypes';
-import FileExplorerDialog, { FileExplorerDialogProps } from 'src/commons/gitHubOverlay/FileExplorerDialog';
-import RepositoryDialog, { RepositoryDialogProps } from 'src/commons/gitHubOverlay/RepositoryDialog';
+import FileExplorerDialog, {
+  FileExplorerDialogProps
+} from 'src/commons/gitHubOverlay/FileExplorerDialog';
+import RepositoryDialog, {
+  RepositoryDialogProps
+} from 'src/commons/gitHubOverlay/RepositoryDialog';
 import { actions } from 'src/commons/utils/ActionsHelper';
 import Constants from 'src/commons/utils/Constants';
 import { promisifyDialog } from 'src/commons/utils/DialogHelper';

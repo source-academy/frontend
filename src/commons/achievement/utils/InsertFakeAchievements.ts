@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { AssessmentConfiguration, AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import {
-  cardBackgroundUrl,
-  coverImageUrl
-} from 'src/features/achievement/AchievementConstants';
+  AssessmentConfiguration,
+  AssessmentOverview
+} from 'src/commons/assessment/AssessmentTypes';
+import { cardBackgroundUrl, coverImageUrl } from 'src/features/achievement/AchievementConstants';
 import { GoalType } from 'src/features/achievement/AchievementTypes';
 
 import AchievementInferencer from './AchievementInferencer';

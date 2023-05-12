@@ -10,7 +10,12 @@ import { displayMiniMessage } from 'src/features/game/effects/MiniMessage';
 import { displayNotification } from 'src/features/game/effects/Notification';
 import { promptWithChoices } from 'src/features/game/effects/Prompt';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { AnyId, GameItemType, GameLocation, LocationId } from 'src/features/game/location/GameMapTypes';
+import {
+  AnyId,
+  GameItemType,
+  GameLocation,
+  LocationId
+} from 'src/features/game/location/GameMapTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { ObjectProperty } from 'src/features/game/objects/GameObjectTypes';
 import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';

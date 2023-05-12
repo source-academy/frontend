@@ -1,6 +1,10 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { isExpired, prettifyDeadline, timeFromExpired } from 'src/commons/achievement/utils/DateHelper';
+import {
+  isExpired,
+  prettifyDeadline,
+  timeFromExpired
+} from 'src/commons/achievement/utils/DateHelper';
 import { DeadlineColors } from 'src/features/achievement/AchievementConstants';
 
 type AchievementDeadlineProps = {

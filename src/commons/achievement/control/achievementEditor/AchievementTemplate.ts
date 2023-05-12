@@ -1,11 +1,5 @@
-import {
-  cardBackgroundUrl,
-  coverImageUrl
-} from 'src/features/achievement/AchievementConstants';
-import {
-  AchievementItem,
-  AchievementView
-} from 'src/features/achievement/AchievementTypes';
+import { cardBackgroundUrl, coverImageUrl } from 'src/features/achievement/AchievementConstants';
+import { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
 
 export const viewTemplate: AchievementView = {
   coverImage: `${coverImageUrl}/default.png`,

@@ -5,7 +5,11 @@ import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 import { Data, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
-import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from 'src/features/envVisualizer/EnvVisualizerUtils';
+import {
+  getTextWidth,
+  setHoveredCursor,
+  setUnhoveredCursor
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 import { Frame } from './Frame';
 import { Visible } from './Visible';

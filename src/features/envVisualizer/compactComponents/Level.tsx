@@ -1,7 +1,10 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 import { Visible } from 'src/features/envVisualizer/components/Visible';
-import { CompactConfig, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import {
+  CompactConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 import { EnvTreeNode } from 'src/features/envVisualizer/EnvVisualizerTypes';
 

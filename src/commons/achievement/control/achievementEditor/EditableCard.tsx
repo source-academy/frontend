@@ -6,10 +6,7 @@ import { useContext, useMemo, useReducer, useState } from 'react';
 import ItemDeleter from 'src/commons/achievement/control/common/ItemDeleter';
 import ItemSaver from 'src/commons/achievement/control/common/ItemSaver';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import {
-  AchievementItem,
-  AchievementView
-} from 'src/features/achievement/AchievementTypes';
+import { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
 
 import AchievementSettings from './AchievementSettings';
 import AchievementUuidCopier from './AchievementUuidCopier';

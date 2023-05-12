@@ -2,7 +2,10 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 import { Visible } from 'src/features/envVisualizer/components/Visible';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { CompactConfig, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import {
+  CompactConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 import { IVisible, StepsArray } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';

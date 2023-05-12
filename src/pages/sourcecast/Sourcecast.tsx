@@ -21,9 +21,7 @@ import {
   convertEditorTabStateToProps,
   SourcecastEditorContainerProps
 } from 'src/commons/editor/EditorContainer';
-import MobileWorkspace, {
-  MobileWorkspaceProps
-} from 'src/commons/mobileWorkspace/MobileWorkspace';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 import SideContentDataVisualizer from 'src/commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from 'src/commons/sideContent/SideContentEnvVisualizer';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';

@@ -29,7 +29,10 @@ import {
   OverallState,
   styliseSublanguage
 } from 'src/commons/application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import {
+  externalLibraries,
+  ExternalLibraryName
+} from 'src/commons/application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -37,9 +40,17 @@ import {
   DEBUG_RESUME,
   UPDATE_EDITOR_HIGHLIGHTED_LINES
 } from 'src/commons/application/types/InterpreterTypes';
-import { Library, Testcase, TestcaseType, TestcaseTypes } from 'src/commons/assessment/AssessmentTypes';
+import {
+  Library,
+  Testcase,
+  TestcaseType,
+  TestcaseTypes
+} from 'src/commons/assessment/AssessmentTypes';
 import { Documentation } from 'src/commons/documentation/Documentation';
-import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from 'src/commons/fileSystem/utils';
+import {
+  retrieveFilesInWorkspaceAsRecord,
+  writeFileRecursively
+} from 'src/commons/fileSystem/utils';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
 import DisplayBufferService from 'src/commons/utils/DisplayBufferService';

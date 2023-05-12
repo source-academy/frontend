@@ -15,7 +15,12 @@ import { Frame } from 'src/features/envVisualizer/components/Frame';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import {
+  EnvTreeNode,
+  FnTypes,
+  IHoverable,
+  ReferenceType
+} from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   getBodyText,
   getNonEmptyEnv,

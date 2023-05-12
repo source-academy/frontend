@@ -22,7 +22,10 @@ import {
   UPDATE_EDITOR_HIGHLIGHTED_LINES
 } from 'src/commons/application/types/InterpreterTypes';
 import { Testcase } from 'src/commons/assessment/AssessmentTypes';
-import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from 'src/commons/collabEditing/CollabEditingTypes';
+import {
+  SET_EDITOR_SESSION_ID,
+  SET_SHAREDB_CONNECTED
+} from 'src/commons/collabEditing/CollabEditingTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from 'src/commons/sideContent/SideContentTypes';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import Constants from 'src/commons/utils/Constants';

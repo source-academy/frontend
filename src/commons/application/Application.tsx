@@ -6,7 +6,10 @@ import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes'
 import NavigationBar from 'src/commons/navigationBar/NavigationBar';
 import Constants from 'src/commons/utils/Constants';
 import { useLocalStorageState } from 'src/commons/utils/Hooks';
-import { defaultWorkspaceSettings, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
+import {
+  defaultWorkspaceSettings,
+  WorkspaceSettingsContext
+} from 'src/commons/WorkspaceSettingsContext';
 import Academy from 'src/pages/academy/Academy';
 import Contributors from 'src/pages/contributors/Contributors';
 import Disabled from 'src/pages/disabled/Disabled';

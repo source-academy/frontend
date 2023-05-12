@@ -17,10 +17,7 @@ import ControlButton from 'src/commons/ControlButton';
 import Markdown from 'src/commons/Markdown';
 import { getPrettyDate } from 'src/commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import {
-  showSuccessMessage,
-  showWarningMessage
-} from 'src/commons/utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
 
 type GradingEditorProps = DispatchProps & OwnProps;

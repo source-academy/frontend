@@ -55,9 +55,7 @@ import {
 import { Position } from 'src/commons/editor/EditorTypes';
 import { overwriteFilesInWorkspace } from 'src/commons/fileSystem/utils';
 import FileSystemView from 'src/commons/fileSystemView/FileSystemView';
-import MobileWorkspace, {
-  MobileWorkspaceProps
-} from 'src/commons/mobileWorkspace/MobileWorkspace';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from 'src/commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { Links } from 'src/commons/utils/Constants';
@@ -116,11 +114,7 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
-import {
-  CodeDelta,
-  Input,
-  SelectionRange
-} from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { CodeDelta, Input, SelectionRange } from 'src/features/sourceRecorder/SourceRecorderTypes';
 import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
 import {

@@ -55,9 +55,7 @@ import {
 } from 'src/commons/githubAssessments/GitHubMissionTypes';
 import Markdown from 'src/commons/Markdown';
 import { MobileSideContentProps } from 'src/commons/mobileWorkspace/mobileSideContent/MobileSideContent';
-import MobileWorkspace, {
-  MobileWorkspaceProps
-} from 'src/commons/mobileWorkspace/MobileWorkspace';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
 import SideContentMarkdownEditor from 'src/commons/sideContent/githubAssessments/SideContentMarkdownEditor';
 import SideContentMissionEditor from 'src/commons/sideContent/githubAssessments/SideContentMissionEditor';
 import SideContentTaskEditor from 'src/commons/sideContent/githubAssessments/SideContentTaskEditor';

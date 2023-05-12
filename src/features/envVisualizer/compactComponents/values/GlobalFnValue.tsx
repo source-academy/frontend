@@ -10,7 +10,10 @@ import {
 import { ArrowFromFn } from 'src/features/envVisualizer/compactComponents/arrows/ArrowFromFn';
 import { Binding } from 'src/features/envVisualizer/compactComponents/Binding';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { CompactConfig, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import {
+  CompactConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 import { CompactReferenceType, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {

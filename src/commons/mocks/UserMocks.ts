@@ -6,7 +6,10 @@ import {
   CourseRegistration,
   User
 } from 'src/commons/application/types/SessionTypes';
-import { Notification, NotificationTypes } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import {
+  Notification,
+  NotificationTypes
+} from 'src/commons/notificationBadge/NotificationBadgeTypes';
 
 /**
  * Mock for fetching a role, given an access token. A null

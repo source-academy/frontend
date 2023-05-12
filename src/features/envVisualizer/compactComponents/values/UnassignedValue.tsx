@@ -3,7 +3,10 @@ import { Binding } from 'src/features/envVisualizer/compactComponents/Binding';
 import { Text } from 'src/features/envVisualizer/compactComponents/Text';
 import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { CompactReferenceType, UnassignedData } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import {
+  CompactReferenceType,
+  UnassignedData
+} from 'src/features/envVisualizer/EnvVisualizerTypes';
 import { getTextWidth } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 import { Value } from './Value';

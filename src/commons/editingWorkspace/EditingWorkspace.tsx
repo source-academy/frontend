@@ -50,7 +50,10 @@ import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideCon
 import { history } from 'src/commons/utils/HistoryHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
-import { removeEditorTab, updateActiveEditorTabIndex } from 'src/commons/workspace/WorkspaceActions';
+import {
+  removeEditorTab,
+  updateActiveEditorTabIndex
+} from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,

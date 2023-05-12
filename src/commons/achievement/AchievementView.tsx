@@ -2,7 +2,10 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { FETCH_ASSESSMENT, FETCH_ASSESSMENT_ADMIN } from 'src/commons/application/types/SessionTypes';
+import {
+  FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_ADMIN
+} from 'src/commons/application/types/SessionTypes';
 import { FETCH_ASSESSMENT_OVERVIEWS } from 'src/commons/assessment/AssessmentTypes';
 import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';

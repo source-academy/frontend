@@ -2,7 +2,10 @@ import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchAssessmentOverviews, fetchTotalXp } from 'src/commons/application/actions/SessionActions';
+import {
+  fetchAssessmentOverviews,
+  fetchTotalXp
+} from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
