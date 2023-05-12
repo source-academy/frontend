@@ -26,35 +26,60 @@ jobs:
       - name: Install dependencies
         run: |
           JOBS=$(nproc) yarn install --frozen-lockfile
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: node_modules
+          path: node_modules
   compile:
     name: Compile
     needs: deps
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules
       - run: yarn run tsc
   format_ci:
     name:
     needs: deps
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules
       - run: yarn run format:ci
   eslint:
     name: Eslint
     needs: deps
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules
       - run: yarn run eslint
   build:
     name: Build
     needs: deps
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules
       - run: yarn run build
   coveralls:
     name: Check code coverage
     needs: [deps, compile, format_ci, eslint, build]
     runs-on: ubuntu-latest
     steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: node_modules
       - name: Coveralls
         run: yarn run test-coveralls
       - name: Coveralls
