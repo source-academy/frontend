@@ -304,6 +304,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+    // Reset old context.errors
+    context.errors = [];
     const codeFilePath = '/code.js';
     const codeFiles = {
       [codeFilePath]: code
