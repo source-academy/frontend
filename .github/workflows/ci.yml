@@ -26,7 +26,7 @@ jobs:
           node-version: 16
           cache: yarn
       - name: Install dependencies
-        run: JOBS=$(nproc) yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: Run command
         run: yarn run ${{ matrix.commands }}
   coveralls:
@@ -42,7 +42,7 @@ jobs:
           node-version: 16
           cache: yarn
       - name: Install dependencies
-        run: JOBS=$(nproc) yarn install --frozen-lockfile
+        run: yarn install --frozen-lockfile
       - name: Coveralls
         run: yarn run test-coveralls
       - name: Coveralls
