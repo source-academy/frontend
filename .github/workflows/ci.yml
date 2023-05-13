@@ -12,19 +12,7 @@ env:
   GENERATE_SOURCEMAP: false
 
 jobs:
-  deps:
-    name: Install dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Setup repository
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: yarn
   lint:
-    needs: deps
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -32,7 +20,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup repository
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -43,12 +31,12 @@ jobs:
         run: yarn run ${{ matrix.commands }}
   coveralls:
     name: Check code coverage
-    needs: [deps, lint]
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup repository
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 16
