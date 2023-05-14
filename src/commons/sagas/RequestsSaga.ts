@@ -1310,8 +1310,7 @@ function getTokensFromStore(): Tokens | undefined {
  * cause this function to call postRefresh to attempt to setToken with fresh
  * tokens.
  *
- * If fetch throws an error, or final response has status code < 200 or > 299,
- * this function will cause the user to logout.
+ * If the refresh token is expired, this function causes the user to logout.
  */
 export const request = async (
   path: string,
@@ -1361,15 +1360,22 @@ export const request = async (
     }
 
     if (!resp.ok) {
-      showWarningMessage(
-        opts.errorMessage
-          ? opts.errorMessage
-          : `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-              resp.status === 401 || resp.status === 403
-                ? '; try logging in again, after manually saving any work.'
-                : ''
-            }`
-      );
+      if (resp.status === 401 && (await resp.text()) === 'Invalid refresh token') {
+        // The refresh token is expired, so the user is logged out and needs to log in again to obtain
+        // a fresh refresh token.
+        store.dispatch(actions.logOut());
+        showWarningMessage('Please login again');
+      } else {
+        showWarningMessage(
+          opts.errorMessage
+            ? opts.errorMessage
+            : `Error while communicating with backend: ${resp.status} ${resp.statusText}${
+                resp.status === 401 || resp.status === 403
+                  ? '; try logging in again, after manually saving any work.'
+                  : ''
+              }`
+        );
+      }
       return null;
     }
 
