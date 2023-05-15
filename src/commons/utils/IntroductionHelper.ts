@@ -1,12 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import {
-  pyLanguages,
-  SALanguage,
-  schemeLanguages,
-  sourceLanguages,
-  styliseSublanguage
-} from '../application/ApplicationTypes';
+import { SALanguage, styliseSublanguage } from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `
@@ -21,8 +15,6 @@ In the editor on the left, you can use the [_Ace keyboard shortcuts_](${Links.ac
 and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
-
-const ALL_LANGUAGES = [...schemeLanguages, ...sourceLanguages, ...pyLanguages];
 
 const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) => {
   if (sourceChapter === Chapter.FULL_JS) {
