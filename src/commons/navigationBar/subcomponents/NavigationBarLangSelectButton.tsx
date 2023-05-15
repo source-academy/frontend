@@ -25,7 +25,7 @@ const defaultSublanguages: {
 
 const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const lang = useTypedSelector(store => store.playground.lang);
+  const lang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
   const dispatch = useDispatch();
   const selectLang = (language: SupportedLanguage) => {
     dispatch(playgroundChangeLang(language));
