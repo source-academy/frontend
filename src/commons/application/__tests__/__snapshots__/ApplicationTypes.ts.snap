@@ -284,3 +284,5 @@ Array [
   },
 ]
 `;
+
+exports[`getLanguageConfig throws an error for an invalid chapter/variant combination 1`] = `"Language config not found for chapter 5 variant default"`;
