@@ -9,7 +9,8 @@ import {
   schemeLanguages,
   sourceLanguages,
   SUPPORTED_LANGUAGES,
-  SupportedLanguage} from 'src/commons/application/ApplicationTypes';
+  SupportedLanguage
+} from 'src/commons/application/ApplicationTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { chapterSelect } from 'src/commons/workspace/WorkspaceActions';
 import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
