@@ -321,7 +321,6 @@ export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  lang: SupportedLanguage.JAVASCRIPT,
   languageConfig: defaultLanguageConfig
 };
 
