@@ -1365,8 +1365,18 @@ export const request = async (
       if (resp.status === 401 && (await resp.text()) === 'Invalid refresh token') {
         // The refresh token is expired, so the user is logged out and needs to log in again to obtain
         // a new refresh token.
-        store.dispatch(actions.logOut());
-        showWarningMessage('Session Expired. Please login again');
+        const hasUnsavedChanges =
+          store.getState().workspaces.assessment.hasUnsavedChanges ||
+          store.getState().workspaces.githubAssessment.hasUnsavedChanges ||
+          store.getState().workspaces.grading.hasUnsavedChanges;
+        if (!hasUnsavedChanges) {
+          store.dispatch(actions.logOut());
+          showWarningMessage('Session Expired. Please login again.');
+        } else {
+          showWarningMessage(
+            'Session Expired. Please login again after manually copying any work.'
+          );
+        }
       } else {
         // User is not logged out unnecessarily as refresh token is still valid. Warning message still shown.
         showWarningMessage(

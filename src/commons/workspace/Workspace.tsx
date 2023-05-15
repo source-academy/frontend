@@ -57,6 +57,22 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     }
   });
 
+  React.useEffect(() => {
+    if (
+      props.hasUnsavedChanges &&
+      props.editorContainerProps &&
+      props.editorContainerProps.handleUpdateHasUnsavedChanges
+    ) {
+      props.editorContainerProps.handleUpdateHasUnsavedChanges(true);
+    }
+
+    return () => {
+      if (props.editorContainerProps && props.editorContainerProps.handleUpdateHasUnsavedChanges) {
+        props.editorContainerProps.handleUpdateHasUnsavedChanges(false);
+      }
+    };
+  });
+
   const sideBarResizableProps = (): ResizableProps & {
     ref: React.MutableRefObject<Resizable | null>;
   } => {
