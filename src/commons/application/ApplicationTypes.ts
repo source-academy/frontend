@@ -194,29 +194,7 @@ export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
 });
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
-  switch (chapter) {
-    case Chapter.FULL_JS:
-      return fullJSLanguage.displayName;
-    case Chapter.FULL_TS:
-      return fullTSLanguage.displayName;
-    case Chapter.HTML:
-      return htmlLanguage.displayName;
-    case Chapter.SCHEME_1:
-    case Chapter.SCHEME_2:
-    case Chapter.SCHEME_3:
-    case Chapter.SCHEME_4:
-    case Chapter.FULL_SCHEME:
-      return schemeLanguages.find(lang => lang.chapter === chapter)!.displayName;
-    case Chapter.PYTHON_1:
-      // case Chapter.PYTHON_2:
-      // case Chapter.PYTHON_3:
-      // case Chapter.PYTHON_4:
-      return pyLanguages.find(lang => lang.chapter === chapter)!.displayName;
-    default:
-      return `Source \xa7${chapter}${
-        variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
-      }`;
-  }
+  return getLanguageConfig(chapter, variant).displayName;
 };
 
 const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
@@ -264,7 +242,7 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
 
   return {
     ...sublang,
-    displayName: styliseSublanguage(sublang.chapter, sublang.variant),
+    displayName: `Source \xa7${chapter} ${variantDisplay.get(variant) ?? ''}`.trim(),
     mainLanguage: SupportedLanguage.JAVASCRIPT,
     supports: supportedFeatures
   };
