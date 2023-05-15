@@ -42,14 +42,6 @@ const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) 
     );
   }
 
-  // `.includes` and `.find` are not used here since we are dealing with reference types
-  if (
-    ALL_LANGUAGES.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
-      .length === 0
-  ) {
-    return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
-  }
-
   const sourceDocsLink: string = `${Links.sourceDocs}source_${sourceChapter}${
     sourceVariant !== Variant.DEFAULT && sourceVariant !== Variant.NATIVE ? `_${sourceVariant}` : ''
   }/`;
@@ -67,7 +59,7 @@ const generateIntroductionText = (sourceChapter: Chapter, sourceVariant: Variant
 };
 
 // TODO: Remove this after migrated to language config
-export const generateSourceIntroduction = (sourceChapter: Chapter, sourceVariant: Variant) => {
+const generateSourceIntroduction = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return generateIntroductionText(sourceChapter, sourceVariant);
 };
 
