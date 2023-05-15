@@ -1310,7 +1310,9 @@ function getTokensFromStore(): Tokens | undefined {
  * cause this function to call postRefresh to attempt to setToken with fresh
  * tokens.
  *
- * If the refresh token is expired, this function causes the user to logout.
+ * Else a response status of < 200 or > 299 will inform the user that the
+ * communication to the backend was unsuccessful. In the case where the refresh
+ * token is expired, the user is logged out as well.
  */
 export const request = async (
   path: string,
@@ -1362,10 +1364,11 @@ export const request = async (
     if (!resp.ok) {
       if (resp.status === 401 && (await resp.text()) === 'Invalid refresh token') {
         // The refresh token is expired, so the user is logged out and needs to log in again to obtain
-        // a fresh refresh token.
+        // a new refresh token.
         store.dispatch(actions.logOut());
-        showWarningMessage('Please login again');
+        showWarningMessage('Session Expired. Please login again');
       } else {
+        // User is not logged out unnecessarily as refresh token is still valid. Warning message still shown.
         showWarningMessage(
           opts.errorMessage
             ? opts.errorMessage
