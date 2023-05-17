@@ -342,8 +342,11 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   if (editor !== undefined) {
     if (filePath !== props.filePath) {
       editor.setSession(props.session);
-      // Give focus to the editor tab after switching.
-      editor.focus();
+      // Give focus to the editor tab only after switching from another tab.
+      // This is necessary to prevent 'unstable_flushDiscreteUpdates' warnings.
+      if (filePath !== undefined) {
+        editor.focus();
+      }
       setFilePath(props.filePath);
     }
   }
