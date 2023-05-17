@@ -180,7 +180,7 @@ const SicpNavigationBar: React.FC = () => {
       }
       return {
         //  array[0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
-        title: array[0].slice(8) + ": " + textbook[array[0]][array[1]][array[2]],
+        title: array[0].slice(8) + ': ' + textbook[array[0]][array[1]][array[2]],
         url: SearchUrl + array[0] + array[1]
       };
     }
@@ -249,12 +249,15 @@ const SicpNavigationBar: React.FC = () => {
       const pure = ans['pureIndex'];
       for (let i = 0; i < pure.length; i++) {
         // pure[i][0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
-        tem.push({ title: pure[i][0].slice(8) + ": " + ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
+        tem.push({
+          title: pure[i][0].slice(8) + ': ' + ans['value'],
+          url: SearchUrl + pure[i][0] + pure[i][1]
+        });
       }
       const subindex = ans['subIndex'];
       for (let i = 0; i < subindex.length; i++) {
         tem.push({
-          title: subindex[i]['id'][0].slice(8) + ": " + ans['value'] + ': ' + subindex[i]['value'],
+          title: subindex[i]['id'][0].slice(8) + ': ' + ans['value'] + ': ' + subindex[i]['value'],
           url: SearchUrl + subindex[i]['id'][0] + subindex[i]['id'][1]
         });
       }
@@ -333,7 +336,11 @@ const SicpNavigationBar: React.FC = () => {
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
-          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={() => handleIndexSearchButton(indexSearchQuery)} />
+          <ControlButton
+            label="Index"
+            icon={IconNames.SEARCH}
+            onClick={() => handleIndexSearchButton(indexSearchQuery)}
+          />
         </div>
       </div>
       {indexAutocompleteResults.length !== 0 && (
