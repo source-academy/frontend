@@ -179,7 +179,8 @@ const SicpNavigationBar: React.FC = () => {
         return { title: '', url: '' };
       }
       return {
-        title: textbook[array[0]][array[1]][array[2]],
+        //  array[0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
+        title: array[0].slice(8) + ": " + textbook[array[0]][array[1]][array[2]],
         url: SearchUrl + array[0] + array[1]
       };
     }
@@ -247,12 +248,13 @@ const SicpNavigationBar: React.FC = () => {
     } else {
       const pure = ans['pureIndex'];
       for (let i = 0; i < pure.length; i++) {
-        tem.push({ title: ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
+        // pure[i][0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
+        tem.push({ title: pure[i][0].slice(8) + ": " + ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
       }
       const subindex = ans['subIndex'];
       for (let i = 0; i < subindex.length; i++) {
         tem.push({
-          title: ans['value'] + ': ' + subindex[i]['value'],
+          title: subindex[i]['id'][0].slice(8) + ": " + ans['value'] + ': ' + subindex[i]['value'],
           url: SearchUrl + subindex[i]['id'][0] + subindex[i]['id'][1]
         });
       }
