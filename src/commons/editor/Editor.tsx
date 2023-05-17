@@ -341,6 +341,12 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   // Set edit session history when switching to another editor tab.
   if (editor !== undefined) {
     if (filePath !== props.filePath) {
+      // Unfortunately, the current editor sets the mode globally.
+      // The side effects make it very hard to ensure that the correct
+      // mode is set for every EditSession. As such, we add this one
+      // line to always propagate the mode whenever we set a new session.
+      // See AceHelper#selectMode for more information.
+      props.session.setMode(editor.getSession().getMode());
       editor.setSession(props.session);
       // Give focus to the editor tab only after switching from another tab.
       // This is necessary to prevent 'unstable_flushDiscreteUpdates' warnings.
