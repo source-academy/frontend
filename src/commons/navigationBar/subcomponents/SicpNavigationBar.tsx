@@ -233,34 +233,15 @@ const SicpNavigationBar: React.FC = () => {
     setSearchQuery(str);
   };
   const handleAutoIndexSearch = (str: string) => {
+    handleIndexSearchButton(str);
+  };
+
+  const handleIndexSearchButton = (str: string) => {
     handleOpenSearch();
     setDisplayedQuery(str);
     const SearchUrl = '..';
-    const results: SearchResultProps[] = [];
-    const ans = queryTrie(indexTrie, str.toLowerCase());
-    if (ans == null) {
-      results.push({ title: 'no result found', url: '' });
-    } else {
-      const { pure, subindex, value } = ans;
-      pure.forEach((p: any) => {
-        results.push({ title: value, url: SearchUrl + p[0] + p[1] });
-      });
-      subindex.forEach((sub: any) => {
-        results.push({
-          title: `${value}: ${sub.value}`,
-          url: SearchUrl + sub.id[0] + sub.id[1]
-        });
-      });
-    }
-    setQueryResult(results);
-  };
-
-  const handleIndexSearchButton = () => {
-    handleOpenSearch();
-    setDisplayedQuery(indexSearchQuery);
-    const SearchUrl = '..';
     const tem = [];
-    const ans = queryTrie(indexTrie, indexSearchQuery.toLowerCase());
+    const ans = queryTrie(indexTrie, str.toLowerCase());
     if (ans == null) {
       tem.push({ title: 'no result found', url: '' });
     } else {
@@ -350,7 +331,7 @@ const SicpNavigationBar: React.FC = () => {
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
-          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
+          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={() => handleIndexSearchButton(indexSearchQuery)} />
         </div>
       </div>
       {indexAutocompleteResults.length !== 0 && (
