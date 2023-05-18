@@ -2,8 +2,6 @@ import { Alignment, Drawer, InputGroup, Navbar, NavbarGroup, Position } from '@b
 import { IconNames } from '@blueprintjs/icons';
 import { memoize } from 'lodash';
 import * as React from 'react';
-//import React, {useEffect} from 'react';
-//import Highlighter from 'react-highlight-words';
 import { useHistory, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
 import Constants from 'src/commons/utils/Constants';
@@ -34,16 +32,42 @@ const fetchData = () => {
 };
 const memoizedFetchData = memoize(fetchData);
 
+// FIXME: Remove this any type
+function queryTrie(startingNode: any, query: string) {
+  let node = startingNode;
+  for (const char of query) {
+    if (node[char]) {
+      node = node[char];
+    } else {
+      return [];
+    }
+  }
+  return node.value || [];
+}
+
+type SearchResultProps = {
+  title: string;
+  url: string;
+};
+
+type SearchResultsProps = {
+  query: string;
+  results: Array<SearchResultProps>;
+  handleCloseSearch: () => void;
+};
+
 const SicpNavigationBar: React.FC = () => {
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
   const [isTocOpen, setIsTocOpen] = React.useState(false);
-  const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState([] as string[]);
+  const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
   const [displayedQuery, setDisplayedQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [indexSearchQuery, setIndexSearchQuery] = React.useState('');
-  const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState([] as string[]);
+  const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
 
-  const [queryResult, setQueryResult] = React.useState([{ title: 'no result found', url: '' }]);
+  const [queryResult, setQueryResult] = React.useState<SearchResultProps[]>([
+    { title: 'no result found', url: '' }
+  ]);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();
   const history = useHistory();
@@ -56,7 +80,6 @@ const SicpNavigationBar: React.FC = () => {
   const handleNavigation = (sect: string) => {
     history.push('/sicpjs/' + sect);
   };
-  //const handleSearch = () => {};
   const handleOpenSearch = () => setIsSearchOpen(true);
   const handleCloseSearch = () => setIsSearchOpen(false);
 
@@ -110,86 +133,20 @@ const SicpNavigationBar: React.FC = () => {
     usePortal: false
   };
 
-  function queryIndexTrie(query: string) {
-    let node = indexTrie;
-    for (let i = 0; i < query.length; i++) {
-      const char = query[i];
-      if (node[char]) {
-        node = node[char];
-      } else {
-        return [];
-      }
-    }
-    if (node['value']) {
-      return node['value'];
-    }
-    return [];
-  }
-
-  function queryTextTrie(query: string) {
-    let node = textTrie;
-    for (let i = 0; i < query.length; i++) {
-      const char = query[i];
-      if (node[char]) {
-        node = node[char];
-      } else {
-        return [];
-      }
-    }
-    if (node['value']) {
-      return node['value'];
-    }
-    return [];
-  }
-
-  function autoComplete(str: string, limit: number, jsonData: any) {
+  function autoComplete(str: string, limit: number, trie: any) {
     if (str.length === 0) {
       return [];
     }
     str = str.toLowerCase();
-    const trie = jsonData;
 
     function next(node: any, i: number) {
-      if (i === 26) return node[' '];
-      else if (i >= 0 && i <= 25) {
-        return node[String.fromCharCode(i + 97)];
-      }
-      return null;
+      return letters[i] ? node[letters[i]] : null;
     }
-    const letters = [
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'f',
-      'g',
-      'h',
-      'i',
-      'j',
-      'k',
-      'l',
-      'm',
-      'n',
-      'o',
-      'p',
-      'q',
-      'r',
-      's',
-      't',
-      'u',
-      'v',
-      'w',
-      'x',
-      'y',
-      'z',
-      ' '
-    ];
+    const letters = [...'abcdefghijklmnopqrstuvwxyz'.split(''), ' '];
 
     function toEnd(query: any) {
       let node = trie;
-      for (let i = 0; i < query.length; i++) {
-        const char = query[i];
+      for (const char of query) {
         if (node[char]) {
           node = node[char];
         } else {
@@ -207,66 +164,62 @@ const SicpNavigationBar: React.FC = () => {
         ans.push(path);
         limit--;
       }
-      for (let i = 0; i < 27; i++) {
+      for (let i = 0; i < letters.length; i++) {
         recur(next(node, i), path + letters[i]);
       }
     }
-    const ans = [] as any[];
+    const ans: string[] = [];
     recur(toEnd(str), str);
     return ans;
   }
 
-  const voidSearch = (str: string) => {
-    function lineMap(array: any[]) {
+  const voidSearch = (query: string): SearchResultProps[] => {
+    function toSearchResult(array: any[]): SearchResultProps {
       if (array == null || array[0] == null || array[1] == null || array[2] == null) {
         return { title: '', url: '' };
       }
       return {
-        title: textbook[array[0]][array[1]][array[2]],
+        //  array[0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
+        title: array[0].slice(8) + ': ' + textbook[array[0]][array[1]][array[2]],
         url: SearchUrl + array[0] + array[1]
       };
     }
     const SearchUrl = '..';
-    let words = str.toLowerCase().split(' ');
-    words = words.filter(word => word !== '');
+    const words = query
+      .toLowerCase()
+      .split(' ')
+      .filter(word => word !== '');
     if (words.length === 0) {
       setQueryResult([]);
-      return;
+      return [];
     }
-    let globalAns = queryTextTrie(words[0]).map((array: any) => lineMap(array));
-
-    globalAns = globalAns.filter((obj: any) => obj.title.toLowerCase().includes(str.toLowerCase()));
-    return globalAns;
+    return queryTrie(textTrie, words[0])
+      .map(toSearchResult)
+      .filter((obj: SearchResultProps) => obj.title.toLowerCase().includes(query.toLowerCase()));
   };
 
-  function sentenceAutoComplete(str: string, limit: number, jsonData: any) {
-    const words = str
+  function sentenceAutoComplete(query: string, limit: number, trie: any): string[] {
+    const words = query
       .toLowerCase()
       .split(' ')
       .filter(word => word !== '');
     if (words.length < 2) {
-      return autoComplete(str, 250, jsonData);
+      return autoComplete(query, 250, trie);
     }
-    let pre = words[0];
-    for (let i = 1; i < words.length - 1; i++) {
-      pre += ' ' + words[i];
-    }
+    const pre = words.slice(0, -1).join(' ');
     const lastWord = words[words.length - 1];
-    let preResults = voidSearch(pre);
-    if (preResults == null) {
+    const preResults = voidSearch(pre).filter((obj: any) => obj.title.includes(lastWord));
+    if (preResults.length === 0) {
       return [];
     }
-    preResults = preResults.filter((obj: any) => obj.title.includes(lastWord));
-    if (preResults.length < 1) {
-      return [];
-    }
-    let lastwords = autoComplete(lastWord, 3000, jsonData);
-    lastwords = lastwords.filter(
-      (word: string) =>
-        preResults.filter((obj: any) => obj.title.toLowerCase().includes(pre + ' ' + word)).length >
-        0
-    );
-    return lastwords.map(word => pre + ' ' + word);
+    const lastwords = autoComplete(lastWord, 3000, trie);
+    return lastwords
+      .filter(
+        word =>
+          // Not sure why the length attribute is accessed here
+          preResults.filter(obj => obj.title.toLowerCase().includes(`${pre} ${word}`)).length > 0
+      )
+      .map(word => pre + ' ' + word);
   }
 
   const handleSearchButton = () => {
@@ -281,46 +234,30 @@ const SicpNavigationBar: React.FC = () => {
     setSearchQuery(str);
   };
   const handleAutoIndexSearch = (str: string) => {
+    handleIndexSearchButton(str);
+  };
+
+  const handleIndexSearchButton = (str: string) => {
     handleOpenSearch();
     setDisplayedQuery(str);
     const SearchUrl = '..';
     const tem = [];
-    const ans = queryIndexTrie(str.toLowerCase());
+    const ans = queryTrie(indexTrie, str.toLowerCase());
     if (ans == null) {
       tem.push({ title: 'no result found', url: '' });
     } else {
       const pure = ans['pureIndex'];
       for (let i = 0; i < pure.length; i++) {
-        tem.push({ title: ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
-      }
-      const subindex = ans['subIndex'];
-      for (let i = 0; i < subindex.length; i++) {
+        // pure[i][0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
         tem.push({
-          title: ans['value'] + ': ' + subindex[i]['value'],
-          url: SearchUrl + subindex[i]['id'][0] + subindex[i]['id'][1]
+          title: pure[i][0].slice(8) + ': ' + ans['value'],
+          url: SearchUrl + pure[i][0] + pure[i][1]
         });
       }
-    }
-    setQueryResult(tem);
-  };
-
-  const handleIndexSearchButton = () => {
-    handleOpenSearch();
-    setDisplayedQuery(indexSearchQuery);
-    const SearchUrl = '..';
-    const tem = [];
-    const ans = queryIndexTrie(indexSearchQuery.toLowerCase());
-    if (ans == null) {
-      tem.push({ title: 'no result found', url: '' });
-    } else {
-      const pure = ans['pureIndex'];
-      for (let i = 0; i < pure.length; i++) {
-        tem.push({ title: ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
-      }
       const subindex = ans['subIndex'];
       for (let i = 0; i < subindex.length; i++) {
         tem.push({
-          title: ans['value'] + ': ' + subindex[i]['value'],
+          title: subindex[i]['id'][0].slice(8) + ': ' + ans['value'] + ': ' + subindex[i]['value'],
           url: SearchUrl + subindex[i]['id'][0] + subindex[i]['id'][1]
         });
       }
@@ -399,7 +336,11 @@ const SicpNavigationBar: React.FC = () => {
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
-          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
+          <ControlButton
+            label="Index"
+            icon={IconNames.SEARCH}
+            onClick={() => handleIndexSearchButton(indexSearchQuery)}
+          />
         </div>
       </div>
       {indexAutocompleteResults.length !== 0 && (
@@ -415,11 +356,11 @@ const SicpNavigationBar: React.FC = () => {
                 handleAutoIndexSearch(result);
               }}
               onMouseOver={e => {
-                const element = e!.nativeEvent!.srcElement as any;
+                const element = e.target as HTMLDivElement;
                 element.style.backgroundColor = 'rgba(0,0,0,0.5)';
               }}
               onMouseOut={e => {
-                const element = e!.nativeEvent!.srcElement as any;
+                const element = e.target as HTMLDivElement;
                 element.style.backgroundColor = 'rgba(0,0,0,0)';
               }}
             >
@@ -437,34 +378,17 @@ const SicpNavigationBar: React.FC = () => {
     handleCloseSearch: handleCloseSearch
   };
 
-  type SearchResultProps = {
-    title: any;
-    url: any;
-  };
-
-  type SearchResultsProps = {
-    query: string;
-    results: Array<SearchResultProps>;
-    handleCloseSearch: () => void;
-  };
-
-  const SearchResult: React.FC<SearchResultProps> = ({ title, url }) => {
-    return (
-      <li>
-        <a href={url}>{title}</a>
-      </li>
-    );
-  };
-
+  // TODO: Remove nested component
   const SearchResults: React.FC<SearchResultsProps> = ({ query, results, handleCloseSearch }) => {
     const highlightedResults = results.map((result, index) => {
       const regex = new RegExp(`(${query})`, 'gi');
       const titleParts = result.title.split(regex);
-      const highlightedTitle = titleParts.map((part: any, i: any) => {
+      const highlightedTitle = titleParts.map((part, i) => {
         if (part.toLowerCase() === query.toLowerCase()) {
+          // TODO: Use a guaranteed unique value (not the index) as the key
           return <mark key={i}>{part}</mark>;
         } else {
-          return part;
+          return <>{part}</>;
         }
       });
       return { ...result, title: highlightedTitle };
@@ -474,8 +398,10 @@ const SicpNavigationBar: React.FC = () => {
       <div>
         <h3>Results for "{query}"</h3>
         <ul>
-          {highlightedResults.map((result, index) => (
-            <SearchResult key={index} {...result} />
+          {highlightedResults.map(result => (
+            <li>
+              <a href={result.url}>{result.title}</a>
+            </li>
           ))}
         </ul>
         <button onClick={handleCloseSearch}>Close</button>
