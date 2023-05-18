@@ -726,8 +726,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    const currentLang = props.playgroundSourceChapter;
-
+    const currentLang = languageConfig.chapter;
     if (currentLang === Chapter.HTML) {
       // For HTML Chapter, HTML Display tab is added only after code is run
       if (props.output.length > 0 && props.output[0].type === 'result') {
@@ -760,7 +759,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return tabs;
   }, [
     playgroundIntroductionTab,
-    props.playgroundSourceChapter,
+    languageConfig.chapter,
     props.output,
     usingRemoteExecution,
     isSicpEditor,
@@ -905,7 +904,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
-    sourceChapter: props.playgroundSourceChapter,
+    sourceChapter: languageConfig.chapter,
     externalLibraryName,
     sourceVariant: props.playgroundSourceVariant,
     handleEditorValueChange: onEditorValueChange,
@@ -926,7 +925,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       (newValue: string) => dispatch(updateReplValue(newValue, workspaceLocation)),
       [dispatch, workspaceLocation]
     ),
-    sourceChapter: props.playgroundSourceChapter,
+    sourceChapter: languageConfig.chapter,
     sourceVariant: props.playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
@@ -969,13 +968,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
+        languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         isSicpEditor ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
+        usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
@@ -1012,7 +1011,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         editorButtons: [
           autorunButtons,
           chapterSelect,
-          props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
+          languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
           languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,
