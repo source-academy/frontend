@@ -132,6 +132,7 @@ type LanguageFeatures = Partial<{
   substVisualizer: boolean;
   envVisualizer: boolean;
   multiFile: boolean;
+  repl: boolean;
 }>;
 
 const variantDisplay: Map<Variant, string> = new Map([
@@ -150,7 +151,7 @@ export const fullJSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full JavaScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true }
+  supports: { dataVisualizer: true, repl: true }
 };
 
 export const fullTSLanguage: SALanguage = {
@@ -158,7 +159,7 @@ export const fullTSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full TypeScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true }
+  supports: { dataVisualizer: true, repl: true }
 };
 
 export const htmlLanguage: SALanguage = {
@@ -178,7 +179,7 @@ const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displa
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: {} };
+  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: { repl: true } };
 });
 
 const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
@@ -190,7 +191,7 @@ const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayNam
 ];
 
 export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: {} };
+  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
 });
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
@@ -239,6 +240,9 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
 
   // Local imports/exports require Source 2+ as Source 1 does not have lists.
   supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
+
+  // Disable REPL for concurrent variants
+  supportedFeatures.repl = variant !== Variant.CONCURRENT;
 
   return {
     ...sublang,

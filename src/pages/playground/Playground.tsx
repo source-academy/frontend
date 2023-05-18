@@ -861,10 +861,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [selectedTab, dispatch, workspaceLocation]
   );
 
-  const replDisabled =
-    props.playgroundSourceChapter === Chapter.HTML ||
-    props.playgroundSourceVariant === Variant.CONCURRENT ||
-    usingRemoteExecution;
+  const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
 
   const setActiveEditorTabIndex = React.useCallback(
     (activeEditorTabIndex: number | null) =>
