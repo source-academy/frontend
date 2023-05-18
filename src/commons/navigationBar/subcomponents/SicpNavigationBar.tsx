@@ -179,7 +179,8 @@ const SicpNavigationBar: React.FC = () => {
         return { title: '', url: '' };
       }
       return {
-        title: textbook[array[0]][array[1]][array[2]],
+        //  array[0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
+        title: array[0].slice(8) + ': ' + textbook[array[0]][array[1]][array[2]],
         url: SearchUrl + array[0] + array[1]
       };
     }
@@ -233,45 +234,30 @@ const SicpNavigationBar: React.FC = () => {
     setSearchQuery(str);
   };
   const handleAutoIndexSearch = (str: string) => {
+    handleIndexSearchButton(str);
+  };
+
+  const handleIndexSearchButton = (str: string) => {
     handleOpenSearch();
     setDisplayedQuery(str);
     const SearchUrl = '..';
-    const results: SearchResultProps[] = [];
-    const ans = queryTrie(indexTrie, str.toLowerCase());
-    if (ans == null) {
-      results.push({ title: 'no result found', url: '' });
-    } else {
-      const { pure, subindex, value } = ans;
-      pure.forEach((p: any) => {
-        results.push({ title: value, url: SearchUrl + p[0] + p[1] });
-      });
-      subindex.forEach((sub: any) => {
-        results.push({
-          title: `${value}: ${sub.value}`,
-          url: SearchUrl + sub.id[0] + sub.id[1]
-        });
-      });
-    }
-    setQueryResult(results);
-  };
-
-  const handleIndexSearchButton = () => {
-    handleOpenSearch();
-    setDisplayedQuery(indexSearchQuery);
-    const SearchUrl = '..';
     const tem = [];
-    const ans = queryTrie(indexTrie, indexSearchQuery.toLowerCase());
+    const ans = queryTrie(indexTrie, str.toLowerCase());
     if (ans == null) {
       tem.push({ title: 'no result found', url: '' });
     } else {
       const pure = ans['pureIndex'];
       for (let i = 0; i < pure.length; i++) {
-        tem.push({ title: ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
+        // pure[i][0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
+        tem.push({
+          title: pure[i][0].slice(8) + ': ' + ans['value'],
+          url: SearchUrl + pure[i][0] + pure[i][1]
+        });
       }
       const subindex = ans['subIndex'];
       for (let i = 0; i < subindex.length; i++) {
         tem.push({
-          title: ans['value'] + ': ' + subindex[i]['value'],
+          title: subindex[i]['id'][0].slice(8) + ': ' + ans['value'] + ': ' + subindex[i]['value'],
           url: SearchUrl + subindex[i]['id'][0] + subindex[i]['id'][1]
         });
       }
@@ -350,7 +336,11 @@ const SicpNavigationBar: React.FC = () => {
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
-          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
+          <ControlButton
+            label="Index"
+            icon={IconNames.SEARCH}
+            onClick={() => handleIndexSearchButton(indexSearchQuery)}
+          />
         </div>
       </div>
       {indexAutocompleteResults.length !== 0 && (

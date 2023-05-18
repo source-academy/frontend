@@ -17,7 +17,7 @@ exports[`Navbar renders correctly 1`] = `
         <div className=\\"indexSearch-inner\\">
           <div style={{...}}>
             <Blueprint4.InputGroup placeholder=\\"Search\\" value=\\"\\" onChange={[Function: onChange]} />
-            <ControlButton label=\\"Index\\" icon=\\"search\\" onClick={[Function: handleIndexSearchButton]} />
+            <ControlButton label=\\"Index\\" icon=\\"search\\" onClick={[Function: onClick]} />
           </div>
         </div>
       </div>
