@@ -10,7 +10,7 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch } from 'react-redux';
-import { RouteComponentProps, useHistory, useLocation } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { AnyAction, Dispatch } from 'redux';
 import {
   beginDebuggerPause,
@@ -273,29 +273,14 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
 
   const dispatch = useDispatch();
 
-  const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
-  const location = useLocation();
-  const history = useHistory();
-  const searchParams = new URLSearchParams(location.search);
-  const shouldAddDevice = searchParams.get('add_device');
-
   const { isFolderModeEnabled, activeEditorTabIndex } = useTypedSelector(
     state => state.workspaces[workspaceLocation]
   );
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
-  // Hide search query from URL to maintain an illusion of security. The device secret
-  // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
-  if (shouldAddDevice && !deviceSecret) {
-    setDeviceSecret(shouldAddDevice);
-    history.replace(location.pathname);
-  }
-
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(
-    shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
-  );
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
@@ -700,7 +685,6 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
       return tabs;
     }
 
-    // Don't show the following when using remote execution
     if (shouldShowDataVisualizer) {
       tabs.push(dataVisualizerTab);
     }
@@ -723,7 +707,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
     shouldShowSubstVisualizer
   ]);
 
-  // Remove Intro and Remote Execution tabs for mobile
+  // Remove Intro tab for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
   const onLoadMethod = React.useCallback(
