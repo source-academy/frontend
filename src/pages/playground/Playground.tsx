@@ -1,7 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
-import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
@@ -109,7 +108,6 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import { Links } from '../../commons/utils/Constants';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
@@ -142,7 +140,6 @@ export type PlaygroundProps = OwnProps &
   };
 
 export type OwnProps = {
-  isSicpEditor?: boolean;
   initialEditorValueHash?: string;
   prependLength?: number;
   handleCloseEditor?: () => void;
@@ -271,7 +268,6 @@ export async function handleHash(
 }
 
 const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
-  const { isSicpEditor } = props;
   const { isMobileBreakpoint } = useResponsive();
   const propsRef = React.useRef(props);
   propsRef.current = props;
@@ -316,8 +312,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [deviceSecret]
   );
 
-  const usingRemoteExecution =
-    useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
+  const usingRemoteExecution = useTypedSelector(state => !!state.session.remoteExecutionSession);
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
   const externalLibraryName = useTypedSelector(
@@ -335,7 +330,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     );
   }, [props.editorSessionId]);
 
-  const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
+  const hash = props.location.hash;
 
   React.useEffect(() => {
     if (!hash) {
@@ -667,9 +662,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const shareButton = React.useMemo(() => {
-    const queryString = isSicpEditor
-      ? Links.playground + '#' + props.initialEditorValueHash
-      : props.queryString;
+    const queryString = props.queryString;
     return (
       <ControlBarShareButton
         handleGenerateLz={() => dispatch(generateLzString())}
@@ -677,11 +670,11 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         handleUpdateShortURL={s => dispatch(updateShortURL(s))}
         queryString={queryString}
         shortURL={props.shortURL}
-        isSicp={isSicpEditor}
+        isSicp={false}
         key="share"
       />
     );
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
+  }, [dispatch, props.queryString, props.shortURL]);
 
   const toggleFolderModeButton = React.useMemo(() => {
     return (
@@ -757,9 +750,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       }
     }
 
-    if (!isSicpEditor) {
-      tabs.push(remoteExecutionTab);
-    }
+    tabs.push(remoteExecutionTab);
 
     return tabs;
   }, [
@@ -767,7 +758,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.playgroundSourceChapter,
     props.output,
     usingRemoteExecution,
-    isSicpEditor,
     dispatch,
     workspaceLocation,
     shouldShowDataVisualizer,
@@ -778,18 +768,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
-
-  const onLoadMethod = React.useCallback(
-    (editor: Ace.Editor) => {
-      const addFold = () => {
-        editor.getSession().addFold('    ', new Range(1, 0, props.prependLength!, 0));
-        editor.renderer.off('afterRender', addFold);
-      };
-
-      editor.renderer.on('afterRender', addFold);
-    },
-    [props.prependLength]
-  );
 
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {
@@ -911,7 +889,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
-    onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: props.playgroundSourceChapter,
     externalLibraryName,
     sourceVariant: props.playgroundSourceVariant,
@@ -941,7 +918,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       selectedTab === SideContentType.envVisualizer,
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
-    disableScrolling: isSicpEditor
+    disableScrolling: false
   };
 
   const sideBarProps: { tabs: SideBarTab[] } = React.useMemo(() => {
@@ -978,7 +955,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         autorunButtons,
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
-        isSicpEditor ? null : sessionButtons,
+        sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
@@ -1004,7 +981,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
+      workspaceLocation: 'playground',
       sideContentHeight: props.sideContentHeight
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
@@ -1020,7 +997,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
           autorunButtons,
           chapterSelect,
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
-          isSicpEditor ? null : sessionButtons,
+          sessionButtons,
           languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,
           githubButtons
@@ -1032,7 +1009,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
+      workspaceLocation: 'playground'
     }
   };
 
