@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        commands: [tsc, 'format:ci', eslint, build]
+        commands: [tsc, 'format:ci', eslint, build, test, test-coverage]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -29,23 +29,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run command
         run: yarn run ${{ matrix.commands }}
-  coveralls:
-    name: Check code coverage
-    needs: lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: yarn
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-      - name: Coveralls
-        run: yarn run test-coveralls
-      - name: Coveralls
+      - name: Coveralls - Upload test coverage report
+        if: ${{ matrix.commands == 'test-coverage'}}
         uses: coverallsapp/github-action@master
         with:
           path-to-lcov: lcov.info
