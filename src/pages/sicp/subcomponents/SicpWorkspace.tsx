@@ -9,7 +9,7 @@ import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useDispatch, useStore } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { AnyAction, Dispatch } from 'redux';
 import {
@@ -23,10 +23,7 @@ import {
   logoutGitHub,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
-import {
-  setEditorSessionId,
-  setSharedbConnected
-} from 'src/commons/collabEditing/CollabEditingActions';
+import { setSharedbConnected } from 'src/commons/collabEditing/CollabEditingActions';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -81,7 +78,6 @@ import {
   makeEnvVisualizerTabFrom,
   makeHtmlDisplayTabFrom,
   makeIntroductionTabFrom,
-  makeRemoteExecutionTabFrom,
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from 'src/pages/playground/PlaygroundTabs';
@@ -91,7 +87,6 @@ import {
   getLanguageConfig,
   InterpreterOutput,
   isSourceLanguage,
-  OverallState,
   ResultOutput,
   SALanguage
 } from '../../../commons/application/ApplicationTypes';
@@ -102,7 +97,6 @@ import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarCle
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarGoogleDriveButtons } from '../../../commons/controlBar/ControlBarGoogleDriveButtons';
-import { ControlBarSessionButtons } from '../../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarToggleFolderModeButton } from '../../../commons/controlBar/ControlBarToggleFolderModeButton';
@@ -142,7 +136,6 @@ export type PlaygroundProps = OwnProps &
   };
 
 export type OwnProps = {
-  isSicpEditor?: boolean;
   initialEditorValueHash?: string;
   prependLength?: number;
   handleCloseEditor?: () => void;
@@ -274,7 +267,6 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
   workspaceLocation = 'playground',
   ...props
 }) => {
-  const { isSicpEditor } = props;
   const { isMobileBreakpoint } = useResponsive();
   const propsRef = React.useRef(props);
   propsRef.current = props;
@@ -284,7 +276,6 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
   const history = useHistory();
-  const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
@@ -314,13 +305,6 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
     })
   );
 
-  const remoteExecutionTab: SideContentTab = React.useMemo(
-    () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
-    [deviceSecret]
-  );
-
-  const usingRemoteExecution =
-    useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
   const externalLibraryName = useTypedSelector(
@@ -338,7 +322,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
     );
   }, [props.editorSessionId]);
 
-  const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
+  const hash = props.initialEditorValueHash;
 
   React.useEffect(() => {
     if (!hash) {
@@ -477,10 +461,10 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
         key="autorun"
-        autorunDisabled={usingRemoteExecution}
+        autorunDisabled={false}
         sourceChapter={props.playgroundSourceChapter}
         // Disable pause for non-Source languages since they cannot be paused
-        pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
+        pauseDisabled={!isSourceLanguage(props.playgroundSourceChapter)}
         {...memoizedHandlers}
       />
     );
@@ -490,8 +474,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
     props.isEditorAutorun,
     props.isRunning,
     props.playgroundSourceChapter,
-    memoizedHandlers,
-    usingRemoteExecution
+    memoizedHandlers
   ]);
 
   const chapterSelectHandler = React.useCallback(
@@ -530,15 +513,14 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
         sourceChapter={props.playgroundSourceChapter}
         sourceVariant={props.playgroundSourceVariant}
         key="chapter"
-        disabled={usingRemoteExecution}
+        disabled={false}
       />
     ),
     [
       chapterSelectHandler,
       isFolderModeEnabled,
       props.playgroundSourceChapter,
-      props.playgroundSourceVariant,
-      usingRemoteExecution
+      props.playgroundSourceVariant
     ]
   );
 
@@ -642,37 +624,8 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
     [dispatch, props.stepLimit, workspaceLocation]
   );
 
-  const getEditorValue = React.useCallback(
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
-    [store, workspaceLocation]
-  );
-
-  const sessionButtons = React.useMemo(
-    () => (
-      <ControlBarSessionButtons
-        isFolderModeEnabled={isFolderModeEnabled}
-        editorSessionId={props.editorSessionId}
-        getEditorValue={getEditorValue}
-        handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-        sharedbConnected={props.sharedbConnected}
-        key="session"
-      />
-    ),
-    [
-      dispatch,
-      getEditorValue,
-      isFolderModeEnabled,
-      props.editorSessionId,
-      props.sharedbConnected,
-      workspaceLocation
-    ]
-  );
-
   const shareButton = React.useMemo(() => {
-    const queryString = isSicpEditor
-      ? Links.playground + '#' + props.initialEditorValueHash
-      : props.queryString;
+    const queryString = Links.playground + '#' + props.initialEditorValueHash;
     return (
       <ControlBarShareButton
         handleGenerateLz={() => dispatch(generateLzString())}
@@ -680,11 +633,11 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
         handleUpdateShortURL={s => dispatch(updateShortURL(s))}
         queryString={queryString}
         shortURL={props.shortURL}
-        isSicp={isSicpEditor}
+        isSicp
         key="share"
       />
     );
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, props.queryString, props.shortURL]);
+  }, [dispatch, props.initialEditorValueHash, props.shortURL]);
 
   const toggleFolderModeButton = React.useMemo(() => {
     return (
@@ -726,9 +679,9 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
   }, [dispatch, props.playgroundSourceChapter, props.playgroundSourceVariant]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
-  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer ?? false;
-  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer ?? false;
-  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer ?? false;
+  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
+  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer;
+  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
@@ -747,21 +700,15 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
       return tabs;
     }
 
-    if (!usingRemoteExecution) {
-      // Don't show the following when using remote execution
-      if (shouldShowDataVisualizer) {
-        tabs.push(dataVisualizerTab);
-      }
-      if (shouldShowEnvVisualizer) {
-        tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
-      }
-      if (shouldShowSubstVisualizer) {
-        tabs.push(makeSubstVisualizerTabFrom(props.output));
-      }
+    // Don't show the following when using remote execution
+    if (shouldShowDataVisualizer) {
+      tabs.push(dataVisualizerTab);
     }
-
-    if (!isSicpEditor) {
-      tabs.push(remoteExecutionTab);
+    if (shouldShowEnvVisualizer) {
+      tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
+    }
+    if (shouldShowSubstVisualizer) {
+      tabs.push(makeSubstVisualizerTabFrom(props.output));
     }
 
     return tabs;
@@ -769,14 +716,11 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
     playgroundIntroductionTab,
     props.playgroundSourceChapter,
     props.output,
-    usingRemoteExecution,
-    isSicpEditor,
     dispatch,
     workspaceLocation,
     shouldShowDataVisualizer,
     shouldShowEnvVisualizer,
-    shouldShowSubstVisualizer,
-    remoteExecutionTab
+    shouldShowSubstVisualizer
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -870,8 +814,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
 
   const replDisabled =
     props.playgroundSourceChapter === Chapter.HTML ||
-    props.playgroundSourceVariant === Variant.CONCURRENT ||
-    usingRemoteExecution;
+    props.playgroundSourceVariant === Variant.CONCURRENT;
 
   const setActiveEditorTabIndex = React.useCallback(
     (activeEditorTabIndex: number | null) =>
@@ -914,7 +857,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
-    onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
+    onLoad: props.prependLength ? onLoadMethod : undefined,
     sourceChapter: props.playgroundSourceChapter,
     externalLibraryName,
     sourceVariant: props.playgroundSourceVariant,
@@ -944,7 +887,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
       selectedTab === SideContentType.envVisualizer,
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
-    disableScrolling: isSicpEditor
+    disableScrolling: true
   };
 
   const sideBarProps: { tabs: SideBarTab[] } = React.useMemo(() => {
@@ -981,11 +924,10 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
         autorunButtons,
         props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
-        isSicpEditor ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
+        !isSourceLanguage(props.playgroundSourceChapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
@@ -1007,7 +949,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
+      workspaceLocation: 'sicp',
       sideContentHeight: props.sideContentHeight
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
@@ -1023,7 +965,6 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
           autorunButtons,
           chapterSelect,
           props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
-          isSicpEditor ? null : sessionButtons,
           languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,
           githubButtons
@@ -1035,7 +976,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = ({
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
+      workspaceLocation: 'sicp'
     }
   };
 

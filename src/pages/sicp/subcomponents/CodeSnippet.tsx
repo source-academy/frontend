@@ -55,7 +55,6 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const WorkspaceProps = {
     initialEditorValueHash: props.initialEditorValueHash,
     prependLength: props.prependLength,
-    isSicpEditor: true,
 
     handleCloseEditor: handleClose
   };
