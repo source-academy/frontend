@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        commands: [tsc, 'format:ci', eslint, build, test, test-coverage]
+        commands: [tsc, 'format:ci', eslint, build, test, test-coveralls]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
