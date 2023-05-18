@@ -466,6 +466,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     };
   }, [dispatch, workspaceLocation]);
 
+  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
+
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
@@ -475,9 +477,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         isRunning={props.isRunning}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
-        sourceChapter={props.playgroundSourceChapter}
+        sourceChapter={languageConfig.chapter}
         // Disable pause for non-Source languages since they cannot be paused
-        pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
+        pauseDisabled={usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)}
         {...memoizedHandlers}
       />
     );
@@ -486,7 +488,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.isDebugging,
     props.isEditorAutorun,
     props.isRunning,
-    props.playgroundSourceChapter,
+    languageConfig.chapter,
     memoizedHandlers,
     usingRemoteExecution
   ]);
@@ -524,7 +526,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
         isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={props.playgroundSourceChapter}
+        sourceChapter={languageConfig.chapter}
         sourceVariant={props.playgroundSourceVariant}
         key="chapter"
         disabled={usingRemoteExecution}
@@ -533,7 +535,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [
       chapterSelectHandler,
       isFolderModeEnabled,
-      props.playgroundSourceChapter,
+      languageConfig.chapter,
       props.playgroundSourceVariant,
       usingRemoteExecution
     ]
@@ -714,7 +716,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     dispatch(playgroundConfigLanguage(languageConfigToSet));
   }, [dispatch, props.playgroundSourceChapter, props.playgroundSourceVariant]);
 
-  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
   const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
