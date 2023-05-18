@@ -18,7 +18,7 @@ import {
   updateEditorValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
-import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
+import SicpWorkspace, { DispatchProps, StateProps } from './SicpWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   ..._.pick(
@@ -78,7 +78,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
  */
 const SicpWorkspaceContainer = (props: any) => {
   // FIXME: Remove any
-  const Component = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
+  const Component = withRouter(connect(mapStateToProps, mapDispatchToProps)(SicpWorkspace));
   return <Component workspaceLocation={workspaceLocation} {...props} />;
 };
 
