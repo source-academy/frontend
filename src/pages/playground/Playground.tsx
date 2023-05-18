@@ -527,7 +527,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         handleChapterSelect={chapterSelectHandler}
         isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={languageConfig.chapter}
-        sourceVariant={props.playgroundSourceVariant}
+        sourceVariant={languageConfig.variant}
         key="chapter"
         disabled={usingRemoteExecution}
       />
@@ -536,7 +536,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       chapterSelectHandler,
       isFolderModeEnabled,
       languageConfig.chapter,
-      props.playgroundSourceVariant,
+      languageConfig.variant,
       usingRemoteExecution
     ]
   );
@@ -907,7 +907,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: languageConfig.chapter,
     externalLibraryName,
-    sourceVariant: props.playgroundSourceVariant,
+    sourceVariant: languageConfig.variant,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
   };
@@ -927,7 +927,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       [dispatch, workspaceLocation]
     ),
     sourceChapter: languageConfig.chapter,
-    sourceVariant: props.playgroundSourceVariant,
+    sourceVariant: languageConfig.variant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
       selectedTab === SideContentType.substVisualizer ||
