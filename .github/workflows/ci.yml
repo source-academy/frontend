@@ -30,7 +30,7 @@ jobs:
       - name: Run command
         run: yarn run ${{ matrix.commands }}
       - name: Coveralls - Upload test coverage report
-        if: ${{ matrix.commands == 'test-coverage'}}
+        if: matrix.commands == 'test-coveralls'
         uses: coverallsapp/github-action@master
         with:
           path-to-lcov: lcov.info
