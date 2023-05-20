@@ -37,7 +37,7 @@ const ControlButton: React.FC<ControlButtonProps> = ({
   const buttonOptions: ButtonOptions = { ...defaultOptions, ...options };
   const iconElement = icon && <Icon icon={icon} color={buttonOptions.iconColor} />;
 
-  return (
+  const anchorButton: JSX.Element = (
     <AnchorButton
       disabled={isDisabled}
       fill={buttonOptions.fullWidth}
@@ -52,6 +52,17 @@ const ControlButton: React.FC<ControlButtonProps> = ({
       {label}
     </AnchorButton>
   );
+
+  if (buttonOptions.type) {
+    // Hacky fix to allow button types to work with anchor buttons
+    return (
+      <button type={buttonOptions.type} style={{ padding: '0px', border: 'none' }}>
+        {anchorButton}
+      </button>
+    );
+  }
+
+  return anchorButton;
 };
 
 export default ControlButton;
