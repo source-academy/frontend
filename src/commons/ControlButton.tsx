@@ -36,27 +36,13 @@ const ControlButton: React.FC<ControlButtonProps> = ({
 }) => {
   const buttonOptions: ButtonOptions = { ...defaultOptions, ...options };
   const iconElement = icon && <Icon icon={icon} color={buttonOptions.iconColor} />;
-
-  if (isDisabled) {
-    return (
-      <AnchorButton
-        disabled={isDisabled}
-        fill={buttonOptions.fullWidth}
-        intent={buttonOptions.intent}
-        minimal={buttonOptions.minimal}
-        className={buttonOptions.className}
-        type={buttonOptions.type}
-        onClick={onClick}
-        icon={!buttonOptions.iconOnRight && iconElement}
-        rightIcon={buttonOptions.iconOnRight && iconElement}
-      >
-        {label}
-      </AnchorButton>
-    );
-  }
+  // Refer to #2417 and #2422 for why we conditionally
+  // set the button component. See also:
+  // https://blueprintjs.com/docs/#core/components/button
+  const ButtonComponent = isDisabled ? AnchorButton : Button;
 
   return (
-    <Button
+    <ButtonComponent
       disabled={isDisabled}
       fill={buttonOptions.fullWidth}
       intent={buttonOptions.intent}
@@ -68,7 +54,7 @@ const ControlButton: React.FC<ControlButtonProps> = ({
       rightIcon={buttonOptions.iconOnRight && iconElement}
     >
       {label}
-    </Button>
+    </ButtonComponent>
   );
 };
 
