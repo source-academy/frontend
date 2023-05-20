@@ -1,4 +1,4 @@
-import { AnchorButton, Icon, IconName, Intent } from '@blueprintjs/core';
+import { AnchorButton, Button, Icon, IconName, Intent } from '@blueprintjs/core';
 import React from 'react';
 
 type ButtonOptions = {
@@ -37,8 +37,26 @@ const ControlButton: React.FC<ControlButtonProps> = ({
   const buttonOptions: ButtonOptions = { ...defaultOptions, ...options };
   const iconElement = icon && <Icon icon={icon} color={buttonOptions.iconColor} />;
 
-  const anchorButton: JSX.Element = (
-    <AnchorButton
+  if (isDisabled) {
+    return (
+      <AnchorButton
+        disabled={isDisabled}
+        fill={buttonOptions.fullWidth}
+        intent={buttonOptions.intent}
+        minimal={buttonOptions.minimal}
+        className={buttonOptions.className}
+        type={buttonOptions.type}
+        onClick={onClick}
+        icon={!buttonOptions.iconOnRight && iconElement}
+        rightIcon={buttonOptions.iconOnRight && iconElement}
+      >
+        {label}
+      </AnchorButton>
+    );
+  }
+
+  return (
+    <Button
       disabled={isDisabled}
       fill={buttonOptions.fullWidth}
       intent={buttonOptions.intent}
@@ -50,19 +68,8 @@ const ControlButton: React.FC<ControlButtonProps> = ({
       rightIcon={buttonOptions.iconOnRight && iconElement}
     >
       {label}
-    </AnchorButton>
+    </Button>
   );
-
-  if (buttonOptions.type) {
-    // Hacky fix to allow button types to work with anchor buttons
-    return (
-      <button type={buttonOptions.type} style={{ padding: '0px', border: 'none' }}>
-        {anchorButton}
-      </button>
-    );
-  }
-
-  return anchorButton;
 };
 
 export default ControlButton;
