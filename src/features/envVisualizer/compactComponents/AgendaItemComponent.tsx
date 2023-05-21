@@ -1,13 +1,13 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Rect } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
-import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { IHoverable, PrimitiveTypes } from '../../EnvVisualizerTypes';
-import { Text } from '../Text';
+import { Visible } from '../components/Visible';
+import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { IHoverable, PrimitiveTypes } from '../EnvVisualizerTypes';
+import { Text } from './Text';
 
-export class Literal extends Visible implements IHoverable {
+export class AgendaItemComponent extends Visible implements IHoverable {
   readonly text: Text;
   constructor(readonly value: PrimitiveTypes) {
     super();

@@ -5,7 +5,7 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
-import { Literal } from './compactComponents/agendaItems/Literal';
+import { AgendaItemComponent } from './compactComponents/AgendaItemComponent';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
@@ -323,7 +323,7 @@ export const isInstr = (command: AgendaItem): command is Instr => {
   return (command as Instr).instrType !== undefined;
 };
 
-export function getAgendaItemComponent(agendaItem: AgendaItem): Literal | undefined {
+export function getAgendaItemComponent(agendaItem: AgendaItem): AgendaItemComponent | undefined {
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
       case 'ExpressionStatement':
@@ -335,10 +335,10 @@ export function getAgendaItemComponent(agendaItem: AgendaItem): Literal | undefi
       case 'ForStatement':
         break;
       case 'Literal':
-        return new Literal(agendaItem.value as PrimitiveTypes);
+        return new AgendaItemComponent(agendaItem.value as PrimitiveTypes);
       default:
         // This should be the case of a literal value on the stash (neither instruction nor a node)
-        return new Literal(agendaItem as unknown as PrimitiveTypes);
+        return new AgendaItemComponent(agendaItem as unknown as PrimitiveTypes);
     }
   } else {
     switch (agendaItem.instrType) {
