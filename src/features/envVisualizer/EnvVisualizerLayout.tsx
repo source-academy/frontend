@@ -1,9 +1,11 @@
 import { Button, ButtonGroup, Checkbox } from '@blueprintjs/core';
+import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { Frame } from 'js-slang/dist/types';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
 import { Level as CompactLevel } from './compactComponents/Level';
+import { Stack } from './compactComponents/Stack';
 import { ArrayValue as CompactArrayValue } from './compactComponents/values/ArrayValue';
 import { FnValue as CompactFnValue } from './compactComponents/values/FnValue';
 import { GlobalFnValue as CompactGlobalFnValue } from './compactComponents/values/GlobalFnValue';
@@ -66,6 +68,11 @@ export class Layout {
   /** grid of frames */
   static grid: Grid;
   static compactLevels: CompactLevel[] = [];
+  /** the agenda and stash */
+  static agenda: Agenda;
+  static stash: Stash;
+  static agendaComponent: Stack;
+  static stashComponent: Stack;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -76,6 +83,7 @@ export class Layout {
   static currentLight: React.ReactNode;
   static currentCompactDark: React.ReactNode;
   static currentCompactLight: React.ReactNode;
+  static currentAgendaStash: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
@@ -118,11 +126,12 @@ export class Layout {
   }
 
   /** processes the runtime context from JS Slang */
-  static setContext(envTree: EnvTree): void {
+  static setContext(envTree: EnvTree, agenda: Agenda, stash: Stash): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentCompactLight = undefined;
     Layout.currentCompactDark = undefined;
+    Layout.currentAgendaStash = undefined;
     // clear/initialize data and value arrays
     Layout.values.forEach((v, d) => {
       v.reset();
@@ -136,6 +145,8 @@ export class Layout {
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(envTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
+    Layout.agenda = agenda;
+    Layout.stash = stash;
 
     // remove program environment and merge bindings into global env
     Layout.removeProgramEnv();
@@ -143,6 +154,8 @@ export class Layout {
     Layout.removeUnreferencedGlobalFns();
     // initialize levels and frames
     Layout.initializeGrid();
+    // initialize agenda and stash
+    Layout.initializeAgendaStash();
 
     // calculate height and width by considering lowest and widest level
     if (EnvVisualizer.getCompactLayout()) {
@@ -170,6 +183,10 @@ export class Layout {
         this.grid.width() + Config.CanvasPaddingX * 2
       );
     }
+  }
+  static initializeAgendaStash() {
+    this.agendaComponent = new Stack(this.agenda);
+    this.stashComponent = new Stack(this.stash);
   }
 
   /** remove program environment containing predefined functions */
@@ -447,6 +464,7 @@ export class Layout {
 
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
+      console.log('HO');
       return Layout.prevLayout;
     } else {
       const layout = (
@@ -534,6 +552,34 @@ export class Layout {
                     />
                   </Button>
                   <Button
+                    large={true}
+                    outlined={true}
+                    style={{
+                      backgroundColor: EnvVisualizer.getPrintableMode()
+                        ? Config.PRINT_BACKGROUND.toString()
+                        : Config.SA_BLUE.toString(),
+                      opacity: 0.8,
+                      borderColor: EnvVisualizer.getPrintableMode()
+                        ? Config.SA_BLUE.toString()
+                        : Config.PRINT_BACKGROUND.toString()
+                    }}
+                    onMouseUp={() => {
+                      EnvVisualizer.toggleAgendaStash();
+                      EnvVisualizer.redraw();
+                    }}
+                  >
+                    <Checkbox
+                      checked={EnvVisualizer.getAgendaStash()}
+                      label="Agenda and Stash"
+                      style={{
+                        marginBottom: '0px',
+                        color: EnvVisualizer.getPrintableMode()
+                          ? Config.SA_BLUE.toString()
+                          : Config.PRINT_BACKGROUND.toString()
+                      }}
+                    />
+                  </Button>
+                  <Button
                     outlined={true}
                     text={Layout.saveButtonText()}
                     large={true}
@@ -569,9 +615,14 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
+                  {!EnvVisualizer.getCompactLayout() &&
+                    !EnvVisualizer.getAgendaStash() &&
+                    Layout.grid.draw()}
                   {EnvVisualizer.getCompactLayout() &&
+                    !EnvVisualizer.getAgendaStash() &&
                     Layout.compactLevels.map(level => level.draw())}
+                  {EnvVisualizer.getAgendaStash() && Layout.agendaComponent.draw()}
+                  {EnvVisualizer.getAgendaStash() && Layout.stashComponent.draw()}
                 </Layer>
               </Stage>
             </div>
@@ -579,7 +630,9 @@ export class Layout {
         </div>
       );
       Layout.prevLayout = layout;
-      if (EnvVisualizer.getCompactLayout()) {
+      if (EnvVisualizer.getAgendaStash()) {
+        Layout.currentAgendaStash = layout;
+      } else if (EnvVisualizer.getCompactLayout()) {
         if (EnvVisualizer.getPrintableMode()) {
           Layout.currentCompactLight = layout;
         } else {

@@ -1,9 +1,11 @@
+import { AgendaItem, Instr, InstrType } from 'js-slang/dist/ec-evaluator/types';
 import { Environment } from 'js-slang/dist/types';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
+import { Literal } from './compactComponents/agendaItems/Literal';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
@@ -307,4 +309,44 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   } else {
     return [c];
   }
+}
+
+/**
+ * Typeguard for Instr to distinguish between program statements and instructions.
+ * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
+ * with circular dependencies so it is redefined here.
+ *
+ * @param command An AgendaItem
+ * @returns true if the AgendaItem is an instruction and false otherwise.
+ */
+export const isInstr = (command: AgendaItem): command is Instr => {
+  return (command as Instr).instrType !== undefined;
+};
+
+export function getAgendaItemComponent(agendaItem: AgendaItem): Literal | undefined {
+  if (!isInstr(agendaItem)) {
+    switch (agendaItem.type) {
+      case 'ExpressionStatement':
+        return getAgendaItemComponent(agendaItem.expression);
+      case 'BlockStatement':
+        break;
+      case 'WhileStatement':
+        break;
+      case 'ForStatement':
+        break;
+      case 'Literal':
+        return new Literal(agendaItem.value as PrimitiveTypes);
+      default:
+        // This should be the case of a literal value on the stash (neither instruction nor a node)
+        return new Literal(agendaItem as unknown as PrimitiveTypes);
+    }
+  } else {
+    switch (agendaItem.instrType) {
+      case InstrType.POP:
+        break;
+      case InstrType.PUSH_UNDEFINED_IF_NEEDED:
+        break;
+    }
+  }
+  return undefined;
 }
