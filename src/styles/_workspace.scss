@@ -914,7 +914,11 @@ $code-color-error: #ff4444;
       display: flex;
       align-items: center;
       margin-bottom: 10px;
-      background-color: rgb(56, 56, 56);
+      background-color: $cadet-color-1;
+    }
+
+    .hovered-tier {
+      border: 2px solid $cadet-color-5;
     }
 
     .tier h2 {
@@ -928,26 +932,6 @@ $code-color-error: #ff4444;
       color: #000000;
       font-size: 1rem;
       font-weight: normal;
-    }
-
-    #tier-s h2 {
-      background-color: rgb(255, 127, 127);
-    }
-
-    #tier-a h2 {
-      background-color: rgb(255, 223, 127);
-    }
-
-    #tier-b h2 {
-      background-color: rgb(255, 255, 127);
-    }
-
-    #tier-c h2 {
-      background-color: rgb(191, 255, 127);
-    }
-
-    #tier-d h2 {
-      background-color: rgb(127, 191, 255);
     }
 
     .item-container {
