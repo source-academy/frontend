@@ -2,7 +2,7 @@ import { Button, Card, Classes, Collapse, Elevation, Icon, Pre } from '@blueprin
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
 
@@ -19,13 +19,14 @@ type StateProps = {
   contestEntries: ContestEntry[];
 };
 
-const TIERS = ['S', 'A', 'B', 'C', 'D'] as const;
+const TIERS = [
+  { name: 'S', color: 'rgb(255, 127, 127)', score: 10 },
+  { name: 'A', color: 'rgb(255, 223, 127)', score: 7 },
+  { name: 'B', color: 'rgb(255, 255, 127)', score: 4 },
+  { name: 'C', color: 'rgb(191, 255, 127)', score: 2 },
+  { name: 'D', color: 'rgb(127, 191, 255)', score: 1 }
+];
 
-/**
- * Main contest voting tab
- * @param props contestEntries for student to vote for : ContestEntry[],
- * and behaviour for onClick: entryId => void
- */
 const SideContentContestVoting: React.FunctionComponent<SideContentContestVotingProps> = props => {
   const {
     contestEntries,
@@ -36,7 +37,11 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   } = props;
   const [showContestEntries, setShowContestEntries] = useState<boolean>(true);
   const [currentDraggedItem, setCurrentDraggedItem] = useState<HTMLElement | null>(null);
-  const [placeholder, setPlaceholder] = useState<HTMLElement | null>(null);
+  const [hoveredTier, setHoveredTier] = useState<string | null>(null);
+
+  const sortedContestEntries = useMemo(() => {
+    return [...contestEntries].sort((a, b) => a.submission_id - b.submission_id);
+  }, [contestEntries]);
 
   const handleDragStart: React.DragEventHandler = e => {
     setCurrentDraggedItem(e.currentTarget as HTMLElement);
@@ -46,117 +51,79 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   const handleDragEnd = useCallback(
     (contestEntry: ContestEntry): React.DragEventHandler =>
       e => {
-        (e.currentTarget as HTMLElement).style.opacity = '';
-
-        let tierElement: HTMLElement | null = e.currentTarget as HTMLElement;
-        while (tierElement && !tierElement.classList.contains('tier')) {
-          tierElement = tierElement.parentElement;
-        }
-
+        const tierElement = (e.currentTarget as HTMLElement).closest('.tier');
         if (tierElement) {
-          const tierMapping = {
-            'tier-d': 1,
-            'tier-c': 2,
-            'tier-b': 4,
-            'tier-a': 7,
-            'tier-s': 10
-          };
-          handleVotingSubmissionChange(contestEntry.submission_id, tierMapping[tierElement.id]);
-          console.log(tierMapping[tierElement.id]);
-        } else {
-          handleVotingSubmissionChange(contestEntry.submission_id, 0);
+          const tierName = tierElement.id.split('-')[1];
+          const tier = TIERS.find(t => t.name.toLowerCase() === tierName);
+          handleVotingSubmissionChange(contestEntry.submission_id, tier?.score || 0);
         }
+        setHoveredTier(null);
       },
     [handleVotingSubmissionChange]
   );
 
-  const handleDragOver: React.DragEventHandler = e => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-  };
+  }, []);
 
-  const createPlaceholder = (): HTMLElement => {
-    const el = document.createElement('div');
-    el.classList.add('placeholder');
-    setPlaceholder(el); // update the placeholder state with the new element
-    return el;
-  };
-
-  const handleDragEnter = useCallback(
-    (e: React.DragEvent): void => {
-      if (e.currentTarget.classList.contains('item-container')) {
-        if (!placeholder) {
-          setPlaceholder(createPlaceholder());
-        }
-
-        let insertBeforeElement: HTMLElement | null = null;
-
-        for (const child of Array.from((e.currentTarget as HTMLElement).children)) {
-          if (child === currentDraggedItem || child === placeholder) continue;
-
-          const childRect = (child as HTMLElement).getBoundingClientRect();
-          const childCenter = (childRect.left + childRect.right) / 2;
-
-          if (e.clientX < childCenter) {
-            insertBeforeElement = child as HTMLElement;
-            break;
-          }
-        }
-        if (insertBeforeElement && placeholder) {
-          e.currentTarget.insertBefore(placeholder as Node, insertBeforeElement);
-        } else if (placeholder) {
-          e.currentTarget.appendChild(placeholder as Node);
-        }
+  const handleDragEnter = useCallback((e: React.DragEvent): void => {
+    // added setTimeout here to give handleDragLeave time to execute if a dragenter event is about to be fired
+    setTimeout(() => {
+      const tierElement = (e.target as HTMLElement).closest('.tier');
+      if (tierElement) {
+        setHoveredTier(tierElement.id);
       }
-    },
-    [placeholder, currentDraggedItem]
-  );
+    }, 0);
+  }, []);
 
   const handleDragLeave = useCallback(
     (e: React.DragEvent): void => {
-      const container = e.currentTarget as HTMLElement;
-      if (
-        container.classList.contains('item-container') &&
-        !currentDraggedItem?.contains(e.relatedTarget as Node) &&
-        !placeholder?.contains(e.relatedTarget as Node) &&
-        container.contains(placeholder as Node)
-      ) {
-        container.removeChild(placeholder as Node);
+      const tierElement = (e.target as HTMLElement).closest('.tier');
+      if (tierElement && tierElement.id === hoveredTier) {
+        setHoveredTier(null);
       }
     },
-    [placeholder, currentDraggedItem]
+    [hoveredTier]
   );
 
   const handleDrop = useCallback(
     (e: React.DragEvent): void => {
       e.preventDefault();
-      const container = (e.currentTarget as HTMLElement).closest('.item-container');
-      if (container && container.contains(placeholder)) {
-        container.insertBefore(currentDraggedItem as Node, placeholder as Node);
-        container.removeChild(placeholder as Node);
+      const container = (e.target as HTMLElement).closest('.item-container');
+      if (container) {
+        container.appendChild(currentDraggedItem as Node);
       }
     },
-    [currentDraggedItem, placeholder]
+    [currentDraggedItem]
   );
 
-  const tierBoard = TIERS.map(tier => (
-    <div className="tier" key={`tier-${tier.toLowerCase()}`} id={`tier-${tier.toLowerCase()}`}>
-      <h2>{tier}</h2>
+  const tierBoard = useMemo(() => {
+    return TIERS.map(tier => (
       <div
-        className="item-container"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDragEnter={handleDragEnter}
-        onDrop={handleDrop}
-      ></div>
-    </div>
-  ));
+        className={classNames('tier', {
+          'hovered-tier': hoveredTier === `tier-${tier.name.toLowerCase()}`
+        })}
+        key={`tier-${tier.name.toLowerCase()}`}
+        id={`tier-${tier.name.toLowerCase()}`}
+      >
+        <h2 style={{ backgroundColor: tier.color }}>{tier.name}</h2>
+        <div
+          className="item-container"
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDragEnter={handleDragEnter}
+          onDrop={handleDrop}
+        ></div>
+      </div>
+    ));
+  }, [hoveredTier, handleDragOver, handleDragLeave, handleDragEnter, handleDrop]);
 
   const contestEntryCards = useMemo(
     () => (
       <div className="tier-list">
         {tierBoard}
-        {contestEntries.length > 0 ? (
+        {sortedContestEntries.length > 0 ? (
           <div className="tier" id="bank">
             <div
               className="item-container"
@@ -166,7 +133,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
               onDragEnter={handleDragEnter}
               onDrop={handleDrop}
             >
-              {contestEntries.map((contestEntry: ContestEntry, index) => (
+              {sortedContestEntries.map((contestEntry: ContestEntry, index) => (
                 <div
                   className={classNames('item', { wrong: !isValid })}
                   draggable={canSave}
@@ -196,19 +163,36 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         )}
       </div>
     ),
-    // determines when to re-render
     [
       isValid,
       canSave,
-      contestEntries,
+      sortedContestEntries,
       handleContestEntryClick,
+      handleDragEnd,
       handleDragEnter,
       handleDragLeave,
+      handleDragOver,
       handleDrop,
-      handleDragEnd,
       tierBoard
     ]
   );
+
+  useEffect(() => {
+    sortedContestEntries.forEach((entry, index) => {
+      if (entry.score !== null) {
+        const tierIndex = TIERS.findIndex(tier => tier.score === entry.score);
+        if (tierIndex !== -1) {
+          const tierElement = document.querySelector(
+            `#tier-${TIERS[tierIndex].name.toLowerCase()} .item-container`
+          );
+          const bankElement = document.querySelector(`#bank .item-container #item-${index + 1}`);
+          if (tierElement && bankElement) {
+            tierElement.appendChild(bankElement);
+          }
+        }
+      }
+    });
+  }, [contestEntryCards, sortedContestEntries]);
 
   return (
     <div className="ContestEntryVoting">
