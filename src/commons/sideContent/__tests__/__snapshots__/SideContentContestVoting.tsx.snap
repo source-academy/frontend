@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SideContentContestVotingContainer matches snapshot 1`] = `
-"<SideContentContestVotingContainer handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
-  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}}>
+"<SideContentContestVotingContainer handleContestEntryClick={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: Object [Object: null prototype] { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }} handleSave={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: Object [Object: null prototype] { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }} canSave={true} contestEntries={{...}}>
+  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: Object [Object: null prototype] { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}}>
     <div className=\\"ContestEntryVoting\\">
       <Blueprint4.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
         <button type=\\"button\\" className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: onClick]} disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
@@ -50,37 +50,37 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
           <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
             <div className=\\"tier-list\\">
               <div className=\\"tier\\" id=\\"tier-s\\">
-                <h2>
+                <h2 style={{...}}>
                   S
                 </h2>
-                <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
               </div>
               <div className=\\"tier\\" id=\\"tier-a\\">
-                <h2>
+                <h2 style={{...}}>
                   A
                 </h2>
-                <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
               </div>
               <div className=\\"tier\\" id=\\"tier-b\\">
-                <h2>
+                <h2 style={{...}}>
                   B
                 </h2>
-                <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
               </div>
               <div className=\\"tier\\" id=\\"tier-c\\">
-                <h2>
+                <h2 style={{...}}>
                   C
                 </h2>
-                <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
               </div>
               <div className=\\"tier\\" id=\\"tier-d\\">
-                <h2>
+                <h2 style={{...}}>
                   D
                 </h2>
-                <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
               </div>
               <div className=\\"tier\\" id=\\"bank\\">
-                <div className=\\"item-container\\" id=\\"items\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]}>
+                <div className=\\"item-container\\" id=\\"items\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]}>
                   <div className=\\"item\\" draggable={true} id=\\"item-1\\" onDragStart={[Function: handleDragStart]} onDragEnd={[Function (anonymous)]}>
                     <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                       <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
@@ -98,6 +98,17 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
                         <Component className=\\"contestentry-entryid\\">
                           <pre className=\\"bp4-code-block contestentry-entryid\\">
                             2
+                          </pre>
+                        </Component>
+                      </div>
+                    </Blueprint4.Card>
+                  </div>
+                  <div className=\\"item\\" draggable={true} id=\\"item-3\\" onDragStart={[Function: handleDragStart]} onDragEnd={[Function (anonymous)]}>
+                    <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
+                      <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
+                        <Component className=\\"contestentry-entryid\\">
+                          <pre className=\\"bp4-code-block contestentry-entryid\\">
+                            3
                           </pre>
                         </Component>
                       </div>
