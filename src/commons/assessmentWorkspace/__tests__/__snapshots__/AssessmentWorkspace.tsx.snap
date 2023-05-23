@@ -457,37 +457,37 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
                                                   <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
                                                     <div className=\\"tier-list\\">
                                                       <div className=\\"tier\\" id=\\"tier-s\\">
-                                                        <h2>
+                                                        <h2 style={{...}}>
                                                           S
                                                         </h2>
-                                                        <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                                                        <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
                                                       </div>
                                                       <div className=\\"tier\\" id=\\"tier-a\\">
-                                                        <h2>
+                                                        <h2 style={{...}}>
                                                           A
                                                         </h2>
-                                                        <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                                                        <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
                                                       </div>
                                                       <div className=\\"tier\\" id=\\"tier-b\\">
-                                                        <h2>
+                                                        <h2 style={{...}}>
                                                           B
                                                         </h2>
-                                                        <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                                                        <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
                                                       </div>
                                                       <div className=\\"tier\\" id=\\"tier-c\\">
-                                                        <h2>
+                                                        <h2 style={{...}}>
                                                           C
                                                         </h2>
-                                                        <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                                                        <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
                                                       </div>
                                                       <div className=\\"tier\\" id=\\"tier-d\\">
-                                                        <h2>
+                                                        <h2 style={{...}}>
                                                           D
                                                         </h2>
-                                                        <div className=\\"item-container\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+                                                        <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
                                                       </div>
                                                       <div className=\\"tier\\" id=\\"bank\\">
-                                                        <div className=\\"item-container\\" id=\\"items\\" onDragOver={[Function: handleDragOver]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]}>
+                                                        <div className=\\"item-container\\" id=\\"items\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]}>
                                                           <div className=\\"item\\" draggable={true} id=\\"item-1\\" onDragStart={[Function: handleDragStart]} onDragEnd={[Function (anonymous)]}>
                                                             <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
                                                               <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
