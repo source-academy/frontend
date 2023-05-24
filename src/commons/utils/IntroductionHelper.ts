@@ -1,6 +1,11 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { styliseSublanguage, sublanguages } from '../application/ApplicationTypes';
+import {
+  pyLanguages,
+  schemeLanguages,
+  sourceLanguages,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `
@@ -15,6 +20,8 @@ In the editor on the left, you can use the [_Ace keyboard shortcuts_](${Links.ac
 and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
+
+const ALL_LANGUAGES = [...schemeLanguages, ...sourceLanguages, ...pyLanguages];
 
 const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) => {
   if (sourceChapter === Chapter.FULL_JS) {
@@ -36,7 +43,7 @@ const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) 
 
   // `.includes` and `.find` are not used here since we are dealing with reference types
   if (
-    sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
+    ALL_LANGUAGES.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
       .length === 0
   ) {
     return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';

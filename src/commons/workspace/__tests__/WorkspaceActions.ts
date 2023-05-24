@@ -1,6 +1,10 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { createDefaultWorkspace, SALanguage } from '../../application/ApplicationTypes';
+import {
+  createDefaultWorkspace,
+  SALanguage,
+  SupportedLanguage
+} from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
@@ -46,7 +50,8 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  updateSublanguage
+  updateSublanguage,
+  updateSubmissionsTableFilters
 } from '../WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
@@ -90,6 +95,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   WorkspaceLocation
 } from '../WorkspaceTypes';
 
@@ -541,6 +547,30 @@ test('resetWorkspace generates correct action object with provided workspace', (
   });
 });
 
+test('updateSubmissionsTableFilters generates correct action object', () => {
+  const columnFilters = [
+    {
+      id: 'groupName',
+      value: '1A'
+    },
+    {
+      id: 'assessmentType',
+      value: 'Missions'
+    }
+  ];
+  const globalFilter = 'runes';
+  const action = updateSubmissionsTableFilters({ columnFilters, globalFilter });
+  expect(action).toEqual({
+    type: UPDATE_SUBMISSIONS_TABLE_FILTERS,
+    payload: {
+      filters: {
+        columnFilters,
+        globalFilter
+      }
+    }
+  });
+});
+
 test('updateCurrentAssessmentId generates correct action object', () => {
   const assessmentId = 2;
   const questionId = 4;
@@ -595,7 +625,9 @@ test('changeSublanguage generates correct action object', () => {
   const sublang: SALanguage = {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
-    displayName: 'Source \xa72'
+    displayName: 'Source \xa72',
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: {}
   };
   const action = changeSublanguage(sublang);
   expect(action).toEqual({
@@ -610,7 +642,9 @@ test('updateChapter generates correct action object', () => {
   const sublang: SALanguage = {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
-    displayName: 'Source \xa72'
+    displayName: 'Source \xa72',
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: {}
   };
   const action = updateSublanguage(sublang);
   expect(action).toEqual({

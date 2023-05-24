@@ -293,6 +293,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+    // Reset old context.errors
+    context.errors = [];
     const codeFilePath = '/code.js';
     const codeFiles = {
       [codeFilePath]: code
@@ -347,9 +349,14 @@ export default function* WorkspaceSaga(): SagaIterator {
       if (newHighlightedLines.length === 0) {
         highlightClean();
       } else {
-        newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
-          highlightLine(startRow)
-        );
+        try {
+          newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
+            highlightLine(startRow)
+          );
+        } catch (e) {
+          // Error most likely caused by trying to highlight the lines of the prelude
+          // in Env Viz. Can be ignored.
+        }
       }
       yield;
     }
@@ -545,6 +552,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[start, end]]));
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
@@ -998,6 +1006,35 @@ export function* evalCode(
     }
   }
 
+  // For the environment visualiser slider
+  const envIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingEnv
+      )
+    : false;
+  const needUpdateEnv: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .updateEnv
+      )
+    : false;
+  const envSteps: number = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .envSteps
+      )
+    : -1;
+  const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
+  if (envActiveAndCorrectChapter) {
+    context.executionMethod = 'ec-evaluator';
+  }
+  // When envSteps is -1, the entire code is run from the start.
+  context.runtime.envSteps = needUpdateEnv ? -1 : envSteps;
+
   const entrypointCode = files[entrypointFilePath];
 
   function call_variant(variant: Variant) {
@@ -1159,6 +1196,14 @@ export function* evalCode(
     yield put(
       notifyProgramEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
     );
+  }
+
+  // The first time the code is executed using the explicit control evaluator,
+  // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
+  if (context.executionMethod === 'ec-evaluator' && needUpdateEnv) {
+    yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
+    yield put(actions.toggleUpdateEnv(false, workspaceLocation));
+    yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
   }
 }
 

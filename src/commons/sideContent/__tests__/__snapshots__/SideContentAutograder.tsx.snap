@@ -54,8 +54,8 @@ exports[`Autograder renders autograder results with different statuses correctly
       </div>
     </Blueprint4.Collapse>
     <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
+      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint4.Icon icon={{...}}>
             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -69,8 +69,8 @@ exports[`Autograder renders autograder results with different statuses correctly
             Autograder Results
           </span>
           <Blueprint4.Icon icon={false} />
-        </a>
-      </Blueprint4.AnchorButton>
+        </button>
+      </Blueprint4.Button>
     </ControlButton>
     <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -387,8 +387,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       </div>
     </Blueprint4.Collapse>
     <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
+      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint4.Icon icon={{...}}>
             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -402,8 +402,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
             Autograder Results
           </span>
           <Blueprint4.Icon icon={false} />
-        </a>
-      </Blueprint4.AnchorButton>
+        </button>
+      </Blueprint4.Button>
     </ControlButton>
     <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -595,8 +595,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       </div>
     </Blueprint4.Collapse>
     <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
+      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint4.Icon icon={{...}}>
             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -610,8 +610,8 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
             Autograder Results
           </span>
           <Blueprint4.Icon icon={false} />
-        </a>
-      </Blueprint4.AnchorButton>
+        </button>
+      </Blueprint4.Button>
     </ControlButton>
     <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -850,8 +850,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
       </div>
     </Blueprint4.Collapse>
     <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
+      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint4.Icon icon={{...}}>
             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -865,8 +865,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
             Autograder Results
           </span>
           <Blueprint4.Icon icon={false} />
-        </a>
-      </Blueprint4.AnchorButton>
+        </button>
+      </Blueprint4.Button>
     </ControlButton>
     <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp4-collapse\\" style={{...}}>
@@ -1081,8 +1081,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
       </div>
     </Blueprint4.Collapse>
     <ControlButton label=\\"Autograder Results\\" icon=\\"caret-down\\" onClick={[Function (anonymous)]} options={{...}}>
-      <Blueprint4.AnchorButton disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
-        <a role=\\"button\\" disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={0} href={[undefined]}>
+      <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} onClick={[Function (anonymous)]} icon={{...}} rightIcon={false}>
+        <button type={[undefined]} disabled={false} className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint4.Icon icon={{...}}>
             <Blueprint4.Icon icon=\\"caret-down\\" color={[undefined]}>
               <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
@@ -1096,8 +1096,8 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
             Autograder Results
           </span>
           <Blueprint4.Icon icon={false} />
-        </a>
-      </Blueprint4.AnchorButton>
+        </button>
+      </Blueprint4.Button>
     </ControlButton>
     <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
       <div className=\\"bp4-collapse\\" style={{...}}>

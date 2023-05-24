@@ -1,11 +1,12 @@
 import { fireEvent } from '@testing-library/react';
 import { mount } from 'enzyme';
+import { stringify } from 'js-slang/dist/utils/stringify';
 
 import SideContentHtmlDisplay from '../SideContentHtmlDisplay';
 
 test('HTML Display renders correctly', () => {
   const mockProps = {
-    content: '<p>Hello World!</p>',
+    content: stringify('<p>Hello World!</p>'),
     handleAddHtmlConsoleError: (errorMsg: string) => {}
   };
   const htmlDisplay = mount(<SideContentHtmlDisplay {...mockProps} />);
@@ -16,7 +17,7 @@ describe('HTML Display postMessage Listener', () => {
   const mockHandleAddHtmlConsoleError = jest.fn((errorMsg: string) => {});
 
   const mockProps = {
-    content: '<p>Hello World!</p>',
+    content: stringify('<p>Hello World!</p>'),
     handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError
   };
 

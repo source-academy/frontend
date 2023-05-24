@@ -6,16 +6,17 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 
 import {
-  defaultLanguages,
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
+  pyLanguages,
   SALanguage,
+  schemeLanguages,
   sourceLanguages,
-  styliseSublanguage,
-  variantLanguages
+  styliseSublanguage
 } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
+import { useTypedSelector } from '../utils/Hooks';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
@@ -30,21 +31,22 @@ type StateProps = {
   disabled?: boolean;
 };
 
-const chapterListRenderer: ItemListRenderer<SALanguage> = ({ itemsParentRef, renderItem }) => {
-  const defaultChoices = defaultLanguages.map(renderItem);
-  const variantChoices = variantLanguages.map(renderItem);
-  const fullJSChoice = renderItem(fullJSLanguage, 0);
-  const fullTSChoice = renderItem(fullTSLanguage, 0);
-  const htmlChoice = renderItem(htmlLanguage, 0);
+const chapterListRenderer: ItemListRenderer<SALanguage> = ({
+  itemsParentRef,
+  renderItem,
+  items
+}) => {
+  const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
+  const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
+
   return (
     <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {defaultChoices}
-      {Constants.playgroundOnly && fullJSChoice}
-      {Constants.playgroundOnly && fullTSChoice}
-      {Constants.playgroundOnly && htmlChoice}
-      <MenuItem key="variant-menu" text="Variants" icon="cog">
-        {variantChoices}
-      </MenuItem>
+      {defaultChoices.map(renderItem)}
+      {variantChoices.length > 0 && (
+        <MenuItem key="variant-menu" text="Variants" icon="cog">
+          {variantChoices.map(renderItem)}
+        </MenuItem>
+      )}
     </Menu>
   );
 };
@@ -76,9 +78,18 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
+  const selectedLang = useTypedSelector(store => store.playground.lang);
+
+  const choices = [
+    ...sourceLanguages,
+    ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
+    ...schemeLanguages,
+    ...pyLanguages
+  ];
+
   return (
     <ChapterSelectComponent
-      items={sourceLanguages}
+      items={choices.filter(({ mainLanguage }) => mainLanguage === selectedLang)}
       onItemSelect={handleChapterSelect}
       itemRenderer={chapterRenderer(isFolderModeEnabled)}
       itemListRenderer={chapterListRenderer}

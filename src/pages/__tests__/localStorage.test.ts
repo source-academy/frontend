@@ -32,6 +32,8 @@ const mockShortDefaultState: SavedState = {
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
   playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
+  playgroundLang: defaultState.playground.lang,
+  playgroundLanguage: defaultState.playground.languageConfig,
   playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary
 };
 
