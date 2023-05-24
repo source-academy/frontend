@@ -56,7 +56,7 @@ import {
   updateEnvStepsTotal,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
-import { EditorTabState, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import {
   githubOpenFile,
@@ -79,7 +79,6 @@ import {
 import {
   getDefaultFilePath,
   getLanguageConfig,
-  InterpreterOutput,
   isSourceLanguage,
   OverallState,
   ResultOutput,
@@ -160,26 +159,12 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  editorTabs: EditorTabState[];
-  programPrependValue: string;
-  programPostpendValue: string;
-  editorSessionId: string;
-  execTime: number;
-  isEditorAutorun: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  output: InterpreterOutput[];
   queryString?: string;
   shortURL?: string;
-  replValue: string;
-  sideContentHeight?: number;
   playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
   courseSourceChapter?: number;
   courseSourceVariant?: Variant;
-  stepLimit: number;
-  sharedbConnected: boolean;
   usingEnv: boolean;
   usingSubst: boolean;
   persistenceUser: string | undefined;
@@ -276,6 +261,24 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const propsRef = React.useRef(props);
   propsRef.current = props;
 
+  const workspaceState = useTypedSelector(state => state.workspaces[workspaceLocation]);
+  const stateRef = React.useRef({
+    editorTabs: workspaceState.editorTabs,
+    programPrependValue: workspaceState.programPrependValue,
+    programPostpendValue: workspaceState.programPostpendValue,
+    editorSessionId: workspaceState.editorSessionId,
+    execTime: workspaceState.execTime,
+    stepLimit: workspaceState.stepLimit,
+    isEditorAutorun: workspaceState.isEditorAutorun,
+    isRunning: workspaceState.isRunning,
+    isDebugging: workspaceState.isDebugging,
+    enableDebugging: workspaceState.enableDebugging,
+    output: workspaceState.output,
+    replValue: workspaceState.replValue,
+    sideContentHeight: workspaceState.sideContentHeight,
+    sharedbConnected: workspaceState.sharedbConnected
+  });
+
   const dispatch = useDispatch();
 
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
@@ -306,7 +309,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const [sessionId, setSessionId] = React.useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: propsRef.current.editorTabs[0]?.value ?? '',
+      editorValue: stateRef.current.editorTabs[0]?.value ?? '',
       chapter: propsRef.current.playgroundSourceChapter
     })
   );
@@ -324,16 +327,17 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     state => state.workspaces.playground.externalLibrary
   );
 
+  const { editorSessionId } = stateRef.current;
   React.useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorValue: propsRef.current.editorTabs[0]?.value ?? '',
+        editorValue: stateRef.current.editorTabs[0]?.value ?? '',
         chapter: propsRef.current.playgroundSourceChapter
       })
     );
-  }, [props.editorSessionId]);
+  }, [editorSessionId]);
 
   const hash = isSicpEditor
     ? propsRef.current.initialEditorValueHash
@@ -470,9 +474,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return (
       <ControlBarAutorunButtons
         isEntrypointFileDefined={activeEditorTabIndex !== null}
-        isDebugging={propsRef.current.isDebugging}
-        isEditorAutorun={propsRef.current.isEditorAutorun}
-        isRunning={propsRef.current.isRunning}
+        isDebugging={stateRef.current.isDebugging}
+        isEditorAutorun={stateRef.current.isEditorAutorun}
+        isRunning={stateRef.current.isRunning}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
         sourceChapter={languageConfig.chapter}
@@ -547,7 +551,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       selectedTab === SideContentType.substVisualizer ? null : (
         <ControlBarEvalButton
           handleReplEval={propsRef.current.handleReplEval}
-          isRunning={propsRef.current.isRunning}
+          isRunning={stateRef.current.isRunning}
           key="eval_repl"
         />
       ),
@@ -607,7 +611,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const executionTime = React.useMemo(
     () => (
       <ControlBarExecutionTime
-        execTime={propsRef.current.execTime}
+        execTime={stateRef.current.execTime}
         handleChangeExecTime={propsRef.current.handleChangeExecTime}
         key="execution_time"
       />
@@ -618,7 +622,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const stepperStepLimit = React.useMemo(
     () => (
       <ControlBarStepLimit
-        stepLimit={propsRef.current.stepLimit}
+        stepLimit={stateRef.current.stepLimit}
         handleChangeStepLimit={limit => dispatch(changeStepLimit(limit, workspaceLocation))}
         handleOnBlurAutoScale={limit => {
           limit % 2 === 0
@@ -641,10 +645,10 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     () => (
       <ControlBarSessionButtons
         isFolderModeEnabled={isFolderModeEnabled}
-        editorSessionId={propsRef.current.editorSessionId}
+        editorSessionId={stateRef.current.editorSessionId}
         getEditorValue={getEditorValue}
         handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-        sharedbConnected={propsRef.current.sharedbConnected}
+        sharedbConnected={stateRef.current.sharedbConnected}
         key="session"
       />
     ),
@@ -672,7 +676,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return (
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
-        isSessionActive={propsRef.current.editorSessionId !== ''}
+        isSessionActive={stateRef.current.editorSessionId !== ''}
         isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
@@ -706,9 +710,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     const currentLang = languageConfig.chapter;
     if (currentLang === Chapter.HTML) {
       // For HTML Chapter, HTML Display tab is added only after code is run
-      if (propsRef.current.output.length > 0 && propsRef.current.output[0].type === 'result') {
+      if (stateRef.current.output.length > 0 && stateRef.current.output[0].type === 'result') {
         tabs.push(
-          makeHtmlDisplayTabFrom(propsRef.current.output[0] as ResultOutput, errorMsg =>
+          makeHtmlDisplayTabFrom(stateRef.current.output[0] as ResultOutput, errorMsg =>
             dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
           )
         );
@@ -725,7 +729,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
       }
       if (shouldShowSubstVisualizer) {
-        tabs.push(makeSubstVisualizerTabFrom(propsRef.current.output));
+        tabs.push(makeSubstVisualizerTabFrom(stateRef.current.output));
       }
     }
 
@@ -846,14 +850,14 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   );
 
   const editorContainerProps: NormalEditorContainerProps = {
-    ..._.pick(props, 'editorSessionId', 'isEditorAutorun'),
+    ..._.pick(stateRef.current, 'editorSessionId', 'isEditorAutorun'),
     editorVariant: 'normal',
     baseFilePath: WORKSPACE_BASE_PATHS[workspaceLocation],
     isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
-    editorTabs: propsRef.current.editorTabs.map(convertEditorTabStateToProps),
+    editorTabs: stateRef.current.editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: React.useCallback(
       (cursorPosition: Position) =>
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
@@ -885,7 +889,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   };
 
   const replProps = {
-    ..._.pick(props, 'output', 'replValue', 'handleReplEval', 'usingSubst'),
+    ..._.pick(props, 'handleReplEval', 'usingSubst'),
+    output: stateRef.current.output,
+    replValue: stateRef.current.replValue,
     handleBrowseHistoryDown: React.useCallback(
       () => dispatch(browseReplHistoryDown(workspaceLocation)),
       [dispatch, workspaceLocation]
@@ -961,7 +967,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     ),
     replProps: replProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: propsRef.current.sideContentHeight,
+    sideContentHeight: stateRef.current.sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
@@ -970,7 +976,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         afterDynamicTabs: []
       },
       workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
-      sideContentHeight: propsRef.current.sideContentHeight
+      sideContentHeight: stateRef.current.sideContentHeight
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };

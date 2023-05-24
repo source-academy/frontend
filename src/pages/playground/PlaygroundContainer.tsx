@@ -1,8 +1,8 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { connect,MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators,Dispatch } from 'redux';
 
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import {
@@ -19,25 +19,7 @@ import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import Playground, { DispatchProps, StateProps } from './Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  ..._.pick(
-    state.workspaces.playground,
-    'editorTabs',
-    'programPrependValue',
-    'programPostpendValue',
-    'editorSessionId',
-    'execTime',
-    'stepLimit',
-    'isEditorAutorun',
-    'isRunning',
-    'isDebugging',
-    'enableDebugging',
-    'output',
-    'replValue',
-    'sideContentHeight',
-    'sharedbConnected',
-    'usingSubst',
-    'usingEnv'
-  ),
+  ..._.pick(state.workspaces.playground, 'usingSubst', 'usingEnv'),
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
   playgroundSourceChapter: state.workspaces.playground.context.chapter,
