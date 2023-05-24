@@ -49,8 +49,6 @@ export async function promptWithChoices(
   choices: string[]
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-  
-  
   const promptPartitions = Math.ceil(choices.length / 5);
   const promptHeight = choices.length > 5 ? 5 : choices.length;
 
@@ -103,7 +101,7 @@ export async function promptWithChoices(
             resolve(index);
           }
         }).setPosition(
-          screenSize.x - PromptConstants.width / 2 - (PromptConstants.width * Math.floor(index / 5)),
+          screenSize.x - PromptConstants.width / 2 - (PromptConstants.width * (promptPartitions - Math.floor((choices.length - index) / 5 - 1))),
           (buttonPositions[index][1] % (5 * PromptConstants.yInterval)) + promptHeaderBg.getBounds().bottom + 75
         )
       )
