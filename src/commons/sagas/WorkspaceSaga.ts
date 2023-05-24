@@ -293,6 +293,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+    // Reset old context.errors
+    context.errors = [];
     const codeFilePath = '/code.js';
     const codeFiles = {
       [codeFilePath]: code
@@ -991,6 +993,20 @@ export function* evalCode(
             .usingSubst
       )
     : false;
+  const stepLimit: number = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
+  );
+  const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
+  if (substActiveAndCorrectChapter) {
+    context.executionMethod = 'interpreter';
+    // icon to blink
+    const icon = document.getElementById(SideContentType.substVisualizer + '-icon');
+    if (icon) {
+      icon.classList.add('side-content-tab-alert');
+    }
+  }
+
+  // For the environment visualiser slider
   const envIsActive: boolean = correctWorkspace
     ? yield select(
         (state: OverallState) =>
@@ -1012,25 +1028,12 @@ export function* evalCode(
             .envSteps
       )
     : -1;
-  const stepLimit: number = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
-  );
-  const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
-  if (substActiveAndCorrectChapter) {
-    context.executionMethod = 'interpreter';
-    // icon to blink
-    const icon = document.getElementById(SideContentType.substVisualizer + '-icon');
-    if (icon) {
-      icon.classList.add('side-content-tab-alert');
-    }
-  }
   const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
   if (envActiveAndCorrectChapter) {
     context.executionMethod = 'ec-evaluator';
-    context.runtime.envSteps = needUpdateEnv ? -1 : envSteps;
-  } else {
-    context.runtime.envSteps = -1;
   }
+  // When envSteps is -1, the entire code is run from the start.
+  context.runtime.envSteps = needUpdateEnv ? -1 : envSteps;
 
   const entrypointCode = files[entrypointFilePath];
 
@@ -1195,12 +1198,12 @@ export function* evalCode(
     );
   }
 
-  if (envActiveAndCorrectChapter) {
-    if (needUpdateEnv) {
-      yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
-      yield put(actions.toggleUpdateEnv(false, workspaceLocation));
-      yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
-    }
+  // The first time the code is executed using the explicit control evaluator,
+  // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
+  if (context.executionMethod === 'ec-evaluator' && needUpdateEnv) {
+    yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
+    yield put(actions.toggleUpdateEnv(false, workspaceLocation));
+    yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
   }
 }
 
