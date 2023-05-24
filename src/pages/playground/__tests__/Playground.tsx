@@ -10,22 +10,8 @@ import { assertType } from '../../../commons/utils/TypeHelper';
 import Playground, { handleHash, PlaygroundProps } from '../Playground';
 
 const baseProps = assertType<PlaygroundProps>()({
-  execTime: 1000,
-  stepLimit: 1000,
-  isRunning: false,
-  isDebugging: false,
-  enableDebugging: true,
-  editorTabs: [{ value: '', highlightedLines: [], breakpoints: [] }],
-  programPrependValue: '',
-  programPostpendValue: '',
-  editorSessionId: '',
-  isEditorAutorun: false,
-  sideContentHeight: 40,
   playgroundSourceChapter: Chapter.SOURCE_2,
   playgroundSourceVariant: Variant.DEFAULT,
-  output: [],
-  replValue: '',
-  sharedbConnected: false,
   usingSubst: false,
   usingEnv: false,
   persistenceUser: undefined,
@@ -44,17 +30,34 @@ const baseProps = assertType<PlaygroundProps>()({
 
 const testValueProps: PlaygroundProps = {
   ...baseProps,
-  ...mockRouterProps('/academy', {}),
-  editorTabs: [{ ...baseProps.editorTabs[0], value: 'Test value' }]
+  ...mockRouterProps('/academy', {})
 };
 
 const playgroundLinkProps: PlaygroundProps = {
   ...baseProps,
-  ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
-  editorTabs: [{ ...baseProps.editorTabs[0], value: 'This should not show up' }]
+  ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {})
 };
 
-const mockStore = mockInitialStore();
+const mockStore = mockInitialStore({
+  workspaces: {
+    playground: {
+      execTime: 1000,
+      stepLimit: 1000,
+      isRunning: false,
+      isDebugging: false,
+      enableDebugging: true,
+      editorTabs: [{ value: '', highlightedLines: [], breakpoints: [] }],
+      programPrependValue: '',
+      programPostpendValue: '',
+      editorSessionId: '',
+      isEditorAutorun: false,
+      sideContentHeight: 40,
+      output: [],
+      replValue: '',
+      sharedbConnected: false
+    }
+  }
+});
 
 test('Playground renders correctly', () => {
   const app = (
