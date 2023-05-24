@@ -50,9 +50,6 @@ export async function promptWithChoices(
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 
-  const promptPartitions = Math.ceil(choices.length / 5);
-  const promptHeight = choices.length > 5 ? 5 : choices.length;
-
   const header = new Phaser.GameObjects.Text(
     scene,
     screenSize.x - PromptConstants.textPad,
@@ -64,7 +61,7 @@ export async function promptWithChoices(
     scene,
     screenSize.x,
     PromptConstants.y - PromptConstants.textPad,
-    PromptConstants.width * promptPartitions,
+    PromptConstants.width,
     header.getBounds().bottom * 0.5 + PromptConstants.textPad,
     HexColor.darkBlue,
     0.8
@@ -73,8 +70,8 @@ export async function promptWithChoices(
     scene,
     screenSize.x,
     PromptConstants.y - PromptConstants.textPad,
-    PromptConstants.width * promptPartitions,
-    promptHeaderBg.getBounds().bottom * 0.5 + (promptHeight + 0.5) * PromptConstants.yInterval,
+    PromptConstants.width,
+    promptHeaderBg.getBounds().bottom * 0.5 + (choices.length + 0.5) * PromptConstants.yInterval,
     HexColor.lightBlue,
     0.2
   ).setOrigin(1.0, 0.0);
@@ -102,12 +99,8 @@ export async function promptWithChoices(
             resolve(index);
           }
         }).setPosition(
-          screenSize.x -
-            PromptConstants.width / 2 -
-            PromptConstants.width * (promptPartitions - Math.floor(index / 5) - 1),
-          (buttonPositions[index][1] % (5 * PromptConstants.yInterval)) +
-            promptHeaderBg.getBounds().bottom +
-            75
+          screenSize.x - PromptConstants.width / 2,
+          buttonPositions[index][1] + promptHeaderBg.getBounds().bottom + 75
         )
       )
     );
