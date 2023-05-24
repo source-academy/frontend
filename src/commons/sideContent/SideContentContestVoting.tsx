@@ -68,7 +68,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   }, []);
 
   const handleDragEnter = useCallback((e: React.DragEvent): void => {
-    // added setTimeout here to give handleDragLeave time to execute if a dragenter event is about to be fired
+    // Added setTimeout here to give handleDragLeave time to execute if a dragenter event is about to be fired
     setTimeout(() => {
       const tierElement = (e.target as HTMLElement).closest('.tier');
       if (tierElement) {
@@ -114,7 +114,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
           onDragLeave={handleDragLeave}
           onDragEnter={handleDragEnter}
           onDrop={handleDrop}
-        ></div>
+        />
       </div>
     ));
   }, [hoveredTier, handleDragOver, handleDragLeave, handleDragEnter, handleDrop]);
@@ -177,10 +177,32 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     ]
   );
 
+  // Function for mapping legacy (and current) contest votes to the new tier system
+  const mapTier = (entryScore: number) => {
+    if (entryScore < 2) {
+      return (tierScore: number) => tierScore === 1;
+    }
+    if (entryScore >= 2 && entryScore < 4) {
+      return (tierScore: number) => tierScore === 2;
+    }
+    if (entryScore >= 4 && entryScore < 7) {
+      return (tierScore: number) => tierScore === 4;
+    }
+    if (entryScore >= 7 && entryScore < 10) {
+      return (tierScore: number) => tierScore === 7;
+    }
+    if (entryScore >= 10) {
+      return (tierScore: number) => tierScore === 10;
+    }
+    return (tierScore: number) => false;
+  };
+
+  // Renders contest entries in the correct tier using saved score upon initial render
   useEffect(() => {
     sortedContestEntries.forEach((entry, index) => {
-      if (entry.score !== null) {
-        const tierIndex = TIERS.findIndex(tier => tier.score === entry.score);
+      if (entry.score !== undefined && entry.score !== null) {
+        const entryScore = entry.score as number;
+        const tierIndex = TIERS.findIndex(tier => mapTier(entryScore)(tier.score));
         if (tierIndex !== -1) {
           const tierElement = document.querySelector(
             `#tier-${TIERS[tierIndex].name.toLowerCase()} .item-container`
