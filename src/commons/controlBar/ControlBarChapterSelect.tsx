@@ -78,10 +78,13 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
-  const selectedLang = useTypedSelector(store => store.playground.lang);
+  const selectedLang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
 
   const choices = [
     ...sourceLanguages,
+    // Full JS/TS version uses eval(), which is a huge security risk, so we only enable
+    // for public deployments. HTML, while sandboxed, is treated the same way to be safe.
+    // See https://github.com/source-academy/frontend/pull/2460#issuecomment-1528759912
     ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
     ...schemeLanguages,
     ...pyLanguages
