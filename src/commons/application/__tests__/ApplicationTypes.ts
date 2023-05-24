@@ -1,6 +1,24 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { pyLanguages, schemeLanguages, sourceLanguages } from '../ApplicationTypes';
+import {
+  ALL_LANGUAGES,
+  getLanguageConfig,
+  pyLanguages,
+  schemeLanguages,
+  sourceLanguages
+} from '../ApplicationTypes';
+
+describe('getLanguageConfig', () => {
+  test('works for existing variants', () => {
+    for (const language of ALL_LANGUAGES) {
+      expect(getLanguageConfig(language.chapter, language.variant)).toEqual(language);
+    }
+  });
+
+  test('throws an error for an invalid chapter/variant combination', () => {
+    expect(() => getLanguageConfig(5, Variant.DEFAULT)).toThrowErrorMatchingSnapshot();
+  });
+});
 
 describe('available Source language configurations', () => {
   test('matches expected configurations', () => {
