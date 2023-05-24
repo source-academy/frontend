@@ -55,5 +55,4 @@ export type UserSaveState = {
 export type SettingsJson = {
   bgmVolume: number;
   sfxVolume: number;
-  isMuted: boolean;
 };

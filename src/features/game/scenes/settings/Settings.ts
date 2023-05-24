@@ -1,8 +1,7 @@
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
-import CommonCheckBox from '../../commons/CommonCheckBox';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import CommonSlider from '../../commons/CommonSlider';
+import CommonRadioButton from '../../commons/CommonRadioButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -21,12 +20,9 @@ import SettingsConstants, {
  * different settings of the game.
  */
 class Settings extends Phaser.Scene {
+  private bgmVolumeRadioButtons: CommonRadioButton | undefined;
+  private sfxVolumeRadioButtons: CommonRadioButton | undefined;
   private layerManager?: GameLayerManager;
-
-  // Volume sliders and mute button
-  private bgmVomlumeSlider: CommonSlider | undefined;
-  private sfxVolumeSlider: CommonSlider | undefined;
-  private muteButton: CommonCheckBox | undefined;
 
   constructor() {
     super('Settings');
@@ -77,23 +73,19 @@ class Settings extends Phaser.Scene {
       optHeader.map((header, index) => this.createOptionHeader(header, optHeaderPos[index][1]))
     );
 
-    // Get user settings, to use as default choice in the radio buttons
-    const { bgmVolume, sfxVolume, isMuted } = this.getSaveManager().getSettings();
+    // Get user default choice
+    const { bgmVolume, sfxVolume } = this.getSaveManager().getSettings();
+    const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
+      value => parseFloat(value) === sfxVolume
+    );
+    const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
+      value => parseFloat(value) === bgmVolume
+    );
 
-    this.sfxVolumeSlider = this.createSettingsSlider(sfxVolume, 170);
-    this.bgmVomlumeSlider = this.createSettingsSlider(bgmVolume, 360);
-    this.muteButton = new CommonCheckBox(
-      this,
-      isMuted, 
-      {sideLength: 50, outlineThickness: 3}, 
-      { x: 0, y: 0, oriX: -0.5, oriY: 0.5 },
-      optionTextStyle,
-      700, 
-      225,
-      "Mute Audio");
-    this.getLayerManager().addToLayer(Layer.UI, this.sfxVolumeSlider);
-    this.getLayerManager().addToLayer(Layer.UI, this.bgmVomlumeSlider);
-    this.getLayerManager().addToLayer(Layer.UI, this.muteButton);
+    // Create SFX Radio Buttons
+    this.sfxVolumeRadioButtons = this.createOptRadioOptions(sfxVolIdx, optHeaderPos[0][1]);
+    // Create BGM Radio Buttons
+    this.bgmVolumeRadioButtons = this.createOptRadioOptions(bgmVolIdx, optHeaderPos[1][1]);
 
     // Create apply settings button
     const applySettingsButton = createButton(this, {
@@ -111,6 +103,8 @@ class Settings extends Phaser.Scene {
     });
 
     this.getLayerManager().addToLayer(Layer.UI, optCont);
+    this.getLayerManager().addToLayer(Layer.UI, this.sfxVolumeRadioButtons);
+    this.getLayerManager().addToLayer(Layer.UI, this.bgmVolumeRadioButtons);
     this.getLayerManager().addToLayer(Layer.UI, applySettingsButton);
     this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
@@ -148,29 +142,24 @@ class Settings extends Phaser.Scene {
   }
 
   /**
-   * Create sliders matching the escape menu style.
+   * Create a radio buttons, formatted with settings' style.
    *
-   * @param defaultChoiceValue default option for the radio button
-   * @param yPos y position of the slider
+   * @param defaultChoiceIdx default choice of the radio button
+   * @param yPos y position of the radio button
    */
-  private createSettingsSlider(value: number, yPos: number) {
-    return new CommonSlider(
+  private createOptRadioOptions(defaultChoiceIdx: number, yPos: number) {
+    return new CommonRadioButton(
       this,
       {
-        minMax: [0.0, 2.0],
-        defaultChoiceValue: value,
+        choices: SettingsConstants.volContainerOpts,
+        defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: SettingsConstants.opt.xSpace,
-        sliderButtonConfig: {
-          circleDim: 50,
-          dragDim: 40,
-          outlineThickness: 5
-        },
         choiceTextConfig: SettingsConstants.radioButtonsTextConfig,
-        bitmapTextStyle: optionTextStyle,
+        bitmapTextStyle: optionTextStyle
       },
-      SettingsConstants.opt.x + 185,
-      yPos
-    )
+      SettingsConstants.opt.x,
+      -screenCenter.y + yPos
+    );
   }
 
   /**
@@ -179,23 +168,21 @@ class Settings extends Phaser.Scene {
    * This method is responsible in contacting the managers that
    * need to be aware of the update.
    */
-  private async applySettings() {
-    const sfxVol = this.sfxVolumeSlider
-      ? this.sfxVolumeSlider.getValue()
+  public async applySettings() {
+    const sfxVol = this.sfxVolumeRadioButtons
+      ? parseFloat(this.sfxVolumeRadioButtons.getChosenChoice())
       : 1;
-    const bgmVol = this.bgmVomlumeSlider
-      ? this.bgmVomlumeSlider.getValue()
+    const bgmVol = this.bgmVolumeRadioButtons
+      ? parseFloat(this.bgmVolumeRadioButtons.getChosenChoice())
       : 1;
-    const muted = this.muteButton
-      ? this.muteButton.getChoice()
-      : false;
-    
+
     // Save settings
-    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol, isMuted: muted };
-    await this.getSaveManager().saveSettings(newSettings);
+    await this.getSaveManager().saveSettings({ bgmVolume: bgmVol, sfxVolume: sfxVol });
 
     // Apply settings
-    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(newSettings);
+    SourceAcademyGame.getInstance()
+      .getSoundManager()
+      .applyUserSettings(this.getSaveManager().getSettings());
   }
 
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
