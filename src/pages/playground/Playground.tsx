@@ -108,7 +108,7 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
+import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
@@ -461,6 +461,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     };
   }, [dispatch, workspaceLocation]);
 
+  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
+
   const autorunButtons = React.useMemo(() => {
     return (
       <ControlBarAutorunButtons
@@ -470,9 +472,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         isRunning={props.isRunning}
         key="autorun"
         autorunDisabled={usingRemoteExecution}
-        sourceChapter={props.playgroundSourceChapter}
+        sourceChapter={languageConfig.chapter}
         // Disable pause for non-Source languages since they cannot be paused
-        pauseDisabled={usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)}
+        pauseDisabled={usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)}
         {...memoizedHandlers}
       />
     );
@@ -481,7 +483,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     props.isDebugging,
     props.isEditorAutorun,
     props.isRunning,
-    props.playgroundSourceChapter,
+    languageConfig.chapter,
     memoizedHandlers,
     usingRemoteExecution
   ]);
@@ -519,8 +521,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
         isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={props.playgroundSourceChapter}
-        sourceVariant={props.playgroundSourceVariant}
+        sourceChapter={languageConfig.chapter}
+        sourceVariant={languageConfig.variant}
         key="chapter"
         disabled={usingRemoteExecution}
       />
@@ -528,8 +530,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [
       chapterSelectHandler,
       isFolderModeEnabled,
-      props.playgroundSourceChapter,
-      props.playgroundSourceVariant,
+      languageConfig.chapter,
+      languageConfig.variant,
       usingRemoteExecution
     ]
   );
@@ -695,14 +697,6 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     workspaceLocation
   ]);
 
-  const playgroundIntroductionTab: SideContentTab = React.useMemo(
-    () =>
-      makeIntroductionTabFrom(
-        generateSourceIntroduction(props.playgroundSourceChapter, props.playgroundSourceVariant)
-      ),
-    [props.playgroundSourceChapter, props.playgroundSourceVariant]
-  );
-
   React.useEffect(() => {
     // TODO: To migrate the state logic away from playgroundSourceChapter
     //       and playgroundSourceVariant into the language config instead
@@ -715,16 +709,18 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     dispatch(playgroundConfigLanguage(languageConfigToSet));
   }, [dispatch, props.playgroundSourceChapter, props.playgroundSourceVariant]);
 
-  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
-  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer ?? false;
-  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer ?? false;
-  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer ?? false;
+  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
+  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer;
+  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
+  const playgroundIntroductionTab: SideContentTab = React.useMemo(
+    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
+    [languageConfig]
+  );
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
-    const currentLang = props.playgroundSourceChapter;
-
+    const currentLang = languageConfig.chapter;
     if (currentLang === Chapter.HTML) {
       // For HTML Chapter, HTML Display tab is added only after code is run
       if (props.output.length > 0 && props.output[0].type === 'result') {
@@ -755,7 +751,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     return tabs;
   }, [
     playgroundIntroductionTab,
-    props.playgroundSourceChapter,
+    languageConfig.chapter,
     props.output,
     usingRemoteExecution,
     dispatch,
@@ -843,10 +839,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     [selectedTab, dispatch, workspaceLocation]
   );
 
-  const replDisabled =
-    props.playgroundSourceChapter === Chapter.HTML ||
-    props.playgroundSourceVariant === Variant.CONCURRENT ||
-    usingRemoteExecution;
+  const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
 
   const setActiveEditorTabIndex = React.useCallback(
     (activeEditorTabIndex: number | null) =>
@@ -889,9 +882,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
-    sourceChapter: props.playgroundSourceChapter,
+    sourceChapter: languageConfig.chapter,
     externalLibraryName,
-    sourceVariant: props.playgroundSourceVariant,
+    sourceVariant: languageConfig.variant,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
   };
@@ -910,8 +903,8 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
       (newValue: string) => dispatch(updateReplValue(newValue, workspaceLocation)),
       [dispatch, workspaceLocation]
     ),
-    sourceChapter: props.playgroundSourceChapter,
-    sourceVariant: props.playgroundSourceVariant,
+    sourceChapter: languageConfig.chapter,
+    sourceVariant: languageConfig.variant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
       selectedTab === SideContentType.substVisualizer ||
@@ -953,13 +946,13 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
+        languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelect,
         sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || !isSourceLanguage(props.playgroundSourceChapter)
+        usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
           : props.usingSubst
           ? stepperStepLimit
@@ -996,7 +989,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
         editorButtons: [
           autorunButtons,
           chapterSelect,
-          props.playgroundSourceChapter === Chapter.FULL_JS ? null : shareButton,
+          languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
           sessionButtons,
           languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,

@@ -4,8 +4,7 @@ import { compressToUTF16 } from 'lz-string';
 import {
   defaultLanguageConfig,
   defaultState,
-  OverallState,
-  SupportedLanguage
+  OverallState
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import Constants from '../../commons/utils/Constants';
@@ -44,7 +43,6 @@ const mockChangedStoredState: SavedState = {
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
-  playgroundLang: SupportedLanguage.JAVASCRIPT,
   playgroundLanguage: defaultLanguageConfig
 };
 
