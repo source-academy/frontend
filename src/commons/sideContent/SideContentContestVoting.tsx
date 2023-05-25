@@ -2,7 +2,7 @@ import { Button, Card, Classes, Collapse, Elevation, Icon, Pre } from '@blueprin
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
 
@@ -19,6 +19,7 @@ type StateProps = {
   contestEntries: ContestEntry[];
 };
 
+// Tier mapping to scores, arranged in descending order of scores.
 const TIERS = [
   { name: 'S', color: 'rgb(255, 127, 127)', score: 10 },
   { name: 'A', color: 'rgb(255, 223, 127)', score: 7 },
@@ -98,8 +99,11 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     [currentDraggedItem]
   );
 
+  const contestEntryRefs = useRef({});
+  const tierContainerRefs = useRef({});
+
   const tierBoard = useMemo(() => {
-    return TIERS.map(tier => (
+    return TIERS.map((tier, index) => (
       <div
         className={classNames('tier', {
           'hovered-tier': hoveredTier === `tier-${tier.name.toLowerCase()}`
@@ -114,6 +118,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
           onDragLeave={handleDragLeave}
           onDragEnter={handleDragEnter}
           onDrop={handleDrop}
+          ref={item => (tierContainerRefs.current[index] = item)}
         />
       </div>
     ));
@@ -141,6 +146,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
                   id={`item-${index + 1}`}
                   onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd(contestEntry)}
+                  ref={item => (contestEntryRefs.current[index] = item)}
                 >
                   <Card
                     className={Classes.INTERACTIVE}
@@ -177,44 +183,23 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     ]
   );
 
-  // Function for mapping legacy (and current) contest votes to the new tier system
-  const mapTier = (entryScore: number) => {
-    if (entryScore < 2) {
-      return (tierScore: number) => tierScore === 1;
-    }
-    if (entryScore >= 2 && entryScore < 4) {
-      return (tierScore: number) => tierScore === 2;
-    }
-    if (entryScore >= 4 && entryScore < 7) {
-      return (tierScore: number) => tierScore === 4;
-    }
-    if (entryScore >= 7 && entryScore < 10) {
-      return (tierScore: number) => tierScore === 7;
-    }
-    if (entryScore >= 10) {
-      return (tierScore: number) => tierScore === 10;
-    }
-    return (tierScore: number) => false;
-  };
-
-  // Renders contest entries in the correct tier using saved score upon initial render
+  // Upon initial render, loads contest entries in the correct tier using saved score
   useEffect(() => {
     sortedContestEntries.forEach((entry, index) => {
-      if (entry.score !== undefined && entry.score !== null) {
-        const entryScore = entry.score as number;
-        const tierIndex = TIERS.findIndex(tier => mapTier(entryScore)(tier.score));
-        if (tierIndex !== -1) {
-          const tierElement = document.querySelector(
-            `#tier-${TIERS[tierIndex].name.toLowerCase()} .item-container`
-          );
-          const bankElement = document.querySelector(`#bank .item-container #item-${index + 1}`);
-          if (tierElement && bankElement) {
-            tierElement.appendChild(bankElement);
+      if (entry.score !== null) {
+        const savedTierIndex = TIERS.findIndex(tier =>
+          entry.score ? tier.score <= entry.score : false
+        );
+        if (savedTierIndex !== -1) {
+          const tierContainer = tierContainerRefs.current[savedTierIndex];
+          const entryItem = contestEntryRefs.current[index];
+          if (tierContainer && entryItem) {
+            tierContainer.appendChild(entryItem);
           }
         }
       }
     });
-  }, [contestEntryCards, sortedContestEntries]);
+  }, [sortedContestEntries]);
 
   return (
     <div className="ContestEntryVoting">
