@@ -1,5 +1,6 @@
 import moment from 'moment';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Academy from '../../pages/academy/Academy';
@@ -13,42 +14,25 @@ import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import Sicp from '../../pages/sicp/Sicp';
 import Welcome from '../../pages/welcome/Welcome';
-import { AssessmentConfiguration } from '../assessment/AssessmentTypes';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
-import { useLocalStorageState } from '../utils/Hooks';
+import { useLocalStorageState, useTypedSelector } from '../utils/Hooks';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
-import { Role } from './ApplicationTypes';
-import { UpdateCourseConfiguration, UserCourse } from './types/SessionTypes';
-
-export type ApplicationProps = DispatchProps & StateProps;
-
-export type DispatchProps = {
-  handleLogOut: () => void;
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
-  fetchUserAndCourse: () => void;
-  handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
-  updateCourseResearchAgreement: (agreedToResearch: boolean) => void;
-};
-
-export type StateProps = {
-  role?: Role;
-  name?: string;
-  courses: UserCourse[];
-  courseId?: number;
-  courseShortName?: string;
-  enableAchievements?: boolean;
-  enableSourcecast?: boolean;
-  assessmentConfigurations?: AssessmentConfiguration[];
-  agreedToResearch?: boolean | null;
-};
+import { fetchUserAndCourse } from './actions/SessionActions';
+import { SessionState } from './types/SessionTypes';
 
 const loginPath = <Route path="/login" element={<Login />} key="login" />;
 
-const Application: React.FC<ApplicationProps> = props => {
+const Application: React.FC = () => {
+  const dispatch = useDispatch();
+  const session = useTypedSelector(state => state.session);
+  const { role, name, courseId } = session;
+
+  // Used in determining the disabled state of any type of Source Academy deployment (e.g. during exams)
   const intervalId = React.useRef<number | undefined>(undefined);
   const [isDisabled, setIsDisabled] = React.useState(computeDisabledState());
+
+  // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
   const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
   const browserDimensions = React.useRef({ height: 0, width: 0 });
@@ -58,14 +42,14 @@ const Application: React.FC<ApplicationProps> = props => {
     defaultWorkspaceSettings
   );
 
-  const isLoggedIn = typeof props.name === 'string';
-  const isCourseLoaded = isLoggedIn && typeof props.role === 'string';
+  const isLoggedIn = typeof name === 'string';
+  const isCourseLoaded = isLoggedIn && typeof role === 'string';
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
   React.useEffect(() => {
-    if (props.name) {
-      props.fetchUserAndCourse();
+    if (name) {
+      dispatch(fetchUserAndCourse());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -132,20 +116,11 @@ const Application: React.FC<ApplicationProps> = props => {
     <Route path="/callback/github" element={<GitHubCallback />} key="githubCallback" />,
     <Route path="/sicpjs/:section?" element={<Sicp />} key="sicp" />,
     Constants.enableGitHubAssessments ? (
-      <Route
-        path="/githubassessments"
-        element={
-          <GitHubClassroom
-            handleGitHubLogIn={props.handleGitHubLogIn}
-            handleGitHubLogOut={props.handleGitHubLogOut}
-          />
-        }
-        key="githubAssessments"
-      />
+      <Route path="/githubassessments" element={<GitHubClassroom />} key="githubAssessments" />
     ) : null
   ];
 
-  const isDisabledEffective = !['staff', 'admin'].includes(props.role!) && isDisabled;
+  const isDisabledEffective = !['staff', 'admin'].includes(role!) && isDisabled;
 
   const renderDisabled = (
     <Routes>
@@ -182,13 +157,11 @@ const Application: React.FC<ApplicationProps> = props => {
       {commonPaths}
       <Route
         path="/"
-        element={
-          <Navigate to={props.courseId != null ? `/courses/${props.courseId}` : '/welcome'} />
-        }
+        element={<Navigate to={courseId != null ? `/courses/${courseId}` : '/welcome'} />}
       />
-      <Route path="/welcome" element={ensureUserAndRouteTo(props, <Welcome />)} />
-      <Route path={'/courses/:courseId(\\d+)?/*'} element={toAcademy(props)} />
-      <Route path="/playground" element={ensureUserAndRoleAndRouteTo(props, <Playground />)} />
+      <Route path="/welcome" element={ensureUserAndRouteTo(session, <Welcome />)} />
+      <Route path={'/courses/:courseId(\\d+)?/*'} element={toAcademy(session)} />
+      <Route path="/playground" element={ensureUserAndRoleAndRouteTo(session, <Playground />)} />
       <Route
         path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
         element={<MissionControlContainer />}
@@ -200,23 +173,7 @@ const Application: React.FC<ApplicationProps> = props => {
   return (
     <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
       <div className="Application">
-        <NavigationBar
-          handleLogOut={props.handleLogOut}
-          handleGitHubLogIn={props.handleGitHubLogIn}
-          handleGitHubLogOut={props.handleGitHubLogOut}
-          handleCreateCourse={props.handleCreateCourse}
-          role={props.role}
-          name={props.name}
-          courses={props.courses}
-          courseId={props.courseId}
-          courseShortName={props.courseShortName}
-          enableAchievements={props.enableAchievements}
-          enableSourcecast={props.enableSourcecast}
-          assessmentTypes={React.useMemo(
-            () => props.assessmentConfigurations?.map(c => c.type),
-            [props.assessmentConfigurations]
-          )}
-        />
+        <NavigationBar />
         <div className="Application__main">
           {isDisabledEffective
             ? renderDisabled
@@ -237,7 +194,7 @@ const navigateToWelcome = <Navigate to="/welcome" />;
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = ({ name, role }: ApplicationProps) =>
+const toAcademy = ({ name, role }: SessionState) =>
   name === undefined ? navigateToLogin : role === undefined ? navigateToWelcome : <Academy />;
 
 /**
@@ -245,7 +202,7 @@ const toAcademy = ({ name, role }: ApplicationProps) =>
  *  1. If the user is logged in, render the specified component
  *  2. If the user is not logged in, redirect to /login
  */
-const ensureUserAndRouteTo = ({ name }: ApplicationProps, to: JSX.Element) =>
+const ensureUserAndRouteTo = ({ name }: SessionState, to: JSX.Element) =>
   name === undefined ? navigateToLogin : to;
 
 /**
@@ -255,7 +212,7 @@ const ensureUserAndRouteTo = ({ name }: ApplicationProps, to: JSX.Element) =>
  *  2. If the user is not logged in, redirect to /login
  *  3. If the user is logged in, but does not have a course, redirect to /welcome
  */
-const ensureUserAndRoleAndRouteTo = ({ name, role }: ApplicationProps, to: JSX.Element) =>
+const ensureUserAndRoleAndRouteTo = ({ name, role }: SessionState, to: JSX.Element) =>
   name === undefined ? navigateToLogin : role === undefined ? navigateToWelcome : to;
 
 function computeDisabledState() {

@@ -4,7 +4,9 @@ import { Octokit } from '@octokit/rest';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -16,24 +18,24 @@ import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspaceContainer from './GitHubAssessmentWorkspaceContainer';
 import GitHubClassroomWelcome from './GitHubClassroomWelcome';
 
-type DispatchProps = {
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
-};
-
 /**
  * A page that lists the missions available to the authenticated user.
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
-const GitHubClassroom: React.FC<DispatchProps> = props => {
+const GitHubClassroom: React.FC = () => {
   const location = useLocation<{
     courses: string[] | undefined;
     assessmentTypeOverviews: GHAssessmentTypeOverview[] | undefined;
     selectedCourse: string | undefined;
   }>();
+
   const octokit: Octokit | undefined = useTypedSelector(
     store => store.session.githubOctokitObject
   ).octokit;
+  const dispatch = useDispatch();
+  const handleGitHubLogIn = () => dispatch(loginGitHub());
+  const handleGitHubLogOut = () => dispatch(logoutGitHub());
+
   const [courses, setCourses] = useState<string[] | undefined>(location.state?.courses);
   const [selectedCourse, setSelectedCourse] = useState<string>(
     location.state?.selectedCourse || ''
@@ -93,9 +95,9 @@ const GitHubClassroom: React.FC<DispatchProps> = props => {
     <div className="Academy" style={{ overflow: 'hidden' }}>
       <GitHubAssessmentsNavigationBar
         changeCourseHandler={changeCourseHandler}
-        handleGitHubLogIn={props.handleGitHubLogIn}
+        handleGitHubLogIn={handleGitHubLogIn}
         handleGitHubLogOut={() => {
-          props.handleGitHubLogOut();
+          handleGitHubLogOut();
           setCourses(undefined);
           setAssessmentTypeOverviews(undefined);
           setSelectedCourse('');
