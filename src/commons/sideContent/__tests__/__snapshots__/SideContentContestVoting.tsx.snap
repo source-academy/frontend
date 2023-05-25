@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SideContentContestVotingContainer matches snapshot 1`] = `
-"<SideContentContestVotingContainer handleContestEntryClick={[Function: handleContestEntryClick]} handleSave={[Function: handleSave]} canSave={true} contestEntries={{...}}>
-  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}} minScore={9} maxScore={10}>
+"<SideContentContestVotingContainer handleContestEntryClick={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: Object [Object: null prototype] { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }} handleSave={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: Object [Object: null prototype] { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }} canSave={true} contestEntries={{...}}>
+  <SideContentContestVoting isValid={true} canSave={true} handleContestEntryClick={[Function: mockConstructor] { _isMockFunction: true, getMockImplementation: [Function (anonymous)], mock: Object [Object: null prototype] { calls: [], instances: [], invocationCallOrder: [], results: [] }, mockClear: [Function (anonymous)], mockReset: [Function (anonymous)], mockRestore: [Function (anonymous)], mockReturnValueOnce: [Function (anonymous)], mockResolvedValueOnce: [Function (anonymous)], mockRejectedValueOnce: [Function (anonymous)], mockReturnValue: [Function (anonymous)], mockResolvedValue: [Function (anonymous)], mockRejectedValue: [Function (anonymous)], mockImplementationOnce: [Function (anonymous)], mockImplementation: [Function (anonymous)], mockReturnThis: [Function (anonymous)], mockName: [Function (anonymous)], getMockName: [Function (anonymous)] }} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntries={{...}}>
     <div className=\\"ContestEntryVoting\\">
       <Blueprint4.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
         <button type=\\"button\\" className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: onClick]} disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
@@ -48,141 +48,74 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
       <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
         <div className=\\"bp4-collapse\\" style={{...}}>
           <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
-            <div>
-              <div className=\\"contestentries-header\\">
-                <div className=\\"header-entryid\\">
-                  Entry Id
-                  <Blueprint4.Icon icon=\\"caret-down\\">
-                    <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                      </svg>
-                    </span>
-                  </Blueprint4.Icon>
-                </div>
-                <div className=\\"header-entryrank\\">
-                  Score
-                  <Blueprint4.Icon icon=\\"caret-down\\">
-                    <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                      <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                        <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                      </svg>
-                    </span>
-                  </Blueprint4.Icon>
+            <div className=\\"tier-list\\">
+              <div className=\\"tier\\" id=\\"tier-s\\">
+                <h2 style={{...}}>
+                  S
+                </h2>
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+              </div>
+              <div className=\\"tier\\" id=\\"tier-a\\">
+                <h2 style={{...}}>
+                  A
+                </h2>
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+              </div>
+              <div className=\\"tier\\" id=\\"tier-b\\">
+                <h2 style={{...}}>
+                  B
+                </h2>
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+              </div>
+              <div className=\\"tier\\" id=\\"tier-c\\">
+                <h2 style={{...}}>
+                  C
+                </h2>
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+              </div>
+              <div className=\\"tier\\" id=\\"tier-d\\">
+                <h2 style={{...}}>
+                  D
+                </h2>
+                <div className=\\"item-container\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]} />
+              </div>
+              <div className=\\"tier\\" id=\\"bank\\">
+                <div className=\\"item-container\\" id=\\"items\\" onDragOver={[Function (anonymous)]} onDragLeave={[Function (anonymous)]} onDragEnter={[Function (anonymous)]} onDrop={[Function (anonymous)]}>
+                  <div className=\\"item\\" draggable={true} id=\\"item-1\\" onDragStart={[Function: handleDragStart]} onDragEnd={[Function (anonymous)]}>
+                    <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
+                      <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
+                        <Component className=\\"contestentry-entryid\\">
+                          <pre className=\\"bp4-code-block contestentry-entryid\\">
+                            1
+                          </pre>
+                        </Component>
+                      </div>
+                    </Blueprint4.Card>
+                  </div>
+                  <div className=\\"item\\" draggable={true} id=\\"item-2\\" onDragStart={[Function: handleDragStart]} onDragEnd={[Function (anonymous)]}>
+                    <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
+                      <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
+                        <Component className=\\"contestentry-entryid\\">
+                          <pre className=\\"bp4-code-block contestentry-entryid\\">
+                            2
+                          </pre>
+                        </Component>
+                      </div>
+                    </Blueprint4.Card>
+                  </div>
+                  <div className=\\"item\\" draggable={true} id=\\"item-3\\" onDragStart={[Function: handleDragStart]} onDragEnd={[Function (anonymous)]}>
+                    <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
+                      <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
+                        <Component className=\\"contestentry-entryid\\">
+                          <pre className=\\"bp4-code-block contestentry-entryid\\">
+                            3
+                          </pre>
+                        </Component>
+                      </div>
+                    </Blueprint4.Card>
+                  </div>
                 </div>
               </div>
-              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={1} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} minScore={9} maxScore={10}>
-                <div className=\\"ContestEntryCard\\">
-                  <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
-                    <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
-                      <Component className=\\"contestentry-entryid\\">
-                        <pre className=\\"bp4-code-block contestentry-entryid\\">
-                          1
-                        </pre>
-                      </Component>
-                      <Component className=\\"contestentry-rank\\">
-                        <pre className=\\"bp4-code-block contestentry-rank\\">
-                          <Blueprint4.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter score for entry 1\\" min={9} max={10} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
-                            <Blueprint4.ControlGroup className=\\"bp4-numeric-input\\" fill={true}>
-                              <div className=\\"bp4-control-group bp4-fill bp4-numeric-input\\">
-                                <Blueprint4.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" id=\\"numericInput-0\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 1\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} intent={[undefined]} inputClassName={[undefined]} inputRef={[Function (anonymous)]} large={false} leftElement={[undefined]} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
-                                  <div className=\\"bp4-input-group\\">
-                                    <input type=\\"text\\" autoComplete=\\"off\\" id=\\"numericInput-0\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 1\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp4-input\\" style={{...}} />
-                                  </div>
-                                </Blueprint4.InputGroup>
-                                <Blueprint4.ButtonGroup className=\\"bp4-fixed\\" vertical={true}>
-                                  <div className=\\"bp4-button-group bp4-vertical bp4-fixed\\">
-                                    <Blueprint4.Button aria-label=\\"increment\\" aria-controls=\\"numericInput-0\\" disabled={false} icon=\\"chevron-up\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"increment\\" aria-controls=\\"numericInput-0\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-up\\">
-                                          <span aria-hidden={true} icon=\\"chevron-up\\" className=\\"bp4-icon bp4-icon-chevron-up\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"chevron-up\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M12.71 9.29l-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 001.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
-                                        </Blueprint4.Icon>
-                                        <Blueprint4.Icon icon={[undefined]} />
-                                      </button>
-                                    </Blueprint4.Button>
-                                    <Blueprint4.Button aria-label=\\"decrement\\" aria-controls=\\"numericInput-0\\" disabled={false} icon=\\"chevron-down\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"decrement\\" aria-controls=\\"numericInput-0\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-down\\">
-                                          <span aria-hidden={true} icon=\\"chevron-down\\" className=\\"bp4-icon bp4-icon-chevron-down\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"chevron-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
-                                        </Blueprint4.Icon>
-                                        <Blueprint4.Icon icon={[undefined]} />
-                                      </button>
-                                    </Blueprint4.Button>
-                                  </div>
-                                </Blueprint4.ButtonGroup>
-                              </div>
-                            </Blueprint4.ControlGroup>
-                          </Blueprint4.NumericInput>
-                        </pre>
-                      </Component>
-                    </div>
-                  </Blueprint4.Card>
-                </div>
-              </SideContentContestEntryCard>
-              <SideContentContestEntryCard isValid={true} canSave={true} entryNumber={2} handleContestEntryClick={[Function: handleContestEntryClick]} handleVotingSubmissionChange={[Function: handleVotingSubmissionChange]} contestEntry={{...}} minScore={9} maxScore={10}>
-                <div className=\\"ContestEntryCard\\">
-                  <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
-                    <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
-                      <Component className=\\"contestentry-entryid\\">
-                        <pre className=\\"bp4-code-block contestentry-entryid\\">
-                          2
-                        </pre>
-                      </Component>
-                      <Component className=\\"contestentry-rank\\">
-                        <pre className=\\"bp4-code-block contestentry-rank\\">
-                          <Blueprint4.NumericInput disabled={false} value={[undefined]} onValueChange={[Function: onValueChange]} placeholder=\\"Enter score for entry 2\\" min={9} max={10} allowNumericCharactersOnly={true} fill={true} minorStepSize={{...}} buttonPosition=\\"right\\" clampValueOnBlur={false} defaultValue=\\"\\" large={false} majorStepSize={10} selectAllOnFocus={false} selectAllOnIncrement={false} stepSize={1}>
-                            <Blueprint4.ControlGroup className=\\"bp4-numeric-input\\" fill={true}>
-                              <div className=\\"bp4-control-group bp4-fill bp4-numeric-input\\">
-                                <Blueprint4.InputGroup asyncControl={[undefined]} autoComplete=\\"off\\" id=\\"numericInput-1\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 2\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} intent={[undefined]} inputClassName={[undefined]} inputRef={[Function (anonymous)]} large={false} leftElement={[undefined]} leftIcon={[undefined]} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} rightElement={[undefined]}>
-                                  <div className=\\"bp4-input-group\\">
-                                    <input type=\\"text\\" autoComplete=\\"off\\" id=\\"numericInput-1\\" role=\\"spinbutton\\" disabled={false} value=\\"\\" placeholder=\\"Enter score for entry 2\\" min={9} max={10} aria-valuemax={10} aria-valuemin={9} aria-valuenow={0} onFocus={[Function (anonymous)]} onBlur={[Function (anonymous)]} onChange={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} onCompositionUpdate={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyPress={[Function (anonymous)]} onPaste={[Function (anonymous)]} className=\\"bp4-input\\" style={{...}} />
-                                  </div>
-                                </Blueprint4.InputGroup>
-                                <Blueprint4.ButtonGroup className=\\"bp4-fixed\\" vertical={true}>
-                                  <div className=\\"bp4-button-group bp4-vertical bp4-fixed\\">
-                                    <Blueprint4.Button aria-label=\\"increment\\" aria-controls=\\"numericInput-1\\" disabled={false} icon=\\"chevron-up\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"increment\\" aria-controls=\\"numericInput-1\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-up\\">
-                                          <span aria-hidden={true} icon=\\"chevron-up\\" className=\\"bp4-icon bp4-icon-chevron-up\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"chevron-up\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M12.71 9.29l-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 001.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 00.71-1.71z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
-                                        </Blueprint4.Icon>
-                                        <Blueprint4.Icon icon={[undefined]} />
-                                      </button>
-                                    </Blueprint4.Button>
-                                    <Blueprint4.Button aria-label=\\"decrement\\" aria-controls=\\"numericInput-1\\" disabled={false} icon=\\"chevron-down\\" intent={[undefined]} onKeyDown={[Function: onKeyDown]} onMouseDown={[Function: onMouseDown]}>
-                                      <button type=\\"button\\" aria-label=\\"decrement\\" aria-controls=\\"numericInput-1\\" disabled={false} onKeyDown={[Function (anonymous)]} onMouseDown={[Function: onMouseDown]} className=\\"bp4-button\\" onBlur={[Function (anonymous)]} onClick={[undefined]} onFocus={[undefined]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                        <Blueprint4.Icon icon=\\"chevron-down\\">
-                                          <span aria-hidden={true} icon=\\"chevron-down\\" className=\\"bp4-icon bp4-icon-chevron-down\\" title={[undefined]}>
-                                            <svg fill={[undefined]} data-icon=\\"chevron-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                              <path d=\\"M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 00-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0012 5z\\" fillRule=\\"evenodd\\" />
-                                            </svg>
-                                          </span>
-                                        </Blueprint4.Icon>
-                                        <Blueprint4.Icon icon={[undefined]} />
-                                      </button>
-                                    </Blueprint4.Button>
-                                  </div>
-                                </Blueprint4.ButtonGroup>
-                              </div>
-                            </Blueprint4.ControlGroup>
-                          </Blueprint4.NumericInput>
-                        </pre>
-                      </Component>
-                    </div>
-                  </Blueprint4.Card>
-                </div>
-              </SideContentContestEntryCard>
             </div>
           </div>
         </div>
