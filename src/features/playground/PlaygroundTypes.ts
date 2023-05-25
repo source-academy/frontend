@@ -1,4 +1,4 @@
-import { SALanguage, SupportedLanguage } from 'src/commons/application/ApplicationTypes';
+import { SALanguage } from 'src/commons/application/ApplicationTypes';
 import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
@@ -7,7 +7,6 @@ export const SHORTEN_URL = 'SHORTEN_URL';
 export const UPDATE_SHORT_URL = 'UPDATE_SHORT_URL';
 export const PLAYGROUND_UPDATE_GITHUB_SAVE_INFO = 'PLAYGROUND_UPDATE_GITHUB_SAVE_INFO';
 export const PLAYGROUND_UPDATE_PERSISTENCE_FILE = 'PLAYGROUND_UPDATE_PERSISTENCE_FILE';
-export const PLAYGROUND_UPDATE_LANG = 'PLAYGROUND_UPDATE_LANG';
 export const PLAYGROUND_UPDATE_LANGUAGE_CONFIG = 'PLAYGROUND_UPDATE_LANGUAGE_CONFIG';
 
 export type PlaygroundState = {
@@ -15,6 +14,5 @@ export type PlaygroundState = {
   readonly shortURL?: string;
   readonly persistenceFile?: PersistenceFile;
   readonly githubSaveInfo: { repoName: string; filePath: string };
-  readonly lang: SupportedLanguage;
   readonly languageConfig: SALanguage;
 };
