@@ -131,11 +131,6 @@ const Application: React.FC<ApplicationProps> = props => {
   const commonPaths = [
     <Route path="/contributors" element={<Contributors />} key="contributors" />,
     <Route path="/callback/github" element={<GitHubCallback />} key="githubCallback" />,
-    <Route
-      path="/interactive-sicp/:section?"
-      element={<Navigate to="/sicpjs/:section?" />}
-      key="oldToNewSicpRedirect"
-    />,
     <Route path="/sicpjs/:section?" element={<Sicp />} key="sicp" />,
     Constants.enableGitHubAssessments ? (
       <Route
@@ -199,23 +194,6 @@ const Application: React.FC<ApplicationProps> = props => {
         path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
         element={<MissionControlContainer />}
       />
-      {props.courseId != null && [
-        <Route
-          path="/academy/:splat?"
-          element={<Navigate to={`/courses/${props.courseId}/:splat?`} />}
-          key="legacy-academy"
-        />,
-        <Route
-          path="/sourcecast/:splat?"
-          element={<Navigate to={`/courses/${props.courseId}/sourcecast/:splat?`} />}
-          key="legacy-sourcecast"
-        />,
-        <Route
-          path="/achievements/:splat?"
-          element={<Navigate to={`/courses/${props.courseId}/achievements/:splat?`} />}
-          key="legacy-achievements"
-        />
-      ]}
       <Route element={<NotFound />} />
     </Routes>
   );
