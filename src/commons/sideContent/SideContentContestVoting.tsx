@@ -188,6 +188,8 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     sortedContestEntries.forEach((entry, index) => {
       if (entry.score !== null) {
         const savedTierIndex = TIERS.findIndex(tier =>
+          // We are using <= instead of === for backwards
+          // compatibiilty with legacy voting submisions.
           entry.score ? tier.score <= entry.score : false
         );
         if (savedTierIndex !== -1) {
