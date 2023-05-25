@@ -1,8 +1,5 @@
-import { NumericInput } from '@blueprintjs/core';
-import { Card } from '@blueprintjs/core';
 import { mount } from 'enzyme';
 
-import SideContentContestEntryCard from '../SideContentContestEntryCard';
 import SideContentContestVotingContainer from '../SideContentContestVotingContainer';
 
 const mockContestEntries = [
@@ -13,111 +10,71 @@ const mockContestEntries = [
   {
     submission_id: 2,
     answer: { code: 'function test() { return 1; }' }
+  },
+  {
+    submission_id: 3,
+    answer: { code: 'return null' }
   }
 ];
 
+const mockedHandleContestEntryClick = jest.fn();
+const mockedHandleSave = jest.fn();
+
 const mockProps = {
-  handleContestEntryClick: () => {},
-  handleSave: () => {},
+  handleContestEntryClick: mockedHandleContestEntryClick,
+  handleSave: mockedHandleSave,
   canSave: true,
   contestEntries: mockContestEntries
 };
 
+const contestVotingContainerRender = mount(<SideContentContestVotingContainer {...mockProps} />);
+
 // Basic snapshot testing to catch unexpected changes
 test('SideContentContestVotingContainer matches snapshot', () => {
-  const contestVotingComponentRender = mount(<SideContentContestVotingContainer {...mockProps} />);
-
-  expect(contestVotingComponentRender.debug()).toMatchSnapshot();
+  expect(contestVotingContainerRender.debug()).toMatchSnapshot();
 });
 
-test('SideContentContestVotingContainer component renders correct number of entries.', () => {
-  const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
-  const contestVotingContainerRender = mount(contestVotingContainer);
-
-  expect(contestVotingContainerRender.find('SideContentContestEntryCard')).toHaveLength(
-    mockContestEntries.length
-  );
-
-  contestVotingContainerRender.setProps({
-    contestEntries: [...mockContestEntries, { submission_id: 3, answer: { code: '' } }]
-  });
-
-  expect(contestVotingContainerRender.find('SideContentContestEntryCard')).toHaveLength(
-    mockContestEntries.length
-  );
+test('Tiers and entry bank are properly rendered and displayed', () => {
+  const mockTiers = contestVotingContainerRender.find('div').filterWhere(x => x.hasClass('tier'));
+  const mockSTier = mockTiers.get(0);
+  const mockATier = mockTiers.get(1);
+  const mockBTier = mockTiers.get(2);
+  const mockCTier = mockTiers.get(3);
+  const mockDTier = mockTiers.get(4);
+  const mockBank = mockTiers.get(5);
+  expect(mockSTier.props.id).toBe('tier-s');
+  expect(mockATier.props.id).toBe('tier-a');
+  expect(mockBTier.props.id).toBe('tier-b');
+  expect(mockCTier.props.id).toBe('tier-c');
+  expect(mockDTier.props.id).toBe('tier-d');
+  expect(mockBank.props.id).toBe('bank');
 });
 
-test('SideContentVotingContainer disabled once canSave == false', () => {
-  const mockProps = {
-    handleContestEntryClick: () => {},
-    handleSave: () => {},
-    canSave: false,
-    contestEntries: mockContestEntries
-  };
+test('Entries are only saved when all entries are assigned a tier', () => {
+  const contestCards = contestVotingContainerRender
+    .find('div')
+    .filterWhere(x => x.hasClass('item'));
 
-  const contestVotingComponentRender = mount(<SideContentContestVotingContainer {...mockProps} />);
-  const contestVotingCards = contestVotingComponentRender.find(NumericInput);
-  contestVotingCards.map(card => expect(card.prop('disabled')).toBe(true));
-});
+  const mockSWrapper = contestVotingContainerRender
+    .find('div')
+    .filterWhere(x => x.hasClass('tier'))
+    .at(0);
+  const mockSContainer = mockSWrapper.findWhere(x => x.hasClass('item-container'));
 
-// testing the ranking validation logic
-test('SideContentVotingContainer only updates when ranks assigned to entries are unique and within rank limit.', () => {
-  const mockedHandleContestEntryClick = jest.fn();
-  const mockedHandleSave = jest.fn();
-
-  const mockProps = {
-    handleContestEntryClick: mockedHandleContestEntryClick,
-    handleSave: mockedHandleSave,
-    canSave: true,
-    contestEntries: mockContestEntries
-  };
-
-  const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
-  const contestVotingContainerRender = mount(contestVotingContainer);
-
-  const contestVotingCard = contestVotingContainerRender.find('input');
-
-  // simulate change to duplicate
-  contestVotingCard.map(card => card.simulate('change', { target: { value: 10 } }));
+  // simulate incomplete assignment of tiers
+  contestCards.at(0).simulate('dragStart', { dataTransfer: { effectAllowed: 'none' } });
+  mockSContainer.simulate('drop');
+  contestCards.at(0).simulate('dragEnd');
   expect(mockedHandleSave).toHaveBeenCalledTimes(0);
 
-  // to avoid warning messages from blueprint.js due to testing invalid input during tests
-  const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-
-  // simulate change to exceed score limit (ie. if 2 entries can only rank [9, 10])
-  contestVotingCard.map(card => card.simulate('change', { target: { value: 11 } }));
+  contestCards.at(1).simulate('dragStart', { dataTransfer: { effectAllowed: 'none' } });
+  mockSContainer.simulate('drop');
+  contestCards.at(1).simulate('dragEnd');
   expect(mockedHandleSave).toHaveBeenCalledTimes(0);
 
-  // simulate appropriate ranking for entries
-  contestVotingCard.map((card, index) =>
-    card.simulate('change', { target: { value: 10 - index } })
-  );
+  // simulate complete assignment of tiers
+  contestCards.at(2).simulate('dragStart', { dataTransfer: { effectAllowed: 'none' } });
+  mockSContainer.simulate('drop');
+  contestCards.at(2).simulate('dragEnd');
   expect(mockedHandleSave).toHaveBeenCalledTimes(1);
-
-  consoleWarnSpy.mockRestore();
-});
-
-test('Clicking the contest entry updates the editor for contest voting.', () => {
-  const mockedHandleContestEntryClick = jest.fn();
-
-  const mockProps = {
-    handleContestEntryClick: mockedHandleContestEntryClick,
-    handleSave: () => {},
-    canSave: true,
-    contestEntries: mockContestEntries
-  };
-
-  const contestVotingContainer = <SideContentContestVotingContainer {...mockProps} />;
-  const contestVotingContainerRender = mount(contestVotingContainer);
-
-  mockedHandleContestEntryClick.mockClear();
-  contestVotingContainerRender.find(SideContentContestEntryCard).find(Card).at(0).simulate('click');
-  expect(mockedHandleContestEntryClick).toBeCalledTimes(1);
-  expect(mockedHandleContestEntryClick.mock.calls[0][0]).toBe(1);
-  expect(mockedHandleContestEntryClick.mock.calls[0][1]).toBe("display('hello world')");
-
-  contestVotingContainerRender.find(SideContentContestEntryCard).find(Card).at(1).simulate('click');
-  expect(mockedHandleContestEntryClick).toBeCalledTimes(2);
-  expect(mockedHandleContestEntryClick.mock.calls[1][0]).toBe(2);
-  expect(mockedHandleContestEntryClick.mock.calls[1][1]).toBe('function test() { return 1; }');
 });
