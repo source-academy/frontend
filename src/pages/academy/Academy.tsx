@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
+import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
+import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import {
@@ -33,6 +35,7 @@ const Academy: React.FC<{}> = () => {
     dispatch(fetchGradingOverviews(false));
   }, [dispatch]);
 
+  const agreedToResearch = useTypedSelector(state => state.session.agreedToResearch);
   const assessmentConfigurations = useTypedSelector(
     state => state.session.assessmentConfigurations
   );
@@ -52,6 +55,9 @@ const Academy: React.FC<{}> = () => {
       : null;
   return (
     <div className="Academy">
+      {/* agreedToResearch has a default value of undefined in the store.
+            It will take on null/true/false when the backend returns. */}
+      {Constants.showResearchPrompt && agreedToResearch === null && <ResearchAgreementPrompt />}
       <Switch>
         {assessmentConfigurations?.map(assessmentConfiguration => (
           <Route
