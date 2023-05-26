@@ -40,13 +40,15 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         props.assessmentTypes?.map((assessmentType, idx) => (
           <NavLink
             to={`/courses/${courseId}/${assessmentTypeLink(assessmentType)}`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames(
-              'NavigationBar__link__mobile',
-              Classes.BUTTON,
-              Classes.MINIMAL,
-              Classes.LARGE
-            )}
+            className={({ isActive }) =>
+              classNames(
+                'NavigationBar__link__mobile',
+                Classes.BUTTON,
+                Classes.MINIMAL,
+                Classes.LARGE,
+                { [Classes.ACTIVE]: isActive }
+              )
+            }
             onClick={props.onClose}
             key={idx}
           >
@@ -64,13 +66,15 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
 
       {role && enableSourcecast && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
+          className={({ isActive }) =>
+            classNames(
+              'NavigationBar__link__mobile',
+              Classes.BUTTON,
+              Classes.MINIMAL,
+              Classes.LARGE,
+              { [Classes.ACTIVE]: isActive }
+            )
+          }
           to={`/courses/${courseId}/sourcecast`}
           onClick={props.onClose}
         >
@@ -81,13 +85,15 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
 
       {role && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
+          className={({ isActive }) =>
+            classNames(
+              'NavigationBar__link__mobile',
+              Classes.BUTTON,
+              Classes.MINIMAL,
+              Classes.LARGE,
+              { [Classes.ACTIVE]: isActive }
+            )
+          }
           to="/playground"
           onClick={props.onClose}
         >
@@ -98,13 +104,15 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
 
       {Constants.enableGitHubAssessments && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link_mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
+          className={({ isActive }) =>
+            classNames(
+              'NavigationBar__link_mobile',
+              Classes.BUTTON,
+              Classes.MINIMAL,
+              Classes.LARGE,
+              { [Classes.ACTIVE]: isActive }
+            )
+          }
           to="/githubassessments"
           onClick={props.onClose}
         >
@@ -114,13 +122,15 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       )}
       {name && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link_mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
+          className={({ isActive }) =>
+            classNames(
+              'NavigationBar__link_mobile',
+              Classes.BUTTON,
+              Classes.MINIMAL,
+              Classes.LARGE,
+              { [Classes.ACTIVE]: isActive }
+            )
+          }
           to={`/sicpjs/`}
           onClick={props.onClose}
         >
@@ -130,13 +140,15 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
       )}
       {role && enableAchievements && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE
-          )}
+          className={({ isActive }) =>
+            classNames(
+              'NavigationBar__link__mobile',
+              Classes.BUTTON,
+              Classes.MINIMAL,
+              Classes.LARGE,
+              { [Classes.ACTIVE]: isActive }
+            )
+          }
           to={`/courses/${courseId}/achievements`}
           onClick={props.onClose}
         >

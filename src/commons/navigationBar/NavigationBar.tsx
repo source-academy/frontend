@@ -16,7 +16,7 @@ import { Popover2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { Location } from 'history';
 import * as React from 'react';
-import { match, NavLink, Route, Switch, useLocation } from 'react-router-dom';
+import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
 import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
 import Dropdown from '../dropdown/Dropdown';
@@ -28,19 +28,6 @@ import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
-
-const matchSourcecastAchievement = /^\/courses\/\d+\/(sourcecast|achievements)/;
-const matchExceptSourcecastAchievement = (match: match | null, location: Location) => {
-  if (!match) {
-    return false;
-  }
-
-  if (matchSourcecastAchievement.test(location.pathname)) {
-    return false;
-  }
-
-  return true;
-};
 
 const NavigationBar: React.FC = () => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
@@ -61,6 +48,29 @@ const NavigationBar: React.FC = () => {
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
+
+  const playgroundOnlyNavbarLeftInfo_GitHubEnabled = [
+    {
+      to: '/playground',
+      icon: IconNames.CODE,
+      text: 'Playground'
+    },
+    {
+      to: '/githubassessments',
+      icon: IconNames.BRIEFCASE,
+      text: 'Classroom'
+    },
+    {
+      to: '/sicpjs/',
+      icon: IconNames.BOOK,
+      text: 'SICP JS'
+    }
+  ];
+
+  const playgroundOnlyNavbarLeftInfo_GitHubDisabled =
+    playgroundOnlyNavbarLeftInfo_GitHubEnabled.filter(
+      e => e.text !== 'Classroom' || e.to !== '/githubassessments' || e.icon !== IconNames.BRIEFCASE
+    );
 
   // Handles both the desktop and mobile versions of the playground-only left navbar group
   const playgroundOnlyNavbarLeft = Constants.enableGitHubAssessments ? (
@@ -87,97 +97,62 @@ const NavigationBar: React.FC = () => {
             title=""
             className={Classes.DARK}
           >
-            <NavLink
-              activeClassName={Classes.ACTIVE}
-              className={classNames(
-                'NavigationBar__link__mobile',
-                Classes.BUTTON,
-                Classes.MINIMAL,
-                Classes.LARGE
-              )}
-              to="/playground"
-              onClick={() => setMobileSideMenuOpen(false)}
-            >
-              <Icon icon={IconNames.CODE} />
-              <div>Playground</div>
-            </NavLink>
-            <NavLink
-              activeClassName={Classes.ACTIVE}
-              className={classNames(
-                'NavigationBar__link__mobile',
-                Classes.BUTTON,
-                Classes.MINIMAL,
-                Classes.LARGE
-              )}
-              to="/githubassessments/missions"
-              onClick={() => setMobileSideMenuOpen(false)}
-            >
-              <Icon icon={IconNames.BRIEFCASE} />
-              <div>Classroom</div>
-            </NavLink>
-            <NavLink
-              activeClassName={Classes.ACTIVE}
-              className={classNames(
-                'NavigationBar__link__mobile',
-                Classes.BUTTON,
-                Classes.MINIMAL,
-                Classes.LARGE
-              )}
-              to={`/sicpjs/`}
-              onClick={() => setMobileSideMenuOpen(false)}
-            >
-              <Icon icon={IconNames.BOOK} />
-              <div>SICP JS</div>
-            </NavLink>
+            {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
+              <NavLink
+                to={e.to}
+                className={({ isActive }) =>
+                  classNames(
+                    'NavigationBar__link__mobile',
+                    Classes.BUTTON,
+                    Classes.MINIMAL,
+                    Classes.LARGE,
+                    { [Classes.ACTIVE]: isActive }
+                  )
+                }
+                onClick={() => setMobileSideMenuOpen(false)}
+                key={idx}
+              >
+                <Icon icon={e.icon} />
+                <div>{e.text}</div>
+              </NavLink>
+            ))}
           </Drawer>
         </NavbarGroup>
       </>
     ) : (
       <NavbarGroup align={Alignment.LEFT}>
-        <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-          to="/playground"
-        >
-          <Icon icon={IconNames.CODE} />
-          <div>Playground</div>
-        </NavLink>
-        <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-          to="/githubassessments"
-        >
-          <Icon icon={IconNames.BRIEFCASE} />
-          <div>Classroom</div>
-        </NavLink>
-        <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-          to={`/sicpjs/`}
-        >
-          <Icon icon={IconNames.BOOK} />
-          <div>SICP JS</div>
-        </NavLink>
+        {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
+          <NavLink
+            to={e.to}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
+            key={idx}
+          >
+            <Icon icon={e.icon} />
+            <div>{e.text}</div>
+          </NavLink>
+        ))}
       </NavbarGroup>
     )
   ) : (
     <NavbarGroup align={Alignment.LEFT}>
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-        to="/playground"
-      >
-        <Icon icon={IconNames.CODE} />
-        <div>Playground</div>
-      </NavLink>
-      <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
-        to={`/sicpjs/`}
-      >
-        <Icon icon={IconNames.BOOK} />
-        <div>SICP JS</div>
-      </NavLink>
+      {playgroundOnlyNavbarLeftInfo_GitHubDisabled.map((e, idx) => (
+        <NavLink
+          className={({ isActive }) =>
+            classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
+          to={e.to}
+          key={idx}
+        >
+          <Icon icon={e.icon} />
+          <div>{e.text}</div>
+        </NavLink>
+      ))}
     </NavbarGroup>
   );
 
@@ -194,8 +169,11 @@ const NavigationBar: React.FC = () => {
       )}
 
       <NavLink
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        activeClassName={Classes.ACTIVE}
+        className={({ isActive }) =>
+          classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+            [Classes.ACTIVE]: isActive
+          })
+        }
         to={courseId == null ? '/welcome' : `/courses/${courseId}`}
       >
         <Icon icon={IconNames.SYMBOL_DIAMOND} />
@@ -220,8 +198,11 @@ const NavigationBar: React.FC = () => {
         {assessmentTypes?.map((assessmentType, idx) => (
           <NavLink
             to={`/courses/${courseId}/${assessmentTypeLink(assessmentType)}`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
             key={assessmentType}
           >
             <Icon icon={icons[idx]} />
@@ -236,12 +217,23 @@ const NavigationBar: React.FC = () => {
     </Navbar>
   );
 
+  const highlightDesktopLogo = React.useCallback((location: Location) => {
+    const highlightDesktopSALogoInRoutesExcept = [
+      `/courses/${courseId}/sourcecast`,
+      `/courses/${courseId}/achievements`
+    ];
+
+    return !highlightDesktopSALogoInRoutesExcept.find(x => location.pathname.startsWith(x));
+  }, []);
+
   const desktopLogoButton = (
     <NavLink
-      activeClassName={Classes.ACTIVE}
-      className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+      className={({ isActive }) =>
+        classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+          [Classes.ACTIVE]: isActive || highlightDesktopLogo(location)
+        })
+      }
       to={courseId == null ? '/welcome' : `/courses/${courseId}`}
-      isActive={matchExceptSourcecastAchievement}
     >
       <Icon icon={IconNames.SYMBOL_DIAMOND} />
       <NavbarHeading style={{ paddingBottom: '0px' }}>
@@ -278,8 +270,11 @@ const NavigationBar: React.FC = () => {
 
       {role && enableSourcecast && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          className={({ isActive }) =>
+            classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
           to={`/courses/${courseId}/sourcecast`}
         >
           <Icon icon={IconNames.MUSIC} />
@@ -288,8 +283,11 @@ const NavigationBar: React.FC = () => {
       )}
       {role && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          className={({ isActive }) =>
+            classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
           to="/playground"
         >
           <Icon icon={IconNames.CODE} />
@@ -298,8 +296,11 @@ const NavigationBar: React.FC = () => {
       )}
       {Constants.enableGitHubAssessments && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          className={({ isActive }) =>
+            classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
           to="/githubassessments"
         >
           <Icon icon={IconNames.BRIEFCASE} />
@@ -308,8 +309,11 @@ const NavigationBar: React.FC = () => {
       )}
       {name && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          className={({ isActive }) =>
+            classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
           to={`/sicpjs/`}
         >
           <Icon icon={IconNames.BOOK} />
@@ -318,8 +322,11 @@ const NavigationBar: React.FC = () => {
       )}
       {role && enableAchievements && (
         <NavLink
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          className={({ isActive }) =>
+            classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
           to={`/courses/${courseId}/achievements`}
         >
           <Icon icon={IconNames.MOUNTAIN} />
@@ -333,8 +340,11 @@ const NavigationBar: React.FC = () => {
     <NavbarGroup align={Alignment.RIGHT}>
       {location.pathname.startsWith('/playground') && <NavigationBarLangSelectButton />}
       <NavLink
-        activeClassName={Classes.ACTIVE}
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        className={({ isActive }) =>
+          classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+            [Classes.ACTIVE]: isActive
+          })
+        }
         to="/contributors"
       >
         <Icon icon={IconNames.HEART} />
@@ -362,7 +372,7 @@ const NavigationBar: React.FC = () => {
         {commonNavbarRight}
       </Navbar>
 
-      <Switch>
+      <Routes>
         <Route path="/playground" />
         <Route path="/githubassessments" />
         <Route path="/contributors" />
@@ -376,7 +386,7 @@ const NavigationBar: React.FC = () => {
             <AcademyNavigationBar assessmentTypes={assessmentTypes} />
           )}
         </Route>
-      </Switch>
+      </Routes>
     </>
   );
 };

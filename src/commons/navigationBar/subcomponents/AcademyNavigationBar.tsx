@@ -24,8 +24,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
         {props.assessmentTypes?.map((assessmentType, idx) => (
           <NavLink
             to={`/courses/${courseId}/${assessmentTypeLink(assessmentType)}`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
             key={idx}
           >
             <Icon icon={icons[idx]} />
@@ -41,8 +44,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
         <NavbarGroup align={Alignment.RIGHT}>
           <NavLink
             to={`/courses/${courseId}/groundcontrol`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
           >
             <Icon icon={IconNames.SATELLITE} />
             <div className="navbar-button-text hidden-xs hidden-sm">Ground Control</div>
@@ -50,8 +56,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
 
           <NavLink
             to={`/courses/${courseId}/dashboard`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
           >
             <Icon icon={IconNames.GLOBE} />
             <div className="navbar-button-text hidden-xs hidden-sm">Dashboard</div>
@@ -59,8 +68,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
 
           <NavLink
             to={`/courses/${courseId}/sourcereel`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
           >
             <Icon icon={IconNames.MOBILE_VIDEO} />
             <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Sourcereel</div>
@@ -69,8 +81,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
           {role === Role.Admin && (
             <NavLink
               to={`/courses/${courseId}/xpcalculation`}
-              activeClassName={Classes.ACTIVE}
-              className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+              className={({ isActive }) =>
+                classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                  [Classes.ACTIVE]: isActive
+                })
+              }
             >
               <Icon icon={IconNames.CALCULATOR} />
               <div className="navbar-button-text hidden-xs hidden-sm">XP Calculation</div>
@@ -79,8 +94,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
 
           <NavLink
             to={`/courses/${courseId}/grading`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
           >
             <Icon icon={IconNames.ENDORSED} />
             <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Grading</div>
@@ -92,8 +110,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
 
           <NavLink
             to={`/courses/${courseId}/storysimulator`}
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+            className={({ isActive }) =>
+              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                [Classes.ACTIVE]: isActive
+              })
+            }
           >
             <Icon icon={IconNames.CROWN} />
             <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Story Simulator</div>
@@ -102,8 +123,11 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
           {role === Role.Admin && (
             <NavLink
               to={`/courses/${courseId}/adminpanel`}
-              activeClassName={Classes.ACTIVE}
-              className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+              className={({ isActive }) =>
+                classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                  [Classes.ACTIVE]: isActive
+                })
+              }
             >
               <Icon icon={IconNames.SETTINGS} />
               <div className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg">
