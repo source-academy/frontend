@@ -2,7 +2,8 @@ import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
+import { Navigate, Route, Routes, useParams } from 'react-router';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -28,7 +29,6 @@ import StorySimulator from './storySimulator/StorySimulator';
 import XpCalculation from './xpCalculation/XpCalculation';
 
 const Academy: React.FC<{}> = () => {
-  const { path, url } = useRouteMatch();
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(fetchNotifications());
@@ -43,14 +43,14 @@ const Academy: React.FC<{}> = () => {
   const role = useTypedSelector(state => state.session.role);
 
   const staffRoutes =
-    role !== 'student'
+    role !== Role.Student
       ? [
-          <Route path={`${path}/groundcontrol`} component={GroundControl} key={0} />,
-          <Route path={`${path}/grading/${gradingRegExp}`} component={Grading} key={1} />,
-          <Route path={`${path}/xpcalculation`} component={XpCalculation} key={2} />,
-          <Route path={`${path}/sourcereel`} component={Sourcereel} key={3} />,
-          <Route path={`${path}/storysimulator`} component={StorySimulator} key={4} />,
-          <Route path={`${path}/dashboard`} component={Dashboard} key={5} />
+          <Route path={`groundcontrol`} element={<GroundControl />} key={0} />,
+          <Route path={`grading/${gradingRegExp}`} element={<Grading />} key={1} />,
+          <Route path={`xpcalculation`} element={<XpCalculation />} key={2} />,
+          <Route path={`sourcereel`} element={<Sourcereel />} key={3} />,
+          <Route path={`storysimulator`} element={<StorySimulator />} key={4} />,
+          <Route path={`dashboard`} element={<Dashboard />} key={5} />
         ]
       : null;
   return (
@@ -58,36 +58,39 @@ const Academy: React.FC<{}> = () => {
       {/* agreedToResearch has a default value of undefined in the store.
             It will take on null/true/false when the backend returns. */}
       {Constants.showResearchPrompt && agreedToResearch === null && <ResearchAgreementPrompt />}
-      <Switch>
+      <Routes>
         {assessmentConfigurations?.map(assessmentConfiguration => (
           <Route
-            path={`${path}/${assessmentTypeLink(assessmentConfiguration.type)}/${assessmentRegExp}`}
+            path={`${assessmentTypeLink(assessmentConfiguration.type)}/${assessmentRegExp}`}
             key={assessmentConfiguration.type}
           >
             <Assessment assessmentConfiguration={assessmentConfiguration} />
           </Route>
         ))}
-        {enableGame && <Route path={`${path}/game`} component={Game} />}
-        <Route path={`${path}/sourcecast/:sourcecastId?`} component={Sourcecast} />
-        <Route path={`${path}/achievements`} component={Achievement} />
-        <Route exact={true} path={path}>
-          <Redirect
-            push={false}
-            to={
-              enableGame
-                ? `${url}/game`
-                : assessmentConfigurations && assessmentConfigurations.length > 0
-                ? `${url}/${assessmentTypeLink(assessmentConfigurations[0].type)}`
-                : role === 'admin'
-                ? `${url}/adminpanel`
-                : '/404'
-            }
-          />
-        </Route>
+        {enableGame && <Route path={`game`} element={<Game />} />}
+        <Route path={`sourcecast/:sourcecastId?`} element={<Sourcecast />} />
+        <Route path={`achievements`} element={<Achievement />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              replace
+              to={
+                enableGame
+                  ? `game`
+                  : assessmentConfigurations && assessmentConfigurations.length > 0
+                  ? `${assessmentTypeLink(assessmentConfigurations[0].type)}`
+                  : role === 'admin'
+                  ? `adminpanel`
+                  : '/404'
+              }
+            />
+          }
+        />
         {staffRoutes}
-        {role === 'admin' && <Route path={`${path}/adminpanel`} component={AdminPanel} />}
-        <Route component={NotFound} />
-      </Switch>
+        {role === 'admin' && <Route path={`adminpanel`} element={<AdminPanel />} />}
+        <Route element={<NotFound />} />
+      </Routes>
     </div>
   );
 };

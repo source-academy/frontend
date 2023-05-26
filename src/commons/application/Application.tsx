@@ -145,7 +145,7 @@ const Application: React.FC = () => {
   const renderPlaygroundOnly = (
     <Routes>
       {commonPaths}
-      <Route path="/" element={<Navigate to="/playground" />} />
+      <Route path="/" element={<Navigate to="/playground" replace />} />
       <Route path="/playground" element={<Playground />} />
       <Route element={<NotFound />} />
     </Routes>
@@ -157,7 +157,7 @@ const Application: React.FC = () => {
       {commonPaths}
       <Route
         path="/"
-        element={<Navigate to={courseId != null ? `/courses/${courseId}` : '/welcome'} />}
+        element={<Navigate to={courseId != null ? `/courses/${courseId}` : '/welcome'} replace />}
       />
       <Route path="/welcome" element={ensureUserAndRouteTo(session, <Welcome />)} />
       <Route path={'/courses/:courseId(\\d+)?/*'} element={toAcademy(session)} />
@@ -186,8 +186,8 @@ const Application: React.FC = () => {
   );
 };
 
-const navigateToLogin = <Navigate to="/login" />;
-const navigateToWelcome = <Navigate to="/welcome" />;
+const navigateToLogin = <Navigate to="/login" replace />;
+const navigateToWelcome = <Navigate to="/welcome" replace />;
 
 /**
  * A user routes to /academy,

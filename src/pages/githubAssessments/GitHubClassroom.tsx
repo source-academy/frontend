@@ -5,7 +5,7 @@ import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
@@ -17,6 +17,13 @@ import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspaceContainer from './GitHubAssessmentWorkspaceContainer';
 import GitHubClassroomWelcome from './GitHubClassroomWelcome';
+
+const RelativeRoutes = {
+  GITHUB_LOGIN: 'login',
+  GITHUB_WELCOME: 'welcome',
+  GITHUB_EDITOR: 'editor',
+  getAssessmentTypeLink: assessmentTypeLink
+};
 
 /**
  * A page that lists the missions available to the authenticated user.
@@ -75,19 +82,22 @@ const GitHubClassroom: React.FC = () => {
     fetchAssessmentOverviews(octokit, selectedCourse, setAssessmentTypeOverviews);
   };
 
-  const redirectToLogin = () => <Redirect to="/githubassessments/login" />;
-  const redirectToAssessments = () => (
-    <Redirect
+  const navigateToLogin = <Navigate to={RelativeRoutes.GITHUB_LOGIN} replace />;
+  const navigateToAssessments = (
+    <Navigate
       to={{
         // Types should exist whenever we redirect to assessments as this redirect is only called
         // when a course exists. Unless the course.json is configured wrongly.
-        pathname: `/githubassessments/${assessmentTypeLink(types ? types[0] : 'welcome')}`,
+        pathname: `${RelativeRoutes.getAssessmentTypeLink(
+          types ? types[0] : RelativeRoutes.GITHUB_WELCOME
+        )}`,
         state: {
           courses: courses,
           assessmentTypeOverviews: assessmentTypeOverviews,
           selectedCourse: selectedCourse
         }
       }}
+      replace
     />
   );
 
@@ -108,19 +118,19 @@ const GitHubClassroom: React.FC = () => {
         types={types}
         assessmentTypeOverviews={assessmentTypeOverviews}
       />
-      <Switch>
+      <Routes>
         <Route
-          path="/githubassessments/login"
-          render={() => {
-            return octokit && (!courses || (courses.length > 0 && !assessmentTypeOverviews)) ? (
+          path={RelativeRoutes.GITHUB_LOGIN}
+          element={
+            octokit && (!courses || (courses.length > 0 && !assessmentTypeOverviews)) ? (
               <ContentDisplay
                 display={<NonIdealState description="Loading..." icon={<Spinner />} />}
                 loadContentDispatch={() => {}}
               />
             ) : octokit && courses && courses.length === 0 ? (
-              <Redirect to="/githubassessments/welcome" />
+              <Navigate to={RelativeRoutes.GITHUB_WELCOME} replace />
             ) : octokit ? (
-              redirectToAssessments()
+              navigateToAssessments
             ) : (
               <ContentDisplay
                 display={
@@ -131,14 +141,17 @@ const GitHubClassroom: React.FC = () => {
                 }
                 loadContentDispatch={() => {}}
               />
-            );
-          }}
+            )
+          }
         />
         <Route
-          path="/githubassessments/welcome"
-          component={() => (octokit ? <GitHubClassroomWelcome /> : redirectToLogin())}
+          path={RelativeRoutes.GITHUB_WELCOME}
+          element={octokit ? <GitHubClassroomWelcome /> : navigateToLogin}
         />
-        <Route path="/githubassessments/editor" component={GitHubAssessmentWorkspaceContainer} />
+        <Route
+          path={RelativeRoutes.GITHUB_EDITOR}
+          element={<GitHubAssessmentWorkspaceContainer />}
+        />
         {octokit
           ? types?.map((type, idx) => {
               const filteredAssessments = assessmentTypeOverviews
@@ -146,24 +159,24 @@ const GitHubClassroom: React.FC = () => {
                 : undefined;
               return (
                 <Route
-                  path={`/githubassessments/${assessmentTypeLink(type)}`}
-                  render={() => (
+                  path={`${RelativeRoutes.getAssessmentTypeLink(type)}`}
+                  element={
                     <GitHubAssessmentListing
                       assessmentOverviews={filteredAssessments}
                       refreshAssessmentOverviews={refreshAssessmentOverviews}
                     />
-                  )}
+                  }
                   key={idx}
                 />
               );
             })
           : null}
         <Route
-          render={
-            octokit && courses && courses.length > 0 ? redirectToAssessments : redirectToLogin
+          element={
+            octokit && courses && courses.length > 0 ? navigateToAssessments : navigateToLogin
           }
         />
-      </Switch>
+      </Routes>
     </div>
   );
 };
