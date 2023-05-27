@@ -16,9 +16,9 @@ import {
 import Assessment from '../../commons/assessment/Assessment';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
-import Achievement from '../../pages/achievement/Achievement';
-import Sourcecast from '../../pages/sourcecast/SourcecastContainer';
+import Achievement from '../achievement/Achievement';
 import NotFound from '../notFound/NotFound';
+import Sourcecast from '../sourcecast/Sourcecast';
 import AdminPanel from './adminPanel/AdminPanel';
 import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';

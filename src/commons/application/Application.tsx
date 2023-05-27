@@ -9,9 +9,9 @@ import Disabled from '../../pages/disabled/Disabled';
 import GitHubClassroom from '../../pages/githubAssessments/GitHubClassroom';
 import GitHubCallback from '../../pages/githubCallback/GitHubCallback';
 import Login from '../../pages/login/Login';
-import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
+import MissionControl from '../../pages/missionControl/MissionControl';
 import NotFound from '../../pages/notFound/NotFound';
-import Playground from '../../pages/playground/PlaygroundContainer';
+import Playground from '../../pages/playground/Playground';
 import Sicp from '../../pages/sicp/Sicp';
 import Welcome from '../../pages/welcome/Welcome';
 import NavigationBar from '../navigationBar/NavigationBar';
@@ -164,7 +164,7 @@ const Application: React.FC = () => {
       <Route path="/playground" element={ensureUserAndRoleAndRouteTo(session, <Playground />)} />
       <Route
         path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
-        element={<MissionControlContainer />}
+        element={<MissionControl />}
       />
       <Route element={<NotFound />} />
     </Routes>

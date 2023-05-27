@@ -15,7 +15,7 @@ import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcompo
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
-import GitHubAssessmentWorkspaceContainer from './GitHubAssessmentWorkspaceContainer';
+import GitHubAssessmentWorkspace from './GitHubAssessmentWorkspace';
 import GitHubClassroomWelcome from './GitHubClassroomWelcome';
 
 const RelativeRoutes = {
@@ -148,10 +148,7 @@ const GitHubClassroom: React.FC = () => {
           path={RelativeRoutes.GITHUB_WELCOME}
           element={octokit ? <GitHubClassroomWelcome /> : navigateToLogin}
         />
-        <Route
-          path={RelativeRoutes.GITHUB_EDITOR}
-          element={<GitHubAssessmentWorkspaceContainer />}
-        />
+        <Route path={RelativeRoutes.GITHUB_EDITOR} element={<GitHubAssessmentWorkspace />} />
         {octokit
           ? types?.map((type, idx) => {
               const filteredAssessments = assessmentTypeOverviews
