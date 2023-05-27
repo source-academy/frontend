@@ -50,6 +50,10 @@ export class Layout {
   static compactWidth: number;
   /** the height of the compact stage */
   static compactHeight: number;
+  /** the width of the agendaStash stage */
+  static agendaStashWidth: number;
+  /** the height of the agendaStash stage */
+  static agendaStashHeight: number;
   /** the visible height of the stage */
   static visibleHeight: number = window.innerHeight;
   /** the visible width of the stage */
@@ -157,8 +161,19 @@ export class Layout {
     // initialize agenda and stash
     Layout.initializeAgendaStash();
 
-    // calculate height and width by considering lowest and widest level
-    if (EnvVisualizer.getCompactLayout()) {
+    if (EnvVisualizer.getAgendaStash()) {
+      Layout.agendaStashHeight = Math.max(
+        Config.CanvasMinHeight,
+        Layout.agendaComponent.y() + Layout.agendaComponent.height() + Config.CanvasPaddingY,
+        Layout.stashComponent.y() + Layout.stashComponent.height() + Config.CanvasPaddingY
+      );
+      Layout.agendaStashWidth = Math.max(
+        Config.CanvasMinWidth,
+        Layout.agendaComponent.x() + Layout.agendaComponent.width() + Config.CanvasPaddingX,
+        Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX
+      );
+    } else if (EnvVisualizer.getCompactLayout()) {
+      // calculate height and width by considering lowest and widest level
       const lastLevel = Layout.compactLevels[Layout.compactLevels.length - 1];
       Layout.compactHeight = Math.max(
         Config.CanvasMinHeight,
@@ -262,11 +277,19 @@ export class Layout {
   }
 
   public static width(): number {
-    return EnvVisualizer.getCompactLayout() ? Layout.compactWidth : Layout.nonCompactWidth;
+    return EnvVisualizer.getAgendaStash()
+      ? Layout.agendaStashWidth
+      : EnvVisualizer.getCompactLayout()
+      ? Layout.compactWidth
+      : Layout.nonCompactWidth;
   }
 
   public static height(): number {
-    return EnvVisualizer.getCompactLayout() ? Layout.compactHeight : Layout.nonCompactHeight;
+    return EnvVisualizer.getAgendaStash()
+      ? Layout.agendaStashHeight
+      : EnvVisualizer.getCompactLayout()
+      ? Layout.compactHeight
+      : Layout.nonCompactHeight;
   }
 
   /** initializes grid */
@@ -464,7 +487,6 @@ export class Layout {
 
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
-      console.log('HO');
       return Layout.prevLayout;
     } else {
       const layout = (

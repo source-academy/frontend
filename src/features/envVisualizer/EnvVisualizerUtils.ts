@@ -5,7 +5,7 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
-import { AgendaItemComponent } from './compactComponents/AgendaItemComponent';
+import { StackItemComponent } from './compactComponents/StackItemComponent';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
@@ -177,6 +177,36 @@ export function getTextWidth(
   return metrics.width;
 }
 
+/**
+ * Uses canvas.measureText to compute and return the height of the text box
+ * given its font in pixels.
+ *
+ * @param {string} text The text to be rendered.
+ * @param {string} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+ * @param {number} fontSize The size of the font.
+ * @param {number} width The width of the textbox the text will be rendered in.
+ */
+export function getTextHeight(
+  text: string,
+  width: number,
+  font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
+  fontSize: number = Number(Config.FontSize)
+): number {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  if (!context || !text) {
+    return 0;
+  }
+
+  context.font = font;
+  const numberOfLines = text
+    .split('\n')
+    .map(s => context.measureText(s).width)
+    .reduce<number>((accLines, currWidth) => accLines + Math.ceil(currWidth / width), 0);
+  return numberOfLines * fontSize;
+}
+
 /** Returns the parameter string of the given function */
 export function getParamsText(data: () => any): string {
   if (isFn(data)) {
@@ -323,11 +353,14 @@ export const isInstr = (command: AgendaItem): command is Instr => {
   return (command as Instr).instrType !== undefined;
 };
 
-export function getAgendaItemComponent(agendaItem: AgendaItem): AgendaItemComponent | undefined {
+export function getAgendaItemComponent(
+  agendaItem: AgendaItem,
+  stackHeight: number
+): StackItemComponent | undefined {
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
       case 'ExpressionStatement':
-        return getAgendaItemComponent(agendaItem.expression);
+        return getAgendaItemComponent(agendaItem.expression, stackHeight);
       case 'BlockStatement':
         break;
       case 'WhileStatement':
@@ -335,18 +368,27 @@ export function getAgendaItemComponent(agendaItem: AgendaItem): AgendaItemCompon
       case 'ForStatement':
         break;
       case 'Literal':
-        return new AgendaItemComponent(agendaItem.value as PrimitiveTypes);
-      default:
-        // This should be the case of a literal value on the stash (neither instruction nor a node)
-        return new AgendaItemComponent(agendaItem as unknown as PrimitiveTypes);
+        return new StackItemComponent(
+          typeof agendaItem.value === 'string' ? `'${agendaItem.value}'` : agendaItem.value,
+          true,
+          stackHeight
+        );
     }
   } else {
     switch (agendaItem.instrType) {
       case InstrType.POP:
-        break;
+        return new StackItemComponent('POP', true, stackHeight);
       case InstrType.PUSH_UNDEFINED_IF_NEEDED:
         break;
     }
   }
   return undefined;
+}
+
+export function getStashItemComponent(stashItem: any, stackHeight: number) {
+  return new StackItemComponent(
+    typeof stashItem === 'string' ? `'${stashItem}'` : stashItem,
+    false,
+    stackHeight
+  );
 }
