@@ -25,16 +25,21 @@ const RelativeRoutes = {
   getAssessmentTypeLink: assessmentTypeLink
 };
 
+type GitHubClassroomLocationState =
+  | {
+      courses: string[] | undefined;
+      assessmentTypeOverviews: GHAssessmentTypeOverview[] | undefined;
+      selectedCourse: string | undefined;
+    }
+  | undefined;
+
 /**
  * A page that lists the missions available to the authenticated user.
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
 const GitHubClassroom: React.FC = () => {
-  const location = useLocation<{
-    courses: string[] | undefined;
-    assessmentTypeOverviews: GHAssessmentTypeOverview[] | undefined;
-    selectedCourse: string | undefined;
-  }>();
+  const location = useLocation();
+  const locationState = location.state as GitHubClassroomLocationState;
 
   const octokit: Octokit | undefined = useTypedSelector(
     store => store.session.githubOctokitObject
@@ -43,13 +48,11 @@ const GitHubClassroom: React.FC = () => {
   const handleGitHubLogIn = () => dispatch(loginGitHub());
   const handleGitHubLogOut = () => dispatch(logoutGitHub());
 
-  const [courses, setCourses] = useState<string[] | undefined>(location.state?.courses);
-  const [selectedCourse, setSelectedCourse] = useState<string>(
-    location.state?.selectedCourse || ''
-  );
+  const [courses, setCourses] = useState<string[] | undefined>(locationState?.courses);
+  const [selectedCourse, setSelectedCourse] = useState<string>(locationState?.selectedCourse || '');
   const [assessmentTypeOverviews, setAssessmentTypeOverviews] = useState<
     GHAssessmentTypeOverview[] | undefined
-  >(location.state?.assessmentTypeOverviews);
+  >(locationState?.assessmentTypeOverviews);
   const types = assessmentTypeOverviews?.map(overview => overview.typeName);
 
   useEffect(() => {
@@ -85,17 +88,13 @@ const GitHubClassroom: React.FC = () => {
   const navigateToLogin = <Navigate to={RelativeRoutes.GITHUB_LOGIN} replace />;
   const navigateToAssessments = (
     <Navigate
-      to={{
-        // Types should exist whenever we redirect to assessments as this redirect is only called
-        // when a course exists. Unless the course.json is configured wrongly.
-        pathname: `${RelativeRoutes.getAssessmentTypeLink(
-          types ? types[0] : RelativeRoutes.GITHUB_WELCOME
-        )}`,
-        state: {
-          courses: courses,
-          assessmentTypeOverviews: assessmentTypeOverviews,
-          selectedCourse: selectedCourse
-        }
+      to={`${RelativeRoutes.getAssessmentTypeLink(
+        types ? types[0] : RelativeRoutes.GITHUB_WELCOME
+      )}`}
+      state={{
+        courses: courses,
+        assessmentTypeOverviews: assessmentTypeOverviews,
+        selectedCourse: selectedCourse
       }}
       replace
     />

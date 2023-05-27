@@ -14,6 +14,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
@@ -109,6 +110,7 @@ const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 
 const GitHubAssessmentWorkspace: React.FC = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
@@ -160,7 +162,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const [displayMCQInEditor, setDisplayMCQInEditor] = useState(true);
   const [mcqQuestion, setMCQQuestion] = useState(defaultMCQQuestion);
   const [missionRepoData, setMissionRepoData] = useState<MissionRepoData | undefined>(undefined);
-  const assessmentOverview = props.location.state as GHAssessmentOverview;
+  const assessmentOverview = location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
   const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);

@@ -9,7 +9,7 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
-import { useHistory, useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { AnyAction, Dispatch } from 'redux';
 import {
   beginDebuggerPause,
@@ -237,7 +237,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
@@ -291,7 +291,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
   if (shouldAddDevice && !deviceSecret) {
     setDeviceSecret(shouldAddDevice);
-    history.replace(location.pathname);
+    navigate(location.pathname, { replace: true });
   }
 
   const [lastEdit, setLastEdit] = React.useState(new Date());
@@ -332,7 +332,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [editorSessionId]);
 
-  const hash = isSicpEditor ? props.initialEditorValueHash : props.location.hash;
+  const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
 
   React.useEffect(() => {
     if (!hash) {
