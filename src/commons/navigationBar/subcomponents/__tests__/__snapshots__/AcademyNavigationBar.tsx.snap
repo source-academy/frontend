@@ -40,6 +40,14 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/courses/0/notipreference\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
+      <Blueprint4.Icon icon=\\"notifications\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        Notifications
+      </div>
+    </NavLink>
+  </Blueprint4.NavbarGroup>
+  <Blueprint4.NavbarGroup align=\\"right\\">
     <NavLink to=\\"/courses/0/groundcontrol\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
       <Blueprint4.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
@@ -114,6 +122,14 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
   </Blueprint4.NavbarGroup>
+  <Blueprint4.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/courses/0/notipreference\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
+      <Blueprint4.Icon icon=\\"notifications\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        Notifications
+      </div>
+    </NavLink>
+  </Blueprint4.NavbarGroup>
 </Blueprint4.Navbar>"
 `;
 
@@ -154,6 +170,14 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         Others
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
+    </NavLink>
+  </Blueprint4.NavbarGroup>
+  <Blueprint4.NavbarGroup align=\\"right\\">
+    <NavLink to=\\"/courses/0/notipreference\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
+      <Blueprint4.Icon icon=\\"notifications\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        Notifications
+      </div>
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
