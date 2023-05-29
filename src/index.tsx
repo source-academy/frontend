@@ -1,3 +1,4 @@
+import './commons/i18n/i18n';
 import 'src/styles/index.scss';
 
 import * as Sentry from '@sentry/browser';

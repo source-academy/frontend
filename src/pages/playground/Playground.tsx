@@ -9,6 +9,7 @@ import _, { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useStore } from 'react-redux';
 import { RouteComponentProps, useHistory, useLocation } from 'react-router';
 import { AnyAction, Dispatch } from 'redux';
@@ -110,7 +111,7 @@ import MobileWorkspace, {
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import { Links } from '../../commons/utils/Constants';
-import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
+// import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
@@ -273,6 +274,7 @@ export async function handleHash(
 const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground', ...props }) => {
   const { isSicpEditor } = props;
   const { isMobileBreakpoint } = useResponsive();
+  const { t: translate } = useTranslation();
   const propsRef = React.useRef(props);
   propsRef.current = props;
 
@@ -721,7 +723,7 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
-    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
+    () => makeIntroductionTabFrom(translate('introduction.main')),
     [languageConfig]
   );
   const tabs = React.useMemo(() => {
