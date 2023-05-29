@@ -26,7 +26,9 @@ describe('NavigationBarLangSelectButton', () => {
       .findWhere(node => node.type() === 'li' && node.text() === SupportedLanguage.SCHEME)
       .find('a[role="menuitem"]')
       .simulate('click');
-    expect(store.getState().playground.lang).toEqual(SupportedLanguage.SCHEME);
+    expect(store.getState().playground.languageConfig.mainLanguage).toEqual(
+      SupportedLanguage.SCHEME
+    );
   });
 
   it('should call selectLang with "Python" when "Python" menu item is clicked', () => {
@@ -40,7 +42,9 @@ describe('NavigationBarLangSelectButton', () => {
       .findWhere(node => node.type() === 'li' && node.text() === SupportedLanguage.PYTHON)
       .find('a[role="menuitem"]')
       .simulate('click');
-    expect(store.getState().playground.lang).toEqual(SupportedLanguage.PYTHON);
+    expect(store.getState().playground.languageConfig.mainLanguage).toEqual(
+      SupportedLanguage.PYTHON
+    );
   });
 
   it('should call selectLang with "JavaScript" when "JavaScript" menu item is clicked', () => {
@@ -55,6 +59,8 @@ describe('NavigationBarLangSelectButton', () => {
       .findWhere(node => node.type() === 'li' && node.text() === SupportedLanguage.JAVASCRIPT)
       .find('a[role="menuitem"]')
       .simulate('click');
-    expect(store.getState().playground.lang).toEqual(SupportedLanguage.JAVASCRIPT);
+    expect(store.getState().playground.languageConfig.mainLanguage).toEqual(
+      SupportedLanguage.JAVASCRIPT
+    );
   });
 });
