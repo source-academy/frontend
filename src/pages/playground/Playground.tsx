@@ -722,8 +722,9 @@ const Playground: React.FC<PlaygroundProps> = ({ workspaceLocation = 'playground
   const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
+  const REAL_TEXT = translate('introduction.main');
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
-    () => makeIntroductionTabFrom(translate('introduction.main')),
+    () => makeIntroductionTabFrom(REAL_TEXT),
     [languageConfig]
   );
   const tabs = React.useMemo(() => {
