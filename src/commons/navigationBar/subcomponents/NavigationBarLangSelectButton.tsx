@@ -3,6 +3,7 @@ import { Popover2 } from '@blueprintjs/popover2';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
+  getLanguageConfig,
   pyLanguages,
   SALanguage,
   schemeLanguages,
@@ -12,7 +13,7 @@ import {
 } from 'src/commons/application/ApplicationTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { chapterSelect } from 'src/commons/workspace/WorkspaceActions';
-import { playgroundChangeLang } from 'src/features/playground/PlaygroundActions';
+import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
 
 // TODO: Hardcoded to use the first sublanguage for each language
 const defaultSublanguages: {
@@ -25,11 +26,11 @@ const defaultSublanguages: {
 
 const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const lang = useTypedSelector(store => store.playground.lang);
+  const lang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
   const dispatch = useDispatch();
   const selectLang = (language: SupportedLanguage) => {
-    dispatch(playgroundChangeLang(language));
     const { chapter, variant } = defaultSublanguages[language];
+    dispatch(playgroundConfigLanguage(getLanguageConfig(chapter, variant)));
     dispatch(chapterSelect(chapter, variant, 'playground'));
     setIsOpen(false);
   };
