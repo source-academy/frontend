@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
@@ -19,9 +20,12 @@ const MissionControl: React.FC = () => {
 
   const [editingOverview, setEditingOverview] = useState(retrieveLocalAssessmentOverview());
 
-  const assessmentId: number | null = convertParamToInt(props.match.params.assessmentId);
-  const questionId: number =
-    convertParamToInt(props.match.params.questionId) || Constants.defaultQuestionId;
+  const { assessmentId: assessmenIdUrlParam, questionId: questionIdUrlParam } = useParams<{
+    assessmentId: string;
+    questionId: string;
+  }>();
+  const assessmentId: number | null = convertParamToInt(assessmenIdUrlParam);
+  const questionId: number = convertParamToInt(questionIdUrlParam) || Constants.defaultQuestionId;
 
   // If mission for testing is to render, create workspace
   if (assessmentId === -1 && editingOverview) {
