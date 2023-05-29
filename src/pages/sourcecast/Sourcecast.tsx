@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -73,6 +74,7 @@ const workspaceLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcecast: React.FC = () => {
   const { isMobileBreakpoint } = useResponsive();
+  const params = useParams<{ sourcecastId: string }>();
 
   // Handlers migrated over from deprecated withRouter implementation
   const {
@@ -169,8 +171,8 @@ const Sourcecast: React.FC = () => {
    */
   const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
 
-  const handleQueryParam = useCallback(() => {
-    const newUid = props.match.params.sourcecastId;
+  const handleQueryParam = () => {
+    const newUid = params.sourcecastId;
     if (newUid && newUid !== uid && sourcecastIndex) {
       const cast = sourcecastIndex.find(data => data.uid === newUid);
       if (cast) {
@@ -183,7 +185,7 @@ const Sourcecast: React.FC = () => {
         );
       }
     }
-  }, []);
+  };
 
   useEffect(() => {
     handleFetchSourcecastIndex();

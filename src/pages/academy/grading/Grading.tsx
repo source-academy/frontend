@@ -1,8 +1,7 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { GradingWorkspaceParams } from 'src/features/grading/GradingTypes';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
@@ -10,12 +9,14 @@ import GradingDashboard from './subcomponents/GradingDashboard';
 import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspace';
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 
-type GradingProps = RouteComponentProps<GradingWorkspaceParams>;
-
-const Grading: React.FC<GradingProps> = ({ match }) => {
-  const submissionId: number | null = convertParamToInt(match.params.submissionId);
+const Grading: React.FC = () => {
+  const params = useParams<{
+    submissionId: string;
+    questionId: string;
+  }>();
+  const submissionId: number | null = convertParamToInt(params.submissionId);
   // default questionId is 0 (the first question)
-  const questionId: number = convertParamToInt(match.params.questionId) || 0;
+  const questionId: number = convertParamToInt(params.questionId) || 0;
   const gradingOverviews = useTypedSelector(state => state.session.gradingOverviews);
 
   /* Create a workspace to grade a submission. */

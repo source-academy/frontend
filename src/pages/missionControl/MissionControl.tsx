@@ -20,12 +20,12 @@ const MissionControl: React.FC = () => {
 
   const [editingOverview, setEditingOverview] = useState(retrieveLocalAssessmentOverview());
 
-  const { assessmentId: assessmenIdUrlParam, questionId: questionIdUrlParam } = useParams<{
+  const params = useParams<{
     assessmentId: string;
     questionId: string;
   }>();
-  const assessmentId: number | null = convertParamToInt(assessmenIdUrlParam);
-  const questionId: number = convertParamToInt(questionIdUrlParam) || Constants.defaultQuestionId;
+  const assessmentId: number | null = convertParamToInt(params.assessmentId);
+  const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
 
   // If mission for testing is to render, create workspace
   if (assessmentId === -1 && editingOverview) {
