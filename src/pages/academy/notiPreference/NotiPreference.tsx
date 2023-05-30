@@ -6,9 +6,13 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   fetchConfigurableNotificationConfigs,
-  updateNotificationPreference
+  updateNotificationPreferences
 } from 'src/commons/application/actions/SessionActions';
-import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
+import {
+  NotificationConfiguration,
+  NotificationPreference,
+  TimeOption
+} from 'src/commons/application/types/SessionTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
@@ -38,36 +42,40 @@ const NotiPreference: React.FC = () => {
     if (session.configurableNotificationConfigs !== undefined) {
       configurableNotificationConfigs.current = cloneDeep(session.configurableNotificationConfigs);
     }
+
+    // Initialise notification preferences if absent
+    configurableNotificationConfigs.current.forEach(config => {
+      if (config.notificationPreference === null) {
+        config.notificationPreference = {
+          id: -1,
+          isEnabled: true,
+          timeOptionId: null
+        };
+      }
+    });
   }, [session]);
 
   const setIsEnabled = (index: number, value: boolean) => {
     const temp = [...configurableNotificationConfigs.current];
-    const pref = temp[index]['notificationPreference'];
 
-    temp[index]['notificationPreference'] = {
-      id: pref === null ? -1 : pref.id, // assumes -1 is not a valid id
-      timeOptionId: pref === null ? null : pref.timeOptionId,
-      isEnabled: value
-    };
+    temp[index]['notificationPreference'].isEnabled = value;
 
     configurableNotificationConfigs.current = temp;
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isEnabled', value);
+    gridApi.current
+      ?.getDisplayedRowAtIndex(index)
+      ?.setDataValue('notificationPreference.isEnabled', value);
     setHasChanges(true);
   };
 
   const setTimeOption = (index: number, value: TimeOption) => {
     const temp = [...configurableNotificationConfigs.current];
-    const config = temp[index];
-    const pref = temp[index]['notificationPreference'];
 
-    temp[index]['notificationPreference'] = {
-      id: pref === null ? -1 : pref.id, // assumes -1 is not a valid id
-      timeOptionId: value.id, 
-      isEnabled: pref === null ? config.isEnabled : pref.isEnabled
-    };
+    temp[index]['notificationPreference'].timeOptionId = value.id;
 
     configurableNotificationConfigs.current = temp;
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isEnabled', value);
+    gridApi.current
+      ?.getDisplayedRowAtIndex(index)
+      ?.setDataValue('timeOptions', temp[index]['timeOptions']);
     setHasChanges(true);
   };
 
@@ -106,11 +114,11 @@ const NotiPreference: React.FC = () => {
     },
     {
       headerName: 'Enabled',
-      field: 'isEnabled',
+      field: 'notificationPreference.isEnabled',
       cellRendererFramework: BooleanCell,
       cellRendererParams: {
         setStateHandler: setIsEnabled,
-        field: 'isEnabled'
+        field: 'notificationPreference.isEnabled'
       }
     }
   ];
@@ -129,14 +137,15 @@ const NotiPreference: React.FC = () => {
   const submitHandler = () => {
     if (!hasChanges) return;
 
-    configurableNotificationConfigs.current.forEach(config => {
-      if (config.notificationPreference === null) return;
-      if (!session.courseRegId) return;
-
-      dispatch(
-        updateNotificationPreference(config.notificationPreference, config.id, session.courseRegId)
-      );
-    });
+    const preferences: NotificationPreference[] = configurableNotificationConfigs.current.map(
+      config => {
+        return {
+          ...config.notificationPreference,
+          notificationConfigId: config.id
+        } as NotificationPreference;
+      }
+    );
+    dispatch(updateNotificationPreferences(preferences, session.courseRegId!));
 
     setHasChanges(false);
   };

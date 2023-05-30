@@ -207,8 +207,7 @@ const NotificationConfigPanel = () => {
   return (
     <div className="assessment-configuration">
       <div className="assessment-configuration-header-container">
-        <H2>Assessment Configuration</H2>
-        {/* <Button text="Add Row" onClick={addRowHandler} className="add-row-button" /> */}
+        <H2>Notification Configuration</H2>
       </div>
       {grid}
       <Button

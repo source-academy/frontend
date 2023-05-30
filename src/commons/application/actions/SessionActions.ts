@@ -75,7 +75,7 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
-  UPDATE_NOTIFICATION_PREFERENCE,
+  UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_NOTIFICATIONS,
   UPDATE_TIME_OPTIONS,
   UPDATE_TOTAL_XP,
@@ -258,14 +258,12 @@ export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfigurati
 export const updateNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
   action(UPDATE_NOTIFICATION_CONFIG, notificationConfigs);
 
-export const updateNotificationPreference = (
-  notificationPreference: NotificationPreference,
-  notificationConfigId: number,
+export const updateNotificationPreferences = (
+  notificationPreferences: NotificationPreference[],
   courseRegId: number
 ) =>
-  action(UPDATE_NOTIFICATION_PREFERENCE, {
-    notificationPreference,
-    notificationConfigId,
+  action(UPDATE_NOTIFICATION_PREFERENCES, {
+    notificationPreferences,
     courseRegId
   });
 

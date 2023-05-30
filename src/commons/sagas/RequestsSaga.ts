@@ -1244,22 +1244,16 @@ export const postNotificationPreference = async (
   return resp;
 };
 
-export const putNotificationPreference = async (
+export const putNotificationPreferences = async (
   tokens: Tokens,
-  notiPref: NotificationPreference,
-  notificationConfigId: number,
+  notiPrefs: NotificationPreference[],
   courseRegId: number
 ): Promise<Response | null> => {
-  if (notiPref.id === -1) {
-    return await postNotificationPreference(tokens, notiPref, notificationConfigId, courseRegId);
-  }
-
-  const resp = await request(`notifications/preference/${notiPref.id}`, 'PUT', {
+  const resp = await request(`notifications/preferences`, 'PUT', {
     ...tokens,
-    body: {
-      is_enabled: notiPref.isEnabled,
-      time_option_id: notiPref.timeOptionId
-    },
+    body: notiPrefs.map(pref => {
+      return { ...pref, courseRegId: courseRegId };
+    }),
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

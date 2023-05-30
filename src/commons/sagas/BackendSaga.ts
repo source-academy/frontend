@@ -60,7 +60,7 @@ import {
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
-  UPDATE_NOTIFICATION_PREFERENCE,
+  UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_TIME_OPTIONS,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -120,7 +120,7 @@ import {
   putLatestViewedCourse,
   putNewUsers,
   putNotificationConfigs,
-  putNotificationPreference,
+  putNotificationPreferences,
   putTimeOptions,
   putUserRole,
   removeAssessmentConfig,
@@ -808,16 +808,14 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    UPDATE_NOTIFICATION_PREFERENCE,
-    function* (action: ReturnType<typeof actions.updateNotificationPreference>): any {
+    UPDATE_NOTIFICATION_PREFERENCES,
+    function* (action: ReturnType<typeof actions.updateNotificationPreferences>): any {
       const tokens: Tokens = yield selectTokens();
-      const { notificationPreference, notificationConfigId, courseRegId } = action.payload;
-
+      const { notificationPreferences, courseRegId } = action.payload;
       const resp: Response | null = yield call(
-        putNotificationPreference,
+        putNotificationPreferences,
         tokens,
-        notificationPreference,
-        notificationConfigId,
+        notificationPreferences,
         courseRegId
       );
       if (!resp || !resp.ok) {

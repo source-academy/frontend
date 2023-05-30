@@ -69,7 +69,7 @@ export const FETCH_NOTIFICATION_CONFIGS = 'FETCH_NOTIFICATION_CONFIGS';
 export const SET_NOTIFICATION_CONFIGS = 'SET_NOTIFICATION_CONFIGS';
 export const SET_CONFIGURABLE_NOTIFICATION_CONFIGS = 'SET_CONFIGURABLE_NOTIFICATION_CONFIG';
 export const UPDATE_NOTIFICATION_CONFIG = 'UPDATE_NOTIFICATION_CONFIG';
-export const UPDATE_NOTIFICATION_PREFERENCE = 'UPDATE_NOTIFICATION_PREFERENCE';
+export const UPDATE_NOTIFICATION_PREFERENCES = 'UPDATE_NOTIFICATION_PREFERENCES';
 export const DELETE_TIME_OPTIONS = 'DELETE_TIME_OPTIONS';
 export const UPDATE_TIME_OPTIONS = 'UPDATE_TIME_OPTIONS';
 
@@ -196,6 +196,7 @@ export type NotificationPreference = {
   id: number;
   isEnabled: boolean | null;
   timeOptionId: number | null;
+  notificationConfigId?: number;
 };
 
 export type NotificationConfiguration = {
