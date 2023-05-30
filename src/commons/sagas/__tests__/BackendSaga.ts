@@ -23,7 +23,13 @@ import {
   updateLatestViewedCourse,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import { GameState, Role, SALanguage, Story } from '../../application/ApplicationTypes';
+import {
+  GameState,
+  Role,
+  SALanguage,
+  Story,
+  SupportedLanguage
+} from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -773,7 +779,9 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
     const sublang: SALanguage = {
       chapter: Chapter.SOURCE_4,
       variant: Variant.GPU,
-      displayName: 'Source \xa74 GPU'
+      displayName: 'Source \xa74 GPU',
+      mainLanguage: SupportedLanguage.JAVASCRIPT,
+      supports: {}
     };
 
     return expectSaga(BackendSaga)

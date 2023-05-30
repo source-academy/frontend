@@ -1,11 +1,16 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { createDefaultWorkspace, SALanguage } from '../../application/ApplicationTypes';
+import {
+  createDefaultWorkspace,
+  SALanguage,
+  SupportedLanguage
+} from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import {
+  addEditorTab,
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -24,13 +29,19 @@ import {
   moveCursor,
   navigateToDeclaration,
   removeEditorTab,
+  removeEditorTabForFile,
+  removeEditorTabsForDirectory,
+  renameEditorTabForFile,
+  renameEditorTabsForDirectory,
   resetTestcase,
   resetWorkspace,
   sendReplInputToOutput,
   setEditorBreakpoint,
   setEditorHighlightedLines,
+  setFolderMode,
+  shiftEditorTab,
   toggleEditorAutorun,
-  toggleMultipleFilesMode,
+  toggleFolderMode,
   toggleUsingSubst,
   updateActiveEditorTab,
   updateActiveEditorTabIndex,
@@ -39,9 +50,11 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
-  updateSublanguage
+  updateSublanguage,
+  updateSubmissionsTableFilters
 } from '../WorkspaceActions';
 import {
+  ADD_EDITOR_TAB,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -61,11 +74,17 @@ import {
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+  RENAME_EDITOR_TAB_FOR_FILE,
+  RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_FOLDER_MODE,
+  SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
@@ -76,6 +95,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   WorkspaceLocation
 } from '../WorkspaceTypes';
 
@@ -263,12 +283,24 @@ test('evalTestcase generates correct action object', () => {
   });
 });
 
-test('toggleMultipleFilesMode generates correct action object', () => {
-  const action = toggleMultipleFilesMode(gradingWorkspace);
+test('toggleFolderMode generates correct action object', () => {
+  const action = toggleFolderMode(gradingWorkspace);
   expect(action).toEqual({
-    type: TOGGLE_MULTIPLE_FILES_MODE,
+    type: TOGGLE_FOLDER_MODE,
     payload: {
       workspaceLocation: gradingWorkspace
+    }
+  });
+});
+
+test('setFolderMode generates correct action object', () => {
+  const isFolderModeEnabled = true;
+  const action = setFolderMode(gradingWorkspace, isFolderModeEnabled);
+  expect(action).toEqual({
+    type: SET_FOLDER_MODE,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      isFolderModeEnabled
     }
   });
 });
@@ -360,6 +392,34 @@ test('moveCursor generates correct action object', () => {
   });
 });
 
+test('addEditorTab generates correct action object', () => {
+  const filePath = '/playground/program.js';
+  const editorValue = 'Hello World!';
+  const action = addEditorTab(playgroundWorkspace, filePath, editorValue);
+  expect(action).toEqual({
+    type: ADD_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      filePath,
+      editorValue
+    }
+  });
+});
+
+test('shiftEditorTab generates correct action object', () => {
+  const previousEditorTabIndex = 3;
+  const newEditorTabIndex = 1;
+  const action = shiftEditorTab(playgroundWorkspace, previousEditorTabIndex, newEditorTabIndex);
+  expect(action).toEqual({
+    type: SHIFT_EDITOR_TAB,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      previousEditorTabIndex,
+      newEditorTabIndex
+    }
+  });
+});
+
 test('removeEditorTab generates correct action object', () => {
   const editorTabIndex = 3;
   const action = removeEditorTab(playgroundWorkspace, editorTabIndex);
@@ -368,6 +428,62 @@ test('removeEditorTab generates correct action object', () => {
     payload: {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex
+    }
+  });
+});
+
+test('removeEditorTabForFile generates correct action object', () => {
+  const removedFilePath = '/dir1/a.js';
+  const action = removeEditorTabForFile(playgroundWorkspace, removedFilePath);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TAB_FOR_FILE,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      removedFilePath
+    }
+  });
+});
+
+test('removeEditorTabsForDirectory generates correct action object', () => {
+  const removedDirectoryPath = '/dir1';
+  const action = removeEditorTabsForDirectory(playgroundWorkspace, removedDirectoryPath);
+  expect(action).toEqual({
+    type: REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      removedDirectoryPath
+    }
+  });
+});
+
+test('renameEditorTabForFile generates correct action object', () => {
+  const oldFilePath = '/dir1/a.js';
+  const newFilePath = '/dir1/b.js';
+  const action = renameEditorTabForFile(playgroundWorkspace, oldFilePath, newFilePath);
+  expect(action).toEqual({
+    type: RENAME_EDITOR_TAB_FOR_FILE,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      oldFilePath,
+      newFilePath
+    }
+  });
+});
+
+test('renameEditorTabsForDirectory generates correct action object', () => {
+  const oldDirectoryPath = '/dir1';
+  const newDirectoryPath = '/dir2';
+  const action = renameEditorTabsForDirectory(
+    playgroundWorkspace,
+    oldDirectoryPath,
+    newDirectoryPath
+  );
+  expect(action).toEqual({
+    type: RENAME_EDITOR_TABS_FOR_DIRECTORY,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      oldDirectoryPath,
+      newDirectoryPath
     }
   });
 });
@@ -431,6 +547,30 @@ test('resetWorkspace generates correct action object with provided workspace', (
   });
 });
 
+test('updateSubmissionsTableFilters generates correct action object', () => {
+  const columnFilters = [
+    {
+      id: 'groupName',
+      value: '1A'
+    },
+    {
+      id: 'assessmentType',
+      value: 'Missions'
+    }
+  ];
+  const globalFilter = 'runes';
+  const action = updateSubmissionsTableFilters({ columnFilters, globalFilter });
+  expect(action).toEqual({
+    type: UPDATE_SUBMISSIONS_TABLE_FILTERS,
+    payload: {
+      filters: {
+        columnFilters,
+        globalFilter
+      }
+    }
+  });
+});
+
 test('updateCurrentAssessmentId generates correct action object', () => {
   const assessmentId = 2;
   const questionId = 4;
@@ -485,7 +625,9 @@ test('changeSublanguage generates correct action object', () => {
   const sublang: SALanguage = {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
-    displayName: 'Source \xa72'
+    displayName: 'Source \xa72',
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: {}
   };
   const action = changeSublanguage(sublang);
   expect(action).toEqual({
@@ -500,7 +642,9 @@ test('updateChapter generates correct action object', () => {
   const sublang: SALanguage = {
     chapter: Chapter.SOURCE_2,
     variant: Variant.DEFAULT,
-    displayName: 'Source \xa72'
+    displayName: 'Source \xa72',
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: {}
   };
   const action = updateSublanguage(sublang);
   expect(action).toEqual({

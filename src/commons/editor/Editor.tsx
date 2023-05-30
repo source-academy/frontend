@@ -1,5 +1,5 @@
 /* eslint-disable simple-import-sort/imports */
-import { Ace, require as acequire } from 'ace-builds';
+import { Ace, createEditSession, require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'js-slang/dist/editors/ace/theme/source';
@@ -57,6 +57,7 @@ type EditorStateProps = {
 
 export type EditorTabStateProps = {
   editorTabIndex: number;
+  filePath?: string;
   editorValue: string;
   highlightedLines: HighlightedLines[];
   breakpoints: string[];
@@ -65,6 +66,7 @@ export type EditorTabStateProps = {
 
 type LocalStateProps = {
   editorBinding: EditorBinding;
+  session: Ace.EditSession;
 };
 
 type OnEvent = {
@@ -329,10 +331,31 @@ const handlers = {
 
 const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
+  const [filePath, setFilePath] = React.useState<string | undefined>(undefined);
 
   // Refs for things that technically shouldn't change... but just in case.
   const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
   const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+
+  const editor = reactAceRef.current?.editor;
+  // Set edit session history when switching to another editor tab.
+  if (editor !== undefined) {
+    if (filePath !== props.filePath) {
+      // Unfortunately, the current editor sets the mode globally.
+      // The side effects make it very hard to ensure that the correct
+      // mode is set for every EditSession. As such, we add this one
+      // line to always propagate the mode whenever we set a new session.
+      // See AceHelper#selectMode for more information.
+      props.session.setMode(editor.getSession().getMode());
+      editor.setSession(props.session);
+      // Give focus to the editor tab only after switching from another tab.
+      // This is necessary to prevent 'unstable_flushDiscreteUpdates' warnings.
+      if (filePath !== undefined) {
+        editor.focus();
+      }
+      setFilePath(props.filePath);
+    }
+  }
 
   React.useEffect(() => {
     handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
@@ -340,12 +363,11 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
   React.useEffect(() => {
-    const editor = reactAceRef.current?.editor;
     if (editor === undefined) {
       return;
     }
     displayBreakpoints(editor, props.breakpoints);
-  }, [props.breakpoints]);
+  }, [editor, props.breakpoints]);
 
   // Handles input into AceEditor causing app to scroll to the top on iOS Safari
   React.useEffect(() => {
@@ -378,10 +400,9 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   selectMode(sourceChapter, sourceVariant, externalLibraryName);
 
   React.useLayoutEffect(() => {
-    if (!reactAceRef.current) {
+    if (editor === undefined) {
       return;
     }
-    const editor = reactAceRef.current.editor;
     const session = editor.getSession();
     // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
     // The () => ref.current() are designed to use the latest instance only.
@@ -403,17 +424,17 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     acequire('ace/ext/language_tools').setCompleters([
       makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
-  }, [props.editorTabIndex]);
+  }, [editor, props.editorTabIndex]);
 
   React.useLayoutEffect(() => {
-    if (!reactAceRef.current) {
+    if (editor === undefined) {
       return;
     }
     const newCursorPosition = props.newCursorPosition;
     if (newCursorPosition) {
-      moveCursor(reactAceRef.current.editor, newCursorPosition);
+      moveCursor(editor, newCursorPosition);
     }
-  }, [props.newCursorPosition]);
+  }, [editor, props.newCursorPosition]);
 
   const {
     handleUpdateHasUnsavedChanges,
@@ -532,8 +553,28 @@ const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, us
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
   const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
+  const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});
 
-  return <EditorBase {...props} editorBinding={workspaceSettings.editorBinding} hooks={hooks} />;
+  // Create new edit session.
+  const defaultMode = acequire('ace/mode/javascript').Mode();
+  const defaultEditSession = createEditSession(props.editorValue, defaultMode);
+
+  // Initialise edit session if file path has not been seen before.
+  if (props.filePath !== undefined && sessions[props.filePath] === undefined) {
+    setSessions({
+      ...sessions,
+      [props.filePath]: defaultEditSession
+    });
+  }
+
+  return (
+    <EditorBase
+      {...props}
+      session={props.filePath ? sessions[props.filePath] : defaultEditSession}
+      editorBinding={workspaceSettings.editorBinding}
+      hooks={hooks}
+    />
+  );
 };
 
 export default Editor;

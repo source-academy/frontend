@@ -21,7 +21,7 @@ export enum SideContentType {
   editorQuestionOverview = 'editor_question_overview',
   editorQuestionTemplate = 'editor_question_template',
   envVisualizer = 'env_visualizer',
-  files = 'files',
+  folder = 'folder',
   grading = 'grading',
   introduction = 'introduction',
   module = 'module',
@@ -79,5 +79,5 @@ export type ModuleSideContent = {
   label: string;
   iconName: IconName;
   body: (props: any) => JSX.Element;
-  toSpawn: (context: DebuggerContext) => boolean;
+  toSpawn?: (context: DebuggerContext) => boolean;
 };

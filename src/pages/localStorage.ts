@@ -1,20 +1,32 @@
-import { Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { OverallState } from '../commons/application/ApplicationTypes';
+import { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/NotificationsHelper';
 import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
 import { AchievementItem } from '../features/achievement/AchievementTypes';
 
+// In JSON, missing keys & keys with the value 'null' are both
+// deserialised into 'null'. In order to differentiate between
+// the two cases, we wrap nullable values in an object. Missing
+// keys would then be deserialised as 'null' while keys with
+// the value 'null' would be deserialised as { value: null }.
+export type NullableValue<T> = {
+  value: T | null;
+};
+
 export type SavedState = {
   session: Partial<SessionState>;
   achievements: AchievementItem[];
+  playgroundIsFolderModeEnabled: boolean;
+  playgroundActiveEditorTabIndex: NullableValue<number>;
   playgroundEditorTabs: EditorTabState[];
   playgroundIsEditorAutorun: boolean;
-  playgroundSourceChapter: number;
+  playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
+  playgroundLanguage: SALanguage;
   playgroundExternalLibrary: ExternalLibraryName;
 };
 
@@ -61,10 +73,15 @@ export const saveState = (state: OverallState) => {
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
+      playgroundIsFolderModeEnabled: state.workspaces.playground.isFolderModeEnabled,
+      playgroundActiveEditorTabIndex: {
+        value: state.workspaces.playground.activeEditorTabIndex
+      },
       playgroundEditorTabs: state.workspaces.playground.editorTabs,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
+      playgroundLanguage: state.playground.languageConfig,
       playgroundExternalLibrary: state.workspaces.playground.externalLibrary
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));

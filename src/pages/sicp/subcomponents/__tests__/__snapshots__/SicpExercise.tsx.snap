@@ -14,8 +14,8 @@ exports[`Sicp exercise renders correctly 1`] = `
       </div>
       <div className=\\"sicp-button-container\\">
         <Blueprint4.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
-          <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-large sicp-show-solution-button\\" disabled={false} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-            <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+          <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-large sicp-show-solution-button\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+            <Blueprint4.Icon icon={[undefined]} />
             <span className=\\"bp4-button-text\\">
               Show Solution
             </span>
@@ -25,7 +25,7 @@ exports[`Sicp exercise renders correctly 1`] = `
       </div>
       <Blueprint4.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
         <div className=\\"bp4-collapse sicp-solution\\" style={{...}}>
-          <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+          <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
         </div>
       </Blueprint4.Collapse>
     </div>

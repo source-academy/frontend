@@ -117,7 +117,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const dispatch = useDispatch();
 
-  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
     store => store.workspaces[workspaceLocation]
   );
 
@@ -198,6 +198,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       handleEditorEval={props.handleEditorEval}
       handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
       handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+      isEntrypointFileDefined={activeEditorTabIndex !== null}
       isDebugging={props.isDebugging}
       isEditorAutorun={props.isEditorAutorun}
       isRunning={props.isRunning}
@@ -211,6 +212,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
   const chapterSelect = (
     <ControlBarChapterSelect
       handleChapterSelect={chapterSelectHandler}
+      isFolderModeEnabled={isFolderModeEnabled}
       sourceChapter={props.sourceChapter}
       sourceVariant={props.sourceVariant}
       key="chapter"
@@ -231,6 +233,20 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
       key="eval_repl"
     />
   );
+
+  const dataVisualizerTab: SideContentTab = {
+    label: 'Data Visualizer',
+    iconName: IconNames.EYE_OPEN,
+    body: <SideContentDataVisualizer />,
+    id: SideContentType.dataVisualizer
+  };
+
+  const envVisualizerTab: SideContentTab = {
+    label: 'Env Visualizer',
+    iconName: IconNames.GLOBE,
+    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+    id: SideContentType.envVisualizer
+  };
 
   const tabs: SideContentTab[] = [
     {
@@ -281,7 +297,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
-    isMultipleFilesEnabled,
+    isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
@@ -296,7 +312,7 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
     isEditorAutorun: props.isEditorAutorun,
     inputToApply: props.inputToApply,
     isPlaying: props.playbackStatus === PlaybackStatus.playing,
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorUpdateBreakpoints: newBreakpoints =>
       dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints))
   };
@@ -396,19 +412,5 @@ const Sourcecast: React.FC<SourcecastProps> = props => {
 };
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
-
-const dataVisualizerTab: SideContentTab = {
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer
-};
-
-const envVisualizerTab: SideContentTab = {
-  label: 'Env Visualizer',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer
-};
 
 export default Sourcecast;

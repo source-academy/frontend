@@ -32,6 +32,7 @@ import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
+  ADD_EDITOR_TAB,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
@@ -47,21 +48,32 @@ import {
   EVAL_REPL,
   MOVE_CURSOR,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+  RENAME_EDITOR_TAB_FOR_FILE,
+  RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_FOLDER_MODE,
+  SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_UPDATE_ENV,
+  TOGGLE_USING_ENV,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_ENVSTEPS,
+  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
@@ -570,6 +582,38 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
+    case TOGGLE_USING_ENV:
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingEnv: action.payload.usingEnv
+          }
+        };
+      } else {
+        return state;
+      }
+    case TOGGLE_UPDATE_ENV:
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            updateEnv: action.payload.updateEnv
+          }
+        };
+      } else {
+        return state;
+      }
+    case UPDATE_SUBMISSIONS_TABLE_FILTERS:
+      return {
+        ...state,
+        grading: {
+          ...state.grading,
+          submissionsTableFilters: action.payload.filters
+        }
+      };
     case UPDATE_CURRENT_ASSESSMENT_ID:
       return {
         ...state,
@@ -588,12 +632,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           currentQuestion: action.payload.questionId
         }
       };
-    case TOGGLE_MULTIPLE_FILES_MODE:
+    case SET_FOLDER_MODE:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          isMultipleFilesEnabled: !state[workspaceLocation].isMultipleFilesEnabled
+          isFolderModeEnabled: action.payload.isFolderModeEnabled
         }
       };
     case UPDATE_ACTIVE_EDITOR_TAB_INDEX: {
@@ -729,6 +773,85 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
+    case ADD_EDITOR_TAB: {
+      const { filePath, editorValue } = action.payload;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const openedEditorTabIndex = editorTabs.findIndex(
+        (editorTab: EditorTabState) => editorTab.filePath === filePath
+      );
+      const fileIsAlreadyOpen = openedEditorTabIndex !== -1;
+      if (fileIsAlreadyOpen) {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            activeEditorTabIndex: openedEditorTabIndex
+          }
+        };
+      }
+
+      const newEditorTab: EditorTabState = {
+        filePath,
+        value: editorValue,
+        highlightedLines: [],
+        breakpoints: []
+      };
+      const newEditorTabs: EditorTabState[] = [
+        ...state[workspaceLocation].editorTabs,
+        newEditorTab
+      ];
+      // Set the newly added editor tab as the active tab.
+      const newActiveEditorTabIndex = newEditorTabs.length - 1;
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case SHIFT_EDITOR_TAB: {
+      const { previousEditorTabIndex, newEditorTabIndex } = action.payload;
+      if (previousEditorTabIndex < 0) {
+        throw new Error('Previous editor tab index must be non-negative!');
+      }
+      if (previousEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Previous editor tab index must have a corresponding editor tab!');
+      }
+      if (newEditorTabIndex < 0) {
+        throw new Error('New editor tab index must be non-negative!');
+      }
+      if (newEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('New editor tab index must have a corresponding editor tab!');
+      }
+
+      const newActiveEditorTabIndex =
+        state[workspaceLocation].activeEditorTabIndex === previousEditorTabIndex
+          ? newEditorTabIndex
+          : state[workspaceLocation].activeEditorTabIndex;
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const shiftedEditorTab = editorTabs[previousEditorTabIndex];
+      const filteredEditorTabs = editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== previousEditorTabIndex
+      );
+      const newEditorTabs = [
+        ...filteredEditorTabs.slice(0, newEditorTabIndex),
+        shiftedEditorTab,
+        ...filteredEditorTabs.slice(newEditorTabIndex)
+      ];
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
     case REMOVE_EDITOR_TAB: {
       const editorTabIndex = action.payload.editorTabIndex;
       if (editorTabIndex < 0) {
@@ -742,28 +865,126 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       );
 
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
-      const newActiveEditorTabIndex =
-        activeEditorTabIndex !== editorTabIndex
-          ? // If the active editor tab is not the one that is removed,
-            // the active editor tab remains the same.
-            activeEditorTabIndex
-          : newEditorTabs.length === 0
-          ? // If there are no editor tabs after removal, there cannot
-            // be an active editor tab.
-            null
-          : editorTabIndex === 0
-          ? // If the removed editor tab is the leftmost tab, the active
-            // editor tab will be the new leftmost tab.
-            0
-          : // Otherwise, the active editor tab will be the tab to the
-            // left of the removed tab.
-            editorTabIndex - 1;
+      const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+        activeEditorTabIndex,
+        editorTabIndex,
+        newEditorTabs.length
+      );
 
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
           activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case REMOVE_EDITOR_TAB_FOR_FILE: {
+      const removedFilePath = action.payload.removedFilePath;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const editorTabIndexToRemove = editorTabs.findIndex(
+        (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
+      );
+      if (editorTabIndexToRemove === -1) {
+        return state;
+      }
+      const newEditorTabs = editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
+      );
+
+      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+        activeEditorTabIndex,
+        editorTabIndexToRemove,
+        newEditorTabs.length
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case REMOVE_EDITOR_TABS_FOR_DIRECTORY: {
+      const removedDirectoryPath = action.payload.removedDirectoryPath;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const editorTabIndicesToRemove = editorTabs
+        .map((editorTab: EditorTabState, index: number) => {
+          if (editorTab.filePath?.startsWith(removedDirectoryPath)) {
+            return index;
+          }
+          return null;
+        })
+        .filter((index: number | null): index is number => index !== null);
+      if (editorTabIndicesToRemove.length === 0) {
+        return state;
+      }
+
+      let newActiveEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
+      const newEditorTabs = [...editorTabs];
+      for (let i = editorTabIndicesToRemove.length - 1; i >= 0; i--) {
+        const editorTabIndexToRemove = editorTabIndicesToRemove[i];
+        newEditorTabs.splice(editorTabIndexToRemove, 1);
+        newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+          newActiveEditorTabIndex,
+          editorTabIndexToRemove,
+          newEditorTabs.length
+        );
+      }
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          activeEditorTabIndex: newActiveEditorTabIndex,
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case RENAME_EDITOR_TAB_FOR_FILE: {
+      const { oldFilePath, newFilePath } = action.payload;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
+        editorTab.filePath === oldFilePath
+          ? {
+              ...editorTab,
+              filePath: newFilePath
+            }
+          : editorTab
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case RENAME_EDITOR_TABS_FOR_DIRECTORY: {
+      const { oldDirectoryPath, newDirectoryPath } = action.payload;
+
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
+        editorTab.filePath?.startsWith(oldDirectoryPath)
+          ? {
+              ...editorTab,
+              filePath: editorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath)
+            }
+          : editorTab
+      );
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
           editorTabs: newEditorTabs
         }
       };
@@ -796,6 +1017,30 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
+    case UPDATE_ENVSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          envSteps: action.payload.steps
+        }
+      };
+    case UPDATE_ENVSTEPSTOTAL:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          envStepsTotal: action.payload.steps
+        }
+      };
+    case UPDATE_BREAKPOINTSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          breakpointSteps: action.payload.breakpointSteps
+        }
+      };
     case NOTIFY_PROGRAM_EVALUATED:
       return {
         ...state,
@@ -814,4 +1059,32 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     default:
       return state;
   }
+};
+
+const getNextActiveEditorTabIndexAfterTabRemoval = (
+  activeEditorTabIndex: number | null,
+  removedEditorTabIndex: number,
+  newEditorTabsLength: number
+) => {
+  return activeEditorTabIndex !== removedEditorTabIndex
+    ? // If the active editor tab is not the one that is removed,
+      // the active editor tab remains the same if its index is
+      // less than the removed editor tab index or null.
+      activeEditorTabIndex === null || activeEditorTabIndex < removedEditorTabIndex
+      ? activeEditorTabIndex
+      : // Otherwise, the active editor tab index needs to have 1
+        // subtracted because every tab to the right of the editor
+        // tab being removed has their index decremented by 1.
+        activeEditorTabIndex - 1
+    : newEditorTabsLength === 0
+    ? // If there are no editor tabs after removal, there cannot
+      // be an active editor tab.
+      null
+    : removedEditorTabIndex === 0
+    ? // If the removed editor tab is the leftmost tab, the active
+      // editor tab will be the new leftmost tab.
+      0
+    : // Otherwise, the active editor tab will be the tab to the
+      // left of the removed tab.
+      removedEditorTabIndex - 1;
 };

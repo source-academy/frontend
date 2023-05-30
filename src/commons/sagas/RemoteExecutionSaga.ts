@@ -1,5 +1,5 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { assemble, compile, Context } from 'js-slang';
+import { assemble, compile, compileFiles, Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
@@ -260,48 +260,48 @@ export function* remoteExecutionSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(
-    REMOTE_EXEC_RUN,
-    function* ({ payload: program }: ReturnType<typeof actions.remoteExecRun>) {
-      const session: DeviceSession | undefined = yield select(
-        (state: OverallState) => state.session.remoteExecutionSession
-      );
-      if (!session) {
-        return;
-      }
-      if (session.connection.status !== 'CONNECTED') {
-        yield put(
-          actions.updateWorkspace(session.workspace, {
-            isRunning: false
-          })
-        );
-        return;
-      }
+  yield takeEvery(REMOTE_EXEC_RUN, function* (action: ReturnType<typeof actions.remoteExecRun>) {
+    const { files, entrypointFilePath } = action.payload;
 
-      yield put(actions.clearReplOutput(session.workspace));
-
-      const client = session.connection.client;
-      const context: Context = yield select(
-        (state: OverallState) => state.workspaces[session.workspace].context
-      );
-      // clear the context of errors (note: the way this works is that the context
-      // is mutated by js-slang anyway, so it's ok to do it like this)
-      context.errors.length = 0;
-      const compiled: ReturnType<typeof compile> = yield call(
-        compile,
-        program,
-        context,
-        deviceTypesById.get(session.device.type)?.internalFunctions
-      );
-      if (!compiled) {
-        yield put(actions.evalInterpreterError(context.errors, session.workspace));
-        return;
-      }
-      const assembled = assemble(compiled);
-
-      client.sendRun(Buffer.from(assembled));
+    const session: DeviceSession | undefined = yield select(
+      (state: OverallState) => state.session.remoteExecutionSession
+    );
+    if (!session) {
+      return;
     }
-  );
+    if (session.connection.status !== 'CONNECTED') {
+      yield put(
+        actions.updateWorkspace(session.workspace, {
+          isRunning: false
+        })
+      );
+      return;
+    }
+
+    yield put(actions.clearReplOutput(session.workspace));
+
+    const client = session.connection.client;
+    const context: Context = yield select(
+      (state: OverallState) => state.workspaces[session.workspace].context
+    );
+    // clear the context of errors (note: the way this works is that the context
+    // is mutated by js-slang anyway, so it's ok to do it like this)
+    context.errors.length = 0;
+    const compiled: ReturnType<typeof compile> = yield call(
+      compileFiles,
+      files,
+      entrypointFilePath,
+      context,
+      deviceTypesById.get(session.device.type)?.internalFunctions
+    );
+    if (!compiled) {
+      yield put(actions.evalInterpreterError(context.errors, session.workspace));
+      return;
+    }
+    const assembled = assemble(compiled);
+
+    client.sendRun(Buffer.from(assembled));
+  });
 
   yield takeEvery(BEGIN_INTERRUPT_EXECUTION, function* () {
     const session: DeviceSession | undefined = yield select(

@@ -1,6 +1,6 @@
 import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import * as React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
@@ -9,6 +9,7 @@ import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
 
 export type ControlBarGitHubButtonsProps = {
+  isFolderModeEnabled: boolean;
   loggedInAs?: Octokit;
   githubSaveInfo: GitHubSaveInfo;
   isDirty: boolean;
@@ -47,6 +48,7 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
       label={mainButtonDisplayText}
       icon={IconNames.GIT_BRANCH}
       options={{ intent: mainButtonIntent }}
+      isDisabled={props.isFolderModeEnabled}
     />
   );
 
@@ -83,22 +85,29 @@ export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = p
     <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
 
+  const tooltipContent = props.isFolderModeEnabled
+    ? 'Currently unsupported in Folder mode'
+    : undefined;
+
   return (
-    <Popover2
-      autoFocus={false}
-      content={
-        <div>
-          <ButtonGroup large={!isMobileBreakpoint}>
-            {openButton}
-            {saveButton}
-            {saveAsButton}
-            {loginButton}
-          </ButtonGroup>
-        </div>
-      }
-      popoverClassName={Classes.POPOVER_DISMISS}
-    >
-      {mainButton}
-    </Popover2>
+    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
+      <Popover2
+        autoFocus={false}
+        content={
+          <div>
+            <ButtonGroup large={!isMobileBreakpoint}>
+              {openButton}
+              {saveButton}
+              {saveAsButton}
+              {loginButton}
+            </ButtonGroup>
+          </div>
+        }
+        popoverClassName={Classes.POPOVER_DISMISS}
+        disabled={props.isFolderModeEnabled}
+      >
+        {mainButton}
+      </Popover2>
+    </Tooltip2>
   );
 };

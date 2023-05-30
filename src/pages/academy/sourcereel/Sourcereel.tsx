@@ -120,7 +120,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
   const dispatch = useDispatch();
 
-  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
     store => store.workspaces[workspaceLocation]
   );
 
@@ -200,6 +200,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       handleEditorEval={editorEvalHandler}
       handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
       handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+      isEntrypointFileDefined={activeEditorTabIndex !== null}
       isDebugging={props.isDebugging}
       isEditorAutorun={props.isEditorAutorun}
       isRunning={props.isRunning}
@@ -222,6 +223,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   const chapterSelect = (
     <ControlBarChapterSelect
       handleChapterSelect={chapterSelectHandler}
+      isFolderModeEnabled={isFolderModeEnabled}
       sourceChapter={props.sourceChapter}
       sourceVariant={props.sourceVariant}
       key="chapter"
@@ -255,14 +257,14 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       'isEditorReadonly'
     ),
     editorVariant: 'sourcecast',
-    isMultipleFilesEnabled,
+    isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate: cursorPosition =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorUpdateBreakpoints: newBreakpoints =>
       dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
     editorSessionId: '',
@@ -281,6 +283,20 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       type: 'activeTabChange',
       data: activeTab
     });
+  };
+
+  const dataVisualizerTab: SideContentTab = {
+    label: 'Data Visualizer',
+    iconName: IconNames.EYE_OPEN,
+    body: <SideContentDataVisualizer />,
+    id: SideContentType.dataVisualizer
+  };
+
+  const envVisualizerTab: SideContentTab = {
+    label: 'Env Visualizer',
+    iconName: IconNames.GLOBE,
+    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+    id: SideContentType.envVisualizer
   };
 
   const workspaceProps: WorkspaceProps = {
@@ -427,19 +443,5 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
 };
 
 const INTRODUCTION = 'Welcome to Sourcereel!';
-
-const dataVisualizerTab: SideContentTab = {
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer
-};
-
-const envVisualizerTab: SideContentTab = {
-  label: 'Env Visualizer',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualizer
-};
 
 export default Sourcereel;

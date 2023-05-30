@@ -211,7 +211,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
       // Disable draggable REPL when on the files & stepper tab.
       if (
-        newTabId === SideContentType.files ||
+        newTabId === SideContentType.folder ||
         newTabId === SideContentType.substVisualizer ||
         (prevTabId === SideContentType.substVisualizer &&
           newTabId === SideContentType.mobileEditorRun)

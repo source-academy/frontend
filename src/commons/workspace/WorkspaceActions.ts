@@ -10,6 +10,7 @@ import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
+  ADD_EDITOR_TAB,
   ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
@@ -34,21 +35,34 @@ import {
   PLAYGROUND_EXTERNAL_SELECT,
   PROMPT_AUTOCOMPLETE,
   REMOVE_EDITOR_TAB,
+  REMOVE_EDITOR_TAB_FOR_FILE,
+  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+  RENAME_EDITOR_TAB_FOR_FILE,
+  RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
+  SET_FOLDER_MODE,
+  SHIFT_EDITOR_TAB,
+  SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_MULTIPLE_FILES_MODE,
+  TOGGLE_FOLDER_MODE,
+  TOGGLE_UPDATE_ENV,
+  TOGGLE_USING_ENV,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_ENVSTEPS,
+  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceState
@@ -160,8 +174,11 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
 
-export const toggleMultipleFilesMode = (workspaceLocation: WorkspaceLocation) =>
-  action(TOGGLE_MULTIPLE_FILES_MODE, { workspaceLocation });
+export const toggleFolderMode = (workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_FOLDER_MODE, { workspaceLocation });
+
+export const setFolderMode = (workspaceLocation: WorkspaceLocation, isFolderModeEnabled: boolean) =>
+  action(SET_FOLDER_MODE, { workspaceLocation, isFolderModeEnabled });
 
 export const updateActiveEditorTabIndex = (
   workspaceLocation: WorkspaceLocation,
@@ -202,8 +219,47 @@ export const moveCursor = (
   newCursorPosition: Position
 ) => action(MOVE_CURSOR, { workspaceLocation, editorTabIndex, newCursorPosition });
 
+export const addEditorTab = (
+  workspaceLocation: WorkspaceLocation,
+  filePath: string,
+  editorValue: string
+) => action(ADD_EDITOR_TAB, { workspaceLocation, filePath, editorValue });
+
+export const shiftEditorTab = (
+  workspaceLocation: WorkspaceLocation,
+  previousEditorTabIndex: number,
+  newEditorTabIndex: number
+) => action(SHIFT_EDITOR_TAB, { workspaceLocation, previousEditorTabIndex, newEditorTabIndex });
+
 export const removeEditorTab = (workspaceLocation: WorkspaceLocation, editorTabIndex: number) =>
   action(REMOVE_EDITOR_TAB, { workspaceLocation, editorTabIndex });
+
+export const removeEditorTabForFile = (
+  workspaceLocation: WorkspaceLocation,
+  removedFilePath: string
+) => action(REMOVE_EDITOR_TAB_FOR_FILE, { workspaceLocation, removedFilePath });
+
+export const removeEditorTabsForDirectory = (
+  workspaceLocation: WorkspaceLocation,
+  removedDirectoryPath: string
+) => action(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { workspaceLocation, removedDirectoryPath });
+
+export const renameEditorTabForFile = (
+  workspaceLocation: WorkspaceLocation,
+  oldFilePath: string,
+  newFilePath: string
+) => action(RENAME_EDITOR_TAB_FOR_FILE, { workspaceLocation, oldFilePath, newFilePath });
+
+export const renameEditorTabsForDirectory = (
+  workspaceLocation: WorkspaceLocation,
+  oldDirectoryPath: string,
+  newDirectoryPath: string
+) =>
+  action(RENAME_EDITOR_TABS_FOR_DIRECTORY, {
+    workspaceLocation,
+    oldDirectoryPath,
+    newDirectoryPath
+  });
 
 export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
@@ -258,6 +314,9 @@ export const setIsEditorReadonly = (
     workspaceLocation,
     isEditorReadonly: isEditorReadonly
   });
+
+export const updateSubmissionsTableFilters = (filters: SubmissionsTableFilters) =>
+  action(UPDATE_SUBMISSIONS_TABLE_FILTERS, { filters });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>
   action(UPDATE_CURRENT_ASSESSMENT_ID, {
@@ -317,3 +376,20 @@ export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: Workspa
 
 export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: WorkspaceLocation) =>
   action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation });
+
+export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
+
+export const toggleUpdateEnv = (updateEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
+
+export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPS, { steps, workspaceLocation });
+
+export const updateEnvStepsTotal = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPSTOTAL, { steps, workspaceLocation });
+
+export const updateBreakpointSteps = (
+  breakpointSteps: number[],
+  workspaceLocation: WorkspaceLocation
+) => action(UPDATE_BREAKPOINTSTEPS, { breakpointSteps, workspaceLocation });

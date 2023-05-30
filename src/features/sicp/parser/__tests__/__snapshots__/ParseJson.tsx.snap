@@ -105,8 +105,8 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
               <div />
               <div className=\\"sicp-button-container\\">
                 <Blueprint4.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
-                  <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-large sicp-show-solution-button\\" disabled={false} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                    <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+                  <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-large sicp-show-solution-button\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.Icon icon={[undefined]} />
                     <span className=\\"bp4-button-text\\">
                       Show Solution
                     </span>
@@ -116,7 +116,7 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
               </div>
               <Blueprint4.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                 <div className=\\"bp4-collapse sicp-solution\\" style={{...}}>
-                  <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                  <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                 </div>
               </Blueprint4.Collapse>
             </div>
@@ -144,8 +144,8 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
               </div>
               <div className=\\"sicp-button-container\\">
                 <Blueprint4.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
-                  <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-large sicp-show-solution-button\\" disabled={false} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                    <Blueprint4.Icon icon={[undefined]} aria-hidden={true} tabIndex={-1} />
+                  <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-large sicp-show-solution-button\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                    <Blueprint4.Icon icon={[undefined]} />
                     <span className=\\"bp4-button-text\\">
                       Show Solution
                     </span>
@@ -155,7 +155,7 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
               </div>
               <Blueprint4.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
                 <div className=\\"bp4-collapse sicp-solution\\" style={{...}}>
-                  <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false} />
+                  <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
                 </div>
               </Blueprint4.Collapse>
             </div>
@@ -176,7 +176,7 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
           <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
             <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
               <Blueprint4.Icon icon=\\"link\\">
-                <span icon=\\"link\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
                   <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                     <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
                   </svg>
@@ -207,7 +207,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
           <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
             <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
               <Blueprint4.Icon icon=\\"link\\">
-                <span icon=\\"link\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
                   <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                     <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
                   </svg>
@@ -238,7 +238,7 @@ exports[`Parse figures FIGURE with snippet successful 1`] = `
           <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
             <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
               <Blueprint4.Icon icon=\\"link\\">
-                <span icon=\\"link\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
                   <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                     <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
                   </svg>
@@ -273,7 +273,7 @@ exports[`Parse figures FIGURE with table successful 1`] = `
           <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
             <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
               <Blueprint4.Icon icon=\\"link\\">
-                <span icon=\\"link\\" aria-hidden={true} className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
                   <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
                     <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
                   </svg>

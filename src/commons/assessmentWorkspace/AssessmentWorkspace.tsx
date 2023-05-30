@@ -140,12 +140,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const dispatch = useDispatch();
 
-  const { isMultipleFilesEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
+  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
     store => store.workspaces[workspaceLocation]
   );
 
   React.useEffect(() => {
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorValueChange(0, '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -182,7 +182,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       }
     }
 
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorValueChange(0, answer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -220,7 +220,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       props.handleUpdateHasUnsavedChanges(true);
     }
 
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorValueChange(0, newCode);
 
     const input: Input = {
@@ -350,7 +350,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       programPostpendValue = questionData.postpend;
     }
 
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorUpdateBreakpoints(0, []);
     dispatch(updateCurrentAssessmentId(assessmentId, questionId));
     dispatch(
@@ -378,7 +378,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     dispatch(beginClearContext(workspaceLocation, question.library, true));
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       props.handleEditorValueChange(0, editorValue);
     }
   };
@@ -394,7 +394,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     const isContestVoting = props.assessment!.questions[questionId]?.type === 'voting';
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       props.handleEditorValueChange(0, answer);
     };
 
@@ -642,7 +642,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
+        handleEditorEval={handleEval}
+        key="run"
+      />
+    );
 
     const saveButton =
       props.canSave &&
@@ -659,6 +665,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
+        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={props.assessment!.questions[questionId].library.chapter}
         sourceVariant={
           props.assessment!.questions[questionId].library.variant ?? Constants.defaultSourceVariant
@@ -771,7 +778,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             label="Confirm"
             onClick={() => {
               closeOverlay();
-              // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable multiple files.
+              // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
               props.handleEditorValueChange(
                 0,
                 (props.assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
@@ -795,7 +802,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
           editorVariant: 'normal',
-          isMultipleFilesEnabled,
+          isFolderModeEnabled,
           activeEditorTabIndex,
           setActiveEditorTabIndex,
           removeEditorTabByIndex,
