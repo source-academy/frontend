@@ -34,7 +34,6 @@ export class Stack extends Visible implements IHoverable {
           return component;
         }
       : (stashItem: any) => {
-          console.log(stashItem);
           const component = getStashItemComponent(stashItem, this._height);
           this._height += component ? component.height() : 0;
           return component;

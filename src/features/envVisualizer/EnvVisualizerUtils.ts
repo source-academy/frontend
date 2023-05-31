@@ -1,5 +1,6 @@
-import { AgendaItem, AssmtInstr, Instr, InstrType } from 'js-slang/dist/ec-evaluator/types';
+import { AgendaItem, AssmtInstr, BinOpInstr, Instr, InstrType, UnOpInstr } from 'js-slang/dist/ec-evaluator/types';
 import { Environment } from 'js-slang/dist/types';
+import { astToString} from 'js-slang/dist/utils/astToString'
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
@@ -359,58 +360,58 @@ export function getAgendaItemComponent(
 ): StackItemComponent | undefined {
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
-      case 'Program':
-        return new StackItemComponent('Program', true, stackHeight);
-      case 'BlockStatement':
-        return new StackItemComponent('BlockStatement', true, stackHeight);
-      case 'WhileStatement':
-        return new StackItemComponent('WhileStatement', true, stackHeight);
-      case 'ForStatement':
-        return new StackItemComponent('ForStatement', true, stackHeight);
-      case 'IfStatement':
-        return new StackItemComponent('IfStatement', true, stackHeight);
-      case 'ExpressionStatement':
-        return new StackItemComponent('ExpressionStatement', true, stackHeight);
-      case 'DebuggerStatement':
-        return new StackItemComponent('DebuggerStatement', true, stackHeight);
-      case 'VariableDeclaration':
-        return new StackItemComponent('VariableDeclaration', true, stackHeight);
-      case 'FunctionDeclaration':
-        return new StackItemComponent('FunctionDeclaration', true, stackHeight);
-      case 'ReturnStatement':
-        return new StackItemComponent('ReturnStatement', true, stackHeight);
-      case 'ContinueStatement':
-        return new StackItemComponent('ContinueStatement', true, stackHeight);
-      case 'BreakStatement':
-        return new StackItemComponent('BreakStatement', true, stackHeight);
-      case 'ImportDeclaration':
-        return new StackItemComponent('ImportDeclaration', true, stackHeight);
+      // case 'BlockStatement':
+      //   return new StackItemComponent('BlockStatement', true, stackHeight);
+      // case 'WhileStatement':
+      //   return new StackItemComponent('WhileStatement', true, stackHeight);
+      // case 'ForStatement':
+      //   return new StackItemComponent('ForStatement', true, stackHeight);
+      // case 'IfStatement':
+      //   return new StackItemComponent('IfStatement', true, stackHeight);
+      // case 'ExpressionStatement':
+      //   return new StackItemComponent('ExpressionStatement', true, stackHeight);
+      // case 'DebuggerStatement':
+      //   return new StackItemComponent('DebuggerStatement', true, stackHeight);
+      // case 'VariableDeclaration':
+      //   return new StackItemComponent('VariableDeclaration', true, stackHeight);
+      // case 'FunctionDeclaration':
+      //   return new StackItemComponent('FunctionDeclaration', true, stackHeight);
+      // case 'ReturnStatement':
+      //   return new StackItemComponent('ReturnStatement', true, stackHeight);
+      // case 'ContinueStatement':
+      //   return new StackItemComponent('ContinueStatement', true, stackHeight);
+      // case 'BreakStatement':
+      //   return new StackItemComponent('BreakStatement', true, stackHeight);
+      // case 'ImportDeclaration':
+      //   return new StackItemComponent('ImportDeclaration', true, stackHeight);
       case 'Literal':
         return new StackItemComponent(
           typeof agendaItem.value === 'string' ? `"${agendaItem.value}"` : agendaItem.value,
           true,
           stackHeight
         );
-      case 'AssignmentExpression':
-        return new StackItemComponent('AssignmentExpression', true, stackHeight);
-      case 'ArrayExpression':
-        return new StackItemComponent('ArrayExpression', true, stackHeight);
-      case 'MemberExpression':
-        return new StackItemComponent('MemberExpression', true, stackHeight);
-      case 'ConditionalExpression':
-        return new StackItemComponent('ConditionalExpression', true, stackHeight);
-      case 'Identifier':
-        return new StackItemComponent('Identifier', true, stackHeight);
-      case 'UnaryExpression':
-        return new StackItemComponent('UnaryExpression', true, stackHeight);
-      case 'BinaryExpression':
-        return new StackItemComponent('BinaryExpression', true, stackHeight);
-      case 'LogicalExpression':
-        return new StackItemComponent('LogicalExpression', true, stackHeight);
-      case 'ArrowFunctionExpression':
-        return new StackItemComponent('ArrowFunctionExpression', true, stackHeight);
-      case 'CallExpression':
-        return new StackItemComponent('CallExpression', true, stackHeight);
+      // case 'AssignmentExpression':
+      //   return new StackItemComponent('AssignmentExpression', true, stackHeight);
+      // case 'ArrayExpression':
+      //   return new StackItemComponent('ArrayExpression', true, stackHeight);
+      // case 'MemberExpression':
+      //   return new StackItemComponent('MemberExpression', true, stackHeight);
+      // case 'ConditionalExpression':
+      //   return new StackItemComponent('ConditionalExpression', true, stackHeight);
+      // case 'Identifier':
+      //   return new StackItemComponent('Identifier', true, stackHeight);
+      // case 'UnaryExpression':
+      //   return new StackItemComponent('UnaryExpression', true, stackHeight);
+      // case 'BinaryExpression':
+      //   return new StackItemComponent('BinaryExpression', true, stackHeight);
+      // case 'LogicalExpression':
+      //   return new StackItemComponent('LogicalExpression', true, stackHeight);
+      // case 'ArrowFunctionExpression':
+      //   return new StackItemComponent('ArrowFunctionExpression', true, stackHeight);
+      // case 'CallExpression':
+      //   return new StackItemComponent('CallExpression', true, stackHeight);
+      default:
+        return new StackItemComponent(astToString(agendaItem).trim(), true, stackHeight);
     }
   } else {
     switch (agendaItem.instrType) {
@@ -419,14 +420,16 @@ export function getAgendaItemComponent(
       case InstrType.WHILE:
         return new StackItemComponent('WHILE', true, stackHeight);
       case InstrType.FOR:
-        return new StackItemComponent('WHILE', true, stackHeight);
+        return new StackItemComponent('FOR', true, stackHeight);
       case InstrType.ASSIGNMENT:
         const assmtInstr = agendaItem as AssmtInstr;
         return new StackItemComponent(`ASSIGN ${assmtInstr.symbol}`, true, stackHeight);
       case InstrType.UNARY_OP:
-        return new StackItemComponent('UNARY_OP', true, stackHeight);
+        const unOpInstr = agendaItem as UnOpInstr
+        return new StackItemComponent(unOpInstr.symbol, true, stackHeight);
       case InstrType.BINARY_OP:
-        return new StackItemComponent('BINARY_OP', true, stackHeight);
+        const binOpInstr = agendaItem as BinOpInstr
+        return new StackItemComponent(binOpInstr.symbol, true, stackHeight);
       case InstrType.POP:
         return new StackItemComponent('POP', true, stackHeight);
       case InstrType.APPLICATION:
