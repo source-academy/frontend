@@ -63,15 +63,14 @@ const Academy: React.FC<{}> = () => {
           <Route
             path={`${assessmentTypeLink(assessmentConfiguration.type)}/${assessmentRegExp}`}
             key={assessmentConfiguration.type}
-          >
-            <Assessment assessmentConfiguration={assessmentConfiguration} />
-          </Route>
+            element={<Assessment assessmentConfiguration={assessmentConfiguration} />}
+          />
         ))}
         {enableGame && <Route path={`game`} element={<Game />} />}
         <Route path={`sourcecast/:sourcecastId?`} element={<Sourcecast />} />
-        <Route path={`achievements`} element={<Achievement />} />
+        <Route path={`achievements/*`} element={<Achievement />} />
         <Route
-          path="/"
+          path=""
           element={
             <Navigate
               replace
@@ -102,12 +101,14 @@ const CourseSelectingAcademy: React.FC<{}> = () => {
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
   React.useEffect(() => {
-    if (routeCourseId !== undefined && courseId !== routeCourseId) {
+    if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {
       dispatch(updateLatestViewedCourse(routeCourseId));
     }
   }, [courseId, dispatch, routeCourseId]);
 
-  return routeCourseId === courseId ? (
+  return Number.isNaN(routeCourseId) ? (
+    <Navigate to="/" />
+  ) : routeCourseId === courseId ? (
     <Academy />
   ) : (
     <div className={classNames('Academy-switching-courses', Classes.DARK)}>

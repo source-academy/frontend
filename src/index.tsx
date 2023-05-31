@@ -4,15 +4,13 @@ import * as Sentry from '@sentry/browser';
 import { setModulesStaticURL } from 'js-slang/dist/modules/moduleLoader';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
 import Constants, { Links } from 'src/commons/utils/Constants';
-import { history } from 'src/commons/utils/HistoryHelper';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 import { register as registerServiceWorker } from 'src/commons/utils/RegisterServiceWorker';
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
-import Application from './commons/application/Application';
+import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
 if (Constants.sentryDsn) {
@@ -42,9 +40,7 @@ createInBrowserFileSystem(store)
   .finally(() => {
     render(
       <Provider store={store}>
-        <Router history={history}>
-          <Application />
-        </Router>
+        <ApplicationWrapper />
       </Provider>,
       rootContainer
     );

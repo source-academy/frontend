@@ -18,7 +18,6 @@ import { Location } from 'history';
 import * as React from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
-import SicpNavigationBar from '../../commons/navigationBar/subcomponents/SicpNavigationBar';
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
@@ -28,6 +27,7 @@ import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
+import SicpNavigationBar from './subcomponents/SicpNavigationBar';
 
 const NavigationBar: React.FC = () => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
@@ -44,7 +44,7 @@ const NavigationBar: React.FC = () => {
   } = useTypedSelector(state => state.session);
   const assessmentTypes = React.useMemo(
     () => assessmentConfigurations?.map(c => c.type),
-    assessmentConfigurations
+    [assessmentConfigurations]
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
@@ -224,7 +224,7 @@ const NavigationBar: React.FC = () => {
     ];
 
     return !highlightDesktopSALogoInRoutesExcept.find(x => location.pathname.startsWith(x));
-  }, []);
+  }, [courseId]);
 
   const desktopLogoButton = (
     <NavLink
@@ -373,19 +373,20 @@ const NavigationBar: React.FC = () => {
       </Navbar>
 
       <Routes>
-        <Route path="/playground" />
-        <Route path="/githubassessments" />
-        <Route path="/contributors" />
-        <Route path="/courses/:courseId/sourcecast" />
-        <Route path="/courses/:courseId/achievements" />
-        <Route path="/sicpjs/:section?">
-          <SicpNavigationBar />
-        </Route>
-        <Route>
-          {!Constants.playgroundOnly && role && !isMobileBreakpoint && (
-            <AcademyNavigationBar assessmentTypes={assessmentTypes} />
-          )}
-        </Route>
+        <Route path="/playground" element={null} />
+        <Route path="/githubassessments" element={null} />
+        <Route path="/contributors" element={null} />
+        <Route path="/courses/:courseId/sourcecast" element={null} />
+        <Route path="/courses/:courseId/achievements" element={null} />
+        <Route path="/sicpjs/:section?" element={<SicpNavigationBar />}></Route>
+        <Route
+          path="*"
+          element={
+            !Constants.playgroundOnly && role && !isMobileBreakpoint ? (
+              <AcademyNavigationBar assessmentTypes={assessmentTypes} />
+            ) : null
+          }
+        ></Route>
       </Routes>
     </>
   );
