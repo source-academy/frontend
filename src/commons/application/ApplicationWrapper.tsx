@@ -11,7 +11,7 @@ import {
 } from '../../routes/routerConfig';
 import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
-import { fetchUserAndCourse } from './actions/SessionActions';
+import { updateReactRouter } from './actions/CommonsActions';
 
 /**
  * Application wrapper component which figures out which deployment and set of routes to render.
@@ -29,15 +29,6 @@ const ApplicationWrapper: React.FC = () => {
   // Used in determining the disabled state of any type of Source Academy deployment (e.g. during exams)
   const intervalId = useRef<number | undefined>(undefined);
   const [isDisabled, setIsDisabled] = useState(computeDisabledState());
-
-  // Effect to fetch the latest user info and course configurations from the backend on refresh,
-  // if the user was previously logged in
-  useEffect(() => {
-    if (name) {
-      dispatch(fetchUserAndCourse());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (Constants.disablePeriods.length > 0) {
@@ -71,7 +62,10 @@ const ApplicationWrapper: React.FC = () => {
           courseId
         });
 
-    return createBrowserRouter(routerConfig);
+    const r = createBrowserRouter(routerConfig);
+    dispatch(updateReactRouter(r));
+
+    return r;
   }, [isDisabled, role, name, courseId]);
 
   return <RouterProvider router={router} />;
