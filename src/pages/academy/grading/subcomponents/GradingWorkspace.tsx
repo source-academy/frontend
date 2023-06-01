@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { useNavigate } from 'react-router';
 import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 
 import {
@@ -30,7 +31,6 @@ import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
-import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { EditorTabState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
@@ -91,7 +91,10 @@ export type StateProps = {
   courseId?: number;
 };
 
+// TODO:
+// - change use of history import
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
+  const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.grading);
 
   /**
@@ -144,7 +147,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
      * if that question exists
      */
     if (props.grading[questionId] === undefined) {
-      history.push(`/courses/${props.courseId}/grading`);
+      navigate(`/courses/${props.courseId}/grading`);
     } else {
       checkWorkspaceReset(props);
     }
@@ -306,10 +309,9 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     const questionProgress: [number, number] = [questionId + 1, props.grading!.length];
 
     const onClickPrevious = () =>
-      history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
-    const onClickNext = () =>
-      history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
-    const onClickReturn = () => history.push(listingPath);
+      navigate(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () => navigate(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => navigate(listingPath);
 
     const nextButton = (
       <ControlBarNextButton

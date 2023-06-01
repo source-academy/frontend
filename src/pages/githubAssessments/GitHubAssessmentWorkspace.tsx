@@ -14,7 +14,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
@@ -87,7 +87,6 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
@@ -109,12 +108,13 @@ import { GHAssessmentOverview } from './GitHubClassroom';
 const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 
 const GitHubAssessmentWorkspace: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
-    history.push('/githubassessments/login');
+    navigate('/githubassessments/login');
   }
 
   // Handlers migrated over from deprecated withRouter implementation
@@ -703,7 +703,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   ]);
 
   const onClickReturn = useCallback(() => {
-    history.push('/githubassessments/missions');
+    navigate('/githubassessments/missions');
   }, []);
 
   /**
