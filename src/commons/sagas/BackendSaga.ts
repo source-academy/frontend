@@ -490,7 +490,9 @@ function* BackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield routerNavigate(`/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`)
+    yield routerNavigate(
+      `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
+    );
   };
 
   yield takeEvery(SUBMIT_GRADING, sendGrade);
@@ -631,7 +633,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield call(showSuccessMessage, 'Saved successfully!', 1000);
-      yield routerNavigate(`/courses/${courseId}/sourcecast`)
+      yield routerNavigate(`/courses/${courseId}/sourcecast`);
     }
   );
 

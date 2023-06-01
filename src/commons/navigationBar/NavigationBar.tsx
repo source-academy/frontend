@@ -217,14 +217,17 @@ const NavigationBar: React.FC = () => {
     </Navbar>
   );
 
-  const highlightDesktopLogo = React.useCallback((location: Location) => {
-    const highlightDesktopSALogoInRoutesExcept = [
-      `/courses/${courseId}/sourcecast`,
-      `/courses/${courseId}/achievements`
-    ];
+  const highlightDesktopLogo = React.useCallback(
+    (location: Location) => {
+      const highlightDesktopSALogoInRoutesExcept = [
+        `/courses/${courseId}/sourcecast`,
+        `/courses/${courseId}/achievements`
+      ];
 
-    return !highlightDesktopSALogoInRoutesExcept.find(x => location.pathname.startsWith(x));
-  }, [courseId]);
+      return !highlightDesktopSALogoInRoutesExcept.find(x => location.pathname.startsWith(x));
+    },
+    [courseId]
+  );
 
   const desktopLogoButton = (
     <NavLink
