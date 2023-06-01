@@ -23,7 +23,19 @@ i18n
         translation: {
           introduction: {
             main: `Welcome to the Source Academy playground!
-            The book [_Structure and Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}) uses JavaScript sublanguages that we call [_Source_](${Links.sourceDocs}). `
+            The book [_Structure and Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}) uses JavaScript sublanguages that we call [_Source_](${Links.sourceDocs}).\n`,
+            docs: ``,
+            hotkeys: `\nIn the editor on the left, you can use the [_Ace keyboard shortcuts_](${Links.aceHotkeys}) and the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).`
+          }
+        }
+      },
+
+      zh: {
+        translation: {
+          introduction: {
+            main: `欢迎来到源学院游乐场！ 这本书 [_Structure and Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}) 使用了我们称之为 [_Source_](${Links.sourceDocs}) 的 JavaScript 子语言。\n`,
+            docs: ``,
+            hotkeys: `\n在左侧的编辑器中，您可以使用 [_Ace 键盘快捷键_](${Links.aceHotkeys}) 和 [_Source Academy 键盘快捷键_](${Links.sourceHotkeys})。`
           }
         }
       }

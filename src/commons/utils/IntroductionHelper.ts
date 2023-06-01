@@ -16,7 +16,7 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
 
-const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) => {
+export const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) => {
   if (sourceChapter === Chapter.FULL_JS) {
     return (
       `However, you have chosen full JavaScript; your program will be run directly using JavaScript strict mode [_(ECMAScript 2021)_](${Links.ecmaScript_2021}).` +
