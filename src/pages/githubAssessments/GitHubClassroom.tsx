@@ -168,6 +168,7 @@ const GitHubClassroom: React.FC = () => {
             })
           : null}
         <Route
+          path="*"
           element={
             octokit && courses && courses.length > 0 ? navigateToAssessments : navigateToLogin
           }

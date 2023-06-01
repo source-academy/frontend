@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -24,6 +25,15 @@ const MissionControl: React.FC = () => {
     assessmentId: string;
     questionId: string;
   }>();
+
+  // If assessmentId or questionId is defined but not numeric, redirect back to the MissionControl overviews page
+  if (
+    (params.assessmentId && !params.assessmentId?.match(numberRegExp)) ||
+    (params.questionId && !params.questionId?.match(numberRegExp))
+  ) {
+    return <Navigate to={`/mission-control`} />;
+  }
+
   const assessmentId: number | null = convertParamToInt(params.assessmentId);
   const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
 

@@ -17,7 +17,7 @@ const Achievement: React.FC = () => {
     <Routes>
       <Route path="/" element={<AchievementDashboard />}></Route>
       <Route path="control" element={toAchievementControl}></Route>
-      <Route element={<NotFound />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

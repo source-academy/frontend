@@ -109,15 +109,23 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
 export const getFullAcademyRouterConfig = ({
   name,
   role,
-  courseId,
-  isLoggedIn
+  isLoggedIn,
+  courseId
 }: {
   name?: string;
   role?: Role;
-  courseId?: number | null;
   isLoggedIn: boolean;
+  courseId?: number | null;
 }): RouteObject[] => {
-  const ensureUser = conditionalLoader(name === undefined, '/login');
+  const welcomeLoader = () => {
+    if (name === undefined) {
+      return redirect('/login');
+    }
+    if (courseId !== null && courseId !== undefined) {
+      return redirect(`/courses/${courseId}`);
+    }
+    return null;
+  };
 
   const ensureUserAndRole = () => {
     if (name === undefined) {
@@ -150,7 +158,7 @@ export const getFullAcademyRouterConfig = ({
         {
           path: 'welcome',
           element: <Welcome />,
-          loader: ensureUser
+          loader: welcomeLoader
         },
         {
           path: 'courses',
@@ -167,7 +175,7 @@ export const getFullAcademyRouterConfig = ({
           loader: ensureUserAndRole
         },
         {
-          path: 'mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?',
+          path: 'mission-control/:assessmentId?/:questionId?',
           element: <MissionControl />
         },
         ...commonChildrenRoutes,

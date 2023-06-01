@@ -2,7 +2,7 @@ import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, Route, Routes, useParams } from 'react-router';
+import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
@@ -15,7 +15,7 @@ import {
 } from '../../commons/application/actions/SessionActions';
 import Assessment from '../../commons/assessment/Assessment';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
-import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
+import { assessmentRegExp, gradingRegExp, numberRegExp } from '../../features/academy/AcademyTypes';
 import Achievement from '../achievement/Achievement';
 import NotFound from '../notFound/NotFound';
 import Sourcecast from '../sourcecast/Sourcecast';
@@ -88,7 +88,7 @@ const Academy: React.FC<{}> = () => {
         />
         {staffRoutes}
         {role === 'admin' && <Route path={`adminpanel`} element={<AdminPanel />} />}
-        <Route element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
@@ -96,15 +96,21 @@ const Academy: React.FC<{}> = () => {
 
 const CourseSelectingAcademy: React.FC<{}> = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const courseId = useTypedSelector(state => state.session.courseId);
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
   React.useEffect(() => {
+    // Regex to handle case where routeCourseIdStr is not a number
+    if (!routeCourseIdStr?.match(numberRegExp)) {
+      return navigate('/');
+    }
+
     if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {
       dispatch(updateLatestViewedCourse(routeCourseId));
     }
-  }, [courseId, dispatch, routeCourseId]);
+  }, [courseId, dispatch, routeCourseId, navigate]);
 
   return Number.isNaN(routeCourseId) ? (
     <Navigate to="/" />

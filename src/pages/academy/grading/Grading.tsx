@@ -1,7 +1,8 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import * as React from 'react';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
@@ -10,14 +11,23 @@ import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWor
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 
 const Grading: React.FC = () => {
+  const { courseId, gradingOverviews } = useTypedSelector(state => state.session);
   const params = useParams<{
     submissionId: string;
     questionId: string;
   }>();
+
+  // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
+  if (
+    (params.submissionId && !params.submissionId?.match(numberRegExp)) ||
+    (params.questionId && !params.questionId?.match(numberRegExp))
+  ) {
+    return <Navigate to={`/courses/${courseId}/grading`} />;
+  }
+
   const submissionId: number | null = convertParamToInt(params.submissionId);
   // default questionId is 0 (the first question)
   const questionId: number = convertParamToInt(params.questionId) || 0;
-  const gradingOverviews = useTypedSelector(state => state.session.gradingOverviews);
 
   /* Create a workspace to grade a submission. */
   if (submissionId !== null) {
