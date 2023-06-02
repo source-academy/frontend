@@ -1,6 +1,13 @@
-import { AgendaItem, AssmtInstr, BinOpInstr, Instr, InstrType, UnOpInstr } from 'js-slang/dist/ec-evaluator/types';
+import {
+  AgendaItem,
+  AssmtInstr,
+  BinOpInstr,
+  Instr,
+  InstrType,
+  UnOpInstr
+} from 'js-slang/dist/ec-evaluator/types';
 import { Environment } from 'js-slang/dist/types';
-import { astToString} from 'js-slang/dist/utils/astToString'
+import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
@@ -13,6 +20,7 @@ import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
+import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { Config } from './EnvVisualizerConfig';
 import {
   CompactReferenceType,
@@ -342,6 +350,22 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   }
 }
 
+export const truncateLines = (programStr: string): string => {
+  const maxWidth = AgendaStashConfig.AgendaItemWidth - AgendaStashConfig.AgendaItemTextPadding * 2;
+  const lines = programStr.split('\n').map(line => {
+    if (getTextWidth(line) < maxWidth) {
+      return line;
+    }
+    let newLine = line + '...';
+    while (getTextWidth(newLine) > maxWidth) {
+      newLine = newLine.slice(0, -4) + '...';
+    }
+    return newLine;
+  });
+
+  return lines.join('\n');
+};
+
 /**
  * Typeguard for Instr to distinguish between program statements and instructions.
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
@@ -411,7 +435,11 @@ export function getAgendaItemComponent(
       // case 'CallExpression':
       //   return new StackItemComponent('CallExpression', true, stackHeight);
       default:
-        return new StackItemComponent(astToString(agendaItem).trim(), true, stackHeight);
+        return new StackItemComponent(
+          truncateLines(astToString(agendaItem).trim()),
+          true,
+          stackHeight
+        );
     }
   } else {
     switch (agendaItem.instrType) {
@@ -425,10 +453,10 @@ export function getAgendaItemComponent(
         const assmtInstr = agendaItem as AssmtInstr;
         return new StackItemComponent(`ASSIGN ${assmtInstr.symbol}`, true, stackHeight);
       case InstrType.UNARY_OP:
-        const unOpInstr = agendaItem as UnOpInstr
+        const unOpInstr = agendaItem as UnOpInstr;
         return new StackItemComponent(unOpInstr.symbol, true, stackHeight);
       case InstrType.BINARY_OP:
-        const binOpInstr = agendaItem as BinOpInstr
+        const binOpInstr = agendaItem as BinOpInstr;
         return new StackItemComponent(binOpInstr.symbol, true, stackHeight);
       case InstrType.POP:
         return new StackItemComponent('POP', true, stackHeight);
