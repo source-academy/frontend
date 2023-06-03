@@ -356,7 +356,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     dispatch(
       resetWorkspace(workspaceLocation, {
         autogradingResults,
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
         editorTabs: [
           {
             value: editorValue,
@@ -600,7 +600,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       };
     };
 
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     const onClickSave = () =>
       props.handleSave(props.assessment!.questions[questionId].id, editorTabs[0].value);
 

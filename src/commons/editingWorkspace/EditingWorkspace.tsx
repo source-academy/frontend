@@ -281,7 +281,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     }
 
     props.handleResetWorkspace({
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       editorTabs: [
         {
           value: editorValue,
@@ -303,7 +303,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   };
 
   const handleSave = () => {
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     assessment!.questions[formatedQuestionId()].editorValue = editorTabs[0].value;
     setAssessment(assessment);
     setHasUnsavedChanges(false);
@@ -635,7 +635,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             editorTabs: editorTabs
               .map(convertEditorTabStateToProps)
               .map((editorTabStateProps, index) => {
-                // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
                 //       Specifically, need to update questions such that they can span multiple files.
                 if (index !== 0) {
                   return editorTabStateProps;

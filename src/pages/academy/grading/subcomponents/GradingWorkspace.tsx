@@ -274,7 +274,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     props.handleUpdateCurrentSubmissionId(submissionId, questionId);
     props.handleResetWorkspace({
       autogradingResults,
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       editorTabs: [
         {
           value: editorValue,

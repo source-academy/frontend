@@ -168,7 +168,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     const initData: PlaybackData['init'] = {
       chapter: props.sourceChapter,
       externalLibrary: props.externalLibraryName as ExternalLibraryName,
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       editorValue: editorTabs[0].value
     };
     dispatch(recordInit(initData, workspaceLocation));
@@ -343,7 +343,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                 </span>
                 <SourcereelControlbar
                   currentPlayerTime={props.currentPlayerTime}
-                  // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+                  // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
                   editorValue={editorTabs[0].value}
                   getTimerDuration={getTimerDuration}
                   playbackData={props.playbackData}
