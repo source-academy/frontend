@@ -356,11 +356,11 @@ export const truncateLines = (programStr: string): string => {
     if (getTextWidth(line) < maxWidth) {
       return line;
     }
-    let newLine = line + '...';
-    while (getTextWidth(newLine) > maxWidth) {
-      newLine = newLine.slice(0, -4) + '...';
+    let newLine = line;
+    while (getTextWidth(newLine + Config.Ellipsis) > maxWidth) {
+      newLine = newLine.slice(0, -1);
     }
-    return newLine;
+    return newLine + Config.Ellipsis;
   });
 
   return lines.join('\n');
