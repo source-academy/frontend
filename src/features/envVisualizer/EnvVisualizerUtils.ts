@@ -20,7 +20,6 @@ import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { Config } from './EnvVisualizerConfig';
 import {
   CompactReferenceType,
@@ -351,7 +350,7 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
 }
 
 export const truncateLines = (programStr: string): string => {
-  const maxWidth = AgendaStashConfig.AgendaItemWidth - AgendaStashConfig.AgendaItemTextPadding * 2;
+  const maxWidth = StackItemComponent.maxTextWidth;
   const lines = programStr.split('\n').map(line => {
     if (getTextWidth(line) < maxWidth) {
       return line;
