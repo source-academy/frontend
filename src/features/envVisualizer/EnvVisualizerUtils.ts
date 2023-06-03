@@ -349,20 +349,32 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   }
 }
 
-export const truncateLines = (programStr: string): string => {
+export const truncateText = (programStr: string): string => {
   const maxWidth = StackItemComponent.maxTextWidth;
-  const lines = programStr.split('\n').map(line => {
-    if (getTextWidth(line) < maxWidth) {
+
+  // Truncate so item component looks like a square
+  const maxHeight = StackItemComponent.maxTextHeight;
+
+  // Add ellipsis for each line if needed
+  let lines = programStr.split('\n').map(line => {
+    if (getTextWidth(line) <= maxWidth) {
       return line;
     }
-    let newLine = line;
-    while (getTextWidth(newLine + Config.Ellipsis) > maxWidth) {
-      newLine = newLine.slice(0, -1);
+    let truncatedLine = line;
+    while (getTextWidth(truncatedLine + Config.Ellipsis) > maxWidth) {
+      truncatedLine = truncatedLine.slice(0, -1);
     }
-    return newLine + Config.Ellipsis;
+    return truncatedLine + Config.Ellipsis;
   });
 
-  return lines.join('\n');
+  // Add ellipsis for entire code block if needed
+  if (getTextHeight([...lines, Config.Ellipsis].join('\n'), maxWidth) <= maxHeight) {
+    return lines.join('\n');
+  }
+  while (getTextHeight([...lines, Config.Ellipsis].join('\n'), maxWidth) > maxHeight) {
+    lines = lines.slice(0, -1);
+  }
+  return [...lines, Config.Ellipsis].join('\n');
 };
 
 /**
@@ -435,7 +447,7 @@ export function getAgendaItemComponent(
       //   return new StackItemComponent('CallExpression', true, stackHeight);
       default:
         return new StackItemComponent(
-          truncateLines(astToString(agendaItem).trim()),
+          truncateText(astToString(agendaItem).trim()),
           true,
           stackHeight
         );

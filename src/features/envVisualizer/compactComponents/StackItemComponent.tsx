@@ -12,6 +12,8 @@ import { getTextHeight } from '../EnvVisualizerUtils';
 export class StackItemComponent extends Visible implements IHoverable {
   static readonly maxTextWidth: number =
     AgendaStashConfig.AgendaItemWidth - AgendaStashConfig.AgendaItemTextPadding * 2 - 5;
+  static readonly maxTextHeight: number =
+    AgendaStashConfig.AgendaItemWidth - AgendaStashConfig.AgendaItemTextPadding * 2 - 5;
   readonly text: string;
 
   constructor(readonly value: any, isAgenda: boolean, stackHeight: number) {
