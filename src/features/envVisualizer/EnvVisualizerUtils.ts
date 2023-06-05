@@ -349,6 +349,34 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   }
 }
 
+export const truncateText = (programStr: string): string => {
+  const maxWidth = StackItemComponent.maxTextWidth;
+
+  // Truncate so item component looks like a square
+  const maxHeight = StackItemComponent.maxTextHeight;
+
+  // Add ellipsis for each line if needed
+  let lines = programStr.split('\n').map(line => {
+    if (getTextWidth(line) <= maxWidth) {
+      return line;
+    }
+    let truncatedLine = line;
+    while (getTextWidth(truncatedLine + Config.Ellipsis) > maxWidth) {
+      truncatedLine = truncatedLine.slice(0, -1);
+    }
+    return truncatedLine + Config.Ellipsis;
+  });
+
+  // Add ellipsis for entire code block if needed
+  if (getTextHeight([...lines, Config.Ellipsis].join('\n'), maxWidth) <= maxHeight) {
+    return lines.join('\n');
+  }
+  while (getTextHeight([...lines, Config.Ellipsis].join('\n'), maxWidth) > maxHeight) {
+    lines = lines.slice(0, -1);
+  }
+  return [...lines, Config.Ellipsis].join('\n');
+};
+
 /**
  * Typeguard for Instr to distinguish between program statements and instructions.
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
@@ -418,7 +446,11 @@ export function getAgendaItemComponent(
       // case 'CallExpression':
       //   return new StackItemComponent('CallExpression', true, stackHeight);
       default:
-        return new StackItemComponent(astToString(agendaItem).trim(), true, stackHeight);
+        return new StackItemComponent(
+          truncateText(astToString(agendaItem).trim()),
+          true,
+          stackHeight
+        );
     }
   } else {
     switch (agendaItem.instrType) {
