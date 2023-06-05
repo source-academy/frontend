@@ -2,26 +2,27 @@ import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { AgendaItem } from 'js-slang/dist/ec-evaluator/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-import { Group, Text } from 'react-konva';
+import { Group } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
+import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import { getAgendaItemComponent, getStashItemComponent } from '../EnvVisualizerUtils';
+import { ModelLabel } from './ModelLabel';
 import { StackItemComponent } from './StackItemComponent';
-import { defaultOptions } from './Text';
 
 export class Stack extends Visible implements IHoverable {
   /** Whether the stack is the Agenda or Stash */
   readonly isAgenda: boolean;
   /** Array of the Agenda Item Components */
   readonly stackItemComponents: StackItemComponent[];
+  readonly modelLabel: ModelLabel;
 
-  constructor(readonly stack: Agenda | Stash) {
+  constructor(readonly stack: Agenda | Stash, posx: number) {
     super();
     this.isAgenda = stack instanceof Agenda;
-    this._x = this.isAgenda ? AgendaStashConfig.AgendaPosX : AgendaStashConfig.StashPosX;
+    this._x = posx;
     this._y = this.isAgenda ? AgendaStashConfig.AgendaPosY : AgendaStashConfig.StashPosY;
     this._width = AgendaStashConfig.AgendaItemWidth;
     // Account for the Agenda and Stash labels in the height
@@ -38,7 +39,8 @@ export class Stack extends Visible implements IHoverable {
           this._height += component ? component.height() : 0;
           return component;
         };
-    this.stackItemComponents = this.stack.reverseMapStack(stackItemToComponent);
+    this.stackItemComponents = this.stack.mapStack(stackItemToComponent);
+    this.modelLabel = new ModelLabel(this.isAgenda ? 'Agenda' : 'Stack', this.x());
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}
   onMouseLeave(e: KonvaEventObject<MouseEvent>): void {}
@@ -48,22 +50,9 @@ export class Stack extends Visible implements IHoverable {
   }
 
   draw(): React.ReactNode {
-    const textProps = {
-      ...defaultOptions,
-      fill: AgendaStashConfig.SA_WHITE.toString(),
-      padding: Number(AgendaStashConfig.AgendaItemTextPadding),
-      fontStyle: AgendaStashConfig.FontStyleHeader.toString(),
-      fontSize: Number(AgendaStashConfig.FontSizeHeader)
-    };
     return (
       <Group key={Layout.key++} ref={this.ref}>
-        <Text
-          {...ShapeDefaultProps}
-          {...textProps}
-          x={this.x()}
-          y={this.y()}
-          text={this.isAgenda ? 'Agenda' : 'Stash'}
-        />
+        {this.modelLabel.draw()}
         {this.stackItemComponents.map(c => c?.draw())}
       </Group>
     );

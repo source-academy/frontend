@@ -1,6 +1,13 @@
-import { AgendaItem, AssmtInstr, BinOpInstr, Instr, InstrType, UnOpInstr } from 'js-slang/dist/ec-evaluator/types';
+import {
+  AgendaItem,
+  AssmtInstr,
+  BinOpInstr,
+  Instr,
+  InstrType,
+  UnOpInstr
+} from 'js-slang/dist/ec-evaluator/types';
 import { Environment } from 'js-slang/dist/types';
-import { astToString} from 'js-slang/dist/utils/astToString'
+import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
@@ -425,10 +432,10 @@ export function getAgendaItemComponent(
         const assmtInstr = agendaItem as AssmtInstr;
         return new StackItemComponent(`ASSIGN ${assmtInstr.symbol}`, true, stackHeight);
       case InstrType.UNARY_OP:
-        const unOpInstr = agendaItem as UnOpInstr
+        const unOpInstr = agendaItem as UnOpInstr;
         return new StackItemComponent(unOpInstr.symbol, true, stackHeight);
       case InstrType.BINARY_OP:
-        const binOpInstr = agendaItem as BinOpInstr
+        const binOpInstr = agendaItem as BinOpInstr;
         return new StackItemComponent(binOpInstr.symbol, true, stackHeight);
       case InstrType.POP:
         return new StackItemComponent('POP', true, stackHeight);

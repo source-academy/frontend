@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Checkbox } from '@blueprintjs/core';
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { Frame } from 'js-slang/dist/types';
-import React, { RefObject } from 'react';
+import React, { Fragment, RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
 import { Level as CompactLevel } from './compactComponents/Level';
@@ -20,6 +20,7 @@ import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
+import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import {
   CompactReferenceType,
@@ -87,7 +88,8 @@ export class Layout {
   static currentLight: React.ReactNode;
   static currentCompactDark: React.ReactNode;
   static currentCompactLight: React.ReactNode;
-  static currentAgendaStash: React.ReactNode;
+  static currentAgendaStashDark: React.ReactNode;
+  static currentAgendaStashLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
@@ -135,7 +137,8 @@ export class Layout {
     Layout.currentDark = undefined;
     Layout.currentCompactLight = undefined;
     Layout.currentCompactDark = undefined;
-    Layout.currentAgendaStash = undefined;
+    Layout.currentAgendaStashDark = undefined;
+    Layout.currentAgendaStashLight = undefined;
     // clear/initialize data and value arrays
     Layout.values.forEach((v, d) => {
       v.reset();
@@ -172,12 +175,14 @@ export class Layout {
         Layout.agendaComponent.x() + Layout.agendaComponent.width() + Config.CanvasPaddingX,
         Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX
       );
-    } else if (EnvVisualizer.getCompactLayout()) {
+    }
+    if (EnvVisualizer.getCompactLayout()) {
       // calculate height and width by considering lowest and widest level
       const lastLevel = Layout.compactLevels[Layout.compactLevels.length - 1];
       Layout.compactHeight = Math.max(
         Config.CanvasMinHeight,
-        lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY
+        lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
+        Layout.agendaStashHeight
       );
 
       Layout.compactWidth = Math.max(
@@ -186,7 +191,13 @@ export class Layout {
           (maxWidth, level) => Math.max(maxWidth, level.width()),
           0
         ) +
-          Config.CanvasPaddingX * 2
+          Config.CanvasPaddingX * 2 +
+          (EnvVisualizer.getAgendaStash()
+            ? Layout.agendaComponent.width() +
+              Config.CanvasPaddingX * 2 +
+              Layout.stashComponent.width() +
+              Config.CanvasPaddingX * 2
+            : 0)
       );
     } else {
       Layout.nonCompactHeight = Math.max(
@@ -199,9 +210,22 @@ export class Layout {
       );
     }
   }
+
   static initializeAgendaStash() {
-    this.agendaComponent = new Stack(this.agenda);
-    this.stashComponent = new Stack(this.stash);
+    this.agendaComponent = new Stack(this.agenda, AgendaStashConfig.AgendaPosX);
+    if (EnvVisualizer.getCompactLayout()) {
+      const stashposX =
+        Layout.compactLevels[0].x() +
+        Layout.compactLevels.reduce<number>(
+          (maxWidth, level) => Math.max(maxWidth, level.width()),
+          0
+        ) +
+        Config.CanvasPaddingX * 2;
+      this.stashComponent = new Stack(this.stash, stashposX);
+    } else {
+      const stashposX = this.grid.x() + this.grid.width() + Config.CanvasPaddingX * 2;
+      this.stashComponent = new Stack(this.stash, stashposX);
+    }
   }
 
   /** remove program environment containing predefined functions */
@@ -277,19 +301,11 @@ export class Layout {
   }
 
   public static width(): number {
-    return EnvVisualizer.getAgendaStash()
-      ? Layout.agendaStashWidth
-      : EnvVisualizer.getCompactLayout()
-      ? Layout.compactWidth
-      : Layout.nonCompactWidth;
+    return EnvVisualizer.getCompactLayout() ? Layout.compactWidth : Layout.nonCompactWidth;
   }
 
   public static height(): number {
-    return EnvVisualizer.getAgendaStash()
-      ? Layout.agendaStashHeight
-      : EnvVisualizer.getCompactLayout()
-      ? Layout.compactHeight
-      : Layout.nonCompactHeight;
+    return EnvVisualizer.getCompactLayout() ? Layout.compactHeight : Layout.nonCompactHeight;
   }
 
   /** initializes grid */
@@ -490,175 +506,194 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <div className={'sa-env-visualizer'}>
+        <Fragment>
           <div
-            id="scroll-container"
-            ref={Layout.scrollContainerRef}
-            onScroll={e =>
-              Layout.handleScrollPosition(e.currentTarget.scrollLeft, e.currentTarget.scrollTop)
-            }
             style={{
-              width: Layout.visibleWidth,
-              height: Layout.visibleHeight,
-              overflow: 'auto',
-              margin: '10px'
+              overflow: 'hidden',
+              marginLeft: 20,
+              marginRight: 0,
+              marginTop: 0,
+              marginBottom: 0,
+              height: '100%'
             }}
           >
+            <ButtonGroup>
+              <Button
+                large={true}
+                outlined={true}
+                style={{
+                  backgroundColor: EnvVisualizer.getPrintableMode()
+                    ? Config.PRINT_BACKGROUND.toString()
+                    : Config.SA_BLUE.toString(),
+                  opacity: 0.8,
+                  borderColor: EnvVisualizer.getPrintableMode()
+                    ? Config.SA_BLUE.toString()
+                    : Config.PRINT_BACKGROUND.toString()
+                }}
+                onMouseUp={() => {
+                  EnvVisualizer.toggleCompactLayout();
+                  EnvVisualizer.redraw();
+                }}
+              >
+                <Checkbox
+                  checked={!EnvVisualizer.getCompactLayout()}
+                  label="Experimental"
+                  style={{
+                    marginBottom: '0px',
+                    color: EnvVisualizer.getPrintableMode()
+                      ? Config.SA_BLUE.toString()
+                      : Config.PRINT_BACKGROUND.toString()
+                  }}
+                />
+              </Button>
+              <Button
+                large={true}
+                outlined={true}
+                style={{
+                  backgroundColor: EnvVisualizer.getPrintableMode()
+                    ? Config.PRINT_BACKGROUND.toString()
+                    : Config.SA_BLUE.toString(),
+                  opacity: 0.8,
+                  borderColor: EnvVisualizer.getPrintableMode()
+                    ? Config.SA_BLUE.toString()
+                    : Config.PRINT_BACKGROUND.toString()
+                }}
+                onMouseUp={() => {
+                  EnvVisualizer.togglePrintableMode();
+                  EnvVisualizer.redraw();
+                }}
+              >
+                <Checkbox
+                  checked={EnvVisualizer.getPrintableMode()}
+                  label="Printable"
+                  style={{
+                    marginBottom: '0px',
+                    color: EnvVisualizer.getPrintableMode()
+                      ? Config.SA_BLUE.toString()
+                      : Config.PRINT_BACKGROUND.toString()
+                  }}
+                />
+              </Button>
+              <Button
+                large={true}
+                outlined={true}
+                style={{
+                  backgroundColor: EnvVisualizer.getPrintableMode()
+                    ? Config.PRINT_BACKGROUND.toString()
+                    : Config.SA_BLUE.toString(),
+                  opacity: 0.8,
+                  borderColor: EnvVisualizer.getPrintableMode()
+                    ? Config.SA_BLUE.toString()
+                    : Config.PRINT_BACKGROUND.toString()
+                }}
+                onMouseUp={() => {
+                  EnvVisualizer.toggleAgendaStash();
+                  EnvVisualizer.redraw();
+                }}
+              >
+                <Checkbox
+                  checked={EnvVisualizer.getAgendaStash()}
+                  disabled={!EnvVisualizer.getCompactLayout()}
+                  label="Agenda and Stash"
+                  style={{
+                    marginBottom: '0px',
+                    color: EnvVisualizer.getPrintableMode()
+                      ? Config.SA_BLUE.toString()
+                      : Config.PRINT_BACKGROUND.toString()
+                  }}
+                />
+              </Button>
+              <Button
+                outlined={true}
+                text={Layout.saveButtonText()}
+                large={true}
+                onClick={this.exportImage}
+                style={{
+                  color: EnvVisualizer.getPrintableMode()
+                    ? Config.SA_BLUE.toString()
+                    : Config.PRINT_BACKGROUND.toString(),
+                  backgroundColor: EnvVisualizer.getPrintableMode()
+                    ? Config.PRINT_BACKGROUND.toString()
+                    : Config.SA_BLUE.toString(),
+                  opacity: 0.8,
+                  borderColor: EnvVisualizer.getPrintableMode()
+                    ? Config.SA_BLUE.toString()
+                    : Config.PRINT_BACKGROUND.toString()
+                }}
+              />
+            </ButtonGroup>
+          </div>
+          <div className={'sa-env-visualizer'}>
             <div
-              id="large-container"
+              id="scroll-container"
+              ref={Layout.scrollContainerRef}
+              onScroll={e =>
+                Layout.handleScrollPosition(e.currentTarget.scrollLeft, e.currentTarget.scrollTop)
+              }
               style={{
-                width: Layout.width(),
-                height: Layout.height(),
-                overflow: 'hidden',
-                backgroundColor: EnvVisualizer.getPrintableMode()
-                  ? Config.PRINT_BACKGROUND.toString()
-                  : Config.SA_BLUE.toString()
+                width: Layout.visibleWidth,
+                height: Layout.visibleHeight,
+                overflow: 'auto',
+                margin: '10px'
               }}
             >
-              <div style={{ right: 40, position: 'absolute', display: 'flex', alignSelf: 'right' }}>
-                <ButtonGroup vertical>
-                  <Button
-                    large={true}
-                    outlined={true}
-                    style={{
-                      backgroundColor: EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString(),
-                      opacity: 0.8,
-                      borderColor: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString()
-                    }}
-                    onMouseUp={() => {
-                      EnvVisualizer.toggleCompactLayout();
-                      EnvVisualizer.redraw();
-                    }}
-                  >
-                    <Checkbox
-                      checked={!EnvVisualizer.getCompactLayout()}
-                      label="Experimental"
-                      style={{
-                        marginBottom: '0px',
-                        color: EnvVisualizer.getPrintableMode()
-                          ? Config.SA_BLUE.toString()
-                          : Config.PRINT_BACKGROUND.toString()
-                      }}
+              <div
+                id="large-container"
+                style={{
+                  width: Layout.width(),
+                  height: Layout.height(),
+                  overflow: 'hidden',
+                  backgroundColor: EnvVisualizer.getPrintableMode()
+                    ? Config.PRINT_BACKGROUND.toString()
+                    : Config.SA_BLUE.toString()
+                }}
+              >
+                <Stage width={Layout.stageWidth} height={Layout.stageHeight} ref={this.stageRef}>
+                  <Layer>
+                    <Rect
+                      {...ShapeDefaultProps}
+                      x={0}
+                      y={0}
+                      width={Layout.width()}
+                      height={Layout.height()}
+                      fill={
+                        EnvVisualizer.getPrintableMode()
+                          ? Config.PRINT_BACKGROUND.toString()
+                          : Config.SA_BLUE.toString()
+                      }
+                      key={Layout.key++}
+                      listening={false}
                     />
-                  </Button>
-                  <Button
-                    large={true}
-                    outlined={true}
-                    style={{
-                      backgroundColor: EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString(),
-                      opacity: 0.8,
-                      borderColor: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString()
-                    }}
-                    onMouseUp={() => {
-                      EnvVisualizer.togglePrintableMode();
-                      EnvVisualizer.redraw();
-                    }}
-                  >
-                    <Checkbox
-                      checked={EnvVisualizer.getPrintableMode()}
-                      label="Printable"
-                      style={{
-                        marginBottom: '0px',
-                        color: EnvVisualizer.getPrintableMode()
-                          ? Config.SA_BLUE.toString()
-                          : Config.PRINT_BACKGROUND.toString()
-                      }}
-                    />
-                  </Button>
-                  <Button
-                    large={true}
-                    outlined={true}
-                    style={{
-                      backgroundColor: EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString(),
-                      opacity: 0.8,
-                      borderColor: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString()
-                    }}
-                    onMouseUp={() => {
-                      EnvVisualizer.toggleAgendaStash();
-                      EnvVisualizer.redraw();
-                    }}
-                  >
-                    <Checkbox
-                      checked={EnvVisualizer.getAgendaStash()}
-                      label="Agenda and Stash"
-                      style={{
-                        marginBottom: '0px',
-                        color: EnvVisualizer.getPrintableMode()
-                          ? Config.SA_BLUE.toString()
-                          : Config.PRINT_BACKGROUND.toString()
-                      }}
-                    />
-                  </Button>
-                  <Button
-                    outlined={true}
-                    text={Layout.saveButtonText()}
-                    large={true}
-                    onClick={this.exportImage}
-                    style={{
-                      color: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString(),
-                      backgroundColor: EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString(),
-                      opacity: 0.8,
-                      borderColor: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString()
-                    }}
-                  />
-                </ButtonGroup>
+                    {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
+                    {EnvVisualizer.getCompactLayout() &&
+                      Layout.compactLevels.map(level => level.draw())}
+                    {EnvVisualizer.getCompactLayout() &&
+                      EnvVisualizer.getAgendaStash() &&
+                      Layout.agendaComponent.draw()}
+                    {EnvVisualizer.getCompactLayout() &&
+                      EnvVisualizer.getAgendaStash() &&
+                      Layout.stashComponent.draw()}
+                  </Layer>
+                </Stage>
               </div>
-              <Stage width={Layout.stageWidth} height={Layout.stageHeight} ref={this.stageRef}>
-                <Layer>
-                  <Rect
-                    {...ShapeDefaultProps}
-                    x={0}
-                    y={0}
-                    width={Layout.width()}
-                    height={Layout.height()}
-                    fill={
-                      EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString()
-                    }
-                    key={Layout.key++}
-                    listening={false}
-                  />
-                  {!EnvVisualizer.getCompactLayout() &&
-                    !EnvVisualizer.getAgendaStash() &&
-                    Layout.grid.draw()}
-                  {EnvVisualizer.getCompactLayout() &&
-                    !EnvVisualizer.getAgendaStash() &&
-                    Layout.compactLevels.map(level => level.draw())}
-                  {EnvVisualizer.getAgendaStash() && Layout.agendaComponent.draw()}
-                  {EnvVisualizer.getAgendaStash() && Layout.stashComponent.draw()}
-                </Layer>
-              </Stage>
             </div>
           </div>
-        </div>
+        </Fragment>
       );
       Layout.prevLayout = layout;
-      if (EnvVisualizer.getAgendaStash()) {
-        Layout.currentAgendaStash = layout;
-      } else if (EnvVisualizer.getCompactLayout()) {
+      if (EnvVisualizer.getCompactLayout()) {
         if (EnvVisualizer.getPrintableMode()) {
-          Layout.currentCompactLight = layout;
+          if (EnvVisualizer.getAgendaStash()) {
+            Layout.currentAgendaStashLight = layout;
+          } else {
+            Layout.currentCompactLight = layout;
+          }
         } else {
-          Layout.currentCompactDark = layout;
+          if (EnvVisualizer.getAgendaStash()) {
+            Layout.currentAgendaStashDark = layout;
+          } else {
+            Layout.currentCompactDark = layout;
+          }
         }
       } else {
         if (EnvVisualizer.getPrintableMode()) {

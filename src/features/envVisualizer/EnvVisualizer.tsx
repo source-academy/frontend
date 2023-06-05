@@ -75,9 +75,22 @@ export default class EnvVisualizer {
   static redraw() {
     if (this.environmentTree) {
       // checks if the required diagram exists, and updates the dom node using setVis
-      if (EnvVisualizer.getAgendaStash() && Layout.currentAgendaStash !== undefined) {
-        this.setVis(Layout.currentAgendaStash);
+      if (
+        EnvVisualizer.getCompactLayout() &&
+        EnvVisualizer.getPrintableMode() &&
+        EnvVisualizer.getAgendaStash() &&
+        Layout.currentAgendaStashLight !== undefined
+      ) {
+        this.setVis(Layout.currentAgendaStashLight);
       } else if (
+        EnvVisualizer.getCompactLayout() &&
+        !EnvVisualizer.getPrintableMode() &&
+        EnvVisualizer.getAgendaStash() &&
+        Layout.currentAgendaStashDark !== undefined
+      ) {
+        this.setVis(Layout.currentAgendaStashDark);
+      }
+      else if (
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
         !EnvVisualizer.getAgendaStash() &&

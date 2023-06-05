@@ -13,7 +13,7 @@ export class StackItemComponent extends Visible implements IHoverable {
   readonly text: string;
   constructor(readonly value: any, isAgenda: boolean, stackHeight: number) {
     super();
-    this._x = isAgenda ? AgendaStashConfig.AgendaPosX : AgendaStashConfig.StashPosX;
+    this._x = isAgenda ? Layout.agendaComponent.x() : Layout.stashComponent.x();
     this.text = String(value);
     this._width = AgendaStashConfig.AgendaItemWidth;
     this._height =
