@@ -31,15 +31,13 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>
   <Routes>
-    <Route path=\\"/playground\\" />
-    <Route path=\\"/githubassessments\\" />
-    <Route path=\\"/contributors\\" />
-    <Route path=\\"/courses/:courseId/sourcecast\\" />
-    <Route path=\\"/courses/:courseId/achievements\\" />
-    <Route path=\\"/sicpjs/:section?\\">
-      <SicpNavigationBar />
-    </Route>
-    <Route />
+    <Route path=\\"/playground\\" element={{...}} />
+    <Route path=\\"/githubassessments\\" element={{...}} />
+    <Route path=\\"/contributors\\" element={{...}} />
+    <Route path=\\"/courses/:courseId/sourcecast\\" element={{...}} />
+    <Route path=\\"/courses/:courseId/achievements\\" element={{...}} />
+    <Route path=\\"/sicpjs/:section?\\" element={{...}} />
+    <Route path=\\"*\\" element={{...}} />
   </Routes>
 </Fragment>"
 `;
@@ -99,17 +97,13 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>
   <Routes>
-    <Route path=\\"/playground\\" />
-    <Route path=\\"/githubassessments\\" />
-    <Route path=\\"/contributors\\" />
-    <Route path=\\"/courses/:courseId/sourcecast\\" />
-    <Route path=\\"/courses/:courseId/achievements\\" />
-    <Route path=\\"/sicpjs/:section?\\">
-      <SicpNavigationBar />
-    </Route>
-    <Route>
-      <AcademyNavigationBar assessmentTypes={{...}} />
-    </Route>
+    <Route path=\\"/playground\\" element={{...}} />
+    <Route path=\\"/githubassessments\\" element={{...}} />
+    <Route path=\\"/contributors\\" element={{...}} />
+    <Route path=\\"/courses/:courseId/sourcecast\\" element={{...}} />
+    <Route path=\\"/courses/:courseId/achievements\\" element={{...}} />
+    <Route path=\\"/sicpjs/:section?\\" element={{...}} />
+    <Route path=\\"*\\" element={{...}} />
   </Routes>
 </Fragment>"
 `;
@@ -151,15 +145,13 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>
   <Routes>
-    <Route path=\\"/playground\\" />
-    <Route path=\\"/githubassessments\\" />
-    <Route path=\\"/contributors\\" />
-    <Route path=\\"/courses/:courseId/sourcecast\\" />
-    <Route path=\\"/courses/:courseId/achievements\\" />
-    <Route path=\\"/sicpjs/:section?\\">
-      <SicpNavigationBar />
-    </Route>
-    <Route />
+    <Route path=\\"/playground\\" element={{...}} />
+    <Route path=\\"/githubassessments\\" element={{...}} />
+    <Route path=\\"/contributors\\" element={{...}} />
+    <Route path=\\"/courses/:courseId/sourcecast\\" element={{...}} />
+    <Route path=\\"/courses/:courseId/achievements\\" element={{...}} />
+    <Route path=\\"/sicpjs/:section?\\" element={{...}} />
+    <Route path=\\"*\\" element={{...}} />
   </Routes>
 </Fragment>"
 `;
