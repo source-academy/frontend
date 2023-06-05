@@ -1,15 +1,17 @@
 import { act, render, screen } from '@testing-library/react';
-import { ComponentType } from 'react';
-import { Route, StaticRouter } from 'react-router';
+import { Route, Routes } from 'react-router';
+import { StaticRouter } from 'react-router-dom/server';
 
 import Constants from '../../../commons/utils/Constants';
 import * as GitHubUtils from '../../../features/github/GitHubUtils';
 import GitHubCallback from '../GitHubCallback';
 
-function renderWithLocation<T>(component: ComponentType<T>, location: string) {
+function renderWithLocation(element: JSX.Element, location: string) {
   return render(
     <StaticRouter location={location}>
-      <Route component={component} />
+      <Routes>
+        <Route path={urlWithoutCode} element={element} />
+      </Routes>
     </StaticRouter>
   );
 }
@@ -24,7 +26,7 @@ describe('empty client ID', () => {
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     act(() => {
-      renderWithLocation(GitHubCallback, urlWithCode);
+      renderWithLocation(<GitHubCallback />, urlWithCode);
     });
 
     expect(exchangeAccessCodeMock).toBeCalledTimes(0);
@@ -45,7 +47,7 @@ describe('nonempty client ID', () => {
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     act(() => {
-      renderWithLocation(GitHubCallback, urlWithoutCode);
+      renderWithLocation(<GitHubCallback />, urlWithoutCode);
     });
 
     expect(exchangeAccessCodeMock).toBeCalledTimes(0);
@@ -62,7 +64,7 @@ describe('nonempty client ID', () => {
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateFailure);
 
     act(() => {
-      renderWithLocation(GitHubCallback, urlWithCode);
+      renderWithLocation(<GitHubCallback />, urlWithCode);
     });
     expect(exchangeAccessCodeMock).toBeCalledTimes(1);
 
@@ -80,7 +82,7 @@ describe('nonempty client ID', () => {
     closeWindowMock.mockImplementation(() => {});
 
     act(() => {
-      renderWithLocation(GitHubCallback, urlWithCode);
+      renderWithLocation(<GitHubCallback />, urlWithCode);
     });
 
     expect(exchangeAccessCodeMock).toBeCalledTimes(1);
@@ -90,8 +92,8 @@ describe('nonempty client ID', () => {
   });
 });
 
-const urlWithCode = 'https://abc.com/callback/github?code=12345';
-const urlWithoutCode = 'https://abc.com/callback/github';
+const urlWithCode = '/callback/github?code=12345';
+const urlWithoutCode = '/callback/github';
 
 async function connectBackendSimulateSuccess(): Promise<Response> {
   return new Promise(resolve => {

@@ -155,7 +155,7 @@ export async function handleHash(
   },
   workspaceLocation: WorkspaceLocation,
   dispatch: Dispatch<AnyAction>,
-  fileSystem: FSModule
+  fileSystem: FSModule | null
 ) {
   // Make the parsed query string object a Partial because we might access keys which are not set.
   const qs: Partial<IParsedQuery> = parseQuery(hash);
@@ -184,7 +184,9 @@ export async function handleHash(
             [defaultFilePath]: program
           }
         : parseQuery(decompressFromEncodedURIComponent(qs.files));
-    await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
+    if (fileSystem !== null) {
+      await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
+    }
 
     // BrowserFS does not provide a way of listening to changes in the file system, which makes
     // updating the file system view troublesome. To force the file system view to re-render
@@ -351,15 +353,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
       return;
     }
-    if (fileSystem !== null) {
-      handleHash(
-        hash,
-        { handleChangeExecTime, handleChapterSelect },
-        workspaceLocation,
-        dispatch,
-        fileSystem
-      );
-    }
+    handleHash(
+      hash,
+      { handleChangeExecTime, handleChapterSelect },
+      workspaceLocation,
+      dispatch,
+      fileSystem
+    );
   }, [dispatch, fileSystem, hash, courseSourceChapter, courseSourceVariant, workspaceLocation]);
 
   /**
