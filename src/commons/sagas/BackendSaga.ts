@@ -127,7 +127,7 @@ function selectTokens() {
 function selectRouter() {
   return select((state: OverallState) => state.router);
 }
-function* routerNavigate(path: string) {
+export function* routerNavigate(path: string) {
   const router: RouterState = yield selectRouter();
   return router?.navigate(path);
 }

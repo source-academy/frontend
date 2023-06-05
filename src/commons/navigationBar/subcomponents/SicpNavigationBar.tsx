@@ -281,6 +281,7 @@ const SicpNavigationBar: React.FC = () => {
     <div
       className="userSearch"
       style={{ position: 'absolute', top: '10%', left: '15%', width: '20%', height: '600%' }}
+      key="userSearch"
     >
       <div className="userSearch-inner">
         <div style={{ display: 'inline-flex' }}>
@@ -329,6 +330,7 @@ const SicpNavigationBar: React.FC = () => {
     <div
       className="indexSearch"
       style={{ position: 'absolute', top: '10%', left: '36%', width: '20%', height: '600%' }}
+      key="indexSearch"
     >
       <div className="indexSearch-inner">
         <div style={{ display: 'inline-flex' }}>
