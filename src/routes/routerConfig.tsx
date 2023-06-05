@@ -38,7 +38,7 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
 
   return [
     {
-      path: '/',
+      path: '/*',
       element: <Application />,
       children: [
         {
@@ -86,7 +86,7 @@ const commonChildrenRoutes = [
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
   {
-    path: '/',
+    path: '/*',
     element: <Application />,
     children: [
       {
