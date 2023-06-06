@@ -3,13 +3,13 @@
 exports[`Navbar renders correctly 1`] = `
 "<Blueprint4.Navbar className=\\"NavigationBar secondary-navbar\\">
   <Blueprint4.NavbarGroup align=\\"left\\">
-    <NavLink to={{...}} activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
+    <NavLink to=\\"/githubassessments/missions\\" state={{...}} className={[Function: className]}>
       <Blueprint4.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
     </NavLink>
-    <NavLink to={{...}} activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
+    <NavLink to=\\"/githubassessments/quests\\" state={{...}} className={[Function: className]}>
       <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests

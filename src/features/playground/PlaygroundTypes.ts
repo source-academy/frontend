@@ -1,5 +1,6 @@
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
 
+import { GitHubSaveInfo } from '../github/GitHubTypes';
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
@@ -14,6 +15,6 @@ export type PlaygroundState = {
   readonly queryString?: string;
   readonly shortURL?: string;
   readonly persistenceFile?: PersistenceFile;
-  readonly githubSaveInfo: { repoName: string; filePath: string };
+  readonly githubSaveInfo: GitHubSaveInfo;
   readonly languageConfig: SALanguage;
 };
