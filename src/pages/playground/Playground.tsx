@@ -28,6 +28,7 @@ import {
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { generateLanguageIntroduction } from 'src/commons/utils/IntroductionHelper';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -138,7 +139,6 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
-import { generateLanguageIntroduction } from 'src/commons/utils/IntroductionHelper';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
