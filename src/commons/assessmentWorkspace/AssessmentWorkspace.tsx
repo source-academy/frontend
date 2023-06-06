@@ -16,6 +16,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { initSession, log } from '../../features/eventLogging';
 import {
@@ -64,7 +65,6 @@ import SideContentContestVotingContainer from '../sideContent/SideContentContest
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
-import { history } from '../utils/HistoryHelper';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
@@ -138,6 +138,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   );
   const { isMobileBreakpoint } = useResponsive();
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
@@ -548,14 +549,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
 
     const onClickPrevious = () => {
-      history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
+      navigate(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
       setSelectedTab(SideContentType.questionOverview);
     };
     const onClickNext = () => {
-      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+      navigate(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
       setSelectedTab(SideContentType.questionOverview);
     };
-    const onClickReturn = () => history.push(listingPath);
+    const onClickReturn = () => navigate(listingPath);
 
     /**
      * Returns a nullary function that defers the navigation of the browser window, until the
