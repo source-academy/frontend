@@ -75,50 +75,48 @@ const NavigationBar: React.FC = () => {
   // Handles both the desktop and mobile versions of the playground-only left navbar group
   const playgroundOnlyNavbarLeft = Constants.enableGitHubAssessments ? (
     isMobileBreakpoint ? (
-      <>
-        <NavbarGroup align={Alignment.LEFT}>
-          <Button
-            onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
-            icon={IconNames.MENU}
-            large={true}
-            minimal={true}
-          />
-          <NavLink
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-            to="/"
-          >
-            <Icon icon={IconNames.SYMBOL_DIAMOND} />
-            <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
-          </NavLink>
-          <Drawer
-            isOpen={mobileSideMenuOpen}
-            position="left"
-            onClose={() => setMobileSideMenuOpen(false)}
-            title=""
-            className={Classes.DARK}
-          >
-            {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
-              <NavLink
-                to={e.to}
-                className={({ isActive }) =>
-                  classNames(
-                    'NavigationBar__link__mobile',
-                    Classes.BUTTON,
-                    Classes.MINIMAL,
-                    Classes.LARGE,
-                    { [Classes.ACTIVE]: isActive }
-                  )
-                }
-                onClick={() => setMobileSideMenuOpen(false)}
-                key={idx}
-              >
-                <Icon icon={e.icon} />
-                <div>{e.text}</div>
-              </NavLink>
-            ))}
-          </Drawer>
-        </NavbarGroup>
-      </>
+      <NavbarGroup align={Alignment.LEFT}>
+        <Button
+          onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+          icon={IconNames.MENU}
+          large={true}
+          minimal={true}
+        />
+        <NavLink
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to="/"
+        >
+          <Icon icon={IconNames.SYMBOL_DIAMOND} />
+          <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+        </NavLink>
+        <Drawer
+          isOpen={mobileSideMenuOpen}
+          position="left"
+          onClose={() => setMobileSideMenuOpen(false)}
+          title=""
+          className={Classes.DARK}
+        >
+          {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
+            <NavLink
+              to={e.to}
+              className={({ isActive }) =>
+                classNames(
+                  'NavigationBar__link__mobile',
+                  Classes.BUTTON,
+                  Classes.MINIMAL,
+                  Classes.LARGE,
+                  { [Classes.ACTIVE]: isActive }
+                )
+              }
+              onClick={() => setMobileSideMenuOpen(false)}
+              key={idx}
+            >
+              <Icon icon={e.icon} />
+              <div>{e.text}</div>
+            </NavLink>
+          ))}
+        </Drawer>
+      </NavbarGroup>
     ) : (
       <NavbarGroup align={Alignment.LEFT}>
         {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
