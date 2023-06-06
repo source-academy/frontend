@@ -21,7 +21,25 @@ import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import Playground, { DispatchProps, StateProps } from '../../playground/Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  ..._.pick(state.workspaces.sicp, 'usingSubst', 'usingEnv'),
+  ..._.pick(
+    state.workspaces.sicp,
+    'editorTabs',
+    'programPrependValue',
+    'programPostpendValue',
+    'editorSessionId',
+    'execTime',
+    'stepLimit',
+    'isEditorAutorun',
+    'isRunning',
+    'isDebugging',
+    'enableDebugging',
+    'output',
+    'replValue',
+    'sideContentHeight',
+    'sharedbConnected',
+    'usingSubst',
+    'usingEnv'
+  ),
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
   playgroundSourceChapter: state.workspaces.sicp.context.chapter,
