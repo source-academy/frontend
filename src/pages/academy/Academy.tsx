@@ -79,7 +79,7 @@ const Academy: React.FC<{}> = () => {
                   ? `game`
                   : assessmentConfigurations && assessmentConfigurations.length > 0
                   ? `${assessmentTypeLink(assessmentConfigurations[0].type)}`
-                  : role === 'admin'
+                  : role === Role.Admin
                   ? `adminpanel`
                   : '/404'
               }
@@ -87,7 +87,7 @@ const Academy: React.FC<{}> = () => {
           }
         />
         {staffRoutes}
-        {role === 'admin' && <Route path={`adminpanel`} element={<AdminPanel />} />}
+        {role === Role.Admin && <Route path={`adminpanel`} element={<AdminPanel />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
