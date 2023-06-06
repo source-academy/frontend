@@ -4,11 +4,11 @@ import { Ace } from 'ace-builds';
 import React from 'react';
 import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
-import { Prompt } from 'react-router';
 
 import ControlBar from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import { Prompt } from '../ReactRouterPrompt';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
@@ -287,11 +287,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   return (
     <div className="workspace mobile-workspace">
-      {props.hasUnsavedChanges ? (
-        <Prompt
-          message={'You have changes that may not be saved. Are you sure you want to leave?'}
-        />
-      ) : null}
+      <Prompt
+        when={!!props.hasUnsavedChanges}
+        message={'You have changes that may not be saved. Are you sure you want to leave?'}
+      />
 
       {/* Render the top ControlBar when it is the Assessment Workspace */}
       {inAssessmentWorkspace && (
