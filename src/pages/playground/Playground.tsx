@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -237,7 +237,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
 
-  const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
+  const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
   const location = useLocation();
   const navigate = useNavigate();
   const store = useStore<OverallState>();
@@ -308,13 +308,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     navigate(location.pathname, { replace: true });
   }
 
-  const [lastEdit, setLastEdit] = React.useState(new Date());
-  const [isGreen, setIsGreen] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(
+  const [lastEdit, setLastEdit] = useState(new Date());
+  const [isGreen, setIsGreen] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
   );
-  const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
-  const [sessionId, setSessionId] = React.useState(() =>
+  const [hasBreakpoints, setHasBreakpoints] = useState(false);
+  const [sessionId, setSessionId] = useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0]?.value ?? '',
@@ -322,7 +322,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     })
   );
 
-  const remoteExecutionTab: SideContentTab = React.useMemo(
+  const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
     [deviceSecret]
   );
@@ -335,7 +335,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     state => state.workspaces.playground.externalLibrary
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
       initSession('playground', {
@@ -349,7 +349,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!hash) {
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (courseSourceChapter && courseSourceVariant) {
@@ -387,7 +387,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
@@ -395,14 +395,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   }, [isMobileBreakpoint, selectedTab]);
 
-  const handlers = React.useMemo(
+  const handlers = useMemo(
     () => ({
       goGreen: () => setIsGreen(!isGreen)
     }),
     [isGreen]
   );
 
-  const onEditorValueChange = React.useCallback(
+  const onEditorValueChange = useCallback(
     (editorTabIndex, newEditorValue) => {
       setLastEdit(new Date());
       handleEditorValueChange(editorTabIndex, newEditorValue);
@@ -410,7 +410,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleEditorValueChange]
   );
 
-  const handleEnvVisualiserReset = React.useCallback(() => {
+  const handleEnvVisualiserReset = useCallback(() => {
     handleUsingEnv(false);
     EnvVisualizer.clearEnv();
     dispatch(updateEnvSteps(-1, workspaceLocation));
@@ -419,7 +419,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
   }, [dispatch, workspaceLocation, handleUsingEnv]);
 
-  const onChangeTabs = React.useCallback(
+  const onChangeTabs = useCallback(
     (
       newTabId: SideContentType,
       prevTabId: SideContentType,
@@ -469,14 +469,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const pushLog = React.useCallback(
+  const pushLog = useCallback(
     (newInput: Input) => {
       log(sessionId, newInput);
     },
     [sessionId]
   );
 
-  const memoizedHandlers = React.useMemo(() => {
+  const memoizedHandlers = useMemo(() => {
     return {
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
       handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
@@ -489,7 +489,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
 
-  const autorunButtons = React.useMemo(() => {
+  const autorunButtons = useMemo(() => {
     return (
       <ControlBarAutorunButtons
         isEntrypointFileDefined={activeEditorTabIndex !== null}
@@ -514,7 +514,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     usingRemoteExecution
   ]);
 
-  const chapterSelectHandler = React.useCallback(
+  const chapterSelectHandler = useCallback(
     (sublanguage: SALanguage, e: any) => {
       const { chapter, variant } = sublanguage;
       if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
@@ -549,7 +549,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const chapterSelectButton = React.useMemo(
+  const chapterSelectButton = useMemo(
     () => (
       <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
@@ -569,7 +569,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const clearButton = React.useMemo(
+  const clearButton = useMemo(
     () =>
       selectedTab === SideContentType.substVisualizer ? null : (
         <ControlBarClearButton handleReplOutputClear={handleReplOutputClear} key="clear_repl" />
@@ -577,7 +577,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleReplOutputClear, selectedTab]
   );
 
-  const evalButton = React.useMemo(
+  const evalButton = useMemo(
     () =>
       selectedTab === SideContentType.substVisualizer ? null : (
         <ControlBarEvalButton
@@ -592,7 +592,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Compute this here to avoid re-rendering the button every keystroke
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
-  const persistenceButtons = React.useMemo(() => {
+  const persistenceButtons = useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
         isFolderModeEnabled={isFolderModeEnabled}
@@ -613,7 +613,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
-  const githubButtons = React.useMemo(() => {
+  const githubButtons = useMemo(() => {
     return (
       <ControlBarGitHubButtons
         key="github"
@@ -636,7 +636,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isFolderModeEnabled
   ]);
 
-  const executionTime = React.useMemo(
+  const executionTime = useMemo(
     () => (
       <ControlBarExecutionTime
         execTime={execTime}
@@ -647,7 +647,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [execTime, handleChangeExecTime]
   );
 
-  const stepperStepLimit = React.useMemo(
+  const stepperStepLimit = useMemo(
     () => (
       <ControlBarStepLimit
         stepLimit={stepLimit}
@@ -663,13 +663,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [dispatch, stepLimit, workspaceLocation]
   );
 
-  const getEditorValue = React.useCallback(
+  const getEditorValue = useCallback(
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
     [store, workspaceLocation]
   );
 
-  const sessionButtons = React.useMemo(
+  const sessionButtons = useMemo(
     () => (
       <ControlBarSessionButtons
         isFolderModeEnabled={isFolderModeEnabled}
@@ -690,7 +690,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const shareButton = React.useMemo(() => {
+  const shareButton = useMemo(() => {
     const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
     return (
       <ControlBarShareButton
@@ -705,7 +705,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
 
-  const toggleFolderModeButton = React.useMemo(() => {
+  const toggleFolderModeButton = useMemo(() => {
     return (
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
@@ -724,7 +724,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     workspaceLocation
   ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // TODO: To migrate the state logic away from playgroundSourceChapter
     //       and playgroundSourceVariant into the language config instead
     const languageConfigToSet = getLanguageConfig(playgroundSourceChapter, playgroundSourceVariant);
@@ -737,11 +737,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
-  const playgroundIntroductionTab: SideContentTab = React.useMemo(
+  const playgroundIntroductionTab: SideContentTab = useMemo(
     () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
     [languageConfig]
   );
-  const tabs = React.useMemo(() => {
+  const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
     const currentLang = languageConfig.chapter;
@@ -792,7 +792,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
-  const onLoadMethod = React.useCallback(
+  const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
       const addFold = () => {
         editor.getSession().addFold('    ', new Range(1, 0, props.prependLength!, 0));
@@ -804,7 +804,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [props.prependLength]
   );
 
-  const onChangeMethod = React.useCallback(
+  const onChangeMethod = useCallback(
     (newCode: string, delta: CodeDelta) => {
       const input: Input = {
         time: Date.now(),
@@ -819,7 +819,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [pushLog, dispatch, workspaceLocation]
   );
 
-  const onCursorChangeMethod = React.useCallback(
+  const onCursorChangeMethod = useCallback(
     (selection: any) => {
       const input: Input = {
         time: Date.now(),
@@ -832,7 +832,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [pushLog]
   );
 
-  const onSelectionChangeMethod = React.useCallback(
+  const onSelectionChangeMethod = useCallback(
     (selection: any) => {
       const range: SelectionRange = selection.getRange();
       const isBackwards: boolean = selection.isBackwards();
@@ -849,7 +849,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [pushLog]
   );
 
-  const handleEditorUpdateBreakpoints = React.useCallback(
+  const handleEditorUpdateBreakpoints = useCallback(
     (editorTabIndex: number, breakpoints: string[]) => {
       // get rid of holes in array
       const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
@@ -888,12 +888,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
 
-  const setActiveEditorTabIndex = React.useCallback(
+  const setActiveEditorTabIndex = useCallback(
     (activeEditorTabIndex: number | null) =>
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
     [dispatch, workspaceLocation]
   );
-  const removeEditorTabByIndex = React.useCallback(
+  const removeEditorTabByIndex = useCallback(
     (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
     [dispatch, workspaceLocation]
   );
@@ -908,22 +908,22 @@ const Playground: React.FC<PlaygroundProps> = props => {
     setActiveEditorTabIndex,
     removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate: React.useCallback(
+    handleDeclarationNavigate: useCallback(
       (cursorPosition: Position) =>
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
       [dispatch, workspaceLocation]
     ),
     handleEditorEval: memoizedHandlers.handleEditorEval,
-    handlePromptAutocomplete: React.useCallback(
+    handlePromptAutocomplete: useCallback(
       (row: number, col: number, callback: any) =>
         dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
       [dispatch, workspaceLocation]
     ),
-    handleSendReplInputToOutput: React.useCallback(
+    handleSendReplInputToOutput: useCallback(
       (code: string) => dispatch(sendReplInputToOutput(code, workspaceLocation)),
       [dispatch, workspaceLocation]
     ),
-    handleSetSharedbConnected: React.useCallback(
+    handleSetSharedbConnected: useCallback(
       (connected: boolean) => dispatch(setSharedbConnected(workspaceLocation, connected)),
       [dispatch, workspaceLocation]
     ),
@@ -943,15 +943,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replValue,
     handleReplEval,
     usingSubst,
-    handleBrowseHistoryDown: React.useCallback(
+    handleBrowseHistoryDown: useCallback(
       () => dispatch(browseReplHistoryDown(workspaceLocation)),
       [dispatch, workspaceLocation]
     ),
-    handleBrowseHistoryUp: React.useCallback(
+    handleBrowseHistoryUp: useCallback(
       () => dispatch(browseReplHistoryUp(workspaceLocation)),
       [dispatch, workspaceLocation]
     ),
-    handleReplValueChange: React.useCallback(
+    handleReplValueChange: useCallback(
       (newValue: string) => dispatch(updateReplValue(newValue, workspaceLocation)),
       [dispatch, workspaceLocation]
     ),
@@ -966,7 +966,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     disableScrolling: isSicpEditor
   };
 
-  const sideBarProps: { tabs: SideBarTab[] } = React.useMemo(() => {
+  const sideBarProps: { tabs: SideBarTab[] } = useMemo(() => {
     // The sidebar is rendered if and only if there is at least one tab present.
     // Because whether the sidebar is rendered or not affects the sidebar resizing
     // logic, we cannot defer the decision on which sidebar tabs should be rendered
@@ -1012,7 +1012,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       ]
     },
     editorContainerProps: editorContainerProps,
-    handleSideContentHeightChange: React.useCallback(
+    handleSideContentHeightChange: useCallback(
       change => dispatch(changeSideContentHeight(change, workspaceLocation)),
       [dispatch, workspaceLocation]
     ),
