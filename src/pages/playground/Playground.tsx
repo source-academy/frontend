@@ -4,7 +4,7 @@ import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import _, { isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
@@ -274,20 +274,41 @@ const Playground: React.FC<PlaygroundProps> = props => {
   } = useTypedSelector(state => state.session);
 
   const dispatch = useDispatch();
-  const handleChangeExecTime = (execTime: number) =>
-    dispatch(changeExecTime(execTime, workspaceLocation));
-  const handleChapterSelect = (chapter: Chapter, variant: Variant) =>
-    dispatch(chapterSelect(chapter, variant, workspaceLocation));
-  const handleEditorValueChange = (editorTabIndex: number, newEditorValue: string) =>
-    dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue));
-  const handleSetEditorBreakpoints = (editorTabIndex: number, newBreakpoints: string[]) =>
-    dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints));
-  const handleReplEval = () => dispatch(evalRepl(workspaceLocation));
-  const handleReplOutputClear = () => dispatch(clearReplOutput(workspaceLocation));
-  const handleUsingEnv = (usingEnv: boolean) =>
-    dispatch(toggleUsingEnv(usingEnv, workspaceLocation));
-  const handleUsingSubst = (usingSubst: boolean) =>
-    dispatch(toggleUsingSubst(usingSubst, workspaceLocation));
+  const handleChangeExecTime = React.useCallback(
+    (execTime: number) => dispatch(changeExecTime(execTime, workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleChapterSelect = React.useCallback(
+    (chapter: Chapter, variant: Variant) =>
+      dispatch(chapterSelect(chapter, variant, workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleEditorValueChange = React.useCallback(
+    (editorTabIndex: number, newEditorValue: string) =>
+      dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+    [dispatch, workspaceLocation]
+  );
+  const handleSetEditorBreakpoints = React.useCallback(
+    (editorTabIndex: number, newBreakpoints: string[]) =>
+      dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
+    [dispatch, workspaceLocation]
+  );
+  const handleReplEval = React.useCallback(
+    () => dispatch(evalRepl(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleReplOutputClear = React.useCallback(
+    () => dispatch(clearReplOutput(workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleUsingEnv = React.useCallback(
+    (usingEnv: boolean) => dispatch(toggleUsingEnv(usingEnv, workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
+  const handleUsingSubst = React.useCallback(
+    (usingSubst: boolean) => dispatch(toggleUsingSubst(usingSubst, workspaceLocation)),
+    [dispatch, workspaceLocation]
+  );
 
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
@@ -332,6 +353,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         chapter: playgroundSourceChapter
       })
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorSessionId]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
@@ -360,7 +382,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
       dispatch,
       fileSystem
     );
-  }, [dispatch, fileSystem, hash, courseSourceChapter, courseSourceVariant, workspaceLocation]);
+  }, [
+    dispatch,
+    fileSystem,
+    hash,
+    courseSourceChapter,
+    courseSourceVariant,
+    workspaceLocation,
+    handleChapterSelect,
+    handleChangeExecTime
+  ]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -380,10 +411,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [isGreen]
   );
 
-  const onEditorValueChange = React.useCallback((editorTabIndex, newEditorValue) => {
-    setLastEdit(new Date());
-    handleEditorValueChange(editorTabIndex, newEditorValue);
-  }, []);
+  const onEditorValueChange = React.useCallback(
+    (editorTabIndex, newEditorValue) => {
+      setLastEdit(new Date());
+      handleEditorValueChange(editorTabIndex, newEditorValue);
+    },
+    [handleEditorValueChange]
+  );
 
   const handleEnvVisualiserReset = React.useCallback(() => {
     handleUsingEnv(false);
@@ -392,7 +426,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch(updateEnvStepsTotal(0, workspaceLocation));
     dispatch(toggleUpdateEnv(true, workspaceLocation));
     dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
-  }, [dispatch, workspaceLocation]);
+  }, [dispatch, workspaceLocation, handleUsingEnv]);
 
   const onChangeTabs = React.useCallback(
     (
@@ -434,7 +468,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       setSelectedTab(newTabId);
     },
-    [hasBreakpoints, handleEnvVisualiserReset]
+    [
+      hasBreakpoints,
+      handleEnvVisualiserReset,
+      playgroundSourceChapter,
+      handleUsingSubst,
+      handleUsingEnv,
+      handleReplOutputClear
+    ]
   );
 
   const pushLog = React.useCallback(
@@ -506,7 +547,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
       // to decouple the SicpWorkspace from the Playground.
       dispatch(playgroundConfigLanguage(sublanguage));
     },
-    [dispatch, hasBreakpoints, selectedTab, pushLog]
+    [
+      dispatch,
+      hasBreakpoints,
+      selectedTab,
+      pushLog,
+      handleReplOutputClear,
+      handleUsingSubst,
+      handleChapterSelect
+    ]
   );
 
   const chapterSelectButton = React.useMemo(
@@ -835,7 +884,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleSetEditorBreakpoints(editorTabIndex, breakpoints);
       dispatch(toggleUpdateEnv(true, workspaceLocation));
     },
-    [selectedTab, dispatch, workspaceLocation]
+    [
+      selectedTab,
+      dispatch,
+      workspaceLocation,
+      handleSetEditorBreakpoints,
+      handleReplOutputClear,
+      handleUsingSubst,
+      playgroundSourceChapter
+    ]
   );
 
   const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;

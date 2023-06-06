@@ -110,7 +110,7 @@ const CourseSelectingAcademy: React.FC<{}> = () => {
     if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {
       dispatch(updateLatestViewedCourse(routeCourseId));
     }
-  }, [courseId, dispatch, routeCourseId, navigate]);
+  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr]);
 
   return Number.isNaN(routeCourseId) ? (
     <Navigate to="/" />

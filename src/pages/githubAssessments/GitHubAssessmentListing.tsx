@@ -40,7 +40,7 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
         Create a New Assessment!
       </Button>
     ),
-    []
+    [navigate]
   );
 
   const refreshButton = useMemo(

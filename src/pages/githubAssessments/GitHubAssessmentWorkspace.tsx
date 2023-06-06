@@ -118,22 +118,25 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   }
 
   // Handlers migrated over from deprecated withRouter implementation
-  const handleEditorEval = useCallback(() => dispatch(evalEditor(workspaceLocation)), []);
+  const handleEditorEval = useCallback(() => dispatch(evalEditor(workspaceLocation)), [dispatch]);
   const handleEditorValueChange = useCallback(
     (editorTabIndex: number, newEditorValue: string) =>
       dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
-    []
+    [dispatch]
   );
-  const handleReplEval = useCallback(() => dispatch(evalRepl(workspaceLocation)), []);
-  const handleReplOutputClear = useCallback(() => dispatch(clearReplOutput(workspaceLocation)), []);
+  const handleReplEval = useCallback(() => dispatch(evalRepl(workspaceLocation)), [dispatch]);
+  const handleReplOutputClear = useCallback(
+    () => dispatch(clearReplOutput(workspaceLocation)),
+    [dispatch]
+  );
   const handleUpdateHasUnsavedChanges = useCallback(
     (hasUnsavedChanges: boolean) =>
       dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
-    []
+    [dispatch]
   );
   const handleUpdateWorkspace = useCallback(
     (options: Partial<WorkspaceState>) => dispatch(updateWorkspace(workspaceLocation, options)),
-    []
+    [dispatch]
   );
 
   /**
@@ -704,7 +707,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
 
   const onClickReturn = useCallback(() => {
     navigate('/githubassessments/missions');
-  }, []);
+  }, [navigate]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit

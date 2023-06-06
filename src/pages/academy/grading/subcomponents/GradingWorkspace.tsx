@@ -125,6 +125,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorValueChange(0, answer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**

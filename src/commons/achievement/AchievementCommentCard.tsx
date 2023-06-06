@@ -26,7 +26,7 @@ const AchievementCommentCard = ({
       const assessmentWorkspacePath = listingPath + `/${assessment?.id.toString()}`;
       navigate(assessmentWorkspacePath + `/${questionId}`);
     },
-    [assessment?.id, assessment?.type, courseId]
+    [assessment?.id, assessment?.type, courseId, navigate]
   );
 
   return (

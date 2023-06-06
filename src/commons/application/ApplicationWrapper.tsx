@@ -66,7 +66,7 @@ const ApplicationWrapper: React.FC = () => {
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [isDisabled, role, name, courseId]);
+  }, [isDisabled, role, name, courseId, dispatch]);
 
   return <RouterProvider router={router} />;
 };
