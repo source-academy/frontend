@@ -41,8 +41,8 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
+import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
-import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
@@ -69,7 +69,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.setTokens(tokens));
     yield mockGetUserAndCourse();
     const courseId: number = yield select((state: OverallState) => state.session.courseId!);
-    yield history.push(`/courses/${courseId}`);
+    yield routerNavigate(`/courses/${courseId}`);
   });
 
   const mockGetUserAndCourse = function* () {
@@ -252,7 +252,7 @@ export function* mockBackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/courses/${courseId}/grading'
      */
-    yield history.push(
+    yield routerNavigate(
       `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
     );
   };

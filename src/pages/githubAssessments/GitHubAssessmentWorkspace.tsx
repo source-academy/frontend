@@ -14,12 +14,15 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeSideContentHeight,
+  clearReplOutput,
+  evalEditor,
+  evalRepl,
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
@@ -27,7 +30,10 @@ import {
   runAllTestcases,
   setEditorBreakpoint,
   updateActiveEditorTabIndex,
-  updateReplValue
+  updateEditorValue,
+  updateHasUnsavedChanges,
+  updateReplValue,
+  updateWorkspace
 } from 'src/commons/workspace/WorkspaceActions';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -81,7 +87,6 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
@@ -100,33 +105,39 @@ import {
 } from './GitHubAssessmentDefaultValues';
 import { GHAssessmentOverview } from './GitHubClassroom';
 
-export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
-
-export type DispatchProps = {
-  handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleEditorEval: () => void;
-  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleReplEval: () => void;
-  handleReplOutputClear: () => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
-};
-
-export type StateProps = {
-  isDebugging: boolean; // TODO: Unused for now. To check for possible removal.
-  enableDebugging: boolean; // TODO: Unused for now. To check for possible removal.
-  sourceChapter: Chapter; // TODO: Unused for now. To check for possible removal.
-};
-
 const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 
-const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
+const GitHubAssessmentWorkspace: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
-    history.push('/githubassessments/login');
+    navigate('/githubassessments/login');
   }
+
+  // Handlers migrated over from deprecated withRouter implementation
+  const handleEditorEval = useCallback(() => dispatch(evalEditor(workspaceLocation)), [dispatch]);
+  const handleEditorValueChange = useCallback(
+    (editorTabIndex: number, newEditorValue: string) =>
+      dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+    [dispatch]
+  );
+  const handleReplEval = useCallback(() => dispatch(evalRepl(workspaceLocation)), [dispatch]);
+  const handleReplOutputClear = useCallback(
+    () => dispatch(clearReplOutput(workspaceLocation)),
+    [dispatch]
+  );
+  const handleUpdateHasUnsavedChanges = useCallback(
+    (hasUnsavedChanges: boolean) =>
+      dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+    [dispatch]
+  );
+  const handleUpdateWorkspace = useCallback(
+    (options: Partial<WorkspaceState>) => dispatch(updateWorkspace(workspaceLocation, options)),
+    [dispatch]
+  );
 
   /**
    * State variables relating to information we are concerned with saving
@@ -154,7 +165,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [displayMCQInEditor, setDisplayMCQInEditor] = useState(true);
   const [mcqQuestion, setMCQQuestion] = useState(defaultMCQQuestion);
   const [missionRepoData, setMissionRepoData] = useState<MissionRepoData | undefined>(undefined);
-  const assessmentOverview = props.location.state as GHAssessmentOverview;
+  const assessmentOverview = location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
   const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
@@ -171,14 +182,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     replValue,
     sideContentHeight
   } = useTypedSelector(state => state.workspaces.githubAssessment);
-
-  /**
-   * Unpacked properties
-   */
-  const handleEditorValueChange = props.handleEditorValueChange;
-  const handleUpdateWorkspace = props.handleUpdateWorkspace;
-  const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
-  const handleReplOutputClear = props.handleReplOutputClear;
 
   /**
    * Should be called to change the task number, rather than using setCurrentTaskNumber
@@ -703,8 +706,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   ]);
 
   const onClickReturn = useCallback(() => {
-    history.push('/githubassessments/missions');
-  }, []);
+    navigate('/githubassessments/missions');
+  }, [navigate]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -717,7 +720,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     ) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab]);
 
   const onEditorValueChange = useCallback(
     val => {
@@ -748,7 +751,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = () => {
-    props.handleEditorEval();
+    handleEditorEval();
 
     // Run testcases when the GitHub testcases tab is selected
     if (activeTab.current === SideContentType.testcases) {
@@ -812,9 +815,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [currentTaskNumber, taskList, setTaskListWrapper]
   );
 
-  const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
-    props: GitHubAssessmentWorkspaceProps
-  ) => {
+  const sideContentProps: () => SideContentProps = () => {
     const tabs: SideContentTab[] = [
       {
         label: 'Task',
@@ -1025,7 +1026,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     };
 
-    const sideContent = sideContentProps(props);
+    const sideContent = sideContentProps();
 
     return {
       mobileControlBarProps: {
@@ -1044,11 +1045,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     );
 
     const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={isRunning}
-        key="eval_repl"
-      />
+      <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
     );
 
     return [evalButton, clearButton];
@@ -1110,7 +1107,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const replProps = {
     handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
     handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
-    handleReplEval: props.handleReplEval,
+    handleReplEval: handleReplEval,
     handleReplValueChange: (newValue: string) =>
       dispatch(updateReplValue(newValue, workspaceLocation)),
     output: output,
@@ -1132,7 +1129,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
     sideContentHeight: sideContentHeight,
-    sideContentProps: sideContentProps(props),
+    sideContentProps: sideContentProps(),
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
