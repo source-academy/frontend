@@ -1,4 +1,4 @@
-import '../../../commons/i18n.ts';
+import '../../../commons/i18n/i18n';
 
 import { require as acequire } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
