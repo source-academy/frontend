@@ -1,11 +1,12 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Prompt } from 'react-router';
-import AchievementEditor from 'src/commons/achievement/control/AchievementEditor';
-import AchievementPreview from 'src/commons/achievement/control/AchievementPreview';
-import GoalEditor from 'src/commons/achievement/control/GoalEditor';
-import AchievementInferencer from 'src/commons/achievement/utils/AchievementInferencer';
-import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { AchievementItem, GoalDefinition } from 'src/features/achievement/AchievementTypes';
+
+import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
+import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
+import GoalEditor from '../../../commons/achievement/control/GoalEditor';
+import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
+import { Prompt } from '../../../commons/ReactRouterPrompt';
+import { AchievementContext } from '../../../features/achievement/AchievementConstants';
+import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   bulkUpdateAchievements: (achievements: AchievementItem[]) => void;

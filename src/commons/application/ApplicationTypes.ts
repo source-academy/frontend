@@ -1,26 +1,28 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
-import { Assessment } from 'src/commons/assessment/AssessmentTypes';
-import { FileSystemState } from 'src/commons/fileSystem/FileSystemTypes';
-import Constants from 'src/commons/utils/Constants';
-import { createContext } from 'src/commons/utils/JsSlangHelper';
+
+import { AcademyState } from '../../features/academy/AcademyTypes';
+import { AchievementState } from '../../features/achievement/AchievementTypes';
+import { DashboardState } from '../../features/dashboard/DashboardTypes';
+import { Grading } from '../../features/grading/GradingTypes';
+import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
+import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
+import { Assessment } from '../assessment/AssessmentTypes';
+import { FileSystemState } from '../fileSystem/FileSystemTypes';
+import Constants from '../utils/Constants';
+import { createContext } from '../utils/JsSlangHelper';
 import {
   DebuggerContext,
   WorkspaceLocation,
   WorkspaceManagerState,
   WorkspaceState
-} from 'src/commons/workspace/WorkspaceTypes';
-import { AcademyState } from 'src/features/academy/AcademyTypes';
-import { AchievementState } from 'src/features/achievement/AchievementTypes';
-import { DashboardState } from 'src/features/dashboard/DashboardTypes';
-import { Grading } from 'src/features/grading/GradingTypes';
-import { PlaygroundState } from 'src/features/playground/PlaygroundTypes';
-import { PlaybackStatus, RecordingStatus } from 'src/features/sourceRecorder/SourceRecorderTypes';
-import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
-
+} from '../workspace/WorkspaceTypes';
+import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
+  readonly router: RouterState;
   readonly academy: AcademyState;
   readonly achievement: AchievementState;
   readonly application: ApplicationState;
@@ -288,6 +290,8 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 };
 
+export const defaultRouter: RouterState = null;
+
 export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
 };
@@ -508,6 +512,7 @@ export const defaultFileSystem: FileSystemState = {
 };
 
 export const defaultState: OverallState = {
+  router: defaultRouter,
   academy: defaultAcademy,
   achievement: defaultAchievement,
   application: defaultApplication,

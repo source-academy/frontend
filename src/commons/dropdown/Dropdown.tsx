@@ -2,30 +2,19 @@ import { Menu, MenuItem, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
-import { UpdateCourseConfiguration, UserCourse } from 'src/commons/application/types/SessionTypes';
-import ControlButton from 'src/commons/ControlButton';
-import Profile from 'src/commons/profile/Profile';
+import { useDispatch } from 'react-redux';
 
+import { logOut } from '../application/actions/CommonsActions';
+import ControlButton from '../ControlButton';
+import Profile from '../profile/Profile';
+import { useTypedSelector } from '../utils/Hooks';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';
 import DropdownHelp from './DropdownHelp';
 import DropdownSettings from './DropdownSettings';
 
-type DropdownProps = DispatchProps & StateProps;
-
-type DispatchProps = {
-  handleLogOut: () => void;
-  handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
-};
-
-type StateProps = {
-  name?: string;
-  courses: UserCourse[];
-  courseId?: number;
-};
-
-const Dropdown: React.FC<DropdownProps> = props => {
+const Dropdown: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -33,77 +22,70 @@ const Dropdown: React.FC<DropdownProps> = props => {
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
 
-  function menu(props: DropdownProps) {
-    const profile =
-      props.name && props.courseId != null ? (
-        <MenuItem icon={IconNames.USER} onClick={toggleProfileOpen} text={titleCase(props.name)} />
-      ) : null;
-
-    const myCourses = props.name ? (
-      <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text="My Courses" />
-    ) : null;
-
-    const createCourse = props.name ? (
-      <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text="Create Course" />
-    ) : null;
-
-    const logout = props.name ? (
-      <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={props.handleLogOut} />
-    ) : null;
-
-    return (
-      <Menu>
-        {profile}
-        {myCourses}
-        {createCourse}
-        <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text="Settings" />
-        <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text="About" />
-        <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text="Help" />
-        {logout}
-      </Menu>
-    );
-  }
+  const { name, courses, courseId } = useTypedSelector(state => state.session);
+  const dispatch = useDispatch();
+  const handleLogOut = () => dispatch(logOut());
 
   const toggleSettingsOpen = () => {
     setIsSettingsOpen(oldValue => !oldValue);
   };
-
   const toggleAboutOpen = () => {
     setIsAboutOpen(oldValue => !oldValue);
   };
-
   const toggleHelpOpen = () => setIsHelpOpen(oldValue => !oldValue);
-
   const toggleProfileOpen = () => setIsProfileOpen(oldValue => !oldValue);
-
   const toggleMyCoursesOpen = () => setIsMyCoursesOpen(oldValue => !oldValue);
-
   const toggleCreateCourseOpen = () => setIsCreateCourseOpen(oldValue => !oldValue);
+
+  const profile =
+    name && courseId != null ? (
+      <MenuItem icon={IconNames.USER} onClick={toggleProfileOpen} text={titleCase(name)} />
+    ) : null;
+
+  const myCourses = name ? (
+    <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text="My Courses" />
+  ) : null;
+
+  const createCourse = name ? (
+    <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text="Create Course" />
+  ) : null;
+
+  const logout = name ? (
+    <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={handleLogOut} />
+  ) : null;
+
+  const menu = (
+    <Menu>
+      {profile}
+      {myCourses}
+      {createCourse}
+      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text="Settings" />
+      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text="About" />
+      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text="Help" />
+      {logout}
+    </Menu>
+  );
 
   return (
     <>
-      <Popover2 content={menu(props)} inheritDarkTheme={false} placement={Position.BOTTOM}>
+      <Popover2 content={menu} inheritDarkTheme={false} placement={Position.BOTTOM}>
         <ControlButton icon={IconNames.CARET_DOWN} />
       </Popover2>
       <DropdownSettings isOpen={isSettingsOpen} onClose={toggleSettingsOpen} />
       <DropdownAbout isOpen={isAboutOpen} onClose={toggleAboutOpen} />
       <DropdownHelp isOpen={isHelpOpen} onClose={toggleHelpOpen} />
-      {props.name ? (
+      {name ? (
         <DropdownCourses
           isOpen={isMyCoursesOpen}
           onClose={toggleMyCoursesOpen}
-          courses={props.courses}
-          courseId={props.courseId}
+          courses={courses}
+          courseId={courseId}
         />
       ) : null}
-      {props.name ? (
-        <DropdownCreateCourse
-          isOpen={isCreateCourseOpen}
-          onClose={toggleCreateCourseOpen}
-          handleCreateCourse={props.handleCreateCourse}
-        />
+      {name ? (
+        <DropdownCreateCourse isOpen={isCreateCourseOpen} onClose={toggleCreateCourseOpen} />
       ) : null}
-      {props.name ? <Profile isOpen={isProfileOpen} onClose={toggleProfileOpen} /> : null}
+      {name ? <Profile isOpen={isProfileOpen} onClose={toggleProfileOpen} /> : null}
     </>
   );
 };

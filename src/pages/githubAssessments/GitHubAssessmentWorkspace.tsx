@@ -14,64 +14,15 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { Testcase } from 'src/commons/assessment/AssessmentTypes';
-import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
-import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from 'src/commons/controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from 'src/commons/controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from 'src/commons/controlBar/ControlBarQuestionViewButton';
-import { ControlBarResetButton } from 'src/commons/controlBar/ControlBarResetButton';
-import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
-import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
-import { ControlBarDisplayMCQButton } from 'src/commons/controlBar/github/ControlBarDisplayMCQButton';
-import { ControlBarTaskAddButton } from 'src/commons/controlBar/github/ControlBarTaskAddButton';
-import { ControlBarTaskDeleteButton } from 'src/commons/controlBar/github/ControlBarTaskDeleteButton';
-import {
-  convertEditorTabStateToProps,
-  NormalEditorContainerProps
-} from 'src/commons/editor/EditorContainer';
-import { Position } from 'src/commons/editor/EditorTypes';
-import {
-  GitHubMissionCreateDialog,
-  GitHubMissionCreateDialogProps,
-  GitHubMissionCreateDialogResolution
-} from 'src/commons/githubAssessments/GitHubMissionCreateDialog';
-import {
-  convertIMCQQuestionToMCQText,
-  convertToMCQQuestionIfMCQText,
-  discoverFilesToBeChangedWithMissionRepoData,
-  discoverFilesToBeCreatedWithoutMissionRepoData,
-  getMissionData
-} from 'src/commons/githubAssessments/GitHubMissionDataUtils';
-import {
-  MissionData,
-  MissionMetadata,
-  MissionRepoData,
-  TaskData
-} from 'src/commons/githubAssessments/GitHubMissionTypes';
-import Markdown from 'src/commons/Markdown';
-import { MobileSideContentProps } from 'src/commons/mobileWorkspace/mobileSideContent/MobileSideContent';
-import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
-import SideContentMarkdownEditor from 'src/commons/sideContent/githubAssessments/SideContentMarkdownEditor';
-import SideContentMissionEditor from 'src/commons/sideContent/githubAssessments/SideContentMissionEditor';
-import SideContentTaskEditor from 'src/commons/sideContent/githubAssessments/SideContentTaskEditor';
-import SideContentTestcaseEditor from 'src/commons/sideContent/githubAssessments/SideContentTestcaseEditor';
-import { SideContentProps } from 'src/commons/sideContent/SideContent';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import Constants from 'src/commons/utils/Constants';
-import { promisifyDialog, showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { history } from 'src/commons/utils/HistoryHelper';
+import { useLocation, useNavigate } from 'react-router';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
-import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeSideContentHeight,
+  clearReplOutput,
+  evalEditor,
+  evalRepl,
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
@@ -79,17 +30,73 @@ import {
   runAllTestcases,
   setEditorBreakpoint,
   updateActiveEditorTabIndex,
-  updateReplValue
+  updateEditorValue,
+  updateHasUnsavedChanges,
+  updateReplValue,
+  updateWorkspace
 } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+
+import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import { Testcase } from '../../commons/assessment/AssessmentTypes';
+import { ControlBarProps } from '../../commons/controlBar/ControlBar';
+import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
+import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
+import { ControlBarDisplayMCQButton } from '../../commons/controlBar/github/ControlBarDisplayMCQButton';
+import { ControlBarTaskAddButton } from '../../commons/controlBar/github/ControlBarTaskAddButton';
+import { ControlBarTaskDeleteButton } from '../../commons/controlBar/github/ControlBarTaskDeleteButton';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../../commons/editor/EditorContainer';
+import { Position } from '../../commons/editor/EditorTypes';
+import {
+  GitHubMissionCreateDialog,
+  GitHubMissionCreateDialogProps,
+  GitHubMissionCreateDialogResolution
+} from '../../commons/githubAssessments/GitHubMissionCreateDialog';
+import {
+  convertIMCQQuestionToMCQText,
+  convertToMCQQuestionIfMCQText,
+  discoverFilesToBeChangedWithMissionRepoData,
+  discoverFilesToBeCreatedWithoutMissionRepoData,
+  getMissionData
+} from '../../commons/githubAssessments/GitHubMissionDataUtils';
+import {
+  MissionData,
+  MissionMetadata,
+  MissionRepoData,
+  TaskData
+} from '../../commons/githubAssessments/GitHubMissionTypes';
+import Markdown from '../../commons/Markdown';
+import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
+import MobileWorkspace, {
+  MobileWorkspaceProps
+} from '../../commons/mobileWorkspace/MobileWorkspace';
+import SideContentMarkdownEditor from '../../commons/sideContent/githubAssessments/SideContentMarkdownEditor';
+import SideContentMissionEditor from '../../commons/sideContent/githubAssessments/SideContentMissionEditor';
+import SideContentTaskEditor from '../../commons/sideContent/githubAssessments/SideContentTaskEditor';
+import SideContentTestcaseEditor from '../../commons/sideContent/githubAssessments/SideContentTestcaseEditor';
+import { SideContentProps } from '../../commons/sideContent/SideContent';
+import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
+import Constants from '../../commons/utils/Constants';
+import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
+import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
   performCreatingSave,
   performFolderDeletion,
   performOverwritingSave
-} from 'src/features/github/GitHubUtils';
-
+} from '../../features/github/GitHubUtils';
 import {
   defaultMCQQuestion,
   defaultMissionBriefing,
@@ -98,33 +105,39 @@ import {
 } from './GitHubAssessmentDefaultValues';
 import { GHAssessmentOverview } from './GitHubClassroom';
 
-export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
-
-export type DispatchProps = {
-  handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleEditorEval: () => void;
-  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleReplEval: () => void;
-  handleReplOutputClear: () => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
-};
-
-export type StateProps = {
-  isDebugging: boolean; // TODO: Unused for now. To check for possible removal.
-  enableDebugging: boolean; // TODO: Unused for now. To check for possible removal.
-  sourceChapter: Chapter; // TODO: Unused for now. To check for possible removal.
-};
-
 const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 
-const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
+const GitHubAssessmentWorkspace: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
-    history.push('/githubassessments/login');
+    navigate('/githubassessments/login');
   }
+
+  // Handlers migrated over from deprecated withRouter implementation
+  const handleEditorEval = useCallback(() => dispatch(evalEditor(workspaceLocation)), [dispatch]);
+  const handleEditorValueChange = useCallback(
+    (editorTabIndex: number, newEditorValue: string) =>
+      dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+    [dispatch]
+  );
+  const handleReplEval = useCallback(() => dispatch(evalRepl(workspaceLocation)), [dispatch]);
+  const handleReplOutputClear = useCallback(
+    () => dispatch(clearReplOutput(workspaceLocation)),
+    [dispatch]
+  );
+  const handleUpdateHasUnsavedChanges = useCallback(
+    (hasUnsavedChanges: boolean) =>
+      dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+    [dispatch]
+  );
+  const handleUpdateWorkspace = useCallback(
+    (options: Partial<WorkspaceState>) => dispatch(updateWorkspace(workspaceLocation, options)),
+    [dispatch]
+  );
 
   /**
    * State variables relating to information we are concerned with saving
@@ -152,7 +165,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const [displayMCQInEditor, setDisplayMCQInEditor] = useState(true);
   const [mcqQuestion, setMCQQuestion] = useState(defaultMCQQuestion);
   const [missionRepoData, setMissionRepoData] = useState<MissionRepoData | undefined>(undefined);
-  const assessmentOverview = props.location.state as GHAssessmentOverview;
+  const assessmentOverview = location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
   const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
@@ -169,14 +182,6 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     replValue,
     sideContentHeight
   } = useTypedSelector(state => state.workspaces.githubAssessment);
-
-  /**
-   * Unpacked properties
-   */
-  const handleEditorValueChange = props.handleEditorValueChange;
-  const handleUpdateWorkspace = props.handleUpdateWorkspace;
-  const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
-  const handleReplOutputClear = props.handleReplOutputClear;
 
   /**
    * Should be called to change the task number, rather than using setCurrentTaskNumber
@@ -701,8 +706,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   ]);
 
   const onClickReturn = useCallback(() => {
-    history.push('/githubassessments/missions');
-  }, []);
+    navigate('/githubassessments/missions');
+  }, [navigate]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -715,7 +720,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     ) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab]);
 
   const onEditorValueChange = useCallback(
     val => {
@@ -746,7 +751,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = () => {
-    props.handleEditorEval();
+    handleEditorEval();
 
     // Run testcases when the GitHub testcases tab is selected
     if (activeTab.current === SideContentType.testcases) {
@@ -810,9 +815,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [currentTaskNumber, taskList, setTaskListWrapper]
   );
 
-  const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
-    props: GitHubAssessmentWorkspaceProps
-  ) => {
+  const sideContentProps: () => SideContentProps = () => {
     const tabs: SideContentTab[] = [
       {
         label: 'Task',
@@ -1023,7 +1026,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     };
 
-    const sideContent = sideContentProps(props);
+    const sideContent = sideContentProps();
 
     return {
       mobileControlBarProps: {
@@ -1042,11 +1045,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     );
 
     const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={isRunning}
-        key="eval_repl"
-      />
+      <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
     );
 
     return [evalButton, clearButton];
@@ -1108,7 +1107,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   const replProps = {
     handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
     handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
-    handleReplEval: props.handleReplEval,
+    handleReplEval: handleReplEval,
     handleReplValueChange: (newValue: string) =>
       dispatch(updateReplValue(newValue, workspaceLocation)),
     output: output,
@@ -1130,7 +1129,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
     sideContentHeight: sideContentHeight,
-    sideContentProps: sideContentProps(props),
+    sideContentProps: sideContentProps(),
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {

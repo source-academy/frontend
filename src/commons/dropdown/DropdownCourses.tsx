@@ -1,9 +1,10 @@
 import { Classes, Dialog, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { UserCourse } from 'src/commons/application/types/SessionTypes';
-import { history } from 'src/commons/utils/HistoryHelper';
+import { useNavigate } from 'react-router';
+
+import { Role } from '../application/ApplicationTypes';
+import { UserCourse } from '../application/types/SessionTypes';
 
 type DialogProps = {
   isOpen: boolean;
@@ -13,6 +14,7 @@ type DialogProps = {
 };
 
 const DropdownCourses: React.FC<DialogProps> = props => {
+  const navigate = useNavigate();
   const { courses } = props;
 
   const options = courses.map(course => ({
@@ -22,7 +24,7 @@ const DropdownCourses: React.FC<DialogProps> = props => {
   }));
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    history.push(`/courses/${e.currentTarget.value}`);
+    navigate(`/courses/${e.currentTarget.value}`);
     props.onClose();
   };
 

@@ -21,27 +21,28 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import defaultCoverImage from 'src/assets/default_cover_image.jpg';
+import { numberRegExp } from 'src/features/academy/AcademyTypes';
+
+import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import {
   acknowledgeNotifications,
   fetchAssessmentOverviews,
   submitAssessment
-} from 'src/commons/application/actions/SessionActions';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { OwnProps as AssessmentWorkspaceOwnProps } from 'src/commons/assessmentWorkspace/AssessmentWorkspace';
-import AssessmentWorkspaceContainer from 'src/commons/assessmentWorkspace/AssessmentWorkspaceContainer';
-import ContentDisplay from 'src/commons/ContentDisplay';
-import ControlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
-import NotificationBadge from 'src/commons/notificationBadge/NotificationBadge';
-import { filterNotificationsByAssessment } from 'src/commons/notificationBadge/NotificationBadgeHelper';
-import Constants from 'src/commons/utils/Constants';
-import { beforeNow, getPrettyDate } from 'src/commons/utils/DateHelper';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
-import { assessmentTypeLink, convertParamToInt } from 'src/commons/utils/ParamParseHelper';
-
+} from '../application/actions/SessionActions';
+import { Role } from '../application/ApplicationTypes';
+import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
+import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
+import ContentDisplay from '../ContentDisplay';
+import ControlButton from '../ControlButton';
+import Markdown from '../Markdown';
+import NotificationBadge from '../notificationBadge/NotificationBadge';
+import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
+import Constants from '../utils/Constants';
+import { beforeNow, getPrettyDate } from '../utils/DateHelper';
+import { useResponsive, useTypedSelector } from '../utils/Hooks';
+import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
   AssessmentConfiguration,
@@ -252,6 +253,15 @@ const Assessment: React.FC<AssessmentProps> = props => {
       assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
     [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
   );
+
+  // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
+  if (
+    (params.assessmentId && !params.assessmentId?.match(numberRegExp)) ||
+    (params.questionId && !params.questionId?.match(numberRegExp))
+  ) {
+    return <Navigate to={`/courses/${courseId}/${props.assessmentConfiguration.type}`} />;
+  }
+
   const assessmentId: number | null = convertParamToInt(params.assessmentId);
   const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
 

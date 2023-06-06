@@ -12,13 +12,17 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
-import { Prompt } from 'react-router';
-import ControlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
-import { getPrettyDate } from 'src/commons/utils/DateHelper';
-import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
-import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
+
+import ControlButton from '../../../../commons/ControlButton';
+import Markdown from '../../../../commons/Markdown';
+import { Prompt } from '../../../../commons/ReactRouterPrompt';
+import { getPrettyDate } from '../../../../commons/utils/DateHelper';
+import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../../../commons/utils/NotificationsHelper';
+import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
 type GradingEditorProps = DispatchProps & OwnProps;
 
@@ -224,9 +228,10 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
 
   return (
     <div className="GradingEditor">
-      {!currentlySaving && hasUnsavedChanges ? (
-        <Prompt message={'You have unsaved changes. Are you sure you want to leave?'} />
-      ) : null}
+      <Prompt
+        when={!currentlySaving && hasUnsavedChanges}
+        message={'You have unsaved changes. Are you sure you want to leave?'}
+      />
 
       <div className="grading-editor-header">
         <H3>Currently Grading: {props.studentName}</H3>

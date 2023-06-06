@@ -2,8 +2,9 @@ import { Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { useState } from 'react';
-import { useHistory } from 'react-router';
-import toc from 'src/features/sicp/data/toc.json';
+import { useNavigate } from 'react-router';
+
+import toc from '../../../features/sicp/data/toc.json';
 
 type TocProps = OwnProps;
 
@@ -16,7 +17,7 @@ type OwnProps = {
  */
 const SicpToc: React.FC<TocProps> = props => {
   const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleNodeExpand = (_node: TreeNodeInfo, path: integer[]) => {
     const newState = cloneDeep(sidebarContent);
@@ -35,9 +36,9 @@ const SicpToc: React.FC<TocProps> = props => {
       if (props.handleCloseToc) {
         props.handleCloseToc();
       }
-      history.push('/sicpjs/' + String(node.nodeData));
+      navigate('/sicpjs/' + String(node.nodeData));
     },
-    [history, props]
+    [navigate, props]
   );
 
   return (

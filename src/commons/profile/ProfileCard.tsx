@@ -45,7 +45,6 @@ const ProfileCard: React.FC<ProfileCardProps> = props => {
       key={`${item.title}-${item.id}`}
       target="_blank"
       to={`/courses/${props.courseId}/${assessmentTypeLink(item.type)}/${item.id}/0`}
-      activeClassName="profile-summary-navlink"
     >
       <Callout
         className="profile-summary-callout"

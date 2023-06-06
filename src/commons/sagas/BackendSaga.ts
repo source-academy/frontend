@@ -2,7 +2,28 @@
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
-import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
+import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+
+import {
+  FETCH_GROUP_GRADING_SUMMARY,
+  GradingSummary
+} from '../../features/dashboard/DashboardTypes';
+import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  CHANGE_DATE_ASSESSMENT,
+  DELETE_ASSESSMENT,
+  PUBLISH_ASSESSMENT,
+  UPLOAD_ASSESSMENT
+} from '../../features/groundControl/GroundControlTypes';
+import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import {
+  SAVE_SOURCECAST_DATA,
+  SourcecastData
+} from '../../features/sourceRecorder/SourceRecorderTypes';
+import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { OverallState, Role } from '../application/ApplicationTypes';
+import { RouterState } from '../application/types/CommonsTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -37,7 +58,7 @@ import {
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
-} from 'src/commons/application/types/SessionTypes';
+} from '../application/types/SessionTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -46,33 +67,15 @@ import {
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
   SUBMIT_ASSESSMENT
-} from 'src/commons/assessment/AssessmentTypes';
+} from '../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
-} from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { actions } from 'src/commons/utils/ActionsHelper';
-import { computeRedirectUri, getClientId, getDefaultProvider } from 'src/commons/utils/AuthHelper';
-import { history } from 'src/commons/utils/HistoryHelper';
-import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
-import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
-import { FETCH_GROUP_GRADING_SUMMARY, GradingSummary } from 'src/features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from 'src/features/grading/GradingTypes';
-import {
-  CHANGE_DATE_ASSESSMENT,
-  DELETE_ASSESSMENT,
-  PUBLISH_ASSESSMENT,
-  UPLOAD_ASSESSMENT
-} from 'src/features/groundControl/GroundControlTypes';
-import { FETCH_SOURCECAST_INDEX } from 'src/features/sourceRecorder/sourcecast/SourcecastTypes';
-import {
-  SAVE_SOURCECAST_DATA,
-  SourcecastData
-} from 'src/features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from 'src/features/sourceRecorder/sourcereel/SourcereelTypes';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
-
+} from '../notificationBadge/NotificationBadgeTypes';
+import { actions } from '../utils/ActionsHelper';
+import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   deleteAssessment,
   deleteSourcecastEntry,
@@ -121,6 +124,14 @@ function selectTokens() {
   }));
 }
 
+function selectRouter() {
+  return select((state: OverallState) => state.router);
+}
+export function* routerNavigate(path: string) {
+  const router: RouterState = yield selectRouter();
+  return router?.navigate(path);
+}
+
 function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>): any {
     const { code, providerId: payloadProviderId } = action.payload;
@@ -131,7 +142,7 @@ function* BackendSaga(): SagaIterator {
         showWarningMessage,
         'Could not log in; invalid provider or no providers configured.'
       );
-      return yield history.push('/');
+      return yield routerNavigate('/');
     }
 
     const clientId = getClientId(providerId);
@@ -139,7 +150,7 @@ function* BackendSaga(): SagaIterator {
 
     const tokens: Tokens | null = yield call(postAuth, code, providerId, clientId, redirectUrl);
     if (!tokens) {
-      return yield history.push('/');
+      return yield routerNavigate('/');
     }
     yield put(actions.setTokens(tokens));
 
@@ -173,10 +184,10 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      return yield history.push(`/courses/${courseRegistration.courseId}`);
+      return yield routerNavigate(`/courses/${courseRegistration.courseId}`);
     }
 
-    return yield history.push(`/welcome`);
+    return yield routerNavigate('/welcome');
   });
 
   yield takeEvery(
@@ -479,7 +490,7 @@ function* BackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield history.push(
+    yield routerNavigate(
       `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
     );
   };
@@ -622,7 +633,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield call(showSuccessMessage, 'Saved successfully!', 1000);
-      yield history.push(`/courses/${courseId}/sourcecast`);
+      yield routerNavigate(`/courses/${courseId}/sourcecast`);
     }
   );
 
@@ -673,7 +684,7 @@ function* BackendSaga(): SagaIterator {
 
       if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
         yield call(showWarningMessage, `Failed to load course!`);
-        return yield history.push('/welcome');
+        return yield routerNavigate('/welcome');
       }
 
       yield put(actions.setCourseConfiguration(courseConfiguration));
@@ -819,7 +830,7 @@ function* BackendSaga(): SagaIterator {
     }
 
     yield call(showSuccessMessage, 'Successfully created your new course!');
-    yield call([history, 'push'], `/courses/${courseRegistration.courseId}`);
+    yield routerNavigate(`/courses/${courseRegistration.courseId}`);
   });
 
   yield takeEvery(

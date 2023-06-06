@@ -1,12 +1,15 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
+
+import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
+import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
   OverallState,
   Role,
   SALanguage,
   styliseSublanguage,
   SupportedLanguage
-} from 'src/commons/application/ApplicationTypes';
+} from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -26,25 +29,22 @@ import {
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
   UPDATE_LATEST_VIEWED_COURSE
-} from 'src/commons/application/types/SessionTypes';
+} from '../application/types/SessionTypes';
 import {
   AssessmentOverview,
   AssessmentStatuses,
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
   SUBMIT_ASSESSMENT
-} from 'src/commons/assessment/AssessmentTypes';
+} from '../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
-} from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { actions } from 'src/commons/utils/ActionsHelper';
-import { history } from 'src/commons/utils/HistoryHelper';
-import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import { FETCH_GROUP_GRADING_SUMMARY } from 'src/features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from 'src/features/grading/GradingTypes';
-
+} from '../notificationBadge/NotificationBadgeTypes';
+import { routerNavigate } from '../sagas/BackendSaga';
+import { actions } from '../utils/ActionsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   mockAssessmentConfigurations,
   mockAssessmentOverviews,
@@ -69,7 +69,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.setTokens(tokens));
     yield mockGetUserAndCourse();
     const courseId: number = yield select((state: OverallState) => state.session.courseId!);
-    yield history.push(`/courses/${courseId}`);
+    yield routerNavigate(`/courses/${courseId}`);
   });
 
   const mockGetUserAndCourse = function* () {
@@ -252,7 +252,7 @@ export function* mockBackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/courses/${courseId}/grading'
      */
-    yield history.push(
+    yield routerNavigate(
       `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
     );
   };

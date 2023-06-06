@@ -50,16 +50,17 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
           return (
             <NavLink
               key={type}
-              to={{
-                pathname: `/githubassessments/${assessmentTypeLink(type)}`,
-                state: {
-                  courses: props.courses,
-                  assessmentTypeOverviews: props.assessmentTypeOverviews,
-                  selectedCourse: props.selectedCourse
-                }
+              to={`/githubassessments/${assessmentTypeLink(type)}`}
+              state={{
+                courses: props.courses,
+                assessmentTypeOverviews: props.assessmentTypeOverviews,
+                selectedCourse: props.selectedCourse
               }}
-              activeClassName={Classes.ACTIVE}
-              className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+              className={({ isActive }) =>
+                classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+                  [Classes.ACTIVE]: isActive
+                })
+              }
             >
               <Icon icon={idx < 5 ? icons[idx] : icons[0]} />
               <div className="navbar-button-text hidden-xs hidden-sm">{type}</div>

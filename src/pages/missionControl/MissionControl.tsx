@@ -1,33 +1,41 @@
 import React, { useState } from 'react';
-import { RouteComponentProps } from 'react-router';
-import {
-  AssessmentStatuses,
-  AssessmentType,
-  AssessmentWorkspaceParams
-} from 'src/commons/assessment/AssessmentTypes';
-import ContentDisplay from 'src/commons/ContentDisplay';
-import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCard';
-import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspace';
-import EditingWorkspaceContainer from 'src/commons/editingWorkspace/EditingWorkspaceContainer';
-import MissionCreator from 'src/commons/missionCreator/MissionCreatorContainer';
-import Constants from 'src/commons/utils/Constants';
-import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
-import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
+import { Navigate, useParams } from 'react-router';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
-export type MissionControlProps = StateProps & RouteComponentProps<AssessmentWorkspaceParams>;
-
-export type StateProps = {
-  assessmentTypes: AssessmentType[];
-};
+import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
+import ContentDisplay from '../../commons/ContentDisplay';
+import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
+import { OwnProps as EditingWorkspaceOwnProps } from '../../commons/editingWorkspace/EditingWorkspace';
+import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWorkspaceContainer';
+import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
+import Constants from '../../commons/utils/Constants';
+import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
+import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
 const nullFunction = () => {};
 
-const MissionControl: React.FC<MissionControlProps> = props => {
+const MissionControl: React.FC = () => {
+  const { assessmentConfigurations } = useTypedSelector(state => state.session);
+  const assessmentTypes = assessmentConfigurations?.map(e => e.type) || [];
+
   const [editingOverview, setEditingOverview] = useState(retrieveLocalAssessmentOverview());
 
-  const assessmentId: number | null = convertParamToInt(props.match.params.assessmentId);
-  const questionId: number =
-    convertParamToInt(props.match.params.questionId) || Constants.defaultQuestionId;
+  const params = useParams<{
+    assessmentId: string;
+    questionId: string;
+  }>();
+
+  // If assessmentId or questionId is defined but not numeric, redirect back to the MissionControl overviews page
+  if (
+    (params.assessmentId && !params.assessmentId?.match(numberRegExp)) ||
+    (params.questionId && !params.questionId?.match(numberRegExp))
+  ) {
+    return <Navigate to={`/mission-control`} />;
+  }
+
+  const assessmentId: number | null = convertParamToInt(params.assessmentId);
+  const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
 
   // If mission for testing is to render, create workspace
   if (assessmentId === -1 && editingOverview) {
@@ -55,7 +63,7 @@ const MissionControl: React.FC<MissionControlProps> = props => {
           overview={editingOverview}
           updateEditingOverview={setEditingOverview}
           listingPath="/mission-control"
-          assessmentTypes={props.assessmentTypes}
+          assessmentTypes={assessmentTypes}
         />
       )}
     </>
