@@ -11,8 +11,26 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { ControlBarAutorunButtons } from 'src/commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import {
+  convertEditorTabStateToProps,
+  SourcecastEditorContainerProps
+} from 'src/commons/editor/EditorContainer';
 import { Position } from 'src/commons/editor/EditorTypes';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
+import SideContentDataVisualizer from 'src/commons/sideContent/SideContentDataVisualizer';
+import SideContentEnvVisualizer from 'src/commons/sideContent/SideContentEnvVisualizer';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import SourceRecorderControlBar, {
+  SourceRecorderControlBarProps
+} from 'src/commons/sourceRecorder/SourceRecorderControlBar';
+import SourceRecorderTable from 'src/commons/sourceRecorder/SourceRecorderTable';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -42,33 +60,12 @@ import {
   setSourcecastDuration,
   setSourcecastStatus
 } from 'src/features/sourceRecorder/SourceRecorderActions';
-
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import {
-  convertEditorTabStateToProps,
-  SourcecastEditorContainerProps
-} from '../../commons/editor/EditorContainer';
-import MobileWorkspace, {
-  MobileWorkspaceProps
-} from '../../commons/mobileWorkspace/MobileWorkspace';
-import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import SourceRecorderControlBar, {
-  SourceRecorderControlBarProps
-} from '../../commons/sourceRecorder/SourceRecorderControlBar';
-import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
-import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   CodeDelta,
   Input,
   PlaybackData,
   PlaybackStatus
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 const workspaceLocation: WorkspaceLocation = 'sourcecast';
 

@@ -1,11 +1,11 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import * as React from 'react';
 import { Navigate, useParams } from 'react-router';
+import ContentDisplay from 'src/commons/ContentDisplay';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
-import ContentDisplay from '../../../commons/ContentDisplay';
-import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingDashboard from './subcomponents/GradingDashboard';
 import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspace';
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';

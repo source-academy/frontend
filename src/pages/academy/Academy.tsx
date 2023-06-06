@@ -3,22 +3,22 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
-import Constants from 'src/commons/utils/Constants';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-
 import {
   fetchGradingOverviews,
   fetchNotifications,
   updateLatestViewedCourse
-} from '../../commons/application/actions/SessionActions';
-import Assessment from '../../commons/assessment/Assessment';
-import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
-import { assessmentRegExp, gradingRegExp, numberRegExp } from '../../features/academy/AcademyTypes';
-import Achievement from '../achievement/Achievement';
-import NotFound from '../notFound/NotFound';
-import Sourcecast from '../sourcecast/Sourcecast';
+} from 'src/commons/application/actions/SessionActions';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import Assessment from 'src/commons/assessment/Assessment';
+import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
+import Constants from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
+import { assessmentRegExp, gradingRegExp, numberRegExp } from 'src/features/academy/AcademyTypes';
+import Achievement from 'src/pages/achievement/Achievement';
+import NotFound from 'src/pages/notFound/NotFound';
+import Sourcecast from 'src/pages/sourcecast/Sourcecast';
+
 import AdminPanel from './adminPanel/AdminPanel';
 import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';

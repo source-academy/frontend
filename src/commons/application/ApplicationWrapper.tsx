@@ -3,14 +3,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-
+import Constants from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   getDisabledRouterConfig,
   getFullAcademyRouterConfig,
   playgroundOnlyRouterConfig
-} from '../../routes/routerConfig';
-import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+} from 'src/routes/routerConfig';
+
 import { updateReactRouter } from './actions/CommonsActions';
 
 /**

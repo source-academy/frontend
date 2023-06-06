@@ -13,8 +13,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -24,40 +23,43 @@ import {
   Question,
   QuestionTypes,
   Testcase
-} from '../assessment/AssessmentTypes';
-import { ControlBarProps } from '../controlBar/ControlBar';
-import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
-import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
-import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
-import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
-import { ControlBarToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
-import ControlButton from '../ControlButton';
-import { AutograderTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
-import DeploymentTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
-import GradingTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
-import ManageQuestionTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentManageQuestionTab';
-import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
-import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
-import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
-import { convertEditorTabStateToProps } from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
-import Markdown from '../Markdown';
-import { SideContentProps } from '../sideContent/SideContent';
-import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import { useTypedSelector } from '../utils/Hooks';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { removeEditorTab, updateActiveEditorTabIndex } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+} from 'src/commons/assessment/AssessmentTypes';
+import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from 'src/commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from 'src/commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from 'src/commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarResetButton } from 'src/commons/controlBar/ControlBarResetButton';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
+import { ControlBarToggleEditModeButton } from 'src/commons/controlBar/ControlBarToggleEditModeButton';
+import ControlButton from 'src/commons/ControlButton';
+import { AutograderTab } from 'src/commons/editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
+import DeploymentTab from 'src/commons/editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
+import GradingTab from 'src/commons/editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
+import ManageQuestionTab from 'src/commons/editingWorkspaceSideContent/EditingWorkspaceSideContentManageQuestionTab';
+import MCQQuestionTemplateTab from 'src/commons/editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
+import ProgrammingQuestionTemplateTab from 'src/commons/editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
+import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
+import { convertEditorTabStateToProps } from 'src/commons/editor/EditorContainer';
+import { Position } from 'src/commons/editor/EditorTypes';
+import Markdown from 'src/commons/Markdown';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
+import {
+  removeEditorTab,
+  updateActiveEditorTabIndex
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
   storeLocalAssessmentOverview
-} from '../XMLParser/XMLParserHelper';
+} from 'src/commons/XMLParser/XMLParserHelper';
 
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
 

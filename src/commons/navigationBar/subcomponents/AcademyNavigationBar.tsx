@@ -3,13 +3,12 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+import NotificationBadge from 'src/commons/notificationBadge/NotificationBadge';
+import { filterNotificationsByType } from 'src/commons/notificationBadge/NotificationBadgeHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
-
-import { Role } from '../../application/ApplicationTypes';
-import NotificationBadge from '../../notificationBadge/NotificationBadge';
-import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
 
 type OwnProps = {
   assessmentTypes?: AssessmentType[];

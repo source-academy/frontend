@@ -1,19 +1,18 @@
 import { Navigate, redirect, RouteObject } from 'react-router';
-
-import Application from '../commons/application/Application';
-import { Role } from '../commons/application/ApplicationTypes';
-import Constants from '../commons/utils/Constants';
-import Academy from '../pages/academy/Academy';
-import Contributors from '../pages/contributors/Contributors';
-import Disabled from '../pages/disabled/Disabled';
-import GitHubClassroom from '../pages/githubAssessments/GitHubClassroom';
-import GitHubCallback from '../pages/githubCallback/GitHubCallback';
-import Login from '../pages/login/Login';
-import MissionControl from '../pages/missionControl/MissionControl';
-import NotFound from '../pages/notFound/NotFound';
-import Playground from '../pages/playground/Playground';
-import Sicp from '../pages/sicp/Sicp';
-import Welcome from '../pages/welcome/Welcome';
+import Application from 'src/commons/application/Application';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import Constants from 'src/commons/utils/Constants';
+import Academy from 'src/pages/academy/Academy';
+import Contributors from 'src/pages/contributors/Contributors';
+import Disabled from 'src/pages/disabled/Disabled';
+import GitHubClassroom from 'src/pages/githubAssessments/GitHubClassroom';
+import GitHubCallback from 'src/pages/githubCallback/GitHubCallback';
+import Login from 'src/pages/login/Login';
+import MissionControl from 'src/pages/missionControl/MissionControl';
+import NotFound from 'src/pages/notFound/NotFound';
+import Playground from 'src/pages/playground/Playground';
+import Sicp from 'src/pages/sicp/Sicp';
+import Welcome from 'src/pages/welcome/Welcome';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.

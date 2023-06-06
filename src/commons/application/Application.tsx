@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import NavigationBar from 'src/commons/navigationBar/NavigationBar';
+import Constants from 'src/commons/utils/Constants';
+import { useLocalStorageState, useTypedSelector } from 'src/commons/utils/Hooks';
+import {
+  defaultWorkspaceSettings,
+  WorkspaceSettingsContext
+} from 'src/commons/WorkspaceSettingsContext';
 
-import NavigationBar from '../navigationBar/NavigationBar';
-import Constants from '../utils/Constants';
-import { useLocalStorageState, useTypedSelector } from '../utils/Hooks';
-import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import { fetchUserAndCourse } from './actions/SessionActions';
 
 const Application: React.FC = () => {
