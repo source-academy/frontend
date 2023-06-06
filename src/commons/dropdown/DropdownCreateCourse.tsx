@@ -14,6 +14,8 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { createCourse } from 'src/features/academy/AcademyActions';
 
 import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
 import { sourceLanguages } from '../application/ApplicationTypes';
@@ -24,10 +26,11 @@ import { showWarningMessage } from '../utils/NotificationsHelper';
 type DialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  handleCreateCourse: (courseConfig: UpdateCourseConfiguration) => void;
 };
 
 const DropdownCreateCourse: React.FC<DialogProps> = props => {
+  const dispatch = useDispatch();
+
   const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({
     courseName: '',
     courseShortName: '',
@@ -66,7 +69,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
       showWarningMessage('Course Name cannot be empty!');
       return;
     }
-    props.handleCreateCourse(courseConfig);
+    dispatch(createCourse(courseConfig));
     props.onClose();
   };
 
