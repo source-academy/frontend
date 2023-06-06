@@ -1,3 +1,5 @@
+import '../../../commons/i18n.ts';
+
 import { require as acequire } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { mount } from 'enzyme';
