@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -274,41 +274,32 @@ const Playground: React.FC<PlaygroundProps> = props => {
   } = useTypedSelector(state => state.session);
 
   const dispatch = useDispatch();
-  const handleChangeExecTime = React.useCallback(
-    (execTime: number) => dispatch(changeExecTime(execTime, workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleChapterSelect = React.useCallback(
-    (chapter: Chapter, variant: Variant) =>
-      dispatch(chapterSelect(chapter, variant, workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleEditorValueChange = React.useCallback(
-    (editorTabIndex: number, newEditorValue: string) =>
-      dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
-    [dispatch, workspaceLocation]
-  );
-  const handleSetEditorBreakpoints = React.useCallback(
-    (editorTabIndex: number, newBreakpoints: string[]) =>
-      dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
-    [dispatch, workspaceLocation]
-  );
-  const handleReplEval = React.useCallback(
-    () => dispatch(evalRepl(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleReplOutputClear = React.useCallback(
-    () => dispatch(clearReplOutput(workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleUsingEnv = React.useCallback(
-    (usingEnv: boolean) => dispatch(toggleUsingEnv(usingEnv, workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
-  const handleUsingSubst = React.useCallback(
-    (usingSubst: boolean) => dispatch(toggleUsingSubst(usingSubst, workspaceLocation)),
-    [dispatch, workspaceLocation]
-  );
+  const {
+    handleChangeExecTime,
+    handleChapterSelect,
+    handleEditorValueChange,
+    handleSetEditorBreakpoints,
+    handleReplEval,
+    handleReplOutputClear,
+    handleUsingEnv,
+    handleUsingSubst
+  } = useMemo(() => {
+    return {
+      handleChangeExecTime: (execTime: number) =>
+        dispatch(changeExecTime(execTime, workspaceLocation)),
+      handleChapterSelect: (chapter: Chapter, variant: Variant) =>
+        dispatch(chapterSelect(chapter, variant, workspaceLocation)),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+      handleSetEditorBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleUsingEnv: (usingEnv: boolean) => dispatch(toggleUsingEnv(usingEnv, workspaceLocation)),
+      handleUsingSubst: (usingSubst: boolean) =>
+        dispatch(toggleUsingSubst(usingSubst, workspaceLocation))
+    };
+  }, [dispatch, workspaceLocation]);
 
   // Hide search query from URL to maintain an illusion of security. The device secret
   // is still exposed via the 'Referer' header when requesting external content (e.g. Google API fonts)
