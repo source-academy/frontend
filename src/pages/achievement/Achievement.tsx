@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router';
+import { Route, Routes } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import { Role } from '../../commons/application/ApplicationTypes';
@@ -11,21 +11,14 @@ const Achievement: React.FC = () => {
   const role = useTypedSelector(state => state.session.role!);
 
   const toAchievementControl =
-    role === Role.Admin || role === Role.Staff ? AchievementControl : NotFound;
+    role === Role.Admin || role === Role.Staff ? <AchievementControl /> : <NotFound />;
 
   return (
-    <Switch>
-      <Route
-        exact={true}
-        path="/courses/:courseId/achievements"
-        component={AchievementDashboard}
-      ></Route>
-      <Route
-        path="/courses/:courseId/achievements/control"
-        component={toAchievementControl}
-      ></Route>
-      <Route component={NotFound} />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<AchievementDashboard />}></Route>
+      <Route path="control" element={toAchievementControl}></Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 

@@ -2,7 +2,7 @@ import { Alignment, Drawer, InputGroup, Navbar, NavbarGroup, Position } from '@b
 import { IconNames } from '@blueprintjs/icons';
 import { memoize } from 'lodash';
 import * as React from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
 import Constants from 'src/commons/utils/Constants';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
@@ -70,15 +70,16 @@ const SicpNavigationBar: React.FC = () => {
   ]);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const prev = getPrev(section);
-  const next = getNext(section);
+  // `section` is defined due to the navigate logic in the useEffect in Sicp.tsx
+  const prev = getPrev(section!);
+  const next = getNext(section!);
 
   const handleCloseToc = () => setIsTocOpen(false);
   const handleOpenToc = () => setIsTocOpen(true);
   const handleNavigation = (sect: string) => {
-    history.push('/sicpjs/' + sect);
+    navigate('/sicpjs/' + sect);
   };
   const handleOpenSearch = () => setIsSearchOpen(true);
   const handleCloseSearch = () => setIsSearchOpen(false);
@@ -280,6 +281,7 @@ const SicpNavigationBar: React.FC = () => {
     <div
       className="userSearch"
       style={{ position: 'absolute', top: '10%', left: '15%', width: '20%', height: '600%' }}
+      key="userSearch"
     >
       <div className="userSearch-inner">
         <div style={{ display: 'inline-flex' }}>
@@ -328,6 +330,7 @@ const SicpNavigationBar: React.FC = () => {
     <div
       className="indexSearch"
       style={{ position: 'absolute', top: '10%', left: '36%', width: '20%', height: '600%' }}
+      key="indexSearch"
     >
       <div className="indexSearch-inner">
         <div style={{ display: 'inline-flex' }}>

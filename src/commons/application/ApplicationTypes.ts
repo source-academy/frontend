@@ -17,10 +17,12 @@ import {
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
+import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
+  readonly router: RouterState;
   readonly academy: AcademyState;
   readonly achievement: AchievementState;
   readonly application: ApplicationState;
@@ -300,6 +302,8 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 };
 
+export const defaultRouter: RouterState = null;
+
 export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
 };
@@ -521,6 +525,7 @@ export const defaultFileSystem: FileSystemState = {
 };
 
 export const defaultState: OverallState = {
+  router: defaultRouter,
   academy: defaultAcademy,
   achievement: defaultAchievement,
   application: defaultApplication,
