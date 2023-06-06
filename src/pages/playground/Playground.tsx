@@ -28,10 +28,7 @@ import {
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  generateLanguageIntroduction,
-  generateSourceDocsLink
-} from 'src/commons/utils/IntroductionHelper';
+import { generateLanguageIntroduction } from 'src/commons/utils/IntroductionHelper';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
