@@ -29,6 +29,29 @@ import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSele
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
 
+const playgroundOnlyNavbarLeftInfo_GitHubEnabled = [
+  {
+    to: '/playground',
+    icon: IconNames.CODE,
+    text: 'Playground'
+  },
+  {
+    to: '/githubassessments',
+    icon: IconNames.BRIEFCASE,
+    text: 'Classroom'
+  },
+  {
+    to: '/sicpjs/',
+    icon: IconNames.BOOK,
+    text: 'SICP JS'
+  }
+];
+
+const playgroundOnlyNavbarLeftInfo_GitHubDisabled =
+  playgroundOnlyNavbarLeftInfo_GitHubEnabled.filter(
+    e => e.text !== 'Classroom' || e.to !== '/githubassessments' || e.icon !== IconNames.BRIEFCASE
+  );
+
 const NavigationBar: React.FC = () => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
   const { isMobileBreakpoint } = useResponsive();
@@ -48,29 +71,6 @@ const NavigationBar: React.FC = () => {
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
-
-  const playgroundOnlyNavbarLeftInfo_GitHubEnabled = [
-    {
-      to: '/playground',
-      icon: IconNames.CODE,
-      text: 'Playground'
-    },
-    {
-      to: '/githubassessments',
-      icon: IconNames.BRIEFCASE,
-      text: 'Classroom'
-    },
-    {
-      to: '/sicpjs/',
-      icon: IconNames.BOOK,
-      text: 'SICP JS'
-    }
-  ];
-
-  const playgroundOnlyNavbarLeftInfo_GitHubDisabled =
-    playgroundOnlyNavbarLeftInfo_GitHubEnabled.filter(
-      e => e.text !== 'Classroom' || e.to !== '/githubassessments' || e.icon !== IconNames.BRIEFCASE
-    );
 
   // Handles both the desktop and mobile versions of the playground-only left navbar group
   const playgroundOnlyNavbarLeft = Constants.enableGitHubAssessments ? (
