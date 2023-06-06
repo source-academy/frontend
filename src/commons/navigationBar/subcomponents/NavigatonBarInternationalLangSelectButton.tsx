@@ -6,6 +6,7 @@ import {
   InternationalLanguage,
   SUPPORTED_INTERNATIONAL_LANGUAGES
 } from 'src/commons/application/ApplicationTypes';
+import { changeInternationalLanguage } from 'src/commons/i18n/i18n';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { playgroundInternationalLanguage } from 'src/features/playground/PlaygroundActions';
 
@@ -22,6 +23,7 @@ const NavigationBarInternationalLangSelectButton = () => {
   const selectLang = (language: InternationalLanguage) => {
     console.log('language is', language);
     dispatch(playgroundInternationalLanguage(language));
+    changeInternationalLanguage(language);
     setIsOpen(false);
   };
 

@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
+import { InternationalLanguage } from '../application/ApplicationTypes';
 import { Links } from '../utils/Constants';
 
 i18n
@@ -41,5 +42,9 @@ i18n
       }
     }
   });
+
+export const changeInternationalLanguage = (language: InternationalLanguage) => {
+  i18n.changeLanguage(language);
+};
 
 export default i18n;
