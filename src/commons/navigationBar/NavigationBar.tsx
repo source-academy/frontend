@@ -31,6 +31,7 @@ import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import AcademyNavigationBar, { icons } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
+import NavigationBarInternationalLangSelectButton from './subcomponents/NavigatonBarInternationalLangSelectButton';
 
 type NavigationBarProps = DispatchProps & StateProps;
 
@@ -348,6 +349,9 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 
   const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
+      {location.pathname.startsWith('/playground') && (
+        <NavigationBarInternationalLangSelectButton />
+      )}
       {location.pathname.startsWith('/playground') && <NavigationBarLangSelectButton />}
       <NavLink
         activeClassName={Classes.ACTIVE}

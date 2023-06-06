@@ -5,6 +5,7 @@ import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   CHANGE_QUERY_STRING,
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
+  PLAYGROUND_UPDATE_INTERNATIONAL_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PlaygroundState,
@@ -40,6 +41,11 @@ export const PlaygroundReducer: Reducer<PlaygroundState> = (
       return {
         ...state,
         languageConfig: action.payload
+      };
+    case PLAYGROUND_UPDATE_INTERNATIONAL_LANGUAGE_CONFIG:
+      return {
+        ...state,
+        internationalLanguage: action.payload
       };
     default:
       return state;

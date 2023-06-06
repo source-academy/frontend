@@ -115,6 +115,18 @@ export const SUPPORTED_LANGUAGES = [
   SupportedLanguage.PYTHON
 ];
 
+export enum InternationalLanguage {
+  ENGLISH = 'en',
+  CHINESE = 'zh',
+  GERMAN = 'de'
+}
+
+export const SUPPORTED_INTERNATIONAL_LANGUAGES = [
+  InternationalLanguage.ENGLISH,
+  InternationalLanguage.CHINESE,
+  InternationalLanguage.GERMAN
+];
+
 /**
  * Defines the languages available for use on Source Academy,
  * including Source sublanguages and other languages e.g. full JS.
@@ -325,7 +337,8 @@ export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig
+  languageConfig: defaultLanguageConfig,
+  internationalLanguage: InternationalLanguage.ENGLISH
 };
 
 export const defaultEditorValue = '// Type your program in here!';

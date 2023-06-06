@@ -1,4 +1,4 @@
-import { SALanguage } from 'src/commons/application/ApplicationTypes';
+import { InternationalLanguage, SALanguage } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
 
 import { PersistenceFile } from '../persistence/PersistenceTypes';
@@ -6,6 +6,7 @@ import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
+  PLAYGROUND_UPDATE_INTERNATIONAL_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   SHORTEN_URL,
@@ -31,3 +32,6 @@ export const playgroundUpdateGitHubSaveInfo = (
 
 export const playgroundConfigLanguage = (languageConfig: SALanguage) =>
   action(PLAYGROUND_UPDATE_LANGUAGE_CONFIG, languageConfig);
+
+export const playgroundInternationalLanguage = (language: InternationalLanguage) =>
+  action(PLAYGROUND_UPDATE_INTERNATIONAL_LANGUAGE_CONFIG, language);
