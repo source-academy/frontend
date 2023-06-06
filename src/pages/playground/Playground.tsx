@@ -28,7 +28,10 @@ import {
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
-import { generateSourceDocsLink } from 'src/commons/utils/IntroductionHelper';
+import {
+  generateLanguageIntroduction,
+  generateSourceDocsLink
+} from 'src/commons/utils/IntroductionHelper';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -750,12 +753,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
-    () =>
-      makeIntroductionTabFrom(
-        translate('introduction.main') +
-          generateSourceDocsLink(languageConfig.chapter, languageConfig.variant) +
-          translate('introduction.hotkeys')
-      ),
+    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
     [languageConfig, translate]
   );
   const tabs = React.useMemo(() => {
