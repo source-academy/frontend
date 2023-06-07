@@ -8,6 +8,10 @@ import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStas
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import { getTextHeight } from '../EnvVisualizerUtils';
+import { ArrowFromStackItemComponent } from './arrows/ArrowFromStackItemComponent';
+import { Frame } from './Frame';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 
 export class StackItemComponent extends Visible implements IHoverable {
   static readonly maxTextWidth: number =
@@ -15,8 +19,9 @@ export class StackItemComponent extends Visible implements IHoverable {
   static readonly maxTextHeight: number =
     AgendaStashConfig.AgendaItemWidth - AgendaStashConfig.AgendaItemTextPadding * 2 - 5;
   readonly text: string;
+  readonly arrow?: ArrowFromStackItemComponent;
 
-  constructor(readonly value: any, isAgenda: boolean, stackHeight: number) {
+  constructor(readonly value: any, isAgenda: boolean, stackHeight: number, arrowTo?: Frame | FnValue | GlobalFnValue) {
     super();
     this._x = isAgenda ? Layout.agendaComponent.x() : Layout.stashComponent.x();
     this.text = String(value);
@@ -30,6 +35,10 @@ export class StackItemComponent extends Visible implements IHoverable {
       ) +
       AgendaStashConfig.AgendaItemTextPadding * 2;
     this._y = (isAgenda ? AgendaStashConfig.AgendaPosY : AgendaStashConfig.StashPosY) + stackHeight;
+    if (arrowTo) {
+      this.arrow = new ArrowFromStackItemComponent(this);
+      this.arrow.to(arrowTo);
+    }
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {};
@@ -67,6 +76,7 @@ export class StackItemComponent extends Visible implements IHoverable {
             width={this.width()}
           />
         </Label>
+        {this.arrow?.draw()}
       </React.Fragment>
     );
   }

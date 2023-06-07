@@ -2,6 +2,7 @@ import {
   AgendaItem,
   AssmtInstr,
   BinOpInstr,
+  EnvInstr,
   Instr,
   InstrType,
   UnOpInstr
@@ -21,6 +22,7 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
 import { Config } from './EnvVisualizerConfig';
+import { Layout } from './EnvVisualizerLayout';
 import {
   CompactReferenceType,
   Data,
@@ -476,7 +478,17 @@ export function getAgendaItemComponent(
       case InstrType.BRANCH:
         return new StackItemComponent('BRANCH', true, stackHeight);
       case InstrType.ENVIRONMENT:
-        return new StackItemComponent('ENVIRONMENT', true, stackHeight);
+        const envInstr = agendaItem as EnvInstr;
+        return new StackItemComponent(
+          'ENVIRONMENT',
+          true,
+          stackHeight,
+          Layout.compactLevels
+            .map(level =>
+              level.frames.find(frame => frame.environment?.tail?.id === envInstr.env.id)
+            )
+            .find(frame => frame)
+        );
       case InstrType.PUSH_UNDEFINED_IF_NEEDED:
         return new StackItemComponent('PUSH_UNDEFINED_IF_NEEDED', true, stackHeight);
       case InstrType.ARRAY_LITERAL:

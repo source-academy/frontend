@@ -89,8 +89,7 @@ export default class EnvVisualizer {
         Layout.currentAgendaStashDark !== undefined
       ) {
         this.setVis(Layout.currentAgendaStashDark);
-      }
-      else if (
+      } else if (
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
         !EnvVisualizer.getAgendaStash() &&
