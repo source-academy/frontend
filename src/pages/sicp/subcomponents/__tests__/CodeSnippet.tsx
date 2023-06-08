@@ -1,5 +1,4 @@
 import 'ace-builds';
-import 'ace-builds/webpack-resolver';
 import 'ace-builds/src-noconflict/ace';
 
 import { shallow } from 'enzyme';
