@@ -1,6 +1,5 @@
 import { Button, ButtonGroup, Checkbox } from '@blueprintjs/core';
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
-import Closure from 'js-slang/dist/interpreter/closure';
 import { Frame } from 'js-slang/dist/types';
 import React, { Fragment, RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -406,7 +405,6 @@ export class Layout {
   /** create an instance of the corresponding `Value` if it doesn't already exists,
    *  else, return the existing value */
   static createCompactValue(data: Data, reference: CompactReferenceType): CompactValue {
-    console.log("HI")
     if (isUnassigned(data)) {
       return new CompactUnassignedValue([reference]);
     } else if (isPrimitiveData(data)) {
@@ -425,7 +423,6 @@ export class Layout {
         newValue = new CompactArrayValue(data, [reference]);
       } else if (isFunction(data)) {
         if (isFn(data)) {
-          console.log(data instanceof Closure)
           // normal JS Slang function
           newValue = new CompactFnValue(data, [reference]);
         } else {

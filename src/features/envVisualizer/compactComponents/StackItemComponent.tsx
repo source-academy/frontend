@@ -21,7 +21,12 @@ export class StackItemComponent extends Visible implements IHoverable {
   readonly text: string;
   readonly arrow?: ArrowFromStackItemComponent;
 
-  constructor(readonly value: any, isAgenda: boolean, stackHeight: number, arrowTo?: Frame | FnValue | GlobalFnValue) {
+  constructor(
+    readonly value: any,
+    isAgenda: boolean,
+    stackHeight: number,
+    arrowTo?: Frame | FnValue | GlobalFnValue
+  ) {
     super();
     this._x = isAgenda ? Layout.agendaComponent.x() : Layout.stashComponent.x();
     this.text = String(value);

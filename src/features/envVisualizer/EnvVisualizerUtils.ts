@@ -7,6 +7,7 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/ec-evaluator/types';
+import Closure from 'js-slang/dist/interpreter/closure';
 import { Environment } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
@@ -484,9 +485,7 @@ export function getAgendaItemComponent(
           true,
           stackHeight,
           Layout.compactLevels
-            .map(level =>
-              level.frames.find(frame => frame.environment?.tail?.id === envInstr.env.id)
-            )
+            .map(level => level.frames.find(frame => frame.environment?.id === envInstr.env.id))
             .find(frame => frame)
         );
       case InstrType.PUSH_UNDEFINED_IF_NEEDED:
@@ -511,6 +510,9 @@ export function getAgendaItemComponent(
 }
 
 export function getStashItemComponent(stashItem: any, stackHeight: number) {
+  if (stashItem instanceof Closure) {
+    console.log('YES');
+  }
   return new StackItemComponent(
     typeof stashItem === 'string' ? `"${stashItem}"` : stashItem,
     false,
