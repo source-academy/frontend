@@ -9,7 +9,18 @@ export default defineConfig({
   plugins: [react(), envCompatible()],
   resolve: {
     alias: {
-      src: path.resolve(__dirname, './src')
+      src: path.resolve(__dirname, './src'),
+      constants: 'constants-browserify',
+      http: 'stream-http',
+      https: 'https-browserify',
+      os: 'os-browserify/browser',
+      stream: 'stream-browserify',
+      timers: 'timers-browserify',
+      url: 'url'
     }
+  },
+  define: {
+    child_process: false,
+    fs: false
   }
 });
