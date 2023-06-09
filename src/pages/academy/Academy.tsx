@@ -45,12 +45,12 @@ const Academy: React.FC<{}> = () => {
   const staffRoutes =
     role !== Role.Student
       ? [
-          <Route path={`groundcontrol`} element={<GroundControl />} key={0} />,
+          <Route path={'groundcontrol'} element={<GroundControl />} key={0} />,
           <Route path={`grading/${gradingRegExp}`} element={<Grading />} key={1} />,
-          <Route path={`xpcalculation`} element={<XpCalculation />} key={2} />,
-          <Route path={`sourcereel`} element={<Sourcereel />} key={3} />,
-          <Route path={`storysimulator`} element={<StorySimulator />} key={4} />,
-          <Route path={`dashboard`} element={<Dashboard />} key={5} />
+          <Route path={'xpcalculation'} element={<XpCalculation />} key={2} />,
+          <Route path={'sourcereel'} element={<Sourcereel />} key={3} />,
+          <Route path={'storysimulator'} element={<StorySimulator />} key={4} />,
+          <Route path={'dashboard'} element={<Dashboard />} key={5} />
         ]
       : null;
   return (
@@ -66,9 +66,9 @@ const Academy: React.FC<{}> = () => {
             element={<Assessment assessmentConfiguration={assessmentConfiguration} />}
           />
         ))}
-        {enableGame && <Route path={`game`} element={<Game />} />}
-        <Route path={`sourcecast/:sourcecastId?`} element={<Sourcecast />} />
-        <Route path={`achievements/*`} element={<Achievement />} />
+        {enableGame && <Route path={'game'} element={<Game />} />}
+        <Route path={'sourcecast/:sourcecastId?'} element={<Sourcecast />} />
+        <Route path={'achievements/*'} element={<Achievement />} />
         <Route
           path=""
           element={
@@ -76,18 +76,18 @@ const Academy: React.FC<{}> = () => {
               replace
               to={
                 enableGame
-                  ? `game`
+                  ? 'game'
                   : assessmentConfigurations && assessmentConfigurations.length > 0
                   ? `${assessmentTypeLink(assessmentConfigurations[0].type)}`
-                  : role === 'admin'
-                  ? `adminpanel`
+                  : role === Role.Admin
+                  ? 'adminpanel'
                   : '/404'
               }
             />
           }
         />
         {staffRoutes}
-        {role === 'admin' && <Route path={`adminpanel`} element={<AdminPanel />} />}
+        {role === Role.Admin && <Route path={'adminpanel'} element={<AdminPanel />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
