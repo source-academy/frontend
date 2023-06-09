@@ -2,7 +2,7 @@ import 'src/styles/index.scss';
 
 import * as Sentry from '@sentry/browser';
 import { setModulesStaticURL } from 'js-slang/dist/modules/moduleLoader';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
@@ -24,6 +24,7 @@ if (Constants.sentryDsn) {
 }
 
 const rootContainer = document.getElementById('root') as HTMLElement;
+const root = createRoot(rootContainer);
 (window as any).__REDUX_STORE__ = store; // need this for slang's display
 console.log(
   `%cSource Academy ${Constants.sourceAcademyEnvironment}-${Constants.sourceAcademyVersion}; ` +
@@ -38,11 +39,10 @@ console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 createInBrowserFileSystem(store)
   .catch(err => console.error(err))
   .finally(() => {
-    render(
+    root.render(
       <Provider store={store}>
         <ApplicationWrapper />
-      </Provider>,
-      rootContainer
+      </Provider>
     );
   });
 
