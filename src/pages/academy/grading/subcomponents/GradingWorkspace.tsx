@@ -91,8 +91,6 @@ export type StateProps = {
   courseId?: number;
 };
 
-// TODO:
-// - change use of history import
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.grading);

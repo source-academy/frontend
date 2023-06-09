@@ -116,26 +116,26 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   }
 
   // Handlers migrated over from deprecated withRouter implementation
-  const handleEditorEval = useCallback(() => dispatch(evalEditor(workspaceLocation)), [dispatch]);
-  const handleEditorValueChange = useCallback(
-    (editorTabIndex: number, newEditorValue: string) =>
-      dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
-    [dispatch]
-  );
-  const handleReplEval = useCallback(() => dispatch(evalRepl(workspaceLocation)), [dispatch]);
-  const handleReplOutputClear = useCallback(
-    () => dispatch(clearReplOutput(workspaceLocation)),
-    [dispatch]
-  );
-  const handleUpdateHasUnsavedChanges = useCallback(
-    (hasUnsavedChanges: boolean) =>
-      dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
-    [dispatch]
-  );
-  const handleUpdateWorkspace = useCallback(
-    (options: Partial<WorkspaceState>) => dispatch(updateWorkspace(workspaceLocation, options)),
-    [dispatch]
-  );
+  const {
+    handleEditorEval,
+    handleEditorValueChange,
+    handleReplEval,
+    handleReplOutputClear,
+    handleUpdateHasUnsavedChanges,
+    handleUpdateWorkspace
+  } = useMemo(() => {
+    return {
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
+        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
+        dispatch(updateWorkspace(workspaceLocation, options))
+    };
+  }, [dispatch]);
 
   /**
    * State variables relating to information we are concerned with saving
