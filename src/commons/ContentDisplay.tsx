@@ -8,8 +8,10 @@ export type ContentDisplayProps = {
 };
 
 const ContentDisplay: React.FC<ContentDisplayProps> = props => {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => props.loadContentDispatch?.(), []);
+  useEffect(() => {
+    props.loadContentDispatch?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="ContentDisplay row center-xs">
