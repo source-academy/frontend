@@ -729,7 +729,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   }, [isMobileBreakpoint, selectedTab]);
 
   const onEditorValueChange = useCallback(
-    val => {
+    (editorTabIndex: number, val: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, val);
       editCode(currentTaskNumber, val);
