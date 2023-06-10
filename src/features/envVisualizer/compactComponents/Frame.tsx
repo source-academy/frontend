@@ -1,4 +1,3 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -12,9 +11,7 @@ import {
   getTextWidth,
   isDummyKey,
   isPrimitiveData,
-  isUnassigned,
-  setHoveredStyle,
-  setUnhoveredStyle
+  isUnassigned
 } from '../EnvVisualizerUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
@@ -129,13 +126,9 @@ export class Frame extends Visible implements IHoverable {
     this.totalHeight = this.height() + this.name.height() + CompactConfig.TextPaddingY / 2;
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-  };
+  onMouseEnter = () => {};
 
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
-  };
+  onMouseLeave = () => {};
 
   draw(): React.ReactNode {
     return (
