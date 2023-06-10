@@ -12,7 +12,9 @@ import { IHoverable } from '../EnvVisualizerTypes';
 import {
   getAgendaItemComponent,
   getStashItemComponent,
+  setHoveredCursor,
   setHoveredStyle,
+  setUnhoveredCursor,
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
 import { ModelLabel } from './ModelLabel';
@@ -51,15 +53,13 @@ export class Stack extends Visible implements IHoverable {
                 const end = agendaItem.loc.end.line - 1;
                 setEditorHighlightedLines(start, end);
                 setHoveredStyle(e.currentTarget);
-                console.log('onmouseenter');
+                setHoveredCursor(e.currentTarget);
               }
             };
             component.onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-              // make new action for removal
-              // get marker id
               setEditorHighlightedLines();
               setUnhoveredStyle(e.currentTarget);
-              console.log('onmouseleave');
+              setUnhoveredCursor(e.currentTarget);
             };
           }
           return component;
