@@ -19,10 +19,10 @@ export class Stack extends Visible implements IHoverable {
   readonly stackItemComponents: StackItemComponent[];
   readonly modelLabel: ModelLabel;
 
-  constructor(readonly stack: Agenda | Stash, posx: number) {
+  constructor(readonly stack: Agenda | Stash) {
     super();
     this.isAgenda = stack instanceof Agenda;
-    this._x = posx;
+    this._x = this.isAgenda ? AgendaStashConfig.AgendaPosX : Layout.stashComponentX;
     this._y = this.isAgenda ? AgendaStashConfig.AgendaPosY : AgendaStashConfig.StashPosY;
     this._width = AgendaStashConfig.AgendaItemWidth;
     // Account for the Agenda and Stash labels in the height

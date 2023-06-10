@@ -28,7 +28,7 @@ export class StackItemComponent extends Visible implements IHoverable {
     arrowTo?: Frame | FnValue | GlobalFnValue
   ) {
     super();
-    this._x = isAgenda ? Layout.agendaComponent.x() : Layout.stashComponent.x();
+    this._x = isAgenda ? AgendaStashConfig.AgendaPosX : Layout.stashComponentX;
     this.text = String(value);
     this._width = AgendaStashConfig.AgendaItemWidth;
     this._height =

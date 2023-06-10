@@ -20,7 +20,6 @@ import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import {
   CompactReferenceType,
@@ -78,6 +77,7 @@ export class Layout {
   static stash: Stash;
   static agendaComponent: Stack;
   static stashComponent: Stack;
+  static stashComponentX: number;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -212,19 +212,19 @@ export class Layout {
   }
 
   static initializeAgendaStash() {
-    this.agendaComponent = new Stack(this.agenda, AgendaStashConfig.AgendaPosX);
+    this.agendaComponent = new Stack(this.agenda);
     if (EnvVisualizer.getCompactLayout()) {
-      const stashposX =
+      Layout.stashComponentX =
         Layout.compactLevels[0].x() +
         Layout.compactLevels.reduce<number>(
           (maxWidth, level) => Math.max(maxWidth, level.width()),
           0
         ) +
         Config.CanvasPaddingX * 2;
-      this.stashComponent = new Stack(this.stash, stashposX);
+      this.stashComponent = new Stack(this.stash);
     } else {
-      const stashposX = this.grid.x() + this.grid.width() + Config.CanvasPaddingX * 2;
-      this.stashComponent = new Stack(this.stash, stashposX);
+      Layout.stashComponentX = this.grid.x() + this.grid.width() + Config.CanvasPaddingX * 2;
+      this.stashComponent = new Stack(this.stash);
     }
   }
 
