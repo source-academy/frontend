@@ -3,7 +3,7 @@
 exports[`EnvVisualizer component renders correctly 1`] = `
 "<Provider store={{...}}>
   <Connect(SideContentEnvVisualizer) workspaceLocation=\\"playground\\">
-    <SideContentEnvVisualizer workspaceLocation=\\"playground\\" numOfStepsTotal={0} numOfSteps={-1} breakpointSteps={{...}} needEnvUpdate={true} handleEditorEval={[Function (anonymous)]} handleEnvStepUpdate={[Function (anonymous)]}>
+    <SideContentEnvVisualizer workspaceLocation=\\"playground\\" numOfStepsTotal={0} numOfSteps={-1} breakpointSteps={{...}} needEnvUpdate={true} handleEditorEval={[Function (anonymous)]} handleEnvStepUpdate={[Function (anonymous)]} setEditorHighlightedLines={[Function (anonymous)]}>
       <HotKeysEnabled keyMap={{...}} handlers={{...}}>
         <HotKeysWrapper hotKeys={{...}}>
           <div onFocus={[Function: bound _handleFocus]} onBlur={[Function: bound _handleBlur]} tabIndex=\\"-1\\" onKeyDown={[Function: bound _handleKeyDown]} onKeyPress={[Function: bound _handleKeyPress]} onKeyUp={[Function: bound _handleKeyUp]}>

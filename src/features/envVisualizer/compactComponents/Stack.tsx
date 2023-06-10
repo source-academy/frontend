@@ -1,5 +1,6 @@
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { AgendaItem } from 'js-slang/dist/ec-evaluator/types';
+import { isNode } from 'js-slang/dist/ec-evaluator/utils';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
@@ -8,7 +9,12 @@ import { Visible } from '../components/Visible';
 import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
-import { getAgendaItemComponent, getStashItemComponent } from '../EnvVisualizerUtils';
+import {
+  getAgendaItemComponent,
+  getStashItemComponent,
+  setHoveredStyle,
+  setUnhoveredStyle
+} from '../EnvVisualizerUtils';
 import { ModelLabel } from './ModelLabel';
 import { StackItemComponent } from './StackItemComponent';
 
@@ -19,7 +25,10 @@ export class Stack extends Visible implements IHoverable {
   readonly stackItemComponents: StackItemComponent[];
   readonly modelLabel: ModelLabel;
 
-  constructor(readonly stack: Agenda | Stash) {
+  constructor(
+    readonly stack: Agenda | Stash,
+    setEditorHighlightedLines?: (start?: number, end?: number) => void
+  ) {
     super();
     this.isAgenda = stack instanceof Agenda;
     this._x = this.isAgenda ? AgendaStashConfig.AgendaPosX : Layout.stashComponentX;
@@ -31,12 +40,33 @@ export class Stack extends Visible implements IHoverable {
     const stackItemToComponent = this.isAgenda
       ? (agendaItem: AgendaItem) => {
           const component = getAgendaItemComponent(agendaItem, this._height);
-          this._height += component ? component.height() : 0;
+          this._height += component.height();
+
+          // TODO: refactor to put this logic inside StackItemComponent
+          if (isNode(agendaItem) && setEditorHighlightedLines) {
+            component.onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+              // TODO: Refactor to force nodes to have loc property (in js-slang)
+              if (agendaItem.loc) {
+                const start = agendaItem.loc.start.line - 1;
+                const end = agendaItem.loc.end.line - 1;
+                setEditorHighlightedLines(start, end);
+                setHoveredStyle(e.currentTarget);
+                console.log('onmouseenter');
+              }
+            };
+            component.onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
+              // make new action for removal
+              // get marker id
+              setEditorHighlightedLines();
+              setUnhoveredStyle(e.currentTarget);
+              console.log('onmouseleave');
+            };
+          }
           return component;
         }
       : (stashItem: any) => {
           const component = getStashItemComponent(stashItem, this._height);
-          this._height += component ? component.height() : 0;
+          this._height += component.height();
           return component;
         };
     this.stackItemComponents = this.stack.mapStack(stackItemToComponent);

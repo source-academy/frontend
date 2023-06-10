@@ -395,7 +395,7 @@ export const isInstr = (command: AgendaItem): command is Instr => {
 export function getAgendaItemComponent(
   agendaItem: AgendaItem,
   stackHeight: number
-): StackItemComponent | undefined {
+): StackItemComponent {
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
       // case 'BlockStatement':
@@ -504,9 +504,10 @@ export function getAgendaItemComponent(
         return new StackItemComponent('BREAK', true, stackHeight);
       case InstrType.BREAK_MARKER:
         return new StackItemComponent('BREAK_MARKER', true, stackHeight);
+      default:
+        return new StackItemComponent('INSTRUCTION', true, stackHeight);
     }
   }
-  return undefined;
 }
 
 export function getStashItemComponent(stashItem: any, stackHeight: number) {

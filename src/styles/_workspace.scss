@@ -135,6 +135,14 @@ $code-color-error: #ff4444;
       background-color: blue;
     }
 
+    .ace_gutter-cell_hi_agenda {
+      background-color: #32cd32;
+    }
+
+    .ace_line_hi_agenda {
+      background-color: #32cd32;
+    }
+
     .ace_breakpoint:before {
       content: ' \25CF';
       margin-left: -10px;

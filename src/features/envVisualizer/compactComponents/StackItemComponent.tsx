@@ -46,9 +46,9 @@ export class StackItemComponent extends Visible implements IHoverable {
     }
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {};
+  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {};
 
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {};
+  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {};
 
   destroy() {
     this.ref.current.destroyChildren();
@@ -71,7 +71,12 @@ export class StackItemComponent extends Visible implements IHoverable {
     };
     return (
       <React.Fragment key={Layout.key++}>
-        <Label x={this.x()} y={this.y()}>
+        <Label
+          x={this.x()}
+          y={this.y()}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+        >
           <Tag {...ShapeDefaultProps} {...tagProps} />
           <Text
             {...ShapeDefaultProps}

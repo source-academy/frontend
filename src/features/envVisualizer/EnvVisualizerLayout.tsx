@@ -78,6 +78,7 @@ export class Layout {
   static agendaComponent: Stack;
   static stashComponent: Stack;
   static stashComponentX: number;
+  static setEditorHighlightedLines: (start?: number, end?: number) => void;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -212,7 +213,7 @@ export class Layout {
   }
 
   static initializeAgendaStash() {
-    this.agendaComponent = new Stack(this.agenda);
+    this.agendaComponent = new Stack(this.agenda, this.setEditorHighlightedLines);
     if (EnvVisualizer.getCompactLayout()) {
       Layout.stashComponentX =
         Layout.compactLevels[0].x() +

@@ -38,9 +38,15 @@ export default class EnvVisualizer {
   }
 
   /** SideContentEnvVis initializes this onMount with the callback function */
-  static init(setVis: SetVis, width: number, height: number) {
+  static init(
+    setVis: SetVis,
+    width: number,
+    height: number,
+    setEditorHighlightedLines: (start?: number, end?: number) => void
+  ) {
     Layout.visibleHeight = height;
     Layout.visibleWidth = width;
+    Layout.setEditorHighlightedLines = setEditorHighlightedLines;
     this.setVis = setVis;
   }
 

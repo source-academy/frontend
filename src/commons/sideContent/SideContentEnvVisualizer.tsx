@@ -7,8 +7,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import { OverallState } from '../application/ApplicationTypes';
+import { HighlightedLines } from '../editor/EditorTypes';
 import Constants, { Links } from '../utils/Constants';
-import { updateEnvSteps } from '../workspace/WorkspaceActions';
+import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../workspace/WorkspaceActions';
 import { evalEditor } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
@@ -37,6 +38,11 @@ type OwnProps = {
 type DispatchProps = {
   handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
   handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
+  setEditorHighlightedLines: (
+    workspaceLocation: WorkspaceLocation,
+    editorTabIndex: number,
+    newHighlightedLines: HighlightedLines[]
+  ) => void;
 };
 
 const envVizKeyMap = {
@@ -58,7 +64,16 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     EnvVisualizer.init(
       visualization => this.setState({ visualization }),
       this.state.width,
-      this.state.height
+      this.state.height,
+      (start?, end?) => {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        // This comment is copied over from workspace saga
+        if (start === undefined || end === undefined) {
+          props.setEditorHighlightedLines(props.workspaceLocation, 0, []);
+        } else {
+          props.setEditorHighlightedLines(props.workspaceLocation, 0, [[start, end]]);
+        }
+      }
     );
   }
 
@@ -315,7 +330,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
       handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
-        updateEnvSteps(steps, workspaceLocation)
+        updateEnvSteps(steps, workspaceLocation),
+      setEditorHighlightedLines: (
+        workspaceLocation: WorkspaceLocation,
+        editorTabIndex: number,
+        newHighlightedLines: HighlightedLines[]
+      ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
     },
     dispatch
   );
