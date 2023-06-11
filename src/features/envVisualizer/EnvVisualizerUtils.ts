@@ -15,11 +15,12 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
+import { Frame } from './compactComponents/Frame';
 import { StackItemComponent } from './compactComponents/StackItemComponent';
+import { FnValue } from './compactComponents/values/FnValue';
+import { GlobalFnValue } from './compactComponents/values/GlobalFnValue';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
-import { FnValue } from './components/values/FnValue';
-import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
 import { Config } from './EnvVisualizerConfig';
@@ -484,9 +485,11 @@ export function getAgendaItemComponent(
           'ENVIRONMENT',
           true,
           stackHeight,
-          Layout.compactLevels
-            .map(level => level.frames.find(frame => frame.environment?.id === envInstr.env.id))
-            .find(frame => frame)
+          Layout.compactLevels.reduce<Frame | undefined>(
+            (accum, level) =>
+              accum ? accum : level.frames.find(frame => frame.environment?.id === envInstr.env.id),
+            undefined
+          )
         );
       case InstrType.PUSH_UNDEFINED_IF_NEEDED:
         return new StackItemComponent('PUSH_UNDEFINED_IF_NEEDED', true, stackHeight);
@@ -512,7 +515,18 @@ export function getAgendaItemComponent(
 
 export function getStashItemComponent(stashItem: any, stackHeight: number) {
   if (stashItem instanceof Closure) {
-    console.log('YES');
+    let fn: FnValue | GlobalFnValue | undefined;
+    for (const level of Layout.compactLevels) {
+      for (const frame of level.frames) {
+        fn = frame.bindings.find(binding => {
+          if (isFn(binding.data)) {
+            return binding.data.id === stashItem.id;
+          }
+          return false;
+        })?.value as FnValue | GlobalFnValue;
+      }
+    }
+    if (fn) return new StackItemComponent('', false, stackHeight, fn);
   }
   return new StackItemComponent(
     typeof stashItem === 'string' ? `"${stashItem}"` : stashItem,
