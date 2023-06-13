@@ -8,13 +8,11 @@ import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig'
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
-import { ModelLabel } from './ModelLabel';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */
 export class Level extends Visible {
   /** all the frames in this level */
   readonly frames: Frame[] = [];
-  readonly label?: ModelLabel;
 
   constructor(
     /** the level of this */
@@ -29,9 +27,7 @@ export class Level extends Visible {
         CompactConfig.CanvasPaddingX
       : CompactConfig.CanvasPaddingX;
     this._y = CompactConfig.CanvasPaddingY;
-    !this.parentLevel &&
-      (this.label = new ModelLabel('Environment Model', this.x())) &&
-      (this._y += this.label.height());
+    !this.parentLevel && (this._y += AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2);
     this.parentLevel && (this._y += this.parentLevel.height() + this.parentLevel.y());
     let prevFrame: Frame | null = null;
     envTreeNodes.forEach(e => {
@@ -43,10 +39,11 @@ export class Level extends Visible {
     });
 
     // get the max height of all the frames in this level including the label
-    this.label && (this._height = this.label?.height());
-    this._height +=
-      (this.label ? this.label.height() : 0) +
-      this.frames.reduce<number>((maxHeight, frame) => Math.max(maxHeight, frame.totalHeight), 0);
+    this._height = AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2;
+    this._height += this.frames.reduce<number>(
+      (maxHeight, frame) => Math.max(maxHeight, frame.totalHeight),
+      0
+    );
     const lastFrame = this.frames[this.frames.length - 1];
     // derive the width of this level from the last frame
     this._width = lastFrame.x() + lastFrame.totalWidth - this.x() + CompactConfig.LevelPaddingX;
@@ -68,7 +65,6 @@ export class Level extends Visible {
           key={Layout.key++}
           listening={false}
         />
-        {this.label?.draw()}
         {this.frames.map(frame => frame.draw())}
       </Group>
     );

@@ -7,39 +7,48 @@ import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
-import { getTextHeight } from '../EnvVisualizerUtils';
+import { getTextHeight, getTextWidth } from '../EnvVisualizerUtils';
 import { ArrowFromStackItemComponent } from './arrows/ArrowFromStackItemComponent';
 import { Frame } from './Frame';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 
 export class StackItemComponent extends Visible implements IHoverable {
-  static readonly maxTextWidth: number =
-    AgendaStashConfig.AgendaItemWidth - AgendaStashConfig.AgendaItemTextPadding * 2 - 5;
-  static readonly maxTextHeight: number =
-    AgendaStashConfig.AgendaItemWidth - AgendaStashConfig.AgendaItemTextPadding * 2 - 5;
   readonly text: string;
   readonly arrow?: ArrowFromStackItemComponent;
 
   constructor(
     readonly value: any,
     isAgenda: boolean,
-    stackHeight: number,
+    stackHeightWidth: number,
     arrowTo?: Frame | FnValue | GlobalFnValue
   ) {
     super();
-    this._x = isAgenda ? AgendaStashConfig.AgendaPosX : Layout.stashComponentX;
     this.text = String(value);
-    this._width = AgendaStashConfig.AgendaItemWidth;
+    this._width = isAgenda
+      ? AgendaStashConfig.AgendaItemWidth
+      : Math.min(
+          AgendaStashConfig.AgendaItemTextPadding * 2 +
+            getTextWidth(
+              this.text,
+              `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`
+            ),
+          AgendaStashConfig.AgendaItemWidth
+        );
     this._height =
       getTextHeight(
         this.text,
-        StackItemComponent.maxTextWidth,
+        isAgenda ? AgendaStashConfig.AgendaMaxTextWidth : AgendaStashConfig.StashMaxTextWidth,
         `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`,
         AgendaStashConfig.FontSize
       ) +
       AgendaStashConfig.AgendaItemTextPadding * 2;
-    this._y = (isAgenda ? AgendaStashConfig.AgendaPosY : AgendaStashConfig.StashPosY) + stackHeight;
+    this._x = isAgenda
+      ? AgendaStashConfig.AgendaPosX
+      : AgendaStashConfig.StashPosX + stackHeightWidth;
+    this._y = isAgenda
+      ? AgendaStashConfig.AgendaPosY + stackHeightWidth
+      : AgendaStashConfig.StashPosY;
     if (arrowTo) {
       this.arrow = new ArrowFromStackItemComponent(this);
       this.arrow.to(arrowTo);

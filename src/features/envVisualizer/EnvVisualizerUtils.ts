@@ -23,6 +23,7 @@ import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
+import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { Config } from './EnvVisualizerConfig';
 import { Layout } from './EnvVisualizerLayout';
 import {
@@ -353,12 +354,8 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   }
 }
 
-export const truncateText = (programStr: string): string => {
-  const maxWidth = StackItemComponent.maxTextWidth;
-
+export const truncateText = (programStr: string, maxWidth: number, maxHeight: number): string => {
   // Truncate so item component looks like a square
-  const maxHeight = StackItemComponent.maxTextHeight;
-
   // Add ellipsis for each line if needed
   let lines = programStr.split('\n').map(line => {
     if (getTextWidth(line) <= maxWidth) {
@@ -451,7 +448,11 @@ export function getAgendaItemComponent(
       //   return new StackItemComponent('CallExpression', true, stackHeight);
       default:
         return new StackItemComponent(
-          truncateText(astToString(agendaItem).trim()),
+          truncateText(
+            astToString(agendaItem).trim(),
+            AgendaStashConfig.AgendaMaxTextWidth,
+            AgendaStashConfig.AgendaMaxTextHeight
+          ),
           true,
           stackHeight
         );
@@ -499,6 +500,8 @@ export function getAgendaItemComponent(
         return new StackItemComponent('ARRAY_ACCESS', true, stackHeight);
       case InstrType.ARRAY_ASSIGNMENT:
         return new StackItemComponent('ARRAY_ASSIGNMENT', true, stackHeight);
+      case InstrType.ARRAY_LENGTH:
+        return new StackItemComponent('ARRAY_LENGTH', true, stackHeight);
       case InstrType.CONTINUE:
         return new StackItemComponent('CONTINUE', true, stackHeight);
       case InstrType.CONTINUE_MARKER:
@@ -507,6 +510,8 @@ export function getAgendaItemComponent(
         return new StackItemComponent('BREAK', true, stackHeight);
       case InstrType.BREAK_MARKER:
         return new StackItemComponent('BREAK_MARKER', true, stackHeight);
+      case InstrType.MARKER:
+        return new StackItemComponent('MARKER', true, stackHeight);
       default:
         return new StackItemComponent('INSTRUCTION', true, stackHeight);
     }
@@ -529,7 +534,17 @@ export function getStashItemComponent(stashItem: any, stackHeight: number) {
     if (fn) return new StackItemComponent('', false, stackHeight, fn);
   }
   return new StackItemComponent(
-    typeof stashItem === 'string' ? `"${stashItem}"` : stashItem,
+    typeof stashItem === 'string'
+      ? truncateText(
+          `"${stashItem}"`.trim(),
+          AgendaStashConfig.StashMaxTextWidth,
+          AgendaStashConfig.StashMaxTextHeight
+        )
+      : truncateText(
+          String(stashItem),
+          AgendaStashConfig.StashMaxTextWidth,
+          AgendaStashConfig.StashMaxTextHeight
+        ),
     false,
     stackHeight
   );
