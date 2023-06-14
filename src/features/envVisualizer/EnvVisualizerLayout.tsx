@@ -1,4 +1,3 @@
-import { Button, ButtonGroup, Checkbox } from '@blueprintjs/core';
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { Frame } from 'js-slang/dist/types';
 import React, { Fragment, RefObject } from 'react';
@@ -478,17 +477,6 @@ export class Layout {
     download_images();
   };
 
-  /** Calculate the test to be displayed for button to save the images.*/
-  private static saveButtonText(): String {
-    return `Save ${
-      Layout.width() > Config.MaxExportWidth || Layout.height() > Config.MaxExportHeight
-        ? Math.ceil(Layout.width() / Config.MaxExportWidth) *
-            Math.ceil(Layout.height() / Config.MaxExportHeight) +
-          ' images'
-        : 'image'
-    }`;
-  }
-
   /**
    * Calculates the required transformation for the stage given the scroll-container div scroll position.
    * @param x x position of the scroll container
@@ -517,113 +505,7 @@ export class Layout {
               marginBottom: 0,
               height: '100%'
             }}
-          >
-            <ButtonGroup>
-              <Button
-                large={true}
-                outlined={true}
-                style={{
-                  backgroundColor: EnvVisualizer.getPrintableMode()
-                    ? Config.PRINT_BACKGROUND.toString()
-                    : Config.SA_BLUE.toString(),
-                  opacity: 0.8,
-                  borderColor: EnvVisualizer.getPrintableMode()
-                    ? Config.SA_BLUE.toString()
-                    : Config.PRINT_BACKGROUND.toString()
-                }}
-                onMouseUp={() => {
-                  EnvVisualizer.toggleCompactLayout();
-                  EnvVisualizer.redraw();
-                }}
-              >
-                <Checkbox
-                  checked={!EnvVisualizer.getCompactLayout()}
-                  label="Experimental"
-                  style={{
-                    marginBottom: '0px',
-                    color: EnvVisualizer.getPrintableMode()
-                      ? Config.SA_BLUE.toString()
-                      : Config.PRINT_BACKGROUND.toString()
-                  }}
-                />
-              </Button>
-              <Button
-                large={true}
-                outlined={true}
-                style={{
-                  backgroundColor: EnvVisualizer.getPrintableMode()
-                    ? Config.PRINT_BACKGROUND.toString()
-                    : Config.SA_BLUE.toString(),
-                  opacity: 0.8,
-                  borderColor: EnvVisualizer.getPrintableMode()
-                    ? Config.SA_BLUE.toString()
-                    : Config.PRINT_BACKGROUND.toString()
-                }}
-                onMouseUp={() => {
-                  EnvVisualizer.togglePrintableMode();
-                  EnvVisualizer.redraw();
-                }}
-              >
-                <Checkbox
-                  checked={EnvVisualizer.getPrintableMode()}
-                  label="Printable"
-                  style={{
-                    marginBottom: '0px',
-                    color: EnvVisualizer.getPrintableMode()
-                      ? Config.SA_BLUE.toString()
-                      : Config.PRINT_BACKGROUND.toString()
-                  }}
-                />
-              </Button>
-              <Button
-                large={true}
-                outlined={true}
-                style={{
-                  backgroundColor: EnvVisualizer.getPrintableMode()
-                    ? Config.PRINT_BACKGROUND.toString()
-                    : Config.SA_BLUE.toString(),
-                  opacity: 0.8,
-                  borderColor: EnvVisualizer.getPrintableMode()
-                    ? Config.SA_BLUE.toString()
-                    : Config.PRINT_BACKGROUND.toString()
-                }}
-                onMouseUp={() => {
-                  EnvVisualizer.toggleAgendaStash();
-                  EnvVisualizer.redraw();
-                }}
-              >
-                <Checkbox
-                  checked={EnvVisualizer.getAgendaStash()}
-                  disabled={!EnvVisualizer.getCompactLayout()}
-                  label="Agenda and Stash"
-                  style={{
-                    marginBottom: '0px',
-                    color: EnvVisualizer.getPrintableMode()
-                      ? Config.SA_BLUE.toString()
-                      : Config.PRINT_BACKGROUND.toString()
-                  }}
-                />
-              </Button>
-              <Button
-                outlined={true}
-                text={Layout.saveButtonText()}
-                large={true}
-                onClick={this.exportImage}
-                style={{
-                  color: EnvVisualizer.getPrintableMode()
-                    ? Config.SA_BLUE.toString()
-                    : Config.PRINT_BACKGROUND.toString(),
-                  backgroundColor: EnvVisualizer.getPrintableMode()
-                    ? Config.PRINT_BACKGROUND.toString()
-                    : Config.SA_BLUE.toString(),
-                  opacity: 0.8,
-                  borderColor: EnvVisualizer.getPrintableMode()
-                    ? Config.SA_BLUE.toString()
-                    : Config.PRINT_BACKGROUND.toString()
-                }}
-              />
-            </ButtonGroup>
-          </div>
+          ></div>
           <div className={'sa-env-visualizer'}>
             <div
               id="scroll-container"

@@ -34,20 +34,23 @@ export class Stack extends Visible implements IHoverable {
     this._x = this.isAgenda ? AgendaStashConfig.AgendaPosX : Layout.stashComponentX;
     this._y = this.isAgenda ? AgendaStashConfig.AgendaPosY : AgendaStashConfig.StashPosY;
     this._width = this.isAgenda ? AgendaStashConfig.AgendaItemWidth : 0;
-    this._height = this.isAgenda ? AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2 : 0;
+    this._height = this.isAgenda
+      ? AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2
+      : 0;
     // Function to convert the stack items to their components
     const stackItemToComponent = this.isAgenda
       ? (agendaItem: AgendaItem) => {
           const component = getAgendaItemComponent(agendaItem, this._height);
           this._height += component.height();
 
+          const node = isNode(agendaItem) ? agendaItem : agendaItem.srcNode
           // TODO: refactor to put this logic inside StackItemComponent
-          if (isNode(agendaItem) && setEditorHighlightedLines) {
+          if (setEditorHighlightedLines) {
             component.onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
               // TODO: Refactor to force nodes to have loc property (in js-slang)
-              if (agendaItem.loc) {
-                const start = agendaItem.loc.start.line - 1;
-                const end = agendaItem.loc.end.line - 1;
+              if (node.loc) {
+                const start = node.loc.start.line - 1;
+                const end = node.loc.end.line - 1;
                 setEditorHighlightedLines(start, end);
                 setHoveredStyle(e.currentTarget);
                 setHoveredCursor(e.currentTarget);

@@ -19,13 +19,13 @@ export class StackItemComponent extends Visible implements IHoverable {
 
   constructor(
     readonly value: any,
-    isAgenda: boolean,
+    readonly isAgenda: boolean,
     stackHeightWidth: number,
     arrowTo?: Frame | FnValue | GlobalFnValue
   ) {
     super();
     this.text = String(value);
-    this._width = isAgenda
+    this._width = this.isAgenda
       ? AgendaStashConfig.AgendaItemWidth
       : Math.min(
           AgendaStashConfig.AgendaItemTextPadding * 2 +
@@ -36,12 +36,14 @@ export class StackItemComponent extends Visible implements IHoverable {
           AgendaStashConfig.AgendaItemWidth
         );
     this._height =
-      getTextHeight(
-        this.text,
-        isAgenda ? AgendaStashConfig.AgendaMaxTextWidth : AgendaStashConfig.StashMaxTextWidth,
-        `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`,
-        AgendaStashConfig.FontSize
-      ) +
+      (this.isAgenda
+        ? getTextHeight(
+            this.text,
+            isAgenda ? AgendaStashConfig.AgendaMaxTextWidth : AgendaStashConfig.StashMaxTextWidth,
+            `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`,
+            AgendaStashConfig.FontSize
+          )
+        : AgendaStashConfig.StashMaxTextHeight) +
       AgendaStashConfig.AgendaItemTextPadding * 2;
     this._x = isAgenda
       ? AgendaStashConfig.AgendaPosX
@@ -93,6 +95,7 @@ export class StackItemComponent extends Visible implements IHoverable {
             key={Layout.key++}
             text={String(this.text)}
             width={this.width()}
+            height={this.height()}
           />
         </Label>
         {this.arrow?.draw()}
