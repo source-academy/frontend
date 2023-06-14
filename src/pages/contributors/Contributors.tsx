@@ -13,4 +13,9 @@ const Contributors: React.FC = () => (
   </div>
 );
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Contributors;
+Component.displayName = 'Contributors';
+
 export default Contributors;

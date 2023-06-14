@@ -40,4 +40,9 @@ const Welcome: React.FC = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Welcome;
+Component.displayName = 'Welcome';
+
 export default Welcome;
