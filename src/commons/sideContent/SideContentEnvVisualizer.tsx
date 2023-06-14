@@ -188,7 +188,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
           </div>
           <br />
           {this.state.visualization || (
-            <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+            <div id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
               The environment model visualizer generates environment model diagrams following a
               notation introduced in{' '}
               <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
@@ -220,7 +220,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
               <br />
               <br />
               Note that these shortcuts are only active when the browser focus is on this tab.
-            </p>
+            </div>
           )}
         </div>
       </HotKeys>

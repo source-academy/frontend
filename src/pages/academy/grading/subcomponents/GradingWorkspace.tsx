@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { useNavigate } from 'react-router';
 import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 
 import {
@@ -30,7 +31,6 @@ import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
-import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { EditorTabState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
@@ -91,38 +91,26 @@ export type StateProps = {
   courseId?: number;
 };
 
-type State = {
-  selectedTab: SideContentType;
-};
-
-class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
-  public constructor(props: GradingWorkspaceProps) {
-    super(props);
-
-    this.state = {
-      selectedTab: SideContentType.grading
-    };
-
-    this.handleEval = this.handleEval.bind(this);
-  }
+const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
+  const navigate = useNavigate();
+  const [selectedTab, setSelectedTab] = React.useState(SideContentType.grading);
 
   /**
    * After mounting (either an older copy of the grading
    * or a loading screen), try to fetch a newer grading.
    */
-  public componentDidMount() {
-    this.props.handleGradingFetch(this.props.submissionId);
-
-    if (!this.props.grading) {
+  React.useEffect(() => {
+    props.handleGradingFetch(props.submissionId);
+    if (!props.grading) {
       return;
     }
 
-    let questionId = this.props.questionId;
-    if (this.props.questionId >= this.props.grading.length) {
-      questionId = this.props.grading.length - 1;
+    let questionId = props.questionId;
+    if (props.questionId >= props.grading.length) {
+      questionId = props.grading.length - 1;
     }
 
-    const question: AnsweredQuestion = this.props.grading[questionId].question;
+    const question: AnsweredQuestion = props.grading[questionId].question;
     let answer: string = '';
 
     if (question.type === QuestionTypes.programming) {
@@ -134,19 +122,20 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    this.props.handleEditorValueChange(0, answer);
-  }
+    props.handleEditorValueChange(0, answer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Once there is an update (due to the grading being fetched), check
    * if a workspace reset is needed.
    */
-  public componentDidUpdate() {
+  React.useEffect(() => {
     /* Don't reset workspace if grading not fetched yet. */
-    if (this.props.grading === undefined) {
+    if (props.grading === undefined) {
       return;
     }
-    const questionId = this.props.questionId;
+    const questionId = props.questionId;
 
     /**
      * Check if questionId is out of bounds, if it is, redirect to the
@@ -156,83 +145,12 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
      * as the function to move to the next question does not check
      * if that question exists
      */
-    if (this.props.grading[questionId] === undefined) {
-      history.push(`/courses/${this.props.courseId}/grading`);
+    if (props.grading[questionId] === undefined) {
+      navigate(`/courses/${props.courseId}/grading`);
     } else {
-      this.checkWorkspaceReset(this.props);
+      checkWorkspaceReset(props);
     }
-  }
-
-  public render() {
-    if (this.props.grading === undefined) {
-      return (
-        <NonIdealState
-          className={classNames('WorkspaceParent', Classes.DARK)}
-          description="Getting assessment ready..."
-          icon={<Spinner size={SpinnerSize.LARGE} />}
-        />
-      );
-    }
-
-    /* If questionId is out of bounds, set it to the max. */
-    const questionId =
-      this.props.questionId >= this.props.grading.length
-        ? this.props.grading.length - 1
-        : this.props.questionId;
-    /* Get the question to be graded */
-    const question = this.props.grading[questionId].question as Question;
-    const workspaceProps: WorkspaceProps = {
-      controlBarProps: this.controlBarProps(questionId),
-      editorContainerProps:
-        question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
-          ? {
-              editorVariant: 'normal',
-              isFolderModeEnabled: this.props.isFolderModeEnabled,
-              activeEditorTabIndex: this.props.activeEditorTabIndex,
-              setActiveEditorTabIndex: this.props.handleSetActiveEditorTabIndex,
-              removeEditorTabByIndex: this.props.handleRemoveEditorTabByIndex,
-              editorTabs: this.props.editorTabs.map(convertEditorTabStateToProps),
-              editorSessionId: '',
-              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.handleEval,
-              handleEditorValueChange: this.props.handleEditorValueChange,
-              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false,
-              sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-              sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
-              externalLibraryName: question?.library?.external?.name || 'NONE'
-            }
-          : undefined,
-      handleSideContentHeightChange: this.props.handleSideContentHeightChange,
-      mcqProps: {
-        mcq: question as IMCQQuestion,
-        handleMCQSubmit: (i: number) => {}
-      },
-      sideBarProps: {
-        tabs: []
-      },
-      sideContentHeight: this.props.sideContentHeight,
-      sideContentProps: this.sideContentProps(this.props, questionId),
-      replProps: {
-        handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
-        handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
-        handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange,
-        output: this.props.output,
-        replValue: this.props.replValue,
-        sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-        sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
-        externalLibrary: question?.library?.external?.name || 'NONE',
-        replButtons: this.replButtons()
-      }
-    };
-    return (
-      <div className={classNames('WorkspaceParent', Classes.DARK)}>
-        <Workspace {...workspaceProps} />
-      </div>
-    );
-  }
+  });
 
   /**
    * Checks if there is a need to reset the workspace, then executes
@@ -240,7 +158,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
    *
    * Assumes that 'props.grading' is defined
    */
-  private checkWorkspaceReset(props: GradingWorkspaceProps) {
+  const checkWorkspaceReset = (props: GradingWorkspaceProps) => {
     /* Reset grading if it has changed.*/
     const submissionId = props.submissionId;
     const questionId = props.questionId;
@@ -295,10 +213,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       props.handleEditorValueChange(0, editorValue);
     }
-  }
+  };
 
   /** Pre-condition: Grading has been loaded */
-  private sideContentProps: (p: GradingWorkspaceProps, q: number) => SideContentProps = (
+  const sideContentProps: (p: GradingWorkspaceProps, q: number) => SideContentProps = (
     props: GradingWorkspaceProps,
     questionId: number
   ) => {
@@ -344,7 +262,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
           <SideContentAutograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
-            handleTestcaseEval={this.props.handleTestcaseEval}
+            handleTestcaseEval={props.handleTestcaseEval}
             workspaceLocation="grading"
           />
         ),
@@ -371,7 +289,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
         if (newTabId === prevTabId) {
           return;
         }
-        this.setState({ selectedTab: newTabId });
+        setSelectedTab(newTabId);
       },
       tabs: {
         beforeDynamicTabs: tabs,
@@ -384,16 +302,15 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
   };
 
   /** Pre-condition: Grading has been loaded */
-  private controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/courses/${this.props.courseId}/grading`;
-    const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
-    const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
+  const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
+    const listingPath = `/courses/${props.courseId}/grading`;
+    const gradingWorkspacePath = listingPath + `/${props.submissionId}`;
+    const questionProgress: [number, number] = [questionId + 1, props.grading!.length];
 
     const onClickPrevious = () =>
-      history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
-    const onClickNext = () =>
-      history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
-    const onClickReturn = () => history.push(listingPath);
+      navigate(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () => navigate(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => navigate(listingPath);
 
     const nextButton = (
       <ControlBarNextButton
@@ -418,8 +335,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
 
     const runButton = (
       <ControlBarRunButton
-        isEntrypointFileDefined={this.props.activeEditorTabIndex !== null}
-        handleEditorEval={this.handleEval}
+        isEntrypointFileDefined={props.activeEditorTabIndex !== null}
+        handleEditorEval={handleEval}
         key="run"
       />
     );
@@ -430,33 +347,98 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps, State> {
     };
   };
 
-  private replButtons() {
+  const replButtons = () => {
     const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
+      <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
       <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
+        handleReplEval={props.handleReplEval}
+        isRunning={props.isRunning}
         key="eval_repl"
       />
     );
 
     return [evalButton, clearButton];
-  }
+  };
 
-  private handleEval() {
-    this.props.handleEditorEval();
+  const handleEval = () => {
+    props.handleEditorEval();
 
     // Run testcases when the autograder tab is selected
-    if (this.state.selectedTab === SideContentType.autograder) {
-      this.props.handleRunAllTestcases();
+    if (selectedTab === SideContentType.autograder) {
+      props.handleRunAllTestcases();
     }
+  };
+
+  // Rendering logic
+  if (props.grading === undefined) {
+    return (
+      <NonIdealState
+        className={classNames('WorkspaceParent', Classes.DARK)}
+        description="Getting assessment ready..."
+        icon={<Spinner size={SpinnerSize.LARGE} />}
+      />
+    );
   }
-}
+
+  /* If questionId is out of bounds, set it to the max. */
+  const questionId =
+    props.questionId >= props.grading.length ? props.grading.length - 1 : props.questionId;
+  /* Get the question to be graded */
+  const question = props.grading[questionId].question as Question;
+  const workspaceProps: WorkspaceProps = {
+    controlBarProps: controlBarProps(questionId),
+    editorContainerProps:
+      question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
+        ? {
+            editorVariant: 'normal',
+            isFolderModeEnabled: props.isFolderModeEnabled,
+            activeEditorTabIndex: props.activeEditorTabIndex,
+            setActiveEditorTabIndex: props.handleSetActiveEditorTabIndex,
+            removeEditorTabByIndex: props.handleRemoveEditorTabByIndex,
+            editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+            editorSessionId: '',
+            handleDeclarationNavigate: props.handleDeclarationNavigate,
+            handleEditorEval: handleEval,
+            handleEditorValueChange: props.handleEditorValueChange,
+            handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
+            handlePromptAutocomplete: props.handlePromptAutocomplete,
+            isEditorAutorun: false,
+            sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
+            sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
+            externalLibraryName: question?.library?.external?.name || 'NONE'
+          }
+        : undefined,
+    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    mcqProps: {
+      mcq: question as IMCQQuestion,
+      handleMCQSubmit: (i: number) => {}
+    },
+    sideBarProps: {
+      tabs: []
+    },
+    sideContentHeight: props.sideContentHeight,
+    sideContentProps: sideContentProps(props, questionId),
+    replProps: {
+      handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+      handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+      handleReplEval: props.handleReplEval,
+      handleReplValueChange: props.handleReplValueChange,
+      output: props.output,
+      replValue: props.replValue,
+      sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
+      sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
+      externalLibrary: question?.library?.external?.name || 'NONE',
+      replButtons: replButtons()
+    }
+  };
+  return (
+    <div className={classNames('WorkspaceParent', Classes.DARK)}>
+      <Workspace {...workspaceProps} />
+    </div>
+  );
+};
 
 export default GradingWorkspace;
