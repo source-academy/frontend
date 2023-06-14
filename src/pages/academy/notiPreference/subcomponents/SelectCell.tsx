@@ -40,7 +40,7 @@ const SelectCell: React.FC<SelectCellProps> = props => {
     );
   };
 
-  const systemEnabled = props.data["isEnabled"];
+  const systemEnabled = props.data['isEnabled'];
 
   // look for default time option
   let defaultTimeOption: TimeOption | undefined;
