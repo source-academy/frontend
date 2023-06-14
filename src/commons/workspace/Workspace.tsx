@@ -2,11 +2,11 @@ import { FocusStyleManager } from '@blueprintjs/core';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
 import * as React from 'react';
-import { Prompt } from 'react-router';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import { Prompt } from '../ReactRouterPrompt';
 import Repl, { ReplProps } from '../repl/Repl';
 import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
@@ -206,11 +206,10 @@ const Workspace: React.FC<WorkspaceProps> = props => {
 
   return (
     <div className="workspace">
-      {props.hasUnsavedChanges ? (
-        <Prompt
-          message={'You have changes that may not be saved. Are you sure you want to leave?'}
-        />
-      ) : null}
+      <Prompt
+        when={!!props.hasUnsavedChanges}
+        message={'You have changes that may not be saved. Are you sure you want to leave?'}
+      />
       <ControlBar {...props.controlBarProps} />
       <div className="workspace-parent">
         <Resizable {...sideBarResizableProps()}>

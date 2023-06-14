@@ -17,10 +17,12 @@ import {
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
+import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
+  readonly router: RouterState;
   readonly academy: AcademyState;
   readonly achievement: AchievementState;
   readonly application: ApplicationState;
@@ -126,12 +128,14 @@ export interface SALanguage extends Language {
   /** Whether the language supports the given features */
   supports: LanguageFeatures;
 }
-type LanguageFeatures = {
-  dataVisualizer?: boolean;
-  substVisualizer?: boolean;
-  envVisualizer?: boolean;
-  multiFile?: boolean;
-};
+// TODO: Remove Partial type when fully migrated
+type LanguageFeatures = Partial<{
+  dataVisualizer: boolean;
+  substVisualizer: boolean;
+  envVisualizer: boolean;
+  multiFile: boolean;
+  repl: boolean;
+}>;
 
 const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
@@ -149,7 +153,7 @@ export const fullJSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full JavaScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true }
+  supports: { dataVisualizer: true, repl: true }
 };
 
 export const fullTSLanguage: SALanguage = {
@@ -157,7 +161,7 @@ export const fullTSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full TypeScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true }
+  supports: { dataVisualizer: true, repl: true }
 };
 
 export const htmlLanguage: SALanguage = {
@@ -177,7 +181,7 @@ const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displa
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: {} };
+  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: { repl: true } };
 });
 
 const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
@@ -189,33 +193,11 @@ const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayNam
 ];
 
 export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: {} };
+  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
 });
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
-  switch (chapter) {
-    case Chapter.FULL_JS:
-      return fullJSLanguage.displayName;
-    case Chapter.FULL_TS:
-      return fullTSLanguage.displayName;
-    case Chapter.HTML:
-      return htmlLanguage.displayName;
-    case Chapter.SCHEME_1:
-    case Chapter.SCHEME_2:
-    case Chapter.SCHEME_3:
-    case Chapter.SCHEME_4:
-    case Chapter.FULL_SCHEME:
-      return schemeLanguages.find(lang => lang.chapter === chapter)!.displayName;
-    case Chapter.PYTHON_1:
-      // case Chapter.PYTHON_2:
-      // case Chapter.PYTHON_3:
-      // case Chapter.PYTHON_4:
-      return pyLanguages.find(lang => lang.chapter === chapter)!.displayName;
-    default:
-      return `Source \xa7${chapter}${
-        variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
-      }`;
-  }
+  return getLanguageConfig(chapter, variant).displayName;
 };
 
 const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
@@ -261,9 +243,12 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
   // Local imports/exports require Source 2+ as Source 1 does not have lists.
   supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
 
+  // Disable REPL for concurrent variants
+  supportedFeatures.repl = variant !== Variant.CONCURRENT;
+
   return {
     ...sublang,
-    displayName: styliseSublanguage(sublang.chapter, sublang.variant),
+    displayName: `Source \xa7${chapter} ${variantDisplay.get(variant) ?? ''}`.trim(),
     mainLanguage: SupportedLanguage.JAVASCRIPT,
     supports: supportedFeatures
   };
@@ -305,6 +290,8 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 };
 
+export const defaultRouter: RouterState = null;
+
 export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
 };
@@ -342,7 +329,6 @@ export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  lang: SupportedLanguage.JAVASCRIPT,
   languageConfig: defaultLanguageConfig
 };
 
@@ -526,6 +512,7 @@ export const defaultFileSystem: FileSystemState = {
 };
 
 export const defaultState: OverallState = {
+  router: defaultRouter,
   academy: defaultAcademy,
   achievement: defaultAchievement,
   application: defaultApplication,

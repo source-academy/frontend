@@ -92,7 +92,8 @@ const mockStore = {
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useSelector: jest.fn()
+  useSelector: jest.fn(),
+  useDispatch: jest.fn()
 }));
 
 jest.mock('react-router-dom', () => ({
@@ -112,14 +113,9 @@ describe('GitHubClassroom', () => {
     });
   });
 
-  const mockProps = {
-    handleGitHubLogIn: () => {},
-    handleGitHubLogOut: () => {}
-  };
-
   it('renders correctly', async () => {
     await act(async () => {
-      const tree = shallow(<GitHubClassroom {...mockProps} />);
+      const tree = shallow(<GitHubClassroom />);
       expect(tree.debug()).toMatchSnapshot();
     });
   });

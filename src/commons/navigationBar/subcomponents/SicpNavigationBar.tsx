@@ -2,7 +2,7 @@ import { Alignment, Drawer, InputGroup, Navbar, NavbarGroup, Position } from '@b
 import { IconNames } from '@blueprintjs/icons';
 import { memoize } from 'lodash';
 import * as React from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
 import Constants from 'src/commons/utils/Constants';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
@@ -70,15 +70,16 @@ const SicpNavigationBar: React.FC = () => {
   ]);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const prev = getPrev(section);
-  const next = getNext(section);
+  // `section` is defined due to the navigate logic in the useEffect in Sicp.tsx
+  const prev = getPrev(section!);
+  const next = getNext(section!);
 
   const handleCloseToc = () => setIsTocOpen(false);
   const handleOpenToc = () => setIsTocOpen(true);
   const handleNavigation = (sect: string) => {
-    history.push('/sicpjs/' + sect);
+    navigate('/sicpjs/' + sect);
   };
   const handleOpenSearch = () => setIsSearchOpen(true);
   const handleCloseSearch = () => setIsSearchOpen(false);
@@ -179,7 +180,8 @@ const SicpNavigationBar: React.FC = () => {
         return { title: '', url: '' };
       }
       return {
-        title: textbook[array[0]][array[1]][array[2]],
+        //  array[0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
+        title: array[0].slice(8) + ': ' + textbook[array[0]][array[1]][array[2]],
         url: SearchUrl + array[0] + array[1]
       };
     }
@@ -233,45 +235,30 @@ const SicpNavigationBar: React.FC = () => {
     setSearchQuery(str);
   };
   const handleAutoIndexSearch = (str: string) => {
+    handleIndexSearchButton(str);
+  };
+
+  const handleIndexSearchButton = (str: string) => {
     handleOpenSearch();
     setDisplayedQuery(str);
     const SearchUrl = '..';
-    const results: SearchResultProps[] = [];
-    const ans = queryTrie(indexTrie, str.toLowerCase());
-    if (ans == null) {
-      results.push({ title: 'no result found', url: '' });
-    } else {
-      const { pure, subindex, value } = ans;
-      pure.forEach((p: any) => {
-        results.push({ title: value, url: SearchUrl + p[0] + p[1] });
-      });
-      subindex.forEach((sub: any) => {
-        results.push({
-          title: `${value}: ${sub.value}`,
-          url: SearchUrl + sub.id[0] + sub.id[1]
-        });
-      });
-    }
-    setQueryResult(results);
-  };
-
-  const handleIndexSearchButton = () => {
-    handleOpenSearch();
-    setDisplayedQuery(indexSearchQuery);
-    const SearchUrl = '..';
     const tem = [];
-    const ans = queryTrie(indexTrie, indexSearchQuery.toLowerCase());
+    const ans = queryTrie(indexTrie, str.toLowerCase());
     if (ans == null) {
       tem.push({ title: 'no result found', url: '' });
     } else {
       const pure = ans['pureIndex'];
       for (let i = 0; i < pure.length; i++) {
-        tem.push({ title: ans['value'], url: SearchUrl + pure[i][0] + pure[i][1] });
+        // pure[i][0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
+        tem.push({
+          title: pure[i][0].slice(8) + ': ' + ans['value'],
+          url: SearchUrl + pure[i][0] + pure[i][1]
+        });
       }
       const subindex = ans['subIndex'];
       for (let i = 0; i < subindex.length; i++) {
         tem.push({
-          title: ans['value'] + ': ' + subindex[i]['value'],
+          title: subindex[i]['id'][0].slice(8) + ': ' + ans['value'] + ': ' + subindex[i]['value'],
           url: SearchUrl + subindex[i]['id'][0] + subindex[i]['id'][1]
         });
       }
@@ -294,6 +281,7 @@ const SicpNavigationBar: React.FC = () => {
     <div
       className="userSearch"
       style={{ position: 'absolute', top: '10%', left: '15%', width: '20%', height: '600%' }}
+      key="userSearch"
     >
       <div className="userSearch-inner">
         <div style={{ display: 'inline-flex' }}>
@@ -342,6 +330,7 @@ const SicpNavigationBar: React.FC = () => {
     <div
       className="indexSearch"
       style={{ position: 'absolute', top: '10%', left: '36%', width: '20%', height: '600%' }}
+      key="indexSearch"
     >
       <div className="indexSearch-inner">
         <div style={{ display: 'inline-flex' }}>
@@ -350,7 +339,11 @@ const SicpNavigationBar: React.FC = () => {
             value={indexSearchQuery}
             onChange={event => handleIndexSearchChange(event.target.value)}
           />
-          <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
+          <ControlButton
+            label="Index"
+            icon={IconNames.SEARCH}
+            onClick={() => handleIndexSearchButton(indexSearchQuery)}
+          />
         </div>
       </div>
       {indexAutocompleteResults.length !== 0 && (
