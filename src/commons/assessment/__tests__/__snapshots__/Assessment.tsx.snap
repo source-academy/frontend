@@ -3,7 +3,7 @@
 exports[`Assessment page "loading" content renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
-    <Router history={{...}}>
+    <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
       <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
@@ -214,31 +214,29 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/2/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"play\\">
-                                                    <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Continue
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/2/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"play\\">
+                                                  <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Continue
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>
@@ -329,31 +327,29 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/1/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"edit\\">
-                                                    <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Review
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/1/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"edit\\">
+                                                  <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Review
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>
@@ -407,7 +403,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
 exports[`Assessment page does not show attempt Button for upcoming assessments for student user 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
-    <Router history={{...}}>
+    <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
       <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
@@ -618,31 +614,29 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/2/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"play\\">
-                                                    <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Continue
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/2/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"play\\">
+                                                  <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Continue
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>
@@ -733,31 +727,29 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/1/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"edit\\">
-                                                    <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Review
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/1/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"edit\\">
+                                                  <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Review
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>
@@ -811,7 +803,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
 exports[`Assessment page with 0 missions renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
-    <Router history={{...}}>
+    <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
       <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
@@ -1022,31 +1014,29 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/2/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"play\\">
-                                                    <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Continue
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/2/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"play\\">
+                                                  <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Continue
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>
@@ -1137,31 +1127,29 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/1/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"edit\\">
-                                                    <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Review
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/1/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"edit\\">
+                                                  <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Review
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>
@@ -1215,7 +1203,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
 exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
 "<Provider store={{...}}>
   <MemoryRouter initialEntries={{...}}>
-    <Router history={{...}}>
+    <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
       <Assessment assessmentConfiguration={{...}}>
         <div className=\\"Assessment\\">
           <ContentDisplay display={{...}} loadContentDispatch={[Function: loadContentDispatch]}>
@@ -1426,31 +1414,29 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/2/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"play\\">
-                                                    <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Continue
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/2/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/2/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"play\\">
+                                                  <span aria-hidden={true} icon=\\"play\\" className=\\"bp4-icon bp4-icon-play\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"play\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Continue
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>
@@ -1541,31 +1527,29 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </div>
                                     <div className=\\"listing-button\\">
                                       <NavLink to=\\"/courses/undefined/missions/1/0\\">
-                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
-                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" navigate={[Function: navigate]}>
-                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: onClick]}>
-                                              <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
-                                                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                                                  <Blueprint4.Icon icon=\\"edit\\">
-                                                    <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
-                                                      <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                                                        <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
-                                                      </svg>
-                                                    </span>
-                                                  </Blueprint4.Icon>
-                                                  <span className=\\"bp4-button-text\\">
-                                                    <span className=\\"custom-hidden-xxxs\\">
-                                                      Review
-                                                    </span>
-                                                    <span className=\\"custom-hidden-xxs\\">
-                                                       Attempt
-                                                    </span>
+                                        <Link aria-current={[undefined]} className=\\"\\" style={[undefined]} to=\\"/courses/undefined/missions/1/0\\">
+                                          <a aria-current={[undefined]} className=\\"\\" style={[undefined]} href=\\"/courses/undefined/missions/1/0\\" onClick={[Function: handleClick]} target={[undefined]}>
+                                            <Blueprint4.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
+                                              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-minimal\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                                <Blueprint4.Icon icon=\\"edit\\">
+                                                  <span aria-hidden={true} icon=\\"edit\\" className=\\"bp4-icon bp4-icon-edit\\" title={[undefined]}>
+                                                    <svg fill={[undefined]} data-icon=\\"edit\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                                                      <path d=\\"M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z\\" fillRule=\\"evenodd\\" />
+                                                    </svg>
                                                   </span>
-                                                  <Blueprint4.Icon icon={[undefined]} />
-                                                </button>
-                                              </Blueprint4.Button>
-                                            </a>
-                                          </LinkAnchor>
+                                                </Blueprint4.Icon>
+                                                <span className=\\"bp4-button-text\\">
+                                                  <span className=\\"custom-hidden-xxxs\\">
+                                                    Review
+                                                  </span>
+                                                  <span className=\\"custom-hidden-xxs\\">
+                                                     Attempt
+                                                  </span>
+                                                </span>
+                                                <Blueprint4.Icon icon={[undefined]} />
+                                              </button>
+                                            </Blueprint4.Button>
+                                          </a>
                                         </Link>
                                       </NavLink>
                                     </div>

@@ -84,7 +84,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
                 </div>
               </div>
               <br />
-              <p id=\\"env-visualizer-default-text\\" className=\\"bp4-running-text\\">
+              <div id=\\"env-visualizer-default-text\\" className=\\"bp4-running-text\\">
                 The environment model visualizer generates environment model diagrams following a notation introduced in
                  
                 <a href=\\"https://sourceacademy.org/sicpjs/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
@@ -114,7 +114,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
                 <br />
                 <br />
                 Note that these shortcuts are only active when the browser focus is on this tab.
-              </p>
+              </div>
             </div>
           </div>
         </HotKeysWrapper>

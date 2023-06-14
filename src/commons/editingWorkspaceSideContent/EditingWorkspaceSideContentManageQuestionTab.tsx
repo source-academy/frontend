@@ -1,11 +1,11 @@
 import { Button, ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
-import { history } from '../utils/HistoryHelper';
 
 type ManageQuestionTabProps = DispatchProps & StateProps;
 
@@ -20,6 +20,7 @@ type StateProps = {
 };
 
 const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
+  const navigate = useNavigate();
   const [showSaveOverlay, setShowSaveOverlay] = useState(false);
   const [modifyAssessment, setModifyAssessment] = useState<VoidFunction>(() => {});
 
@@ -75,7 +76,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
       questions[newIndex] = question;
       assessment.questions = questions;
       props.updateAssessment(assessment);
-      history.push('/mission-control/-1/' + newIndex.toString());
+      navigate('/mission-control/-1/' + newIndex.toString());
     }
   };
 
@@ -86,7 +87,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
     questions.splice(index, 0, template());
     assessment.questions = questions;
     props.updateAssessment(assessment);
-    history.push('/mission-control/-1/' + index.toString());
+    navigate('/mission-control/-1/' + index.toString());
   };
 
   const deleteQuestion = (index: number) => () => {
