@@ -1,6 +1,5 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
@@ -115,7 +114,6 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import { Links } from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
@@ -231,11 +229,8 @@ export async function handleHash(
   }
 }
 
-// FIXME: Remove this after merging is complete
-const isSicpEditor = false;
-
 const Playground: React.FC<PlaygroundProps> = props => {
-  const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
+  const workspaceLocation: WorkspaceLocation = 'playground';
   const { isMobileBreakpoint } = useResponsive();
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
@@ -328,8 +323,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [deviceSecret]
   );
 
-  const usingRemoteExecution =
-    useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
+  const usingRemoteExecution = useTypedSelector(state => !!state.session.remoteExecutionSession);
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
   const externalLibraryName = useTypedSelector(
@@ -348,7 +342,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorSessionId]);
 
-  const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
+  const hash = location.hash;
 
   useEffect(() => {
     if (!hash) {
@@ -692,7 +686,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const shareButton = useMemo(() => {
-    const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
+    const qs = queryString;
     return (
       <ControlBarShareButton
         handleGenerateLz={() => dispatch(generateLzString())}
@@ -700,11 +694,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         handleUpdateShortURL={s => dispatch(updateShortURL(s))}
         queryString={qs}
         shortURL={shortURL}
-        isSicp={isSicpEditor}
+        isSicp={false}
         key="share"
       />
     );
-  }, [dispatch, props.initialEditorValueHash, queryString, shortURL]);
+  }, [dispatch, queryString, shortURL]);
 
   const toggleFolderModeButton = useMemo(() => {
     return (
@@ -771,9 +765,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
     }
 
-    if (!isSicpEditor) {
-      tabs.push(remoteExecutionTab);
-    }
+    tabs.push(remoteExecutionTab);
 
     return tabs;
   }, [
@@ -791,18 +783,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
-
-  const onLoadMethod = useCallback(
-    (editor: Ace.Editor) => {
-      const addFold = () => {
-        editor.getSession().addFold('    ', new Range(1, 0, props.prependLength!, 0));
-        editor.renderer.off('afterRender', addFold);
-      };
-
-      editor.renderer.on('afterRender', addFold);
-    },
-    [props.prependLength]
-  );
 
   const onChangeMethod = useCallback(
     (newCode: string, delta: CodeDelta) => {
@@ -930,7 +910,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
-    onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: languageConfig.chapter,
     externalLibraryName,
     sourceVariant: languageConfig.variant,
@@ -963,7 +942,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       selectedTab === SideContentType.envVisualizer,
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
-    disableScrolling: isSicpEditor
+    disableScrolling: false
   };
 
   const sideBarProps: { tabs: SideBarTab[] } = useMemo(() => {
@@ -1000,7 +979,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         autorunButtons,
         languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelectButton,
-        isSicpEditor ? null : sessionButtons,
+        sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
@@ -1026,7 +1005,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
+      workspaceLocation: 'playground',
       sideContentHeight: sideContentHeight
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
@@ -1042,7 +1021,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           autorunButtons,
           chapterSelectButton,
           languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
-          isSicpEditor ? null : sessionButtons,
+          sessionButtons,
           languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,
           githubButtons
@@ -1054,7 +1033,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
+      workspaceLocation: 'playground'
     }
   };
 
