@@ -1,4 +1,4 @@
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { mount } from 'enzyme';
 import moment from 'moment';
 import { Provider } from 'react-redux';
@@ -47,7 +47,7 @@ describe('ApplicationWrapper', () => {
       </Provider>
     );
     const tree = mount(app);
-    expect(tree.find('.NoPage').length).toBe(1);
+    waitFor(() => expect(tree.find('.NoPage').length).toBe(1));
     expect(tree.find('.NavigationBar__link.pt-active').length).toBe(0);
   });
 
@@ -62,7 +62,7 @@ describe('ApplicationWrapper', () => {
       </Provider>
     );
     const tree = mount(app);
-    expect(tree.find('.NoPage').length).toBe(1);
+    waitFor(() => expect(tree.find('.NoPage').length).toBe(1));
     expect(tree.find('.NavigationBar__link.pt-active').length).toBe(0);
   });
 

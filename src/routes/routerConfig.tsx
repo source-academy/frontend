@@ -3,17 +3,7 @@ import { Navigate, redirect, RouteObject } from 'react-router';
 import Application from '../commons/application/Application';
 import { Role } from '../commons/application/ApplicationTypes';
 import Constants from '../commons/utils/Constants';
-import Academy from '../pages/academy/Academy';
-import Contributors from '../pages/contributors/Contributors';
 import Disabled from '../pages/disabled/Disabled';
-import GitHubClassroom from '../pages/githubAssessments/GitHubClassroom';
-import GitHubCallback from '../pages/githubCallback/GitHubCallback';
-import Login from '../pages/login/Login';
-import MissionControl from '../pages/missionControl/MissionControl';
-import NotFound from '../pages/notFound/NotFound';
-import Playground from '../pages/playground/Playground';
-import Sicp from '../pages/sicp/Sicp';
-import Welcome from '../pages/welcome/Welcome';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
@@ -43,7 +33,7 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
       children: [
         {
           path: 'login',
-          element: <Login />,
+          lazy: () => import('../pages/login/Login'),
           loader: conditionalLoader(Constants.playgroundOnly, '/')
         },
         {
@@ -64,22 +54,22 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
   ];
 };
 
-const commonChildrenRoutes = [
+const commonChildrenRoutes: RouteObject[] = [
   {
     path: 'contributors',
-    element: <Contributors />
+    lazy: () => import('../pages/contributors/Contributors')
   },
   {
     path: 'callback/github',
-    element: <GitHubCallback />
+    lazy: () => import('../pages/githubCallback/GitHubCallback')
   },
   {
     path: 'sicpjs/:section?',
-    element: <Sicp />
+    lazy: () => import('../pages/sicp/Sicp')
   },
   {
     path: 'githubassessments/*',
-    element: <GitHubClassroom />,
+    lazy: () => import('../pages/githubAssessments/GitHubClassroom'),
     loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
   }
 ];
@@ -95,12 +85,12 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
       },
       {
         path: 'playground',
-        element: <Playground />
+        lazy: () => import('../pages/playground/Playground')
       },
       ...commonChildrenRoutes,
       {
         path: '*',
-        element: <NotFound />
+        lazy: () => import('../pages/notFound/NotFound')
       }
     ]
   }
@@ -153,11 +143,11 @@ export const getFullAcademyRouterConfig = ({
         },
         {
           path: 'login',
-          element: <Login />
+          lazy: () => import('../pages/login/Login')
         },
         {
           path: 'welcome',
-          element: <Welcome />,
+          lazy: () => import('../pages/welcome/Welcome'),
           loader: welcomeLoader
         },
         {
@@ -166,22 +156,22 @@ export const getFullAcademyRouterConfig = ({
         },
         {
           path: 'courses/:courseId/*',
-          element: <Academy />,
+          lazy: () => import('../pages/academy/Academy'),
           loader: ensureUserAndRole
         },
         {
           path: 'playground',
-          element: <Playground />,
+          lazy: () => import('../pages/playground/Playground'),
           loader: ensureUserAndRole
         },
         {
           path: 'mission-control/:assessmentId?/:questionId?',
-          element: <MissionControl />
+          lazy: () => import('../pages/missionControl/MissionControl')
         },
         ...commonChildrenRoutes,
         {
           path: '*',
-          element: <NotFound />
+          lazy: () => import('../pages/notFound/NotFound')
         }
       ]
     }
