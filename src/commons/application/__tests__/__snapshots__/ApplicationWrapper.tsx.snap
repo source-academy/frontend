@@ -147,7 +147,7 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                   <div className=\\"Application__main\\">
                     <Outlet>
                       <RenderedRoute match={{...}} routeContext={{...}}>
-                        <Disabled reason=\\"Testing\\">
+                        <Disabled>
                           <div className=\\"NoPage bp4-dark\\">
                             <Blueprint4.NonIdealState icon=\\"error\\" title=\\"Disabled\\" description=\\"The Source Academy has been disabled for this reason: Testing.\\" iconSize={48} layout=\\"vertical\\">
                               <div className=\\"bp4-non-ideal-state bp4-non-ideal-state-vertical\\">

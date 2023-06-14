@@ -3,7 +3,6 @@ import { Navigate, redirect, RouteObject } from 'react-router';
 import Application from '../commons/application/Application';
 import { Role } from '../commons/application/ApplicationTypes';
 import Constants from '../commons/utils/Constants';
-import Disabled from '../pages/disabled/Disabled';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
@@ -16,16 +15,15 @@ import Disabled from '../pages/disabled/Disabled';
 
 // Conditionally allow access to route via `loader` instead of conditionally defining these routes in react-router v6.4.
 // See https://github.com/remix-run/react-router/discussions/10223#discussioncomment-5909050
-const conditionalLoader = (condition: boolean, redirectTo: string) => () => {
+const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?: any) => () => {
   if (condition) {
     return redirect(redirectTo);
   }
-  return null;
+  return returnValue ?? null;
 };
 
 export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
-  const disabledElement = <Disabled reason={typeof reason === 'string' ? reason : undefined} />;
-
+  const disabledReason = typeof reason === 'string' ? reason : undefined;
   return [
     {
       path: '/*',
@@ -38,8 +36,8 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
         },
         {
           path: '',
-          element: disabledElement,
-          loader: conditionalLoader(!Constants.playgroundOnly, 'login')
+          lazy: () => import('../pages/disabled/Disabled'),
+          loader: conditionalLoader(!Constants.playgroundOnly, 'login', disabledReason)
         },
         {
           path: 'courses/*',
@@ -47,7 +45,8 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
         },
         {
           path: '*',
-          element: disabledElement
+          lazy: () => import('../pages/disabled/Disabled'),
+          loader: () => disabledReason
         }
       ]
     }
