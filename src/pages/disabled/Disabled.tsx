@@ -4,11 +4,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useLoaderData } from 'react-router';
 
-interface DisabledProps {
-  reason?: string;
-}
-
-const Disabled: React.FC<DisabledProps> = () => {
+const Disabled: React.FC = () => {
   const disabledReason = useLoaderData() as string | undefined;
 
   return (

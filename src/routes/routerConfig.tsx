@@ -22,6 +22,18 @@ const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?:
   return returnValue ?? null;
 };
 
+const Login = () => import('../pages/login/Login');
+const Disabled = () => import('../pages/disabled/Disabled');
+const Contributors = () => import('../pages/contributors/Contributors');
+const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
+const Sicp = () => import('../pages/sicp/Sicp');
+const GitHubClassroom = () => import('../pages/githubAssessments/GitHubClassroom');
+const Playground = () => import('../pages/playground/Playground');
+const NotFound = () => import('../pages/notFound/NotFound');
+const Welcome = () => import('../pages/welcome/Welcome');
+const Academy = () => import('../pages/academy/Academy');
+const MissionControl = () => import('../pages/missionControl/MissionControl');
+
 export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
   const disabledReason = typeof reason === 'string' ? reason : undefined;
   return [
@@ -31,12 +43,12 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
       children: [
         {
           path: 'login',
-          lazy: () => import('../pages/login/Login'),
+          lazy: Login,
           loader: conditionalLoader(Constants.playgroundOnly, '/')
         },
         {
           path: '',
-          lazy: () => import('../pages/disabled/Disabled'),
+          lazy: Disabled,
           loader: conditionalLoader(!Constants.playgroundOnly, 'login', disabledReason)
         },
         {
@@ -45,7 +57,7 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
         },
         {
           path: '*',
-          lazy: () => import('../pages/disabled/Disabled'),
+          lazy: Disabled,
           loader: () => disabledReason
         }
       ]
@@ -56,19 +68,19 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
 const commonChildrenRoutes: RouteObject[] = [
   {
     path: 'contributors',
-    lazy: () => import('../pages/contributors/Contributors')
+    lazy: Contributors
   },
   {
     path: 'callback/github',
-    lazy: () => import('../pages/githubCallback/GitHubCallback')
+    lazy: GitHubCallback
   },
   {
     path: 'sicpjs/:section?',
-    lazy: () => import('../pages/sicp/Sicp')
+    lazy: Sicp
   },
   {
     path: 'githubassessments/*',
-    lazy: () => import('../pages/githubAssessments/GitHubClassroom'),
+    lazy: GitHubClassroom,
     loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
   }
 ];
@@ -84,12 +96,12 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
       },
       {
         path: 'playground',
-        lazy: () => import('../pages/playground/Playground')
+        lazy: Playground
       },
       ...commonChildrenRoutes,
       {
         path: '*',
-        lazy: () => import('../pages/notFound/NotFound')
+        lazy: NotFound
       }
     ]
   }
@@ -142,11 +154,11 @@ export const getFullAcademyRouterConfig = ({
         },
         {
           path: 'login',
-          lazy: () => import('../pages/login/Login')
+          lazy: Login
         },
         {
           path: 'welcome',
-          lazy: () => import('../pages/welcome/Welcome'),
+          lazy: Welcome,
           loader: welcomeLoader
         },
         {
@@ -155,22 +167,22 @@ export const getFullAcademyRouterConfig = ({
         },
         {
           path: 'courses/:courseId/*',
-          lazy: () => import('../pages/academy/Academy'),
+          lazy: Academy,
           loader: ensureUserAndRole
         },
         {
           path: 'playground',
-          lazy: () => import('../pages/playground/Playground'),
+          lazy: Playground,
           loader: ensureUserAndRole
         },
         {
           path: 'mission-control/:assessmentId?/:questionId?',
-          lazy: () => import('../pages/missionControl/MissionControl')
+          lazy: MissionControl
         },
         ...commonChildrenRoutes,
         {
           path: '*',
-          lazy: () => import('../pages/notFound/NotFound')
+          lazy: NotFound
         }
       ]
     }
