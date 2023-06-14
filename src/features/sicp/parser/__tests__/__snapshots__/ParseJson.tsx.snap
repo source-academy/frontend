@@ -13,7 +13,7 @@ Mock Text"
 
 exports[`Parse epigraph EPIGRAPH with all successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component className=\\"sicp-epigraph\\">
       <blockquote className=\\"bp4-blockquote sicp-epigraph\\">
         Mock Text
@@ -33,7 +33,7 @@ exports[`Parse epigraph EPIGRAPH with all successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with author successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component className=\\"sicp-epigraph\\">
       <blockquote className=\\"bp4-blockquote sicp-epigraph\\">
         Mock Text
@@ -49,7 +49,7 @@ exports[`Parse epigraph EPIGRAPH with author successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with date successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component className=\\"sicp-epigraph\\">
       <blockquote className=\\"bp4-blockquote sicp-epigraph\\">
         Mock Text
@@ -65,7 +65,7 @@ exports[`Parse epigraph EPIGRAPH with date successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with none successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component className=\\"sicp-epigraph\\">
       <blockquote className=\\"bp4-blockquote sicp-epigraph\\">
         Mock Text
@@ -77,7 +77,7 @@ exports[`Parse epigraph EPIGRAPH with none successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with title successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component className=\\"sicp-epigraph\\">
       <blockquote className=\\"bp4-blockquote sicp-epigraph\\">
         Mock Text
@@ -95,7 +95,7 @@ exports[`Parse epigraph EPIGRAPH with title successful 1`] = `
 
 exports[`Parse exercise EXERCISE with solution successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id={[undefined]} refs={{...}} top={5}>
       <div className=\\"sicp-anchor-link-container\\">
         <SicpExercise title={[undefined]} body={{...}} solution={{...}}>
@@ -130,7 +130,7 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
 
 exports[`Parse exercise EXERCISE without solution successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id={[undefined]} refs={{...}} top={5}>
       <div className=\\"sicp-anchor-link-container\\">
         <SicpExercise title=\\"Title\\" body={{...}} solution={[undefined]}>
@@ -169,21 +169,19 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
 
 exports[`Parse figures FIGURE with image and scale successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id=\\"id\\" refs={{...}} top={36}>
       <div className=\\"sicp-anchor-link-container\\">
         <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
-          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
-            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
-              <Blueprint4.Icon icon=\\"link\\">
-                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
-                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
-                  </svg>
-                </span>
-              </Blueprint4.Icon>
-            </a>
-          </LinkAnchor>
+          <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: handleClick]} target={[undefined]}>
+            <Blueprint4.Icon icon=\\"link\\">
+              <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                  <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                </svg>
+              </span>
+            </Blueprint4.Icon>
+          </a>
         </Link>
         <div className=\\"sicp-figure\\">
           <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"50%\\" />
@@ -200,21 +198,19 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
 
 exports[`Parse figures FIGURE with image successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id=\\"id\\" refs={{...}} top={36}>
       <div className=\\"sicp-anchor-link-container\\">
         <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
-          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
-            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
-              <Blueprint4.Icon icon=\\"link\\">
-                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
-                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
-                  </svg>
-                </span>
-              </Blueprint4.Icon>
-            </a>
-          </LinkAnchor>
+          <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: handleClick]} target={[undefined]}>
+            <Blueprint4.Icon icon=\\"link\\">
+              <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                  <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                </svg>
+              </span>
+            </Blueprint4.Icon>
+          </a>
         </Link>
         <div className=\\"sicp-figure\\">
           <img src=\\"https://source-academy.github.io/sicp/sicp.png\\" alt=\\"id\\" width=\\"100%\\" />
@@ -231,21 +227,19 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 
 exports[`Parse figures FIGURE with snippet successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id=\\"id\\" refs={{...}} top={36}>
       <div className=\\"sicp-anchor-link-container\\">
         <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
-          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
-            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
-              <Blueprint4.Icon icon=\\"link\\">
-                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
-                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
-                  </svg>
-                </span>
-              </Blueprint4.Icon>
-            </a>
-          </LinkAnchor>
+          <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: handleClick]} target={[undefined]}>
+            <Blueprint4.Icon icon=\\"link\\">
+              <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                  <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                </svg>
+              </span>
+            </Blueprint4.Icon>
+          </a>
         </Link>
         <div className=\\"sicp-figure\\">
           <Component body=\\"1 + 1;\\" id={[undefined]} initialEditorValueHash={[undefined]} prependLength={[undefined]} output={[undefined]}>
@@ -266,21 +260,19 @@ exports[`Parse figures FIGURE with snippet successful 1`] = `
 
 exports[`Parse figures FIGURE with table successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id=\\"id\\" refs={{...}} top={36}>
       <div className=\\"sicp-anchor-link-container\\">
         <Link className=\\"sicp-anchor-link\\" style={{...}} to=\\"id\\">
-          <LinkAnchor className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" navigate={[Function: navigate]}>
-            <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: onClick]}>
-              <Blueprint4.Icon icon=\\"link\\">
-                <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
-                  <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                    <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
-                  </svg>
-                </span>
-              </Blueprint4.Icon>
-            </a>
-          </LinkAnchor>
+          <a className=\\"sicp-anchor-link\\" style={{...}} href=\\"/id\\" onClick={[Function: handleClick]} target={[undefined]}>
+            <Blueprint4.Icon icon=\\"link\\">
+              <span aria-hidden={true} icon=\\"link\\" className=\\"bp4-icon bp4-icon-link\\" title={[undefined]}>
+                <svg fill={[undefined]} data-icon=\\"link\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
+                  <path d=\\"M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z\\" fillRule=\\"evenodd\\" />
+                </svg>
+              </span>
+            </Blueprint4.Icon>
+          </a>
         </Link>
         <div className=\\"sicp-figure\\">
           <table>
@@ -316,7 +308,7 @@ exports[`Parse figures FIGURE with table successful 1`] = `
 
 exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <hr />
     <div className=\\"sicp-footnote\\">
       <div />
@@ -331,7 +323,7 @@ exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
 
 exports[`Parse footnote DISPLAYFOOTNOTE count is 2 successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <div className=\\"sicp-footnote\\">
       <div />
       <a href=\\"\\">
@@ -345,7 +337,7 @@ exports[`Parse footnote DISPLAYFOOTNOTE count is 2 successful 1`] = `
 
 exports[`Parse heading SUBHEADING  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id={[undefined]} refs={{...}} top={2}>
       <div className=\\"sicp-anchor-link-container\\">
         <h2 className=\\"bp4-heading\\">
@@ -359,7 +351,7 @@ exports[`Parse heading SUBHEADING  successful 1`] = `
 
 exports[`Parse heading SUBSUBHEADING  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id={[undefined]} refs={{...}} top={16}>
       <div className=\\"sicp-anchor-link-container\\">
         <h4 className=\\"bp4-heading\\">
@@ -374,7 +366,7 @@ exports[`Parse heading SUBSUBHEADING  successful 1`] = `
 
 exports[`Parse latex LATEX block successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <SicpLatex math=\\"\\\\\\\\[test\\\\\\\\]\\">
       <Latex delimiters={{...}} strict={false}>
         <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
@@ -386,7 +378,7 @@ exports[`Parse latex LATEX block successful 1`] = `
 
 exports[`Parse latex LATEX inline successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <SicpLatex math=\\"$test$\\">
       <Latex delimiters={{...}} strict={false}>
         <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
@@ -398,14 +390,12 @@ exports[`Parse latex LATEX inline successful 1`] = `
 
 exports[`Parse links FOOTNOTE_REF  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <sup>
       <Link to=\\"bad-link\\">
-        <LinkAnchor href=\\"/bad-link\\" navigate={[Function: navigate]}>
-          <a href=\\"/bad-link\\" onClick={[Function: onClick]}>
-            link
-          </a>
-        </LinkAnchor>
+        <a href=\\"/bad-link\\" onClick={[Function: handleClick]} target={[undefined]}>
+          link
+        </a>
       </Link>
     </sup>
   </Router>
@@ -414,7 +404,7 @@ exports[`Parse links FOOTNOTE_REF  successful 1`] = `
 
 exports[`Parse links LINK  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <a href=\\"bad-link\\">
       link
     </a>
@@ -424,13 +414,11 @@ exports[`Parse links LINK  successful 1`] = `
 
 exports[`Parse links REF  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Link to=\\"bad-link\\">
-      <LinkAnchor href=\\"/bad-link\\" navigate={[Function: navigate]}>
-        <a href=\\"/bad-link\\" onClick={[Function: onClick]}>
-          link
-        </a>
-      </LinkAnchor>
+      <a href=\\"/bad-link\\" onClick={[Function: handleClick]} target={[undefined]}>
+        link
+      </a>
     </Link>
   </Router>
 </BrowserRouter>"
@@ -438,7 +426,7 @@ exports[`Parse links REF  successful 1`] = `
 
 exports[`Parse list OL  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component>
       <ol className=\\"bp4-list\\">
         <li>
@@ -452,7 +440,7 @@ exports[`Parse list OL  successful 1`] = `
 
 exports[`Parse list UL  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component>
       <ul className=\\"bp4-list\\">
         <li>
@@ -470,7 +458,7 @@ exports[`Parse object successful 1`] = `"Mock Text"`;
 
 exports[`Parse reference REFERENCE  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <div className=\\"sicp-reference\\">
       Mock Text
     </div>
@@ -480,7 +468,7 @@ exports[`Parse reference REFERENCE  successful 1`] = `
 
 exports[`Parse snippet SNIPPET no eval successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component>
       <pre className=\\"bp4-code-block\\">
         const a = 1;
@@ -493,7 +481,7 @@ exports[`Parse snippet SNIPPET no eval successful 1`] = `
 
 exports[`Parse snippet SNIPPET with latex successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component>
       <pre className=\\"bp4-code-block\\">
         <SicpLatex math=\\"const a = 1;\\\\na+1;\\">
@@ -509,7 +497,7 @@ exports[`Parse snippet SNIPPET with latex successful 1`] = `
 
 exports[`Parse snippet SNIPPET with prepend successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={1} output={[undefined]}>
       <div>
         Code Snippet
@@ -521,7 +509,7 @@ exports[`Parse snippet SNIPPET with prepend successful 1`] = `
 
 exports[`Parse snippet SNIPPET without prepend successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output={[undefined]}>
       <div>
         Code Snippet
@@ -533,7 +521,7 @@ exports[`Parse snippet SNIPPET without prepend successful 1`] = `
 
 exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component body=\\"const a = 1;\\\\na+1;\\" id=\\"id\\" initialEditorValueHash=\\"MYewdgzgLgBAhjAvDAjAbgFBwNTqA\\" prependLength={[undefined]} output=\\"2\\">
       <div>
         Code Snippet
@@ -545,7 +533,7 @@ exports[`Parse snippet SNIPPET without prepend with output successful 1`] = `
 
 exports[`Parse styling B  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <b>
       Mock Text
     </b>
@@ -555,7 +543,7 @@ exports[`Parse styling B  successful 1`] = `
 
 exports[`Parse styling EM  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <em>
       Mock Text
     </em>
@@ -565,7 +553,7 @@ exports[`Parse styling EM  successful 1`] = `
 
 exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component>
       <code className=\\"bp4-code\\" />
     </Component>
@@ -575,7 +563,7 @@ exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `
 
 exports[`Parse styling META  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <em />
   </Router>
 </BrowserRouter>"
@@ -583,7 +571,7 @@ exports[`Parse styling META  successful 1`] = `
 
 exports[`Parse styling TT  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <Component>
       <code className=\\"bp4-code\\">
         Mock Text
@@ -595,7 +583,7 @@ exports[`Parse styling TT  successful 1`] = `
 
 exports[`Parse symbol BR  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <br />
   </Router>
 </BrowserRouter>"
@@ -603,7 +591,7 @@ exports[`Parse symbol BR  successful 1`] = `
 
 exports[`Parse table TABLE  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <table>
       <tbody>
         <tr>
@@ -630,7 +618,7 @@ exports[`Parse table TABLE  successful 1`] = `
 
 exports[`Parse title TITLE  successful 1`] = `
 "<BrowserRouter>
-  <Router history={{...}}>
+  <Router basename={[undefined]} location={{...}} navigationType=\\"POP\\" navigator={{...}}>
     <AnchorLink id={[undefined]} refs={{...}} top={6}>
       <div className=\\"sicp-anchor-link-container\\">
         <Component>

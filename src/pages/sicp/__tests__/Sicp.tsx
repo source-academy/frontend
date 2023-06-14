@@ -1,16 +1,10 @@
 import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
-import ReactRouter from 'react-router';
+import * as ReactRouter from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import Sicp from '../Sicp';
 import SicpIndexPage from '../subcomponents/SicpIndexPage';
-
-const routeComponentPropsMock = {
-  history: {} as any,
-  location: {} as any,
-  match: {} as any
-};
 
 describe('Sicp renders', () => {
   test('correctly', () => {
@@ -18,7 +12,7 @@ describe('Sicp renders', () => {
 
     const sicp = (
       <Provider store={mockInitialStore()}>
-        <Sicp {...routeComponentPropsMock} />
+        <Sicp />
       </Provider>
     );
     const tree = shallow(sicp);
@@ -27,11 +21,13 @@ describe('Sicp renders', () => {
 
   test('index section correctly', () => {
     jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ section: 'index' });
+    jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(jest.fn());
+    jest.spyOn(ReactRouter, 'useLocation').mockReturnValue({} as ReactRouter.Location);
     window.HTMLElement.prototype.scrollIntoView = function () {};
 
     const sicp = (
       <Provider store={mockInitialStore()}>
-        <Sicp {...routeComponentPropsMock} />
+        <Sicp />
       </Provider>
     );
     const wrapper = mount(sicp);

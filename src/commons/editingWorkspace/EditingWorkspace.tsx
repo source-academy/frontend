@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -48,7 +49,6 @@ import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import { history } from '../utils/HistoryHelper';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { removeEditorTab, updateActiveEditorTabIndex } from '../workspace/WorkspaceActions';
@@ -117,6 +117,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
     store => store.workspaces[workspaceLocation]
@@ -538,10 +539,9 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     const questionProgress: [number, number] = [questionId + 1, assessment!.questions.length];
 
     const onClickPrevious = () =>
-      history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-    const onClickNext = () =>
-      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-    const onClickReturn = () => history.push(listingPath);
+      navigate(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () => navigate(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => navigate(listingPath);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(() => hasUnsavedChanges);
