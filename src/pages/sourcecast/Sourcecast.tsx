@@ -2,7 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import {
@@ -105,64 +105,94 @@ const Sourcecast: React.FC = () => {
   const courseId = useTypedSelector(store => store.session.courseId);
 
   const dispatch = useDispatch();
-  const handleFetchSourcecastIndex = () => dispatch(fetchSourcecastIndex(workspaceLocation));
-  const handleChapterSelect = (chapter: Chapter) =>
-    dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation));
-  const handleEditorEval = () => dispatch(evalEditor(workspaceLocation));
-  // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-  const handleEditorValueChange = (newEditorValue: string) =>
-    dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue));
-  const handleExternalSelect = (externalLibraryName: ExternalLibraryName) =>
-    dispatch(externalLibrarySelect(externalLibraryName, workspaceLocation));
-  const handleReplEval = () => dispatch(evalRepl(workspaceLocation));
-  const handleSetSourcecastData = (
-    title: string,
-    description: string,
-    uid: string,
-    audioUrl: string,
-    playbackData: PlaybackData
-  ) =>
-    dispatch(setSourcecastData(title, description, uid, audioUrl, playbackData, workspaceLocation));
-  const handleSetSourcecastStatus = (playbackStatus: PlaybackStatus) =>
-    dispatch(setSourcecastStatus(playbackStatus, workspaceLocation));
-  const handleDebuggerPause = () => dispatch(beginDebuggerPause(workspaceLocation));
-  const handleDebuggerReset = () => dispatch(debuggerReset(workspaceLocation));
-  const handleDebuggerResume = () => dispatch(debuggerResume(workspaceLocation));
-  const handleInterruptEval = () => dispatch(beginInterruptExecution(workspaceLocation));
-  const handleToggleEditorAutorun = () => dispatch(toggleEditorAutorun(workspaceLocation));
-  const handleReplOutputClear = () => dispatch(clearReplOutput(workspaceLocation));
-  const handleDeclarationNavigate = (cursorPosition: Position) =>
-    dispatch(navigateToDeclaration(workspaceLocation, cursorPosition));
-  // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-  const handleEditorUpdateBreakpoints = (newBreakpoints: string[]) =>
-    dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints));
-  const handleBrowseHistoryDown = () => dispatch(browseReplHistoryDown(workspaceLocation));
-  const handleBrowseHistoryUp = () => dispatch(browseReplHistoryUp(workspaceLocation));
-  const handleReplValueChange = (newValue: string) =>
-    dispatch(updateReplValue(newValue, workspaceLocation));
-  const handleSideContentHeightChange = (change: number) =>
-    dispatch(changeSideContentHeight(change, workspaceLocation));
-  const handlePromptAutocomplete = (row: number, col: number, callback: any) =>
-    dispatch(promptAutocomplete(workspaceLocation, row, col, callback));
-  const handleSetCurrentPlayerTime = (playerTime: number) =>
-    dispatch(setCurrentPlayerTime(playerTime, workspaceLocation));
-  const handleSetCodeDeltasToApply = (deltas: CodeDelta[]) =>
-    dispatch(setCodeDeltasToApply(deltas, workspaceLocation));
-  const handleSetIsEditorReadonly = (editorReadonly: boolean) =>
-    dispatch(setIsEditorReadonly(workspaceLocation, editorReadonly));
-  const handleSetInputToApply = (inputToApply: Input) =>
-    dispatch(setInputToApply(inputToApply, workspaceLocation));
-  const handleSetSourcecastDuration = (duration: number) =>
-    dispatch(setSourcecastDuration(duration, workspaceLocation));
-  const setActiveEditorTabIndex = useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch]
-  );
-  const removeEditorTabByIndex = useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch]
-  );
+  const {
+    handleFetchSourcecastIndex,
+    handleChapterSelect,
+    handleEditorEval,
+    handleEditorValueChange,
+    handleExternalSelect,
+    handleReplEval,
+    handleSetSourcecastData,
+    handleSetSourcecastStatus,
+    handleDebuggerPause,
+    handleDebuggerReset,
+    handleDebuggerResume,
+    handleInterruptEval,
+    handleToggleEditorAutorun,
+    handleReplOutputClear,
+    handleDeclarationNavigate,
+    handleEditorUpdateBreakpoints,
+    handleBrowseHistoryDown,
+    handleBrowseHistoryUp,
+    handleReplValueChange,
+    handleSideContentHeightChange,
+    handlePromptAutocomplete,
+    handleSetCurrentPlayerTime,
+    handleSetCodeDeltasToApply,
+    handleSetIsEditorReadonly,
+    handleSetInputToApply,
+    handleSetSourcecastDuration,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex
+  } = useMemo(() => {
+    return {
+      handleFetchSourcecastIndex: () => dispatch(fetchSourcecastIndex(workspaceLocation)),
+      handleChapterSelect: (chapter: Chapter) =>
+        dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+      handleEditorValueChange: (newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
+        dispatch(externalLibrarySelect(externalLibraryName, workspaceLocation)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleSetSourcecastData: (
+        title: string,
+        description: string,
+        uid: string,
+        audioUrl: string,
+        playbackData: PlaybackData
+      ) =>
+        dispatch(
+          setSourcecastData(title, description, uid, audioUrl, playbackData, workspaceLocation)
+        ),
+      handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
+        dispatch(setSourcecastStatus(playbackStatus, workspaceLocation)),
+      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
+      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleDeclarationNavigate: (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+      handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
+        dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
+      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleReplValueChange: (newValue: string) =>
+        dispatch(updateReplValue(newValue, workspaceLocation)),
+      handleSideContentHeightChange: (change: number) =>
+        dispatch(changeSideContentHeight(change, workspaceLocation)),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+      handleSetCurrentPlayerTime: (playerTime: number) =>
+        dispatch(setCurrentPlayerTime(playerTime, workspaceLocation)),
+      handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
+        dispatch(setCodeDeltasToApply(deltas, workspaceLocation)),
+      handleSetIsEditorReadonly: (editorReadonly: boolean) =>
+        dispatch(setIsEditorReadonly(workspaceLocation, editorReadonly)),
+      handleSetInputToApply: (inputToApply: Input) =>
+        dispatch(setInputToApply(inputToApply, workspaceLocation)),
+      handleSetSourcecastDuration: (duration: number) =>
+        dispatch(setSourcecastDuration(duration, workspaceLocation)),
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+    };
+  }, [dispatch]);
 
   /**
    * The default selected tab for the Sourcecast workspace is the introduction tab,
