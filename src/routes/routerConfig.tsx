@@ -1,8 +1,7 @@
 import { Navigate, redirect, RouteObject } from 'react-router';
-
-import Application from '../commons/application/Application';
-import { Role } from '../commons/application/ApplicationTypes';
-import Constants from '../commons/utils/Constants';
+import Application from 'src/commons/application/Application';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import Constants from 'src/commons/utils/Constants';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
