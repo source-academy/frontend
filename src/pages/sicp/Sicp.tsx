@@ -172,4 +172,9 @@ const Sicp: React.FC = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Sicp;
+Component.displayName = 'Sicp';
+
 export default Sicp;

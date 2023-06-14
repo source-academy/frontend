@@ -1,18 +1,8 @@
 import { Navigate, redirect, RouteObject } from 'react-router';
-import Application from 'src/commons/application/Application';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import Constants from 'src/commons/utils/Constants';
-import Academy from 'src/pages/academy/Academy';
-import Contributors from 'src/pages/contributors/Contributors';
-import Disabled from 'src/pages/disabled/Disabled';
-import GitHubClassroom from 'src/pages/githubAssessments/GitHubClassroom';
-import GitHubCallback from 'src/pages/githubCallback/GitHubCallback';
-import Login from 'src/pages/login/Login';
-import MissionControl from 'src/pages/missionControl/MissionControl';
-import NotFound from 'src/pages/notFound/NotFound';
-import Playground from 'src/pages/playground/Playground';
-import Sicp from 'src/pages/sicp/Sicp';
-import Welcome from 'src/pages/welcome/Welcome';
+
+import Application from '../commons/application/Application';
+import { Role } from '../commons/application/ApplicationTypes';
+import Constants from '../commons/utils/Constants';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
@@ -25,16 +15,27 @@ import Welcome from 'src/pages/welcome/Welcome';
 
 // Conditionally allow access to route via `loader` instead of conditionally defining these routes in react-router v6.4.
 // See https://github.com/remix-run/react-router/discussions/10223#discussioncomment-5909050
-const conditionalLoader = (condition: boolean, redirectTo: string) => () => {
+const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?: any) => () => {
   if (condition) {
     return redirect(redirectTo);
   }
-  return null;
+  return returnValue ?? null;
 };
 
-export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
-  const disabledElement = <Disabled reason={typeof reason === 'string' ? reason : undefined} />;
+const Login = () => import('../pages/login/Login');
+const Disabled = () => import('../pages/disabled/Disabled');
+const Contributors = () => import('../pages/contributors/Contributors');
+const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
+const Sicp = () => import('../pages/sicp/Sicp');
+const GitHubClassroom = () => import('../pages/githubAssessments/GitHubClassroom');
+const Playground = () => import('../pages/playground/Playground');
+const NotFound = () => import('../pages/notFound/NotFound');
+const Welcome = () => import('../pages/welcome/Welcome');
+const Academy = () => import('../pages/academy/Academy');
+const MissionControl = () => import('../pages/missionControl/MissionControl');
 
+export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
+  const disabledReason = typeof reason === 'string' ? reason : undefined;
   return [
     {
       path: '/*',
@@ -42,13 +43,13 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
       children: [
         {
           path: 'login',
-          element: <Login />,
+          lazy: Login,
           loader: conditionalLoader(Constants.playgroundOnly, '/')
         },
         {
           path: '',
-          element: disabledElement,
-          loader: conditionalLoader(!Constants.playgroundOnly, 'login')
+          lazy: Disabled,
+          loader: conditionalLoader(!Constants.playgroundOnly, 'login', disabledReason)
         },
         {
           path: 'courses/*',
@@ -56,29 +57,30 @@ export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[
         },
         {
           path: '*',
-          element: disabledElement
+          lazy: Disabled,
+          loader: () => disabledReason
         }
       ]
     }
   ];
 };
 
-const commonChildrenRoutes = [
+const commonChildrenRoutes: RouteObject[] = [
   {
     path: 'contributors',
-    element: <Contributors />
+    lazy: Contributors
   },
   {
     path: 'callback/github',
-    element: <GitHubCallback />
+    lazy: GitHubCallback
   },
   {
     path: 'sicpjs/:section?',
-    element: <Sicp />
+    lazy: Sicp
   },
   {
     path: 'githubassessments/*',
-    element: <GitHubClassroom />,
+    lazy: GitHubClassroom,
     loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
   }
 ];
@@ -94,12 +96,12 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
       },
       {
         path: 'playground',
-        element: <Playground />
+        lazy: Playground
       },
       ...commonChildrenRoutes,
       {
         path: '*',
-        element: <NotFound />
+        lazy: NotFound
       }
     ]
   }
@@ -152,11 +154,11 @@ export const getFullAcademyRouterConfig = ({
         },
         {
           path: 'login',
-          element: <Login />
+          lazy: Login
         },
         {
           path: 'welcome',
-          element: <Welcome />,
+          lazy: Welcome,
           loader: welcomeLoader
         },
         {
@@ -165,22 +167,22 @@ export const getFullAcademyRouterConfig = ({
         },
         {
           path: 'courses/:courseId/*',
-          element: <Academy />,
+          lazy: Academy,
           loader: ensureUserAndRole
         },
         {
           path: 'playground',
-          element: <Playground />,
+          lazy: Playground,
           loader: ensureUserAndRole
         },
         {
           path: 'mission-control/:assessmentId?/:questionId?',
-          element: <MissionControl />
+          lazy: MissionControl
         },
         ...commonChildrenRoutes,
         {
           path: '*',
-          element: <NotFound />
+          lazy: NotFound
         }
       ]
     }

@@ -76,4 +76,9 @@ const MissionControl: React.FC = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = MissionControl;
+Component.displayName = 'MissionControl';
+
 export default MissionControl;

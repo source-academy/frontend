@@ -314,4 +314,9 @@ async function fetchAssessmentOverviews(
   }
 }
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GitHubClassroom;
+Component.displayName = 'GitHubClassroom';
+
 export default GitHubClassroom;
