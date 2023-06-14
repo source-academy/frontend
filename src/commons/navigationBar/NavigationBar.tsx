@@ -30,6 +30,29 @@ import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSide
 import NavigationBarInternationalLangSelectButton from './subcomponents/NavigatonBarInternationalLangSelectButton';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
 
+const playgroundOnlyNavbarLeftInfo_GitHubEnabled = [
+  {
+    to: '/playground',
+    icon: IconNames.CODE,
+    text: 'Playground'
+  },
+  {
+    to: '/githubassessments',
+    icon: IconNames.BRIEFCASE,
+    text: 'Classroom'
+  },
+  {
+    to: '/sicpjs/',
+    icon: IconNames.BOOK,
+    text: 'SICP JS'
+  }
+];
+
+const playgroundOnlyNavbarLeftInfo_GitHubDisabled =
+  playgroundOnlyNavbarLeftInfo_GitHubEnabled.filter(
+    e => e.text !== 'Classroom' || e.to !== '/githubassessments' || e.icon !== IconNames.BRIEFCASE
+  );
+
 const NavigationBar: React.FC = () => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
   const { isMobileBreakpoint } = useResponsive();
@@ -50,76 +73,51 @@ const NavigationBar: React.FC = () => {
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
-  const playgroundOnlyNavbarLeftInfo_GitHubEnabled = [
-    {
-      to: '/playground',
-      icon: IconNames.CODE,
-      text: 'Playground'
-    },
-    {
-      to: '/githubassessments',
-      icon: IconNames.BRIEFCASE,
-      text: 'Classroom'
-    },
-    {
-      to: '/sicpjs/',
-      icon: IconNames.BOOK,
-      text: 'SICP JS'
-    }
-  ];
-
-  const playgroundOnlyNavbarLeftInfo_GitHubDisabled =
-    playgroundOnlyNavbarLeftInfo_GitHubEnabled.filter(
-      e => e.text !== 'Classroom' || e.to !== '/githubassessments' || e.icon !== IconNames.BRIEFCASE
-    );
-
   // Handles both the desktop and mobile versions of the playground-only left navbar group
   const playgroundOnlyNavbarLeft = Constants.enableGitHubAssessments ? (
     isMobileBreakpoint ? (
-      <>
-        <NavbarGroup align={Alignment.LEFT}>
-          <Button
-            onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
-            icon={IconNames.MENU}
-            large={true}
-            minimal={true}
-          />
-          <NavLink
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-            to="/"
-          >
-            <Icon icon={IconNames.SYMBOL_DIAMOND} />
-            <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
-          </NavLink>
-          <Drawer
-            isOpen={mobileSideMenuOpen}
-            position="left"
-            onClose={() => setMobileSideMenuOpen(false)}
-            title=""
-            className={Classes.DARK}
-          >
-            {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
-              <NavLink
-                to={e.to}
-                className={({ isActive }) =>
-                  classNames(
-                    'NavigationBar__link__mobile',
-                    Classes.BUTTON,
-                    Classes.MINIMAL,
-                    Classes.LARGE,
-                    { [Classes.ACTIVE]: isActive }
-                  )
-                }
-                onClick={() => setMobileSideMenuOpen(false)}
-                key={idx}
-              >
-                <Icon icon={e.icon} />
-                <div>{e.text}</div>
-              </NavLink>
-            ))}
-          </Drawer>
-        </NavbarGroup>
-      </>
+      <NavbarGroup align={Alignment.LEFT}>
+        <Button
+          onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+          icon={IconNames.MENU}
+          large={true}
+          minimal={true}
+        />
+        <NavLink
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to="/"
+        >
+          <Icon icon={IconNames.SYMBOL_DIAMOND} />
+          <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+        </NavLink>
+        <Drawer
+          isOpen={mobileSideMenuOpen}
+          position="left"
+          onClose={() => setMobileSideMenuOpen(false)}
+          title=""
+          className={Classes.DARK}
+        >
+          {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
+            <NavLink
+              to={e.to}
+              className={({ isActive }) =>
+                classNames(
+                  'NavigationBar__link__mobile',
+                  Classes.BUTTON,
+                  Classes.MINIMAL,
+                  Classes.LARGE,
+                  { [Classes.ACTIVE]: isActive }
+                )
+              }
+              onClick={() => setMobileSideMenuOpen(false)}
+              key={idx}
+            >
+              <Icon icon={e.icon} />
+              <div>{e.text}</div>
+            </NavLink>
+          ))}
+        </Drawer>
+      </NavbarGroup>
     ) : (
       <NavbarGroup align={Alignment.LEFT}>
         {playgroundOnlyNavbarLeftInfo_GitHubEnabled.map((e, idx) => (
@@ -381,11 +379,11 @@ const NavigationBar: React.FC = () => {
 
       <Routes>
         <Route path="/playground" element={null} />
-        <Route path="/githubassessments" element={null} />
+        <Route path="/githubassessments/*" element={null} />
         <Route path="/contributors" element={null} />
         <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
-        <Route path="/sicpjs/:section?" element={<SicpNavigationBar />}></Route>
+        <Route path="/sicpjs/:section?" element={<SicpNavigationBar />} />
         <Route
           path="*"
           element={
@@ -393,7 +391,7 @@ const NavigationBar: React.FC = () => {
               <AcademyNavigationBar assessmentTypes={assessmentTypes} />
             ) : null
           }
-        ></Route>
+        />
       </Routes>
     </>
   );

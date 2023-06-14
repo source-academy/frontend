@@ -17,11 +17,9 @@ function AchievmenetUuidCopier(props: AchievementUuidCopierProps) {
   };
 
   return (
-    <>
-      <Tooltip2 content={hoverText}>
-        <Button icon={IconNames.CLIPBOARD} onClick={copy} />
-      </Tooltip2>
-    </>
+    <Tooltip2 content={hoverText}>
+      <Button icon={IconNames.CLIPBOARD} onClick={copy} />
+    </Tooltip2>
   );
 }
 
