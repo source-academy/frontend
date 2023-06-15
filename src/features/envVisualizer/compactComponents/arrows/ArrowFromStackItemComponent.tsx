@@ -1,9 +1,9 @@
+import { FnValue } from '../../components/values/FnValue';
+import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
 import { Frame } from '../Frame';
 import { StackItemComponent } from '../StackItemComponent';
-import { FnValue } from '../values/FnValue';
-import { GlobalFnValue } from '../values/GlobalFnValue';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */

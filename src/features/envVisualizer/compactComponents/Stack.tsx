@@ -43,7 +43,7 @@ export class Stack extends Visible implements IHoverable {
           const component = getAgendaItemComponent(agendaItem, this._height);
           this._height += component.height();
 
-          const node = isNode(agendaItem) ? agendaItem : agendaItem.srcNode
+          const node = isNode(agendaItem) ? agendaItem : agendaItem.srcNode;
           // TODO: refactor to put this logic inside StackItemComponent
           if (setEditorHighlightedLines) {
             component.onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {

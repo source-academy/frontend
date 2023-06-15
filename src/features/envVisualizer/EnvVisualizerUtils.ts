@@ -17,10 +17,10 @@ import { cloneDeep } from 'lodash';
 
 import { Frame } from './compactComponents/Frame';
 import { StackItemComponent } from './compactComponents/StackItemComponent';
-import { FnValue } from './compactComponents/values/FnValue';
-import { GlobalFnValue } from './compactComponents/values/GlobalFnValue';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
+import { FnValue } from './components/values/FnValue';
+import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
 import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
@@ -522,13 +522,13 @@ export function getStashItemComponent(stashItem: any, stackHeight: number) {
   if (stashItem instanceof Closure) {
     for (const level of Layout.compactLevels) {
       for (const frame of level.frames) {
-        const fn : FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
+        const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
           if (isFn(binding.data)) {
             return binding.data.id === stashItem.id;
           }
           return false;
         })?.value as FnValue | GlobalFnValue;
-      if (fn) return new StackItemComponent('', false, stackHeight, fn);
+        if (fn) return new StackItemComponent('', false, stackHeight, fn);
       }
     }
   }

@@ -2,6 +2,8 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
+import { FnValue } from '../components/values/FnValue';
+import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
@@ -10,8 +12,6 @@ import { IHoverable } from '../EnvVisualizerTypes';
 import { getTextHeight, getTextWidth } from '../EnvVisualizerUtils';
 import { ArrowFromStackItemComponent } from './arrows/ArrowFromStackItemComponent';
 import { Frame } from './Frame';
-import { FnValue } from './values/FnValue';
-import { GlobalFnValue } from './values/GlobalFnValue';
 
 export class StackItemComponent extends Visible implements IHoverable {
   readonly text: string;
