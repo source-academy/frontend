@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as qs from 'query-string';
 import { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { useLocation } from 'react-router';
 
 import Constants from '../../commons/utils/Constants';
 import { parseQuery } from '../../commons/utils/QueryHelper';
@@ -14,7 +14,8 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
  * This page will complete the OAuth workflow by sending the access code the back-end to retrieve the auth-token.
  * The auth-token is then broadcasted back to the main browser page.
  */
-function GitHubCallback({ location }: RouteComponentProps<{}>) {
+const GitHubCallback: React.FC = () => {
+  const location = useLocation();
   const accessCode = parseQuery(location.search).code;
 
   const [state, setState] = useState<'initial' | 'loading' | 'error'>('initial');
@@ -53,7 +54,7 @@ function GitHubCallback({ location }: RouteComponentProps<{}>) {
       <NonIdealState description="Logging In..." icon={<Spinner size={SpinnerSize.LARGE} />} />
     </div>
   );
-}
+};
 
 async function retrieveAuthTokenUpdatePage(
   accessCode: string,
@@ -100,5 +101,10 @@ function Failure({ title, children }: { title: string; children: string }) {
     </div>
   );
 }
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GitHubCallback;
+Component.displayName = 'GitHubCallback';
 
 export default GitHubCallback;
