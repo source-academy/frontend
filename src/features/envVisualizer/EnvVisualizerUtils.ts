@@ -520,18 +520,17 @@ export function getAgendaItemComponent(
 
 export function getStashItemComponent(stashItem: any, stackHeight: number) {
   if (stashItem instanceof Closure) {
-    let fn: FnValue | GlobalFnValue | undefined;
     for (const level of Layout.compactLevels) {
       for (const frame of level.frames) {
-        fn = frame.bindings.find(binding => {
+        const fn : FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
           if (isFn(binding.data)) {
             return binding.data.id === stashItem.id;
           }
           return false;
         })?.value as FnValue | GlobalFnValue;
+      if (fn) return new StackItemComponent('', false, stackHeight, fn);
       }
     }
-    if (fn) return new StackItemComponent('', false, stackHeight, fn);
   }
   return new StackItemComponent(
     typeof stashItem === 'string'

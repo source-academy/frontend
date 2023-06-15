@@ -203,18 +203,6 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                     />
                   </AnchorButton>
                 </Tooltip2>
-                <Tooltip2 content="Experimental" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      EnvVisualizer.toggleCompactLayout();
-                      EnvVisualizer.redraw();
-                    }}
-                    icon="build"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox checked={!EnvVisualizer.getCompactLayout()} />
-                  </AnchorButton>
-                </Tooltip2>
               </ButtonGroup>
               <ButtonGroup>
                 <Button
@@ -239,6 +227,18 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 />
               </ButtonGroup>
               <ButtonGroup>
+                <Tooltip2 content="Experimental" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      EnvVisualizer.toggleCompactLayout();
+                      EnvVisualizer.redraw();
+                    }}
+                    icon="build"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox checked={!EnvVisualizer.getCompactLayout()} />
+                  </AnchorButton>
+                </Tooltip2>
                 <Tooltip2 content="Print" compact>
                   <AnchorButton
                     onMouseUp={() => {
