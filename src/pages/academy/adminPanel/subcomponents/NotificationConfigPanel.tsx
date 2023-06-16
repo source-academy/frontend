@@ -110,6 +110,7 @@ const NotificationConfigPanel = () => {
       field: 'notificationType.forStaff',
       valueFormatter: recipientFormatter
     },
+    // TODO: Extension for notification configs
     // {
     //   headerName: 'View Email Template',
     //   field: 'notificationType.name'

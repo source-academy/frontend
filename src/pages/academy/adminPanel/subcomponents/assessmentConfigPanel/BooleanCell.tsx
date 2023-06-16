@@ -2,9 +2,6 @@ import { Switch } from '@blueprintjs/core';
 import React from 'react';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
-// import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
-// import { NotificationConfiguration } from '../NotificationConfigPanel';
-
 type BooleanCellProps = OwnProps;
 
 interface dataProps {
@@ -25,8 +22,7 @@ const BooleanCell: React.FC<BooleanCellProps> = props => {
   const changeHandler = React.useCallback(() => {
     props.setStateHandler(props.rowIndex, !checked);
   }, [props, checked]);
-  // console.log(props.field);
-  // console.log(props);
+
   return <Switch checked={checked} onChange={changeHandler} />;
 };
 
