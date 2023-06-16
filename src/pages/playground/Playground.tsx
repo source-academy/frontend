@@ -1073,4 +1073,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Playground;
+Component.displayName = 'Playground';
+
 export default Playground;
