@@ -51,7 +51,7 @@ exports[`AssessmentWorkspace page with ContestVoting question renders correctly 
               <div className=\\"WorkspaceParent bp4-dark\\">
                 <Blueprint4.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
                   <Blueprint4.Overlay className=\\"bp4-overlay-scroll-container\\" isOpen={true} canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} shouldReturnFocusOnClose={true} transitionDuration={300} transitionName=\\"bp4-overlay\\" usePortal={true}>
-                    <Blueprint4.Portal className={[undefined]} container={{...}}>
+                    <Blueprint4.Portal className={[undefined]} container={{...}} stopPropagationEvents={[undefined]}>
                       <Portal containerInfo={{...}}>
                         <TransitionGroup appear={true} aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
                           <div aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" onKeyDown={[Function (anonymous)]}>
@@ -1331,7 +1331,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
               <div className=\\"WorkspaceParent bp4-dark\\">
                 <Blueprint4.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
                   <Blueprint4.Overlay className=\\"bp4-overlay-scroll-container\\" isOpen={true} canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} shouldReturnFocusOnClose={true} transitionDuration={300} transitionName=\\"bp4-overlay\\" usePortal={true}>
-                    <Blueprint4.Portal className={[undefined]} container={{...}}>
+                    <Blueprint4.Portal className={[undefined]} container={{...}} stopPropagationEvents={[undefined]}>
                       <Portal containerInfo={{...}}>
                         <TransitionGroup appear={true} aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
                           <div aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" onKeyDown={[Function (anonymous)]}>
@@ -1877,7 +1877,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
               <div className=\\"WorkspaceParent bp4-dark\\">
                 <Blueprint4.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
                   <Blueprint4.Overlay className=\\"bp4-overlay-scroll-container\\" isOpen={true} canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} shouldReturnFocusOnClose={true} transitionDuration={300} transitionName=\\"bp4-overlay\\" usePortal={true}>
-                    <Blueprint4.Portal className={[undefined]} container={{...}}>
+                    <Blueprint4.Portal className={[undefined]} container={{...}} stopPropagationEvents={[undefined]}>
                       <Portal containerInfo={{...}}>
                         <TransitionGroup appear={true} aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
                           <div aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" onKeyDown={[Function (anonymous)]}>
@@ -2444,7 +2444,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
               <div className=\\"WorkspaceParent bp4-dark\\">
                 <Blueprint4.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
                   <Blueprint4.Overlay className=\\"bp4-overlay-scroll-container\\" isOpen={true} canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} shouldReturnFocusOnClose={true} transitionDuration={300} transitionName=\\"bp4-overlay\\" usePortal={true}>
-                    <Blueprint4.Portal className={[undefined]} container={{...}}>
+                    <Blueprint4.Portal className={[undefined]} container={{...}} stopPropagationEvents={[undefined]}>
                       <Portal containerInfo={{...}}>
                         <TransitionGroup appear={true} aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
                           <div aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" onKeyDown={[Function (anonymous)]}>
