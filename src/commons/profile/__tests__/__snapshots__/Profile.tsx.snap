@@ -7,7 +7,7 @@ exports[`Profile renders correctly when there are closed and graded, or closed a
       <Profile isOpen={true} onClose={[Function: onClose]}>
         <Blueprint4.Drawer className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} style={{...}}>
           <Blueprint4.Overlay className=\\"bp4-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} style={{...}} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} shouldReturnFocusOnClose={true} transitionDuration={300} transitionName=\\"bp4-overlay\\" usePortal={true}>
-            <Blueprint4.Portal className={[undefined]} container={{...}}>
+            <Blueprint4.Portal className={[undefined]} container={{...}} stopPropagationEvents={[undefined]}>
               <Portal containerInfo={{...}}>
                 <TransitionGroup appear={true} aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
                   <div aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-container\\" onKeyDown={[Function (anonymous)]}>
@@ -204,7 +204,7 @@ exports[`Profile renders correctly when there are no closed assessments 1`] = `
       <Profile isOpen={true} onClose={[Function: onClose]}>
         <Blueprint4.Drawer className=\\"profile\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} style={{...}}>
           <Blueprint4.Overlay className=\\"bp4-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"360px\\" canOutsideClickClose={true} style={{...}} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} shouldReturnFocusOnClose={true} transitionDuration={300} transitionName=\\"bp4-overlay\\" usePortal={true}>
-            <Blueprint4.Portal className={[undefined]} container={{...}}>
+            <Blueprint4.Portal className={[undefined]} container={{...}} stopPropagationEvents={[undefined]}>
               <Portal containerInfo={{...}}>
                 <TransitionGroup appear={true} aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
                   <div aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-container\\" onKeyDown={[Function (anonymous)]}>
