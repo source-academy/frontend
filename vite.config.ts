@@ -2,6 +2,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
+import eslint from 'vite-plugin-eslint';
 import fs from 'vite-plugin-fs';
 import wasm from 'vite-plugin-wasm';
 
@@ -13,7 +14,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), envPrefix);
   return {
     envPrefix: envPrefix,
-    plugins: [react(), wasm(), fs()],
+    plugins: [react(), wasm(), fs(), eslint()],
     resolve: {
       alias: {
         src: path.resolve(__dirname, './src'),
