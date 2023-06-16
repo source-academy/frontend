@@ -3,7 +3,7 @@ import {
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import {
   GITHUB_OPEN_FILE,
@@ -13,6 +13,7 @@ import {
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
+import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
@@ -20,6 +21,7 @@ import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -66,22 +68,21 @@ function* githubLogoutSaga() {
 }
 
 function* githubOpenFile(): any {
-  const octokit = GitHubUtils.getGitHubOctokitInstance() || {
-    users: { getAuthenticated: () => {} },
-    repos: { listForAuthenticatedUser: () => {} }
-  };
-
-  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.repos.listForAuthenticatedUser
-  >;
-  const results: ListForAuthenticatedUserResponse = yield call(
-    octokit.repos.listForAuthenticatedUser
-  );
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+  if (octokit === undefined) {
+    return;
+  }
 
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
   >;
-  const userRepos: ListForAuthenticatedUserData = results.data;
+  const userRepos: ListForAuthenticatedUserData = yield call(
+    async () =>
+      await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+        // 100 is the maximum number of results that can be retrieved per page.
+        per_page: 100
+      })
+  );
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
@@ -122,7 +123,16 @@ function* githubSaveFile(): any {
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
-  const content = store.getState().workspaces.playground.editorValue;
+  const activeEditorTabIndex: number | null = yield select(
+    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+  );
+  if (activeEditorTabIndex === null) {
+    throw new Error('No active editor tab found.');
+  }
+  const editorTabs: EditorTabState[] = yield select(
+    (state: OverallState) => state.workspaces.playground.editorTabs
+  );
+  const content = editorTabs[activeEditorTabIndex].value;
 
   GitHubUtils.performOverwritingSave(
     octokit,
@@ -137,22 +147,21 @@ function* githubSaveFile(): any {
 }
 
 function* githubSaveFileAs(): any {
-  const octokit = GitHubUtils.getGitHubOctokitInstance() || {
-    users: { getAuthenticated: () => {} },
-    repos: { listForAuthenticatedUser: () => {} }
-  };
-
-  type ListForAuthenticatedUserResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.repos.listForAuthenticatedUser
-  >;
-  const results: ListForAuthenticatedUserResponse = yield call(
-    octokit.repos.listForAuthenticatedUser
-  );
+  const octokit = GitHubUtils.getGitHubOctokitInstance();
+  if (octokit === undefined) {
+    return;
+  }
 
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
   >;
-  const userRepos: ListForAuthenticatedUserData = results.data;
+  const userRepos: ListForAuthenticatedUserData = yield call(
+    async () =>
+      await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+        // 100 is the maximum number of results that can be retrieved per page.
+        per_page: 100
+      })
+  );
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
@@ -161,7 +170,16 @@ function* githubSaveFileAs(): any {
     }));
   const repoName = yield call(getRepoName);
 
-  const editorContent = store.getState().workspaces.playground.editorValue || '';
+  const activeEditorTabIndex: number | null = yield select(
+    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+  );
+  if (activeEditorTabIndex === null) {
+    throw new Error('No active editor tab found.');
+  }
+  const editorTabs: EditorTabState[] = yield select(
+    (state: OverallState) => state.workspaces.playground.editorTabs
+  );
+  const editorContent = editorTabs[activeEditorTabIndex].value;
 
   if (repoName !== '') {
     const pickerType = 'Save';

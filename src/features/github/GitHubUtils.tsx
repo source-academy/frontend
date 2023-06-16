@@ -192,7 +192,11 @@ export async function openFileInEditor(
 
   if (content) {
     const newEditorValue = Buffer.from(content, 'base64').toString();
-    store.dispatch(actions.updateEditorValue(newEditorValue, 'playground'));
+    const activeEditorTabIndex = store.getState().workspaces.playground.activeEditorTabIndex;
+    if (activeEditorTabIndex === null) {
+      throw new Error('No active editor tab found.');
+    }
+    store.dispatch(actions.updateEditorValue('playground', activeEditorTabIndex, newEditorValue));
     store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully loaded file!', 1000);
   }
@@ -206,7 +210,7 @@ export async function performOverwritingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string | null
+  content: string
 ) {
   if (octokit === undefined) return;
 
@@ -261,7 +265,7 @@ export async function performCreatingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string | null
+  content: string
 ) {
   if (octokit === undefined) return;
 

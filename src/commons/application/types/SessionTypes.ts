@@ -1,7 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { MissionRepoData } from '../../../commons/githubAssessments/GitHubMissionTypes';
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import {
@@ -9,6 +8,7 @@ import {
   AssessmentConfiguration,
   AssessmentOverview
 } from '../../assessment/AssessmentTypes';
+import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
@@ -16,8 +16,11 @@ export const FETCH_AUTH = 'FETCH_AUTH';
 export const FETCH_USER_AND_COURSE = 'FETCH_USER_AND_COURSE';
 export const FETCH_COURSE_CONFIG = 'FETCH_COURSE_CONFIG';
 export const FETCH_ASSESSMENT = 'FETCH_ASSESSMENT';
+export const FETCH_ASSESSMENT_ADMIN = 'FETCH_ASSESSMENT_ADMIN';
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
-export const GET_TOTAL_XP = 'GET_TOTAL_XP';
+export const FETCH_ALL_USER_XP = 'FETCH_ALL_USER_XP';
+export const FETCH_TOTAL_XP = 'FETCH_TOTAL_XP';
+export const FETCH_TOTAL_XP_ADMIN = 'FETCH_TOTAL_XP_ADMIN';
 export const FETCH_GRADING = 'FETCH_GRADING';
 export const FETCH_GRADING_OVERVIEWS = 'FETCH_GRADING_OVERVIEWS';
 export const LOGIN = 'LOGIN';
@@ -45,6 +48,7 @@ export const REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN =
 export const UNSUBMIT_SUBMISSION = 'UNSUBMIT_SUBMISSION';
 export const UPDATE_ASSESSMENT_OVERVIEWS = 'UPDATE_ASSESSMENT_OVERVIEWS';
 export const UPDATE_TOTAL_XP = 'UPDATE_TOTAL_XP';
+export const UPDATE_ALL_USER_XP = 'UPDATE_ALL_USER_XP';
 export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
 export const UPDATE_GRADING_OVERVIEWS = 'UPDATE_GRADING_OVERVIEWS';
 export const UPDATE_GRADING = 'UPDATE_GRADING';
@@ -59,7 +63,6 @@ export const DELETE_ASSESSMENT_CONFIG = 'DELETE_ASSESSMENT_CONFIG';
 export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS';
 export const UPDATE_USER_ROLE = 'UPDATE_USER_ROLE';
 export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
-export const UPDATE_INFINITE_LOOP_ENCOUNTERED = 'UPDATE_INFINITE_LOOP_ENCOUNTERED';
 export const DELETE_USER_COURSE_REGISTRATION = 'DELETE_USER_COURSE_REGISTRATION';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
@@ -82,6 +85,7 @@ export type SessionState = {
   readonly gameState: GameState;
   readonly courseId?: number;
   readonly xp: number;
+  readonly allUserXp: string[][] | undefined;
   readonly story: Story;
 
   // Course Configuration
@@ -99,9 +103,8 @@ export type SessionState = {
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
 
-  // For infinite loop research data collection
+  // For research data collection
   readonly agreedToResearch?: boolean | null;
-  readonly hadPreviousInfiniteLoop: boolean;
   readonly sessionId: number;
 
   readonly assessmentOverviews?: AssessmentOverview[];

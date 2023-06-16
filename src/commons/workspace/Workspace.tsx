@@ -1,14 +1,16 @@
 import { FocusStyleManager } from '@blueprintjs/core';
-import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
+import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
+import { Direction } from 're-resizable/lib/resizer';
 import * as React from 'react';
-import { Prompt } from 'react-router';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
-import Editor, { EditorProps } from '../editor/Editor';
+import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import { Prompt } from '../ReactRouterPrompt';
 import Repl, { ReplProps } from '../repl/Repl';
-import SideBar, { SideBarProps } from '../sideBar/SideBar';
+import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
+import { useDimensions } from '../utils/Hooks';
 
 export type WorkspaceProps = DispatchProps & StateProps;
 
@@ -19,22 +21,33 @@ type DispatchProps = {
 type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
-  customEditor?: JSX.Element;
-  editorProps?: EditorProps;
+  editorContainerProps?: EditorContainerProps;
   hasUnsavedChanges?: boolean;
   mcqProps?: McqChooserProps;
   replProps: ReplProps;
-  sideBarProps: SideBarProps;
+  sideBarProps: {
+    tabs: SideBarTab[];
+  };
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
 };
 
 const Workspace: React.FC<WorkspaceProps> = props => {
+  const sideBarResizable = React.useRef<Resizable | null>(null);
+  const contentContainerDiv = React.useRef<HTMLDivElement | null>(null);
   const editorDividerDiv = React.useRef<HTMLDivElement | null>(null);
   const leftParentResizable = React.useRef<Resizable | null>(null);
   const maxDividerHeight = React.useRef<number | null>(null);
   const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
+  const [contentContainerWidth] = useDimensions(contentContainerDiv);
+  const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState<number>(200);
+  const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(true);
+
+  const sideBarCollapsedWidth = 40;
+
+  const expandSideBar = () => setIsSideBarExpanded(true);
+  const collapseSideBar = () => setIsSideBarExpanded(false);
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
@@ -44,8 +57,35 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     }
   });
 
-  const controlBarProps = () => {
-    return { ...props.controlBarProps };
+  const sideBarResizableProps = (): ResizableProps & {
+    ref: React.MutableRefObject<Resizable | null>;
+  } => {
+    const onResizeStop: ResizeCallback = (
+      event: MouseEvent | TouchEvent,
+      direction: Direction,
+      elementRef: HTMLElement,
+      delta: NumberSize
+    ) => {
+      const sideBarWidth = elementRef.clientWidth;
+      if (sideBarWidth !== sideBarCollapsedWidth) {
+        setExpandedSideBarWidth(sideBarWidth);
+      }
+    };
+    const isSideBarRendered = props.sideBarProps.tabs.length !== 0;
+    const minWidth = isSideBarRendered ? sideBarCollapsedWidth : 'auto';
+    return {
+      enable: isSideBarRendered ? rightResizeOnly : noResize,
+      minWidth,
+      maxWidth: '50%',
+      onResize: toggleSideBarDividerDisplay,
+      onResizeStop,
+      ref: sideBarResizable,
+      size: {
+        width: isSideBarRendered && isSideBarExpanded ? expandedSideBarWidth : minWidth,
+        height: '100%'
+      },
+      defaultSize: { width: minWidth, height: '100%' }
+    };
   };
 
   const editorResizableProps = () => {
@@ -61,7 +101,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   };
 
   const sideContentResizableProps = () => {
-    const onResizeStop: ResizeCallback = (_a, _b, ref, _c) =>
+    const onResizeStop: ResizeCallback = (_a, _b, ref) =>
       props.handleSideContentHeightChange(ref.clientHeight);
     return {
       bounds: 'parent',
@@ -72,6 +112,26 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     } as ResizableProps;
   };
 
+  const toggleSideBarDividerDisplay: ResizeCallback = (
+    event: MouseEvent | TouchEvent,
+    direction: Direction,
+    elementRef: HTMLElement,
+    delta: NumberSize
+  ) => {
+    const minWidthThreshold = 100;
+    const sideBarWidth = elementRef.clientWidth;
+    if (sideBarWidth < minWidthThreshold) {
+      const sideBar = sideBarResizable.current;
+      if (sideBar === null) {
+        throw Error('Reference to SideBar not found when resizing.');
+      }
+      sideBar.updateSize({ width: sideBarCollapsedWidth, height: '100%' });
+      setIsSideBarExpanded(false);
+    } else {
+      setIsSideBarExpanded(true);
+    }
+  };
+
   /**
    * Snaps the left-parent resizable to 100% or 0% when percentage width goes
    * above 95% or below 5% respectively. Also changes the editor divider width
@@ -80,18 +140,13 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const toggleEditorDividerDisplay: ResizeCallback = (_a, _b, ref) => {
     const leftThreshold = 5;
     const rightThreshold = 95;
-    const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
+    const editorWidthPercentage =
+      ((ref as HTMLDivElement).clientWidth / contentContainerWidth) * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
       leftParentResizable.current!.updateSize({ width: '100%', height: '100%' });
     } else if (editorWidthPercentage < leftThreshold) {
       leftParentResizable.current!.updateSize({ width: '0%', height: '100%' });
-    }
-    // Update divider margin
-    if (editorWidthPercentage < leftThreshold) {
-      editorDividerDiv.current!.style.marginRight = '0.5rem';
-    } else {
-      editorDividerDiv.current!.style.marginRight = '0';
     }
   };
 
@@ -118,10 +173,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
    * XOR `props.mcq` are defined.
    */
   const createWorkspaceInput = (props: WorkspaceProps) => {
-    if (props.customEditor) {
-      return props.customEditor;
-    } else if (props.editorProps) {
-      return <Editor {...props.editorProps} />;
+    if (props.editorContainerProps) {
+      return <EditorContainer {...props.editorContainerProps} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }
@@ -137,15 +190,21 @@ const Workspace: React.FC<WorkspaceProps> = props => {
 
   return (
     <div className="workspace">
-      {props.hasUnsavedChanges ? (
-        <Prompt
-          message={'You have changes that may not be saved. Are you sure you want to leave?'}
-        />
-      ) : null}
-      <ControlBar {...controlBarProps()} />
+      <Prompt
+        when={!!props.hasUnsavedChanges}
+        message={'You have changes that may not be saved. Are you sure you want to leave?'}
+      />
+      <ControlBar {...props.controlBarProps} />
       <div className="workspace-parent">
-        <SideBar {...props.sideBarProps} />
-        <div className="row content-parent">
+        <Resizable {...sideBarResizableProps()}>
+          <SideBar
+            {...props.sideBarProps}
+            isExpanded={isSideBarExpanded}
+            expandSideBar={expandSideBar}
+            collapseSideBar={collapseSideBar}
+          />
+        </Resizable>
+        <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />
           <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
           <div className="right-parent">
@@ -160,26 +219,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   );
 };
 
-const rightResizeOnly = {
-  top: false,
-  right: true,
-  bottom: false,
-  left: false,
-  topRight: false,
-  bottomRight: false,
-  bottomLeft: false,
-  topLeft: false
-};
-
-const bottomResizeOnly = {
-  top: false,
-  right: false,
-  bottom: true,
-  left: false,
-  topRight: false,
-  bottomRight: false,
-  bottomLeft: false,
-  topLeft: false
-};
+const rightResizeOnly: Enable = { right: true };
+const bottomResizeOnly: Enable = { bottom: true };
+const noResize: Enable = {};
 
 export default Workspace;

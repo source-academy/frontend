@@ -1,14 +1,14 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { actions } from '../../../commons/utils/ActionsHelper';
+import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
+import { ExternalLibraryName } from '../../application/types/ExternalTypes';
+import { actions } from '../../utils/ActionsHelper';
 import {
   CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
   UPDATE_EDITOR_VALUE
-} from '../../../commons/workspace/WorkspaceTypes';
-import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
+} from '../../workspace/WorkspaceTypes';
 
 // mock away the store - the store can't be created in a test, it leads to
 // import cycles
@@ -25,7 +25,7 @@ const FILE_NAME = 'file';
 const FILE_DATA = '// Hello world';
 const SOURCE_CHAPTER = Chapter.SOURCE_3;
 const SOURCE_VARIANT = Variant.LAZY;
-const SOURCE_LIBRARY = ExternalLibraryName.MACHINELEARNING;
+const SOURCE_LIBRARY = ExternalLibraryName.SOUNDS;
 
 beforeAll(() => {
   const authInstance: gapi.auth2.GoogleAuth = {
@@ -73,6 +73,19 @@ test('LOGOUT_GOOGLE causes logout', async () => {
 describe('PERSISTENCE_OPEN_PICKER', () => {
   test('opens a file on success path', () => {
     return expectSaga(PersistenceSaga)
+      .withState({
+        workspaces: {
+          playground: {
+            activeEditorTabIndex: 0,
+            editorTabs: [{ value: FILE_DATA }],
+            externalLibrary: SOURCE_LIBRARY,
+            context: {
+              chapter: SOURCE_CHAPTER,
+              variant: SOURCE_VARIANT
+            }
+          }
+        }
+      })
       .dispatch(actions.persistenceOpenPicker())
       .provide({
         call(effect, next) {
@@ -109,7 +122,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
       .put.like({
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
       })
-      .put(actions.updateEditorValue(FILE_DATA, 'playground'))
+      .put(actions.updateEditorValue('playground', 0, FILE_DATA))
       .put(actions.chapterSelect(SOURCE_CHAPTER, SOURCE_VARIANT, 'playground'))
       .put(actions.externalLibrarySelect(SOURCE_LIBRARY, 'playground'))
       .silentRun();
@@ -168,7 +181,8 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
     .withState({
       workspaces: {
         playground: {
-          editorValue: FILE_DATA,
+          activeEditorTabIndex: 0,
+          editorTabs: [{ value: FILE_DATA }],
           externalLibrary: SOURCE_LIBRARY,
           context: {
             chapter: SOURCE_CHAPTER,
@@ -219,7 +233,8 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            activeEditorTabIndex: 0,
+            editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -276,7 +291,8 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            activeEditorTabIndex: 0,
+            editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -333,7 +349,8 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            activeEditorTabIndex: 0,
+            editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -392,7 +409,8 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            activeEditorTabIndex: 0,
+            editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -450,7 +468,8 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            activeEditorTabIndex: 0,
+            editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
@@ -491,7 +510,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
-            editorValue: FILE_DATA,
+            editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,

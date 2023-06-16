@@ -1,5 +1,5 @@
-import { setEditorSessionId, setSharedbConnected } from '../../collabEditing/CollabEditingActions';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import { setEditorSessionId, setSharedbConnected } from '../CollabEditingActions';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../CollabEditingTypes';
 
 const gradingWorkspace: WorkspaceLocation = 'grading';

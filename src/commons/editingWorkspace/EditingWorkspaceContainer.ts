@@ -37,14 +37,10 @@ import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './Editing
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
-    editorValue: state.workspaces.assessment.editorValue,
-    breakpoints: state.workspaces.assessment.breakpoints,
-    highlightedLines: state.workspaces.assessment.highlightedLines,
     hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
     isRunning: state.workspaces.assessment.isRunning,
     isDebugging: state.workspaces.assessment.isDebugging,
     enableDebugging: state.workspaces.assessment.enableDebugging,
-    newCursorPosition: state.workspaces.assessment.newCursorPosition,
     output: state.workspaces.assessment.output,
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
@@ -67,9 +63,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-        setEditorBreakpoint(breakpoints, workspaceLocation),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
+      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+        setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),

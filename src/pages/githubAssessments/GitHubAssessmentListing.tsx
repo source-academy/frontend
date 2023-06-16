@@ -11,13 +11,12 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useMemo } from 'react';
-import { useMediaQuery } from 'react-responsive';
+import { NavigateFunction, useNavigate } from 'react-router';
+import { useResponsive } from 'src/commons/utils/Hooks';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import ContentDisplay from '../../commons/ContentDisplay';
 import Markdown from '../../commons/Markdown';
-import Constants from '../../commons/utils/Constants';
-import { history } from '../../commons/utils/HistoryHelper';
 import { GHAssessmentOverview } from './GitHubClassroom';
 
 type GitHubAssessmentListingProps = {
@@ -30,17 +29,18 @@ type GitHubAssessmentListingProps = {
  * This page should only be reachable if using a GitHub-hosted deployment.
  */
 const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
+  const navigate = useNavigate();
 
   let display: JSX.Element;
 
   const createAssessmentButton = useMemo(
     () => (
-      <Button icon={IconNames.ADD} onClick={() => history.push(`/githubassessments/editor`)}>
+      <Button icon={IconNames.ADD} onClick={() => navigate(`/githubassessments/editor`)}>
         Create a New Assessment!
       </Button>
     ),
-    []
+    [navigate]
   );
 
   const refreshButton = useMemo(
@@ -70,7 +70,7 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
   } else {
     // Create cards
     const cards = props.assessmentOverviews.map(element =>
-      convertAssessmentOverviewToCard(element, isMobileBreakpoint)
+      convertAssessmentOverviewToCard(element, isMobileBreakpoint, navigate)
     );
     display = (
       <>
@@ -96,7 +96,8 @@ const GitHubAssessmentListing: React.FC<GitHubAssessmentListingProps> = props =>
  */
 function convertAssessmentOverviewToCard(
   assessmentOverview: GHAssessmentOverview,
-  isMobileBreakpoint: boolean
+  isMobileBreakpoint: boolean,
+  navigate: NavigateFunction
 ) {
   const ratio = isMobileBreakpoint ? 5 : 3;
   const ownerSlashName =
@@ -110,7 +111,7 @@ function convertAssessmentOverviewToCard(
 
   const assessmentNotAccepted = assessmentOverview.link !== undefined;
   let buttonText = 'Open';
-  let handleClick = () => history.push(`/githubassessments/editor`, assessmentOverview);
+  let handleClick = () => navigate(`/githubassessments/editor`, { state: assessmentOverview });
 
   if (assessmentNotAccepted) {
     buttonText = 'Accept';

@@ -56,9 +56,15 @@ function loadStore(loadedStore: SavedState | undefined) {
       ...defaultState.workspaces,
       playground: {
         ...defaultState.workspaces.playground,
-        editorValue: loadedStore.playgroundEditorValue
-          ? loadedStore.playgroundEditorValue
-          : defaultState.workspaces.playground.editorValue,
+        isFolderModeEnabled: loadedStore.playgroundIsFolderModeEnabled
+          ? loadedStore.playgroundIsFolderModeEnabled
+          : defaultState.workspaces.playground.isFolderModeEnabled,
+        activeEditorTabIndex: loadedStore.playgroundActiveEditorTabIndex
+          ? loadedStore.playgroundActiveEditorTabIndex.value
+          : defaultState.workspaces.playground.activeEditorTabIndex,
+        editorTabs: loadedStore.playgroundEditorTabs
+          ? loadedStore.playgroundEditorTabs
+          : defaultState.workspaces.playground.editorTabs,
         isEditorAutorun: loadedStore.playgroundIsEditorAutorun
           ? loadedStore.playgroundIsEditorAutorun
           : defaultState.workspaces.playground.isEditorAutorun,

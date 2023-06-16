@@ -5,17 +5,32 @@ exports[`Navbar renders correctly 1`] = `
   <Blueprint4.Navbar className=\\"SicpNavigationBar secondary-navbar\\">
     <Blueprint4.NavbarGroup align=\\"left\\">
       <TableOfContentsButton handleOpenToc={[Function: handleOpenToc]} />
+      <div className=\\"userSearch\\" style={{...}}>
+        <div className=\\"userSearch-inner\\">
+          <div style={{...}}>
+            <Blueprint4.InputGroup placeholder=\\"Search\\" value=\\"\\" onChange={[Function: onChange]} />
+            <ControlButton label=\\"Text\\" icon=\\"search\\" onClick={[Function: onClick]} />
+          </div>
+        </div>
+      </div>
+      <div className=\\"indexSearch\\" style={{...}}>
+        <div className=\\"indexSearch-inner\\">
+          <div style={{...}}>
+            <Blueprint4.InputGroup placeholder=\\"Search\\" value=\\"\\" onChange={[Function: onChange]} />
+            <ControlButton label=\\"Index\\" icon=\\"search\\" onClick={[Function: onClick]} />
+          </div>
+        </div>
+      </div>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
       <div>
-        <Blueprint4.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"\\" type={[undefined]} rightIcon={{...}} onClick={[Function (anonymous)]}>
-          Next
-        </Blueprint4.Button>
+        <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClick]} options={{...}} />
       </div>
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>
   <Blueprint4.Drawer onClose={[Function: handleCloseToc]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" usePortal={false} className=\\"sicp-toc-drawer\\" style={{...}}>
     <SicpToc handleCloseToc={[Function: handleCloseToc]} />
   </Blueprint4.Drawer>
+  <Blueprint4.Drawer style={{...}} onClose={[Function: handleCloseSearch]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" usePortal={false} className=\\"sicp-toc-drawer\\" />
 </Fragment>"
 `;

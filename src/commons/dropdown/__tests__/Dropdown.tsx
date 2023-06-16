@@ -1,45 +1,61 @@
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { MemoryRouter } from 'react-router';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 
-import ProfileContainer from '../../profile/ProfileContainer';
+import Profile from '../../profile/Profile';
 import Dropdown from '../Dropdown';
 import DropdownCourses from '../DropdownCourses';
 import DropdownCreateCourse from '../DropdownCreateCourse';
 
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useSelector: jest.fn()
+}));
+const useSelectorMock = useSelector as jest.Mock;
+
+const mockStore = mockInitialStore();
 test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses components when a user is not logged in', () => {
-  const props = {
-    handleLogOut: () => {},
-    updateLatestViewedCourse: () => {},
-    handleCreateCourse: () => {},
+  useSelectorMock.mockReturnValue({
     courses: [],
-    isAboutOpen: false,
-    isHelpOpen: false,
-    isProfileOpen: false
-  };
-  const app = <Dropdown {...props} />;
-  const tree = shallow(app);
+    courseId: 1
+  });
+  const app = (
+    <Provider store={mockStore}>
+      <WorkspaceSettingsContext.Provider value={[{ editorBinding: EditorBinding.NONE }, jest.fn()]}>
+        <Dropdown />
+      </WorkspaceSettingsContext.Provider>
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect the Profile component to NOT be mounted
-  expect(tree.find(ProfileContainer)).toHaveLength(0);
+  expect(tree.find(Profile)).toHaveLength(0);
   expect(tree.find(DropdownCourses)).toHaveLength(0);
   expect(tree.find(DropdownCreateCourse)).toHaveLength(0);
 });
 
 test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in', () => {
-  const props = {
-    handleLogOut: () => {},
-    updateLatestViewedCourse: () => {},
-    handleCreateCourse: () => {},
+  useSelectorMock.mockReturnValue({
+    name: 'Some user',
     courses: [],
-    isAboutOpen: false,
-    isHelpOpen: false,
-    isProfileOpen: false,
-    name: 'Some user'
-  };
-  const app = <Dropdown {...props} />;
-  const tree = shallow(app);
+    courseId: 1
+  });
+  const app = (
+    <Provider store={mockStore}>
+      <WorkspaceSettingsContext.Provider value={[{ editorBinding: EditorBinding.NONE }, jest.fn()]}>
+        <MemoryRouter>
+          <Dropdown />
+        </MemoryRouter>
+      </WorkspaceSettingsContext.Provider>
+    </Provider>
+  );
+  const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect the Profile component to be mounted
-  expect(tree.find(ProfileContainer)).toHaveLength(1);
+  expect(tree.find(Profile)).toHaveLength(1);
   expect(tree.find(DropdownCourses)).toHaveLength(1);
   expect(tree.find(DropdownCreateCourse)).toHaveLength(1);
 });

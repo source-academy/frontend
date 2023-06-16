@@ -1,12 +1,11 @@
-import controlButton from '../../commons/ControlButton';
+import React from 'react';
 
-type TableOfContentsButtonProps = OwnProps;
+import ControlButton from '../../commons/ControlButton';
 
-type OwnProps = {
-  key: string;
+type TableOfContentsButtonProps = {
   handleOpenToc: () => void;
 };
 
-export function TableOfContentsButton(props: TableOfContentsButtonProps) {
-  return controlButton('Table of Contents', null, props.handleOpenToc);
-}
+export const TableOfContentsButton: React.FC<TableOfContentsButtonProps> = ({ handleOpenToc }) => {
+  return <ControlButton label="Table of Contents" onClick={handleOpenToc} />;
+};

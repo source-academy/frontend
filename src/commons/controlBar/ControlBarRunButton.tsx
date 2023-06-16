@@ -1,8 +1,9 @@
 import { Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 
 type ControlButtonRunButtonProps = DispatchProps & StateProps;
 
@@ -12,17 +13,24 @@ type DispatchProps = {
 
 type StateProps = {
   key: string;
+  isEntrypointFileDefined: boolean;
   color?: string;
   className?: string;
 };
 
-export function ControlBarRunButton(props: ControlButtonRunButtonProps) {
+export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props => {
+  const tooltipContent = props.isEntrypointFileDefined
+    ? '...or press shift-enter in the editor'
+    : 'Open a file to evaluate the program with the file as the entrypoint';
   return (
-    <Tooltip2 content="...or press shift-enter in the editor" placement={Position.TOP}>
-      {controlButton('Run', IconNames.PLAY, props.handleEditorEval, {
-        iconColor: props.color,
-        className: props.className
-      })}
+    <Tooltip2 content={tooltipContent} placement={Position.TOP}>
+      <ControlButton
+        label="Run"
+        icon={IconNames.PLAY}
+        onClick={props.handleEditorEval}
+        options={{ iconColor: props.color, className: props.className }}
+        isDisabled={!props.isEntrypointFileDefined}
+      />
     </Tooltip2>
   );
-}
+};

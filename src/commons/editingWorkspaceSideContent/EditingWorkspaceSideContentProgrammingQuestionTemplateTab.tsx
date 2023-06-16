@@ -1,11 +1,11 @@
 import { Button, Card, Classes, Divider, IconName, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import * as React from 'react';
+import React, { useState } from 'react';
 import AceEditor from 'react-ace';
 
 import { Assessment } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
@@ -13,25 +13,19 @@ type QuestionEditorProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
-  handleEditorValueChange: (val: string) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
 };
 
 type StateProps = {
   assessment: Assessment;
-  editorValue: string | null;
+  editorValue: string;
   questionId: number;
-};
-
-type OwnProps = {
-  activeEditor: QuestionEditor;
-  templateValue: string;
-  templateFocused: boolean;
 };
 
 const questionEditorPaths = ['prepend', 'postpend', 'solutionTemplate', 'answer'] as const;
 
-export type QuestionEditorId = typeof questionEditorPaths[number];
+export type QuestionEditorId = (typeof questionEditorPaths)[number];
 
 const QuestionEditorSelect = Select.ofType<QuestionEditor>();
 
@@ -67,34 +61,29 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEditorProps, OwnProps> {
-  public constructor(props: QuestionEditorProps) {
-    super(props);
-    this.state = {
-      activeEditor: questionEditors[0],
-      templateValue: '',
-      templateFocused: false
-    };
-  }
+const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
+  const [activeEditor, setActiveEditor] = useState(questionEditors[0]);
+  const [templateValue, setTemplateValue] = useState('');
+  const [templateFocused, setTemplateFocused] = useState(false);
 
-  public render() {
-    return this.programmingTab();
-  }
+  const programmingTab = () => {
+    const qnPath = ['questions', props.questionId];
+    const path = qnPath.concat(activeEditor.id);
 
-  private programmingTab = () => {
-    const qnPath = ['questions', this.props.questionId];
-    const path = qnPath.concat(this.state.activeEditor.id);
-
-    const copyFromEditorButton = controlButton(
-      'Copy from Editor',
-      IconNames.IMPORT,
-      this.handleCopyFromEditor(path)
+    const copyFromEditorButton = (
+      <ControlButton
+        label="Copy from Editor"
+        icon={IconNames.IMPORT}
+        onClick={handleCopyFromEditor(path)}
+      />
     );
 
-    const copyToEditorButton = controlButton(
-      'Copy to Editor',
-      IconNames.EXPORT,
-      this.handleCopyToEditor(path)
+    const copyToEditorButton = (
+      <ControlButton
+        label="Copy to Editor"
+        icon={IconNames.EXPORT}
+        onClick={handleCopyToEditor(path)}
+      />
     );
 
     const editorPanel = (
@@ -102,7 +91,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
         {copyFromEditorButton}
         {copyToEditorButton}
         <Divider />
-        {this.editor(path)}
+        {editor(path)}
       </div>
     );
 
@@ -139,7 +128,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
     return (
       <div className="side-content">
         <Card>
-          {editorSelect(this.state.activeEditor, this.handleChangeActiveEditor)}
+          {editorSelect(activeEditor, setActiveEditor)}
           <Divider />
           <div className="side-content-text">{editorPanel}</div>
         </Card>
@@ -147,13 +136,11 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
     );
   };
 
-  private editor = (path: Array<string | number>) => {
-    const value = this.state.templateFocused
-      ? this.state.templateValue
-      : getValueFromPath(path, this.props.assessment);
+  const editor = (path: Array<string | number>) => {
+    const value = templateFocused ? templateValue : getValueFromPath(path, props.assessment);
 
     return (
-      <div onClick={this.focusEditor(path)} onBlur={this.unFocusEditor(path)}>
+      <div onClick={focusEditor(path)} onBlur={unFocusEditor(path)}>
         <AceEditor
           className="react-ace"
           editorProps={{
@@ -162,7 +149,7 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
           fontSize={14}
           highlightActiveLine={false}
           mode="javascript"
-          onChange={this.handleTemplateChange}
+          onChange={setTemplateValue}
           theme="source"
           value={value}
           width="100%"
@@ -171,65 +158,51 @@ export class ProgrammingQuestionTemplateTab extends React.Component<QuestionEdit
     );
   };
 
-  private handleChangeActiveEditor = (editor: QuestionEditor) => {
-    this.setState({
-      activeEditor: editor
-    });
-  };
-
-  private handleTemplateChange = (newCode: string) => {
-    this.setState({
-      templateValue: newCode
-    });
-  };
-
-  private focusEditor =
+  const focusEditor =
     (path: Array<string | number>) =>
     (e: any): void => {
-      if (!this.state.templateFocused) {
-        this.setState({
-          templateValue: getValueFromPath(path, this.props.assessment),
-          templateFocused: true
-        });
+      if (!templateFocused) {
+        setTemplateValue(getValueFromPath(path, props.assessment));
+        setTemplateFocused(true);
       }
     };
 
-  private unFocusEditor =
+  const unFocusEditor =
     (path: Array<string | number>) =>
     (e: any): void => {
-      if (this.state.templateFocused) {
-        const value = getValueFromPath(path, this.props.assessment);
-        if (value !== this.state.templateValue) {
-          const assessmentVal = this.props.assessment;
-          assignToPath(path, this.state.templateValue, assessmentVal);
-          this.props.updateAssessment(assessmentVal);
+      if (templateFocused) {
+        const value = getValueFromPath(path, props.assessment);
+        if (value !== templateValue) {
+          const assessmentVal = props.assessment;
+          assignToPath(path, templateValue, assessmentVal);
+          props.updateAssessment(assessmentVal);
         }
 
-        if (this.state.activeEditor.id === 'prepend') {
-          const editorPrepend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPrepend });
-        } else if (this.state.activeEditor.id === 'postpend') {
-          const editorPostpend = this.state.templateValue;
-          this.props.handleUpdateWorkspace({ editorPostpend });
+        if (activeEditor.id === 'prepend') {
+          const programPrependValue = templateValue;
+          props.handleUpdateWorkspace({ programPrependValue });
+        } else if (activeEditor.id === 'postpend') {
+          const programPostpendValue = templateValue;
+          props.handleUpdateWorkspace({ programPostpendValue });
         }
 
-        this.setState({
-          templateValue: '',
-          templateFocused: false
-        });
+        setTemplateValue('');
+        setTemplateFocused(false);
       }
     };
 
-  private handleCopyFromEditor = (path: Array<string | number>) => (): void => {
-    const assessment = this.props.assessment;
-    assignToPath(path, this.props.editorValue, assessment);
-    this.props.updateAssessment(assessment);
+  const handleCopyFromEditor = (path: Array<string | number>) => (): void => {
+    const assessment = props.assessment;
+    assignToPath(path, props.editorValue, assessment);
+    props.updateAssessment(assessment);
   };
 
-  private handleCopyToEditor = (path: Array<string | number>) => (): void => {
-    const value = getValueFromPath(path, this.props.assessment);
-    this.props.handleEditorValueChange(value);
+  const handleCopyToEditor = (path: Array<string | number>) => (): void => {
+    const value = getValueFromPath(path, props.assessment);
+    props.handleEditorValueChange(value);
   };
-}
+
+  return programmingTab();
+};
 
 export default ProgrammingQuestionTemplateTab;

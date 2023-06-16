@@ -5,80 +5,71 @@ import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
-import { GradingSummary } from '../../../features/dashboard/DashboardTypes';
+import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 
-type DashboardProps = DispatchProps & StateProps;
+type DashboardProps = StateProps;
 
-export type DispatchProps = {
-  handleFetchGradingSummary: () => void;
+export type StateProps = {};
+
+const defaultColumnDefs: ColDef = {
+  filter: true,
+  resizable: true,
+  sortable: true
 };
 
-export type StateProps = {
-  gradingSummary: GradingSummary;
-};
+const Dashboard: React.FC<DashboardProps> = props => {
+  const dispatch = useDispatch();
+  const gradingSummary = useTypedSelector(state => state.dashboard.gradingSummary);
 
-class Dashboard extends React.Component<DashboardProps> {
-  private defaultColumnDefs: ColDef;
-  private gridApi?: GridApi;
+  let gridApi: GridApi | undefined;
 
-  public constructor(props: DashboardProps) {
-    super(props);
-
-    this.defaultColumnDefs = {
-      filter: true,
-      resizable: true,
-      sortable: true
-    };
-  }
-
-  public handleFetchGradingSummary = () => {
-    this.props.handleFetchGradingSummary();
+  const onGridReady = (params: GridReadyEvent) => {
+    gridApi = params.api;
   };
 
-  public render() {
-    const columnDefs = this.props.gradingSummary.cols.map(e => {
-      return {
-        headerName: startCase(e),
-        field: e
-      };
-    });
-
-    const content = (
-      <div className="Dashboard">
-        <div className="Grid ag-grid-parent ag-theme-balham">
-          <AgGridReact
-            domLayout={'autoHeight'}
-            columnDefs={columnDefs}
-            defaultColDef={this.defaultColumnDefs}
-            onGridReady={this.onGridReady}
-            onGridSizeChanged={this.resizeGrid}
-            rowData={this.props.gradingSummary.rows}
-            rowHeight={30}
-            suppressCellSelection={true}
-            suppressMovableColumns={true}
-          />
-        </div>
-      </div>
-    );
-
-    return (
-      <div>
-        <ContentDisplay display={content} loadContentDispatch={this.handleFetchGradingSummary} />
-      </div>
-    );
-  }
-
-  private onGridReady = (params: GridReadyEvent) => {
-    this.gridApi = params.api;
-  };
-
-  private resizeGrid = () => {
-    if (this.gridApi) {
-      this.gridApi.sizeColumnsToFit();
+  const resizeGrid = () => {
+    if (gridApi) {
+      gridApi.sizeColumnsToFit();
     }
   };
-}
+
+  const columnDefs = gradingSummary.cols.map(e => {
+    return {
+      headerName: startCase(e),
+      field: e
+    };
+  });
+
+  const content = (
+    <div className="Dashboard">
+      <div className="Grid ag-grid-parent ag-theme-balham">
+        <AgGridReact
+          domLayout={'autoHeight'}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColumnDefs}
+          onGridReady={onGridReady}
+          onGridSizeChanged={resizeGrid}
+          rowData={gradingSummary.rows}
+          rowHeight={30}
+          suppressCellSelection={true}
+          suppressMovableColumns={true}
+        />
+      </div>
+    </div>
+  );
+
+  return (
+    <div>
+      <ContentDisplay
+        display={content}
+        loadContentDispatch={() => dispatch(fetchGroupGradingSummary())}
+      />
+    </div>
+  );
+};
 
 export default Dashboard;

@@ -14,7 +14,7 @@ type NullProps = {
  *
  *  Used in conjunction with ArrayDrawable.
  */
-export class NullDrawable extends React.PureComponent<NullProps> {
+class NullDrawable extends React.PureComponent<NullProps> {
   render() {
     return (
       <Line
@@ -28,3 +28,5 @@ export class NullDrawable extends React.PureComponent<NullProps> {
     );
   }
 }
+
+export default NullDrawable;

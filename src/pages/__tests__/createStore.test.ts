@@ -1,7 +1,11 @@
 import { Variant } from 'js-slang/dist/types';
 import { compressToUTF16 } from 'lz-string';
 
-import { defaultState, OverallState } from '../../commons/application/ApplicationTypes';
+import {
+  defaultLanguageConfig,
+  defaultState,
+  OverallState
+} from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import Constants from '../../commons/utils/Constants';
 import { createStore } from '../createStore';
@@ -17,11 +21,29 @@ const mockChangedStoredState: SavedState = {
     userId: 1,
     githubAccessToken: 'githubAccessToken'
   },
-  playgroundEditorValue: 'Nihao everybody',
+  playgroundIsFolderModeEnabled: true,
+  playgroundActiveEditorTabIndex: {
+    value: 1
+  },
+  playgroundEditorTabs: [
+    {
+      filePath: '/playground/a.js',
+      value: `import { square } from './b.js'; square(5);`,
+      breakpoints: [],
+      highlightedLines: []
+    },
+    {
+      filePath: '/playground/b.js',
+      value: 'export const square = x => x * x;',
+      breakpoints: [],
+      highlightedLines: []
+    }
+  ],
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
-  playgroundExternalLibrary: 'NONE' as ExternalLibraryName
+  playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
+  playgroundLanguage: defaultLanguageConfig
 };
 
 const mockChangedState: OverallState = {
@@ -39,7 +61,22 @@ const mockChangedState: OverallState = {
     ...defaultState.workspaces,
     playground: {
       ...defaultState.workspaces.playground,
-      editorValue: 'Nihao everybody',
+      isFolderModeEnabled: true,
+      activeEditorTabIndex: 1,
+      editorTabs: [
+        {
+          filePath: '/playground/a.js',
+          value: `import { square } from './b.js'; square(5);`,
+          breakpoints: [],
+          highlightedLines: []
+        },
+        {
+          filePath: '/playground/b.js',
+          value: 'export const square = x => x * x;',
+          breakpoints: [],
+          highlightedLines: []
+        }
+      ],
       isEditorAutorun: true
     }
   }

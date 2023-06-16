@@ -1,7 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import React, { useEffect, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -65,7 +63,9 @@ export const generateAchievementTasks = (
     />
   ));
 
-function Dashboard(props: DispatchProps & StateProps) {
+type DashboardProps = DispatchProps & StateProps;
+
+const Dashboard: React.FC<DashboardProps> = props => {
   const {
     getAchievements,
     getOwnGoals,
@@ -87,7 +87,6 @@ function Dashboard(props: DispatchProps & StateProps) {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
-  const courseRegId = useSelector((store: OverallState) => store.session.courseRegId);
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
@@ -113,7 +112,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     ? achievementAssessmentOverviews
     : assessmentOverviews;
 
-  // inserts assessment achievements for each assessment retrieved
+  // Inserts assessment achievements for each assessment retrieved
   // Note that assessmentConfigs is updated when the page loads (see Application.tsx)
   userAssessmentOverviews &&
     assessmentConfigs &&
@@ -127,16 +126,22 @@ function Dashboard(props: DispatchProps & StateProps) {
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
   const focusState = useState<string>('');
-  const [focusUuid] = focusState;
+  const [focusUuid, setFocusUuid] = focusState;
 
   const hiddenState = useState<boolean>(false);
   const [seeHidden] = hiddenState;
+
+  // Resets AchievementView when the selected user changes
+  useEffect(() => {
+    setFocusUuid('');
+  }, [selectedUser, setFocusUuid]);
 
   return (
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementDashboard">
         <AchievementOverview
           name={selectedUser ? selectedUser.name || selectedUser.username : name || 'User'}
+          userState={userIdState}
         />
         {role && role !== Role.Student && (
           <AchievementManualEditor
@@ -179,12 +184,12 @@ function Dashboard(props: DispatchProps & StateProps) {
           </ul>
 
           <div className="view-container">
-            <AchievementView courseRegId={courseRegId} focusUuid={focusUuid} />
+            <AchievementView focusUuid={focusUuid} userState={userIdState} />
           </div>
         </div>
       </div>
     </AchievementContext.Provider>
   );
-}
+};
 
 export default Dashboard;

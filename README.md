@@ -20,16 +20,12 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 ### Installation of Source Academy (latest version [available in GitHub Pages](https://source-academy.github.io/))
 
-1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current LTS.
+1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current or lower LTS version. (Known working version of node: v16.16.0) 
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.  
-If you encounter error message: `No such file or directory: 'install'`.  These instruction may work for you.  
-`sudo apt remove cmdtest`  
-`sudo apt remove yarn`  
-`curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -`  
-`echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list`  
-`sudo apt-get update`  
-`sudo apt-get install yarn -y`  
+    - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
+    - If you are on the new M1 or M2 Mac chips, and encounter an error while installing `canvas`, refer to [this documentation](https://github.com/Automattic/node-canvas/wiki/Installation:-Mac-OS-X#homebrew) to install the requisite dependencies first.
+
 
 4. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
 5. Point your browser to `http://localhost:8000` to see your local Source Academy.
@@ -157,6 +153,7 @@ The regression tests are generated using `jest` and stored as snapshots in `src/
 $ yarn test --updateSnapshot
 ```
 and then typing `a` to update all snapshots.
+（if you run this on a macBook with ARM chip, you may run into errors; try to do this on a computer with x86 chip instead)
 
 ## License
 

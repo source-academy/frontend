@@ -20,22 +20,29 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { useParams } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { Navigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import {
+  acknowledgeNotifications,
+  fetchAssessmentOverviews,
+  submitAssessment
+} from '../application/actions/SessionActions';
+import { Role } from '../application/ApplicationTypes';
 import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
 import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from '../ContentDisplay';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
-import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
+import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
-import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { assessmentTypeLink, stringParamToInt } from '../utils/ParamParseHelper';
+import { useResponsive, useTypedSelector } from '../utils/Hooks';
+import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
   AssessmentConfiguration,
@@ -45,39 +52,37 @@ import {
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = DispatchProps & OwnProps & StateProps;
-
-export type DispatchProps = {
-  handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
-  handleAssessmentOverviewFetch: () => void;
-  handleSubmitAssessment: (id: number) => void;
-};
+export type AssessmentProps = OwnProps;
 
 export type OwnProps = {
   assessmentConfiguration: AssessmentConfiguration;
 };
 
-export type StateProps = {
-  assessmentOverviews?: AssessmentOverview[];
-  isStudent: boolean;
-  courseId?: number;
-};
-
 const Assessment: React.FC<AssessmentProps> = props => {
   const params = useParams<AssessmentWorkspaceParams>();
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
   const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);
   const [showUpcomingAssessments, setShowUpcomingAssessments] = React.useState<boolean>(true);
 
+  const assessmentOverviewsUnfiltered = useTypedSelector(
+    state => state.session.assessmentOverviews
+  );
+  const isStudent = useTypedSelector(state =>
+    state.session.role ? state.session.role === Role.Student : true
+  );
+  const courseId = useTypedSelector(state => state.session.courseId);
+
+  const dispatch = useDispatch();
+
   const toggleClosedAssessments = () => setShowClosedAssessments(!showClosedAssessments);
   const toggleOpenAssessments = () => setShowOpenedAssessments(!showOpenedAssessments);
   const toggleUpcomingAssessments = () => setShowUpcomingAssessments(!showUpcomingAssessments);
   const setBetchaAssessmentNull = () => setBetchaAssessment(null);
-  const submitAssessment = () => {
+  const handleSubmitAssessment = () => {
     if (betchaAssessment) {
-      props.handleSubmitAssessment(betchaAssessment.id);
+      dispatch(submitAssessment(betchaAssessment.id));
       setBetchaAssessmentNull();
     }
   };
@@ -132,15 +137,15 @@ const Assessment: React.FC<AssessmentProps> = props => {
     }
     return (
       <NavLink
-        to={`/courses/${props.courseId}/${assessmentTypeLink(
-          overview.type
-        )}/${overview.id.toString()}/${Constants.defaultQuestionId}`}
+        to={`/courses/${courseId}/${assessmentTypeLink(overview.type)}/${overview.id.toString()}/${
+          Constants.defaultQuestionId
+        }`}
       >
         <Button
           icon={icon}
           minimal={true}
           onClick={() =>
-            props.handleAcknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+            dispatch(acknowledgeNotifications(filterNotificationsByAssessment(overview.id)))
           }
         >
           <span className="custom-hidden-xxxs">{label}</span>
@@ -243,14 +248,22 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 
   // Rendering Logic
-  const { assessmentOverviews: assessmentOverviewsUnfiltered, isStudent } = props;
   const assessmentOverviews = React.useMemo(
     () =>
       assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
     [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
   );
-  const assessmentId: number | null = stringParamToInt(params.assessmentId);
-  const questionId: number = stringParamToInt(params.questionId) || Constants.defaultQuestionId;
+
+  // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
+  if (
+    (params.assessmentId && !params.assessmentId?.match(numberRegExp)) ||
+    (params.questionId && !params.questionId?.match(numberRegExp))
+  ) {
+    return <Navigate to={`/courses/${courseId}/${props.assessmentConfiguration.type}`} />;
+  }
+
+  const assessmentId: number | null = convertParamToInt(params.assessmentId);
+  const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
 
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.
@@ -264,7 +277,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       questionId,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
-        !props.isStudent ||
+        !isStudent ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
       assessmentConfiguration: props.assessmentConfiguration
     };
@@ -365,11 +378,16 @@ const Assessment: React.FC<AssessmentProps> = props => {
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
-          {controlButton('Cancel', null, setBetchaAssessmentNull, { minimal: false })}
-          {controlButton('Finalise', null, submitAssessment, {
-            minimal: false,
-            intent: Intent.DANGER
-          })}
+          <ControlButton
+            label="Cancel"
+            onClick={setBetchaAssessmentNull}
+            options={{ minimal: false }}
+          />
+          <ControlButton
+            label="Finalise"
+            onClick={handleSubmitAssessment}
+            options={{ minimal: false, intent: Intent.DANGER }}
+          />
         </ButtonGroup>
       </div>
     </Dialog>
@@ -378,7 +396,10 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // Finally, render the ContentDisplay.
   return (
     <div className="Assessment">
-      <ContentDisplay display={display} loadContentDispatch={props.handleAssessmentOverviewFetch} />
+      <ContentDisplay
+        display={display}
+        loadContentDispatch={() => dispatch(fetchAssessmentOverviews())}
+      />
       {betchaDialog}
     </div>
   );
@@ -420,10 +441,13 @@ const makeGradingStatus = (gradingStatus: string) => {
   );
 };
 
-const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
-  controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
-    minimal: true,
-    className: 'collapse-button'
-  });
+const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
+  <ControlButton
+    label={label}
+    icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+    onClick={toggleFunc}
+    options={{ minimal: true, className: 'collapse-button' }}
+  />
+);
 
 export default Assessment;

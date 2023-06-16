@@ -2,7 +2,7 @@ import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import React from 'react';
 
 import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
 import {
@@ -11,7 +11,7 @@ import {
   ExternalLibraryName
 } from '../application/types/ExternalTypes';
 import { Assessment, emptyLibrary, Library } from '../assessment/AssessmentTypes';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
@@ -30,39 +30,16 @@ type StateProps = {
   isOptionalDeployment: boolean;
 };
 
-export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
-  public render() {
-    if (!this.props.isOptionalDeployment) {
-      return (
-        <div>
-          {this.props.label + ' Deployment'}
-          <br />
-          {this.deploymentTab()}
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <Switch
-            checked={!this.isEmptyLibrary()}
-            label={'Enable ' + this.props.label + ' Deployment'}
-            onChange={this.handleSwitchDeployment}
-          />
-          {this.isEmptyLibrary() ? null : this.deploymentTab()}
-        </div>
-      );
-    }
-  }
-
-  private deploymentTab = () => {
-    const deploymentPath = this.props.pathToLibrary;
-    const deployment = getValueFromPath(deploymentPath, this.props.assessment) as Library;
-    // const deploymentDisp = this.props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
+const DeploymentTab: React.FC<DeploymentTabProps> = props => {
+  const deploymentTab = () => {
+    const deploymentPath = props.pathToLibrary;
+    const deployment = getValueFromPath(deploymentPath, props.assessment) as Library;
+    // const deploymentDisp = props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
     const symbols = deployment.external.symbols.map((symbol, i) => (
       <tr key={i}>
-        <td>{this.textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
+        <td>{textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
         <td style={{ width: '100px' }}>
-          {controlButton('Delete', IconNames.MINUS, this.handleSymbolDelete(i))}
+          <ControlButton label="Delete" icon={IconNames.MINUS} onClick={handleSymbolDelete(i)} />
         </td>
       </tr>
     ));
@@ -70,31 +47,35 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
     const globals = deployment.globals.map((symbol, i) => (
       <tr key={i}>
         <td style={{ width: '170px' }}>
-          {this.textareaContent(deploymentPath.concat(['globals', i, 0]))}
+          {textareaContent(deploymentPath.concat(['globals', i, 0]))}
         </td>
-        <td>{this.globalValueTextareaContent(i)}</td>
+        <td>{globalValueTextareaContent(i)}</td>
         <td style={{ width: '90px' }}>
-          {controlButton('Delete', IconNames.MINUS, this.handleGlobalDelete(i))}
+          <ControlButton label="Delete" icon={IconNames.MINUS} onClick={handleGlobalDelete(i)} />
         </td>
       </tr>
     ));
 
-    const resetLibrary = controlButton('Use this Library', IconNames.REFRESH, () =>
-      this.props.handleRefreshLibrary(deployment)
+    const resetLibrary = (
+      <ControlButton
+        label="Use this Library"
+        icon={IconNames.REFRESH}
+        onClick={() => props.handleRefreshLibrary(deployment)}
+      />
     );
 
     const symbolsFragment = (
       <React.Fragment>
         External Library:
         <br />
-        {externalSelect(deployment.external.name, this.handleExternalSelect!)}
+        {externalSelect(deployment.external.name, handleExternalSelect)}
         <Divider />
         <div>Symbols:</div>
         <br />
         <table style={{ width: '100%' }}>
           <tbody>{symbols}</tbody>
         </table>
-        {controlButton('New Symbol', IconNames.PLUS, this.handleNewSymbol)}
+        <ControlButton label="New Symbol" icon={IconNames.PLUS} onClick={handleNewSymbol} />
       </React.Fragment>
     );
 
@@ -105,7 +86,7 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
         <table style={{ width: '100%', borderSpacing: '5px' }}>
           <tbody>{globals}</tbody>
         </table>
-        {controlButton('New Global', IconNames.PLUS, this.handleNewGlobal)}
+        <ControlButton label="New Global" icon={IconNames.PLUS} onClick={handleNewGlobal} />
       </React.Fragment>
     );
 
@@ -118,7 +99,7 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
         <Divider />
         Interpreter:
         <br />
-        {chapterSelect(deployment.chapter, deployment.variant, this.handleChapterSelect)}
+        {chapterSelect(deployment.chapter, deployment.variant, handleChapterSelect)}
         <Divider />
         {symbolsFragment}
         <Divider />
@@ -127,108 +108,129 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
     );
   };
 
-  private textareaContent = (path: Array<string | number>) => {
+  const textareaContent = (path: Array<string | number>) => {
     return (
       <TextAreaContent
-        assessment={this.props.assessment}
+        assessment={props.assessment}
         path={path}
         processResults={removeSpaces}
-        updateAssessment={this.props.updateAssessment}
+        updateAssessment={props.updateAssessment}
         useRawValue={true}
       />
     );
   };
 
-  private globalValueTextareaContent = (i: number) => {
-    const pathVal = this.props.pathToLibrary.concat(['globals', i, 2]);
+  const globalValueTextareaContent = (i: number) => {
+    const pathVal = props.pathToLibrary.concat(['globals', i, 2]);
     return (
       <TextAreaContent
-        assessment={this.props.assessment}
+        assessment={props.assessment}
         path={pathVal}
-        updateAssessment={this.handleGlobalValueUpdate(i)}
+        updateAssessment={handleGlobalValueUpdate(i)}
         useRawValue={true}
       />
     );
   };
 
-  private handleGlobalValueUpdate = (i: number) => (assessment: Assessment) => {
-    const deployment = getValueFromPath(this.props.pathToLibrary, this.props.assessment) as Library;
+  const handleGlobalValueUpdate = (i: number) => (assessment: Assessment) => {
+    const deployment = getValueFromPath(props.pathToLibrary, props.assessment) as Library;
     const global = deployment.globals[i];
     try {
       global[1] = altEval(global[2]!);
-      this.props.updateAssessment(assessment);
+      props.updateAssessment(assessment);
     } catch (e) {
       global[2] = '"Invalid Expression"';
     }
   };
 
-  private handleSymbolDelete = (index: number) => () => {
-    const assessment = this.props.assessment;
-    const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
+  const handleSymbolDelete = (index: number) => () => {
+    const assessment = props.assessment;
+    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
     const symbols = deployment.external.symbols;
     symbols.splice(index, 1);
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private handleNewSymbol = () => {
-    const assessment = this.props.assessment;
-    const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
+  const handleNewSymbol = () => {
+    const assessment = props.assessment;
+    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
     const symbols = deployment.external.symbols;
     symbols.push('new_symbol');
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private handleGlobalDelete = (index: number) => () => {
-    const assessment = this.props.assessment;
-    const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
+  const handleGlobalDelete = (index: number) => () => {
+    const assessment = props.assessment;
+    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
     deployment.globals.splice(index, 1);
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private handleNewGlobal = () => {
-    const assessment = this.props.assessment;
-    const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
+  const handleNewGlobal = () => {
+    const assessment = props.assessment;
+    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
     deployment.globals.push(['new_global', null, 'null']);
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private handleChapterSelect = (i: SALanguage, _e?: React.SyntheticEvent<HTMLElement>) => {
-    const assessment = this.props.assessment;
-    const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
+  const handleChapterSelect = (i: SALanguage, _e?: React.SyntheticEvent<HTMLElement>) => {
+    const assessment = props.assessment;
+    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
     deployment.chapter = i.chapter;
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private handleExternalSelect = (i: External, _e?: React.SyntheticEvent<HTMLElement>) => {
-    const assessment = this.props.assessment;
-    const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
+  const handleExternalSelect = (i: External, _e?: React.SyntheticEvent<HTMLElement>) => {
+    const assessment = props.assessment;
+    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
     deployment.external.name = i.name;
     deployment.external.symbols = JSON.parse(JSON.stringify(externalLibraries.get(i.name)!));
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private handleSwitchDeployment = () => {
-    const assessment = this.props.assessment;
-    if (this.isEmptyLibrary()) {
+  const handleSwitchDeployment = () => {
+    const assessment = props.assessment;
+    if (isEmptyLibrary()) {
       let library = getValueFromPath(
-        this.props.pathToCopy || ['globalDeployment'],
+        props.pathToCopy || ['globalDeployment'],
         assessment
       ) as Library;
       if (library.chapter === -1) {
         library = assessment.globalDeployment!;
       }
       library = JSON.parse(JSON.stringify(library));
-      assignToPath(this.props.pathToLibrary, library, assessment);
+      assignToPath(props.pathToLibrary, library, assessment);
     } else {
-      assignToPath(this.props.pathToLibrary, emptyLibrary(), assessment);
+      assignToPath(props.pathToLibrary, emptyLibrary(), assessment);
     }
-    this.props.updateAssessment(assessment);
+    props.updateAssessment(assessment);
   };
 
-  private isEmptyLibrary = (path: Array<string | number> = this.props.pathToLibrary) => {
-    return getValueFromPath(path.concat(['chapter']), this.props.assessment) === -1;
+  const isEmptyLibrary = (path: Array<string | number> = props.pathToLibrary) => {
+    return getValueFromPath(path.concat(['chapter']), props.assessment) === -1;
   };
-}
+
+  if (!props.isOptionalDeployment) {
+    return (
+      <div>
+        {props.label + ' Deployment'}
+        <br />
+        {deploymentTab()}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Switch
+          checked={!isEmptyLibrary()}
+          label={'Enable ' + props.label + ' Deployment'}
+          onChange={handleSwitchDeployment}
+        />
+        {isEmptyLibrary() ? null : deploymentTab()}
+      </div>
+    );
+  }
+};
 
 const removeSpaces = (str: string | number) => {
   return typeof str === 'string' ? str.replace(/\s+/g, '') : str;

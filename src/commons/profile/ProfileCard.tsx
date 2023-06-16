@@ -1,6 +1,6 @@
 import { Callout, ProgressBar } from '@blueprintjs/core';
 import { IconName } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
@@ -19,47 +19,44 @@ type DispatchProps = {
   renderIcon: (category: AssessmentType) => IconName;
 };
 
-class ProfileCard extends React.Component<ProfileCardProps, {}> {
-  public render() {
-    const { item } = this.props;
+const ProfileCard: React.FC<ProfileCardProps> = props => {
+  const { item } = props;
 
-    const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
+  const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
 
-    const xpDetails = (
-      <div className="xp-details">
-        <div className="title">XP</div>
-        <div className="value">
-          {item.xp} / {item.maxXp}
-        </div>
-        <ProgressBar
-          animate={false}
-          className={'value-bar' + this.props.parseColour(this.props.getFrac(item.xp, item.maxXp))}
-          stripes={false}
-          value={this.props.getFrac(item.xp, item.maxXp)}
-        />
+  const xpDetails = (
+    <div className="xp-details">
+      <div className="title">XP</div>
+      <div className="value">
+        {item.xp} / {item.maxXp}
       </div>
-    );
+      <ProgressBar
+        animate={false}
+        className={'value-bar' + props.parseColour(props.getFrac(item.xp, item.maxXp))}
+        stripes={false}
+        value={props.getFrac(item.xp, item.maxXp)}
+      />
+    </div>
+  );
 
-    return (
-      // Make each card navigate the user to the respective assessment
-      <NavLink
-        className="profile-summary-navlink"
+  return (
+    // Make each card navigate the user to the respective assessment
+    <NavLink
+      className="profile-summary-navlink"
+      key={`${item.title}-${item.id}`}
+      target="_blank"
+      to={`/courses/${props.courseId}/${assessmentTypeLink(item.type)}/${item.id}/0`}
+    >
+      <Callout
+        className="profile-summary-callout"
         key={`${item.title}-${item.id}`}
-        target="_blank"
-        to={`/courses/${this.props.courseId}/${assessmentTypeLink(item.type)}/${item.id}/0`}
-        activeClassName="profile-summary-navlink"
+        icon={props.renderIcon(item.type)}
+        title={item.title}
       >
-        <Callout
-          className="profile-summary-callout"
-          key={`${item.title}-${item.id}`}
-          icon={this.props.renderIcon(item.type)}
-          title={item.title}
-        >
-          {isInvalidXP ? '' : xpDetails}
-        </Callout>
-      </NavLink>
-    );
-  }
-}
+        {isInvalidXP ? '' : xpDetails}
+      </Callout>
+    </NavLink>
+  );
+};
 
 export default ProfileCard;

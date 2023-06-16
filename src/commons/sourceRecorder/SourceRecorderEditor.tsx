@@ -2,10 +2,10 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
+import { Ace } from 'ace-builds';
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
-import ReactAce from 'react-ace/lib/ace';
 import { HotKeys } from 'react-hotkeys';
 
 import {
@@ -14,7 +14,8 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { EditorTabStateProps } from '../editor/Editor';
+import { Position } from '../editor/EditorTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -22,36 +23,36 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
  *           for the react-ace editor's `onChange`
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
- * @property editorReadonly - Used for sourcecast only
+ * @property isEditorReadonly - Used for sourcecast only
  */
-export type SourceRecorderEditorProps = DispatchProps & StateProps & OwnProps;
+export type SourceRecorderEditorProps = DispatchProps &
+  EditorStateProps &
+  EditorTabStateProps &
+  OwnProps;
 
 type DispatchProps = {
   getTimerDuration?: () => number;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
-  handleEditorValueChange: (newCode: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleEditorValueChange: (newEditorValue: string) => void;
+  handleEditorUpdateBreakpoints: (newBreakpoints: string[]) => void;
   handleRecordInput?: (input: Input) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
+  onFocus?: (event: any, editor?: Ace.Editor) => void;
+  onBlur?: (event: any, editor?: Ace.Editor) => void;
 };
 
-type StateProps = {
-  breakpoints: string[];
+type EditorStateProps = {
   codeDeltasToApply?: CodeDelta[] | null;
-  editorReadonly?: boolean;
   editorSessionId: string;
-  editorValue: string;
-  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
+  isEditorReadonly: boolean;
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
-  newCursorPosition?: Position;
 };
 
 type OwnProps = {
-  forwardedRef?: React.RefObject<ReactAce>; // for the mobile Sourcecast Workspace
   setDraggableReplPosition?: () => void; // for the mobile Sourcecast Workspace
 };
 
@@ -168,6 +169,14 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation' as any, this.handleAnnotationChange(session));
+
+    const { onFocus, onBlur } = this.props;
+    if (onFocus) {
+      editor.on('focus', (event: Event) => onFocus(event, editor));
+    }
+    if (onBlur) {
+      editor.on('blur', (event: Event) => onBlur(event, editor));
+    }
   }
 
   public componentWillUnmount() {
@@ -220,7 +229,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             editorProps={{
               $blockScrolling: Infinity
             }}
-            ref={mergeRefs(this.AceEditor, this.props.forwardedRef)}
+            ref={this.AceEditor}
             markers={this.getMarkers()}
             fontSize={17}
             height="100%"
@@ -229,7 +238,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             onChange={this.onChangeMethod}
             onCursorChange={this.onCursorChange}
             onSelectionChange={this.onSelectionChange}
-            readOnly={this.props.editorReadonly ? this.props.editorReadonly : false}
+            readOnly={this.props.isEditorReadonly}
             theme="source"
             value={this.props.editorValue}
             width="100%"
@@ -312,31 +321,6 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
   goGreen: () => {}
-};
-
-/**
- * Custom mergeRef function for class components.
- * For functional components, please use useMergedRef defined in commons/utils/Hooks.ts
- *
- * This function is defined here as it is used only in SourceRecorderEditor.tsx
- * It will unlikely be used elsewhere since we are migrating to React Hooks.
- */
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const mergeRefs = (...refs) => {
-  const filteredRefs = refs.filter(Boolean);
-  if (!filteredRefs.length) return null;
-  if (filteredRefs.length === 1) return filteredRefs[0];
-  return (inst: any) => {
-    for (const ref of filteredRefs) {
-      if (typeof ref === 'function') {
-        ref(inst);
-      } else if (ref) {
-        ref.current = inst;
-      }
-    }
-  };
 };
 
 export default SourcecastEditor;

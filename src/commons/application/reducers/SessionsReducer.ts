@@ -20,11 +20,11 @@ import {
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
+  UPDATE_ALL_USER_XP,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_INFINITE_LOOP_ENCOUNTERED,
   UPDATE_NOTIFICATIONS,
   UPDATE_TOTAL_XP
 } from '../types/SessionTypes';
@@ -100,6 +100,8 @@ export const SessionsReducer: Reducer<SessionState> = (
       };
     case UPDATE_TOTAL_XP:
       return { ...state, xp: action.payload };
+    case UPDATE_ALL_USER_XP:
+      return { ...state, allUserXp: action.payload };
     case UPDATE_GRADING:
       const newGradings = new Map(state.gradings);
       newGradings.set(action.payload.submissionId, action.payload.grading);
@@ -111,11 +113,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         gradingOverviews: action.payload
-      };
-    case UPDATE_INFINITE_LOOP_ENCOUNTERED:
-      return {
-        ...state,
-        hadPreviousInfiniteLoop: true
       };
     case UPDATE_NOTIFICATIONS:
       return {

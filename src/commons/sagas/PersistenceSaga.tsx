@@ -78,7 +78,13 @@ export function* persistenceSaga(): SagaIterator {
         fields: 'appProperties'
       });
       const contents = yield call([gapi.client.drive.files, 'get'], { fileId: id, alt: 'media' });
-      yield put(actions.updateEditorValue(contents.body, 'playground'));
+      const activeEditorTabIndex: number | null = yield select(
+        (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+      );
+      if (activeEditorTabIndex === null) {
+        throw new Error('No active editor tab found.');
+      }
+      yield put(actions.updateEditorValue('playground', activeEditorTabIndex, contents.body));
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
       if (meta && meta.appProperties) {
         yield put(
@@ -113,12 +119,20 @@ export function* persistenceSaga(): SagaIterator {
     try {
       yield call(ensureInitialisedAndAuthorised);
 
-      const [code, chapter, variant, external] = yield select((state: OverallState) => [
-        state.workspaces.playground.editorValue,
-        state.workspaces.playground.context.chapter,
-        state.workspaces.playground.context.variant,
-        state.workspaces.playground.externalLibrary
-      ]);
+      const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
+        (state: OverallState) => [
+          state.workspaces.playground.activeEditorTabIndex,
+          state.workspaces.playground.editorTabs,
+          state.workspaces.playground.context.chapter,
+          state.workspaces.playground.context.variant,
+          state.workspaces.playground.externalLibrary
+        ]
+      );
+
+      if (activeEditorTabIndex === null) {
+        throw new Error('No active editor tab found.');
+      }
+      const code = editorTabs[activeEditorTabIndex].value;
 
       const pickedDir: PickFileResult = yield call(
         pickFile,
@@ -235,12 +249,20 @@ export function* persistenceSaga(): SagaIterator {
 
         yield call(ensureInitialisedAndAuthorised);
 
-        const [code, chapter, variant, external] = yield select((state: OverallState) => [
-          state.workspaces.playground.editorValue,
-          state.workspaces.playground.context.chapter,
-          state.workspaces.playground.context.variant,
-          state.workspaces.playground.externalLibrary
-        ]);
+        const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
+          (state: OverallState) => [
+            state.workspaces.playground.activeEditorTabIndex,
+            state.workspaces.playground.editorTabs,
+            state.workspaces.playground.context.chapter,
+            state.workspaces.playground.context.variant,
+            state.workspaces.playground.externalLibrary
+          ]
+        );
+
+        if (activeEditorTabIndex === null) {
+          throw new Error('No active editor tab found.');
+        }
+        const code = editorTabs[activeEditorTabIndex].value;
 
         const config: IPlaygroundConfig = {
           chapter,

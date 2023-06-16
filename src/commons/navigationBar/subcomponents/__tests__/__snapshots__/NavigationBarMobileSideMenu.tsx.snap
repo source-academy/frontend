@@ -2,7 +2,7 @@
 
 exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 "<Blueprint4.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp4-dark\\" canOutsideClickClose={true} style={{...}}>
-  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link_mobile bp4-button bp4-minimal bp4-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
+  <NavLink className={[Function: className]} to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
       Classroom
@@ -13,13 +13,13 @@ exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 
 exports[`NavigationBarMobileSideMenu renders correctly when logged in (no course selected) 1`] = `
 "<Blueprint4.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp4-dark\\" canOutsideClickClose={true} style={{...}}>
-  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link_mobile bp4-button bp4-minimal bp4-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
+  <NavLink className={[Function: className]} to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
       Classroom
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link_mobile bp4-button bp4-minimal bp4-large\\" to=\\"/sicpjs/\\" onClick={[Function: onClose]}>
+  <NavLink className={[Function: className]} to=\\"/sicpjs/\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"book\\" />
     <div className=\\"navbar-button-text\\">
       SICP JS
@@ -30,57 +30,69 @@ exports[`NavigationBarMobileSideMenu renders correctly when logged in (no course
 
 exports[`NavigationBarMobileSideMenu renders correctly when logged in (with course selected) 1`] = `
 "<Blueprint4.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"\\" className=\\"bp4-dark\\" canOutsideClickClose={true} style={{...}}>
-  <NavLink to=\\"/courses/1/missions\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/missions\\" className={[Function: className]} onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"flame\\" />
     <div>
       Missions
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/courses/1/quests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/quests\\" className={[Function: className]} onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"lightbulb\\" />
     <div>
       Quests
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/courses/1/paths\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/paths\\" className={[Function: className]} onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"predictive-analysis\\" />
     <div>
       Paths
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/courses/1/contests\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/contests\\" className={[Function: className]} onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"comparison\\" />
     <div>
       Contests
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink to=\\"/courses/1/others\\" activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" onClick={[Function: onClose]}>
+  <NavLink to=\\"/courses/1/others\\" className={[Function: className]} onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"manual\\" />
     <div>
       Others
     </div>
-    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+    <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
   </NavLink>
-  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link__mobile bp4-button bp4-minimal bp4-large\\" to=\\"/playground\\" onClick={[Function: onClose]}>
+  <NavLink className={[Function: className]} to=\\"/courses/1/sourcecast\\" onClick={[Function: onClose]}>
+    <Blueprint4.Icon icon=\\"music\\" />
+    <div>
+      Sourcecast
+    </div>
+  </NavLink>
+  <NavLink className={[Function: className]} to=\\"/playground\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"code\\" />
     <div>
       Playground
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link_mobile bp4-button bp4-minimal bp4-large\\" to=\\"/githubassessments\\" onClick={[Function: onClose]}>
+  <NavLink className={[Function: className]} to=\\"/githubassessments\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"briefcase\\" />
     <div className=\\"navbar-button-text\\">
       Classroom
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link_mobile bp4-button bp4-minimal bp4-large\\" to=\\"/sicpjs/\\" onClick={[Function: onClose]}>
+  <NavLink className={[Function: className]} to=\\"/sicpjs/\\" onClick={[Function: onClose]}>
     <Blueprint4.Icon icon=\\"book\\" />
     <div className=\\"navbar-button-text\\">
       SICP JS
+    </div>
+  </NavLink>
+  <NavLink className={[Function: className]} to=\\"/courses/1/achievements\\" onClick={[Function: onClose]}>
+    <Blueprint4.Icon icon=\\"mountain\\" />
+    <div>
+      Achievements
     </div>
   </NavLink>
 </Blueprint4.Drawer>"

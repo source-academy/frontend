@@ -12,11 +12,30 @@ import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import { RouteComponentProps } from 'react-router';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import {
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeSideContentHeight,
+  clearReplOutput,
+  evalEditor,
+  evalRepl,
+  evalTestcase,
+  navigateToDeclaration,
+  promptAutocomplete,
+  removeEditorTab,
+  runAllTestcases,
+  setEditorBreakpoint,
+  updateActiveEditorTabIndex,
+  updateEditorValue,
+  updateHasUnsavedChanges,
+  updateReplValue,
+  updateWorkspace
+} from 'src/commons/workspace/WorkspaceActions';
 
-import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Testcase } from '../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../commons/controlBar/ControlBar';
@@ -32,7 +51,11 @@ import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSave
 import { ControlBarDisplayMCQButton } from '../../commons/controlBar/github/ControlBarDisplayMCQButton';
 import { ControlBarTaskAddButton } from '../../commons/controlBar/github/ControlBarTaskAddButton';
 import { ControlBarTaskDeleteButton } from '../../commons/controlBar/github/ControlBarTaskDeleteButton';
-import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from '../../commons/editor/EditorContainer';
+import { Position } from '../../commons/editor/EditorTypes';
 import {
   GitHubMissionCreateDialog,
   GitHubMissionCreateDialogProps,
@@ -64,10 +87,9 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { history } from '../../commons/utils/HistoryHelper';
 import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
@@ -83,97 +105,83 @@ import {
 } from './GitHubAssessmentDefaultValues';
 import { GHAssessmentOverview } from './GitHubClassroom';
 
-export type GitHubAssessmentWorkspaceProps = DispatchProps & StateProps & RouteComponentProps;
+const workspaceLocation: WorkspaceLocation = 'githubAssessment';
 
-export type DispatchProps = {
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
-  handleEditorEval: () => void;
-  handleEditorValueChange: (val: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleReplEval: () => void;
-  handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
-  handleTestcaseEval: (testcaseId: number) => void;
-  handleRunAllTestcases: () => void;
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleGitHubLogIn: () => void;
-  handleGitHubLogOut: () => void;
-};
-
-export type StateProps = {
-  editorPrepend: string;
-  editorValue: string | null;
-  editorTestcases: Testcase[];
-  editorPostpend: string;
-  breakpoints: string[];
-  highlightedLines: HighlightedLines[];
-  hasUnsavedChanges: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  newCursorPosition?: Position;
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
-  sourceChapter: Chapter;
-};
-
-const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = props => {
+const GitHubAssessmentWorkspace: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
   const octokit = getGitHubOctokitInstance();
 
   if (octokit === undefined) {
-    history.push('/githubassessments/login');
+    navigate('/githubassessments/login');
   }
+
+  // Handlers migrated over from deprecated withRouter implementation
+  const {
+    handleEditorEval,
+    handleEditorValueChange,
+    handleReplEval,
+    handleReplOutputClear,
+    handleUpdateHasUnsavedChanges,
+    handleUpdateWorkspace
+  } = useMemo(() => {
+    return {
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
+        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
+        dispatch(updateWorkspace(workspaceLocation, options))
+    };
+  }, [dispatch]);
 
   /**
    * State variables relating to information we are concerned with saving
    */
-  const [missionMetadata, setMissionMetadata] = React.useState(defaultMissionMetadata);
-  const [cachedMissionMetadata, setCachedMissionMetadata] = React.useState(defaultMissionMetadata);
-  const [hasUnsavedChangesToMetadata, setHasUnsavedChangesToMetadata] = React.useState(false);
+  const [missionMetadata, setMissionMetadata] = useState(defaultMissionMetadata);
+  const [cachedMissionMetadata, setCachedMissionMetadata] = useState(defaultMissionMetadata);
+  const [hasUnsavedChangesToMetadata, setHasUnsavedChangesToMetadata] = useState(false);
 
-  const [briefingContent, setBriefingContent] = React.useState(defaultMissionBriefing);
-  const [cachedBriefingContent, setCachedBriefingContent] = React.useState(defaultMissionBriefing);
-  const [hasUnsavedChangesToBriefing, setHasUnsavedChangesToBriefing] = React.useState(false);
+  const [briefingContent, setBriefingContent] = useState(defaultMissionBriefing);
+  const [cachedBriefingContent, setCachedBriefingContent] = useState(defaultMissionBriefing);
+  const [hasUnsavedChangesToBriefing, setHasUnsavedChangesToBriefing] = useState(false);
 
-  const [cachedTaskList, setCachedTaskList] = React.useState<TaskData[]>([]);
-  const [taskList, setTaskList] = React.useState<TaskData[]>([]);
-  const [hasUnsavedChangesToTasks, setHasUnsavedChangesToTasks] = React.useState(false);
+  const [cachedTaskList, setCachedTaskList] = useState<TaskData[]>([]);
+  const [taskList, setTaskList] = useState<TaskData[]>([]);
+  const [hasUnsavedChangesToTasks, setHasUnsavedChangesToTasks] = useState(false);
 
   /**
    * State variables relating to the rendering and function of the workspace
    */
-  const [summary, setSummary] = React.useState('');
-  const [currentTaskNumber, setCurrentTaskNumber] = React.useState(0);
-  const [isTeacherMode, setIsTeacherMode] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = React.useState(false);
-  const [displayMCQInEditor, setDisplayMCQInEditor] = React.useState(true);
-  const [mcqQuestion, setMCQQuestion] = React.useState(defaultMCQQuestion);
-  const [missionRepoData, setMissionRepoData] = React.useState<MissionRepoData | undefined>(
-    undefined
-  );
-  const assessmentOverview = props.location.state as GHAssessmentOverview;
+  const [summary, setSummary] = useState('');
+  const [currentTaskNumber, setCurrentTaskNumber] = useState(0);
+  const [isTeacherMode, setIsTeacherMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentTaskIsMCQ, setCurrentTaskIsMCQ] = useState(false);
+  const [displayMCQInEditor, setDisplayMCQInEditor] = useState(true);
+  const [mcqQuestion, setMCQQuestion] = useState(defaultMCQQuestion);
+  const [missionRepoData, setMissionRepoData] = useState<MissionRepoData | undefined>(undefined);
+  const assessmentOverview = location.state as GHAssessmentOverview;
 
-  const [showBriefingOverlay, setShowBriefingOverlay] = React.useState(false);
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.questionOverview);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
+  const { isMobileBreakpoint } = useResponsive();
 
-  /**
-   * Unpacked properties
-   */
-  const hasUnsavedChanges = props.hasUnsavedChanges;
-  const editorTestcases = props.editorTestcases;
-  const handleEditorValueChange = props.handleEditorValueChange;
-  const handleUpdateWorkspace = props.handleUpdateWorkspace;
-  const handleUpdateHasUnsavedChanges = props.handleUpdateHasUnsavedChanges;
-  const handleReplOutputClear = props.handleReplOutputClear;
+  const {
+    isFolderModeEnabled,
+    activeEditorTabIndex,
+    editorTabs,
+    editorTestcases,
+    hasUnsavedChanges,
+    isRunning,
+    output,
+    replValue,
+    sideContentHeight
+  } = useTypedSelector(state => state.workspaces.githubAssessment);
 
   /**
    * Should be called to change the task number, rather than using setCurrentTaskNumber
@@ -184,9 +192,16 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       const actualTaskIndex = newTaskNumber - 1;
 
       handleUpdateWorkspace({
-        editorValue: currentTaskList[actualTaskIndex].savedCode,
-        editorPrepend: currentTaskList[actualTaskIndex].testPrepend,
-        editorPostpend: currentTaskList[actualTaskIndex].testPostpend,
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editorTabs: [
+          {
+            value: currentTaskList[actualTaskIndex].savedCode,
+            highlightedLines: [],
+            breakpoints: []
+          }
+        ],
+        programPrependValue: currentTaskList[actualTaskIndex].testPrepend,
+        programPostpendValue: currentTaskList[actualTaskIndex].testPostpend,
         editorTestcases: currentTaskList[actualTaskIndex].testCases
       });
       handleReplOutputClear();
@@ -372,7 +387,8 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
 
   const resetToTemplate = useCallback(() => {
     const originalCode = taskList[currentTaskNumber - 1].starterCode;
-    handleEditorValueChange(originalCode);
+    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+    handleEditorValueChange(0, originalCode);
     editCode(currentTaskNumber, originalCode);
   }, [currentTaskNumber, editCode, handleEditorValueChange, taskList]);
 
@@ -690,13 +706,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   ]);
 
   const onClickReturn = useCallback(() => {
-    history.push('/githubassessments/missions');
-  }, []);
+    navigate('/githubassessments/missions');
+  }, [navigate]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       !isMobileBreakpoint &&
       (selectedTab === SideContentType.mobileEditor ||
@@ -704,11 +720,12 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     ) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab]);
 
-  const onEditorValueChange = React.useCallback(
+  const onEditorValueChange = useCallback(
     val => {
-      handleEditorValueChange(val);
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+      handleEditorValueChange(0, val);
       editCode(currentTaskNumber, val);
     },
     [currentTaskNumber, editCode, handleEditorValueChange]
@@ -731,14 +748,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
    * However, AceEditor only binds commands on mount (https://github.com/securingsincity/react-ace/issues/684)
    * Thus, we use a mutable ref to overcome the stale closure problem
    */
-  const activeTab = React.useRef(selectedTab);
+  const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = () => {
-    props.handleEditorEval();
+    handleEditorEval();
 
     // Run testcases when the GitHub testcases tab is selected
     if (activeTab.current === SideContentType.testcases) {
-      props.handleRunAllTestcases();
+      dispatch(runAllTestcases(workspaceLocation));
     }
   };
 
@@ -798,9 +815,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     [currentTaskNumber, taskList, setTaskListWrapper]
   );
 
-  const sideContentProps: (p: GitHubAssessmentWorkspaceProps) => SideContentProps = (
-    props: GitHubAssessmentWorkspaceProps
-  ) => {
+  const sideContentProps: () => SideContentProps = () => {
     const tabs: SideContentTab[] = [
       {
         label: 'Task',
@@ -844,7 +859,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           setTaskTestcases={setTaskTestcases}
           setTestPrepend={setTestPrepend}
           setTestPostpend={setTestPostpend}
-          handleTestcaseEval={props.handleTestcaseEval}
+          handleTestcaseEval={testcaseId => dispatch(evalTestcase(workspaceLocation, testcaseId))}
         />
       ),
       id: SideContentType.testcases
@@ -857,6 +872,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         iconName: IconNames.BUILD,
         body: (
           <SideContentMissionEditor
+            isFolderModeEnabled={isFolderModeEnabled}
             missionMetadata={missionMetadata}
             setMissionMetadata={setMissionMetadataWrapper}
           />
@@ -900,7 +916,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
   };
 
   const controlBarProps: () => ControlBarProps = () => {
-    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
+        handleEditorEval={handleEval}
+        key="run"
+      />
+    );
 
     const saveButton = (
       <ControlButtonSaveButton
@@ -915,6 +937,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     const chapterSelect = (
       <ControlBarChapterSelect
         handleChapterSelect={() => {}}
+        isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={missionMetadata.sourceVersion}
         sourceVariant={Constants.defaultSourceVariant}
         disabled={true}
@@ -927,7 +950,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         onClickNext={onClickNext}
         onClickReturn={onClickReturn}
         questionProgress={[currentTaskNumber, taskList.length]}
-        key={'next_question'}
+        key="next_question"
       />
     );
 
@@ -935,13 +958,13 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       <ControlBarPreviousButton
         onClick={onClickPrevious}
         questionProgress={[currentTaskNumber, taskList.length]}
-        key={'previous_question'}
+        key="previous_question"
       />
     );
 
     const questionView = (
       <ControlBarQuestionViewButton
-        key={'task_view'}
+        key="task_view"
         questionProgress={[currentTaskNumber, taskList.length]}
       />
     );
@@ -955,14 +978,14 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
         <ControlBarTaskAddButton
           addNewQuestion={addNewQuestion}
           numberOfTasks={taskList.length}
-          key={'add_task'}
+          key="add_task"
         />
       );
       const deleteTaskButton = (
         <ControlBarTaskDeleteButton
           deleteCurrentQuestion={deleteCurrentQuestion}
           numberOfTasks={taskList.length}
-          key={'delete_task'}
+          key="delete_task"
         />
       );
       const showMCQButton = (
@@ -970,13 +993,11 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
           displayMCQInEditor={() => setDisplayMCQInEditorWrapper(true)}
           displayTextInEditor={() => setDisplayMCQInEditorWrapper(false)}
           mcqDisplayed={displayMCQInEditor}
-          key={'display MCQ'}
+          key="display MCQ"
         />
       );
 
-      editorButtons.push(addTaskButton);
-      editorButtons.push(deleteTaskButton);
-      editorButtons.push(showMCQButton);
+      editorButtons.push(addTaskButton, deleteTaskButton, showMCQButton);
     }
 
     const flowButtons = [previousButton, questionView, nextButton];
@@ -1005,7 +1026,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       }
     };
 
-    const sideContent = sideContentProps(props);
+    const sideContent = sideContentProps();
 
     return {
       mobileControlBarProps: {
@@ -1024,11 +1045,7 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
     );
 
     const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
-        key="eval_repl"
-      />
+      <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
     );
 
     return [evalButton, clearButton];
@@ -1058,48 +1075,67 @@ const GitHubAssessmentWorkspace: React.FC<GitHubAssessmentWorkspaceProps> = prop
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
 
-  const editorProps = {
+  const setActiveEditorTabIndex = React.useCallback(
+    (activeEditorTabIndex: number | null) =>
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+    [dispatch]
+  );
+  const removeEditorTabByIndex = React.useCallback(
+    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+    [dispatch]
+  );
+
+  const editorContainerProps: NormalEditorContainerProps = {
+    editorVariant: 'normal',
+    isFolderModeEnabled,
+    activeEditorTabIndex,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex,
+    editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
-    editorValue: props.editorValue!,
-    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleDeclarationNavigate: (cursorPosition: Position) =>
+      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval: handleEval,
     handleEditorValueChange: onEditorValueChange,
     handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
-    breakpoints: props.breakpoints,
-    highlightedLines: props.highlightedLines,
-    newCursorPosition: props.newCursorPosition,
-    handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
-    handlePromptAutocomplete: props.handlePromptAutocomplete,
+    handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+      dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
+    handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
     isEditorAutorun: false
   };
   const replProps = {
-    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-    handleReplEval: props.handleReplEval,
-    handleReplValueChange: props.handleReplValueChange,
-    output: props.output,
-    replValue: props.replValue,
+    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+    handleReplEval: handleReplEval,
+    handleReplValueChange: (newValue: string) =>
+      dispatch(updateReplValue(newValue, workspaceLocation)),
+    output: output,
+    replValue: replValue,
     sourceChapter: missionMetadata.sourceVersion || Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: replButtons()
   };
+  const sideBarProps = {
+    tabs: []
+  };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
-    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
-    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
+    handleSideContentHeightChange: heightChange =>
+      dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
-    sideBarProps: {
-      tabs: []
-    },
-    sideContentHeight: props.sideContentHeight,
-    sideContentProps: sideContentProps(props),
+    sideBarProps: sideBarProps,
+    sideContentHeight: sideContentHeight,
+    sideContentProps: sideContentProps(),
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    editorProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorProps,
+    editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
     replProps: replProps,
+    sideBarProps: sideBarProps,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     mobileSideContentProps: mobileSideContentProps()

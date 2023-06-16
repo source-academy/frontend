@@ -1,14 +1,14 @@
 import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
-import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
+import React from 'react';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
-import controlButton from '../ControlButton';
-import Constants from '../utils/Constants';
+import ControlButton from '../ControlButton';
+import { useResponsive } from '../utils/Hooks';
 
 export type ControlBarGoogleDriveButtonsProps = {
+  isFolderModeEnabled: boolean;
   loggedInAs?: string;
   currentFile?: PersistenceFile;
   isDirty?: boolean;
@@ -26,53 +26,64 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 };
 
 export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
   const state: PersistenceState = props.currentFile
     ? props.isDirty
       ? 'DIRTY'
       : 'SAVED'
     : 'INACTIVE';
-  const mainButton = controlButton(
-    (props.currentFile && props.currentFile.name) || 'Google Drive',
-    IconNames.CLOUD,
-    null,
-    {
-      intent: stateToIntent[state]
-    }
+  const mainButton = (
+    <ControlButton
+      label={(props.currentFile && props.currentFile.name) || 'Google Drive'}
+      icon={IconNames.CLOUD}
+      options={{ intent: stateToIntent[state] }}
+      isDisabled={props.isFolderModeEnabled}
+    />
   );
-  const openButton = controlButton('Open', IconNames.DOCUMENT_OPEN, props.onClickOpen);
-  const saveButton = controlButton(
-    'Save',
-    IconNames.FLOPPY_DISK,
-    props.onClickSave,
-    undefined,
-    // disable if logged_in only (i.e. not linked to a file)
-    state === 'INACTIVE'
+  const openButton = (
+    <ControlButton label="Open" icon={IconNames.DOCUMENT_OPEN} onClick={props.onClickOpen} />
   );
-  const saveAsButton = controlButton('Save as', IconNames.SEND_TO, props.onClickSaveAs);
+  const saveButton = (
+    <ControlButton
+      label="Save"
+      icon={IconNames.FLOPPY_DISK}
+      onClick={props.onClickSave}
+      // disable if logged_in only (i.e. not linked to a file)
+      isDisabled={state === 'INACTIVE'}
+    />
+  );
+  const saveAsButton = (
+    <ControlButton label="Save as" icon={IconNames.SEND_TO} onClick={props.onClickSaveAs} />
+  );
   const logoutButton = props.loggedInAs && (
     <Tooltip2 content={`Logged in as ${props.loggedInAs}`}>
-      {controlButton('Log out', IconNames.LOG_OUT, props.onClickLogOut)}
+      <ControlButton label="Log out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
     </Tooltip2>
   );
+  const tooltipContent = props.isFolderModeEnabled
+    ? 'Currently unsupported in Folder mode'
+    : undefined;
 
   return (
-    <Popover2
-      autoFocus={false}
-      content={
-        <div>
-          <ButtonGroup large={!isMobileBreakpoint}>
-            {openButton}
-            {saveButton}
-            {saveAsButton}
-            {logoutButton}
-          </ButtonGroup>
-        </div>
-      }
-      onOpening={props.onPopoverOpening}
-      popoverClassName={Classes.POPOVER_DISMISS}
-    >
-      {mainButton}
-    </Popover2>
+    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
+      <Popover2
+        autoFocus={false}
+        content={
+          <div>
+            <ButtonGroup large={!isMobileBreakpoint}>
+              {openButton}
+              {saveButton}
+              {saveAsButton}
+              {logoutButton}
+            </ButtonGroup>
+          </div>
+        }
+        onOpening={props.onPopoverOpening}
+        popoverClassName={Classes.POPOVER_DISMISS}
+        disabled={props.isFolderModeEnabled}
+      >
+        {mainButton}
+      </Popover2>
+    </Tooltip2>
   );
 };

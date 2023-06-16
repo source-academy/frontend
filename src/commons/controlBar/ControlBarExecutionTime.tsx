@@ -1,6 +1,7 @@
 import { NumericInput, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 
 type ControlBarExecutionTimeProps = DispatchProps & StateProps;
 
@@ -13,7 +14,7 @@ type StateProps = {
   key: string;
 };
 
-export function ControlBarExecutionTime(props: ControlBarExecutionTimeProps) {
+export const ControlBarExecutionTime: React.FC<ControlBarExecutionTimeProps> = props => {
   return (
     <Tooltip2 content="Execution Time" placement={Position.TOP}>
       <NumericInput
@@ -25,4 +26,4 @@ export function ControlBarExecutionTime(props: ControlBarExecutionTimeProps) {
       />
     </Tooltip2>
   );
-}
+};

@@ -38,6 +38,17 @@ var timeout_color;
 
 var timeout_objects = new Array();
 
+// vector_to_list returns a list that contains the elements of the argument vector
+// in the given order.
+// vector_to_list throws an exception if the argument is not a vector
+function vector_to_list(vector) {
+  let result = null;
+  for (let i = vector.length - 1; i >= 0; i = i - 1) {
+    result = [vector[i], result];
+  }
+  return result;
+}
+
 // given the x, y coordinates of a "click" event
 // return the row and column numbers of the clicked square
 function x_y_to_row_column(x, y) {

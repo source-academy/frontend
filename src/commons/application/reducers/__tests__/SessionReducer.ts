@@ -23,7 +23,6 @@ import {
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
-  UPDATE_INFINITE_LOOP_ENCOUNTERED,
   UPDATE_NOTIFICATIONS
 } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
@@ -536,19 +535,6 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
   const result: SessionState = SessionsReducer(newDefaultSession, action);
 
   expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
-});
-
-test('UPDATE_INFINITE_LOOP_ENCOUNTERED works correctly in updating had infinite loop flag', () => {
-  const newDefaultSession = {
-    ...defaultSession,
-    hadPreviousInfiniteLoop: false
-  };
-  const action = {
-    type: UPDATE_INFINITE_LOOP_ENCOUNTERED
-  };
-  const result: SessionState = SessionsReducer(newDefaultSession, action);
-
-  expect(result.hadPreviousInfiniteLoop).toEqual(true);
 });
 
 test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {

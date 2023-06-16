@@ -2,15 +2,14 @@ import { Card, Elevation, Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
-import Constants from 'src/commons/utils/Constants';
+import { useResponsive } from 'src/commons/utils/Hooks';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
+import Playground from 'src/pages/playground/Playground';
 
 import { CodeSnippetContext } from '../Sicp';
-import SicpWorkspaceContainer from './SicpWorkspaceContainer';
 
 export type CodeSnippetProps = OwnProps;
 type OwnProps = {
@@ -43,7 +42,7 @@ const resizableProps = {
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output, id } = props;
   const context = React.useContext(CodeSnippetContext);
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
+  const { isMobileBreakpoint } = useResponsive();
 
   const handleOpen = () => {
     context.setActive(id);
@@ -82,13 +81,13 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           <ControlBar {...controlBarProps} />
           {isMobileBreakpoint ? (
             <div className="sicp-workspace-container-container">
-              <SicpWorkspaceContainer {...WorkspaceProps} />
+              <Playground {...WorkspaceProps} />
             </div>
           ) : (
             <div className="sicp-code-snippet-desktop-open">
               <Resizable {...resizableProps}>
                 <div className="sicp-workspace-container-container">
-                  <SicpWorkspaceContainer {...WorkspaceProps} />
+                  <Playground {...WorkspaceProps} />
                 </div>
               </Resizable>
             </div>

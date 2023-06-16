@@ -5,21 +5,6 @@ import { call, put, select } from 'redux-saga/effects';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { OverallState, Role } from '../../commons/application/ApplicationTypes';
-import {
-  Assessment,
-  AssessmentConfiguration,
-  AssessmentOverview,
-  AssessmentStatuses,
-  FETCH_ASSESSMENT_OVERVIEWS,
-  Question,
-  SUBMIT_ASSESSMENT
-} from '../../commons/assessment/AssessmentTypes';
-import {
-  Notification,
-  NotificationFilterFunction
-} from '../../commons/notificationBadge/NotificationBadgeTypes';
-import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
@@ -37,6 +22,8 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { OverallState, Role } from '../application/ApplicationTypes';
+import { RouterState } from '../application/types/CommonsTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -45,15 +32,18 @@ import {
   DELETE_ASSESSMENT_CONFIG,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_TOTAL_XP,
+  FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
-  GET_TOTAL_XP,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -69,13 +59,27 @@ import {
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  AssessmentStatuses,
+  FETCH_ASSESSMENT_OVERVIEWS,
+  Question,
+  SUBMIT_ASSESSMENT
+} from '../assessment/AssessmentTypes';
+import {
+  Notification,
+  NotificationFilterFunction
+} from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
-import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   deleteAssessment,
   deleteSourcecastEntry,
+  getAllUserXp,
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
@@ -120,6 +124,14 @@ function selectTokens() {
   }));
 }
 
+function selectRouter() {
+  return select((state: OverallState) => state.router);
+}
+export function* routerNavigate(path: string) {
+  const router: RouterState = yield selectRouter();
+  return router?.navigate(path);
+}
+
 function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>): any {
     const { code, providerId: payloadProviderId } = action.payload;
@@ -130,7 +142,7 @@ function* BackendSaga(): SagaIterator {
         showWarningMessage,
         'Could not log in; invalid provider or no providers configured.'
       );
-      return yield history.push('/');
+      return yield routerNavigate('/');
     }
 
     const clientId = getClientId(providerId);
@@ -138,7 +150,7 @@ function* BackendSaga(): SagaIterator {
 
     const tokens: Tokens | null = yield call(postAuth, code, providerId, clientId, redirectUrl);
     if (!tokens) {
-      return yield history.push('/');
+      return yield routerNavigate('/');
     }
     yield put(actions.setTokens(tokens));
 
@@ -172,10 +184,10 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      return yield history.push(`/courses/${courseRegistration.courseId}`);
+      return yield routerNavigate(`/courses/${courseRegistration.courseId}`);
     }
 
-    return yield history.push(`/welcome`);
+    return yield routerNavigate('/welcome');
   });
 
   yield takeEvery(
@@ -235,7 +247,16 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(GET_TOTAL_XP, function* () {
+  yield takeEvery(FETCH_ALL_USER_XP, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const res: { all_users_xp: string[][] } = yield call(getAllUserXp, tokens);
+    if (res) {
+      yield put(actions.updateAllUserXp(res.all_users_xp));
+    }
+  });
+
+  yield takeEvery(FETCH_TOTAL_XP, function* () {
     const tokens: Tokens = yield selectTokens();
 
     const res: { totalXp: number } = yield call(getTotalXp, tokens);
@@ -244,16 +265,49 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
+  yield takeEvery(
+    FETCH_TOTAL_XP_ADMIN,
+    function* (action: ReturnType<typeof actions.fetchTotalXpAdmin>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const courseRegId = action.payload;
+
+      const res: { totalXp: number } = yield call(getTotalXp, tokens, courseRegId);
+      if (res) {
+        yield put(actions.updateTotalXp(res.totalXp));
+      }
+    }
+  );
+
   yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
     const tokens: Tokens = yield selectTokens();
 
-    const id = action.payload;
+    const assessmentId = action.payload;
 
-    const assessment: Assessment | null = yield call(getAssessment, id, tokens);
+    const assessment: Assessment | null = yield call(getAssessment, assessmentId, tokens);
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
     }
   });
+
+  yield takeEvery(
+    FETCH_ASSESSMENT_ADMIN,
+    function* (action: ReturnType<typeof actions.fetchAssessmentAdmin>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const { assessmentId, courseRegId } = action.payload;
+
+      const assessment: Assessment | null = yield call(
+        getAssessment,
+        assessmentId,
+        tokens,
+        courseRegId
+      );
+      if (assessment) {
+        yield put(actions.updateAssessment(assessment));
+      }
+    }
+  );
 
   yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>): any {
     const tokens: Tokens = yield selectTokens();
@@ -436,7 +490,7 @@ function* BackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield history.push(
+    yield routerNavigate(
       `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
     );
   };
@@ -579,7 +633,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield call(showSuccessMessage, 'Saved successfully!', 1000);
-      yield history.push(`/courses/${courseId}/sourcecast`);
+      yield routerNavigate(`/courses/${courseId}/sourcecast`);
     }
   );
 
@@ -630,7 +684,7 @@ function* BackendSaga(): SagaIterator {
 
       if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
         yield call(showWarningMessage, `Failed to load course!`);
-        return yield history.push('/welcome');
+        return yield routerNavigate('/welcome');
       }
 
       yield put(actions.setCourseConfiguration(courseConfiguration));
@@ -776,7 +830,7 @@ function* BackendSaga(): SagaIterator {
     }
 
     yield call(showSuccessMessage, 'Successfully created your new course!');
-    yield call([history, 'push'], `/courses/${courseRegistration.courseId}`);
+    yield routerNavigate(`/courses/${courseRegistration.courseId}`);
   });
 
   yield takeEvery(

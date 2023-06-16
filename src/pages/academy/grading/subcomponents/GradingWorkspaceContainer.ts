@@ -23,10 +23,12 @@ import {
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
+  removeEditorTab,
   resetWorkspace,
   runAllTestcases,
   sendReplInputToOutput,
   setEditorBreakpoint,
+  updateActiveEditorTabIndex,
   updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
@@ -40,18 +42,15 @@ const workspaceLocation: WorkspaceLocation = 'grading';
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     autogradingResults: state.workspaces.grading.autogradingResults,
-    editorPrepend: state.workspaces.grading.editorPrepend,
-    editorValue: state.workspaces.grading.editorValue,
-    editorPostpend: state.workspaces.grading.editorPostpend,
+    isFolderModeEnabled: state.workspaces.grading.isFolderModeEnabled,
+    activeEditorTabIndex: state.workspaces.grading.activeEditorTabIndex,
+    editorTabs: state.workspaces.grading.editorTabs,
     editorTestcases: state.workspaces.grading.editorTestcases,
-    breakpoints: state.workspaces.grading.breakpoints,
-    highlightedLines: state.workspaces.grading.highlightedLines,
     grading: state.session.gradings.get(props.submissionId),
     hasUnsavedChanges: state.workspaces.grading.hasUnsavedChanges,
     isRunning: state.workspaces.grading.isRunning,
     isDebugging: state.workspaces.grading.isDebugging,
     enableDebugging: state.workspaces.grading.enableDebugging,
-    newCursorPosition: state.workspaces.grading.newCursorPosition,
     output: state.workspaces.grading.output,
     replValue: state.workspaces.grading.replValue,
     sideContentHeight: state.workspaces.grading.sideContentHeight,
@@ -71,9 +70,14 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),
-      handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
-        setEditorBreakpoint(breakpoints, workspaceLocation),
+      handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
+      handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
+        removeEditorTab(workspaceLocation, editorTabIndex),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        updateEditorValue(workspaceLocation, 0, newEditorValue),
+      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+        setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
       handleGradingFetch: fetchGrading,
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),

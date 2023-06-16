@@ -1,16 +1,20 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router';
 
 import { Assessment } from '../assessment/AssessmentTypes';
-import { history } from '../utils/HistoryHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
-export type OwnProps = {
+const AchievementCommentCard = ({
+  assessment,
+  showToQuestion
+}: {
   assessment: Assessment;
-  courseId?: number;
-};
-
-const AchievementCommentCard = ({ assessment, courseId }: OwnProps) => {
+  showToQuestion: boolean;
+}) => {
+  const navigate = useNavigate();
+  const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
     () => (questionId: number) => {
       if (!courseId) {
@@ -20,9 +24,9 @@ const AchievementCommentCard = ({ assessment, courseId }: OwnProps) => {
 
       const listingPath = `/courses/${courseId}/${assessmentTypeLink(assessment?.type)}`;
       const assessmentWorkspacePath = listingPath + `/${assessment?.id.toString()}`;
-      history.push(assessmentWorkspacePath + `/${questionId}`);
+      navigate(assessmentWorkspacePath + `/${questionId}`);
     },
-    [assessment?.id, assessment?.type, courseId]
+    [assessment?.id, assessment?.type, courseId, navigate]
   );
 
   return (
@@ -37,13 +41,15 @@ const AchievementCommentCard = ({ assessment, courseId }: OwnProps) => {
               </span>
 
               <div className="box-comment">
-                <p>{question.comments === null ? 'Not Graded' : question.comments}</p>
+                <p>{question.comments === null ? 'No Comments' : question.comments}</p>
                 <p className="xp">{'XP: ' + question.xp + '/' + question.maxXp}</p>
               </div>
 
-              <button className="to-assessment-button" onClick={() => toMission(index)}>
-                {'To Question'}
-              </button>
+              {showToQuestion && (
+                <button className="to-assessment-button" onClick={() => toMission(index)}>
+                  {'To Question'}
+                </button>
+              )}
             </div>
           ))}
       </div>

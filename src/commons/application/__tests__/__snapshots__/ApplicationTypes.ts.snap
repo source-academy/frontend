@@ -1,0 +1,319 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`available Python language configurations matches snapshot 1`] = `
+Array [
+  Object {
+    "chapter": -4,
+    "displayName": "Python §1",
+    "mainLanguage": "Python",
+    "supports": Object {
+      "repl": true,
+    },
+    "variant": "default",
+  },
+]
+`;
+
+exports[`available Scheme language configurations matches snapshot 1`] = `
+Array [
+  Object {
+    "chapter": -9,
+    "displayName": "Scheme §1",
+    "mainLanguage": "Scheme",
+    "supports": Object {
+      "repl": true,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": -10,
+    "displayName": "Scheme §2",
+    "mainLanguage": "Scheme",
+    "supports": Object {
+      "repl": true,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": -11,
+    "displayName": "Scheme §3",
+    "mainLanguage": "Scheme",
+    "supports": Object {
+      "repl": true,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": -12,
+    "displayName": "Scheme §4",
+    "mainLanguage": "Scheme",
+    "supports": Object {
+      "repl": true,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": -13,
+    "displayName": "Full Scheme",
+    "mainLanguage": "Scheme",
+    "supports": Object {
+      "repl": true,
+    },
+    "variant": "default",
+  },
+]
+`;
+
+exports[`available Source language configurations matches snapshot 1`] = `
+Array [
+  Object {
+    "chapter": 1,
+    "displayName": "Source §1",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": false,
+      "envVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": 1,
+    "displayName": "Source §1 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": false,
+      "envVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "typed",
+  },
+  Object {
+    "chapter": 1,
+    "displayName": "Source §1 WebAssembly",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": false,
+      "envVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "wasm",
+  },
+  Object {
+    "chapter": 1,
+    "displayName": "Source §1 Lazy",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": false,
+      "envVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "lazy",
+  },
+  Object {
+    "chapter": 1,
+    "displayName": "Source §1 Native",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": false,
+      "envVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "native",
+  },
+  Object {
+    "chapter": 2,
+    "displayName": "Source §2",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": false,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": 2,
+    "displayName": "Source §2 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": false,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "typed",
+  },
+  Object {
+    "chapter": 2,
+    "displayName": "Source §2 Lazy",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": false,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "lazy",
+  },
+  Object {
+    "chapter": 2,
+    "displayName": "Source §2 Native",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": false,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "native",
+  },
+  Object {
+    "chapter": 3,
+    "displayName": "Source §3",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": 3,
+    "displayName": "Source §3 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "typed",
+  },
+  Object {
+    "chapter": 3,
+    "displayName": "Source §3 Concurrent",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": false,
+      "multiFile": true,
+      "repl": false,
+      "substVisualizer": false,
+    },
+    "variant": "concurrent",
+  },
+  Object {
+    "chapter": 3,
+    "displayName": "Source §3 Non-Det",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": false,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "non-det",
+  },
+  Object {
+    "chapter": 3,
+    "displayName": "Source §3 Native",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "native",
+  },
+  Object {
+    "chapter": 4,
+    "displayName": "Source §4",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "default",
+  },
+  Object {
+    "chapter": 4,
+    "displayName": "Source §4 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "typed",
+  },
+  Object {
+    "chapter": 4,
+    "displayName": "Source §4 GPU",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "gpu",
+  },
+  Object {
+    "chapter": 4,
+    "displayName": "Source §4 Native",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "native",
+  },
+  Object {
+    "chapter": 4,
+    "displayName": "Source §4 Explicit-Control",
+    "mainLanguage": "JavaScript",
+    "supports": Object {
+      "dataVisualizer": true,
+      "envVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "explicit-control",
+  },
+]
+`;
+
+exports[`getLanguageConfig throws an error for an invalid chapter/variant combination 1`] = `"Language config not found for chapter 5 variant default"`;

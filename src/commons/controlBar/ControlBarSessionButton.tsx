@@ -1,11 +1,11 @@
 import { Classes, Colors, Menu } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { checkSessionIdExists, createNewSession } from '../collabEditing/CollabEditingHelper';
-import controlButton from '../ControlButton';
+import ControlButton from '../ControlButton';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
@@ -15,8 +15,9 @@ type DispatchProps = {
 };
 
 type StateProps = {
+  isFolderModeEnabled: boolean;
   editorSessionId?: string;
-  editorValue?: string | null;
+  getEditorValue: () => string;
   sharedbConnected?: boolean;
   key: string;
 };
@@ -48,7 +49,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
     const handleStartInvite = () => {
       // FIXME this handler should be a Saga action or at least in a controller
       if (this.props.editorSessionId === '') {
-        createNewSession(this.props.editorValue || '').then(sessionId => {
+        createNewSession(this.props.getEditorValue()).then(sessionId => {
           this.props.handleSetEditorSessionId!(sessionId);
         }, handleError);
       }
@@ -58,7 +59,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
       <>
         <input value={this.props.editorSessionId} readOnly={true} ref={this.inviteInputElem} />
         <CopyToClipboard text={'' + this.props.editorSessionId}>
-          {controlButton('', IconNames.DUPLICATE, this.selectInviteInputText)}
+          <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectInviteInputText} />
         </CopyToClipboard>
       </>
     );
@@ -69,7 +70,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
         inheritDarkTheme={false}
         content={inviteButtonPopoverContent}
       >
-        {controlButton('Invite', IconNames.GRAPH, handleStartInvite)}
+        <ControlButton label="Invite" icon={IconNames.GRAPH} onClick={handleStartInvite} />
       </Popover2>
     );
 
@@ -97,7 +98,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
       <form onSubmit={handleStartJoining}>
         <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
         <span className={Classes.POPOVER_DISMISS}>
-          {controlButton('', IconNames.KEY_ENTER, null, { type: 'submit' })}
+          <ControlButton icon={IconNames.KEY_ENTER} options={{ type: 'submit' }} />
         </span>
       </form>
     );
@@ -108,34 +109,52 @@ export class ControlBarSessionButtons extends React.PureComponent<
         inheritDarkTheme={false}
         content={joinButtonPopoverContent}
       >
-        {controlButton('Join', IconNames.LOG_IN)}
+        <ControlButton label="Join" icon={IconNames.LOG_IN} />
       </Popover2>
     );
 
-    const leaveButton = controlButton('Leave', IconNames.FEED, () => {
-      // FIXME this handler should be a Saga action or at least in a controller
-      this.props.handleSetEditorSessionId!('');
-      this.setState({ joinElemValue: '' });
-    });
+    const leaveButton = (
+      <ControlButton
+        label="Leave"
+        icon={IconNames.FEED}
+        onClick={() => {
+          // FIXME: this handler should be a Saga action or at least in a controller
+          this.props.handleSetEditorSessionId!('');
+          this.setState({ joinElemValue: '' });
+        }}
+      />
+    );
+
+    const tooltipContent = this.props.isFolderModeEnabled
+      ? 'Currently unsupported in Folder mode'
+      : undefined;
 
     return (
-      <Popover2
-        content={
-          <Menu large={true}>
-            {inviteButton}
-            {this.props.editorSessionId === '' ? joinButton : leaveButton}
-          </Menu>
-        }
-      >
-        {controlButton('Session', IconNames.SOCIAL_MEDIA, undefined, {
-          iconColor:
-            this.props.editorSessionId === ''
-              ? undefined
-              : this.props.sharedbConnected
-              ? Colors.GREEN3
-              : Colors.RED3
-        })}
-      </Popover2>
+      <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
+        <Popover2
+          content={
+            <Menu large={true}>
+              {inviteButton}
+              {this.props.editorSessionId === '' ? joinButton : leaveButton}
+            </Menu>
+          }
+          disabled={this.props.isFolderModeEnabled}
+        >
+          <ControlButton
+            label="Session"
+            icon={IconNames.SOCIAL_MEDIA}
+            options={{
+              iconColor:
+                this.props.editorSessionId === ''
+                  ? undefined
+                  : this.props.sharedbConnected
+                  ? Colors.GREEN3
+                  : Colors.RED3
+            }}
+            isDisabled={this.props.isFolderModeEnabled}
+          />
+        </Popover2>
+      </Tooltip2>
     );
   }
 

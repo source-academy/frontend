@@ -1,126 +1,89 @@
-import { shallow } from 'enzyme';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { require as acequire } from 'ace-builds';
+import { FSModule } from 'browserfs/dist/node/core/FS';
+import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
-import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { createMemoryRouter, RouteObject, RouterProvider } from 'react-router';
+import { Dispatch } from 'redux';
+import { WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
+import { EditorBinding } from 'src/commons/WorkspaceSettingsContext';
+import { createStore } from 'src/pages/createStore';
 
-import { Position } from '../../../commons/editor/EditorTypes';
-import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
-import Playground, { handleHash, PlaygroundProps } from '../Playground';
+import Playground, { handleHash } from '../Playground';
 
-const baseProps = {
-  editorValue: '',
-  execTime: 1000,
-  stepLimit: 1000,
-  breakpoints: [],
-  highlightedLines: [],
-  isRunning: false,
-  isDebugging: false,
-  enableDebugging: true,
-  editorSessionId: '',
-  isEditorAutorun: false,
-  sideContentHeight: 40,
-  playgroundSourceChapter: Chapter.SOURCE_2,
-  playgroundSourceVariant: Variant.DEFAULT,
-  output: [],
-  replValue: '',
-  sharedbConnected: false,
-  usingSubst: false,
-  persistenceUser: undefined,
-  persistenceFile: undefined,
-  githubOctokitObject: { octokit: undefined },
-  githubSaveInfo: { repoName: '', filePath: '' },
-  handleAddHtmlConsoleError: (errorMsg: string) => {},
-  handleBrowseHistoryDown: () => {},
-  handleBrowseHistoryUp: () => {},
-  handleChangeExecTime: (execTime: number) => {},
-  handleChangeStepLimit: (stepLimit: number) => {},
-  handleChapterSelect: (chapter: Chapter) => {},
-  handleDeclarationNavigate: (cursorPosition: Position) => {},
-  handleEditorEval: () => {},
-  handleEditorValueChange: () => {},
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
-  handleFetchSublanguage: () => {},
-  handleGenerateLz: () => {},
-  handleShortenURL: () => {},
-  handleUpdateShortURL: (s: string) => {},
-  handleInterruptEval: () => {},
-  handleReplEval: () => {},
-  handleReplOutputClear: () => {},
-  handleReplValueChange: (code: string) => {},
-  handleSendReplInputToOutput: (code: string) => {},
-  handleSetEditorSessionId: (editorSessionId: string) => {},
-  handleSetSharedbConnected: (connected: boolean) => {},
-  handleSideContentHeightChange: (h: number) => {},
-  handleToggleEditorAutorun: () => {},
-  handleUsingSubst: (usingSubst: boolean) => {},
-  handleDebuggerPause: () => {},
-  handleDebuggerResume: () => {},
-  handleDebuggerReset: () => {},
-  handleFetchChapter: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
-  handlePersistenceOpenPicker: () => {},
-  handlePersistenceSaveFile: () => {},
-  handlePersistenceInitialise: () => {},
-  handlePersistenceUpdateFile: () => {},
-  handlePersistenceLogOut: () => {},
-  handleGitHubOpenFile: () => {},
-  handleGitHubSaveFileAs: () => {},
-  handleGitHubSaveFile: () => {},
-  handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {}
-};
+jest.mock('ace-builds', () => ({
+  ...jest.requireActual('ace-builds'),
+  require: jest.fn()
+}));
 
-const testValueProps: PlaygroundProps = {
-  ...baseProps,
-  ...mockRouterProps('/academy', {}),
-  editorValue: 'Test value'
-};
+const acequireMock = acequire as jest.Mock;
 
-const playgroundLinkProps: PlaygroundProps = {
-  ...baseProps,
-  ...mockRouterProps('/playground#lib=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA', {}),
-  editorValue: 'This should not show up'
-};
-
-const mockStore = mockInitialStore();
-
-test('Playground renders correctly', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <Playground {...testValueProps} />
-    </Provider>
-  );
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
-});
-
-test('Playground with link renders correctly', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <Playground {...playgroundLinkProps} />
-    </Provider>
-  );
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
-});
-
-describe('handleHash', () => {
-  test('disables loading hash with fullJS chapter in URL params', () => {
-    const testHash = '#chap=-1&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA';
-
-    const mockHandleEditorValueChanged = jest.fn();
-    const mockHandleChapterSelect = jest.fn();
-    const mockHandleChangeExecTime = jest.fn();
-
-    handleHash(testHash, {
-      ...playgroundLinkProps, // dummy props (will not be used)
-      handleEditorValueChange: mockHandleEditorValueChanged,
-      handleChapterSelect: mockHandleChapterSelect,
-      handleChangeExecTime: mockHandleChangeExecTime
+describe('Playground tests', () => {
+  let routes: RouteObject[];
+  beforeEach(() => {
+    const mockStore = createStore();
+    routes = [
+      {
+        path: '/playground',
+        element: (
+          <Provider store={mockStore}>
+            <WorkspaceSettingsContext.Provider
+              value={[{ editorBinding: EditorBinding.NONE }, jest.fn()]}
+            >
+              <Playground />
+            </WorkspaceSettingsContext.Provider>
+          </Provider>
+        )
+      }
+    ];
+    acequireMock.mockReturnValue({
+      Mode: jest.fn(),
+      setCompleters: jest.fn()
     });
+  });
 
-    expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
-    expect(mockHandleChapterSelect).not.toHaveBeenCalled();
-    expect(mockHandleChangeExecTime).not.toHaveBeenCalled();
+  test('Playground renders correctly', async () => {
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/playground'],
+      initialIndex: 0
+    });
+    const tree = mount(<RouterProvider router={router} />);
+    expect(tree.debug()).toMatchSnapshot();
+  });
+
+  test('Playground with link renders correctly', async () => {
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/playground#chap=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA'],
+      initialIndex: 0
+    });
+    const tree = mount(<RouterProvider router={router} />);
+    expect(tree.debug()).toMatchSnapshot();
+  });
+
+  describe('handleHash', () => {
+    test('disables loading hash with fullJS chapter in URL params', () => {
+      const testHash = '#chap=-1&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA';
+
+      const mockHandleEditorValueChanged = jest.fn();
+      const mockHandleChapterSelect = jest.fn();
+      const mockHandleChangeExecTime = jest.fn();
+
+      handleHash(
+        testHash,
+        {
+          handleChapterSelect: mockHandleChapterSelect,
+          handleChangeExecTime: mockHandleChangeExecTime
+        },
+        'playground',
+        // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
+        // behaviour being tested here does not actually invoke either of these. As
+        // a workaround, we pass in 'undefined' instead & cast to the expected types.
+        undefined as unknown as Dispatch,
+        undefined as unknown as FSModule
+      );
+
+      expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
+      expect(mockHandleChapterSelect).not.toHaveBeenCalled();
+      expect(mockHandleChangeExecTime).not.toHaveBeenCalled();
+    });
   });
 });
