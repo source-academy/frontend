@@ -1,15 +1,14 @@
-import SoundAssets from "../assets/SoundAssets";
+import SoundAssets from '../assets/SoundAssets';
 import { BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
-import SourceAcademyGame from "../SourceAcademyGame";
-import { HexColor } from "../utils/StyleUtils";
-import { createBitmapText } from "../utils/TextUtils";
-import { AssetKey } from "./CommonTypes";
-
+import SourceAcademyGame from '../SourceAcademyGame';
+import { HexColor } from '../utils/StyleUtils';
+import { createBitmapText } from '../utils/TextUtils';
+import { AssetKey } from './CommonTypes';
 
 type CheckboxConfig = {
   sideLength: number;
   outlineThickness: number;
-}
+};
 
 /**
  * A container that contains a checkbox.
@@ -27,7 +26,6 @@ class CommonCheckBox extends Phaser.GameObjects.Container {
   private bitmapTextStyle: BitmapFontStyle;
   private text: string;
 
-
   /**
    * @param scene scene for the container to attach to
    * @param defaultChoiceValue value oof default choice, optional
@@ -44,23 +42,23 @@ class CommonCheckBox extends Phaser.GameObjects.Container {
     defaultChoiceValue = false,
     checkboxConfig = {
       sideLength: 50,
-      outlineThickness: 5,
+      outlineThickness: 5
     },
     textConfig: TextConfig,
     bitmapTextStyle: BitmapFontStyle,
     x?: number,
     y?: number,
-    text = "",
+    text = '',
     checkboxClickSoundKey: AssetKey = SoundAssets.radioButtonClick.key
   ) {
-    super(scene, x, y)
+    super(scene, x, y);
     this.checkboxValue = defaultChoiceValue;
     this.checkboxConfig = checkboxConfig;
     this.checkboxClickSoundKey = checkboxClickSoundKey;
     this.choiceTextConfig = textConfig;
     this.bitmapTextStyle = bitmapTextStyle;
     this.text = text;
-    
+
     this.render();
   }
 
@@ -91,22 +89,18 @@ class CommonCheckBox extends Phaser.GameObjects.Container {
       .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
         SourceAcademyGame.getInstance().getSoundManager().playSound(this.checkboxClickSoundKey);
         this.activate();
-      })
+      });
     this.add(this.checkboxImage);
-    const textbox = new Phaser.GameObjects.Container(
-      this.scene,
-      this.x,
-      this.y);
-    textbox.add(createBitmapText(this.scene,
-      this.text,
-      this.choiceTextConfig, 
-      this.bitmapTextStyle))
+    const textbox = new Phaser.GameObjects.Container(this.scene, this.x, this.y);
+    textbox.add(
+      createBitmapText(this.scene, this.text, this.choiceTextConfig, this.bitmapTextStyle)
+    );
     this.add(textbox);
   }
 
   /**
    * Gets the value of the checkbox.
-   * 
+   *
    * @returns true if the checkbox is ticked, false otherwise
    */
   public getChoice(): boolean {

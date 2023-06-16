@@ -1,5 +1,5 @@
-import { HexColor } from "../utils/StyleUtils";
-import PipeButton from "./PipeButton";
+import { HexColor } from '../utils/StyleUtils';
+import PipeButton from './PipeButton';
 
 type PipeConnect = {
   up: boolean;
@@ -7,7 +7,7 @@ type PipeConnect = {
   left: boolean;
   right: boolean;
   immutable: boolean;
-}
+};
 
 enum Direction {
   left,
@@ -18,7 +18,7 @@ enum Direction {
 
 /**
  * A simple pipe puzzle minigame.
- * 
+ *
  * Given an input and output pipe, test whether the pipes
  * connect from the input pipe to the output pipe.
  */
@@ -26,7 +26,7 @@ class PipePuzzle extends Phaser.GameObjects.Container {
   // Fields storing information about the table of PipeButtons.
   private rowSize: number;
   private columnSize: number;
-  private table: Array<Array<PipeButton>>
+  private table: Array<Array<PipeButton>>;
   private checkButton: Phaser.GameObjects.Rectangle;
   private container: Phaser.GameObjects.Container;
   private buttonHeight: number;
@@ -68,8 +68,8 @@ class PipePuzzle extends Phaser.GameObjects.Container {
     startRow: number,
     startCol: number,
     startDirection: Direction,
-    endRow: number, 
-    endCol: number, 
+    endRow: number,
+    endCol: number,
     endDirection: Direction
   ) {
     super(scene, x, y);
@@ -95,20 +95,32 @@ class PipePuzzle extends Phaser.GameObjects.Container {
     this.buttonWidth = maxYSpace / this.rowSize;
     this.buttonHeight = maxXSpace / this.columnSize;
 
-    this.container.add(new Phaser.GameObjects.Rectangle(
-      this.scene, 0, 40,
-        maxXSpace + 40, maxYSpace + 120, HexColor.darkBlue, 0.7)
-        .setStrokeStyle(5, HexColor.white));
-    
-    
+    this.container.add(
+      new Phaser.GameObjects.Rectangle(
+        this.scene,
+        0,
+        40,
+        maxXSpace + 40,
+        maxYSpace + 120,
+        HexColor.darkBlue,
+        0.7
+      ).setStrokeStyle(5, HexColor.white)
+    );
+
     this.checkButton = new Phaser.GameObjects.Rectangle(
-      this.scene, 0, maxYSpace / 2 + 50,
-        maxXSpace, 60, HexColor.offWhite, 1)
-        .setStrokeStyle(5, HexColor.white)
-        .setInteractive({ useHandCursor: true })
-        .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-          if (this.check()) this.container.destroy();
-        })
+      this.scene,
+      0,
+      maxYSpace / 2 + 50,
+      maxXSpace,
+      60,
+      HexColor.offWhite,
+      1
+    )
+      .setStrokeStyle(5, HexColor.white)
+      .setInteractive({ useHandCursor: true })
+      .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+        if (this.check()) this.container.destroy();
+      });
 
     this.container.add(this.checkButton);
 
@@ -118,12 +130,12 @@ class PipePuzzle extends Phaser.GameObjects.Container {
         this.table[r][c] = new PipeButton(
           this.scene,
           pipesArray[r][c],
-          c * this.buttonHeight / 2 - maxXSpace / 4 + this.buttonHeight / 4,
-          r * this.buttonWidth / 2 - maxYSpace / 4 + this.buttonWidth / 4,
+          (c * this.buttonHeight) / 2 - maxXSpace / 4 + this.buttonHeight / 4,
+          (r * this.buttonWidth) / 2 - maxYSpace / 4 + this.buttonWidth / 4,
           this.buttonHeight,
           this.buttonWidth
-        )
-        }
+        );
+      }
 
       this.container.add(this.table[r]);
     }
@@ -136,15 +148,17 @@ class PipePuzzle extends Phaser.GameObjects.Container {
   }
 
   // Tests whether a connected path from the input pipe to the output path exists.
-  private check() : boolean {
+  private check(): boolean {
     this.resetVisits();
     if (this.connectPipe(this.startDirection, this.table[this.startRow][this.startCol])) {
       this.checkEntry(this.startRow, this.startCol);
-    } 
+    }
 
-    if (this.visited[this.endRow][this.endCol] &&
-       this.connectPipe(this.endDirection, this.table[this.endRow][this.endCol]) &&
-       !this.solved) {
+    if (
+      this.visited[this.endRow][this.endCol] &&
+      this.connectPipe(this.endDirection, this.table[this.endRow][this.endCol]) &&
+      !this.solved
+    ) {
       this.solved = true;
       this.disableAllInput();
       return false;
@@ -154,7 +168,7 @@ class PipePuzzle extends Phaser.GameObjects.Container {
   }
 
   // Reset the 'visited' status of all pipes.
-  private resetVisits() : void {
+  private resetVisits(): void {
     for (let r = 0; r < this.rowSize; r++) {
       for (let c = 0; c < this.columnSize; c++) {
         this.visited[r][c] = false;
@@ -164,7 +178,7 @@ class PipePuzzle extends Phaser.GameObjects.Container {
   }
 
   // DFS search through the table of pipes to test whether they connect.
-  private checkEntry(row: number, col: number) : void {
+  private checkEntry(row: number, col: number): void {
     if (row < 0 || row >= this.rowSize || col < 0 || col >= this.columnSize) return;
     if (this.visited[row][col]) return;
 
@@ -177,27 +191,27 @@ class PipePuzzle extends Phaser.GameObjects.Container {
     if (this.connectBelow(row, col, row - 1, col)) this.checkEntry(row - 1, col);
   }
 
-  private connectLeft(rIn: number, cIn: number, rOut: number, cOut: number) : boolean {
+  private connectLeft(rIn: number, cIn: number, rOut: number, cOut: number): boolean {
     if (rOut < 0 || rOut >= this.rowSize || cOut < 0 || cOut >= this.columnSize) return false;
     return this.table[rIn][cIn].connectLeft(this.table[rOut][cOut]);
   }
 
-  private connectRight(rIn: number, cIn: number, rOut: number, cOut: number) : boolean {
+  private connectRight(rIn: number, cIn: number, rOut: number, cOut: number): boolean {
     if (rOut < 0 || rOut >= this.rowSize || cOut < 0 || cOut >= this.columnSize) return false;
     return this.table[rIn][cIn].connectRight(this.table[rOut][cOut]);
   }
 
-  private connectAbove(rIn: number, cIn: number, rOut: number, cOut: number) : boolean {
+  private connectAbove(rIn: number, cIn: number, rOut: number, cOut: number): boolean {
     if (rOut < 0 || rOut >= this.rowSize || cOut < 0 || cOut >= this.columnSize) return false;
     return this.table[rIn][cIn].connectAbove(this.table[rOut][cOut]);
   }
 
-  private connectBelow(rIn: number, cIn: number, rOut: number, cOut: number) : boolean {
+  private connectBelow(rIn: number, cIn: number, rOut: number, cOut: number): boolean {
     if (rOut < 0 || rOut >= this.rowSize || cOut < 0 || cOut >= this.columnSize) return false;
     return this.table[rIn][cIn].connectBelow(this.table[rOut][cOut]);
   }
 
-  private disableAllInput() : void {
+  private disableAllInput(): void {
     for (let r = 0; r < this.rowSize; r++) {
       for (let c = 0; c < this.columnSize; c++) {
         this.table[r][c].removeInput();
@@ -206,17 +220,45 @@ class PipePuzzle extends Phaser.GameObjects.Container {
   }
 
   // Used for testing whether a specified pipe connects to the input/output pipe.
-  private connectPipe(dir: Direction, input: PipeButton) : boolean {
-    switch(dir) {
+  private connectPipe(dir: Direction, input: PipeButton): boolean {
+    switch (dir) {
       case Direction.left: {
-        return new PipeButton(this.scene, {up: true, down: true, left: true, right: true, immutable: true }).connectLeft(input);
-      } case Direction.right: {
-        return new PipeButton(this.scene, {up: true, down: true, left: true, right: true, immutable: true }).connectRight(input);
-      } case Direction.above: {
-        return new PipeButton(this.scene, {up: true, down: true, left: true, right: true, immutable: true }).connectAbove(input);
-      } case Direction.below: {
-        return new PipeButton(this.scene, {up: true, down: true, left: true, right: true, immutable: true }).connectBelow(input);
-      } default: {
+        return new PipeButton(this.scene, {
+          up: true,
+          down: true,
+          left: true,
+          right: true,
+          immutable: true
+        }).connectLeft(input);
+      }
+      case Direction.right: {
+        return new PipeButton(this.scene, {
+          up: true,
+          down: true,
+          left: true,
+          right: true,
+          immutable: true
+        }).connectRight(input);
+      }
+      case Direction.above: {
+        return new PipeButton(this.scene, {
+          up: true,
+          down: true,
+          left: true,
+          right: true,
+          immutable: true
+        }).connectAbove(input);
+      }
+      case Direction.below: {
+        return new PipeButton(this.scene, {
+          up: true,
+          down: true,
+          left: true,
+          right: true,
+          immutable: true
+        }).connectBelow(input);
+      }
+      default: {
         return false;
       }
     }
@@ -224,19 +266,28 @@ class PipePuzzle extends Phaser.GameObjects.Container {
 
   // Render input/output pipes
   private extantPipe(row: number, col: number, dir: Direction, color: number) {
-    const x = dir === Direction.left 
-      ? 2 * this.table[row][col].x - this.buttonWidth / 2
-      : dir === Direction.right
-      ? 2 * this.table[row][col].x + this.buttonWidth / 2
-      : 2 * this.table[row][col].x
+    const x =
+      dir === Direction.left
+        ? 2 * this.table[row][col].x - this.buttonWidth / 2
+        : dir === Direction.right
+        ? 2 * this.table[row][col].x + this.buttonWidth / 2
+        : 2 * this.table[row][col].x;
 
-    const y = dir === Direction.above
-      ? 2 * this.table[row][col].y - this.buttonHeight / 2
-      : dir === Direction.below
-      ? 2 * this.table[row][col].y + this.buttonHeight / 2
-      : 2 * this.table[row][col].y;
-    
-    const rect = new Phaser.GameObjects.Rectangle(this.scene, x, y, this.buttonWidth / 4, this.buttonHeight / 4, color).setStrokeStyle(2, HexColor.white);
+    const y =
+      dir === Direction.above
+        ? 2 * this.table[row][col].y - this.buttonHeight / 2
+        : dir === Direction.below
+        ? 2 * this.table[row][col].y + this.buttonHeight / 2
+        : 2 * this.table[row][col].y;
+
+    const rect = new Phaser.GameObjects.Rectangle(
+      this.scene,
+      x,
+      y,
+      this.buttonWidth / 4,
+      this.buttonHeight / 4,
+      color
+    ).setStrokeStyle(2, HexColor.white);
     rect.depth = Infinity;
     this.container.add(rect);
   }

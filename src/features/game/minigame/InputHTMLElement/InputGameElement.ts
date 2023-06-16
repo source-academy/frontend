@@ -4,7 +4,7 @@
  */
 class InputGameElement extends Phaser.GameObjects.Container {
   private container: Phaser.GameObjects.Container;
-  
+
   //fields and properties for the input text box
   private inputTextBoxX: number;
   private inputTextBoxY: number;
@@ -14,7 +14,7 @@ class InputGameElement extends Phaser.GameObjects.Container {
   private inputTextBoxFontSize: number;
   private inputTextBoxFontFace: string;
   private inputTextBoxPlaceholder: string;
-  
+
   //fields and properties for the submit button
   private buttonX: number;
   private buttonY: number;
@@ -23,7 +23,6 @@ class InputGameElement extends Phaser.GameObjects.Container {
   private buttonSizeY: number;
   private buttonFontSize: number;
   private buttonFontFace: string;
-  
 
   /**
    * Constructor for the Game Object, which takes in several default arguments.
@@ -81,7 +80,7 @@ class InputGameElement extends Phaser.GameObjects.Container {
     this.inputTextBoxFontSize = inputTextBoxFontSize;
     this.inputTextBoxFontFace = inputTextBoxFontFace;
     this.inputTextBoxPlaceholder = inputTextBoxPlaceholder;
-    
+
     this.buttonX = buttonX + x;
     this.buttonY = buttonY + y;
     this.buttonBgColor = buttonBgColor;
@@ -89,44 +88,45 @@ class InputGameElement extends Phaser.GameObjects.Container {
     this.buttonSizeY = buttonSizeY;
     this.buttonFontSize = buttonFontSize;
     this.buttonFontFace = buttonFontFace;
-    
-    
+
     /**
-    * A function called when the submit button is clicked, produces an alert displaying the text currently contained in inputbox
-    * 
-    * @return an alert displaying input text.
-    */
+     * A function called when the submit button is clicked, produces an alert displaying the text currently contained in inputbox
+     *
+     * @return an alert displaying input text.
+     */
     function alertTestIn() {
-      const c = (document.getElementById("nameInput") as HTMLInputElement)!.value;
-      alert("Name: " + c);
+      const c = (document.getElementById('nameInput') as HTMLInputElement)!.value;
+      alert('Name: ' + c);
     }
-    
+
     /**
-    * A function to return the current value stored in the input box element to the caller.
-    * @return the value stored in inputTextBox
-    * Disabled currently to avoid compiler warning on unused function.
-    */
+     * A function to return the current value stored in the input box element to the caller.
+     * @return the value stored in inputTextBox
+     * Disabled currently to avoid compiler warning on unused function.
+     */
     /*
     function returnInputValue() {
       const text = (document.getElementById("nameInput") as HTMLInputElement)!.value;
       return text;
     }*/
-    
+
     //creates an input text box with given properties and script
     const inputScript = `<input type = "text" id = "nameInput" name = "fname" style="background-color: ${this.inputTextBoxBgColor}; width: ${this.inputTextBoxSizeX}px; height: ${this.inputTextBoxSizeY}px; font: ${this.inputTextBoxFontSize}px ${this.inputTextBoxFontFace}" placeholder="${this.inputTextBoxPlaceholder}"></input>`;
-    this.scene.add.dom(this.inputTextBoxX, this.inputTextBoxY,'input').createFromHTML(inputScript);
-    
-    
+    this.scene.add.dom(this.inputTextBoxX, this.inputTextBoxY, 'input').createFromHTML(inputScript);
+
     //creates a submit button with given properties and script
-    const buttonScript = `<button id = "submitButton" name = "fbutton" style="background-color: ${this.buttonBgColor}; width: ${this.buttonSizeX}px; height: ${this.buttonSizeY}px; font: ${this.buttonFontSize}px ${this.buttonFontFace}">Submit</input>`;   
-    const submitButton = this.scene.add.dom(this.buttonX,this.buttonY,'button').createFromHTML(buttonScript);
-    
+    const buttonScript = `<button id = "submitButton" name = "fbutton" style="background-color: ${this.buttonBgColor}; width: ${this.buttonSizeX}px; height: ${this.buttonSizeY}px; font: ${this.buttonFontSize}px ${this.buttonFontFace}">Submit</input>`;
+    const submitButton = this.scene.add
+      .dom(this.buttonX, this.buttonY, 'button')
+      .createFromHTML(buttonScript);
+
     //adds listener to the submit button. As of now, alerts the input value. Should return to Game Engine.
-    submitButton.addListener('click').on('click', () => {alertTestIn()});
+    submitButton.addListener('click').on('click', () => {
+      alertTestIn();
+    });
 
     this.container = new Phaser.GameObjects.Container(this.scene, x, y);
     this.add(this.container);
-    
   }
 }
 

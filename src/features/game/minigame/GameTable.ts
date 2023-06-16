@@ -1,14 +1,13 @@
-import { HexColor } from "../utils/StyleUtils";
-import GameTableButton from "./GameTableButton";
+import { HexColor } from '../utils/StyleUtils';
+import GameTableButton from './GameTableButton';
 
 /**
  * A container that contains a table of GameTableButtons.
- * 
+ *
  * Not really meant to be constructed on its own (though you can if you want),
  * rather it is meant to be inherited by more complex puzzle objects.
  */
 class GameTable extends Phaser.GameObjects.Container {
-
   // Fields containing information about the table of buttons.
   private rowSize: number;
   private columnSize: number;
@@ -53,21 +52,33 @@ class GameTable extends Phaser.GameObjects.Container {
     const buttonWidth = maxYSpace / this.rowSize;
 
     const buttonHeight = maxXSpace / this.columnSize;
-      
-    this.container.add(new Phaser.GameObjects.Rectangle(
-      this.scene, 0, 40,
-        maxXSpace + 40, maxYSpace + 120, HexColor.darkBlue, 0.7)
-        .setStrokeStyle(5, HexColor.white));
-    
-    
+
+    this.container.add(
+      new Phaser.GameObjects.Rectangle(
+        this.scene,
+        0,
+        40,
+        maxXSpace + 40,
+        maxYSpace + 120,
+        HexColor.darkBlue,
+        0.7
+      ).setStrokeStyle(5, HexColor.white)
+    );
+
     this.checkButton = new Phaser.GameObjects.Rectangle(
-      this.scene, 0, maxYSpace / 2 + 50,
-        maxXSpace, 60, HexColor.offWhite, 1)
-        .setStrokeStyle(5, HexColor.white)
-        .setInteractive({ useHandCursor: true })
-        .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-          if (this.check()) this.container.destroy();
-        })
+      this.scene,
+      0,
+      maxYSpace / 2 + 50,
+      maxXSpace,
+      60,
+      HexColor.offWhite,
+      1
+    )
+      .setStrokeStyle(5, HexColor.white)
+      .setInteractive({ useHandCursor: true })
+      .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+        if (this.check()) this.container.destroy();
+      });
 
     this.container.add(this.checkButton);
 
@@ -80,17 +91,16 @@ class GameTable extends Phaser.GameObjects.Container {
           defaultValue,
           max,
           { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-          c * buttonHeight / 2 - maxXSpace / 4 + buttonHeight / 4,
-          r * buttonWidth / 2 - maxYSpace / 4 + buttonWidth / 4,
+          (c * buttonHeight) / 2 - maxXSpace / 4 + buttonHeight / 4,
+          (r * buttonWidth) / 2 - maxYSpace / 4 + buttonWidth / 4,
           buttonHeight,
           buttonWidth
-        )
+        );
       }
       this.container.add(this.table[r]);
     }
 
     this.add(this.container);
-
   }
 
   // Calls a specified button's increment function.
@@ -118,7 +128,7 @@ class GameTable extends Phaser.GameObjects.Container {
   }
 
   // The check method defines some correct combination for the GameTable
-  protected check() : boolean {
+  protected check(): boolean {
     for (let r = 0; r < this.rowSize; r++) {
       for (let c = 0; c < this.columnSize; c++) {
         if (this.table[r][c].getActiveValue() === 0) return false;
@@ -126,9 +136,9 @@ class GameTable extends Phaser.GameObjects.Container {
     }
     return true;
   }
-  
+
   // Returns the color of the specified button.
-  public getButtonColor(r: number, c: number) : number {
+  public getButtonColor(r: number, c: number): number {
     return this.table[r][c].getColor();
   }
 
@@ -139,7 +149,6 @@ class GameTable extends Phaser.GameObjects.Container {
     }
     this.table[r][c].setCallback(callback);
   }
-
 
   // Hides the text of the specified button.
   public hideText(r: number, c: number) {
@@ -159,7 +168,7 @@ class GameTable extends Phaser.GameObjects.Container {
   }
 
   // Gets the value of the specified button
-  public getButtonValue(r: number, c: number) : number {
+  public getButtonValue(r: number, c: number): number {
     return this.table[r][c].getActiveValue();
   }
 

@@ -1,9 +1,9 @@
-import { HexColor } from "../utils/StyleUtils";
-import GameTable from "./GameTable";
+import { HexColor } from '../utils/StyleUtils';
+import GameTable from './GameTable';
 
 /**
  * A simple light switch puzzle.
- * 
+ *
  * When a button is clicked, it and its surrounding buttons will have their colors flipped.
  */
 class LightSwitchPuzzle extends GameTable {
@@ -58,7 +58,6 @@ class LightSwitchPuzzle extends GameTable {
       super.recolor(row, column, HexColor.darkBlue);
     }
   }
-
 }
 
 export default LightSwitchPuzzle;

@@ -1,13 +1,13 @@
-import { HexColor } from "../utils/StyleUtils";
-import GameTable from "./GameTable";
+import { HexColor } from '../utils/StyleUtils';
+import GameTable from './GameTable';
 
 /**
  * A simple combination lock puzzle.
- * 
+ *
  * Users can click the top buttons on the top row to increment
  * the value in the middle, and decrement using the bottom
  * row buttons.
- * 
+ *
  * The gray button at the bottom is used to check that the correct
  * combination has been inputted.
  */
@@ -46,23 +46,21 @@ class CombinationLockPuzzle extends GameTable {
 
     this.overrideCheck(this.combination);
   }
-  
+
   /**
    * Overrides the default check of the GameTable so that this GameTable can properly test
    * for the correct combination.
-   * 
+   *
    * @param numArray The array containing the correct numerical combination.
    */
-  private overrideCheck(numArray: number[]){
+  private overrideCheck(numArray: number[]) {
     super.setCheck(() => {
       for (let c = 0; c < this.numOfCols; c++) {
         if (super.getButtonValue(1, c) !== numArray[c]) return false;
       }
       return true;
-    })
-
+    });
   }
-
 }
 
 export default CombinationLockPuzzle;

@@ -39,7 +39,7 @@ class GameSoundManager {
   public applyUserSettings(settings: SettingsJson) {
     this.bgmVol = settings.bgmVolume !== undefined ? settings.bgmVolume : 1;
     this.sfxVol = settings.sfxVolume !== undefined ? settings.sfxVolume : 1;
-    this.muted = settings.isMuted !== undefined ? settings.isMuted ? 0 : 1 : 1;
+    this.muted = settings.isMuted !== undefined ? (settings.isMuted ? 0 : 1) : 1;
     this.bgmVol *= this.muted;
     this.sfxVol *= this.muted;
 

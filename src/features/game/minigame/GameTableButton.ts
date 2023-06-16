@@ -5,7 +5,7 @@ import { createBitmapText } from '../utils/TextUtils';
 
 /**
  * A container that contains a button for a GameTable
- * 
+ *
  * A button consists of a number and min/max values.
  * Clicking the button increments the number by 1 (though this
  * behavior can be modified)
@@ -41,7 +41,7 @@ class GameTableButton extends Phaser.GameObjects.Container {
    * @param height height of container, optional
    * @param x x coordinate of the container, optional
    * @param y y coordinate of the container, optional
-   * 
+   *
    */
   constructor(
     scene: Phaser.Scene,
@@ -72,11 +72,11 @@ class GameTableButton extends Phaser.GameObjects.Container {
       this.rectHeight,
       HexColor.darkBlue
     )
-    .setStrokeStyle(5, HexColor.white)
-    .setInteractive({ useHandCursor: true })
-    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      this.increment();
-    });
+      .setStrokeStyle(5, HexColor.white)
+      .setInteractive({ useHandCursor: true })
+      .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+        this.increment();
+      });
 
     this.add(this.button);
     this.setText(this.currentValue);
@@ -84,32 +84,24 @@ class GameTableButton extends Phaser.GameObjects.Container {
 
   // Increments the value inside the button by 1.
   // If the value of the button is the max value, roll back into the minimum value.
-  public increment() : void {
-    this.currentValue = this.currentValue === this.maxValue
-                          ? this.minValue 
-                          : this.currentValue + 1;
+  public increment(): void {
+    this.currentValue = this.currentValue === this.maxValue ? this.minValue : this.currentValue + 1;
     this.setText(this.currentValue);
   }
 
   // Decrements the value inside the button by 1.
   // If the value of the button is the min value, roll forward into the maximum value.
   public decrement(): void {
-    this.currentValue = this.currentValue === this.minValue
-                          ? this.maxValue
-                          : this.currentValue - 1;
+    this.currentValue = this.currentValue === this.minValue ? this.maxValue : this.currentValue - 1;
     this.setText(this.currentValue);
   }
 
   // Change the displayed text of the button.
   // Usually called whenever the button is clicked.
-  private setText(value: number) : void {
+  private setText(value: number): void {
     if (this.activeValue) this.activeValue.destroy();
     if (this.showText) {
-      this.activeValue = new Phaser.GameObjects.Container(
-        this.scene,
-        this.x,
-        this.y
-      );
+      this.activeValue = new Phaser.GameObjects.Container(this.scene, this.x, this.y);
       const choiceText = createBitmapText(
         this.scene,
         this.currentValue.toString(),
@@ -117,13 +109,13 @@ class GameTableButton extends Phaser.GameObjects.Container {
         this.bitmapTextStyle
       );
       this.activeValue.add(choiceText);
-  
+
       this.add(this.activeValue);
     }
   }
 
   // Get the current value of the button.
-  public getActiveValue() : number {
+  public getActiveValue(): number {
     return this.currentValue;
   }
 
@@ -133,7 +125,7 @@ class GameTableButton extends Phaser.GameObjects.Container {
   }
 
   // Gets the current color of the button.
-  public getColor() : number {
+  public getColor(): number {
     return this.button.fillColor;
   }
 
@@ -150,4 +142,4 @@ class GameTableButton extends Phaser.GameObjects.Container {
   }
 }
 
-export default GameTableButton
+export default GameTableButton;

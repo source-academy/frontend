@@ -24,11 +24,11 @@ type SliderConfig = {
  * A container that contains a menu slider.
  * Sliders allows user to choose any number within
  * a predefined range.
- * 
+ *
  * The slider consists of a draggable button
  * (That only changes its x-coordinate when dragged)
  * and a stationary horizontal bar.
- * 
+ *
  * The slider's choice will be displayed above the slider
  * button at all times.
  */
@@ -90,41 +90,35 @@ class CommonSlider extends Phaser.GameObjects.Container {
     this.sliderButtonConfig = sliderButtonConfig;
     this.buttonClickSoundKey = buttonClickSoundKey;
 
-    const slider = this.createSlider(
-      this.x, 
-      this.y, 
-      () => {}, 
-      this.sliderButtonConfig);
+    const slider = this.createSlider(this.x, this.y, () => {}, this.sliderButtonConfig);
     this.scene.input.setDraggable(slider);
-    slider.addListener('drag', (pointer: any, dragX: number) =>
-      {
-        if (dragX < this.barExtents[0]) {
-          slider.setX(this.barExtents[0]);
-        } else if (dragX > this.barExtents[1]) {
-          slider.setX(this.barExtents[1]);
-        } else {
-          slider.setX(dragX);
-        }
-        this.activeChoiceValue = 
-        ((slider.x - this.barExtents[0]) /
-         (this.barlength)) *
-        (this.minMax[1] - this.minMax[0]);
-        this.updateValue(this.activeChoiceValue, slider);
+    slider.addListener('drag', (pointer: any, dragX: number) => {
+      if (dragX < this.barExtents[0]) {
+        slider.setX(this.barExtents[0]);
+      } else if (dragX > this.barExtents[1]) {
+        slider.setX(this.barExtents[1]);
+      } else {
+        slider.setX(dragX);
       }
-    );
+      this.activeChoiceValue =
+        ((slider.x - this.barExtents[0]) / this.barlength) * (this.minMax[1] - this.minMax[0]);
+      this.updateValue(this.activeChoiceValue, slider);
+    });
 
     this.barExtents = [this.x, this.x + maxXSpace];
     this.barlength = this.barExtents[1] - this.barExtents[0];
-    this.add(new Phaser.GameObjects.Rectangle(
-      this.scene, 
-      this.x + this.barlength / 2,
-      this.y,
-      this.barlength,
-      6,
-      HexColor.white)
+    this.add(
+      new Phaser.GameObjects.Rectangle(
+        this.scene,
+        this.x + this.barlength / 2,
+        this.y,
+        this.barlength,
+        6,
+        HexColor.white
+      )
     );
     this.add(slider);
-    
+
     this.activate(defaultChoiceValue, slider);
     this.updateValue(defaultChoiceValue, slider);
   }
@@ -143,47 +137,39 @@ class CommonSlider extends Phaser.GameObjects.Container {
       sliderButtonConfig.circleDim,
       sliderButtonConfig.circleDim,
       HexColor.darkBlue
-    ).setInteractive({ useHandCursor: true, draggable: true })
-     .setStrokeStyle(this.sliderButtonConfig.outlineThickness)
-     .addListener('pointerdown', () =>
-        SourceAcademyGame.getInstance().getSoundManager().playSound(this.buttonClickSoundKey))
+    )
+      .setInteractive({ useHandCursor: true, draggable: true })
+      .setStrokeStyle(this.sliderButtonConfig.outlineThickness)
+      .addListener('pointerdown', () =>
+        SourceAcademyGame.getInstance().getSoundManager().playSound(this.buttonClickSoundKey)
+      );
   }
 
   // Place the silder button in the correct position based on the current value of the button.
-  private activate(
-    value: number,
-    slider: Phaser.GameObjects.Ellipse
-  ) {
+  private activate(value: number, slider: Phaser.GameObjects.Ellipse) {
     slider.setX((this.barExtents[1] + this.barExtents[0]) / 2);
     this.activeChoiceValue = value;
-    slider.setX(this.barExtents[0] + value / (this.minMax[1] - this.minMax[0]) * (this.barlength));
-  } 
-  
+    slider.setX(this.barExtents[0] + (value / (this.minMax[1] - this.minMax[0])) * this.barlength);
+  }
+
   // Gets the current value of the button
   public getValue(): number {
     return this.activeChoiceValue;
   }
 
   // Change the active value of the button based on the position of the slider.
-  private updateValue(
-    value: number, 
-    slider: Phaser.GameObjects.Ellipse
-  ) {
+  private updateValue(value: number, slider: Phaser.GameObjects.Ellipse) {
     if (this.activeChoice) this.activeChoice.destroy();
 
-    this.activeChoice = new Phaser.GameObjects.Container(
-      this.scene,
-      slider.x,
-      slider.y
-    );
+    this.activeChoice = new Phaser.GameObjects.Container(this.scene, slider.x, slider.y);
     const choiceText = createBitmapText(
       this.scene,
       value.toFixed(2).toString(),
       this.choiceTextConfig,
       this.bitmapTextStyle
     );
-    this.activeChoice.add(choiceText)
-    this.add(this.activeChoice)
+    this.activeChoice.add(choiceText);
+    this.add(this.activeChoice);
   }
 }
 

@@ -84,13 +84,14 @@ class Settings extends Phaser.Scene {
     this.bgmVomlumeSlider = this.createSettingsSlider(bgmVolume, 360);
     this.muteButton = new CommonCheckBox(
       this,
-      isMuted, 
-      {sideLength: 50, outlineThickness: 3}, 
+      isMuted,
+      { sideLength: 50, outlineThickness: 3 },
       { x: 0, y: 0, oriX: -0.5, oriY: 0.5 },
       optionTextStyle,
-      700, 
+      700,
       225,
-      "Mute Audio");
+      'Mute Audio'
+    );
     this.getLayerManager().addToLayer(Layer.UI, this.sfxVolumeSlider);
     this.getLayerManager().addToLayer(Layer.UI, this.bgmVomlumeSlider);
     this.getLayerManager().addToLayer(Layer.UI, this.muteButton);
@@ -166,11 +167,11 @@ class Settings extends Phaser.Scene {
           outlineThickness: 5
         },
         choiceTextConfig: SettingsConstants.radioButtonsTextConfig,
-        bitmapTextStyle: optionTextStyle,
+        bitmapTextStyle: optionTextStyle
       },
       SettingsConstants.opt.x + 185,
       yPos
-    )
+    );
   }
 
   /**
@@ -180,16 +181,10 @@ class Settings extends Phaser.Scene {
    * need to be aware of the update.
    */
   private async applySettings() {
-    const sfxVol = this.sfxVolumeSlider
-      ? this.sfxVolumeSlider.getValue()
-      : 1;
-    const bgmVol = this.bgmVomlumeSlider
-      ? this.bgmVomlumeSlider.getValue()
-      : 1;
-    const muted = this.muteButton
-      ? this.muteButton.getChoice()
-      : false;
-    
+    const sfxVol = this.sfxVolumeSlider ? this.sfxVolumeSlider.getValue() : 1;
+    const bgmVol = this.bgmVomlumeSlider ? this.bgmVomlumeSlider.getValue() : 1;
+    const muted = this.muteButton ? this.muteButton.getChoice() : false;
+
     // Save settings
     const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol, isMuted: muted };
     await this.getSaveManager().saveSettings(newSettings);
