@@ -12,7 +12,7 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/ban-types": "off",
-    "@typescripts-eslint/no-unused-vars": ["warn", { "args": "none" }],
+    "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }],
     "simple-import-sort/imports": "error",
     "react-hooks/exhaustive-deps": "warn"
   }
