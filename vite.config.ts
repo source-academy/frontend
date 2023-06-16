@@ -23,7 +23,8 @@ export default defineConfig(({ mode }) => {
         os: 'os-browserify/browser',
         stream: 'stream-browserify',
         timers: 'timers-browserify',
-        url: 'url'
+        url: 'url',
+        'xmlhttprequest-ts': './node_modules/xmlhttprequest-ts/bundles/xmlhttprequest-ts.umd.js'
       }
     },
     define: {
@@ -47,6 +48,7 @@ export default defineConfig(({ mode }) => {
       port: 8000
     },
     build: {
+      target: 'esnext',
       outDir: 'build'
     }
   };
