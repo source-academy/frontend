@@ -1,8 +1,10 @@
 import { IconName, Intent } from '@blueprintjs/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { ConfirmDialog, ConfirmDialogProps } from 'src/commons/dialogs/ConfirmDialog';
-import { PromptDialog, PromptDialogProps } from 'src/commons/dialogs/PromptDialog';
+
+import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
+import { PromptDialog, PromptDialogProps } from '../dialogs/PromptDialog';
+import { PropsType } from './TypeHelper';
 
 // The below is based off the Blueprint Toaster:
 // https://github.com/palantir/blueprint/blob/develop/packages/core/src/components/toast/toaster.tsx
@@ -54,7 +56,7 @@ export function closeDialog() {
   singleton.close();
 }
 
-export function promisifyDialog<P, R>(
+export function promisifyDialog<P extends PropsType<React.Component>, R>(
   DialogComponent: React.ComponentType<P>,
   propFn: (resolve: (response: R) => void) => P
 ): Promise<R> {

@@ -344,7 +344,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   }, [changeStateDueToChangedTaskNumber, handleUpdateHasUnsavedChanges]);
 
   useEffect(() => {
-    if (assessmentOverview === undefined) {
+    if (assessmentOverview === undefined || assessmentOverview === null) {
       setUpWithoutAssessmentOverview();
     } else {
       setUpWithAssessmentOverview();
