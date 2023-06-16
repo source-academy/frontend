@@ -15,9 +15,9 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                       <div className=\\"bp4-navbar NavigationBar primary-navbar bp4-dark\\">
                         <Blueprint4.NavbarGroup align=\\"left\\">
                           <div className=\\"bp4-navbar-group bp4-align-left\\">
-                            <NavLink className={[Function: className]} to=\\"/playground\\">
-                              <Link aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} to=\\"/playground\\">
-                                <a aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} href=\\"/playground\\" onClick={[Function: handleClick]} target={[undefined]}>
+                            <NavLink className={[Function: className]} to=\\"/playground\\" title=\\"Playground\\">
+                              <Link title=\\"Playground\\" aria-current={[undefined]} className=\\"NavigationBar__link bp4-button bp4-minimal\\" style={[undefined]} to=\\"/playground\\">
+                                <a title=\\"Playground\\" aria-current={[undefined]} className=\\"NavigationBar__link bp4-button bp4-minimal\\" style={[undefined]} href=\\"/playground\\" onClick={[Function: handleClick]} target={[undefined]}>
                                   <Blueprint4.Icon icon=\\"code\\">
                                     <span aria-hidden={true} icon=\\"code\\" className=\\"bp4-icon bp4-icon-code\\" title={[undefined]}>
                                       <svg fill={[undefined]} data-icon=\\"code\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
@@ -25,16 +25,15 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                                       </svg>
                                     </span>
                                   </Blueprint4.Icon>
-                                  <div>
+                                  <div className=\\"navbar-button-text\\">
                                     Playground
                                   </div>
-                                  <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
                                 </a>
                               </Link>
                             </NavLink>
-                            <NavLink className={[Function: className]} to=\\"/githubassessments\\">
-                              <Link aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} to=\\"/githubassessments\\">
-                                <a aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} href=\\"/githubassessments\\" onClick={[Function: handleClick]} target={[undefined]}>
+                            <NavLink className={[Function: className]} to=\\"/githubassessments\\" title=\\"Classroom\\">
+                              <Link title=\\"Classroom\\" aria-current={[undefined]} className=\\"NavigationBar__link bp4-button bp4-minimal\\" style={[undefined]} to=\\"/githubassessments\\">
+                                <a title=\\"Classroom\\" aria-current={[undefined]} className=\\"NavigationBar__link bp4-button bp4-minimal\\" style={[undefined]} href=\\"/githubassessments\\" onClick={[Function: handleClick]} target={[undefined]}>
                                   <Blueprint4.Icon icon=\\"briefcase\\">
                                     <span aria-hidden={true} icon=\\"briefcase\\" className=\\"bp4-icon bp4-icon-briefcase\\" title={[undefined]}>
                                       <svg fill={[undefined]} data-icon=\\"briefcase\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
@@ -42,16 +41,15 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                                       </svg>
                                     </span>
                                   </Blueprint4.Icon>
-                                  <div>
+                                  <div className=\\"navbar-button-text\\">
                                     Classroom
                                   </div>
-                                  <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
                                 </a>
                               </Link>
                             </NavLink>
-                            <NavLink className={[Function: className]} to=\\"/sicpjs\\">
-                              <Link aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} to=\\"/sicpjs\\">
-                                <a aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} href=\\"/sicpjs\\" onClick={[Function: handleClick]} target={[undefined]}>
+                            <NavLink className={[Function: className]} to=\\"/sicpjs\\" title=\\"SICP JS\\">
+                              <Link title=\\"SICP JS\\" aria-current={[undefined]} className=\\"NavigationBar__link bp4-button bp4-minimal\\" style={[undefined]} to=\\"/sicpjs\\">
+                                <a title=\\"SICP JS\\" aria-current={[undefined]} className=\\"NavigationBar__link bp4-button bp4-minimal\\" style={[undefined]} href=\\"/sicpjs\\" onClick={[Function: handleClick]} target={[undefined]}>
                                   <Blueprint4.Icon icon=\\"book\\">
                                     <span aria-hidden={true} icon=\\"book\\" className=\\"bp4-icon bp4-icon-book\\" title={[undefined]}>
                                       <svg fill={[undefined]} data-icon=\\"book\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
@@ -59,10 +57,9 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                                       </svg>
                                     </span>
                                   </Blueprint4.Icon>
-                                  <div>
+                                  <div className=\\"navbar-button-text\\">
                                     SICP JS
                                   </div>
-                                  <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
                                 </a>
                               </Link>
                             </NavLink>

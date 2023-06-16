@@ -65,7 +65,8 @@ export const assessmentTypesToNavlinkInfo = ({
     icon: icons[idx],
     text: assessmentType,
     disabled: !isEnrolledInACourse,
-    hasNotifications: true
+    hasNotifications: true,
+    hiddenInBreakpoints: ['xs', 'sm']
   }));
 
 export const getStaffNavlinkInfo = ({

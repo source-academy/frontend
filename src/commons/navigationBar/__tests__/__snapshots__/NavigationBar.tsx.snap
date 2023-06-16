@@ -12,12 +12,11 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
           </Blueprint4.NavbarHeading>
         </NavLink>
       </Blueprint4.Popover2>
-      <NavLink className={[Function: className]} to=\\"/githubassessments\\">
+      <NavLink className={[Function: className]} to=\\"/githubassessments\\" title=\\"Classroom\\">
         <Blueprint4.Icon icon=\\"briefcase\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           Classroom
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
@@ -57,40 +56,35 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           </Blueprint4.NavbarHeading>
         </NavLink>
       </Blueprint4.Popover2>
-      <NavLink className={[Function: className]} to=\\"/courses/1/sourcecast\\">
+      <NavLink className={[Function: className]} to=\\"/courses/1/sourcecast\\" title=\\"Sourcecast\\">
         <Blueprint4.Icon icon=\\"music\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           Sourcecast
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
-      <NavLink className={[Function: className]} to=\\"/playground\\">
+      <NavLink className={[Function: className]} to=\\"/playground\\" title=\\"Playground\\">
         <Blueprint4.Icon icon=\\"code\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           Playground
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
-      <NavLink className={[Function: className]} to=\\"/githubassessments\\">
+      <NavLink className={[Function: className]} to=\\"/githubassessments\\" title=\\"Classroom\\">
         <Blueprint4.Icon icon=\\"briefcase\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           Classroom
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
-      <NavLink className={[Function: className]} to=\\"/sicpjs\\">
+      <NavLink className={[Function: className]} to=\\"/sicpjs\\" title=\\"SICP JS\\">
         <Blueprint4.Icon icon=\\"book\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           SICP JS
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
-      <NavLink className={[Function: className]} to=\\"/courses/1/achievements\\">
+      <NavLink className={[Function: className]} to=\\"/courses/1/achievements\\" title=\\"Achievements\\">
         <Blueprint4.Icon icon=\\"mountain\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           Achievements
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
@@ -130,19 +124,17 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
           </Blueprint4.NavbarHeading>
         </NavLink>
       </Blueprint4.Popover2>
-      <NavLink className={[Function: className]} to=\\"/githubassessments\\">
+      <NavLink className={[Function: className]} to=\\"/githubassessments\\" title=\\"Classroom\\">
         <Blueprint4.Icon icon=\\"briefcase\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           Classroom
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
-      <NavLink className={[Function: className]} to=\\"/sicpjs\\">
+      <NavLink className={[Function: className]} to=\\"/sicpjs\\" title=\\"SICP JS\\">
         <Blueprint4.Icon icon=\\"book\\" />
-        <div>
+        <div className=\\"navbar-button-text\\">
           SICP JS
         </div>
-        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
