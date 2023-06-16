@@ -6,7 +6,7 @@ exports[`ResearchAgreementPrompt renders correctly 1`] = `
     <div className=\\"research-prompt\\">
       <Blueprint4.Dialog className=\\"bp4-dark\\" title=\\"Agreement to Participate in Educational Research\\" canOutsideClickClose={false} canEscapeKeyClose={false} isCloseButtonShown={false} isOpen={true}>
         <Blueprint4.Overlay className=\\"bp4-overlay-scroll-container\\" title=\\"Agreement to Participate in Educational Research\\" canOutsideClickClose={false} canEscapeKeyClose={false} isCloseButtonShown={false} isOpen={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} enforceFocus={true} lazy={true} shouldReturnFocusOnClose={true} transitionDuration={300} transitionName=\\"bp4-overlay\\" usePortal={true}>
-          <Blueprint4.Portal className={[undefined]} container={{...}}>
+          <Blueprint4.Portal className={[undefined]} container={{...}} stopPropagationEvents={[undefined]}>
             <Portal containerInfo={{...}}>
               <TransitionGroup appear={true} aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
                 <div aria-live=\\"polite\\" className=\\"bp4-overlay bp4-overlay-open bp4-overlay-scroll-container\\" onKeyDown={[Function (anonymous)]}>
