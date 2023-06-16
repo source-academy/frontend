@@ -4,17 +4,20 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
 "<Fragment>
   <Blueprint4.Navbar className=\\"NavigationBar primary-navbar bp4-dark\\">
     <Blueprint4.NavbarGroup align=\\"left\\">
-      <NavLink className={[Function: className]} to=\\"/welcome\\">
-        <Blueprint4.Icon icon=\\"symbol-diamond\\" />
-        <Blueprint4.NavbarHeading style={{...}}>
-          Source Academy @ NUS
-        </Blueprint4.NavbarHeading>
-      </NavLink>
+      <Blueprint4.Popover2 position=\\"bottom-right\\" interactionKind=\\"hover\\" content={{...}} popoverClassName=\\"desktop-navbar-popover\\" disabled={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+        <NavLink className=\\"NavigationBar__link bp4-button bp4-minimal bp4-active\\" to=\\"/welcome\\">
+          <Blueprint4.Icon icon=\\"symbol-diamond\\" />
+          <Blueprint4.NavbarHeading style={{...}}>
+            Source Academy
+          </Blueprint4.NavbarHeading>
+        </NavLink>
+      </Blueprint4.Popover2>
       <NavLink className={[Function: className]} to=\\"/githubassessments\\">
         <Blueprint4.Icon icon=\\"briefcase\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           Classroom
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
@@ -46,41 +49,48 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
 "<Fragment>
   <Blueprint4.Navbar className=\\"NavigationBar primary-navbar bp4-dark\\">
     <Blueprint4.NavbarGroup align=\\"left\\">
-      <NavLink className={[Function: className]} to=\\"/courses/1\\">
-        <Blueprint4.Icon icon=\\"symbol-diamond\\" />
-        <Blueprint4.NavbarHeading style={{...}}>
-          CS1101S
-        </Blueprint4.NavbarHeading>
-      </NavLink>
+      <Blueprint4.Popover2 position=\\"bottom-right\\" interactionKind=\\"hover\\" content={{...}} popoverClassName=\\"desktop-navbar-popover\\" disabled={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+        <NavLink className=\\"NavigationBar__link bp4-button bp4-minimal bp4-active\\" to=\\"/courses/1\\">
+          <Blueprint4.Icon icon=\\"symbol-diamond\\" />
+          <Blueprint4.NavbarHeading style={{...}}>
+            CS1101S
+          </Blueprint4.NavbarHeading>
+        </NavLink>
+      </Blueprint4.Popover2>
       <NavLink className={[Function: className]} to=\\"/courses/1/sourcecast\\">
         <Blueprint4.Icon icon=\\"music\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           Sourcecast
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
       <NavLink className={[Function: className]} to=\\"/playground\\">
         <Blueprint4.Icon icon=\\"code\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           Playground
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
       <NavLink className={[Function: className]} to=\\"/githubassessments\\">
         <Blueprint4.Icon icon=\\"briefcase\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           Classroom
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
-      <NavLink className={[Function: className]} to=\\"/sicpjs/\\">
+      <NavLink className={[Function: className]} to=\\"/sicpjs\\">
         <Blueprint4.Icon icon=\\"book\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           SICP JS
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
       <NavLink className={[Function: className]} to=\\"/courses/1/achievements\\">
         <Blueprint4.Icon icon=\\"mountain\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           Achievements
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">
@@ -112,23 +122,27 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
 "<Fragment>
   <Blueprint4.Navbar className=\\"NavigationBar primary-navbar bp4-dark\\">
     <Blueprint4.NavbarGroup align=\\"left\\">
-      <NavLink className={[Function: className]} to=\\"/welcome\\">
-        <Blueprint4.Icon icon=\\"symbol-diamond\\" />
-        <Blueprint4.NavbarHeading style={{...}}>
-          Source Academy @ NUS
-        </Blueprint4.NavbarHeading>
-      </NavLink>
+      <Blueprint4.Popover2 position=\\"bottom-right\\" interactionKind=\\"hover\\" content={{...}} popoverClassName=\\"desktop-navbar-popover\\" disabled={true} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} matchTargetWidth={false} minimal={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" transitionDuration={300} usePortal={true}>
+        <NavLink className=\\"NavigationBar__link bp4-button bp4-minimal bp4-active\\" to=\\"/welcome\\">
+          <Blueprint4.Icon icon=\\"symbol-diamond\\" />
+          <Blueprint4.NavbarHeading style={{...}}>
+            Source Academy
+          </Blueprint4.NavbarHeading>
+        </NavLink>
+      </Blueprint4.Popover2>
       <NavLink className={[Function: className]} to=\\"/githubassessments\\">
         <Blueprint4.Icon icon=\\"briefcase\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           Classroom
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
-      <NavLink className={[Function: className]} to=\\"/sicpjs/\\">
+      <NavLink className={[Function: className]} to=\\"/sicpjs\\">
         <Blueprint4.Icon icon=\\"book\\" />
-        <div className=\\"navbar-button-text\\">
+        <div>
           SICP JS
         </div>
+        <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
       </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup align=\\"right\\">

@@ -15,7 +15,7 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                       <div className=\\"bp4-navbar NavigationBar primary-navbar bp4-dark\\">
                         <Blueprint4.NavbarGroup align=\\"left\\">
                           <div className=\\"bp4-navbar-group bp4-align-left\\">
-                            <NavLink to=\\"/playground\\" className={[Function: className]}>
+                            <NavLink className={[Function: className]} to=\\"/playground\\">
                               <Link aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} to=\\"/playground\\">
                                 <a aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} href=\\"/playground\\" onClick={[Function: handleClick]} target={[undefined]}>
                                   <Blueprint4.Icon icon=\\"code\\">
@@ -28,10 +28,11 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                                   <div>
                                     Playground
                                   </div>
+                                  <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
                                 </a>
                               </Link>
                             </NavLink>
-                            <NavLink to=\\"/githubassessments\\" className={[Function: className]}>
+                            <NavLink className={[Function: className]} to=\\"/githubassessments\\">
                               <Link aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} to=\\"/githubassessments\\">
                                 <a aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} href=\\"/githubassessments\\" onClick={[Function: handleClick]} target={[undefined]}>
                                   <Blueprint4.Icon icon=\\"briefcase\\">
@@ -44,12 +45,13 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                                   <div>
                                     Classroom
                                   </div>
+                                  <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
                                 </a>
                               </Link>
                             </NavLink>
-                            <NavLink to=\\"/sicpjs/\\" className={[Function: className]}>
-                              <Link aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} to=\\"/sicpjs/\\">
-                                <a aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} href=\\"/sicpjs/\\" onClick={[Function: handleClick]} target={[undefined]}>
+                            <NavLink className={[Function: className]} to=\\"/sicpjs\\">
+                              <Link aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} to=\\"/sicpjs\\">
+                                <a aria-current={[undefined]} className=\\"NavigationBar__link__mobile bp4-button bp4-minimal\\" style={[undefined]} href=\\"/sicpjs\\" onClick={[Function: handleClick]} target={[undefined]}>
                                   <Blueprint4.Icon icon=\\"book\\">
                                     <span aria-hidden={true} icon=\\"book\\" className=\\"bp4-icon bp4-icon-book\\" title={[undefined]}>
                                       <svg fill={[undefined]} data-icon=\\"book\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
@@ -60,6 +62,7 @@ exports[`ApplicationWrapper Application shows disabled when in disabled period 1
                                   <div>
                                     SICP JS
                                   </div>
+                                  <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
                                 </a>
                               </Link>
                             </NavLink>
