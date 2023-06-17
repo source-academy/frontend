@@ -166,7 +166,7 @@ const NotificationConfigPanel = () => {
     if (hasChangesNotificationConfig) {
       setHasChangesNotificationConfig(false);
       const allTimeOptions: TimeOption[] = [];
-      notificationConfig.current?.forEach((curr) => {
+      notificationConfig.current?.forEach(curr => {
         const timeOptions = curr.timeOptions.map(timeOption => {
           return {
             ...timeOption,
