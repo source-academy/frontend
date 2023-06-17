@@ -103,7 +103,6 @@ const Sourcereel: React.FC = () => {
     isFolderModeEnabled,
     activeEditorTabIndex,
     editorTabs,
-    // enableDebugging,
     externalLibrary: externalLibraryName,
     isDebugging,
     isEditorAutorun,
