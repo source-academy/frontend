@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter } from 'js-slang/dist/types';
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   beginDebuggerPause,
@@ -40,6 +40,7 @@ import {
   convertEditorTabStateToProps,
   SourcecastEditorContainerProps
 } from '../../../commons/editor/EditorContainer';
+import { Position } from '../../../commons/editor/EditorTypes';
 import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
 import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
@@ -152,16 +153,6 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputToApply]);
 
-  const setActiveEditorTabIndex = React.useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch]
-  );
-  const removeEditorTabByIndex = React.useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch]
-  );
-
   const getTimerDuration = () => timeElapsedBeforePause + Date.now() - timeResumed;
 
   const handleRecordInit = () => {
@@ -192,14 +183,23 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       data: KeyboardCommand.run
     });
   };
+  const autorunButtonHandlers = useMemo(() => {
+    return {
+      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
+      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation))
+    };
+  }, [dispatch]);
   const autorunButtons = (
     <ControlBarAutorunButtons
-      handleDebuggerPause={() => dispatch(beginDebuggerPause(workspaceLocation))}
-      handleDebuggerResume={() => dispatch(debuggerResume(workspaceLocation))}
-      handleDebuggerReset={() => dispatch(debuggerReset(workspaceLocation))}
+      handleDebuggerPause={autorunButtonHandlers.handleDebuggerPause}
+      handleDebuggerResume={autorunButtonHandlers.handleDebuggerResume}
+      handleDebuggerReset={autorunButtonHandlers.handleDebuggerReset}
       handleEditorEval={editorEvalHandler}
-      handleInterruptEval={() => dispatch(beginInterruptExecution(workspaceLocation))}
-      handleToggleEditorAutorun={() => dispatch(toggleEditorAutorun(workspaceLocation))}
+      handleInterruptEval={autorunButtonHandlers.handleInterruptEval}
+      handleToggleEditorAutorun={autorunButtonHandlers.handleToggleEditorAutorun}
       isEntrypointFileDefined={activeEditorTabIndex !== null}
       isDebugging={isDebugging}
       isEditorAutorun={isEditorAutorun}
@@ -230,11 +230,14 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     />
   );
 
-  const clearButton = (
-    <ControlBarClearButton
-      handleReplOutputClear={() => dispatch(clearReplOutput(workspaceLocation))}
-      key="clear_repl"
-    />
+  const clearButton = useMemo(
+    () => (
+      <ControlBarClearButton
+        handleReplOutputClear={() => dispatch(clearReplOutput(workspaceLocation))}
+        key="clear_repl"
+      />
+    ),
+    [dispatch]
   );
 
   const evalButton = (
@@ -245,6 +248,19 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     />
   );
 
+  const editorContainerHandlers = useMemo(() => {
+    return {
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+      handleDeclarationNavigate: (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+      handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
+        dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints))
+    };
+  }, [dispatch]);
   const editorContainerProps: SourcecastEditorContainerProps = {
     ..._.pick(props, 'handleEditorEval', 'handleEditorValueChange', 'handleRecordInput'),
     codeDeltasToApply: codeDeltasToApply,
@@ -254,14 +270,11 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     editorVariant: 'sourcecast',
     isFolderModeEnabled,
     activeEditorTabIndex,
-    setActiveEditorTabIndex,
-    removeEditorTabByIndex,
+    setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
+    removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate: cursorPosition =>
-      dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    handleEditorUpdateBreakpoints: newBreakpoints =>
-      dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
+    handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
+    handleEditorUpdateBreakpoints: editorContainerHandlers.handleEditorUpdateBreakpoints,
     editorSessionId: '',
     getTimerDuration: getTimerDuration,
     isPlaying: playbackStatus === PlaybackStatus.playing,
@@ -294,6 +307,39 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     id: SideContentType.envVisualizer
   };
 
+  const workspaceHandlers = useMemo(() => {
+    return {
+      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleReplValueChange: (newValue: string) =>
+        dispatch(updateReplValue(newValue, workspaceLocation)),
+      handleDeleteSourcecastEntry: (id: number) =>
+        dispatch(deleteSourcecastEntry(id, 'sourcecast')),
+      // SourcereelControlbar handlers
+      handleResetInputs: (inputs: Input[]) => dispatch(resetInputs(inputs, workspaceLocation)),
+      handleSaveSourcecastData: (
+        title: string,
+        description: string,
+        uid: string,
+        audio: Blob,
+        playbackData: PlaybackData
+      ) => dispatch(saveSourcecastData(title, description, uid, audio, playbackData, 'sourcecast')),
+      handleSetSourcecastData: (
+        title: string,
+        description: string,
+        uid: string,
+        audioUrl: string,
+        playbackData: PlaybackData
+      ) =>
+        dispatch(setSourcecastData(title, description, uid, audioUrl, playbackData, 'sourcecast')),
+      handleTimerPause: () => dispatch(timerPause(workspaceLocation)),
+      handleTimerReset: () => dispatch(timerReset(workspaceLocation)),
+      handleTimerResume: (timeBefore: number) =>
+        dispatch(timerResume(timeBefore, workspaceLocation)),
+      handleTimerStart: () => dispatch(timerStart(workspaceLocation)),
+      handleTimerStop: () => dispatch(timerStop(workspaceLocation))
+    };
+  }, [dispatch]);
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelect]
@@ -304,10 +350,10 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     replProps: {
       output: output,
       replValue: replValue,
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleBrowseHistoryDown: workspaceHandlers.handleBrowseHistoryDown,
+      handleBrowseHistoryUp: workspaceHandlers.handleBrowseHistoryUp,
       handleReplEval: props.handleReplEval,
-      handleReplValueChange: newValue => dispatch(updateReplValue(newValue, workspaceLocation)),
+      handleReplValueChange: workspaceHandlers.handleReplValueChange,
       sourceChapter: sourceChapter,
       sourceVariant: sourceVariant,
       externalLibrary: externalLibraryName,
@@ -344,34 +390,15 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                   playbackData={playbackData}
                   handleRecordInit={handleRecordInit}
                   handleRecordPause={handleRecordPause}
-                  handleResetInputs={(inputs: Input[]) =>
-                    dispatch(resetInputs(inputs, workspaceLocation))
-                  }
-                  handleSaveSourcecastData={(title, description, uid, audio, playbackData) =>
-                    dispatch(
-                      saveSourcecastData(title, description, uid, audio, playbackData, 'sourcecast')
-                    )
-                  }
-                  handleSetSourcecastData={(title, description, uid, audioUrl, playbackData) =>
-                    dispatch(
-                      setSourcecastData(
-                        title,
-                        description,
-                        uid,
-                        audioUrl,
-                        playbackData,
-                        'sourcecast'
-                      )
-                    )
-                  }
+                  handleResetInputs={workspaceHandlers.handleResetInputs}
+                  handleSaveSourcecastData={workspaceHandlers.handleSaveSourcecastData}
+                  handleSetSourcecastData={workspaceHandlers.handleSetSourcecastData}
                   handleSetIsEditorReadonly={props.handleSetIsEditorReadonly}
-                  handleTimerPause={() => dispatch(timerPause(workspaceLocation))}
-                  handleTimerReset={() => dispatch(timerReset(workspaceLocation))}
-                  handleTimerResume={timeBefore =>
-                    dispatch(timerResume(timeBefore, workspaceLocation))
-                  }
-                  handleTimerStart={() => dispatch(timerStart(workspaceLocation))}
-                  handleTimerStop={() => dispatch(timerStop(workspaceLocation))}
+                  handleTimerPause={workspaceHandlers.handleTimerPause}
+                  handleTimerReset={workspaceHandlers.handleTimerReset}
+                  handleTimerResume={workspaceHandlers.handleTimerResume}
+                  handleTimerStart={workspaceHandlers.handleTimerStart}
+                  handleTimerStop={workspaceHandlers.handleTimerStop}
                   recordingStatus={recordingStatus}
                 />
               </div>
@@ -384,9 +411,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
             body: (
               <div>
                 <SourcecastTable
-                  handleDeleteSourcecastEntry={id =>
-                    dispatch(deleteSourcecastEntry(id, 'sourcecast'))
-                  }
+                  handleDeleteSourcecastEntry={workspaceHandlers.handleDeleteSourcecastEntry}
                   sourcecastIndex={sourcecastIndex}
                   courseId={courseId}
                 />
@@ -402,6 +427,21 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       workspaceLocation: 'sourcereel'
     }
   };
+
+  const sourcecastControlbarHandlers = useMemo(() => {
+    return {
+      handleSetCurrentPlayerTime: (playerTime: number) =>
+        dispatch(setCurrentPlayerTime(playerTime, 'sourcecast')),
+      handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
+        dispatch(setCodeDeltasToApply(deltas, 'sourcecast')),
+      handleSetInputToApply: (inputToApply: Input) =>
+        dispatch(setInputToApply(inputToApply, 'sourcecast')),
+      handleSetSourcecastDuration: (duration: number) =>
+        dispatch(setSourcecastDuration(duration, 'sourcecast')),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+    };
+  }, [dispatch]);
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
     ..._.pick(
       props,
@@ -415,16 +455,11 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     currentPlayerTime: currentPlayerTime,
     playbackData: playbackData,
     playbackStatus: playbackStatus,
-    handleSetCurrentPlayerTime: playerTime =>
-      dispatch(setCurrentPlayerTime(playerTime, 'sourcecast')),
-    handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
-      dispatch(setCodeDeltasToApply(deltas, 'sourcecast')),
-    handleSetInputToApply: (inputToApply: Input) =>
-      dispatch(setInputToApply(inputToApply, 'sourcecast')),
-    handleSetSourcecastDuration: duration =>
-      dispatch(setSourcecastDuration(duration, 'sourcecast')),
-    handlePromptAutocomplete: (row, col, callback) =>
-      dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+    handleSetCurrentPlayerTime: sourcecastControlbarHandlers.handleSetCurrentPlayerTime,
+    handleSetCodeDeltasToApply: sourcecastControlbarHandlers.handleSetCodeDeltasToApply,
+    handleSetInputToApply: sourcecastControlbarHandlers.handleSetInputToApply,
+    handleSetSourcecastDuration: sourcecastControlbarHandlers.handleSetSourcecastDuration,
+    handlePromptAutocomplete: sourcecastControlbarHandlers.handlePromptAutocomplete,
     duration: playbackDuration
   };
   return (
