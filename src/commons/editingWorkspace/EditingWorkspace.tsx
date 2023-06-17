@@ -79,11 +79,7 @@ import {
   storeLocalAssessmentOverview
 } from '../XMLParser/XMLParserHelper';
 
-export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
-
-export type DispatchProps = {};
-
-export type OwnProps = {
+export type EditingWorkspaceProps = {
   assessmentId: number;
   questionId: number;
   assessmentOverview: AssessmentOverview;
@@ -91,8 +87,6 @@ export type OwnProps = {
   notAttempted: boolean;
   closeDate: string;
 };
-
-export type StateProps = {};
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
