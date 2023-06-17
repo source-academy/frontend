@@ -1,7 +1,7 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/types';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -69,8 +69,7 @@ import {
   KeyboardCommand,
   PlaybackData,
   PlaybackStatus,
-  RecordingStatus,
-  SourcecastData
+  RecordingStatus
 } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
@@ -87,18 +86,7 @@ export type DispatchProps = {
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
 };
 
-export type StateProps = {
-  audioUrl: string;
-  currentPlayerTime: number;
-  codeDeltasToApply: CodeDelta[] | null;
-  inputToApply: Input | null;
-  playbackDuration: number;
-  playbackStatus: PlaybackStatus;
-  sourcecastIndex: SourcecastData[] | null;
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
-  courseId?: number;
-};
+export type StateProps = {};
 
 const workspaceLocation: WorkspaceLocation = 'sourcereel';
 
@@ -106,6 +94,19 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
   const dispatch = useDispatch();
 
+  const courseId = useTypedSelector(state => state.session.courseId);
+  const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(
+    state => state.workspaces[workspaceLocation].context
+  );
+  const {
+    audioUrl,
+    currentPlayerTime,
+    codeDeltasToApply,
+    inputToApply,
+    playbackDuration,
+    playbackStatus,
+    sourcecastIndex
+  } = useTypedSelector(state => state.workspaces.sourcecast);
   const {
     isFolderModeEnabled,
     activeEditorTabIndex,
@@ -130,8 +131,6 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   }, []);
 
   useEffect(() => {
-    const { inputToApply } = props;
-
     if (!inputToApply) {
       return;
     }
@@ -151,7 +150,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.inputToApply]);
+  }, [inputToApply]);
 
   const setActiveEditorTabIndex = React.useCallback(
     (activeEditorTabIndex: number | null) =>
@@ -167,7 +166,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
 
   const handleRecordInit = () => {
     const initData: PlaybackData['init'] = {
-      chapter: props.sourceChapter,
+      chapter: sourceChapter,
       externalLibrary: externalLibraryName,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0].value
@@ -225,8 +224,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     <ControlBarChapterSelect
       handleChapterSelect={chapterSelectHandler}
       isFolderModeEnabled={isFolderModeEnabled}
-      sourceChapter={props.sourceChapter}
-      sourceVariant={props.sourceVariant}
+      sourceChapter={sourceChapter}
+      sourceVariant={sourceVariant}
       key="chapter"
     />
   );
@@ -247,14 +246,9 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   );
 
   const editorContainerProps: SourcecastEditorContainerProps = {
-    ..._.pick(
-      props,
-      'codeDeltasToApply',
-      'handleEditorEval',
-      'handleEditorValueChange',
-      'inputToApply',
-      'handleRecordInput'
-    ),
+    ..._.pick(props, 'handleEditorEval', 'handleEditorValueChange', 'handleRecordInput'),
+    codeDeltasToApply: codeDeltasToApply,
+    inputToApply: inputToApply,
     isEditorAutorun: isEditorAutorun,
     isEditorReadonly: isEditorReadonly,
     editorVariant: 'sourcecast',
@@ -270,7 +264,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
     editorSessionId: '',
     getTimerDuration: getTimerDuration,
-    isPlaying: props.playbackStatus === PlaybackStatus.playing,
+    isPlaying: playbackStatus === PlaybackStatus.playing,
     isRecording: recordingStatus === RecordingStatus.recording
   };
 
@@ -314,8 +308,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
       handleReplEval: props.handleReplEval,
       handleReplValueChange: newValue => dispatch(updateReplValue(newValue, workspaceLocation)),
-      sourceChapter: props.sourceChapter,
-      sourceVariant: props.sourceVariant,
+      sourceChapter: sourceChapter,
+      sourceVariant: sourceVariant,
       externalLibrary: externalLibraryName,
       replButtons: [evalButton, clearButton]
     },
@@ -343,7 +337,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                   <Pre> {INTRODUCTION} </Pre>
                 </span>
                 <SourcereelControlbar
-                  currentPlayerTime={props.currentPlayerTime}
+                  currentPlayerTime={currentPlayerTime}
                   // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
                   editorValue={editorTabs[0].value}
                   getTimerDuration={getTimerDuration}
@@ -393,8 +387,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                   handleDeleteSourcecastEntry={id =>
                     dispatch(deleteSourcecastEntry(id, 'sourcecast'))
                   }
-                  sourcecastIndex={props.sourcecastIndex}
-                  courseId={props.courseId}
+                  sourcecastIndex={sourcecastIndex}
+                  courseId={courseId}
                 />
               </div>
             ),
@@ -414,13 +408,13 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       'handleEditorValueChange',
       'handleSetIsEditorReadonly',
       'handleSetSourcecastStatus',
-      'audioUrl',
-      'currentPlayerTime',
-      'playbackStatus',
       'handleChapterSelect',
       'handleExternalSelect'
     ),
+    audioUrl: audioUrl,
+    currentPlayerTime: currentPlayerTime,
     playbackData: playbackData,
+    playbackStatus: playbackStatus,
     handleSetCurrentPlayerTime: playerTime =>
       dispatch(setCurrentPlayerTime(playerTime, 'sourcecast')),
     handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
@@ -431,7 +425,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       dispatch(setSourcecastDuration(duration, 'sourcecast')),
     handlePromptAutocomplete: (row, col, callback) =>
       dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
-    duration: props.playbackDuration
+    duration: playbackDuration
   };
   return (
     <div className={classNames('Sourcereel', Classes.DARK)}>

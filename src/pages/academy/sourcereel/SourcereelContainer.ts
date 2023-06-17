@@ -1,5 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { connect,MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators,Dispatch } from 'redux';
 
 import { OverallState } from '../../../commons/application/ApplicationTypes';
@@ -18,20 +18,7 @@ import { Input, PlaybackStatus } from '../../../features/sourceRecorder/SourceRe
 import { recordInput } from '../../../features/sourceRecorder/sourcereel/SourcereelActions';
 import Sourcereel, { DispatchProps, StateProps } from './Sourcereel';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  audioUrl: state.workspaces.sourcecast.audioUrl,
-  currentPlayerTime: state.workspaces.sourcecast.currentPlayerTime,
-  codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
-  inputToApply: state.workspaces.sourcecast.inputToApply,
-  playbackDuration: state.workspaces.sourcecast.playbackDuration,
-  playbackStatus: state.workspaces.sourcecast.playbackStatus,
-  sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
-
-  sourceChapter: state.workspaces.sourcereel.context.chapter,
-  sourceVariant: state.workspaces.sourcereel.context.variant,
-
-  courseId: state.session.courseId
-});
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({});
 
 const location: WorkspaceLocation = 'sourcereel';
 
