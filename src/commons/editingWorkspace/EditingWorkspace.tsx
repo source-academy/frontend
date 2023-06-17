@@ -159,7 +159,9 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     // handleTestcaseEval,
     handleUpdateHasUnsavedChanges,
     handleUpdateCurrentAssessmentId,
-    handlePromptAutocomplete
+    handlePromptAutocomplete,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex
   } = useMemo(() => {
     return {
       handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
@@ -192,19 +194,13 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
         dispatch(updateCurrentAssessmentId(assessmentId, questionId)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
     };
   }, [dispatch]);
-
-  const setActiveEditorTabIndex = React.useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch]
-  );
-  const removeEditorTabByIndex = React.useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch]
-  );
 
   const { handleEditorValueChange } = props;
   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
