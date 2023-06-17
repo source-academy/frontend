@@ -1,7 +1,7 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -55,6 +55,7 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeSideContentHeight,
+  chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -82,9 +83,7 @@ import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
 type SourcereelProps = DispatchProps & StateProps;
 
-export type DispatchProps = {
-  handleChapterSelect: (chapter: Chapter) => void;
-};
+export type DispatchProps = {};
 
 export type StateProps = {};
 
@@ -127,6 +126,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
 
   const dispatch = useDispatch();
   const {
+    handleChapterSelect,
     handleEditorEval,
     handleEditorValueChange,
     handleExternalSelect,
@@ -136,8 +136,8 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     handleSetIsEditorReadonly
   } = useMemo(() => {
     return {
-      // handleChapterSelect: (chapter: Chapter) =>
-      //   dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
+      handleChapterSelect: (chapter: Chapter) =>
+        dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange: (newEditorValue: string) =>
@@ -167,7 +167,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
         setSelectedTab(inputToApply.data);
         break;
       case 'chapterSelect':
-        props.handleChapterSelect(inputToApply.data);
+        handleChapterSelect(inputToApply.data);
         break;
       case 'externalLibrarySelect':
         handleExternalSelect(inputToApply.data);
@@ -235,7 +235,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   );
 
   const chapterSelectHandler = ({ chapter }: { chapter: Chapter }, e: any) => {
-    props.handleChapterSelect(chapter);
+    handleChapterSelect(chapter);
     if (recordingStatus !== RecordingStatus.recording) {
       return;
     }
@@ -467,7 +467,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     };
   }, [dispatch]);
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
-    handleChapterSelect: props.handleChapterSelect,
+    handleChapterSelect: handleChapterSelect,
     handleEditorValueChange: handleEditorValueChange,
     handleExternalSelect: handleExternalSelect,
     handleSetSourcecastStatus: handleSetSourcecastStatus,
