@@ -2,10 +2,35 @@ import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { fetchGrading } from 'src/commons/application/actions/SessionActions';
 import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import {
+  beginClearContext,
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeExecTime,
+  changeSideContentHeight,
+  clearReplOutput,
+  evalEditor,
+  evalRepl,
+  evalTestcase,
+  navigateToDeclaration,
+  promptAutocomplete,
+  removeEditorTab,
+  resetWorkspace,
+  runAllTestcases,
+  sendReplInputToOutput,
+  setEditorBreakpoint,
+  updateActiveEditorTabIndex,
+  updateCurrentSubmissionId,
+  updateEditorValue,
+  updateHasUnsavedChanges,
+  updateReplValue
+} from 'src/commons/workspace/WorkspaceActions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import {
@@ -36,30 +61,7 @@ import GradingEditor from './GradingEditorContainer';
 
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
-export type DispatchProps = {
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
-  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
-  handleEditorEval: () => void;
-  handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
-  handleRemoveEditorTabByIndex: (editorTabIndex: number) => void;
-  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
-  handleGradingFetch: (submissionId: number) => void;
-  handleReplEval: () => void;
-  handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
-  handleSendReplInputToOutput: (code: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleChangeExecTime: (execTimeMs: number) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
-  handleTestcaseEval: (testcaseId: number) => void;
-  handleRunAllTestcases: () => void;
-  handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-};
+export type DispatchProps = {};
 
 export type OwnProps = {
   submissionId: number;
@@ -94,12 +96,78 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     currentQuestion: storedQuestionId
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
 
+  const dispatch = useDispatch();
+  const {
+    handleBrowseHistoryDown,
+    handleBrowseHistoryUp,
+    handleClearContext,
+    handleDeclarationNavigate,
+    handleEditorEval,
+    handleSetActiveEditorTabIndex,
+    handleRemoveEditorTabByIndex,
+    handleEditorValueChange,
+    handleEditorUpdateBreakpoints,
+    handleGradingFetch,
+    handleReplEval,
+    handleReplOutputClear,
+    handleReplValueChange,
+    // handleSendReplInputToOutput,
+    handleResetWorkspace,
+    handleChangeExecTime,
+    handleSideContentHeightChange,
+    handleTestcaseEval,
+    handleRunAllTestcases,
+    handleUpdateCurrentSubmissionId,
+    handleUpdateHasUnsavedChanges,
+    handlePromptAutocomplete
+  } = useMemo(() => {
+    return {
+      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
+        dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+      handleDeclarationNavigate: (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
+      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
+      handleGradingFetch: (submissionId: number) => dispatch(fetchGrading(submissionId)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleReplValueChange: (newValue: string) =>
+        dispatch(updateReplValue(newValue, workspaceLocation)),
+      handleSendReplInputToOutput: (code: string) =>
+        dispatch(sendReplInputToOutput(code, workspaceLocation)),
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
+        dispatch(resetWorkspace(workspaceLocation, options)),
+      handleChangeExecTime: (execTimeMs: number) =>
+        dispatch(changeExecTime(execTimeMs, workspaceLocation)),
+      handleSideContentHeightChange: (heightChange: number) =>
+        dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
+      handleTestcaseEval: (testcaseId: number) =>
+        dispatch(evalTestcase(workspaceLocation, testcaseId)),
+      handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
+      handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) =>
+        dispatch(updateCurrentSubmissionId(submissionId, questionId)),
+      handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
+        dispatch(updateHasUnsavedChanges(workspaceLocation, unsavedChanges)),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+    };
+  }, [dispatch]);
+
   /**
    * After mounting (either an older copy of the grading
    * or a loading screen), try to fetch a newer grading.
    */
   useEffect(() => {
-    props.handleGradingFetch(props.submissionId);
+    handleGradingFetch(props.submissionId);
     if (!props.grading) {
       return;
     }
@@ -121,7 +189,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorValueChange(0, answer);
+    handleEditorValueChange(0, answer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -187,9 +255,9 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorUpdateBreakpoints(0, []);
-    props.handleUpdateCurrentSubmissionId(submissionId, questionId);
-    props.handleResetWorkspace({
+    handleEditorUpdateBreakpoints(0, []);
+    handleUpdateCurrentSubmissionId(submissionId, questionId);
+    handleResetWorkspace({
       autogradingResults,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
@@ -203,14 +271,12 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       programPostpendValue,
       editorTestcases
     });
-    props.handleChangeExecTime(
-      question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime
-    );
-    props.handleClearContext(question.library, true);
-    props.handleUpdateHasUnsavedChanges(false);
+    handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
+    handleClearContext(question.library, true);
+    handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      props.handleEditorValueChange(0, editorValue);
+      handleEditorValueChange(0, editorValue);
     }
   };
 
@@ -261,7 +327,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
           <SideContentAutograder
             testcases={editorTestcases}
             autogradingResults={autogradingResults}
-            handleTestcaseEval={props.handleTestcaseEval}
+            handleTestcaseEval={handleTestcaseEval}
             workspaceLocation="grading"
           />
         ),
@@ -348,26 +414,22 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
 
   const replButtons = () => {
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton handleReplOutputClear={handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={isRunning}
-        key="eval_repl"
-      />
+      <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
     );
 
     return [evalButton, clearButton];
   };
 
   const handleEval = () => {
-    props.handleEditorEval();
+    handleEditorEval();
 
     // Run testcases when the autograder tab is selected
     if (selectedTab === SideContentType.autograder) {
-      props.handleRunAllTestcases();
+      handleRunAllTestcases();
     }
   };
 
@@ -395,22 +457,22 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             editorVariant: 'normal',
             isFolderModeEnabled: isFolderModeEnabled,
             activeEditorTabIndex: activeEditorTabIndex,
-            setActiveEditorTabIndex: props.handleSetActiveEditorTabIndex,
-            removeEditorTabByIndex: props.handleRemoveEditorTabByIndex,
+            setActiveEditorTabIndex: handleSetActiveEditorTabIndex,
+            removeEditorTabByIndex: handleRemoveEditorTabByIndex,
             editorTabs: editorTabs.map(convertEditorTabStateToProps),
             editorSessionId: '',
-            handleDeclarationNavigate: props.handleDeclarationNavigate,
+            handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEval,
-            handleEditorValueChange: props.handleEditorValueChange,
-            handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
-            handlePromptAutocomplete: props.handlePromptAutocomplete,
+            handleEditorValueChange: handleEditorValueChange,
+            handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+            handlePromptAutocomplete: handlePromptAutocomplete,
             isEditorAutorun: false,
             sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
             sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
             externalLibraryName: question?.library?.external?.name || 'NONE'
           }
         : undefined,
-    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    handleSideContentHeightChange: handleSideContentHeightChange,
     mcqProps: {
       mcq: question as IMCQQuestion,
       handleMCQSubmit: (i: number) => {}
@@ -421,10 +483,10 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
-      handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-      handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-      handleReplEval: props.handleReplEval,
-      handleReplValueChange: props.handleReplValueChange,
+      handleBrowseHistoryDown: handleBrowseHistoryDown,
+      handleBrowseHistoryUp: handleBrowseHistoryUp,
+      handleReplEval: handleReplEval,
+      handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
