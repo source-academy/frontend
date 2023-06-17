@@ -14,7 +14,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -93,14 +92,6 @@ export type OwnProps = {
 
 export type StateProps = {
   hasUnsavedChanges: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
-  storedAssessmentId?: number;
-  storedQuestionId?: number;
 };
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
@@ -114,9 +105,19 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
-    store => store.workspaces[workspaceLocation]
-  );
+  const {
+    isFolderModeEnabled,
+    activeEditorTabIndex,
+    editorTabs,
+    isRunning,
+    // isDebugging,
+    // enableDebugging,
+    output,
+    replValue,
+    sideContentHeight,
+    currentAssessment: storedAssessmentId,
+    currentQuestion: storedQuestionId
+  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
   /**
    * After mounting (either an older copy of the assessment
@@ -228,7 +229,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     const assessmentId = -1;
     const questionId = formatedQuestionId();
 
-    if (props.storedAssessmentId !== assessmentId || props.storedQuestionId !== questionId) {
+    if (storedAssessmentId !== assessmentId || storedQuestionId !== questionId) {
       resetWorkspaceValues();
       props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
       props.handleUpdateHasUnsavedChanges(false);
@@ -606,7 +607,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     const evalButton = (
       <ControlBarEvalButton
         handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
+        isRunning={isRunning}
         key="eval_repl"
       />
     );
@@ -663,15 +664,15 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: props.sideContentHeight,
+    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
       handleBrowseHistoryDown: props.handleBrowseHistoryDown,
       handleBrowseHistoryUp: props.handleBrowseHistoryUp,
       handleReplEval: props.handleReplEval,
       handleReplValueChange: props.handleReplValueChange,
-      output: props.output,
-      replValue: props.replValue,
+      output: output,
+      replValue: replValue,
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',

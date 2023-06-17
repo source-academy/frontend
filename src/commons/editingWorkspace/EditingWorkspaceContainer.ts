@@ -29,15 +29,7 @@ import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './Editing
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
-    hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges,
-    isRunning: state.workspaces.assessment.isRunning,
-    isDebugging: state.workspaces.assessment.isDebugging,
-    enableDebugging: state.workspaces.assessment.enableDebugging,
-    output: state.workspaces.assessment.output,
-    replValue: state.workspaces.assessment.replValue,
-    sideContentHeight: state.workspaces.assessment.sideContentHeight,
-    storedAssessmentId: state.workspaces.assessment.currentAssessment,
-    storedQuestionId: state.workspaces.assessment.currentQuestion
+    hasUnsavedChanges: state.workspaces.assessment.hasUnsavedChanges
   };
 };
 
