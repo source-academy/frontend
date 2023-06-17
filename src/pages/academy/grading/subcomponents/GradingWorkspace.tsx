@@ -59,9 +59,7 @@ import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace
 import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
-type GradingWorkspaceProps = OwnProps;
-
-export type OwnProps = {
+type GradingWorkspaceProps = {
   submissionId: number;
   questionId: number;
 };
