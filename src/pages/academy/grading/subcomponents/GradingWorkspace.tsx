@@ -59,16 +59,12 @@ import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace
 import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
-type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
-
-export type DispatchProps = {};
+type GradingWorkspaceProps = OwnProps;
 
 export type OwnProps = {
   submissionId: number;
   questionId: number;
 };
-
-export type StateProps = {};
 
 const workspaceLocation: WorkspaceLocation = 'grading';
 
