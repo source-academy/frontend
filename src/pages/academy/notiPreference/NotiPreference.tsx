@@ -44,7 +44,7 @@ const NotiPreference: React.FC = () => {
     }
 
     // Initialise notification preferences if absent
-    configurableNotificationConfigs.current.forEach(config => {
+    configurableNotificationConfigs.current?.forEach(config => {
       if (config.notificationPreference === null) {
         config.notificationPreference = {
           id: -1,
