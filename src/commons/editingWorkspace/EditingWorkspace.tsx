@@ -14,6 +14,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
+import { submitAnswer } from '../application/actions/SessionActions';
 import {
   Assessment,
   AssessmentOverview,
@@ -80,7 +81,6 @@ import {
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleSubmitAnswer: (id: number, answer: number | string) => void;
   handleTestcaseEval: (testcaseId: number) => void;
 };
 
@@ -154,7 +154,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     handleReplValueChange,
     handleResetWorkspace,
     handleUpdateWorkspace,
-    // handleSubmitAnswer,
+    handleSubmitAnswer,
     handleSideContentHeightChange,
     // handleTestcaseEval,
     handleUpdateHasUnsavedChanges,
@@ -183,8 +183,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         dispatch(resetWorkspace(workspaceLocation, options)),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         dispatch(updateWorkspace(workspaceLocation, options)),
-      // handleSubmitAnswer: (id: number, answer: string | number | ContestEntry[]) =>
-      //   dispatch(submitAnswer(id, answer)),
+      handleSubmitAnswer: (id: number, answer: string | number) =>
+        dispatch(submitAnswer(id, answer)),
       handleSideContentHeightChange: (heightChange: number) =>
         dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
       // handleTestcaseEval: (testcaseId: number) =>
@@ -708,7 +708,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     mcqProps: {
       mcq: question as IMCQQuestion,
       handleMCQSubmit: (option: number) =>
-        props.handleSubmitAnswer(assessment!.questions[questionId].id, option)
+        handleSubmitAnswer(assessment!.questions[questionId].id, option)
     },
     sideBarProps: {
       tabs: []

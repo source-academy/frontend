@@ -1,7 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { submitAnswer } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { evalTestcase } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -18,7 +17,6 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleSubmitAnswer: submitAnswer,
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId)
     },
     dispatch
