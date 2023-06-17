@@ -81,15 +81,9 @@ import {
 } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
-type SourcereelProps = DispatchProps & StateProps;
-
-export type DispatchProps = {};
-
-export type StateProps = {};
-
 const workspaceLocation: WorkspaceLocation = 'sourcereel';
 
-const Sourcereel: React.FC<SourcereelProps> = props => {
+const Sourcereel: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
 
   const courseId = useTypedSelector(state => state.session.courseId);

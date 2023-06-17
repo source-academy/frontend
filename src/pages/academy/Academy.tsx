@@ -24,7 +24,7 @@ import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
 import Grading from './grading/Grading';
 import GroundControl from './groundControl/GroundControlContainer';
-import Sourcereel from './sourcereel/SourcereelContainer';
+import Sourcereel from './sourcereel/Sourcereel';
 import StorySimulator from './storySimulator/StorySimulator';
 import XpCalculation from './xpCalculation/XpCalculation';
 
