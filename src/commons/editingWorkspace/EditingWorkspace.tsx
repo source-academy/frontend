@@ -80,7 +80,7 @@ import {
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleSave: (id: number, answer: number | string) => void;
+  handleSubmitAnswer: (id: number, answer: number | string) => void;
   handleTestcaseEval: (testcaseId: number) => void;
 };
 
@@ -154,7 +154,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     handleReplValueChange,
     handleResetWorkspace,
     handleUpdateWorkspace,
-    // handleSave,
+    // handleSubmitAnswer,
     handleSideContentHeightChange,
     // handleTestcaseEval,
     handleUpdateHasUnsavedChanges,
@@ -183,7 +183,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         dispatch(resetWorkspace(workspaceLocation, options)),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         dispatch(updateWorkspace(workspaceLocation, options)),
-      // handleSave: (id: number, answer: string | number | ContestEntry[]) =>
+      // handleSubmitAnswer: (id: number, answer: string | number | ContestEntry[]) =>
       //   dispatch(submitAnswer(id, answer)),
       handleSideContentHeightChange: (heightChange: number) =>
         dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
@@ -708,7 +708,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     mcqProps: {
       mcq: question as IMCQQuestion,
       handleMCQSubmit: (option: number) =>
-        props.handleSave(assessment!.questions[questionId].id, option)
+        props.handleSubmitAnswer(assessment!.questions[questionId].id, option)
     },
     sideBarProps: {
       tabs: []

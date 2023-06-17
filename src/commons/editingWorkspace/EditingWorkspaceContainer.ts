@@ -18,7 +18,7 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleSave: submitAnswer,
+      handleSubmitAnswer: submitAnswer,
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId)
     },
     dispatch
