@@ -33,9 +33,9 @@ const NotificationConfigPanel = () => {
    * Also, useState causes a flicker in ag-grid during rerenders. Thus we use this mutable ref and
    * ag-grid's API to update cell values instead.
    */
-  const notificationConfig = React.useRef(session.notificationConfigs) as React.MutableRefObject<
-    NotificationConfiguration[]
-  >;
+  const notificationConfig = React.useRef<NotificationConfiguration[] | undefined>(
+    session.notificationConfigs
+  );
   const [timeOptionsToDelete, setTimeOptionsToDelete] = useState<TimeOption[]>([]);
   const [hasChangesNotificationConfig, setHasChangesNotificationConfig] = useState(false);
 
@@ -64,7 +64,7 @@ const NotificationConfigPanel = () => {
   }, [session]);
 
   const setIsEnabled = (index: number, value: boolean) => {
-    const temp = [...notificationConfig.current];
+    const temp = [...(notificationConfig.current ?? [])];
     temp[index] = {
       ...temp[index],
       isEnabled: value
@@ -75,7 +75,7 @@ const NotificationConfigPanel = () => {
   };
 
   const setTimeOptions = (index: number, value: TimeOption[]) => {
-    const temp = [...notificationConfig.current];
+    const temp = [...(notificationConfig.current ?? [])];
 
     temp[index] = {
       ...temp[index],
@@ -184,7 +184,7 @@ const NotificationConfigPanel = () => {
         dispatch(deleteTimeOptions(timeOptionsToDelete.map(timeOption => timeOption.id)));
         setTimeOptionsToDelete([]);
       }
-      dispatch(updateNotificationConfigs(notificationConfig.current));
+      dispatch(updateNotificationConfigs(notificationConfig.current ?? []));
     }
   };
 

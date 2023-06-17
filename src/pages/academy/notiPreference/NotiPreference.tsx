@@ -27,9 +27,9 @@ const NotiPreference: React.FC = () => {
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
 
-  const configurableNotificationConfigs = React.useRef(
+  const configurableNotificationConfigs = React.useRef<NotificationConfiguration[] | undefined>(
     session.configurableNotificationConfigs
-  ) as React.MutableRefObject<NotificationConfiguration[]>;
+  );
 
   React.useEffect(() => {
     if (!session.courseRegId) return;
@@ -56,7 +56,7 @@ const NotiPreference: React.FC = () => {
   }, [session]);
 
   const setIsEnabled = (index: number, value: boolean) => {
-    const temp = [...configurableNotificationConfigs.current];
+    const temp = [...(configurableNotificationConfigs.current ?? [])];
 
     temp[index]['notificationPreference'].isEnabled = value;
 
@@ -68,7 +68,7 @@ const NotiPreference: React.FC = () => {
   };
 
   const setTimeOption = (index: number, value: TimeOption) => {
-    const temp = [...configurableNotificationConfigs.current];
+    const temp = [...(configurableNotificationConfigs.current ?? [])];
 
     temp[index]['notificationPreference'].timeOptionId = value.id;
 
@@ -137,14 +137,13 @@ const NotiPreference: React.FC = () => {
   const submitHandler = () => {
     if (!hasChanges) return;
 
-    const preferences: NotificationPreference[] = configurableNotificationConfigs.current.map(
-      config => {
+    const preferences: NotificationPreference[] =
+      configurableNotificationConfigs.current?.map(config => {
         return {
           ...config.notificationPreference,
           notificationConfigId: config.id
-        } as NotificationPreference;
-      }
-    );
+        };
+      }) ?? [];
     dispatch(updateNotificationPreferences(preferences, session.courseRegId!));
 
     setHasChanges(false);
