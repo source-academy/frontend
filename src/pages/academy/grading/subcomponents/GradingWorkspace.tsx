@@ -2,14 +2,12 @@ import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import {
-  defaultWorkspaceManager,
-  InterpreterOutput
-} from '../../../../commons/application/ApplicationTypes';
+import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -32,7 +30,7 @@ import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { EditorTabState, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
@@ -69,33 +67,38 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  autogradingResults: AutogradingResult[];
   grading?: Grading;
-  isFolderModeEnabled: boolean;
-  activeEditorTabIndex: number | null;
-  editorTabs: EditorTabState[];
-  editorTestcases: Testcase[];
-  hasUnsavedChanges: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
-  storedSubmissionId?: number;
-  storedQuestionId?: number;
   courseId?: number;
 };
 
+const workspaceLocation: WorkspaceLocation = 'grading';
+
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = React.useState(SideContentType.grading);
+  const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
+
+  const {
+    autogradingResults,
+    isFolderModeEnabled,
+    activeEditorTabIndex,
+    editorTabs,
+    editorTestcases,
+    // hasUnsavedChanges,
+    isRunning,
+    // isDebugging,
+    // enableDebugging,
+    output,
+    replValue,
+    sideContentHeight,
+    currentSubmission: storedSubmissionId,
+    currentQuestion: storedQuestionId
+  } = useTypedSelector(state => state.workspaces[workspaceLocation]);
 
   /**
    * After mounting (either an older copy of the grading
    * or a loading screen), try to fetch a newer grading.
    */
-  React.useEffect(() => {
+  useEffect(() => {
     props.handleGradingFetch(props.submissionId);
     if (!props.grading) {
       return;
@@ -126,7 +129,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
    * Once there is an update (due to the grading being fetched), check
    * if a workspace reset is needed.
    */
-  React.useEffect(() => {
+  useEffect(() => {
     /* Don't reset workspace if grading not fetched yet. */
     if (props.grading === undefined) {
       return;
@@ -159,7 +162,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     const submissionId = props.submissionId;
     const questionId = props.questionId;
 
-    if (props.storedSubmissionId === submissionId && props.storedQuestionId === questionId) {
+    if (storedSubmissionId === submissionId && storedQuestionId === questionId) {
       return;
     }
     const question = props.grading![questionId].question as Question;
@@ -256,8 +259,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         iconName: IconNames.AIRPLANE,
         body: (
           <SideContentAutograder
-            testcases={props.editorTestcases}
-            autogradingResults={props.autogradingResults}
+            testcases={editorTestcases}
+            autogradingResults={autogradingResults}
             handleTestcaseEval={props.handleTestcaseEval}
             workspaceLocation="grading"
           />
@@ -331,7 +334,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
 
     const runButton = (
       <ControlBarRunButton
-        isEntrypointFileDefined={props.activeEditorTabIndex !== null}
+        isEntrypointFileDefined={activeEditorTabIndex !== null}
         handleEditorEval={handleEval}
         key="run"
       />
@@ -351,7 +354,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     const evalButton = (
       <ControlBarEvalButton
         handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
+        isRunning={isRunning}
         key="eval_repl"
       />
     );
@@ -390,11 +393,11 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
         ? {
             editorVariant: 'normal',
-            isFolderModeEnabled: props.isFolderModeEnabled,
-            activeEditorTabIndex: props.activeEditorTabIndex,
+            isFolderModeEnabled: isFolderModeEnabled,
+            activeEditorTabIndex: activeEditorTabIndex,
             setActiveEditorTabIndex: props.handleSetActiveEditorTabIndex,
             removeEditorTabByIndex: props.handleRemoveEditorTabByIndex,
-            editorTabs: props.editorTabs.map(convertEditorTabStateToProps),
+            editorTabs: editorTabs.map(convertEditorTabStateToProps),
             editorSessionId: '',
             handleDeclarationNavigate: props.handleDeclarationNavigate,
             handleEditorEval: handleEval,
@@ -415,15 +418,15 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: props.sideContentHeight,
+    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
       handleBrowseHistoryDown: props.handleBrowseHistoryDown,
       handleBrowseHistoryUp: props.handleBrowseHistoryUp,
       handleReplEval: props.handleReplEval,
       handleReplValueChange: props.handleReplValueChange,
-      output: props.output,
-      replValue: props.replValue,
+      output: output,
+      replValue: replValue,
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',

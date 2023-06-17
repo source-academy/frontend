@@ -35,21 +35,7 @@ const workspaceLocation: WorkspaceLocation = 'grading';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
-    autogradingResults: state.workspaces.grading.autogradingResults,
-    isFolderModeEnabled: state.workspaces.grading.isFolderModeEnabled,
-    activeEditorTabIndex: state.workspaces.grading.activeEditorTabIndex,
-    editorTabs: state.workspaces.grading.editorTabs,
-    editorTestcases: state.workspaces.grading.editorTestcases,
     grading: state.session.gradings.get(props.submissionId),
-    hasUnsavedChanges: state.workspaces.grading.hasUnsavedChanges,
-    isRunning: state.workspaces.grading.isRunning,
-    isDebugging: state.workspaces.grading.isDebugging,
-    enableDebugging: state.workspaces.grading.enableDebugging,
-    output: state.workspaces.grading.output,
-    replValue: state.workspaces.grading.replValue,
-    sideContentHeight: state.workspaces.grading.sideContentHeight,
-    storedSubmissionId: state.workspaces.grading.currentSubmission,
-    storedQuestionId: state.workspaces.grading.currentQuestion,
     courseId: state.session.courseId
   };
 };
