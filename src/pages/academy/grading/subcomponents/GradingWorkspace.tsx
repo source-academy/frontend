@@ -23,7 +23,6 @@ import {
   removeEditorTab,
   resetWorkspace,
   runAllTestcases,
-  sendReplInputToOutput,
   setEditorBreakpoint,
   updateActiveEditorTabIndex,
   updateCurrentSubmissionId,
@@ -78,10 +77,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     activeEditorTabIndex,
     editorTabs,
     editorTestcases,
-    // hasUnsavedChanges,
     isRunning,
-    // isDebugging,
-    // enableDebugging,
     output,
     replValue,
     sideContentHeight,
@@ -104,7 +100,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     handleReplEval,
     handleReplOutputClear,
     handleReplValueChange,
-    // handleSendReplInputToOutput,
     handleResetWorkspace,
     handleChangeExecTime,
     handleSideContentHeightChange,
@@ -135,8 +130,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
         dispatch(updateReplValue(newValue, workspaceLocation)),
-      handleSendReplInputToOutput: (code: string) =>
-        dispatch(sendReplInputToOutput(code, workspaceLocation)),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         dispatch(resetWorkspace(workspaceLocation, options)),
       handleChangeExecTime: (execTimeMs: number) =>
