@@ -198,7 +198,6 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
 
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
-    console.log(params.api);
     params.api.sizeColumnsToFit();
   };
 
