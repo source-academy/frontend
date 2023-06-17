@@ -3,28 +3,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { submitAnswer } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
-import { Library } from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
-import {
-  beginClearContext,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeSideContentHeight,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  evalTestcase,
-  navigateToDeclaration,
-  promptAutocomplete,
-  resetWorkspace,
-  setEditorBreakpoint,
-  updateCurrentAssessmentId,
-  updateEditorValue,
-  updateHasUnsavedChanges,
-  updateReplValue,
-  updateWorkspace
-} from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { evalTestcase, updateEditorValue } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
@@ -38,33 +18,10 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
-      handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        beginClearContext(workspaceLocation, library, shouldInitLibrary),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        navigateToDeclaration(workspaceLocation, cursorPosition),
-      handleEditorEval: () => evalEditor(workspaceLocation),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
-      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
-        setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
-      handleReplEval: () => evalRepl(workspaceLocation),
-      handleReplOutputClear: () => clearReplOutput(workspaceLocation),
-      handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
-        resetWorkspace(workspaceLocation, options),
-      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
-        updateWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
-      handleSideContentHeightChange: (heightChange: number) =>
-        changeSideContentHeight(heightChange, workspaceLocation),
-      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId),
-      handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
-        updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges),
-      handleUpdateCurrentAssessmentId: updateCurrentAssessmentId,
-      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+      handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId)
     },
     dispatch
   );
