@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { submitAnswer } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
-import { evalTestcase, updateEditorValue } from '../workspace/WorkspaceActions';
+import { evalTestcase } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspace';
 
@@ -18,8 +18,6 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
-        updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
       handleSave: submitAnswer,
       handleTestcaseEval: (testcaseId: number) => evalTestcase(workspaceLocation, testcaseId)
     },

@@ -65,6 +65,7 @@ import {
   setEditorBreakpoint,
   updateActiveEditorTabIndex,
   updateCurrentAssessmentId,
+  updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace
@@ -79,7 +80,6 @@ import {
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
-  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleTestcaseEval: (testcaseId: number) => void;
 };
@@ -147,7 +147,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     handleClearContext,
     handleDeclarationNavigate,
     handleEditorEval,
-    // handleEditorValueChange,
+    handleEditorValueChange,
     handleEditorUpdateBreakpoints,
     handleReplEval,
     handleReplOutputClear,
@@ -171,8 +171,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
-      // handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
-      //   dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
@@ -202,7 +202,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     };
   }, [dispatch]);
 
-  const { handleEditorValueChange } = props;
   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
   const handleFirstEditorValueChange = React.useCallback(
     (newEditorValue: string) => handleEditorValueChange(0, newEditorValue),
@@ -344,7 +343,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       programPostpendValue
     });
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorValueChange(0, editorValue);
+    handleEditorValueChange(0, editorValue);
   };
 
   const handleTestcaseEval = (testcase: Testcase) => {
@@ -697,7 +696,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             editorSessionId: '',
             handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEditorEval,
-            handleEditorValueChange: props.handleEditorValueChange,
+            handleEditorValueChange: handleEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
             handlePromptAutocomplete: handlePromptAutocomplete,
