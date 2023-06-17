@@ -103,8 +103,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     activeEditorTabIndex,
     editorTabs,
     isRunning,
-    // isDebugging,
-    // enableDebugging,
     output,
     replValue,
     sideContentHeight,
