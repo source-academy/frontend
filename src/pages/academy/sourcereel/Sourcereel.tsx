@@ -2,7 +2,6 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter } from 'js-slang/dist/types';
-import _ from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -18,11 +17,13 @@ import {
   setCurrentPlayerTime,
   setInputToApply,
   setSourcecastData,
-  setSourcecastDuration
+  setSourcecastDuration,
+  setSourcecastStatus
 } from 'src/features/sourceRecorder/SourceRecorderActions';
 import {
   deleteSourcecastEntry,
   recordInit,
+  recordInput,
   resetInputs,
   timerPause,
   timerReset,
@@ -55,12 +56,17 @@ import {
   browseReplHistoryUp,
   changeSideContentHeight,
   clearReplOutput,
+  evalEditor,
+  evalRepl,
+  externalLibrarySelect,
   navigateToDeclaration,
   promptAutocomplete,
   removeEditorTab,
   setEditorBreakpoint,
+  setIsEditorReadonly,
   toggleEditorAutorun,
   updateActiveEditorTabIndex,
+  updateEditorValue,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
@@ -78,13 +84,6 @@ type SourcereelProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleChapterSelect: (chapter: Chapter) => void;
-  handleEditorEval: () => void;
-  handleEditorValueChange: (newEditorValue: string) => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
-  handleRecordInput: (input: Input) => void;
-  handleReplEval: () => void;
-  handleSetIsEditorReadonly: (editorReadonly: boolean) => void;
-  handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
 };
 
 export type StateProps = {};
@@ -93,7 +92,6 @@ const workspaceLocation: WorkspaceLocation = 'sourcereel';
 
 const Sourcereel: React.FC<SourcereelProps> = props => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
-  const dispatch = useDispatch();
 
   const courseId = useTypedSelector(state => state.session.courseId);
   const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(
@@ -127,6 +125,34 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     timeResumed
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
+  const dispatch = useDispatch();
+  const {
+    handleEditorEval,
+    handleEditorValueChange,
+    handleExternalSelect,
+    handleRecordInput,
+    handleReplEval,
+    handleSetSourcecastStatus,
+    handleSetIsEditorReadonly
+  } = useMemo(() => {
+    return {
+      // handleChapterSelect: (chapter: Chapter) =>
+      //   dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+      handleEditorValueChange: (newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
+        dispatch(externalLibrarySelect(externalLibraryName, workspaceLocation)),
+      handleRecordInput: (input: Input) => dispatch(recordInput(input, workspaceLocation)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
+        dispatch(setSourcecastStatus(playbackStatus, 'sourcecast')),
+      handleSetIsEditorReadonly: (readonly: boolean) =>
+        dispatch(setIsEditorReadonly(workspaceLocation, readonly))
+    };
+  }, [dispatch]);
+
   useEffect(() => {
     fetchSourcecastIndex('sourcecast');
   }, []);
@@ -144,10 +170,10 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
         props.handleChapterSelect(inputToApply.data);
         break;
       case 'externalLibrarySelect':
-        props.handleExternalSelect(inputToApply.data);
+        handleExternalSelect(inputToApply.data);
         break;
       case 'forcePause':
-        props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
+        handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,18 +192,18 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   };
 
   const handleRecordPause = () =>
-    props.handleRecordInput({
+    handleRecordInput({
       time: getTimerDuration(),
       type: 'forcePause',
       data: null
     });
 
   const editorEvalHandler = () => {
-    props.handleEditorEval();
+    handleEditorEval();
     if (recordingStatus !== RecordingStatus.recording) {
       return;
     }
-    props.handleRecordInput({
+    handleRecordInput({
       time: getTimerDuration(),
       type: 'keyboardCommand',
       data: KeyboardCommand.run
@@ -213,7 +239,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     if (recordingStatus !== RecordingStatus.recording) {
       return;
     }
-    props.handleRecordInput({
+    handleRecordInput({
       time: getTimerDuration(),
       type: 'chapterSelect',
       data: chapter
@@ -241,11 +267,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   );
 
   const evalButton = (
-    <ControlBarEvalButton
-      handleReplEval={props.handleReplEval}
-      isRunning={isRunning}
-      key="eval_repl"
-    />
+    <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
   );
 
   const editorContainerHandlers = useMemo(() => {
@@ -262,7 +284,9 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     };
   }, [dispatch]);
   const editorContainerProps: SourcecastEditorContainerProps = {
-    ..._.pick(props, 'handleEditorEval', 'handleEditorValueChange', 'handleRecordInput'),
+    handleEditorEval: handleEditorEval,
+    handleEditorValueChange: handleEditorValueChange,
+    handleRecordInput: handleRecordInput,
     codeDeltasToApply: codeDeltasToApply,
     inputToApply: inputToApply,
     isEditorAutorun: isEditorAutorun,
@@ -286,7 +310,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     if (recordingStatus !== RecordingStatus.recording) {
       return;
     }
-    props.handleRecordInput({
+    handleRecordInput({
       time: getTimerDuration(),
       type: 'activeTabChange',
       data: activeTab
@@ -352,7 +376,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
       replValue: replValue,
       handleBrowseHistoryDown: workspaceHandlers.handleBrowseHistoryDown,
       handleBrowseHistoryUp: workspaceHandlers.handleBrowseHistoryUp,
-      handleReplEval: props.handleReplEval,
+      handleReplEval: handleReplEval,
       handleReplValueChange: workspaceHandlers.handleReplValueChange,
       sourceChapter: sourceChapter,
       sourceVariant: sourceVariant,
@@ -393,7 +417,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
                   handleResetInputs={workspaceHandlers.handleResetInputs}
                   handleSaveSourcecastData={workspaceHandlers.handleSaveSourcecastData}
                   handleSetSourcecastData={workspaceHandlers.handleSetSourcecastData}
-                  handleSetIsEditorReadonly={props.handleSetIsEditorReadonly}
+                  handleSetIsEditorReadonly={handleSetIsEditorReadonly}
                   handleTimerPause={workspaceHandlers.handleTimerPause}
                   handleTimerReset={workspaceHandlers.handleTimerReset}
                   handleTimerResume={workspaceHandlers.handleTimerResume}
@@ -443,14 +467,11 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     };
   }, [dispatch]);
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
-    ..._.pick(
-      props,
-      'handleEditorValueChange',
-      'handleSetIsEditorReadonly',
-      'handleSetSourcecastStatus',
-      'handleChapterSelect',
-      'handleExternalSelect'
-    ),
+    handleChapterSelect: props.handleChapterSelect,
+    handleEditorValueChange: handleEditorValueChange,
+    handleExternalSelect: handleExternalSelect,
+    handleSetSourcecastStatus: handleSetSourcecastStatus,
+    handleSetIsEditorReadonly: handleSetIsEditorReadonly,
     audioUrl: audioUrl,
     currentPlayerTime: currentPlayerTime,
     playbackData: playbackData,
