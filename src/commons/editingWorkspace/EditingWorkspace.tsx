@@ -59,6 +59,7 @@ import {
   clearReplOutput,
   evalEditor,
   evalRepl,
+  evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
   removeEditorTab,
@@ -80,9 +81,7 @@ import {
 
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
-export type DispatchProps = {
-  handleTestcaseEval: (testcaseId: number) => void;
-};
+export type DispatchProps = {};
 
 export type OwnProps = {
   assessmentId: number;
@@ -93,9 +92,7 @@ export type OwnProps = {
   closeDate: string;
 };
 
-export type StateProps = {
-  hasUnsavedChanges: boolean;
-};
+export type StateProps = {};
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
@@ -156,7 +153,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     handleUpdateWorkspace,
     handleSubmitAnswer,
     handleSideContentHeightChange,
-    // handleTestcaseEval,
     handleUpdateHasUnsavedChanges,
     handleUpdateCurrentAssessmentId,
     handlePromptAutocomplete,
@@ -187,8 +183,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         dispatch(submitAnswer(id, answer)),
       handleSideContentHeightChange: (heightChange: number) =>
         dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
-      // handleTestcaseEval: (testcaseId: number) =>
-      //   dispatch(evalTestcase(workspaceLocation, testcaseId)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
@@ -349,7 +343,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const handleTestcaseEval = (testcase: Testcase) => {
     const editorTestcases = [testcase];
     handleUpdateWorkspace({ editorTestcases });
-    props.handleTestcaseEval(0);
+    dispatch(evalTestcase(workspaceLocation, 0));
   };
 
   const handleSave = () => {
