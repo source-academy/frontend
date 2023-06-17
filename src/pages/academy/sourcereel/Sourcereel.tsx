@@ -246,7 +246,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
     });
   };
 
-  const chapterSelect = (
+  const chapterSelectButton = (
     <ControlBarChapterSelect
       handleChapterSelect={chapterSelectHandler}
       isFolderModeEnabled={isFolderModeEnabled}
@@ -366,7 +366,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
   }, [dispatch]);
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
-      editorButtons: [autorunButtons, chapterSelect]
+      editorButtons: [autorunButtons, chapterSelectButton]
     },
     editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: heightChange =>
