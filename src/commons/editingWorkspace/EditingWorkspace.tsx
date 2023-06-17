@@ -10,7 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -203,7 +203,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   }, [dispatch]);
 
   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-  const handleFirstEditorValueChange = React.useCallback(
+  const handleFirstEditorValueChange = useCallback(
     (newEditorValue: string) => handleEditorValueChange(0, newEditorValue),
     [handleEditorValueChange]
   );
