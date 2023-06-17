@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { connect,MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators,Dispatch } from 'redux';
 
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
@@ -22,25 +22,14 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   audioUrl: state.workspaces.sourcecast.audioUrl,
   currentPlayerTime: state.workspaces.sourcecast.currentPlayerTime,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
-  enableDebugging: state.workspaces.sourcereel.enableDebugging,
-  externalLibraryName: state.workspaces.sourcereel.externalLibrary,
   inputToApply: state.workspaces.sourcecast.inputToApply,
-  isDebugging: state.workspaces.sourcereel.isDebugging,
-  isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
-  isEditorReadonly: state.workspaces.sourcereel.isEditorReadonly,
-  isRunning: state.workspaces.sourcereel.isRunning,
-  output: state.workspaces.sourcereel.output,
-  playbackData: state.workspaces.sourcereel.playbackData,
   playbackDuration: state.workspaces.sourcecast.playbackDuration,
   playbackStatus: state.workspaces.sourcecast.playbackStatus,
-  recordingStatus: state.workspaces.sourcereel.recordingStatus,
-  replValue: state.workspaces.sourcereel.replValue,
-  sideContentHeight: state.workspaces.sourcereel.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
+
   sourceChapter: state.workspaces.sourcereel.context.chapter,
   sourceVariant: state.workspaces.sourcereel.context.variant,
-  timeElapsedBeforePause: state.workspaces.sourcereel.timeElapsedBeforePause,
-  timeResumed: state.workspaces.sourcereel.timeResumed,
+
   courseId: state.session.courseId
 });
 
