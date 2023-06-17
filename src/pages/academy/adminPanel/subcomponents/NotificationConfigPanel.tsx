@@ -165,15 +165,16 @@ const NotificationConfigPanel = () => {
   const submitHandler = () => {
     if (hasChangesNotificationConfig) {
       setHasChangesNotificationConfig(false);
-      const allTimeOptions = notificationConfig.current.reduce((acc, curr) => {
+      const allTimeOptions: TimeOption[] = [];
+      notificationConfig.current?.forEach((curr) => {
         const timeOptions = curr.timeOptions.map(timeOption => {
           return {
             ...timeOption,
             notificationConfigId: curr.id
           };
         });
-        return acc.concat(timeOptions);
-      }, [] as TimeOption[]);
+        allTimeOptions.push(...timeOptions);
+      });
 
       if (allTimeOptions.length > 0) {
         dispatch(updateTimeOptions(allTimeOptions));
