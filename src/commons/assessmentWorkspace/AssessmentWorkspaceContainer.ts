@@ -5,10 +5,7 @@ import { OverallState } from '../application/ApplicationTypes';
 import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './AssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
-  return {
-    courseId: state.session.courseId,
-    assessment: state.session.assessments.get(props.assessmentId)
-  };
+  return {};
 };
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

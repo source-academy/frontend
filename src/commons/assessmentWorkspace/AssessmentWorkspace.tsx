@@ -29,7 +29,6 @@ import {
 import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
-  Assessment,
   AssessmentConfiguration,
   AutogradingResult,
   ContestEntry,
@@ -107,10 +106,7 @@ export type OwnProps = {
   assessmentConfiguration: AssessmentConfiguration;
 };
 
-export type StateProps = {
-  assessment?: Assessment;
-  courseId?: number;
-};
+export type StateProps = {};
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
@@ -118,15 +114,18 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [sessionId, setSessionId] = useState('');
+  const { isMobileBreakpoint } = useResponsive();
+
+  const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const [selectedTab, setSelectedTab] = useState(
-    props.assessment?.questions[props.questionId].grader !== undefined
+    assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
   );
-  const { isMobileBreakpoint } = useResponsive();
 
   const navigate = useNavigate();
 
+  const { courseId } = useTypedSelector(state => state.session);
   const {
     isFolderModeEnabled,
     activeEditorTabIndex,
@@ -200,17 +199,17 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     if (props.questionId === 0 && props.notAttempted) {
       setShowOverlay(true);
     }
-    if (!props.assessment) {
+    if (!assessment) {
       return;
     }
     // ------------- PLEASE NOTE, EVERYTHING BELOW THIS SEEMS TO BE UNUSED -------------
     // checkWorkspaceReset does exactly the same thing.
     let questionId = props.questionId;
-    if (props.questionId >= props.assessment.questions.length) {
-      questionId = props.assessment.questions.length - 1;
+    if (props.questionId >= assessment.questions.length) {
+      questionId = assessment.questions.length - 1;
     }
 
-    const question: Question = props.assessment.questions[questionId];
+    const question: Question = assessment.questions[questionId];
 
     let answer = '';
     if (question.type === QuestionTypes.programming) {
@@ -323,7 +322,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    */
   const checkWorkspaceReset = () => {
     /* Don't reset workspace if assessment not fetched yet. */
-    if (props.assessment === undefined) {
+    if (assessment === undefined) {
       return;
     }
 
@@ -333,7 +332,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       return;
     }
 
-    const question = props.assessment.questions[questionId];
+    const question = assessment.questions[questionId];
 
     const options: {
       autogradingResults?: AutogradingResult[];
@@ -357,7 +356,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         // Initialize session once the editorValue is known.
         if (!sessionId) {
           setSessionId(
-            initSession(`${(props.assessment as any).number}/${props.questionId}`, {
+            initSession(`${(assessment as any).number}/${props.questionId}`, {
               chapter: question.library.chapter,
               externalLibrary: question?.library?.external?.name || 'NONE',
               editorValue: options.editorValue
@@ -404,15 +403,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   };
 
   /**
-   * sideContentProps() will only be called when props.assessment is not undefined
-   * (see 'Rendering Logic' below), thus it is okay to use props.assessment!
+   * sideContentProps() will only be called when assessment is not undefined
+   * (see 'Rendering Logic' below), thus it is okay to use assessment!
    */
   const sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
-    const isContestVoting = props.assessment!.questions[questionId]?.type === 'voting';
+    const isGraded = assessment!.questions[questionId].grader !== undefined;
+    const isContestVoting = assessment!.questions[questionId]?.type === 'voting';
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
@@ -423,13 +422,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           {
             label: `Question ${questionId + 1}`,
             iconName: IconNames.NINJA,
-            body: <Markdown content={props.assessment!.questions[questionId].content} />,
+            body: <Markdown content={assessment!.questions[questionId].content} />,
             id: SideContentType.questionOverview
           },
           {
             label: `Contest Voting Briefing`,
             iconName: IconNames.BRIEFCASE,
-            body: <Markdown content={props.assessment!.longSummary} />,
+            body: <Markdown content={assessment!.longSummary} />,
             id: SideContentType.briefing
           },
           {
@@ -440,14 +439,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 canSave={props.canSave}
                 handleSave={votingSubmission =>
                   handleSave(
-                    (props.assessment?.questions[questionId] as IContestVotingQuestion).id,
+                    (assessment?.questions[questionId] as IContestVotingQuestion).id,
                     votingSubmission
                   )
                 }
                 handleContestEntryClick={handleContestEntryClick}
                 contestEntries={
-                  (props.assessment?.questions[questionId] as IContestVotingQuestion)
-                    ?.contestEntries ?? []
+                  (assessment?.questions[questionId] as IContestVotingQuestion)?.contestEntries ??
+                  []
                 }
               />
             ),
@@ -460,7 +459,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               <SideContentContestLeaderboard
                 handleContestEntryClick={handleContestEntryClick}
                 orderedContestEntries={
-                  (props.assessment?.questions[questionId] as IContestVotingQuestion)
+                  (assessment?.questions[questionId] as IContestVotingQuestion)
                     ?.contestLeaderboard ?? []
                 }
               />
@@ -475,7 +474,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             body: (
               <Markdown
                 className="sidecontent-overview"
-                content={props.assessment!.questions[questionId].content}
+                content={assessment!.questions[questionId].content}
               />
             ),
             id: SideContentType.questionOverview
@@ -483,9 +482,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           {
             label: `Briefing`,
             iconName: IconNames.BRIEFCASE,
-            body: (
-              <Markdown className="sidecontent-overview" content={props.assessment!.longSummary} />
-            ),
+            body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
             id: SideContentType.briefing
           },
           {
@@ -514,18 +511,18 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.TICK,
         body: (
           <AssessmentWorkspaceGradingResult
-            graderName={props.assessment!.questions[questionId].grader!.name}
-            gradedAt={props.assessment!.questions[questionId].gradedAt!}
-            xp={props.assessment!.questions[questionId].xp}
-            maxXp={props.assessment!.questions[questionId].maxXp}
-            comments={props.assessment!.questions[questionId].comments}
+            graderName={assessment!.questions[questionId].grader!.name}
+            gradedAt={assessment!.questions[questionId].gradedAt!}
+            xp={assessment!.questions[questionId].xp}
+            maxXp={assessment!.questions[questionId].maxXp}
+            comments={assessment!.questions[questionId].comments}
           />
         ),
         id: SideContentType.grading
       });
     }
 
-    const externalLibrary = props.assessment!.questions[questionId].library.external;
+    const externalLibrary = assessment!.questions[questionId].library.external;
     const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
@@ -559,13 +556,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   };
 
   /**
-   * controlBarProps() will only be called when props.assessment is not undefined
-   * (see 'Rendering Logic' below), thus it is okay to use props.assessment!
+   * controlBarProps() will only be called when assessment is not undefined
+   * (see 'Rendering Logic' below), thus it is okay to use assessment!
    */
   const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
-    const listingPath = `/courses/${props.courseId}/${assessmentTypeLink(props.assessment!.type)}`;
-    const assessmentWorkspacePath = listingPath + `/${props.assessment!.id.toString()}`;
-    const questionProgress: [number, number] = [questionId + 1, props.assessment!.questions.length];
+    const listingPath = `/courses/${courseId}/${assessmentTypeLink(assessment!.type)}`;
+    const assessmentWorkspacePath = listingPath + `/${assessment!.id.toString()}`;
+    const questionProgress: [number, number] = [questionId + 1, assessment!.questions.length];
 
     const onClickPrevious = () => {
       navigate(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -586,15 +583,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       return () => {
         // Perform question blocking - determine the highest question number previously accessed
         // by counting the number of questions that have a non-null answer
-        const blockedQuestionId =
-          props.assessment!.questions.filter(qn => qn.answer !== null).length - 1;
+        const blockedQuestionId = assessment!.questions.filter(qn => qn.answer !== null).length - 1;
 
         // If the current question does not block the next question, proceed as usual
         if (questionId < blockedQuestionId) {
           return deferredNavigate();
         }
         // Else evaluate its correctness - proceed iff the answer to the current question is correct
-        const question: Question = props.assessment!.questions[questionId];
+        const question: Question = assessment!.questions[questionId];
         if (question.type === QuestionTypes.mcq) {
           // Note that 0 is a falsy value!
           if (question.answer === null) {
@@ -621,8 +617,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    const onClickSave = () =>
-      handleSave(props.assessment!.questions[questionId].id, editorTabs[0].value);
+    const onClickSave = () => handleSave(assessment!.questions[questionId].id, editorTabs[0].value);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -631,12 +626,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          props.assessment!.questions[questionId].blocking
-            ? onClickProgress(onClickNext)
-            : onClickNext
+          assessment!.questions[questionId].blocking ? onClickProgress(onClickNext) : onClickNext
         }
         onClickReturn={
-          props.assessment!.questions[questionId].blocking
+          assessment!.questions[questionId].blocking
             ? onClickProgress(onClickReturn)
             : onClickReturn
         }
@@ -658,7 +651,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     const resetButton =
-      props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+      assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
@@ -671,8 +664,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     const saveButton =
-      props.canSave &&
-      props.assessment!.questions[questionId].type === QuestionTypes.programming ? (
+      props.canSave && assessment!.questions[questionId].type === QuestionTypes.programming ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={hasUnsavedChanges}
           onClickSave={onClickSave}
@@ -686,9 +678,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       <ControlBarChapterSelect
         handleChapterSelect={handleChapterSelect}
         isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={props.assessment!.questions[questionId].library.chapter}
+        sourceChapter={assessment!.questions[questionId].library.chapter}
         sourceVariant={
-          props.assessment!.questions[questionId].library.variant ?? Constants.defaultSourceVariant
+          assessment!.questions[questionId].library.variant ?? Constants.defaultSourceVariant
         }
         disabled={true}
         key="chapter"
@@ -778,7 +770,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   /* ===============
      Rendering Logic
      =============== */
-  if (props.assessment === undefined || props.assessment.questions.length === 0) {
+  if (!assessment?.questions.length) {
     return (
       <NonIdealState
         className={classNames('WorkspaceParent', Classes.DARK)}
@@ -791,7 +783,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const overlay = (
     <Dialog className="assessment-briefing" isOpen={showOverlay}>
       <Card>
-        <Markdown content={props.assessment.longSummary} />
+        <Markdown content={assessment.longSummary} />
         <Button
           className="assessment-briefing-button"
           onClick={() => setShowOverlay(false)}
@@ -825,7 +817,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
               handleEditorValueChange(
                 0,
-                (props.assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+                (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
               );
               handleUpdateHasUnsavedChanges(true);
             }}
@@ -838,10 +830,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   /* If questionId is out of bounds, set it to the max. */
   const questionId =
-    props.questionId >= props.assessment.questions.length
-      ? props.assessment.questions.length - 1
+    props.questionId >= assessment.questions.length
+      ? assessment.questions.length - 1
       : props.questionId;
-  const question: Question = props.assessment.questions[questionId];
+  const question: Question = assessment.questions[questionId];
   const editorContainerProps: NormalEditorContainerProps | undefined =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
@@ -869,8 +861,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       : undefined;
   const mcqProps = {
     mcq: question as IMCQQuestion,
-    handleMCQSubmit: (option: number) =>
-      handleSave(props.assessment!.questions[questionId].id, option)
+    handleMCQSubmit: (option: number) => handleSave(assessment!.questions[questionId].id, option)
   };
   const replProps = {
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
