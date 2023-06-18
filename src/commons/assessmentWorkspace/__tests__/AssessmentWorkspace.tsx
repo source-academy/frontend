@@ -4,7 +4,6 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { assertType } from 'src/commons/utils/TypeHelper';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
 import { EditorProps } from '../../editor/Editor';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
@@ -13,8 +12,6 @@ const MockEditor = (props: EditorProps) => <div id="mock-editor">{props.editorVa
 jest.mock('../../editor/Editor', () => (props: EditorProps) => (
   <MockEditor {...props}></MockEditor>
 ));
-
-const mockedHandleEditorValueChange = jest.fn();
 
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
@@ -28,11 +25,6 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
-  handleEditorValueChange: mockedHandleEditorValueChange,
-  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
-  handleReplEval: () => {},
-  handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
   questionId: 0
 });
 
