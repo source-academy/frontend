@@ -26,7 +26,7 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { fetchAssessment } from '../application/actions/SessionActions';
+import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -79,27 +79,25 @@ import {
   changeSideContentHeight,
   clearReplOutput,
   evalEditor,
+  evalRepl,
   evalTestcase,
   navigateToDeclaration,
   promptAutocomplete,
   removeEditorTab,
   resetWorkspace,
   runAllTestcases,
+  setEditorBreakpoint,
   updateActiveEditorTabIndex,
   updateCurrentAssessmentId,
+  updateEditorValue,
+  updateHasUnsavedChanges,
   updateReplValue
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
-export type DispatchProps = {
-  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
-  handleReplEval: () => void;
-  handleSave: (id: number, answer: number | string | ContestEntry[]) => void;
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
-};
+export type DispatchProps = {};
 
 export type OwnProps = {
   assessmentId: number;
@@ -157,7 +155,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleResetWorkspace,
     handleRunAllTestcases,
     handleEditorEval,
-    handleAssessmentFetch
+    handleAssessmentFetch,
+    handleEditorValueChange,
+    handleEditorUpdateBreakpoints,
+    handleReplEval,
+    handleSave,
+    handleUpdateHasUnsavedChanges
   } = useMemo(() => {
     return {
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
@@ -171,13 +174,22 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(resetWorkspace(workspaceLocation, options)),
       handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
-      handleAssessmentFetch: (assessmentId: number) => dispatch(fetchAssessment(assessmentId))
+      handleAssessmentFetch: (assessmentId: number) => dispatch(fetchAssessment(assessmentId)),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleSave: (id: number, answer: number | string | ContestEntry[]) =>
+        dispatch(submitAnswer(id, answer)),
+      handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
+        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges))
     };
   }, [dispatch]);
 
   useEffect(() => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorValueChange(0, '');
+    handleEditorValueChange(0, '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -214,7 +226,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorValueChange(0, answer);
+    handleEditorValueChange(0, answer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -243,12 +255,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   };
 
   const onChangeMethod = (newCode: string, delta: CodeDelta) => {
-    if (props.handleUpdateHasUnsavedChanges) {
-      props.handleUpdateHasUnsavedChanges(true);
-    }
+    handleUpdateHasUnsavedChanges?.(true);
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorValueChange(0, newCode);
+    handleEditorValueChange(0, newCode);
 
     const input: Input = {
       time: Date.now(),
@@ -370,7 +380,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorUpdateBreakpoints(0, []);
+    handleEditorUpdateBreakpoints(0, []);
     handleUpdateCurrentAssessmentId(assessmentId, questionId);
     handleResetWorkspace({
       autogradingResults: options.autogradingResults,
@@ -390,10 +400,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime
     );
     handleClearContext(question.library, true);
-    props.handleUpdateHasUnsavedChanges(false);
+    handleUpdateHasUnsavedChanges(false);
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      props.handleEditorValueChange(0, options.editorValue);
+      handleEditorValueChange(0, options.editorValue);
     }
   };
 
@@ -409,7 +419,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const isContestVoting = props.assessment!.questions[questionId]?.type === 'voting';
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      props.handleEditorValueChange(0, answer);
+      handleEditorValueChange(0, answer);
     };
 
     const tabs: SideContentTab[] = isContestVoting
@@ -433,7 +443,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               <SideContentContestVotingContainer
                 canSave={props.canSave}
                 handleSave={votingSubmission =>
-                  props.handleSave(
+                  handleSave(
                     (props.assessment?.questions[questionId] as IContestVotingQuestion).id,
                     votingSubmission
                   )
@@ -616,7 +626,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     const onClickSave = () =>
-      props.handleSave(props.assessment!.questions[questionId].id, editorTabs[0].value);
+      handleSave(props.assessment!.questions[questionId].id, editorTabs[0].value);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -734,15 +744,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
     const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={isRunning}
-        key="eval_repl"
-      />
+      <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
     );
 
     return [evalButton, clearButton];
-  }, [dispatch, isRunning, props.handleReplEval]);
+  }, [dispatch, isRunning, handleReplEval]);
 
   const editorContainerHandlers = useMemo(() => {
     return {
@@ -821,11 +827,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             onClick={() => {
               closeOverlay();
               // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-              props.handleEditorValueChange(
+              handleEditorValueChange(
                 0,
                 (props.assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
               );
-              props.handleUpdateHasUnsavedChanges(true);
+              handleUpdateHasUnsavedChanges(true);
             }}
             options={{ minimal: false, intent: Intent.DANGER }}
           />
@@ -855,9 +861,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           externalLibraryName: question.library.external.name || 'NONE',
           handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
           handleEditorEval: handleEval,
-          handleEditorValueChange: props.handleEditorValueChange,
-          handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
-          handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
+          handleEditorValueChange: handleEditorValueChange,
+          handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
+          handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
           handlePromptAutocomplete: editorContainerHandlers.handlePromptAutocomplete,
           isEditorAutorun: false,
           onChange: onChangeMethod,
@@ -868,12 +874,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const mcqProps = {
     mcq: question as IMCQQuestion,
     handleMCQSubmit: (option: number) =>
-      props.handleSave(props.assessment!.questions[questionId].id, option)
+      handleSave(props.assessment!.questions[questionId].id, option)
   };
   const replProps = {
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
     handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
-    handleReplEval: props.handleReplEval,
+    handleReplEval: handleReplEval,
     handleReplValueChange: replHandlers.handleReplValueChange,
     output: output,
     replValue: replValue,
