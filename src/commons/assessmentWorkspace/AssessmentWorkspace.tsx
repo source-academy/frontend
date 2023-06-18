@@ -26,7 +26,7 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { fetchAssessment } from '../application/actions/SessionActions';
-import { defaultWorkspaceManager, InterpreterOutput } from '../application/ApplicationTypes';
+import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -109,19 +109,6 @@ export type OwnProps = {
 
 export type StateProps = {
   assessment?: Assessment;
-  autogradingResults: AutogradingResult[];
-  programPrependValue: string;
-  programPostpendValue: string;
-  editorTestcases: Testcase[];
-  hasUnsavedChanges: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
-  storedAssessmentId?: number;
-  storedQuestionId?: number;
   courseId?: number;
 };
 
@@ -141,9 +128,24 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
-    store => store.workspaces[workspaceLocation]
-  );
+  const {
+    isFolderModeEnabled,
+    activeEditorTabIndex,
+    editorTabs,
+    autogradingResults,
+    // programPrependValue,
+    // programPostpendValue,
+    editorTestcases,
+    hasUnsavedChanges,
+    isRunning,
+    // isDebugging,
+    // enableDebugging,
+    output,
+    replValue,
+    sideContentHeight,
+    currentAssessment: storedAssessmentId,
+    currentQuestion: storedQuestionId
+  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
   React.useEffect(() => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -309,7 +311,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const assessmentId = props.assessmentId;
     const questionId = props.questionId;
 
-    if (props.storedAssessmentId === assessmentId && props.storedQuestionId === questionId) {
+    if (storedAssessmentId === assessmentId && storedQuestionId === questionId) {
       return;
     }
 
@@ -474,11 +476,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             iconName: IconNames.AIRPLANE,
             body: (
               <SideContentAutograder
-                testcases={props.editorTestcases}
+                testcases={editorTestcases}
                 autogradingResults={
                   // Display autograding results if assessment has been graded by an avenger, OR does not need to be manually graded
                   isGraded || !props.assessmentConfiguration.isManuallyGraded
-                    ? props.autogradingResults
+                    ? autogradingResults
                     : []
                 }
                 handleTestcaseEval={id => dispatch(evalTestcase(workspaceLocation, id))}
@@ -590,7 +592,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             return showWarningMessage('Your MCQ solution is incorrect!', 750);
           }
         } else if (question.type === QuestionTypes.programming) {
-          const isCorrect = props.editorTestcases.reduce((acc, testcase) => {
+          const isCorrect = editorTestcases.reduce((acc, testcase) => {
             return acc && stringify(testcase.result) === testcase.answer;
           }, true);
           if (!isCorrect) {
@@ -655,7 +657,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       props.canSave &&
       props.assessment!.questions[questionId].type === QuestionTypes.programming ? (
         <ControlButtonSaveButton
-          hasUnsavedChanges={props.hasUnsavedChanges}
+          hasUnsavedChanges={hasUnsavedChanges}
           onClickSave={onClickSave}
           key="save"
         />
@@ -724,7 +726,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const evalButton = (
       <ControlBarEvalButton
         handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
+        isRunning={isRunning}
         key="eval_repl"
       />
     );
@@ -837,8 +839,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleReplEval: props.handleReplEval,
     handleReplValueChange: (newValue: string) =>
       dispatch(updateReplValue(newValue, workspaceLocation)),
-    output: props.output,
-    replValue: props.replValue,
+    output: output,
+    replValue: replValue,
     sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
     sourceVariant: question.library.variant ?? Variant.DEFAULT,
     externalLibrary: question?.library?.external?.name || 'NONE',
@@ -852,16 +854,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: (heightChange: number) =>
       dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
-    hasUnsavedChanges: props.hasUnsavedChanges,
+    hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: props.sideContentHeight,
+    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: replProps
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
     editorContainerProps: editorContainerProps,
-    hasUnsavedChanges: props.hasUnsavedChanges,
+    hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
