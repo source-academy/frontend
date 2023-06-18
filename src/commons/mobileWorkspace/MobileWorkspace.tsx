@@ -17,7 +17,7 @@ import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
 
 export type MobileWorkspaceProps = {
-  mobileSideContentProps: MobileSideContentProps;
+  sideContentProps: MobileSideContentProps;
 
   // The following are shared with WorkspaceProps
   editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
@@ -42,7 +42,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   // Handles the panel height when the mobile top controlbar is rendered in the Assessment Workspace
   useEffect(() => {
-    if (props.mobileSideContentProps.workspaceLocation === 'assessment') {
+    if (props.sideContentProps.workspaceLocation === 'assessment') {
       document.documentElement.style.setProperty(
         '--mobile-panel-height',
         'calc(100% - 100px - 1.1rem)'
@@ -210,7 +210,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     [handleEditorEval]
   );
 
-  const onChange = props.mobileSideContentProps.onChange;
+  const onChange = props.sideContentProps.onChange;
   const onSideContentTabChange = useCallback(
     (
       newTabId: SideContentType,
@@ -228,22 +228,22 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const updatedMobileSideContentProps = useCallback(() => {
     return {
-      ...props.mobileSideContentProps,
+      ...props.sideContentProps,
       onChange: onSideContentTabChange,
       tabs: {
         beforeDynamicTabs: [
           ...sideBarTabs,
           mobileEditorTab,
-          ...props.mobileSideContentProps.tabs.beforeDynamicTabs
+          ...props.sideContentProps.tabs.beforeDynamicTabs
         ],
-        afterDynamicTabs: [...props.mobileSideContentProps.tabs.afterDynamicTabs, mobileRunTab]
+        afterDynamicTabs: [...props.sideContentProps.tabs.afterDynamicTabs, mobileRunTab]
       }
     };
-  }, [onSideContentTabChange, props.mobileSideContentProps, sideBarTabs]);
+  }, [onSideContentTabChange, props.sideContentProps, sideBarTabs]);
 
   const inAssessmentWorkspace =
-    props.mobileSideContentProps.workspaceLocation === 'assessment' ||
-    props.mobileSideContentProps.workspaceLocation === 'githubAssessment';
+    props.sideContentProps.workspaceLocation === 'assessment' ||
+    props.sideContentProps.workspaceLocation === 'githubAssessment';
 
   return (
     <div className="workspace mobile-workspace">
@@ -253,9 +253,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       />
 
       {/* Render the top ControlBar when it is the Assessment Workspace */}
-      {inAssessmentWorkspace && (
-        <ControlBar {...props.mobileSideContentProps.mobileControlBarProps} />
-      )}
+      {inAssessmentWorkspace && <ControlBar {...props.sideContentProps.mobileControlBarProps} />}
 
       <div>
         <div className="mobile-editor-panel">{createWorkspaceInput()}</div>

@@ -1138,7 +1138,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     sideBarProps: sideBarProps,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
-    mobileSideContentProps: mobileSideContentProps()
+    sideContentProps: mobileSideContentProps()
   };
 
   if (isLoading) {

@@ -865,7 +865,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     mcqProps: mcqProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
-    mobileSideContentProps: mobileSideContentProps(questionId)
+    sideContentProps: mobileSideContentProps(questionId)
   };
 
   return (

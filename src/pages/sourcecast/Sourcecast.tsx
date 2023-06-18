@@ -405,7 +405,7 @@ const Sourcecast: React.FC = () => {
     editorContainerProps,
     replProps,
     sideBarProps,
-    mobileSideContentProps: {
+    sideContentProps: {
       mobileControlBarProps: {
         editorButtons: [autorunButtons, chapterSelectButton]
       },
