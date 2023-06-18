@@ -389,100 +389,86 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
-    const isGraded = assessment!.questions[questionId].grader !== undefined;
-    const isContestVoting = assessment!.questions[questionId]?.type === 'voting';
+    const question = assessment!.questions[questionId];
+    const isGraded = question.grader !== undefined;
+    const isContestVoting = question?.type === QuestionTypes.voting;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
     };
 
-    const tabs: SideContentTab[] = isContestVoting
-      ? [
-          {
-            label: `Question ${questionId + 1}`,
-            iconName: IconNames.NINJA,
-            body: <Markdown content={assessment!.questions[questionId].content} />,
-            id: SideContentType.questionOverview
-          },
-          {
-            label: `Contest Voting Briefing`,
-            iconName: IconNames.BRIEFCASE,
-            body: <Markdown content={assessment!.longSummary} />,
-            id: SideContentType.briefing
-          },
-          {
-            label: 'Contest Voting',
-            iconName: IconNames.NEW_LAYERS,
-            body: (
-              <SideContentContestVotingContainer
-                canSave={props.canSave}
-                handleSave={votingSubmission =>
-                  handleSave(
-                    (assessment?.questions[questionId] as IContestVotingQuestion).id,
-                    votingSubmission
-                  )
-                }
-                handleContestEntryClick={handleContestEntryClick}
-                contestEntries={
-                  (assessment?.questions[questionId] as IContestVotingQuestion)?.contestEntries ??
-                  []
-                }
-              />
-            ),
-            id: SideContentType.contestVoting
-          },
-          {
-            label: 'Contest Leaderboard',
-            iconName: IconNames.CROWN,
-            body: (
-              <SideContentContestLeaderboard
-                handleContestEntryClick={handleContestEntryClick}
-                orderedContestEntries={
-                  (assessment?.questions[questionId] as IContestVotingQuestion)
-                    ?.contestLeaderboard ?? []
-                }
-              />
-            ),
-            id: SideContentType.contestLeaderboard
-          }
-        ]
-      : [
-          {
-            label: `Question ${questionId + 1}`,
-            iconName: IconNames.NINJA,
-            body: (
-              <Markdown
-                className="sidecontent-overview"
-                content={assessment!.questions[questionId].content}
-              />
-            ),
-            id: SideContentType.questionOverview
-          },
-          {
-            label: `Briefing`,
-            iconName: IconNames.BRIEFCASE,
-            body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
-            id: SideContentType.briefing
-          },
-          {
-            label: `Autograder`,
-            iconName: IconNames.AIRPLANE,
-            body: (
-              <SideContentAutograder
-                testcases={editorTestcases}
-                autogradingResults={
-                  // Display autograding results if assessment has been graded by an avenger, OR does not need to be manually graded
-                  isGraded || !props.assessmentConfiguration.isManuallyGraded
-                    ? autogradingResults
-                    : []
-                }
-                handleTestcaseEval={handleTestcaseEval}
-                workspaceLocation="assessment"
-              />
-            ),
-            id: SideContentType.autograder
-          }
-        ];
+    const tabs: SideContentTab[] = [
+      {
+        label: `Question ${questionId + 1}`,
+        iconName: IconNames.NINJA,
+        body: <Markdown content={question.content} />,
+        id: SideContentType.questionOverview
+      }
+    ];
+
+    if (isContestVoting) {
+      tabs.push(
+        {
+          label: `Contest Voting Briefing`,
+          iconName: IconNames.BRIEFCASE,
+          body: <Markdown content={assessment!.longSummary} />,
+          id: SideContentType.briefing
+        },
+        {
+          label: 'Contest Voting',
+          iconName: IconNames.NEW_LAYERS,
+          body: (
+            <SideContentContestVotingContainer
+              canSave={props.canSave}
+              handleSave={votingSubmission =>
+                handleSave((question as IContestVotingQuestion).id, votingSubmission)
+              }
+              handleContestEntryClick={handleContestEntryClick}
+              contestEntries={(question as IContestVotingQuestion)?.contestEntries ?? []}
+            />
+          ),
+          id: SideContentType.contestVoting
+        },
+        {
+          label: 'Contest Leaderboard',
+          iconName: IconNames.CROWN,
+          body: (
+            <SideContentContestLeaderboard
+              handleContestEntryClick={handleContestEntryClick}
+              orderedContestEntries={(question as IContestVotingQuestion)?.contestLeaderboard ?? []}
+            />
+          ),
+          id: SideContentType.contestLeaderboard
+        }
+      );
+    } else {
+      tabs.push(
+        {
+          label: `Briefing`,
+          iconName: IconNames.BRIEFCASE,
+          body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
+          id: SideContentType.briefing
+        },
+        {
+          label: `Autograder`,
+          iconName: IconNames.AIRPLANE,
+          body: (
+            <SideContentAutograder
+              testcases={editorTestcases}
+              autogradingResults={
+                // Display autograding results if assessment has been graded by an avenger, OR does not need to be manually graded
+                isGraded || !props.assessmentConfiguration.isManuallyGraded
+                  ? autogradingResults
+                  : []
+              }
+              handleTestcaseEval={handleTestcaseEval}
+              workspaceLocation="assessment"
+            />
+          ),
+          id: SideContentType.autograder
+        }
+      );
+    }
 
     if (isGraded) {
       tabs.push({
@@ -490,18 +476,18 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.TICK,
         body: (
           <AssessmentWorkspaceGradingResult
-            graderName={assessment!.questions[questionId].grader!.name}
-            gradedAt={assessment!.questions[questionId].gradedAt!}
-            xp={assessment!.questions[questionId].xp}
-            maxXp={assessment!.questions[questionId].maxXp}
-            comments={assessment!.questions[questionId].comments}
+            graderName={question.grader!.name}
+            gradedAt={question.gradedAt!}
+            xp={question.xp}
+            maxXp={question.maxXp}
+            comments={question.comments}
           />
         ),
         id: SideContentType.grading
       });
     }
 
-    const externalLibrary = assessment!.questions[questionId].library.external;
+    const externalLibrary = question.library.external;
     const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
