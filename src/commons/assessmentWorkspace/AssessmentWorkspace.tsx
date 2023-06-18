@@ -94,19 +94,13 @@ import {
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
-export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
-
-export type DispatchProps = {};
-
-export type OwnProps = {
+export type AssessmentWorkspaceProps = {
   assessmentId: number;
   questionId: number;
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
 };
-
-export type StateProps = {};
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
