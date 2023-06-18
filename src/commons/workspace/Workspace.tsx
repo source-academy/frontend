@@ -12,15 +12,15 @@ import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
 import { useDimensions } from '../utils/Hooks';
 
-export type WorkspaceProps = DispatchProps & StateProps;
-
-type DispatchProps = {
-  handleSideContentHeightChange: (height: number) => void;
-};
-
-type StateProps = {
+export type WorkspaceProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
+  sideContentHeight?: number;
+  sideContentProps: SideContentProps;
+  sideContentIsResizeable?: boolean;
+  handleSideContentHeightChange: (height: number) => void;
+
+  // The following are shared with MobileWorkspaceProps
   editorContainerProps?: EditorContainerProps;
   hasUnsavedChanges?: boolean;
   mcqProps?: McqChooserProps;
@@ -28,9 +28,6 @@ type StateProps = {
   sideBarProps: {
     tabs: SideBarTab[];
   };
-  sideContentHeight?: number;
-  sideContentProps: SideContentProps;
-  sideContentIsResizeable?: boolean;
 };
 
 const Workspace: React.FC<WorkspaceProps> = props => {

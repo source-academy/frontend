@@ -16,9 +16,10 @@ import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
 
-export type MobileWorkspaceProps = StateProps;
+export type MobileWorkspaceProps = {
+  mobileSideContentProps: MobileSideContentProps;
 
-type StateProps = {
+  // The following are shared with WorkspaceProps
   editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
@@ -26,7 +27,6 @@ type StateProps = {
   sideBarProps: {
     tabs: SideBarTab[];
   };
-  mobileSideContentProps: MobileSideContentProps;
 };
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
