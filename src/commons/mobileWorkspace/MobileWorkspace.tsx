@@ -1,7 +1,7 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Ace } from 'ace-builds';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 
@@ -32,16 +32,16 @@ export type MobileWorkspaceProps = {
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const isAndroid = /Android/.test(navigator.userAgent);
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
-  const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
+  const [draggableReplPosition, setDraggableReplPosition] = useState({ x: 0, y: 0 });
 
   // For disabling draggable Repl when in stepper tab
-  const [isDraggableReplDisabled, setIsDraggableReplDisabled] = React.useState(false);
+  const [isDraggableReplDisabled, setIsDraggableReplDisabled] = useState(false);
 
   // Get rid of the focus border on blueprint components
   FocusStyleManager.onlyShowFocusOnTabs();
 
   // Handles the panel height when the mobile top controlbar is rendered in the Assessment Workspace
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.mobileSideContentProps.workspaceLocation === 'assessment') {
       document.documentElement.style.setProperty(
         '--mobile-panel-height',
@@ -61,7 +61,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * soft keyboard on Android devices. This is due to the viewport height changing when the soft
    * keyboard is up on Android devices. IOS devices are not affected.
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (isPortrait && isAndroid) {
       document.documentElement.style.setProperty('overflow', 'auto');
       const metaViewport = document.querySelector('meta[name=viewport]');
@@ -85,7 +85,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     };
   }, [isPortrait, isAndroid]);
 
-  const [targetKeyboardInput, setTargetKeyboardInput] = React.useState<Ace.Editor | null>(null);
+  const [targetKeyboardInput, setTargetKeyboardInput] = useState<Ace.Editor | null>(null);
 
   const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
 
@@ -186,7 +186,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   };
 
   const handleEditorEval = props.editorContainerProps?.handleEditorEval;
-  const handleTabChangeForRepl = React.useCallback(
+  const handleTabChangeForRepl = useCallback(
     (newTabId: SideContentType, prevTabId: SideContentType) => {
       // Evaluate program upon pressing the run tab.
       if (newTabId === SideContentType.mobileEditorRun) {
@@ -225,7 +225,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   );
 
   const onChange = props.mobileSideContentProps.onChange;
-  const onSideContentTabChange = React.useCallback(
+  const onSideContentTabChange = useCallback(
     (
       newTabId: SideContentType,
       prevTabId: SideContentType,
@@ -240,7 +240,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   // Convert sidebar tabs with a side content tab ID into side content tabs.
   const sideBarTabs: SideContentTab[] = props.sideBarProps.tabs.filter(tab => tab.id !== undefined);
 
-  const mobileEditorTab: SideContentTab = React.useMemo(
+  const mobileEditorTab: SideContentTab = useMemo(
     () => ({
       label: 'Editor',
       iconName: IconNames.EDIT,
@@ -250,7 +250,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     []
   );
 
-  const mobileRunTab: SideContentTab = React.useMemo(
+  const mobileRunTab: SideContentTab = useMemo(
     () => ({
       label: 'Run',
       iconName: IconNames.PLAY,
@@ -260,7 +260,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     []
   );
 
-  const updatedMobileSideContentProps = React.useCallback(() => {
+  const updatedMobileSideContentProps = useCallback(() => {
     return {
       ...props.mobileSideContentProps,
       onChange: onSideContentTabChange,
