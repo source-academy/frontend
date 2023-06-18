@@ -17,6 +17,7 @@ import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
 import {
@@ -35,6 +36,7 @@ import {
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
+  Library,
   Question,
   QuestionTypes,
   Testcase
@@ -87,7 +89,7 @@ import {
   updateCurrentAssessmentId,
   updateReplValue
 } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
@@ -147,6 +149,31 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
   const dispatch = useDispatch();
+  const {
+    handleTestcaseEval,
+    handleClearContext,
+    handleChangeExecTime,
+    handleUpdateCurrentAssessmentId,
+    handleResetWorkspace,
+    handleRunAllTestcases,
+    handleEditorEval,
+    handleAssessmentFetch
+  } = useMemo(() => {
+    return {
+      handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
+      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
+        dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+      handleChangeExecTime: (execTimeMs: number) =>
+        dispatch(changeExecTime(execTimeMs, workspaceLocation)),
+      handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
+        dispatch(updateCurrentAssessmentId(assessmentId, questionId)),
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
+        dispatch(resetWorkspace(workspaceLocation, options)),
+      handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleAssessmentFetch: (assessmentId: number) => dispatch(fetchAssessment(assessmentId))
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -160,7 +187,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * and show the briefing.
    */
   useEffect(() => {
-    dispatch(fetchAssessment(props.assessmentId));
+    handleAssessmentFetch(props.assessmentId);
 
     if (props.questionId === 0 && props.notAttempted) {
       setShowOverlay(true);
@@ -203,11 +230,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
-    if (
-      !isMobileBreakpoint &&
-      (selectedTab === SideContentType.mobileEditor ||
-        selectedTab === SideContentType.mobileEditorRun)
-    ) {
+    if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
     }
   }, [isMobileBreakpoint, props, selectedTab]);
@@ -271,9 +294,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const handleEval = () => {
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
-      dispatch(runAllTestcases(workspaceLocation));
+      handleRunAllTestcases();
     } else {
-      dispatch(evalEditor(workspaceLocation));
+      handleEditorEval();
     }
 
     const input: Input = {
@@ -299,81 +322,78 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
 
     /* Reset assessment if it has changed.*/
-    const assessmentId = props.assessmentId;
-    const questionId = props.questionId;
-
+    const { assessmentId, questionId } = props;
     if (storedAssessmentId === assessmentId && storedQuestionId === questionId) {
       return;
     }
 
     const question = props.assessment.questions[questionId];
 
-    let autogradingResults: AutogradingResult[] = [];
-    let editorValue: string = '';
-    let programPrependValue: string = '';
-    let programPostpendValue: string = '';
-    let editorTestcases: Testcase[] = [];
+    const options: {
+      autogradingResults?: AutogradingResult[];
+      editorValue?: string;
+      programPrependValue?: string;
+      programPostpendValue?: string;
+      editorTestcases?: Testcase[];
+    } = {};
 
-    if (question.type === QuestionTypes.programming) {
-      const questionData = question as IProgrammingQuestion;
-      autogradingResults = questionData.autogradingResults;
-      programPrependValue = questionData.prepend;
-      programPostpendValue = questionData.postpend;
-      editorTestcases = questionData.testcases;
+    switch (question.type) {
+      case QuestionTypes.programming:
+        const programmingQuestionData: IProgrammingQuestion = question;
+        options.autogradingResults = programmingQuestionData.autogradingResults;
+        options.programPrependValue = programmingQuestionData.prepend;
+        options.programPostpendValue = programmingQuestionData.postpend;
+        options.editorTestcases = programmingQuestionData.testcases;
 
-      editorValue = questionData.answer as string;
-      if (!editorValue) {
-        editorValue = questionData.solutionTemplate!;
-      }
-
-      // Initialize session once the editorValue is known.
-      if (!sessionId) {
-        setSessionId(
-          initSession(`${(props.assessment as any).number}/${props.questionId}`, {
-            chapter: question.library.chapter,
-            externalLibrary: question?.library?.external?.name || 'NONE',
-            editorValue
-          })
-        );
-      }
-    }
-
-    if (question.type === QuestionTypes.voting) {
-      const questionData = question as IContestVotingQuestion;
-      programPrependValue = questionData.prepend;
-      programPostpendValue = questionData.postpend;
+        // We use || not ?? to match both null and an empty string
+        options.editorValue =
+          programmingQuestionData.answer || programmingQuestionData.solutionTemplate;
+        // Initialize session once the editorValue is known.
+        if (!sessionId) {
+          setSessionId(
+            initSession(`${(props.assessment as any).number}/${props.questionId}`, {
+              chapter: question.library.chapter,
+              externalLibrary: question?.library?.external?.name || 'NONE',
+              editorValue: options.editorValue
+            })
+          );
+        }
+        break;
+      case QuestionTypes.voting:
+        const votingQuestionData: IContestVotingQuestion = question;
+        options.programPrependValue = votingQuestionData.prepend;
+        options.programPostpendValue = votingQuestionData.postpend;
+        break;
+      case QuestionTypes.mcq:
+        // Do nothing
+        break;
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorUpdateBreakpoints(0, []);
-    dispatch(updateCurrentAssessmentId(assessmentId, questionId));
-    dispatch(
-      resetWorkspace(workspaceLocation, {
-        autogradingResults,
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorTabs: [
-          {
-            value: editorValue,
-            highlightedLines: [],
-            breakpoints: []
-          }
-        ],
-        programPrependValue,
-        programPostpendValue,
-        editorTestcases
-      })
+    handleUpdateCurrentAssessmentId(assessmentId, questionId);
+    handleResetWorkspace({
+      autogradingResults: options.autogradingResults,
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      editorTabs: [
+        {
+          value: options.editorValue ?? '',
+          highlightedLines: [],
+          breakpoints: []
+        }
+      ],
+      programPrependValue: options.programPrependValue,
+      programPostpendValue: options.programPostpendValue,
+      editorTestcases: options.editorTestcases ?? []
+    });
+    handleChangeExecTime(
+      question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime
     );
-    dispatch(
-      changeExecTime(
-        question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime,
-        workspaceLocation
-      )
-    );
-    dispatch(beginClearContext(workspaceLocation, question.library, true));
+    handleClearContext(question.library, true);
     props.handleUpdateHasUnsavedChanges(false);
-    if (editorValue) {
+    if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      props.handleEditorValueChange(0, editorValue);
+      props.handleEditorValueChange(0, options.editorValue);
     }
   };
 
@@ -474,7 +494,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                     ? autogradingResults
                     : []
                 }
-                handleTestcaseEval={id => dispatch(evalTestcase(workspaceLocation, id))}
+                handleTestcaseEval={handleTestcaseEval}
                 workspaceLocation="assessment"
               />
             ),
@@ -706,14 +726,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   };
 
-  const replButtons = () => {
+  const replButtons = useMemo(() => {
     const clearButton = (
       <ControlBarClearButton
         handleReplOutputClear={() => dispatch(clearReplOutput(workspaceLocation))}
         key="clear_repl"
       />
     );
-
     const evalButton = (
       <ControlBarEvalButton
         handleReplEval={props.handleReplEval}
@@ -723,7 +742,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     return [evalButton, clearButton];
-  };
+  }, [dispatch, isRunning, props.handleReplEval]);
 
   const editorContainerHandlers = useMemo(() => {
     return {
@@ -861,7 +880,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
     sourceVariant: question.library.variant ?? Variant.DEFAULT,
     externalLibrary: question?.library?.external?.name || 'NONE',
-    replButtons: replButtons()
+    replButtons: replButtons
   };
   const sideBarProps = {
     tabs: []
