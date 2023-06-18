@@ -406,7 +406,7 @@ const Sourcecast: React.FC = () => {
     replProps,
     sideBarProps,
     sideContentProps: {
-      mobileControlBarProps: {
+      controlBarProps: {
         editorButtons: [autorunButtons, chapterSelectButton]
       },
       selectedTabId: selectedTab,

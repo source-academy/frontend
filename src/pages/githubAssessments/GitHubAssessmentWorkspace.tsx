@@ -1029,7 +1029,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     const sideContent = sideContentProps();
 
     return {
-      mobileControlBarProps: {
+      controlBarProps: {
         ...controlBarProps()
       },
       ...sideContent,

@@ -24,7 +24,7 @@ type StateProps = {
 };
 
 type MobileControlBarProps = {
-  mobileControlBarProps: ControlBarProps;
+  controlBarProps: ControlBarProps;
 };
 
 const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: WorkspaceLocation) => {
@@ -60,7 +60,7 @@ const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: Work
 const MobileSideContent: React.FC<MobileSideContentProps> = ({
   selectedTabId,
   renderActiveTabPanelOnly,
-  mobileControlBarProps,
+  controlBarProps,
   ...otherProps
 }) => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
@@ -118,7 +118,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
                 {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
                 {(otherProps.workspaceLocation === 'playground' ||
                   otherProps.workspaceLocation === 'sicp') && (
-                  <MobileControlBar {...mobileControlBarProps} />
+                  <MobileControlBar {...controlBarProps} />
                 )}
               </Tabs>
             </div>

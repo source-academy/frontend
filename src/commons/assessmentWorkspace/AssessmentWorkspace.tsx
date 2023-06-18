@@ -703,7 +703,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     return {
-      mobileControlBarProps: {
+      controlBarProps: {
         ...controlBarProps(questionId)
       },
       ...sideContentProps(props, questionId),

@@ -1037,7 +1037,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replProps: replProps,
     sideBarProps: sideBarProps,
     sideContentProps: {
-      mobileControlBarProps: {
+      controlBarProps: {
         editorButtons: [
           autorunButtons,
           chapterSelectButton,

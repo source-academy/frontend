@@ -253,7 +253,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       />
 
       {/* Render the top ControlBar when it is the Assessment Workspace */}
-      {inAssessmentWorkspace && <ControlBar {...props.sideContentProps.mobileControlBarProps} />}
+      {inAssessmentWorkspace && <ControlBar {...props.sideContentProps.controlBarProps} />}
 
       <div>
         <div className="mobile-editor-panel">{createWorkspaceInput()}</div>
