@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
-import * as React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -115,10 +115,10 @@ export type StateProps = {
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
-  const [showOverlay, setShowOverlay] = React.useState(false);
-  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
-  const [sessionId, setSessionId] = React.useState('');
-  const [selectedTab, setSelectedTab] = React.useState(
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
+  const [sessionId, setSessionId] = useState('');
+  const [selectedTab, setSelectedTab] = useState(
     props.assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
@@ -147,7 +147,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     props.handleEditorValueChange(0, '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,7 +158,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * or a loading screen), try to fetch a newer assessment,
    * and show the briefing.
    */
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchAssessment(props.assessmentId));
 
     if (props.questionId === 0 && props.notAttempted) {
@@ -194,14 +194,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Once there is an update (due to the assessment being fetched), check
    * if a workspace reset is needed.
    */
-  React.useEffect(() => {
+  useEffect(() => {
     checkWorkspaceReset();
   });
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       !isMobileBreakpoint &&
       (selectedTab === SideContentType.mobileEditor ||
@@ -265,7 +265,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * However, AceEditor only binds commands on mount (https://github.com/securingsincity/react-ace/issues/684)
    * Thus, we use a mutable ref to overcome the stale closure problem
    */
-  const activeTab = React.useRef(selectedTab);
+  const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = () => {
     // Run testcases when the autograder tab is selected
@@ -284,12 +284,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     pushLog(input);
   };
 
-  const setActiveEditorTabIndex = React.useCallback(
+  const setActiveEditorTabIndex = useCallback(
     (activeEditorTabIndex: number | null) =>
       dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
     [dispatch]
   );
-  const removeEditorTabByIndex = React.useCallback(
+  const removeEditorTabByIndex = useCallback(
     (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
     [dispatch]
   );
