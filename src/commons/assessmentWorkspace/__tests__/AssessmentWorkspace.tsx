@@ -18,7 +18,6 @@ const mockedHandleEditorValueChange = jest.fn();
 
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
-  autogradingResults: [],
   notAttempted: true,
   canSave: true,
   assessmentConfiguration: {
@@ -29,21 +28,12 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
-  programPrependValue: '',
-  programPostpendValue: '',
-  editorTestcases: [],
-  hasUnsavedChanges: false,
   handleEditorValueChange: mockedHandleEditorValueChange,
   handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
   handleReplEval: () => {},
   handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
-  isRunning: false,
-  isDebugging: false,
-  enableDebugging: false,
-  output: [],
-  questionId: 0,
-  replValue: ''
+  questionId: 0
 });
 
 const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
