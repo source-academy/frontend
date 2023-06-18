@@ -34,11 +34,11 @@ type StateProps = {
 
 const Workspace: React.FC<WorkspaceProps> = props => {
   const sideBarResizable = React.useRef<Resizable | null>(null);
-  const contentContainerDiv = React.useRef<HTMLDivElement | null>(null);
-  const editorDividerDiv = React.useRef<HTMLDivElement | null>(null);
+  const contentContainerDiv = React.useRef<HTMLDivElement>(null);
+  const editorDividerDiv = React.useRef<HTMLDivElement>(null);
   const leftParentResizable = React.useRef<Resizable | null>(null);
   const maxDividerHeight = React.useRef<number | null>(null);
-  const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
+  const sideDividerDiv = React.useRef<HTMLDivElement>(null);
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
   const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState(200);
   const [isSideBarExpanded, setIsSideBarExpanded] = React.useState(true);
