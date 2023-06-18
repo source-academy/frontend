@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -126,7 +126,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const {
     isFolderModeEnabled,
@@ -146,6 +145,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -283,16 +284,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     pushLog(input);
   };
-
-  const setActiveEditorTabIndex = useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch]
-  );
-  const removeEditorTabByIndex = useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch]
-  );
 
   /* ================
      Helper Functions
@@ -734,6 +725,35 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return [evalButton, clearButton];
   };
 
+  const editorContainerHandlers = useMemo(() => {
+    return {
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+      handleDeclarationNavigate: (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+    };
+  }, [dispatch]);
+
+  const replHandlers = useMemo(() => {
+    return {
+      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleReplValueChange: (newValue: string) =>
+        dispatch(updateReplValue(newValue, workspaceLocation))
+    };
+  }, [dispatch]);
+
+  const workspaceHandlers = useMemo(() => {
+    return {
+      handleSideContentHeightChange: (heightChange: number) =>
+        dispatch(changeSideContentHeight(heightChange, workspaceLocation))
+    };
+  }, [dispatch]);
+
   /* ===============
      Rendering Logic
      =============== */
@@ -807,21 +827,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           editorVariant: 'normal',
           isFolderModeEnabled,
           activeEditorTabIndex,
-          setActiveEditorTabIndex,
-          removeEditorTabByIndex,
+          setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
+          removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibraryName: question.library.external.name || 'NONE',
-          handleDeclarationNavigate: (cursorPosition: Position) =>
-            dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+          handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
           handleEditorEval: handleEval,
           handleEditorValueChange: props.handleEditorValueChange,
           handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
           handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
-          handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-            dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+          handlePromptAutocomplete: editorContainerHandlers.handlePromptAutocomplete,
           isEditorAutorun: false,
           onChange: onChangeMethod,
           onCursorChange: onCursorChangeMethod,
@@ -834,11 +852,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       props.handleSave(props.assessment!.questions[questionId].id, option)
   };
   const replProps = {
-    handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-    handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+    handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplEval: props.handleReplEval,
-    handleReplValueChange: (newValue: string) =>
-      dispatch(updateReplValue(newValue, workspaceLocation)),
+    handleReplValueChange: replHandlers.handleReplValueChange,
     output: output,
     replValue: replValue,
     sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
@@ -852,8 +869,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
     editorContainerProps: editorContainerProps,
-    handleSideContentHeightChange: (heightChange: number) =>
-      dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
+    handleSideContentHeightChange: workspaceHandlers.handleSideContentHeightChange,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
