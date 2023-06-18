@@ -12,11 +12,11 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import { isEqual } from 'lodash';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
@@ -36,7 +36,6 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
-  Question,
   QuestionTypes,
   Testcase
 } from '../assessment/AssessmentTypes';
@@ -67,7 +66,6 @@ import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
-import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import {
@@ -203,7 +201,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       questionId = assessment.questions.length - 1;
     }
 
-    const question: Question = assessment.questions[questionId];
+    const question = assessment.questions[questionId];
 
     let answer = '';
     if (question.type === QuestionTypes.programming) {
@@ -239,13 +237,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   /* ==================
      onChange handlers
      ================== */
-  const pushLog = (newInput: Input) => {
-    log(sessionId, newInput);
-  };
+  const pushLog = useCallback((newInput: Input) => log(sessionId, newInput), [sessionId]);
 
   const onChangeMethod = (newCode: string, delta: CodeDelta) => {
     handleUpdateHasUnsavedChanges?.(true);
-
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorValueChange(0, newCode);
 
@@ -254,7 +249,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       type: 'codeDelta',
       data: delta
     };
-
     pushLog(input);
   };
 
@@ -264,7 +258,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       type: 'cursorPositionChange',
       data: selection.getCursor()
     };
-
     pushLog(input);
   };
 
@@ -277,7 +270,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         type: 'selectionRangeData',
         data: { range, isBackwards }
       };
-
       pushLog(input);
     }
   };
@@ -290,7 +282,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    */
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
-  const handleEval = () => {
+  const handleEval = useCallback(() => {
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
       handleRunAllTestcases();
@@ -303,9 +295,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       type: 'keyboardCommand',
       data: KeyboardCommand.run
     };
-
     pushLog(input);
-  };
+  }, [handleEditorEval, handleRunAllTestcases, pushLog]);
 
   /* ================
      Helper Functions
@@ -374,13 +365,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleResetWorkspace({
       autogradingResults: options.autogradingResults,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorTabs: [
-        {
-          value: options.editorValue ?? '',
-          highlightedLines: [],
-          breakpoints: []
-        }
-      ],
+      editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
       programPrependValue: options.programPrependValue,
       programPostpendValue: options.programPostpendValue,
       editorTestcases: options.editorTestcases ?? []
@@ -556,7 +541,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = `/courses/${courseId}/${assessmentTypeLink(assessment!.type)}`;
     const assessmentWorkspacePath = listingPath + `/${assessment!.id.toString()}`;
-    const questionProgress: [number, number] = [questionId + 1, assessment!.questions.length];
+
+    const questions = assessment!.questions;
+    const question = questions[questionId];
+    const questionProgress: [number, number] = [questionId + 1, questions.length];
 
     const onClickPrevious = () => {
       navigate(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -568,63 +556,27 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
     const onClickReturn = () => navigate(listingPath);
 
-    /**
-     * Returns a nullary function that defers the navigation of the browser window, until the
-     * student's answer passes some checks - presently only used for assessments types with blocking = true
-     * (previously used for the 'Path' assessment type in SA Knight)
-     */
-    const onClickProgress = (deferredNavigate: () => void) => {
-      return () => {
-        // Perform question blocking - determine the highest question number previously accessed
-        // by counting the number of questions that have a non-null answer
-        const blockedQuestionId = assessment!.questions.filter(qn => qn.answer !== null).length - 1;
-
-        // If the current question does not block the next question, proceed as usual
-        if (questionId < blockedQuestionId) {
-          return deferredNavigate();
-        }
-        // Else evaluate its correctness - proceed iff the answer to the current question is correct
-        const question: Question = assessment!.questions[questionId];
-        if (question.type === QuestionTypes.mcq) {
-          // Note that 0 is a falsy value!
-          if (question.answer === null) {
-            return showWarningMessage('Please select an option!', 750);
-          }
-          // If the question is 'blocking', but there is no MCQ solution provided (i.e. assessment uploader's
-          // mistake), allow the student to proceed after selecting an option
-          if ((question as IMCQQuestion).solution === undefined) {
-            return deferredNavigate();
-          }
-          if (question.answer !== (question as IMCQQuestion).solution) {
-            return showWarningMessage('Your MCQ solution is incorrect!', 750);
-          }
-        } else if (question.type === QuestionTypes.programming) {
-          const isCorrect = editorTestcases.reduce((acc, testcase) => {
-            return acc && stringify(testcase.result) === testcase.answer;
-          }, true);
-          if (!isCorrect) {
-            return showWarningMessage('Your solution has not passed all testcases!', 750);
-          }
-        }
-        return deferredNavigate();
-      };
-    };
-
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    const onClickSave = () => handleSave(assessment!.questions[questionId].id, editorTabs[0].value);
+    const onClickSave = () => handleSave(question.id, editorTabs[0].value);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
     };
 
+    // Perform question blocking - determine the highest question number previously accessed
+    // by counting the number of questions that have a non-null answer
+    const blockedQuestionId = questions.filter(qn => qn.answer !== null).length - 1;
+    const isBlocked = questionId >= blockedQuestionId;
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
-          assessment!.questions[questionId].blocking ? onClickProgress(onClickNext) : onClickNext
+          question.blocking
+            ? onClickProgress(onClickNext, question, editorTestcases, isBlocked)
+            : onClickNext
         }
         onClickReturn={
-          assessment!.questions[questionId].blocking
-            ? onClickProgress(onClickReturn)
+          question.blocking
+            ? onClickProgress(onClickReturn, question, editorTestcases, isBlocked)
             : onClickReturn
         }
         questionProgress={questionProgress}
@@ -645,7 +597,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     const resetButton =
-      assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+      question.type !== QuestionTypes.mcq ? (
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
@@ -658,7 +610,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     const saveButton =
-      props.canSave && assessment!.questions[questionId].type === QuestionTypes.programming ? (
+      props.canSave && question.type === QuestionTypes.programming ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={hasUnsavedChanges}
           onClickSave={onClickSave}
@@ -666,17 +618,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         />
       ) : null;
 
-    const handleChapterSelect = () => {};
-
     const chapterSelect = (
       <ControlBarChapterSelect
-        handleChapterSelect={handleChapterSelect}
+        handleChapterSelect={() => {}}
         isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={assessment!.questions[questionId].library.chapter}
-        sourceVariant={
-          assessment!.questions[questionId].library.variant ?? Constants.defaultSourceVariant
-        }
-        disabled={true}
+        sourceChapter={question.library.chapter}
+        sourceVariant={question.library.variant ?? Constants.defaultSourceVariant}
+        disabled
         key="chapter"
       />
     );
@@ -827,7 +775,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     props.questionId >= assessment.questions.length
       ? assessment.questions.length - 1
       : props.questionId;
-  const question: Question = assessment.questions[questionId];
+  const question = assessment.questions[questionId];
   const editorContainerProps: NormalEditorContainerProps | undefined =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
       ? {
