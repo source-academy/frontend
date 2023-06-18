@@ -1,7 +1,7 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Ace } from 'ace-builds';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 
@@ -90,45 +90,33 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const clearTargetKeyboardInput = () => setTargetKeyboardInput(null);
 
   const enableMobileKeyboardForEditor = (props: EditorContainerProps): EditorContainerProps => {
-    const onFocus = (event: any, editor?: Ace.Editor) => {
-      if (props.onFocus) {
-        props.onFocus(event, editor);
-      }
-      if (!editor) {
-        return;
-      }
-      setTargetKeyboardInput(editor);
-    };
-    const onBlur = (event: any, editor?: Ace.Editor) => {
-      if (props.onBlur) {
-        props.onBlur(event, editor);
-      }
-      clearTargetKeyboardInput();
-    };
     return {
       ...props,
-      onFocus,
-      onBlur
+      onFocus: (event, editor?) => {
+        props.onFocus?.(event, editor);
+        if (!editor) {
+          return;
+        }
+        setTargetKeyboardInput(editor);
+      },
+      onBlur: (event, editor?) => {
+        props.onBlur?.(event, editor);
+        clearTargetKeyboardInput();
+      }
     };
   };
 
   const enableMobileKeyboardForRepl = (props: ReplProps): ReplProps => {
-    const onFocus = (editor: Ace.Editor) => {
-      if (props.onFocus) {
-        props.onFocus(editor);
-      }
-      setTargetKeyboardInput(editor);
-    };
-    const onBlur = () => {
-      if (props.onBlur) {
-        props.onBlur();
-      }
-      clearTargetKeyboardInput();
-    };
     return {
       ...props,
-      onFocus,
-      onBlur
+      onFocus: editor => {
+        props.onFocus?.(editor);
+        setTargetKeyboardInput(editor);
+      },
+      onBlur: () => {
+        props.onBlur?.();
+        clearTargetKeyboardInput();
+      }
     };
   };
 
@@ -190,9 +178,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     (newTabId: SideContentType, prevTabId: SideContentType) => {
       // Evaluate program upon pressing the run tab.
       if (newTabId === SideContentType.mobileEditorRun) {
-        if (handleEditorEval) {
-          handleEditorEval();
-        }
+        handleEditorEval?.();
       }
 
       // Show the REPL upon pressing the run tab if the previous tab is not listed below.
@@ -240,26 +226,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   // Convert sidebar tabs with a side content tab ID into side content tabs.
   const sideBarTabs: SideContentTab[] = props.sideBarProps.tabs.filter(tab => tab.id !== undefined);
 
-  const mobileEditorTab: SideContentTab = useMemo(
-    () => ({
-      label: 'Editor',
-      iconName: IconNames.EDIT,
-      body: null,
-      id: SideContentType.mobileEditor
-    }),
-    []
-  );
-
-  const mobileRunTab: SideContentTab = useMemo(
-    () => ({
-      label: 'Run',
-      iconName: IconNames.PLAY,
-      body: null,
-      id: SideContentType.mobileEditorRun
-    }),
-    []
-  );
-
   const updatedMobileSideContentProps = useCallback(() => {
     return {
       ...props.mobileSideContentProps,
@@ -273,13 +239,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         afterDynamicTabs: [...props.mobileSideContentProps.tabs.afterDynamicTabs, mobileRunTab]
       }
     };
-  }, [
-    onSideContentTabChange,
-    mobileEditorTab,
-    mobileRunTab,
-    props.mobileSideContentProps,
-    sideBarTabs
-  ]);
+  }, [onSideContentTabChange, props.mobileSideContentProps, sideBarTabs]);
 
   const inAssessmentWorkspace =
     props.mobileSideContentProps.workspaceLocation === 'assessment' ||
@@ -316,3 +276,17 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 };
 
 export default MobileWorkspace;
+
+const mobileEditorTab: SideContentTab = {
+  label: 'Editor',
+  iconName: IconNames.EDIT,
+  body: null,
+  id: SideContentType.mobileEditor
+};
+
+const mobileRunTab: SideContentTab = {
+  label: 'Run',
+  iconName: IconNames.PLAY,
+  body: null,
+  id: SideContentType.mobileEditorRun
+};
