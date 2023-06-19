@@ -392,7 +392,9 @@ export const isInstr = (command: AgendaItem): command is Instr => {
 
 export function getAgendaItemComponent(
   agendaItem: AgendaItem,
-  stackHeight: number
+  stackHeight: number,
+  highlightOnHover?: () => void,
+  unhighlightOnHover?: () => void
 ): StackItemComponent {
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
@@ -424,7 +426,10 @@ export function getAgendaItemComponent(
         return new StackItemComponent(
           typeof agendaItem.value === 'string' ? `"${agendaItem.value}"` : agendaItem.value,
           true,
-          stackHeight
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
         );
       // case 'AssignmentExpression':
       //   return new StackItemComponent('AssignmentExpression', true, stackHeight);
@@ -448,13 +453,12 @@ export function getAgendaItemComponent(
       //   return new StackItemComponent('CallExpression', true, stackHeight);
       default:
         return new StackItemComponent(
-          truncateText(
-            astToString(agendaItem).trim(),
-            AgendaStashConfig.AgendaMaxTextWidth,
-            AgendaStashConfig.AgendaMaxTextHeight
-          ),
+          astToString(agendaItem).trim(),
           true,
-          stackHeight
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
         );
     }
   } else {

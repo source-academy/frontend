@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { FnValue } from '../components/values/FnValue';
@@ -7,24 +7,41 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
+import { CompactConfig } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
-import { getTextHeight, getTextWidth } from '../EnvVisualizerUtils';
+import {
+  getTextHeight,
+  getTextWidth,
+  setHoveredCursor,
+  setHoveredStyle,
+  setUnhoveredCursor,
+  setUnhoveredStyle,
+  truncateText
+} from '../EnvVisualizerUtils';
 import { ArrowFromStackItemComponent } from './arrows/ArrowFromStackItemComponent';
 import { Frame } from './Frame';
 
 export class StackItemComponent extends Visible implements IHoverable {
   readonly text: string;
   readonly arrow?: ArrowFromStackItemComponent;
+  readonly codeTooltip?: string;
+  readonly codeLabelRef?: RefObject<any>;
 
   constructor(
     readonly value: any,
     readonly isAgenda: boolean,
     stackHeightWidth: number,
-    arrowTo?: Frame | FnValue | GlobalFnValue
+    arrowTo?: Frame | FnValue | GlobalFnValue,
+    readonly highlightOnHover?: () => void,
+    readonly unhighlightOnHover?: () => void
   ) {
     super();
-    this.text = String(value);
+    this.text = truncateText(
+      String(value),
+      AgendaStashConfig.AgendaMaxTextWidth,
+      AgendaStashConfig.AgendaMaxTextHeight
+    );
     this._width = this.isAgenda
       ? AgendaStashConfig.AgendaItemWidth
       : Math.min(
@@ -55,11 +72,25 @@ export class StackItemComponent extends Visible implements IHoverable {
       this.arrow = new ArrowFromStackItemComponent(this);
       this.arrow.to(arrowTo);
     }
+    if (isAgenda) {
+      this.codeTooltip = this.value;
+      this.codeLabelRef = React.createRef();
+    }
   }
 
-  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {};
+  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+    this.highlightOnHover?.();
+    setHoveredStyle(e.currentTarget);
+    setHoveredCursor(e.currentTarget);
+    this.codeLabelRef?.current.show();
+  };
 
-  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {};
+  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
+    this.unhighlightOnHover?.();
+    setUnhoveredStyle(e.currentTarget);
+    setUnhoveredCursor(e.currentTarget);
+    this.codeLabelRef?.current.hide();
+  };
 
   destroy() {
     this.ref.current.destroyChildren();
@@ -98,6 +129,28 @@ export class StackItemComponent extends Visible implements IHoverable {
             height={this.height()}
           />
         </Label>
+        {this.codeLabelRef && (
+          <Label
+            x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
+            y={this.y() - CompactConfig.TextPaddingY}
+            visible={false}
+            ref={this.codeLabelRef}
+          >
+            <Tag
+              stroke="black"
+              fill={'black'}
+              opacity={Number(AgendaStashConfig.NodeTooltipOpacity)}
+            />
+            <Text
+              text={this.codeTooltip}
+              fontFamily={CompactConfig.FontFamily.toString()}
+              fontSize={Number(CompactConfig.FontSize)}
+              fontStyle={CompactConfig.FontStyle.toString()}
+              fill={CompactConfig.SA_WHITE.toString()}
+              padding={5}
+            />
+          </Label>
+        )}
         {this.arrow?.draw()}
       </React.Fragment>
     );

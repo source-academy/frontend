@@ -9,14 +9,7 @@ import { Visible } from '../components/Visible';
 import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
-import {
-  getAgendaItemComponent,
-  getStashItemComponent,
-  setHoveredCursor,
-  setHoveredStyle,
-  setUnhoveredCursor,
-  setUnhoveredStyle
-} from '../EnvVisualizerUtils';
+import { getAgendaItemComponent, getStashItemComponent } from '../EnvVisualizerUtils';
 import { StackItemComponent } from './StackItemComponent';
 
 export class Stack extends Visible implements IHoverable {
@@ -40,28 +33,29 @@ export class Stack extends Visible implements IHoverable {
     // Function to convert the stack items to their components
     const stackItemToComponent = this.isAgenda
       ? (agendaItem: AgendaItem) => {
-          const component = getAgendaItemComponent(agendaItem, this._height);
-          this._height += component.height();
-
           const node = isNode(agendaItem) ? agendaItem : agendaItem.srcNode;
-          // TODO: refactor to put this logic inside StackItemComponent
+          let highlightOnHover = () => {};
+          let unhighlightOnHover = () => {};
+
+          // TODO: Ideally we can split StackItemComponent into their Agenda and Stash counterparts
           if (setEditorHighlightedLines) {
-            component.onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-              // TODO: Refactor to force nodes to have loc property (in js-slang)
+            highlightOnHover = () => {
               if (node.loc) {
                 const start = node.loc.start.line - 1;
                 const end = node.loc.end.line - 1;
                 setEditorHighlightedLines(start, end);
-                setHoveredStyle(e.currentTarget);
-                setHoveredCursor(e.currentTarget);
               }
             };
-            component.onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-              setEditorHighlightedLines();
-              setUnhoveredStyle(e.currentTarget);
-              setUnhoveredCursor(e.currentTarget);
-            };
+            unhighlightOnHover = () => setEditorHighlightedLines();
           }
+          const component = getAgendaItemComponent(
+            agendaItem,
+            this._height,
+            highlightOnHover,
+            unhighlightOnHover
+          );
+          this._height += component.height();
+
           return component;
         }
       : (stashItem: any) => {
