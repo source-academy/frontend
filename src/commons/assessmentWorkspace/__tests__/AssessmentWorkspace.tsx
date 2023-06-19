@@ -64,7 +64,7 @@ const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
 
 const mockStore = mockInitialStore({
   session: {
-    assessments: Object.fromEntries(mockAssessments.map(assessment => [assessment.id, assessment]))
+    assessments: new Map(mockAssessments.map(assessment => [assessment.id, assessment]))
   }
 });
 
