@@ -16,9 +16,9 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTyp
   const { role, courseId } = useTypedSelector(state => state.session);
   const isEnrolledInACourse = !!role;
 
-  const staffAndAdminNavbarInfo = React.useMemo<NavbarEntryInfo[]>(
-    () => getStaffNavlinkInfo({ courseId, role }),
-    [courseId, role]
+  const academyNavbarRightInfo = React.useMemo<NavbarEntryInfo[]>(
+    () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
+    [isEnrolledInACourse, courseId, role]
   );
 
   if (courseId === undefined || !isEnrolledInACourse) {
@@ -38,7 +38,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTyp
         )}
       </NavbarGroup>
       <NavbarGroup align={Alignment.RIGHT}>
-        {renderNavlinksFromInfo(staffAndAdminNavbarInfo, createDesktopNavlink)}
+        {renderNavlinksFromInfo(academyNavbarRightInfo, createDesktopNavlink)}
       </NavbarGroup>
     </Navbar>
   );
@@ -73,7 +73,7 @@ export const assessmentTypesToNavlinkInfo = ({
     hiddenInBreakpoints: ['xs', 'sm']
   }));
 
-export const getStaffNavlinkInfo = ({
+const getStaffNavlinkInfo = ({
   courseId,
   role
 }: {
@@ -136,5 +136,24 @@ export const getStaffNavlinkInfo = ({
     }
   ];
 };
+
+export const getAcademyNavbarRightInfo = ({
+  isEnrolledInACourse,
+  courseId,
+  role
+}: {
+  isEnrolledInACourse: boolean;
+  courseId?: number;
+  role?: Role;
+}): NavbarEntryInfo[] => [
+  ...getStaffNavlinkInfo({ courseId, role }),
+  {
+    to: `/courses/${courseId}/notipreference`,
+    icon: IconNames.NOTIFICATIONS,
+    text: 'Notifications',
+    disabled: !isEnrolledInACourse,
+    hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
+  }
+];
 
 export default AcademyNavigationBar;

@@ -26,7 +26,7 @@ import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
-  getStaffNavlinkInfo
+  getAcademyNavbarRightInfo
 } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
@@ -183,21 +183,21 @@ const NavigationBar: React.FC = () => {
     ];
   }, [isLoggedIn, isEnrolledInACourse, courseId, enableSourcecast, enableAchievements]);
 
-  const fullAcademyNavbarLeftStaffInfo = useMemo(
-    () => getStaffNavlinkInfo({ courseId, role }),
-    [courseId, role]
+  const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
+    () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
+    [isEnrolledInACourse, courseId, role]
   );
 
-  const fullAcademyNavbarLeftInfoWithAssessments: NavbarEntryInfo[] = useMemo(() => {
+  const fullAcademyMobileNavbarLeftInfoWithAssessments: NavbarEntryInfo[] = useMemo(() => {
     return [
       ...fullAcademyNavbarLeftAssessmentsInfo,
       ...fullAcademyNavbarLeftCommonInfo,
-      ...fullAcademyNavbarLeftStaffInfo
+      ...fullAcademyMobileNavbarLeftAdditionalInfo
     ];
   }, [
     fullAcademyNavbarLeftAssessmentsInfo,
     fullAcademyNavbarLeftCommonInfo,
-    fullAcademyNavbarLeftStaffInfo
+    fullAcademyMobileNavbarLeftAdditionalInfo
   ]);
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
@@ -269,7 +269,7 @@ const NavigationBar: React.FC = () => {
 
   const renderFullAcademyNavbarLeftMobile = () =>
     wrapWithMobileHamburger(
-      renderNavlinksFromInfo(fullAcademyNavbarLeftInfoWithAssessments, createMobileNavlink)
+      renderNavlinksFromInfo(fullAcademyMobileNavbarLeftInfoWithAssessments, createMobileNavlink)
     );
 
   const commonNavbarRight = (
