@@ -40,19 +40,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
-<<<<<<< HEAD
     <NavLink className={[Function: className]} to=\\"/courses/0/groundcontrol\\" title=\\"Ground Control\\">
-=======
-    <NavLink to=\\"/courses/0/notipreference\\" className={[Function: className]}>
-      <Blueprint4.Icon icon=\\"notifications\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
-        Notifications
-      </div>
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/groundcontrol\\" className={[Function: className]}>
->>>>>>> master
       <Blueprint4.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Ground Control
@@ -81,6 +69,12 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       <Blueprint4.Icon icon=\\"crown\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Story Simulator
+      </div>
+    </NavLink>
+    <NavLink className={[Function: className]} to=\\"/courses/0/notipreference\\" title=\\"Notifications\\">
+      <Blueprint4.Icon icon=\\"notifications\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        Notifications
       </div>
     </NavLink>
   </Blueprint4.NavbarGroup>
@@ -126,18 +120,14 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
   </Blueprint4.NavbarGroup>
-<<<<<<< HEAD
-  <Blueprint4.NavbarGroup align=\\"right\\" />
-=======
   <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/notipreference\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/notipreference\\" title=\\"Notifications\\">
       <Blueprint4.Icon icon=\\"notifications\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
         Notifications
       </div>
     </NavLink>
   </Blueprint4.NavbarGroup>
->>>>>>> master
 </Blueprint4.Navbar>"
 `;
 
@@ -181,19 +171,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
-<<<<<<< HEAD
     <NavLink className={[Function: className]} to=\\"/courses/0/groundcontrol\\" title=\\"Ground Control\\">
-=======
-    <NavLink to=\\"/courses/0/notipreference\\" className={[Function: className]}>
-      <Blueprint4.Icon icon=\\"notifications\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
-        Notifications
-      </div>
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/groundcontrol\\" className={[Function: className]}>
->>>>>>> master
       <Blueprint4.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Ground Control
@@ -234,6 +212,12 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       <Blueprint4.Icon icon=\\"settings\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
         Admin Panel
+      </div>
+    </NavLink>
+    <NavLink className={[Function: className]} to=\\"/courses/0/notipreference\\" title=\\"Notifications\\">
+      <Blueprint4.Icon icon=\\"notifications\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        Notifications
       </div>
     </NavLink>
   </Blueprint4.NavbarGroup>
