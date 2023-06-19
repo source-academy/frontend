@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
-import { AssessmentStatuses } from 'src/commons/assessment/AssessmentTypes';
-import ContentDisplay from 'src/commons/ContentDisplay';
-import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCard';
-import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspace';
-import EditingWorkspaceContainer from 'src/commons/editingWorkspace/EditingWorkspaceContainer';
-import MissionCreator from 'src/commons/missionCreator/MissionCreatorContainer';
-import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
-import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+
+import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
+import ContentDisplay from '../../commons/ContentDisplay';
+import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
+import EditingWorkspace, {
+  EditingWorkspaceProps
+} from '../../commons/editingWorkspace/EditingWorkspace';
+import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
+import Constants from '../../commons/utils/Constants';
+import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
+import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
 const nullFunction = () => {};
 
@@ -39,7 +41,7 @@ const MissionControl: React.FC = () => {
   // If mission for testing is to render, create workspace
   if (assessmentId === -1 && editingOverview) {
     const overview = editingOverview;
-    const assessmentProps: EditingWorkspaceOwnProps = {
+    const assessmentProps: EditingWorkspaceProps = {
       assessmentId,
       questionId,
       assessmentOverview: overview,
@@ -49,7 +51,7 @@ const MissionControl: React.FC = () => {
     };
     return (
       <div className="Academy">
-        <EditingWorkspaceContainer {...assessmentProps} />
+        <EditingWorkspace {...assessmentProps} />
       </div>
     );
   }

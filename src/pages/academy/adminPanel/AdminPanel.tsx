@@ -11,6 +11,7 @@ import {
   fetchAdminPanelCourseRegistrations,
   fetchAssessmentConfigs,
   fetchCourseConfig,
+  fetchNotificationConfigs,
   setAssessmentConfigurations,
   updateAssessmentConfigs,
   updateCourseConfig,
@@ -26,6 +27,7 @@ import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
 import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
+import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
 const AdminPanel: React.FC = () => {
@@ -66,6 +68,7 @@ const AdminPanel: React.FC = () => {
     dispatch(fetchCourseConfig());
     dispatch(fetchAssessmentConfigs());
     dispatch(fetchAdminPanelCourseRegistrations());
+    dispatch(fetchNotificationConfigs());
   }, [dispatch]);
 
   // After updated configs have been loaded from the backend, put them into local React state
@@ -177,6 +180,7 @@ const AdminPanel: React.FC = () => {
         />
         <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
         <Tab id="add-users" title="Add Users" panel={<AddUserPanel {...addUserPanelProps} />} />
+        <Tab id="notification-config" title="Notifications" panel={<NotificationConfigPanel />} />
       </Tabs>
     </div>
   );

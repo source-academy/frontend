@@ -11,6 +11,9 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
+  NotificationConfiguration,
+  NotificationPreference,
+  TimeOption,
   Tokens,
   UpdateCourseConfiguration,
   User
@@ -1088,6 +1091,56 @@ export const putAssessmentConfigs = async (
   return resp;
 };
 
+export const putNotificationConfigs = async (
+  tokens: Tokens,
+  notificationConfigs: NotificationConfiguration[]
+) => {
+  return await request(`notifications/config`, 'PUT', {
+    ...tokens,
+    body: notificationConfigs,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+};
+
+export const putTimeOption = async (
+  tokens: Tokens,
+  timeOption: TimeOption
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options/${timeOption.id}`, 'PUT', {
+    ...tokens,
+    body: {
+      isDefault: timeOption.isDefault
+    },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+export const postTimeOption = async (
+  tokens: Tokens,
+  timeOption: TimeOption,
+  notificationConfigId: number
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options`, 'POST', {
+    ...tokens,
+    body: {
+      isDefault: timeOption.isDefault,
+      minutes: timeOption.minutes,
+      notification_config_id: notificationConfigId
+    },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
 /**
  * DELETE /courses/{courseId}/admin/config/assessment_config/{assessmentConfigId}
  */
@@ -1105,6 +1158,105 @@ export const removeAssessmentConfig = async (
       shouldRefresh: true
     }
   );
+
+  return resp;
+};
+
+export const removeTimeOptions = async (
+  tokens: Tokens,
+  timeOptionIds: number[]
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options`, 'DELETE', {
+    ...tokens,
+    body: timeOptionIds,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+export const putTimeOptions = async (
+  tokens: Tokens,
+  timeOptions: TimeOption[]
+): Promise<Response | null> => {
+  const resp = await request(`notifications/options`, 'PUT', {
+    ...tokens,
+    body: timeOptions,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+export const getNotificationConfigs = async (
+  tokens: Tokens
+): Promise<NotificationConfiguration[] | null> => {
+  const resp = await request(`notifications/config/${courseIdWithoutPrefix()}`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+export const getConfigurableNotificationConfigs = async (
+  tokens: Tokens,
+  courseRegId: number
+): Promise<NotificationConfiguration[] | null> => {
+  const resp = await request(`notifications/config/user/${courseRegId}`, 'GET', {
+    ...tokens,
+    shouldRefresh: true
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+export const postNotificationPreference = async (
+  tokens: Tokens,
+  notiPref: NotificationPreference,
+  notificationConfigId: number,
+  courseRegId: number
+): Promise<Response | null> => {
+  const resp = await request(`notifications/preference`, 'POST', {
+    ...tokens,
+    body: {
+      is_enabled: notiPref.isEnabled,
+      time_option_id: notiPref.timeOptionId,
+      notification_config_id: notificationConfigId,
+      course_reg_id: courseRegId
+    },
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+};
+
+export const putNotificationPreferences = async (
+  tokens: Tokens,
+  notiPrefs: NotificationPreference[],
+  courseRegId: number
+): Promise<Response | null> => {
+  const resp = await request(`notifications/preferences`, 'PUT', {
+    ...tokens,
+    body: notiPrefs.map(pref => {
+      return { ...pref, courseRegId: courseRegId };
+    }),
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
 
   return resp;
 };
@@ -1428,6 +1580,17 @@ const courseId: () => string = () => {
   const id = store.getState().session.courseId;
   if (id) {
     return `courses/${id}`;
+  } else {
+    // TODO: Rewrite this logic
+    showWarningMessage(`No course selected!`, 1000);
+    throw new Error(`No course selected`);
+  }
+};
+
+const courseIdWithoutPrefix: () => string = () => {
+  const id = store.getState().session.courseId;
+  if (id) {
+    return `${id}`;
   } else {
     // TODO: Rewrite this logic
     showWarningMessage(`No course selected!`, 1000);
