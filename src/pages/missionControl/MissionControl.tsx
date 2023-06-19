@@ -6,8 +6,9 @@ import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
-import { OwnProps as EditingWorkspaceOwnProps } from '../../commons/editingWorkspace/EditingWorkspace';
-import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWorkspaceContainer';
+import EditingWorkspace, {
+  EditingWorkspaceProps
+} from '../../commons/editingWorkspace/EditingWorkspace';
 import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
 import Constants from '../../commons/utils/Constants';
 import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
@@ -40,7 +41,7 @@ const MissionControl: React.FC = () => {
   // If mission for testing is to render, create workspace
   if (assessmentId === -1 && editingOverview) {
     const overview = editingOverview;
-    const assessmentProps: EditingWorkspaceOwnProps = {
+    const assessmentProps: EditingWorkspaceProps = {
       assessmentId,
       questionId,
       assessmentOverview: overview,
@@ -50,7 +51,7 @@ const MissionControl: React.FC = () => {
     };
     return (
       <div className="Academy">
-        <EditingWorkspaceContainer {...assessmentProps} />
+        <EditingWorkspace {...assessmentProps} />
       </div>
     );
   }
