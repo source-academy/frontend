@@ -40,6 +40,23 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
           </NavLink>
         ))}
       </NavbarGroup>
+
+      <NavbarGroup align={Alignment.RIGHT}>
+        <NavLink
+          to={`/courses/${courseId}/notipreference`}
+          className={({ isActive }) =>
+            classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
+        >
+          <Icon icon={IconNames.NOTIFICATIONS} />
+          <div className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg">
+            Notifications
+          </div>
+        </NavLink>
+      </NavbarGroup>
+
       {role === Role.Admin || role === Role.Staff ? (
         <NavbarGroup align={Alignment.RIGHT}>
           <NavLink
