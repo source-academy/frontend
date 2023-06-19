@@ -69,7 +69,7 @@ export class StackItemComponent extends Visible implements IHoverable {
       ? AgendaStashConfig.AgendaPosY + stackHeightWidth
       : AgendaStashConfig.StashPosY;
     if (arrowTo) {
-      this.arrow = new ArrowFromStackItemComponent(this);
+      this.arrow = new ArrowFromStackItemComponent(this, this.isAgenda);
       this.arrow.to(arrowTo);
     }
     if (isAgenda) {

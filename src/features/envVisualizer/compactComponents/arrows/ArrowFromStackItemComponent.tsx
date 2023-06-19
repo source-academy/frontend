@@ -11,12 +11,17 @@ export class ArrowFromStackItemComponent extends GenericArrow<
   StackItemComponent,
   Frame | FnValue | GlobalFnValue
 > {
+
+  constructor(from: StackItemComponent, readonly isAgenda: boolean) {
+    super(from)
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
     if (!to) return [];
 
-    const steps: StepsArray = [(x, y) => [x + from.width() / 2, y + from.height() / 2]];
+    const steps: StepsArray = [(x, y) => [x + from.width() / (this.isAgenda ? 1 : 2), y + from.height() / (this.isAgenda ? 2 : 1)]];
 
     if (to.x() < from.x()) {
       steps.push((x, y) => [x + CompactConfig.TextMargin, y]);

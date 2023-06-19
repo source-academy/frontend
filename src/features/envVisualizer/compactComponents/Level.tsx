@@ -42,11 +42,7 @@ export class Level extends Visible {
     });
 
     // get the max height of all the frames in this level including the label
-    this._height = 0;
-    EnvVisualizer.getAgendaStash() &&
-      (this._height +=
-        AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2);
-    this._height += this.frames.reduce<number>(
+    this._height = this.frames.reduce<number>(
       (maxHeight, frame) => Math.max(maxHeight, frame.totalHeight),
       0
     );
