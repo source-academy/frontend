@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { numberRegExp } from 'src/features/academy/AcademyTypes';
-
-import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
-import ContentDisplay from '../../commons/ContentDisplay';
-import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
+import { AssessmentStatuses } from 'src/commons/assessment/AssessmentTypes';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCard';
 import EditingWorkspace, {
   EditingWorkspaceProps
-} from '../../commons/editingWorkspace/EditingWorkspace';
-import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
-import Constants from '../../commons/utils/Constants';
-import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
+} from 'src/commons/editingWorkspace/EditingWorkspace';
+import MissionCreator from 'src/commons/missionCreator/MissionCreatorContainer';
+import Constants from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
+import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
+import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 const nullFunction = () => {};
 
