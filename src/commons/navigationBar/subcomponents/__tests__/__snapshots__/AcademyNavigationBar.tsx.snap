@@ -3,35 +3,35 @@
 exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and Grading NavLinks render for Role.Staff 1`] = `
 "<Blueprint4.Navbar className=\\"NavigationBar secondary-navbar\\">
   <Blueprint4.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/courses/0/missions\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/missions\\" title=\\"Missions\\">
       <Blueprint4.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/quests\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/quests\\" title=\\"Quests\\">
       <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/paths\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/paths\\" title=\\"Paths\\">
       <Blueprint4.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Paths
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/contests\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/contests\\" title=\\"Contests\\">
       <Blueprint4.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Contests
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/others\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/others\\" title=\\"Others\\">
       <Blueprint4.Icon icon=\\"manual\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Others
@@ -40,43 +40,41 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/notipreference\\" className={[Function: className]}>
-      <Blueprint4.Icon icon=\\"notifications\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
-        Notifications
-      </div>
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/groundcontrol\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/groundcontrol\\" title=\\"Ground Control\\">
       <Blueprint4.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Ground Control
       </div>
     </NavLink>
-    <NavLink to=\\"/courses/0/dashboard\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/dashboard\\" title=\\"Dashboard\\">
       <Blueprint4.Icon icon=\\"globe\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Dashboard
       </div>
     </NavLink>
-    <NavLink to=\\"/courses/0/sourcereel\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/sourcereel\\" title=\\"Sourcereel\\">
       <Blueprint4.Icon icon=\\"mobile-video\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Sourcereel
       </div>
     </NavLink>
-    <NavLink to=\\"/courses/0/grading\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/grading\\" title=\\"Grading\\">
       <Blueprint4.Icon icon=\\"endorsed\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Grading
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/storysimulator\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/storysimulator\\" title=\\"Story Simulator\\">
       <Blueprint4.Icon icon=\\"crown\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Story Simulator
+      </div>
+    </NavLink>
+    <NavLink className={[Function: className]} to=\\"/courses/0/notipreference\\" title=\\"Notifications\\">
+      <Blueprint4.Icon icon=\\"notifications\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        Notifications
       </div>
     </NavLink>
   </Blueprint4.NavbarGroup>
@@ -86,35 +84,35 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
 exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student 1`] = `
 "<Blueprint4.Navbar className=\\"NavigationBar secondary-navbar\\">
   <Blueprint4.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/courses/0/missions\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/missions\\" title=\\"Missions\\">
       <Blueprint4.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/quests\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/quests\\" title=\\"Quests\\">
       <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/paths\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/paths\\" title=\\"Paths\\">
       <Blueprint4.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Paths
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/contests\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/contests\\" title=\\"Contests\\">
       <Blueprint4.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Contests
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/others\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/others\\" title=\\"Others\\">
       <Blueprint4.Icon icon=\\"manual\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Others
@@ -123,7 +121,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/notipreference\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/notipreference\\" title=\\"Notifications\\">
       <Blueprint4.Icon icon=\\"notifications\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
         Notifications
@@ -136,35 +134,35 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
 exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, XP Calculation and AdminPanel NavLinks render for Role.Admin 1`] = `
 "<Blueprint4.Navbar className=\\"NavigationBar secondary-navbar\\">
   <Blueprint4.NavbarGroup align=\\"left\\">
-    <NavLink to=\\"/courses/0/missions\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/missions\\" title=\\"Missions\\">
       <Blueprint4.Icon icon=\\"flame\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Missions
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/quests\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/quests\\" title=\\"Quests\\">
       <Blueprint4.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Quests
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/paths\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/paths\\" title=\\"Paths\\">
       <Blueprint4.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Paths
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/contests\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/contests\\" title=\\"Contests\\">
       <Blueprint4.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Contests
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/others\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/others\\" title=\\"Others\\">
       <Blueprint4.Icon icon=\\"manual\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Others
@@ -173,55 +171,53 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
     </NavLink>
   </Blueprint4.NavbarGroup>
   <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/notipreference\\" className={[Function: className]}>
-      <Blueprint4.Icon icon=\\"notifications\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
-        Notifications
-      </div>
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup align=\\"right\\">
-    <NavLink to=\\"/courses/0/groundcontrol\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/groundcontrol\\" title=\\"Ground Control\\">
       <Blueprint4.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Ground Control
       </div>
     </NavLink>
-    <NavLink to=\\"/courses/0/dashboard\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/dashboard\\" title=\\"Dashboard\\">
       <Blueprint4.Icon icon=\\"globe\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Dashboard
       </div>
     </NavLink>
-    <NavLink to=\\"/courses/0/sourcereel\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/sourcereel\\" title=\\"Sourcereel\\">
       <Blueprint4.Icon icon=\\"mobile-video\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Sourcereel
       </div>
     </NavLink>
-    <NavLink to=\\"/courses/0/xpcalculation\\" className={[Function: className]}>
-      <Blueprint4.Icon icon=\\"calculator\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        XP Calculation
-      </div>
-    </NavLink>
-    <NavLink to=\\"/courses/0/grading\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/grading\\" title=\\"Grading\\">
       <Blueprint4.Icon icon=\\"endorsed\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Grading
       </div>
       <NotificationBadge notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/courses/0/storysimulator\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/storysimulator\\" title=\\"Story Simulator\\">
       <Blueprint4.Icon icon=\\"crown\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Story Simulator
       </div>
     </NavLink>
-    <NavLink to=\\"/courses/0/adminpanel\\" className={[Function: className]}>
+    <NavLink className={[Function: className]} to=\\"/courses/0/xpcalculation\\" title=\\"XP Calculation\\">
+      <Blueprint4.Icon icon=\\"calculator\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        XP Calculation
+      </div>
+    </NavLink>
+    <NavLink className={[Function: className]} to=\\"/courses/0/adminpanel\\" title=\\"Admin Panel\\">
       <Blueprint4.Icon icon=\\"settings\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
         Admin Panel
+      </div>
+    </NavLink>
+    <NavLink className={[Function: className]} to=\\"/courses/0/notipreference\\" title=\\"Notifications\\">
+      <Blueprint4.Icon icon=\\"notifications\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg\\">
+        Notifications
       </div>
     </NavLink>
   </Blueprint4.NavbarGroup>
