@@ -1,7 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Markdown page renders correctly 1`] = `
-"<Memo(Markdown) content=\\"\\\\nWelcome to the Source Academy playground!\\\\n\\\\nThe book [_Structure and Interpretation of Computer Programs, JavaScript Edition_](https://sourceacademy.org/sicpjs/)\\\\nuses JavaScript sublanguages that we call [_Source_](https://docs.sourceacademy.org/). You have chosen the sublanguage [_Source §1_](https://docs.sourceacademy.org/source_1/).\\\\n\\\\nIn the editor on the left, you can use the [_Ace keyboard shortcuts_](https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts) \\\\nand also the [_Source Academy keyboard shortcuts_](https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts).\\\\n\\\\n\\" openLinksInNewWindow={true}>
-  <div className=\\"md bp4-running-text\\" dangerouslySetInnerHTML={{...}} />
-</Memo(Markdown)>"
+<div
+  className="md bp4-running-text"
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "<p>Welcome to the Source Academy playground!</p>
+<p>The book <a href=\\"https://sourceacademy.org/sicpjs/\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Structure and Interpretation of Computer Programs, JavaScript Edition</em></a>
+uses JavaScript sublanguages that we call <a href=\\"https://docs.sourceacademy.org/\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Source</em></a>. You have chosen the sublanguage <a href=\\"https://docs.sourceacademy.org/source_1/\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Source §1</em></a>.</p>
+<p>In the editor on the left, you can use the <a href=\\"https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Ace keyboard shortcuts</em></a> 
+and also the <a href=\\"https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Source Academy keyboard shortcuts</em></a>.</p>",
+    }
+  }
+/>
 `;
