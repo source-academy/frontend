@@ -119,7 +119,7 @@ const NavigationBar: React.FC = () => {
         >
           <Icon icon={IconNames.SYMBOL_DIAMOND} />
           <NavbarHeading style={{ paddingBottom: '0px' }}>
-            {courseShortName || 'Source Academy'}
+            {courseShortName || Constants.sourceAcademyDeploymentName}
           </NavbarHeading>
         </NavLink>
         {renderDrawer && (
@@ -258,7 +258,7 @@ const NavigationBar: React.FC = () => {
           >
             <Icon icon={IconNames.SYMBOL_DIAMOND} />
             <NavbarHeading style={{ paddingBottom: '0px' }}>
-              {courseShortName || 'Source Academy'}
+              {courseShortName || Constants.sourceAcademyDeploymentName}
             </NavbarHeading>
           </NavLink>
         </Popover2>

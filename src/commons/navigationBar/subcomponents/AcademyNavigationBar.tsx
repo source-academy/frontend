@@ -21,6 +21,10 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTyp
     [courseId, role]
   );
 
+  if (courseId === undefined || !isEnrolledInACourse) {
+    return null;
+  }
+
   return (
     <Navbar className="NavigationBar secondary-navbar">
       <NavbarGroup align={Alignment.LEFT}>
@@ -52,7 +56,7 @@ export const icons: IconName[] = [
 ];
 
 export const assessmentTypesToNavlinkInfo = ({
-  assessmentTypes,
+  assessmentTypes = [],
   courseId,
   isEnrolledInACourse
 }: {
@@ -60,7 +64,7 @@ export const assessmentTypesToNavlinkInfo = ({
   courseId?: number;
   isEnrolledInACourse: boolean;
 }): NavbarEntryInfo[] =>
-  (assessmentTypes || []).map((assessmentType, idx) => ({
+  assessmentTypes.map((assessmentType, idx) => ({
     to: `/courses/${courseId}/${assessmentTypeLink(assessmentType)}`,
     icon: icons[idx],
     text: assessmentType,
