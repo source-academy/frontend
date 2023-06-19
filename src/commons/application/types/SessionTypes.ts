@@ -64,6 +64,14 @@ export const FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS = 'FETCH_ADMIN_PANEL_COURSE_
 export const UPDATE_USER_ROLE = 'UPDATE_USER_ROLE';
 export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
 export const DELETE_USER_COURSE_REGISTRATION = 'DELETE_USER_COURSE_REGISTRATION';
+export const FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS = 'FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS';
+export const FETCH_NOTIFICATION_CONFIGS = 'FETCH_NOTIFICATION_CONFIGS';
+export const SET_NOTIFICATION_CONFIGS = 'SET_NOTIFICATION_CONFIGS';
+export const SET_CONFIGURABLE_NOTIFICATION_CONFIGS = 'SET_CONFIGURABLE_NOTIFICATION_CONFIG';
+export const UPDATE_NOTIFICATION_CONFIG = 'UPDATE_NOTIFICATION_CONFIG';
+export const UPDATE_NOTIFICATION_PREFERENCES = 'UPDATE_NOTIFICATION_PREFERENCES';
+export const DELETE_TIME_OPTIONS = 'DELETE_TIME_OPTIONS';
+export const UPDATE_TIME_OPTIONS = 'UPDATE_TIME_OPTIONS';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
@@ -102,6 +110,9 @@ export type SessionState = {
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
+
+  readonly notificationConfigs?: NotificationConfiguration[];
+  readonly configurableNotificationConfigs?: NotificationConfiguration[];
 
   // For research data collection
   readonly agreedToResearch?: boolean | null;
@@ -173,3 +184,35 @@ export type AdminPanelCourseRegistration = {
 };
 
 export type UpdateCourseConfiguration = Partial<CourseConfiguration>;
+
+export type TimeOption = {
+  id: number;
+  isDefault: boolean;
+  minutes: number;
+  notificationConfigId?: number;
+};
+
+export type NotificationPreference = {
+  id: number;
+  isEnabled: boolean | null;
+  timeOptionId: number | null;
+  notificationConfigId?: number;
+};
+
+export type NotificationConfiguration = {
+  id: number;
+  isEnabled: boolean;
+  notificationType: {
+    id: number;
+    name: string;
+    isEnabled: boolean;
+    forStaff: boolean;
+  };
+  timeOptions: TimeOption[];
+  assessmentConfig: {
+    id: number;
+    type: string;
+  } | null;
+  notificationPreference: NotificationPreference;
+  course: any;
+};
