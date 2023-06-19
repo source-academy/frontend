@@ -32,8 +32,9 @@ import {
   submitAssessment
 } from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
-import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
-import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
+import AssessmentWorkspace, {
+  AssessmentWorkspaceProps
+} from '../assessmentWorkspace/AssessmentWorkspace';
 import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
@@ -272,7 +273,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     if (!overview) {
       return <AssessmentNotFound />;
     }
-    const assessmentWorkspaceProps: AssessmentWorkspaceOwnProps = {
+    const assessmentWorkspaceProps: AssessmentWorkspaceProps = {
       assessmentId,
       questionId,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
@@ -281,7 +282,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
       assessmentConfiguration: props.assessmentConfiguration
     };
-    return <AssessmentWorkspaceContainer {...assessmentWorkspaceProps} />;
+    return <AssessmentWorkspace {...assessmentWorkspaceProps} />;
   }
 
   // Otherwise, render a list of assOwnProps
