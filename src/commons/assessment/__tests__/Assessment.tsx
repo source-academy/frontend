@@ -1,14 +1,19 @@
-import { mount } from 'enzyme';
+import '@testing-library/jest-dom/extend-expect';
+
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
+import { Store } from 'redux';
+import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
+import { mockAssessmentOverviews } from 'src/commons/mocks/AssessmentMocks';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { renderTree } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
 
-import { store } from '../../../pages/createStore';
 import Assessment, { AssessmentProps } from '../Assessment';
+import { AssessmentOverview } from '../AssessmentTypes';
 
-// FIXME: Fix all the test cases
-const defaultProps = assertType<AssessmentProps>()({
-  // courseId: 1,
+const mockAssessmentProps = assertType<AssessmentProps>()({
   assessmentConfiguration: {
     assessmentConfigId: 1,
     type: 'Missions',
@@ -17,79 +22,76 @@ const defaultProps = assertType<AssessmentProps>()({
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   }
-  // assessmentOverviews: undefined,
-  // handleAcknowledgeNotifications: () => {},
-  // handleAssessmentOverviewFetch: () => {},
-  // handleSubmitAssessment: (id: number) => {},
-  // isStudent: false,
-  // ...mockRouterProps('/academy/missions', {})
 });
 
-const mockUndefinedAssessment = assertType<AssessmentProps>()({
-  ...defaultProps
-  // assessmentOverviews: undefined
-});
+const getOverridedStore = ({
+  assessmentOverviews,
+  role
+}: {
+  assessmentOverviews?: AssessmentOverview[];
+  role?: Role;
+}) =>
+  mockInitialStore({
+    session: {
+      assessmentOverviews,
+      role
+    }
+  });
 
-const mockEmptyAssessment = assertType<AssessmentProps>()({
-  ...defaultProps
-  // assessmentOverviews: []
-});
-
-const mockPresentAssessment = assertType<AssessmentProps>()({
-  ...defaultProps
-  // assessmentOverviews: mockAssessmentOverviews
-});
-
-const mockPresentAssessmentForStudent = assertType<AssessmentProps>()({
-  ...defaultProps
-  // assessmentOverviews: mockAssessmentOverviews,
-  // isStudent: true
-});
+const createTestComponent = (mockStore: Store<OverallState>) => (
+  <Provider store={mockStore}>
+    <MemoryRouter>
+      <Assessment {...mockAssessmentProps} />
+    </MemoryRouter>
+  </Provider>
+);
 
 test('Assessment page "loading" content renders correctly', () => {
-  const app = (
-    <Provider store={store}>
-      <MemoryRouter initialEntries={['/unknown']}>
-        <Assessment {...mockUndefinedAssessment} />
-      </MemoryRouter>
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const mockStore = getOverridedStore({});
+  const app = createTestComponent(mockStore);
+
+  const tree = renderTree(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+  screen.getByText('Fetching assessment...');
 });
 
 test('Assessment page with 0 missions renders correctly', () => {
-  const app = (
-    <Provider store={store}>
-      <MemoryRouter initialEntries={['/unknown']}>
-        <Assessment {...mockEmptyAssessment} />
-      </MemoryRouter>
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const mockStore = getOverridedStore({ assessmentOverviews: [] });
+  const app = createTestComponent(mockStore);
+
+  const tree = renderTree(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+  screen.getByText('There are no assessments.');
 });
 
-test('Assessment page with multiple loaded missions renders correctly', () => {
-  const app = (
-    <Provider store={store}>
-      <MemoryRouter initialEntries={['/unknown']}>
-        <Assessment {...mockPresentAssessment} />
-      </MemoryRouter>
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+test('Assessment page with multiple loaded missions renders correctly', async () => {
+  const mockStore = getOverridedStore({
+    assessmentOverviews: mockAssessmentOverviews,
+    role: Role.Staff
+  });
+  const app = createTestComponent(mockStore);
+
+  const tree = renderTree(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+  expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(3);
 });
 
 test('Assessment page does not show attempt Button for upcoming assessments for student user', () => {
-  const app = (
-    <Provider store={store}>
-      <MemoryRouter initialEntries={['/unknown']}>
-        <Assessment {...mockPresentAssessmentForStudent} />
-      </MemoryRouter>
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const mockStore = getOverridedStore({
+    assessmentOverviews: mockAssessmentOverviews,
+    role: Role.Student
+  });
+  const app = createTestComponent(mockStore);
+
+  const tree = renderTree(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+  expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(2);
 });
