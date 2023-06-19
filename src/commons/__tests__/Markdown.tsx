@@ -3,7 +3,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { getLanguageConfig } from '../application/ApplicationTypes';
 import Markdown from '../Markdown';
 import { generateLanguageIntroduction } from '../utils/IntroductionHelper';
-import { renderTree } from '../utils/TestUtils';
+import { renderTreeJson } from '../utils/TestUtils';
 
 const mockProps = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return {
@@ -14,7 +14,7 @@ const mockProps = (sourceChapter: Chapter, sourceVariant: Variant) => {
 
 test('Markdown page renders correctly', () => {
   const app = <Markdown {...mockProps(Chapter.SOURCE_1, Variant.DEFAULT)} />;
-  const tree = renderTree(app);
+  const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 });
 

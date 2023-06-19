@@ -7,7 +7,7 @@ import { Store } from 'redux';
 import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockAssessmentOverviews } from 'src/commons/mocks/AssessmentMocks';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { renderTree } from 'src/commons/utils/TestUtils';
+import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
 
 import Assessment, { AssessmentProps } from '../Assessment';
@@ -50,7 +50,7 @@ test('Assessment page "loading" content renders correctly', () => {
   const mockStore = getOverridedStore({});
   const app = createTestComponent(mockStore);
 
-  const tree = renderTree(app);
+  const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   render(app);
@@ -61,7 +61,7 @@ test('Assessment page with 0 missions renders correctly', () => {
   const mockStore = getOverridedStore({ assessmentOverviews: [] });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTree(app);
+  const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   render(app);
@@ -75,7 +75,7 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
   });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTree(app);
+  const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   render(app);
@@ -89,7 +89,7 @@ test('Assessment page does not show attempt Button for upcoming assessments for 
   });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTree(app);
+  const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   render(app);

@@ -8,6 +8,10 @@ export const shallowRender = (element: React.ReactElement) => {
   return renderer.getRenderOutput();
 };
 
-export const renderTree = (element: React.ReactElement) => {
+export const renderTreeJson = (element: React.ReactElement) => {
   return renderer.create(element).toJSON();
+};
+
+export const renderTree = (element: React.ReactElement) => {
+  return renderer.create(element);
 };

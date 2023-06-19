@@ -1,12 +1,16 @@
+import '@testing-library/jest-dom/extend-expect';
+
 import { Intent } from '@blueprintjs/core';
-import { mount } from 'enzyme';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { ConfirmDialog, ConfirmDialogProps } from '../ConfirmDialog';
 
+const TEXT1 = 'Random';
+const TEXT2 = 'content';
 const CONTENTS = (
   <div>
-    <div>Random</div>
-    <p>content</p>
+    <div>{TEXT1}</div>
+    <p>{TEXT2}</p>
   </div>
 );
 
@@ -37,46 +41,46 @@ const makeEscapeEvent = () =>
   );
 
 test('shows content', () => {
-  const dialog = mount(element);
-  expect(dialog.contains(CONTENTS)).toBe(true);
+  render(element);
+  screen.getByText(TEXT1);
+  screen.getByText(TEXT2);
 });
 
 test('shows buttons', () => {
-  const dialog = mount(element);
-
-  const buttons = dialog.find('button');
+  render(element);
+  const buttons = screen.getAllByRole('button');
 
   expect(buttons.length).toBe(CHOICES.length);
   buttons.forEach(button =>
-    expect(CHOICES.filter(choice => choice.label === button.text()).length).toBe(1)
+    expect(CHOICES.filter(choice => choice.label === button.textContent).length).toBe(1)
   );
 });
 
 test('returns correctly on Esc if escapeResponse set', () => {
   const ESCAPE_RESPONSE = 'escaped';
-  const dialog = mount(<ConfirmDialog {...element.props} escapeResponse={ESCAPE_RESPONSE} />);
+  const dialog = render(<ConfirmDialog {...element.props} escapeResponse={ESCAPE_RESPONSE} />);
 
   RESPONSE_FN.mockReset();
-  dialog.getDOMNode().dispatchEvent(makeEscapeEvent());
+  fireEvent(dialog.getByRole('dialog'), makeEscapeEvent());
   expect(RESPONSE_FN).toBeCalledWith(ESCAPE_RESPONSE);
 });
 
 test('does not return on Esc if escapeResponse not set', () => {
-  const dialog = mount(element);
+  const dialog = render(element);
 
   RESPONSE_FN.mockReset();
-  dialog.getDOMNode().dispatchEvent(makeEscapeEvent());
+  fireEvent(dialog.getByRole('dialog'), makeEscapeEvent());
   expect(RESPONSE_FN).toHaveBeenCalledTimes(0);
 });
 
 test('returns correctly when button clicked', () => {
-  const dialog = mount(element);
+  const dialog = render(element);
+  const buttons = dialog.getAllByRole('button');
 
-  const buttons = dialog.find('button');
   RESPONSE_FN.mockReset();
   buttons.forEach(button => {
-    const choice = CHOICES.find(choice => choice.label === button.text());
-    button.getDOMNode().dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const choice = CHOICES.find(choice => choice.label === button.textContent);
+    fireEvent(button, new MouseEvent('click', { bubbles: true }));
     expect(RESPONSE_FN).toBeCalledWith(choice?.key);
   });
   expect(RESPONSE_FN).toHaveBeenCalledTimes(CHOICES.length);

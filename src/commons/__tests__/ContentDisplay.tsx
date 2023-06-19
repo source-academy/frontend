@@ -1,5 +1,5 @@
 import ContentDisplay, { ContentDisplayProps } from '../ContentDisplay';
-import { renderTree } from '../utils/TestUtils';
+import { renderTreeJson } from '../utils/TestUtils';
 
 const mockProps: ContentDisplayProps = {
   display: <div> Test Content </div>,
@@ -8,6 +8,6 @@ const mockProps: ContentDisplayProps = {
 
 test('ContentDisplay page renders correctly', () => {
   const app = <ContentDisplay {...mockProps} />;
-  const tree = renderTree(app);
+  const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 });
