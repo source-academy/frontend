@@ -15,3 +15,34 @@ export const renderTreeJson = (element: React.ReactElement) => {
 export const renderTree = (element: React.ReactElement) => {
   return renderer.create(element);
 };
+
+/**
+ * Recursively traverses a nested object and returns all matches.
+ *
+ * Used in traversing nested objects such as `shallowRender`'s output.
+ */
+export function deepFilter<T>(
+  nestedObject: T,
+  matchFn: (e: T) => boolean,
+  getChildren: (e: T) => T[]
+) {
+  const matches: any[] = [];
+
+  function helper(obj: T) {
+    if (matchFn(obj)) {
+      matches.push(obj);
+    }
+
+    const children = getChildren(obj);
+    if (children && Array.isArray(children)) {
+      children.forEach(e => {
+        if (e) {
+          helper(e);
+        }
+      });
+    }
+  }
+
+  helper(nestedObject);
+  return matches;
+}

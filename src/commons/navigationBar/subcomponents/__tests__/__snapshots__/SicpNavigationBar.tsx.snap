@@ -1,36 +1,137 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Navbar renders correctly 1`] = `
-"<Fragment>
-  <Blueprint4.Navbar className=\\"SicpNavigationBar secondary-navbar\\">
-    <Blueprint4.NavbarGroup align=\\"left\\">
-      <TableOfContentsButton handleOpenToc={[Function: handleOpenToc]} />
-      <div className=\\"userSearch\\" style={{...}}>
-        <div className=\\"userSearch-inner\\">
-          <div style={{...}}>
-            <Blueprint4.InputGroup placeholder=\\"Search\\" value=\\"\\" onChange={[Function: onChange]} />
-            <ControlButton label=\\"Text\\" icon=\\"search\\" onClick={[Function: onClick]} />
+<React.Fragment>
+  <Blueprint4.Navbar
+    className="SicpNavigationBar secondary-navbar"
+  >
+    <Blueprint4.NavbarGroup
+      align="left"
+    >
+      <TableOfContentsButton
+        handleOpenToc={[Function]}
+      />
+      <div
+        className="userSearch"
+        style={
+          Object {
+            "height": "600%",
+            "left": "15%",
+            "position": "absolute",
+            "top": "10%",
+            "width": "20%",
+          }
+        }
+      >
+        <div
+          className="userSearch-inner"
+        >
+          <div
+            style={
+              Object {
+                "display": "inline-flex",
+              }
+            }
+          >
+            <Blueprint4.InputGroup
+              onChange={[Function]}
+              placeholder="Search"
+              value=""
+            />
+            <ControlButton
+              icon="search"
+              label="Text"
+              onClick={[Function]}
+            />
           </div>
         </div>
       </div>
-      <div className=\\"indexSearch\\" style={{...}}>
-        <div className=\\"indexSearch-inner\\">
-          <div style={{...}}>
-            <Blueprint4.InputGroup placeholder=\\"Search\\" value=\\"\\" onChange={[Function: onChange]} />
-            <ControlButton label=\\"Index\\" icon=\\"search\\" onClick={[Function: onClick]} />
+      <div
+        className="indexSearch"
+        style={
+          Object {
+            "height": "600%",
+            "left": "36%",
+            "position": "absolute",
+            "top": "10%",
+            "width": "20%",
+          }
+        }
+      >
+        <div
+          className="indexSearch-inner"
+        >
+          <div
+            style={
+              Object {
+                "display": "inline-flex",
+              }
+            }
+          >
+            <Blueprint4.InputGroup
+              onChange={[Function]}
+              placeholder="Search"
+              value=""
+            />
+            <ControlButton
+              icon="search"
+              label="Index"
+              onClick={[Function]}
+            />
           </div>
         </div>
       </div>
     </Blueprint4.NavbarGroup>
-    <Blueprint4.NavbarGroup align=\\"right\\">
+    <Blueprint4.NavbarGroup
+      align="right"
+    >
       <div>
-        <ControlButton label=\\"Next\\" icon=\\"arrow-right\\" onClick={[Function: onClick]} options={{...}} />
+        <ControlButton
+          icon="arrow-right"
+          label="Next"
+          onClick={[Function]}
+          options={
+            Object {
+              "iconOnRight": true,
+            }
+          }
+        />
       </div>
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>
-  <Blueprint4.Drawer onClose={[Function: handleCloseToc]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" usePortal={false} className=\\"sicp-toc-drawer\\" style={{...}}>
-    <SicpToc handleCloseToc={[Function: handleCloseToc]} />
+  <Blueprint4.Drawer
+    autoFocus={true}
+    canEscapeKeyClose={true}
+    canOutsideClickClose={true}
+    className="sicp-toc-drawer"
+    enforceFocus={true}
+    hasBackdrop={true}
+    isOpen={false}
+    onClose={[Function]}
+    position="left"
+    style={Object {}}
+    usePortal={false}
+  >
+    <SicpToc
+      handleCloseToc={[Function]}
+    />
   </Blueprint4.Drawer>
-  <Blueprint4.Drawer style={{...}} onClose={[Function: handleCloseSearch]} autoFocus={true} canEscapeKeyClose={true} canOutsideClickClose={true} enforceFocus={true} hasBackdrop={true} isOpen={false} position=\\"left\\" usePortal={false} className=\\"sicp-toc-drawer\\" />
-</Fragment>"
+  <Blueprint4.Drawer
+    autoFocus={true}
+    canEscapeKeyClose={true}
+    canOutsideClickClose={true}
+    className="sicp-toc-drawer"
+    enforceFocus={true}
+    hasBackdrop={true}
+    isOpen={false}
+    onClose={[Function]}
+    position="left"
+    style={
+      Object {
+        "overflow": "auto",
+      }
+    }
+    usePortal={false}
+  />
+</React.Fragment>
 `;
