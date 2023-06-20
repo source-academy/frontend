@@ -1,6 +1,6 @@
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
-import { AgendaItem } from 'js-slang/dist/ec-evaluator/types';
-import { isNode } from 'js-slang/dist/ec-evaluator/utils';
+import { AgendaItem, InstrType } from 'js-slang/dist/ec-evaluator/types';
+import { isInstr, isNode } from 'js-slang/dist/ec-evaluator/utils';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
@@ -33,6 +33,9 @@ export class Stack extends Visible implements IHoverable {
     // Function to convert the stack items to their components
     const stackItemToComponent = this.isAgenda
       ? (agendaItem: AgendaItem) => {
+          if (isInstr(agendaItem) && agendaItem.instrType === InstrType.PUSH_UNDEFINED_IF_NEEDED) {
+            return;
+          }
           const node = isNode(agendaItem) ? agendaItem : agendaItem.srcNode;
           let highlightOnHover = () => {};
           let unhighlightOnHover = () => {};

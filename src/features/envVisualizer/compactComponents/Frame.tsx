@@ -141,7 +141,9 @@ export class Frame extends Visible implements IHoverable {
           width={this.width()}
           height={this.height()}
           stroke={
-            EnvVisualizer.getPrintableMode()
+            EnvVisualizer.getCurrentEnvId() == this.environment?.id
+              ? 'blue'
+              : EnvVisualizer.getPrintableMode()
               ? CompactConfig.SA_BLUE.toString()
               : CompactConfig.SA_WHITE.toString()
           }

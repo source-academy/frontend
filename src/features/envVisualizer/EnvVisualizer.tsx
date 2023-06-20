@@ -16,6 +16,7 @@ export default class EnvVisualizer {
   private static compactLayout: boolean = true;
   private static agendaStash: boolean = false;
   private static environmentTree: EnvTree;
+  private static currentEnvId: string;
   private static agenda: Agenda;
   private static stash: Stash;
   public static togglePrintableMode(): void {
@@ -26,6 +27,9 @@ export default class EnvVisualizer {
   }
   public static toggleAgendaStash(): void {
     EnvVisualizer.agendaStash = !EnvVisualizer.agendaStash;
+  }
+  public static getCurrentEnvId(): string {
+    return EnvVisualizer.currentEnvId;
   }
   public static getPrintableMode(): boolean {
     return EnvVisualizer.printableMode;
@@ -60,6 +64,7 @@ export default class EnvVisualizer {
   static drawEnv(context: Context) {
     // store environmentTree at last breakpoint.
     EnvVisualizer.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
+    EnvVisualizer.currentEnvId = context.runtime.environments[0].id;
     if (!this.setVis || !context.runtime.agenda || !context.runtime.stash)
       throw new Error('env visualizer not initialized');
     EnvVisualizer.agenda = context.runtime.agenda;
