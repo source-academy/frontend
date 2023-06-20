@@ -447,7 +447,7 @@ const Sourcereel: React.FC = () => {
         ],
         afterDynamicTabs: []
       },
-      workspaceLocation: 'sourcereel'
+      workspaceLocation: workspaceLocation
     }
   };
 
