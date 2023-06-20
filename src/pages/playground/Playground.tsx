@@ -1017,7 +1017,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
+      workspaceLocation: workspaceLocation,
       sideContentHeight: sideContentHeight
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
@@ -1045,7 +1045,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
+      workspaceLocation: workspaceLocation
     }
   };
 

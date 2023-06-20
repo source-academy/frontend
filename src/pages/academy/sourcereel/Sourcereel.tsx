@@ -404,7 +404,7 @@ const Sourcereel: React.FC<SourcereelProps> = props => {
         ],
         afterDynamicTabs: []
       },
-      workspaceLocation: 'sourcereel'
+      workspaceLocation: workspaceLocation
     }
   };
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
