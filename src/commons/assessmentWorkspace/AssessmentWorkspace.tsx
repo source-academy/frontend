@@ -16,18 +16,8 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
-import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
-
-import { initSession, log } from '../../features/eventLogging';
-import {
-  CodeDelta,
-  Input,
-  KeyboardCommand,
-  SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
-import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
-import { defaultWorkspaceManager } from '../application/ApplicationTypes';
+import { fetchAssessment, submitAnswer } from 'src/commons/application/actions/SessionActions';
+import { defaultWorkspaceManager } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
   AutogradingResult,
@@ -38,36 +28,36 @@ import {
   Library,
   QuestionTypes,
   Testcase
-} from '../assessment/AssessmentTypes';
-import { ControlBarProps } from '../controlBar/ControlBar';
-import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
-import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
-import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
-import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
-import ControlButton from '../ControlButton';
+} from 'src/commons/assessment/AssessmentTypes';
+import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from 'src/commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from 'src/commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from 'src/commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarResetButton } from 'src/commons/controlBar/ControlBarResetButton';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
+import ControlButton from 'src/commons/ControlButton';
 import {
   convertEditorTabStateToProps,
   NormalEditorContainerProps
-} from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
-import Markdown from '../Markdown';
-import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
-import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
-import { SideContentProps } from '../sideContent/SideContent';
-import SideContentAutograder from '../sideContent/SideContentAutograder';
-import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
-import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
-import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import Constants from '../utils/Constants';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
-import { assessmentTypeLink } from '../utils/ParamParseHelper';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+} from 'src/commons/editor/EditorContainer';
+import { Position } from 'src/commons/editor/EditorTypes';
+import Markdown from 'src/commons/Markdown';
+import { MobileSideContentProps } from 'src/commons/mobileWorkspace/mobileSideContent/MobileSideContent';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import SideContentAutograder from 'src/commons/sideContent/SideContentAutograder';
+import SideContentContestLeaderboard from 'src/commons/sideContent/SideContentContestLeaderboard';
+import SideContentContestVotingContainer from 'src/commons/sideContent/SideContentContestVotingContainer';
+import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import Constants from 'src/commons/utils/Constants';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -89,8 +79,18 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
-} from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import { initSession, log } from 'src/features/eventLogging';
+import {
+  CodeDelta,
+  Input,
+  KeyboardCommand,
+  SelectionRange
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
+
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = {
   assessmentId: number;

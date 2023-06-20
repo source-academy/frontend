@@ -23,27 +23,27 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { numberRegExp } from 'src/features/academy/AcademyTypes';
-
-import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import defaultCoverImage from 'src/assets/default_cover_image.jpg';
 import {
   acknowledgeNotifications,
   fetchAssessmentOverviews,
   submitAssessment
-} from '../application/actions/SessionActions';
-import { Role } from '../application/ApplicationTypes';
+} from 'src/commons/application/actions/SessionActions';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import AssessmentWorkspace, {
   AssessmentWorkspaceProps
-} from '../assessmentWorkspace/AssessmentWorkspace';
-import ContentDisplay from '../ContentDisplay';
-import ControlButton from '../ControlButton';
-import Markdown from '../Markdown';
-import NotificationBadge from '../notificationBadge/NotificationBadge';
-import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
-import Constants from '../utils/Constants';
-import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
-import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
+} from 'src/commons/assessmentWorkspace/AssessmentWorkspace';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import ControlButton from 'src/commons/ControlButton';
+import Markdown from 'src/commons/Markdown';
+import NotificationBadge from 'src/commons/notificationBadge/NotificationBadge';
+import { filterNotificationsByAssessment } from 'src/commons/notificationBadge/NotificationBadgeHelper';
+import Constants from 'src/commons/utils/Constants';
+import { beforeNow, getPrettyDate } from 'src/commons/utils/DateHelper';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { assessmentTypeLink, convertParamToInt } from 'src/commons/utils/ParamParseHelper';
+import { numberRegExp } from 'src/features/academy/AcademyTypes';
+
 import AssessmentNotFound from './AssessmentNotFound';
 import {
   AssessmentConfiguration,
