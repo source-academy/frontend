@@ -516,7 +516,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         afterDynamicTabs: []
       },
       onChange: onChangeTabs,
-      workspaceLocation: 'assessment'
+      workspaceLocation: workspaceLocation
     };
   };
 
