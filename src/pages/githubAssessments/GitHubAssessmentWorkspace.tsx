@@ -122,7 +122,9 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     handleReplEval,
     handleReplOutputClear,
     handleUpdateHasUnsavedChanges,
-    handleUpdateWorkspace
+    handleUpdateWorkspace,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex
   } = useMemo(() => {
     return {
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
@@ -133,7 +135,11 @@ const GitHubAssessmentWorkspace: React.FC = () => {
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
-        dispatch(updateWorkspace(workspaceLocation, options))
+        dispatch(updateWorkspace(workspaceLocation, options)),
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
     };
   }, [dispatch]);
 
@@ -1072,16 +1078,6 @@ const GitHubAssessmentWorkspace: React.FC = () => {
         }
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
-
-  const setActiveEditorTabIndex = React.useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch]
-  );
-  const removeEditorTabByIndex = React.useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch]
-  );
 
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',
