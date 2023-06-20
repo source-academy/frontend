@@ -82,6 +82,7 @@ import {
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
 const workspaceLocation: WorkspaceLocation = 'sourcereel';
+const sourcecastLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcereel: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
@@ -140,14 +141,14 @@ const Sourcereel: React.FC = () => {
       handleRecordInput: (input: Input) => dispatch(recordInput(input, workspaceLocation)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
-        dispatch(setSourcecastStatus(playbackStatus, 'sourcecast')),
+        dispatch(setSourcecastStatus(playbackStatus, sourcecastLocation)),
       handleSetIsEditorReadonly: (readonly: boolean) =>
         dispatch(setIsEditorReadonly(workspaceLocation, readonly))
     };
   }, [dispatch]);
 
   useEffect(() => {
-    fetchSourcecastIndex('sourcecast');
+    fetchSourcecastIndex(sourcecastLocation);
   }, []);
 
   useEffect(() => {
@@ -284,7 +285,7 @@ const Sourcereel: React.FC = () => {
     inputToApply: inputToApply,
     isEditorAutorun: isEditorAutorun,
     isEditorReadonly: isEditorReadonly,
-    editorVariant: 'sourcecast',
+    editorVariant: sourcecastLocation,
     isFolderModeEnabled,
     activeEditorTabIndex,
     setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
@@ -331,7 +332,7 @@ const Sourcereel: React.FC = () => {
       handleReplValueChange: (newValue: string) =>
         dispatch(updateReplValue(newValue, workspaceLocation)),
       handleDeleteSourcecastEntry: (id: number) =>
-        dispatch(deleteSourcecastEntry(id, 'sourcecast')),
+        dispatch(deleteSourcecastEntry(id, sourcecastLocation)),
       // SourcereelControlbar handlers
       handleResetInputs: (inputs: Input[]) => dispatch(resetInputs(inputs, workspaceLocation)),
       handleSaveSourcecastData: (
@@ -340,7 +341,10 @@ const Sourcereel: React.FC = () => {
         uid: string,
         audio: Blob,
         playbackData: PlaybackData
-      ) => dispatch(saveSourcecastData(title, description, uid, audio, playbackData, 'sourcecast')),
+      ) =>
+        dispatch(
+          saveSourcecastData(title, description, uid, audio, playbackData, sourcecastLocation)
+        ),
       handleSetSourcecastData: (
         title: string,
         description: string,
@@ -348,7 +352,9 @@ const Sourcereel: React.FC = () => {
         audioUrl: string,
         playbackData: PlaybackData
       ) =>
-        dispatch(setSourcecastData(title, description, uid, audioUrl, playbackData, 'sourcecast')),
+        dispatch(
+          setSourcecastData(title, description, uid, audioUrl, playbackData, sourcecastLocation)
+        ),
       handleTimerPause: () => dispatch(timerPause(workspaceLocation)),
       handleTimerReset: () => dispatch(timerReset(workspaceLocation)),
       handleTimerResume: (timeBefore: number) =>
@@ -448,13 +454,13 @@ const Sourcereel: React.FC = () => {
   const sourcecastControlbarHandlers = useMemo(() => {
     return {
       handleSetCurrentPlayerTime: (playerTime: number) =>
-        dispatch(setCurrentPlayerTime(playerTime, 'sourcecast')),
+        dispatch(setCurrentPlayerTime(playerTime, sourcecastLocation)),
       handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
-        dispatch(setCodeDeltasToApply(deltas, 'sourcecast')),
+        dispatch(setCodeDeltasToApply(deltas, sourcecastLocation)),
       handleSetInputToApply: (inputToApply: Input) =>
-        dispatch(setInputToApply(inputToApply, 'sourcecast')),
+        dispatch(setInputToApply(inputToApply, sourcecastLocation)),
       handleSetSourcecastDuration: (duration: number) =>
-        dispatch(setSourcecastDuration(duration, 'sourcecast')),
+        dispatch(setSourcecastDuration(duration, sourcecastLocation)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
     };
