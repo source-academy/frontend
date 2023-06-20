@@ -937,7 +937,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: 'sicp',
+      workspaceLocation: workspaceLocation,
       sideContentHeight: sideContentHeight
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
@@ -964,7 +964,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: 'sicp'
+      workspaceLocation: workspaceLocation
     }
   };
 
