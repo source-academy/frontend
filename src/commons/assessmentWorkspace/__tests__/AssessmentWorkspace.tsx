@@ -4,7 +4,6 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { assertType } from 'src/commons/utils/TypeHelper';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
 import { EditorProps } from '../../editor/Editor';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
@@ -14,11 +13,8 @@ jest.mock('../../editor/Editor', () => (props: EditorProps) => (
   <MockEditor {...props}></MockEditor>
 ));
 
-const mockedHandleEditorValueChange = jest.fn();
-
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
-  autogradingResults: [],
   notAttempted: true,
   canSave: true,
   assessmentConfiguration: {
@@ -29,21 +25,7 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
-  programPrependValue: '',
-  programPostpendValue: '',
-  editorTestcases: [],
-  hasUnsavedChanges: false,
-  handleEditorValueChange: mockedHandleEditorValueChange,
-  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
-  handleReplEval: () => {},
-  handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
-  isRunning: false,
-  isDebugging: false,
-  enableDebugging: false,
-  output: [],
-  questionId: 0,
-  replValue: ''
+  questionId: 0
 });
 
 const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
@@ -52,8 +34,7 @@ const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
 
 const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[0],
-  assessmentId: 0,
+  assessmentId: 1,
   questionId: 0
 };
 
@@ -64,27 +45,28 @@ const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = 
 
 const mockGradedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[3],
   assessmentId: 4,
   questionId: 0
 };
 
 const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[0],
-  assessmentId: 0,
+  assessmentId: 1,
   questionId: 2
 };
 
 // set questionId to index 0 since contest voting only has 1 question
 const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[6],
   assessmentId: 7,
   questionId: 0
 };
 
-const mockStore = mockInitialStore();
+const mockStore = mockInitialStore({
+  session: {
+    assessments: new Map(mockAssessments.map(assessment => [assessment.id, assessment]))
+  }
+});
 
 const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
   const routes = [

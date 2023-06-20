@@ -35,15 +35,21 @@ exports[`ResearchAgreementPrompt renders correctly 1`] = `
                           <div className=\\"bp4-dialog-body\\">
                             <Component>
                               <h4 className=\\"bp4-heading\\">
-                                Welcome to your new Source Academy @ NUS course!
+                                Welcome to your new 
+                                Source Academy @ NUS
+                                 course!
                               </h4>
                             </Component>
                             <div>
-                              Here at Source Academy @ NUS, our mission is to bring out the beauty and fun in programming and the ideas behind programming, and to make these ideas universally accessible. This includes educational research!
+                              Here at 
+                              Source Academy @ NUS
+                              , our mission is to bring out the beauty and fun in programming and the ideas behind programming, and to make these ideas universally accessible. This includes educational research!
                             </div>
                             <br />
                             <div>
-                              We collect programs that students run in Source Academy @ NUS and store them anonymously for our research. You are free to opt out of this collection, with no penalty for you whatsoever. Contact your course instructor if you have questions or concerns about this research.
+                              We collect programs that students run in 
+                              Source Academy @ NUS
+                               and store them anonymously for our research. You are free to opt out of this collection, with no penalty for you whatsoever. Contact your course instructor if you have questions or concerns about this research.
                             </div>
                           </div>
                           <div className=\\"bp4-dialog-footer\\">
