@@ -892,7 +892,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
         afterDynamicTabs: []
       },
       onChange: onChangeTabs,
-      workspaceLocation: 'githubAssessment'
+      workspaceLocation: workspaceLocation
     };
   };
 

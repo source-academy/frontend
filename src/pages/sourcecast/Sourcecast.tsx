@@ -111,26 +111,8 @@ const Sourcecast: React.FC = () => {
     handleReplEval,
     handleSetSourcecastData,
     handleSetSourcecastStatus,
-    handleDebuggerPause,
-    handleDebuggerReset,
-    handleDebuggerResume,
-    handleInterruptEval,
-    handleToggleEditorAutorun,
     handleReplOutputClear,
-    handleDeclarationNavigate,
-    handleEditorUpdateBreakpoints,
-    handleBrowseHistoryDown,
-    handleBrowseHistoryUp,
-    handleReplValueChange,
-    handleSideContentHeightChange,
-    handlePromptAutocomplete,
-    handleSetCurrentPlayerTime,
-    handleSetCodeDeltasToApply,
-    handleSetIsEditorReadonly,
-    handleSetInputToApply,
-    handleSetSourcecastDuration,
-    setActiveEditorTabIndex,
-    removeEditorTabByIndex
+    handleSideContentHeightChange
   } = useMemo(() => {
     return {
       handleFetchSourcecastIndex: () => dispatch(fetchSourcecastIndex(workspaceLocation)),
@@ -155,39 +137,9 @@ const Sourcecast: React.FC = () => {
         ),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         dispatch(setSourcecastStatus(playbackStatus, workspaceLocation)),
-      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
-      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
-      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation)),
       handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
-      handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation)),
       handleSideContentHeightChange: (change: number) =>
-        dispatch(changeSideContentHeight(change, workspaceLocation)),
-      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
-      handleSetCurrentPlayerTime: (playerTime: number) =>
-        dispatch(setCurrentPlayerTime(playerTime, workspaceLocation)),
-      handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
-        dispatch(setCodeDeltasToApply(deltas, workspaceLocation)),
-      handleSetIsEditorReadonly: (editorReadonly: boolean) =>
-        dispatch(setIsEditorReadonly(workspaceLocation, editorReadonly)),
-      handleSetInputToApply: (inputToApply: Input) =>
-        dispatch(setInputToApply(inputToApply, workspaceLocation)),
-      handleSetSourcecastDuration: (duration: number) =>
-        dispatch(setSourcecastDuration(duration, workspaceLocation)),
-      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-      removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+        dispatch(changeSideContentHeight(change, workspaceLocation))
     };
   }, [dispatch]);
 
@@ -258,14 +210,23 @@ const Sourcecast: React.FC = () => {
     }
   }, [isMobileBreakpoint, selectedTab]);
 
+  const autorunButtonHandlers = useMemo(() => {
+    return {
+      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
+      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation))
+    };
+  }, [dispatch]);
   const autorunButtons = (
     <ControlBarAutorunButtons
-      handleDebuggerPause={handleDebuggerPause}
-      handleDebuggerReset={handleDebuggerReset}
-      handleDebuggerResume={handleDebuggerResume}
+      handleDebuggerPause={autorunButtonHandlers.handleDebuggerPause}
+      handleDebuggerReset={autorunButtonHandlers.handleDebuggerReset}
+      handleDebuggerResume={autorunButtonHandlers.handleDebuggerResume}
       handleEditorEval={handleEditorEval}
-      handleInterruptEval={handleInterruptEval}
-      handleToggleEditorAutorun={handleToggleEditorAutorun}
+      handleInterruptEval={autorunButtonHandlers.handleInterruptEval}
+      handleToggleEditorAutorun={autorunButtonHandlers.handleToggleEditorAutorun}
       isEntrypointFileDefined={activeEditorTabIndex !== null}
       isDebugging={isDebugging}
       isEditorAutorun={isEditorAutorun}
@@ -342,32 +303,53 @@ const Sourcecast: React.FC = () => {
     setSelectedTab(newTabId);
   };
 
+  const editorContainerHandlers = useMemo(() => {
+    return {
+      handleDeclarationNavigate: (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+      handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
+        dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+    };
+  }, [dispatch]);
   const editorContainerProps: SourcecastEditorContainerProps = {
     editorVariant: 'sourcecast',
     isFolderModeEnabled,
     activeEditorTabIndex,
-    setActiveEditorTabIndex,
-    removeEditorTabByIndex,
+    setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
+    removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     codeDeltasToApply: codeDeltasToApply,
     isEditorReadonly: isEditorReadonly,
     editorSessionId: '',
-    handleDeclarationNavigate: handleDeclarationNavigate,
+    handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
     handleEditorEval: handleEditorEval,
     handleEditorValueChange: handleEditorValueChange,
     isEditorAutorun: isEditorAutorun,
     inputToApply: inputToApply,
     isPlaying: playbackStatus === PlaybackStatus.playing,
-    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
+    handleEditorUpdateBreakpoints: editorContainerHandlers.handleEditorUpdateBreakpoints
   };
 
+  const replHandlers = useMemo(() => {
+    return {
+      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleReplValueChange: (newValue: string) =>
+        dispatch(updateReplValue(newValue, workspaceLocation))
+    };
+  }, [dispatch]);
   const replProps = {
     output: output,
     replValue: replValue,
-    handleBrowseHistoryDown: handleBrowseHistoryDown,
-    handleBrowseHistoryUp: handleBrowseHistoryUp,
+    handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplEval: handleReplEval,
-    handleReplValueChange: handleReplValueChange,
+    handleReplValueChange: replHandlers.handleReplValueChange,
     sourceChapter: sourceChapter,
     sourceVariant: sourceVariant,
     externalLibrary: externalLibraryName,
@@ -383,7 +365,7 @@ const Sourcecast: React.FC = () => {
       editorButtons: [autorunButtons, chapterSelectButton]
     },
     editorContainerProps,
-    handleSideContentHeightChange,
+    handleSideContentHeightChange: handleSideContentHeightChange,
     replProps,
     sideBarProps,
     sideContentHeight,
@@ -416,14 +398,30 @@ const Sourcecast: React.FC = () => {
     }
   };
 
+  const sourcecastControlbarHandlers = useMemo(() => {
+    return {
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+      handleSetCurrentPlayerTime: (playerTime: number) =>
+        dispatch(setCurrentPlayerTime(playerTime, workspaceLocation)),
+      handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
+        dispatch(setCodeDeltasToApply(deltas, workspaceLocation)),
+      handleSetIsEditorReadonly: (editorReadonly: boolean) =>
+        dispatch(setIsEditorReadonly(workspaceLocation, editorReadonly)),
+      handleSetInputToApply: (inputToApply: Input) =>
+        dispatch(setInputToApply(inputToApply, workspaceLocation)),
+      handleSetSourcecastDuration: (duration: number) =>
+        dispatch(setSourcecastDuration(duration, workspaceLocation))
+    };
+  }, [dispatch]);
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
     handleEditorValueChange: handleEditorValueChange,
-    handlePromptAutocomplete: handlePromptAutocomplete,
-    handleSetCurrentPlayerTime: handleSetCurrentPlayerTime,
-    handleSetCodeDeltasToApply: handleSetCodeDeltasToApply,
-    handleSetIsEditorReadonly: handleSetIsEditorReadonly,
-    handleSetInputToApply: handleSetInputToApply,
-    handleSetSourcecastDuration: handleSetSourcecastDuration,
+    handlePromptAutocomplete: sourcecastControlbarHandlers.handlePromptAutocomplete,
+    handleSetCurrentPlayerTime: sourcecastControlbarHandlers.handleSetCurrentPlayerTime,
+    handleSetCodeDeltasToApply: sourcecastControlbarHandlers.handleSetCodeDeltasToApply,
+    handleSetIsEditorReadonly: sourcecastControlbarHandlers.handleSetIsEditorReadonly,
+    handleSetInputToApply: sourcecastControlbarHandlers.handleSetInputToApply,
+    handleSetSourcecastDuration: sourcecastControlbarHandlers.handleSetSourcecastDuration,
     handleSetSourcecastStatus: handleSetSourcecastStatus,
     audioUrl: audioUrl,
     currentPlayerTime: currentPlayerTime,
