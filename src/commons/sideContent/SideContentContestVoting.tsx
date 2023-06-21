@@ -110,6 +110,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
         })}
         key={`tier-${tier.name.toLowerCase()}`}
         id={`tier-${tier.name.toLowerCase()}`}
+        data-testid="tier"
       >
         <h2 style={{ backgroundColor: tier.color }}>{tier.name}</h2>
         <div
@@ -129,7 +130,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
       <div className="tier-list">
         {tierBoard}
         {sortedContestEntries.length > 0 ? (
-          <div className="tier" id="bank">
+          <div className="tier" id="bank" data-testid="tier">
             <div
               className="item-container"
               id="items"
@@ -137,6 +138,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
               onDragLeave={handleDragLeave}
               onDragEnter={handleDragEnter}
               onDrop={handleDrop}
+              data-testid="voting-item-container"
             >
               {sortedContestEntries.map((contestEntry: ContestEntry, index) => (
                 <div
@@ -147,6 +149,7 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
                   onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd(contestEntry)}
                   ref={item => (contestEntryRefs.current[index] = item)}
+                  data-testid="voting-item"
                 >
                   <Card
                     className={Classes.INTERACTIVE}

@@ -1,6 +1,6 @@
+import { render } from '@testing-library/react';
 import { require as acequire } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouteObject, RouterProvider } from 'react-router';
 import { Dispatch } from 'redux';
@@ -9,6 +9,10 @@ import { EditorBinding } from 'src/commons/WorkspaceSettingsContext';
 import { createStore } from 'src/pages/createStore';
 
 import Playground, { handleHash } from '../Playground';
+
+// Mock inspector
+(window as any).Inspector = jest.fn();
+(window as any).Inspector.highlightClean = jest.fn();
 
 jest.mock('ace-builds', () => ({
   ...jest.requireActual('ace-builds'),
@@ -46,8 +50,11 @@ describe('Playground tests', () => {
       initialEntries: ['/playground'],
       initialIndex: 0
     });
-    const tree = mount(<RouterProvider router={router} />);
-    expect(tree.debug()).toMatchSnapshot();
+
+    // Using @testing-library/react to render snapshot instead of react-test-renderer
+    // as the useRefs require the notion of React DOM
+    const tree = render(<RouterProvider router={router} />).container;
+    expect(tree).toMatchSnapshot();
   });
 
   test('Playground with link renders correctly', async () => {
@@ -55,8 +62,11 @@ describe('Playground tests', () => {
       initialEntries: ['/playground#chap=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA'],
       initialIndex: 0
     });
-    const tree = mount(<RouterProvider router={router} />);
-    expect(tree.debug()).toMatchSnapshot();
+
+    // Using @testing-library/react to render snapshot instead of react-test-renderer
+    // as the useRefs require the notion of React DOM
+    const tree = render(<RouterProvider router={router} />).container;
+    expect(tree).toMatchSnapshot();
   });
 
   describe('handleHash', () => {

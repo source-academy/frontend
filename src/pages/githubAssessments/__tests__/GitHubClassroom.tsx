@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
-import { shallow } from 'enzyme';
 import { useSelector } from 'react-redux';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import GitHubClassroom from '../GitHubClassroom';
 
@@ -115,8 +115,8 @@ describe('GitHubClassroom', () => {
 
   it('renders correctly', async () => {
     await act(async () => {
-      const tree = shallow(<GitHubClassroom />);
-      expect(tree.debug()).toMatchSnapshot();
+      const tree = shallowRender(<GitHubClassroom />);
+      expect(tree).toMatchSnapshot();
     });
   });
 });

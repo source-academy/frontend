@@ -86,7 +86,7 @@ const Profile: React.FC<ProfileProps> = props => {
       content = (
         <div className="profile-content">
           {userDetails}
-          <div className="profile-placeholder">
+          <div className="profile-placeholder" data-testid="profile-placeholder">
             There are no closed assessments to render grade and XP of.
           </div>
         </div>
@@ -155,24 +155,31 @@ const Profile: React.FC<ProfileProps> = props => {
         <div className="profile-content">
           {userDetails}
 
-          <div className="profile-progress">
+          <div className="profile-progress" data-testid="profile-progress">
             <div className="profile-xp">
               <Spinner
                 className={'profile-spinner' + parseColour(getFrac(userXp, fullXp))}
                 size={144}
                 value={getFrac(userXp, fullXp)}
+                data-testid="profile-spinner"
               />
-              <div className="type">XP Progress</div>
-              <div className="total-value">
+              <div className="type" data-testid="profile-type">
+                XP Progress
+              </div>
+              <div className="total-value" data-testid="profile-total-value">
                 {userXp} / {fullXp}*
               </div>
-              <div className="percentage">{(getFrac(userXp, fullXp) * 100).toFixed(2)}%</div>
+              <div className="percentage" data-testid="profile-percentage">
+                {(getFrac(userXp, fullXp) * 100).toFixed(2)}%
+              </div>
             </div>
           </div>
           <div className="profile-xp-footer">
             *{fullXp}XP needed to reach full CA level of {caFulfillmentLevel}
           </div>
-          <div className="profile-callouts">{summaryCallouts}</div>
+          <div className="profile-callouts" data-testid="profile-callouts">
+            {summaryCallouts}
+          </div>
         </div>
       );
     }
