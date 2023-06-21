@@ -344,7 +344,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: 'grading'
+      workspaceLocation: workspaceLocation
     };
 
     return sideContentProps;

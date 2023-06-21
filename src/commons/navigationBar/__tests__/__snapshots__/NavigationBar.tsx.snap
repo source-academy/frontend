@@ -51,7 +51,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
               }
             }
           >
-            Source Academy
+            Source Academy @ NUS
           </Blueprint4.NavbarHeading>
         </NavLink>
       </Blueprint4.Popover2>
@@ -472,7 +472,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
               }
             }
           >
-            Source Academy
+            Source Academy @ NUS
           </Blueprint4.NavbarHeading>
         </NavLink>
       </Blueprint4.Popover2>
