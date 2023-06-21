@@ -76,7 +76,7 @@ const resultCardClasses = [
   'ResultCard wrong'
 ];
 
-test('Autograder renders placeholders correctly when testcases and results are empty', async () => {
+test('Autograder renders placeholders correctly when testcases and results are empty', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: [],

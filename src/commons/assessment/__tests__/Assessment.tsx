@@ -22,7 +22,7 @@ const mockAssessmentProps = assertType<AssessmentProps>()({
   }
 });
 
-const getOverridedStore = ({
+const getOverriddenStore = ({
   assessmentOverviews,
   role
 }: {
@@ -45,7 +45,7 @@ const createTestComponent = (mockStore: Store<OverallState>) => (
 );
 
 test('Assessment page "loading" content renders correctly', () => {
-  const mockStore = getOverridedStore({});
+  const mockStore = getOverriddenStore({});
   const app = createTestComponent(mockStore);
 
   const tree = renderTreeJson(app);
@@ -56,7 +56,7 @@ test('Assessment page "loading" content renders correctly', () => {
 });
 
 test('Assessment page with 0 missions renders correctly', () => {
-  const mockStore = getOverridedStore({ assessmentOverviews: [] });
+  const mockStore = getOverriddenStore({ assessmentOverviews: [] });
   const app = createTestComponent(mockStore);
 
   const tree = renderTreeJson(app);
@@ -67,7 +67,7 @@ test('Assessment page with 0 missions renders correctly', () => {
 });
 
 test('Assessment page with multiple loaded missions renders correctly', async () => {
-  const mockStore = getOverridedStore({
+  const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
     role: Role.Staff
   });
@@ -81,7 +81,7 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
 });
 
 test('Assessment page does not show attempt Button for upcoming assessments for student user', () => {
-  const mockStore = getOverridedStore({
+  const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
     role: Role.Student
   });
