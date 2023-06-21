@@ -32,14 +32,23 @@ const SideContentResultCard: React.FunctionComponent<SideContentResultCardProps>
   const { index, result } = props;
 
   return (
-    <div className={classNames('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}>
+    <div
+      className={classNames('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}
+      data-testid="ResultCard"
+    >
       <Card elevation={Elevation.ONE}>
         <div className="result-data">
-          <div className="result-idx">{index + 1}</div>
-          <div className="result-status">{result.resultType.toUpperCase()}</div>
+          <div className="result-idx" data-testid="result-idx">
+            {index + 1}
+          </div>
+          <div className="result-status" data-testid="result-status">
+            {result.resultType.toUpperCase()}
+          </div>
         </div>
-        <Pre className="result-expected">{result.expected!}</Pre>
-        <Pre className="result-actual">
+        <Pre className="result-expected" data-testid="result-expected">
+          {result.expected!}
+        </Pre>
+        <Pre className="result-actual" data-testid="result-actual">
           {result.resultType === 'error' ? buildErrorString(result.errors!) : result.actual!}
         </Pre>
       </Card>

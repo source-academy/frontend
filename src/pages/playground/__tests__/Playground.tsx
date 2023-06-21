@@ -1,14 +1,24 @@
+import { render } from '@testing-library/react';
 import { require as acequire } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { mount } from 'enzyme';
+import { Chapter } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouteObject, RouterProvider } from 'react-router';
-import { Dispatch } from 'redux';
+import { Dispatch, Store } from 'redux';
+import {
+  defaultEditorValue,
+  defaultPlayground,
+  OverallState
+} from 'src/commons/application/ApplicationTypes';
 import { WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { EditorBinding } from 'src/commons/WorkspaceSettingsContext';
 import { createStore } from 'src/pages/createStore';
 
 import Playground, { handleHash } from '../Playground';
+
+// Mock inspector
+(window as any).Inspector = jest.fn();
+(window as any).Inspector.highlightClean = jest.fn();
 
 jest.mock('ace-builds', () => ({
   ...jest.requireActual('ace-builds'),
@@ -19,8 +29,15 @@ const acequireMock = acequire as jest.Mock;
 
 describe('Playground tests', () => {
   let routes: RouteObject[];
+  let mockStore: Store<OverallState>;
+
+  const getSourceChapterFromStore = (store: Store<OverallState>) =>
+    store.getState().playground.languageConfig.chapter;
+  const getEditorValueFromStore = (store: Store<OverallState>) =>
+    store.getState().workspaces.playground.editorTabs[0].value;
+
   beforeEach(() => {
-    const mockStore = createStore();
+    mockStore = createStore();
     routes = [
       {
         path: '/playground',
@@ -46,8 +63,14 @@ describe('Playground tests', () => {
       initialEntries: ['/playground'],
       initialIndex: 0
     });
-    const tree = mount(<RouterProvider router={router} />);
-    expect(tree.debug()).toMatchSnapshot();
+
+    // Using @testing-library/react to render snapshot instead of react-test-renderer
+    // as the useRefs require the notion of React DOM
+    const tree = render(<RouterProvider router={router} />).container;
+    expect(tree).toMatchSnapshot();
+
+    expect(getSourceChapterFromStore(mockStore)).toBe(defaultPlayground.languageConfig.chapter);
+    expect(getEditorValueFromStore(mockStore)).toBe(defaultEditorValue);
   });
 
   test('Playground with link renders correctly', async () => {
@@ -55,8 +78,14 @@ describe('Playground tests', () => {
       initialEntries: ['/playground#chap=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA'],
       initialIndex: 0
     });
-    const tree = mount(<RouterProvider router={router} />);
-    expect(tree.debug()).toMatchSnapshot();
+
+    // Using @testing-library/react to render snapshot instead of react-test-renderer
+    // as the useRefs require the notion of React DOM
+    const tree = render(<RouterProvider router={router} />).container;
+    expect(tree).toMatchSnapshot();
+
+    expect(getSourceChapterFromStore(mockStore)).toBe(Chapter.SOURCE_2);
+    expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
   });
 
   describe('handleHash', () => {

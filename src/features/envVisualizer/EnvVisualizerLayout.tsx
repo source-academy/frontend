@@ -450,7 +450,7 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <div className={'sa-env-visualizer'}>
+        <div className={'sa-env-visualizer'} data-testid="sa-env-visualizer">
           <div
             id="scroll-container"
             ref={Layout.scrollContainerRef}

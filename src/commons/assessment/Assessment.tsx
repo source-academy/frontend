@@ -149,7 +149,9 @@ const Assessment: React.FC<AssessmentProps> = props => {
             dispatch(acknowledgeNotifications(filterNotificationsByAssessment(overview.id)))
           }
         >
-          <span className="custom-hidden-xxxs">{label}</span>
+          <span className="custom-hidden-xxxs" data-testid="Assessment-Attempt-Button">
+            {label}
+          </span>
           <span className="custom-hidden-xxs">{optionalLabel}</span>
         </Button>
       </NavLink>

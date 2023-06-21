@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import SicpLatex from '../SicpLatex';
 
@@ -9,8 +9,8 @@ describe('Sicp latex renders', () => {
       inline: false
     };
 
-    const tree = mount(<SicpLatex {...props} />);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(<SicpLatex {...props} />);
+    expect(tree).toMatchSnapshot();
   });
 
   test('correctly inline', () => {
@@ -19,7 +19,7 @@ describe('Sicp latex renders', () => {
       inline: true
     };
 
-    const tree = mount(<SicpLatex {...props} />);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(<SicpLatex {...props} />);
+    expect(tree).toMatchSnapshot();
   });
 });

@@ -1,3 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Editor renders correctly 1`] = `"<Editor editorTabIndex={0} breakpoints={{...}} editorSessionId=\\"\\" editorValue=\\"\\" highlightedLines={{...}} isEditorAutorun={false} handleDeclarationNavigate={[Function: handleDeclarationNavigate]} handleEditorEval={[Function: handleEditorEval]} handleEditorValueChange={[Function: handleEditorValueChange]} handleEditorUpdateBreakpoints={[Function: handleEditorUpdateBreakpoints]} handleSetSharedbConnected={[Function: handleSetSharedbConnected]} handleUpdateHasUnsavedChanges={[Function: handleUpdateHasUnsavedChanges]} handlePromptAutocomplete={[Function: handlePromptAutocomplete]} />"`;
+exports[`Editor renders correctly 1`] = `
+<Editor
+  breakpoints={Array []}
+  editorSessionId=""
+  editorTabIndex={0}
+  editorValue=""
+  handleDeclarationNavigate={[Function]}
+  handleEditorEval={[Function]}
+  handleEditorUpdateBreakpoints={[Function]}
+  handleEditorValueChange={[Function]}
+  handlePromptAutocomplete={[Function]}
+  handleSetSharedbConnected={[Function]}
+  handleUpdateHasUnsavedChanges={[Function]}
+  highlightedLines={Array []}
+  isEditorAutorun={false}
+/>
+`;

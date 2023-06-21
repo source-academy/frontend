@@ -1,10 +1,10 @@
-import { mount, shallow } from 'enzyme';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import * as ReactRouter from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Sicp from '../Sicp';
-import SicpIndexPage from '../subcomponents/SicpIndexPage';
 
 describe('Sicp renders', () => {
   test('correctly', () => {
@@ -15,8 +15,8 @@ describe('Sicp renders', () => {
         <Sicp />
       </Provider>
     );
-    const tree = shallow(sicp);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(sicp);
+    expect(tree).toMatchSnapshot();
   });
 
   test('index section correctly', () => {
@@ -30,7 +30,7 @@ describe('Sicp renders', () => {
         <Sicp />
       </Provider>
     );
-    const wrapper = mount(sicp);
-    expect(wrapper.contains(<SicpIndexPage />)).toBeTruthy();
+    const { container } = render(sicp);
+    expect(container.querySelector('.sicp-index-page')).toBeTruthy();
   });
 });

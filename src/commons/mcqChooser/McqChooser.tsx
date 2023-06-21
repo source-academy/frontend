@@ -24,7 +24,7 @@ class McqChooser extends React.PureComponent<McqChooserProps, {}> {
       </Button>
     ));
     return (
-      <div className="MCQChooser row">
+      <div className="MCQChooser row" data-testid="MCQChooser">
         <Card className="mcq-content-parent col-xs-12 middle-xs">
           <div className="row mcq-options-parent between-xs">{options}</div>
         </Card>

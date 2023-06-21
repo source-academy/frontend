@@ -27,10 +27,13 @@ const SideContentLeaderboardCard: React.FunctionComponent<
         onClick={() =>
           handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
         }
+        data-testid="SideContentLeaderboardCard"
       >
         <Pre className="contestentry-entryid">{contestEntry.student_name}</Pre>
         <Pre className="contestentry-rank">{rank}</Pre>
-        <Pre className="contestentry-score">{contestEntry.final_score}</Pre>
+        <Pre className="contestentry-score" data-testid="contestentry-score">
+          {contestEntry.final_score}
+        </Pre>
       </Card>
     </div>
   );
