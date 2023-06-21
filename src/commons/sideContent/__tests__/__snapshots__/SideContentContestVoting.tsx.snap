@@ -92,6 +92,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
       >
         <div
           className="tier"
+          data-testid="tier"
           id="tier-s"
         >
           <h2
@@ -113,6 +114,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         </div>
         <div
           className="tier"
+          data-testid="tier"
           id="tier-a"
         >
           <h2
@@ -134,6 +136,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         </div>
         <div
           className="tier"
+          data-testid="tier"
           id="tier-b"
         >
           <h2
@@ -155,6 +158,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         </div>
         <div
           className="tier"
+          data-testid="tier"
           id="tier-c"
         >
           <h2
@@ -176,6 +180,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         </div>
         <div
           className="tier"
+          data-testid="tier"
           id="tier-d"
         >
           <h2
@@ -197,10 +202,12 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         </div>
         <div
           className="tier"
+          data-testid="tier"
           id="bank"
         >
           <div
             className="item-container"
+            data-testid="voting-item-container"
             id="items"
             onDragEnter={[Function]}
             onDragLeave={[Function]}
@@ -209,6 +216,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
           >
             <div
               className="item"
+              data-testid="voting-item"
               draggable={true}
               id="item-1"
               onDragEnd={[Function]}
@@ -227,6 +235,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
             </div>
             <div
               className="item"
+              data-testid="voting-item"
               draggable={true}
               id="item-2"
               onDragEnd={[Function]}
@@ -245,6 +254,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
             </div>
             <div
               className="item"
+              data-testid="voting-item"
               draggable={true}
               id="item-3"
               onDragEnd={[Function]}

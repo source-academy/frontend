@@ -412,6 +412,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
               >
                 <div
                   class="row editor-react-ace"
+                  data-testid="Editor"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -1727,6 +1728,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
               >
                 <div
                   class="row editor-react-ace"
+                  data-testid="Editor"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
