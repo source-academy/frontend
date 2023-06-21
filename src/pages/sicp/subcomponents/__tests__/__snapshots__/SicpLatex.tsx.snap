@@ -1,17 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sicp latex renders correctly block 1`] = `
-"<SicpLatex math=\\"1+1\\" inline={false}>
-  <Latex delimiters={{...}} strict={false}>
-    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-  </Latex>
-</SicpLatex>"
+<Latex
+  delimiters={
+    Array [
+      Object {
+        "display": true,
+        "left": "$$",
+        "right": "$$",
+      },
+      Object {
+        "display": false,
+        "left": "\\\\(",
+        "right": "\\\\)",
+      },
+      Object {
+        "display": false,
+        "left": "$",
+        "right": "$",
+      },
+      Object {
+        "display": true,
+        "left": "\\\\[",
+        "right": "\\\\]",
+      },
+    ]
+  }
+  strict={false}
+>
+  1+1
+</Latex>
 `;
 
 exports[`Sicp latex renders correctly inline 1`] = `
-"<SicpLatex math=\\"1+1\\" inline={true}>
-  <Latex delimiters={{...}} strict={false}>
-    <span className=\\"__Latex__\\" dangerouslySetInnerHTML={{...}} />
-  </Latex>
-</SicpLatex>"
+<Latex
+  delimiters={
+    Array [
+      Object {
+        "display": true,
+        "left": "$$",
+        "right": "$$",
+      },
+      Object {
+        "display": false,
+        "left": "\\\\(",
+        "right": "\\\\)",
+      },
+      Object {
+        "display": false,
+        "left": "$",
+        "right": "$",
+      },
+      Object {
+        "display": true,
+        "left": "\\\\[",
+        "right": "\\\\]",
+      },
+    ]
+  }
+  strict={false}
+>
+  1+1
+</Latex>
 `;

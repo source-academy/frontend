@@ -30,7 +30,7 @@ const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
   }
 
   const notificationIcon = (
-    <Tag intent={Intent.DANGER} round={true} large={props.large}>
+    <Tag intent={Intent.DANGER} round={true} large={props.large} data-testid="NotificationBadge">
       {notifications.length}
     </Tag>
   );
