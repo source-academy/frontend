@@ -1,5 +1,5 @@
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router';
+import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import SicpToc from '../SicpToc';
 
@@ -8,10 +8,10 @@ test('Sicp toc renders correctly', () => {
     handleCloseToc: () => {}
   };
 
-  const tree = mount(
+  const tree = renderTreeJson(
     <MemoryRouter>
       <SicpToc {...props} />
     </MemoryRouter>
   );
-  expect(tree.debug()).toMatchSnapshot();
+  expect(tree).toMatchSnapshot();
 });

@@ -188,7 +188,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
           </div>
           <br />
           {this.state.visualization || (
-            <div id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+            <div
+              id="env-visualizer-default-text"
+              className={Classes.RUNNING_TEXT}
+              data-testid="env-visualizer-default-text"
+            >
               The environment model visualizer generates environment model diagrams following a
               notation introduced in{' '}
               <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
