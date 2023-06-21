@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
@@ -28,70 +28,62 @@ const notifications: Notification[] = [
   {
     id: 3,
     type: 'autograded',
-    assessment_id: 1,
+    assessment_id: 2,
     assessment_type: 'Missions',
-    assessment_title: 'The Secret to Streams'
+    assessment_title: 'The Secret to Streams',
+    submission_id: 3
   },
   {
     id: 4,
     type: 'unsubmitted',
-    assessment_id: 1,
-    assessment_type: 'Missions',
-    assessment_title: 'The Secret to Streams'
+    assessment_id: 2,
+    assessment_type: 'Quests',
+    assessment_title: 'The Secret to Streams',
+    submission_id: 3
   }
 ];
 
+const createAppWithMockedNotifications = (
+  notifications: Notification[],
+  filter?: (notifications: Notification[]) => Notification[]
+) => {
+  const mockStore = mockInitialStore({ session: { notifications } });
+  return (
+    <Provider store={mockStore}>
+      <NotificationBadge notificationFilter={filter} />
+    </Provider>
+  );
+};
+
 describe('Badge', () => {
-  test('renders properly with notifications', () => {
-    const mockStore = mockInitialStore({ session: { notifications: notifications } });
-    const tree = mount(
-      <Provider store={mockStore}>
-        <NotificationBadge />
-      </Provider>
-    );
-    expect(tree.debug()).toMatchSnapshot();
+  test('does not render with no notifications', () => {
+    render(createAppWithMockedNotifications([]));
+    expect(screen.queryByTestId('NotificationBadge')).toBe(null);
   });
 
-  test('does not render with no notifications', () => {
-    const mockStore = mockInitialStore({ session: { notifications: [] } });
-    const tree = mount(
-      <Provider store={mockStore}>
-        <NotificationBadge />
-      </Provider>
-    );
-
-    expect(tree.debug()).toMatchSnapshot();
+  test('renders properly with notifications', () => {
+    render(createAppWithMockedNotifications(notifications));
+    const notificationBadge = screen.getByTestId('NotificationBadge');
+    expect(notificationBadge.textContent).toBe(notifications.length.toString());
   });
 });
 
 describe('Badge with filter,', () => {
   test('filterNotificationsByAssessment renders properly', () => {
-    const mockStore = mockInitialStore({ session: { notifications: notifications } });
-    const tree = mount(
-      <Provider store={mockStore}>
-        <NotificationBadge notificationFilter={filterNotificationsByAssessment(1)} />
-      </Provider>
-    );
-    expect(tree.debug()).toMatchSnapshot();
+    render(createAppWithMockedNotifications(notifications, filterNotificationsByAssessment(1)));
+    const notificationBadge = screen.getByTestId('NotificationBadge');
+    expect(notificationBadge.textContent).toBe('2');
   });
 
   test('filterNotificationsBySubmission renders properly', () => {
-    const mockStore = mockInitialStore({ session: { notifications: notifications } });
-    const tree = mount(
-      <Provider store={mockStore}>
-        <NotificationBadge notificationFilter={filterNotificationsBySubmission(1)} />
-      </Provider>
-    );
-    expect(tree.debug()).toMatchSnapshot();
+    render(createAppWithMockedNotifications(notifications, filterNotificationsBySubmission(3)));
+    const notificationBadge = screen.getByTestId('NotificationBadge');
+    expect(notificationBadge.textContent).toBe('2');
   });
 
   test('filterNotificationsByAssessment renders properly', () => {
-    const mockStore = mockInitialStore({ session: { notifications: notifications } });
-    const tree = mount(
-      <Provider store={mockStore}>
-        <NotificationBadge notificationFilter={filterNotificationsByType('Missions')} />
-      </Provider>
-    );
-    expect(tree.debug()).toMatchSnapshot();
+    render(createAppWithMockedNotifications(notifications, filterNotificationsByType('Missions')));
+    const notificationBadge = screen.getByTestId('NotificationBadge');
+    expect(notificationBadge.textContent).toBe('2');
   });
 });
