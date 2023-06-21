@@ -1,5 +1,3 @@
-import '@testing-library/jest-dom/extend-expect';
-
 import { useSelector } from 'react-redux';
 import { deepFilter, shallowRender } from 'src/commons/utils/TestUtils';
 
