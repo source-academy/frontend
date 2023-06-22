@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { runInContext } from 'js-slang/dist/';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
@@ -26,8 +26,8 @@ test('EnvVisualizer sets visualization state and renders', async () => {
   expect(screen.queryAllByTestId('sa-env-visualizer')).toHaveLength(0);
 
   const context = mockContext();
-  await runInContext('const hello="world"; debugger;', context);
-  visualizeEnv({ context });
+  runInContext('const hello="world"; debugger;', context);
+  act(() => visualizeEnv({ context }));
 
   expect(screen.queryAllByTestId('env-visualizer-default-text')).toHaveLength(0);
   expect(screen.queryAllByTestId('sa-env-visualizer')).toHaveLength(1);

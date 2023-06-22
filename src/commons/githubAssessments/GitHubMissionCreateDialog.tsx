@@ -2,7 +2,7 @@ import { AnchorButton, Button, Classes, Dialog, InputGroup, Intent } from '@blue
 import classNames from 'classnames';
 import React, { useState } from 'react';
 
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 export type GitHubMissionCreateDialogResolution = {
   confirmSave: boolean;

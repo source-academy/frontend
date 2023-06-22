@@ -6,7 +6,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { checkSessionIdExists, createNewSession } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
