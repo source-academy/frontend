@@ -464,26 +464,89 @@ export function getAgendaItemComponent(
   } else {
     switch (agendaItem.instrType) {
       case InstrType.RESET:
-        return new StackItemComponent('RESET', true, stackHeight);
+        return new StackItemComponent(
+          'RESET',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.WHILE:
-        return new StackItemComponent('WHILE', true, stackHeight);
+        return new StackItemComponent(
+          'WHILE',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.FOR:
-        return new StackItemComponent('FOR', true, stackHeight);
+        return new StackItemComponent(
+          'FOR',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.ASSIGNMENT:
         const assmtInstr = agendaItem as AssmtInstr;
-        return new StackItemComponent(`ASSIGN ${assmtInstr.symbol}`, true, stackHeight);
+        return new StackItemComponent(
+          `ASSIGN ${assmtInstr.symbol}`,
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.UNARY_OP:
         const unOpInstr = agendaItem as UnOpInstr;
-        return new StackItemComponent(unOpInstr.symbol, true, stackHeight);
+        return new StackItemComponent(
+          unOpInstr.symbol,
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.BINARY_OP:
         const binOpInstr = agendaItem as BinOpInstr;
-        return new StackItemComponent(binOpInstr.symbol, true, stackHeight);
+        return new StackItemComponent(
+          binOpInstr.symbol,
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.POP:
-        return new StackItemComponent('POP', true, stackHeight);
+        return new StackItemComponent(
+          'POP',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.APPLICATION:
-        return new StackItemComponent('APPLICATION', true, stackHeight);
+        return new StackItemComponent(
+          'APPLICATION',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.BRANCH:
-        return new StackItemComponent('BRANCH', true, stackHeight);
+        return new StackItemComponent(
+          'BRANCH',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.ENVIRONMENT:
         const envInstr = agendaItem as EnvInstr;
         return new StackItemComponent(
@@ -494,30 +557,109 @@ export function getAgendaItemComponent(
             (accum, level) =>
               accum ? accum : level.frames.find(frame => frame.environment?.id === envInstr.env.id),
             undefined
-          )
+          ),
+          highlightOnHover,
+          unhighlightOnHover
         );
       case InstrType.PUSH_UNDEFINED_IF_NEEDED:
-        return new StackItemComponent('PUSH_UNDEFINED_IF_NEEDED', true, stackHeight);
+        return new StackItemComponent(
+          'PUSH_UNDEFINED_IF_NEEDED',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.ARRAY_LITERAL:
-        return new StackItemComponent('ARRAY_LITERAL', true, stackHeight);
+        return new StackItemComponent(
+          'ARRAY_LITERAL',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.ARRAY_ACCESS:
-        return new StackItemComponent('ARRAY_ACCESS', true, stackHeight);
+        return new StackItemComponent(
+          'ARRAY_ACCESS',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.ARRAY_ASSIGNMENT:
-        return new StackItemComponent('ARRAY_ASSIGNMENT', true, stackHeight);
+        return new StackItemComponent(
+          'ARRAY_ASSIGNMENT',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.ARRAY_LENGTH:
-        return new StackItemComponent('ARRAY_LENGTH', true, stackHeight);
+        return new StackItemComponent(
+          'ARRAY_LENGTH',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.CONTINUE:
-        return new StackItemComponent('CONTINUE', true, stackHeight);
+        return new StackItemComponent(
+          'CONTINUE',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.CONTINUE_MARKER:
-        return new StackItemComponent('CONTINUE_MARKER', true, stackHeight);
+        return new StackItemComponent(
+          'CONTINUE_MARKER',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.BREAK:
-        return new StackItemComponent('BREAK', true, stackHeight);
+        return new StackItemComponent(
+          'BREAK',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.BREAK_MARKER:
-        return new StackItemComponent('BREAK_MARKER', true, stackHeight);
+        return new StackItemComponent(
+          'BREAK_MARKER',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       case InstrType.MARKER:
-        return new StackItemComponent('MARKER', true, stackHeight);
+        return new StackItemComponent(
+          'MARKER',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
       default:
-        return new StackItemComponent('INSTRUCTION', true, stackHeight);
+        return new StackItemComponent(
+          'INSTRUCTION',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
     }
   }
 }
