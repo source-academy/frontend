@@ -14,8 +14,11 @@ import { NavLink } from 'react-router-dom';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
 import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
+import { actions } from 'src/commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
 import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
 import {
@@ -24,9 +27,6 @@ import {
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
-import { actions } from '../../utils/ActionsHelper';
-import { useTypedSelector } from '../../utils/Hooks';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
 interface SideContentRemoteExecutionProps {

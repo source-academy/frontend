@@ -15,7 +15,58 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Testcase } from 'src/commons/assessment/AssessmentTypes';
+import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from 'src/commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from 'src/commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from 'src/commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarResetButton } from 'src/commons/controlBar/ControlBarResetButton';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
+import { ControlBarDisplayMCQButton } from 'src/commons/controlBar/github/ControlBarDisplayMCQButton';
+import { ControlBarTaskAddButton } from 'src/commons/controlBar/github/ControlBarTaskAddButton';
+import { ControlBarTaskDeleteButton } from 'src/commons/controlBar/github/ControlBarTaskDeleteButton';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from 'src/commons/editor/EditorContainer';
+import { Position } from 'src/commons/editor/EditorTypes';
+import {
+  GitHubMissionCreateDialog,
+  GitHubMissionCreateDialogProps,
+  GitHubMissionCreateDialogResolution
+} from 'src/commons/githubAssessments/GitHubMissionCreateDialog';
+import {
+  convertIMCQQuestionToMCQText,
+  convertToMCQQuestionIfMCQText,
+  discoverFilesToBeChangedWithMissionRepoData,
+  discoverFilesToBeCreatedWithoutMissionRepoData,
+  getMissionData
+} from 'src/commons/githubAssessments/GitHubMissionDataUtils';
+import {
+  MissionData,
+  MissionMetadata,
+  MissionRepoData,
+  TaskData
+} from 'src/commons/githubAssessments/GitHubMissionTypes';
+import Markdown from 'src/commons/Markdown';
+import { MobileSideContentProps } from 'src/commons/mobileWorkspace/mobileSideContent/MobileSideContent';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
+import SideContentMarkdownEditor from 'src/commons/sideContent/githubAssessments/SideContentMarkdownEditor';
+import SideContentMissionEditor from 'src/commons/sideContent/githubAssessments/SideContentMissionEditor';
+import SideContentTaskEditor from 'src/commons/sideContent/githubAssessments/SideContentTaskEditor';
+import SideContentTestcaseEditor from 'src/commons/sideContent/githubAssessments/SideContentTestcaseEditor';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import Constants from 'src/commons/utils/Constants';
+import { promisifyDialog, showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -35,68 +86,15 @@ import {
   updateReplValue,
   updateWorkspace
 } from 'src/commons/workspace/WorkspaceActions';
-
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Testcase } from '../../commons/assessment/AssessmentTypes';
-import { ControlBarProps } from '../../commons/controlBar/ControlBar';
-import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../../commons/controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../../commons/controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../../commons/controlBar/ControlBarQuestionViewButton';
-import { ControlBarResetButton } from '../../commons/controlBar/ControlBarResetButton';
-import { ControlBarRunButton } from '../../commons/controlBar/ControlBarRunButton';
-import { ControlButtonSaveButton } from '../../commons/controlBar/ControlBarSaveButton';
-import { ControlBarDisplayMCQButton } from '../../commons/controlBar/github/ControlBarDisplayMCQButton';
-import { ControlBarTaskAddButton } from '../../commons/controlBar/github/ControlBarTaskAddButton';
-import { ControlBarTaskDeleteButton } from '../../commons/controlBar/github/ControlBarTaskDeleteButton';
-import {
-  convertEditorTabStateToProps,
-  NormalEditorContainerProps
-} from '../../commons/editor/EditorContainer';
-import { Position } from '../../commons/editor/EditorTypes';
-import {
-  GitHubMissionCreateDialog,
-  GitHubMissionCreateDialogProps,
-  GitHubMissionCreateDialogResolution
-} from '../../commons/githubAssessments/GitHubMissionCreateDialog';
-import {
-  convertIMCQQuestionToMCQText,
-  convertToMCQQuestionIfMCQText,
-  discoverFilesToBeChangedWithMissionRepoData,
-  discoverFilesToBeCreatedWithoutMissionRepoData,
-  getMissionData
-} from '../../commons/githubAssessments/GitHubMissionDataUtils';
-import {
-  MissionData,
-  MissionMetadata,
-  MissionRepoData,
-  TaskData
-} from '../../commons/githubAssessments/GitHubMissionTypes';
-import Markdown from '../../commons/Markdown';
-import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSideContent/MobileSideContent';
-import MobileWorkspace, {
-  MobileWorkspaceProps
-} from '../../commons/mobileWorkspace/MobileWorkspace';
-import SideContentMarkdownEditor from '../../commons/sideContent/githubAssessments/SideContentMarkdownEditor';
-import SideContentMissionEditor from '../../commons/sideContent/githubAssessments/SideContentMissionEditor';
-import SideContentTaskEditor from '../../commons/sideContent/githubAssessments/SideContentTaskEditor';
-import SideContentTestcaseEditor from '../../commons/sideContent/githubAssessments/SideContentTestcaseEditor';
-import { SideContentProps } from '../../commons/sideContent/SideContent';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import Constants from '../../commons/utils/Constants';
-import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
-import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import {
   checkIfFileCanBeSavedAndGetSaveType,
   getGitHubOctokitInstance,
   performCreatingSave,
   performFolderDeletion,
   performOverwritingSave
-} from '../../features/github/GitHubUtils';
+} from 'src/features/github/GitHubUtils';
+
 import {
   defaultMCQQuestion,
   defaultMissionBriefing,

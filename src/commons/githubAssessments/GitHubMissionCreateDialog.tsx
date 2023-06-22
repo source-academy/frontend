@@ -1,8 +1,7 @@
 import { AnchorButton, Button, Classes, Dialog, InputGroup, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useState } from 'react';
-
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 export type GitHubMissionCreateDialogResolution = {
   confirmSave: boolean;

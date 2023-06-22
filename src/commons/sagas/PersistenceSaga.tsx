@@ -2,28 +2,28 @@ import { Intent } from '@blueprintjs/core';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
-
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { LOGOUT_GOOGLE } from 'src/commons/application/types/SessionTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import Constants from 'src/commons/utils/Constants';
+import { showSimpleConfirmDialog, showSimplePromptDialog } from 'src/commons/utils/DialogHelper';
+import {
+  dismiss,
+  showMessage,
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
+import { AsyncReturnType } from 'src/commons/utils/TypeHelper';
 import {
   PERSISTENCE_INITIALISE,
   PERSISTENCE_OPEN_PICKER,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
   PersistenceFile
-} from '../../features/persistence/PersistenceTypes';
-import { store } from '../../pages/createStore';
-import { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { LOGOUT_GOOGLE } from '../application/types/SessionTypes';
-import { actions } from '../utils/ActionsHelper';
-import Constants from '../utils/Constants';
-import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
-import {
-  dismiss,
-  showMessage,
-  showSuccessMessage,
-  showWarningMessage
-} from '../utils/notifications/NotificationsHelper';
-import { AsyncReturnType } from '../utils/TypeHelper';
+} from 'src/features/persistence/PersistenceTypes';
+import { store } from 'src/pages/createStore';
+
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
