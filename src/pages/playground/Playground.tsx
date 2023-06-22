@@ -397,8 +397,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [isGreen]
   );
 
-  const onEditorValueChange = useCallback(
-    (editorTabIndex, newEditorValue) => {
+  const onEditorValueChange = React.useCallback(
+    (editorTabIndex: number, newEditorValue: string) => {
       setLastEdit(new Date());
       handleEditorValueChange(editorTabIndex, newEditorValue);
     },

@@ -6,7 +6,10 @@ import {
 
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { showSuccessMessage, showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
 
 /**

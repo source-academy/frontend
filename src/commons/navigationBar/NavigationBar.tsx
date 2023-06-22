@@ -40,7 +40,7 @@ export type NavbarEntryInfo = {
   hiddenInBreakpoints?: ('xs' | 'sm' | 'md' | 'lg')[]; // hide text in Blueprint breakpoints
 };
 
-type CreateNavlinkFunction = (navbarEntry: NavbarEntryInfo) => React.ReactFragment;
+type CreateNavlinkFunction = (navbarEntry: NavbarEntryInfo) => React.ReactElement;
 
 const NavigationBar: React.FC = () => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState(false);
@@ -96,7 +96,7 @@ const NavigationBar: React.FC = () => {
     [setMobileSideMenuOpen]
   );
 
-  const wrapWithMobileHamburger = (navlinks: (React.ReactFragment | null)[]) => {
+  const wrapWithMobileHamburger = (navlinks: (React.ReactElement | null)[]) => {
     // Don't render drawer when there are 0 navlinks in it
     const nonNullNavlinks = navlinks.filter(e => e !== null);
     const renderDrawer = nonNullNavlinks.length > 0;
@@ -352,7 +352,7 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
 export const renderNavlinksFromInfo = (
   navbarEntries: NavbarEntryInfo[],
   createNavlink: CreateNavlinkFunction
-): (React.ReactFragment | null)[] =>
+): (React.ReactElement | null)[] =>
   navbarEntries.map(entry => {
     if (entry.disabled) {
       return null;
