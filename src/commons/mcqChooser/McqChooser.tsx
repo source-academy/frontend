@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { IMCQQuestion } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 export type McqChooserProps = {
   mcq: IMCQQuestion;

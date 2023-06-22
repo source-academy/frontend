@@ -87,7 +87,7 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {

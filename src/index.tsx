@@ -5,7 +5,7 @@ import { setModulesStaticURL } from 'js-slang/dist/modules/moduleLoader';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import Constants, { Links } from 'src/commons/utils/Constants';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { register as registerServiceWorker } from 'src/commons/utils/RegisterServiceWorker';
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';

@@ -82,7 +82,7 @@ import {
 } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   deleteAssessment,
