@@ -17,7 +17,7 @@ type OwnProps = {
   notificationFilter?: (notifications: Notification[]) => Notification[];
 };
 
-const NotificationBadge: React.SFC<NotificationBadgeProps> = props => {
+const NotificationBadge: React.FC<NotificationBadgeProps> = props => {
   const dispatch = useDispatch();
   const initialNotifications = useTypedSelector(state => state.session.notifications);
 

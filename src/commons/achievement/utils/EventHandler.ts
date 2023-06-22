@@ -1,4 +1,3 @@
-import { showSuccessMessage } from 'src/commons/utils/NotificationsHelper';
 import {
   AchievementGoal,
   AchievementItem,
@@ -6,8 +5,8 @@ import {
   EventType,
   GoalProgress,
   GoalType
-} from 'src/features/achievement/AchievementTypes';
-
+} from '../../../features/achievement/AchievementTypes';
+import { showSuccessMessage } from '../../utils/notifications/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased, isWithinTimeRange } from './DateHelper';
 

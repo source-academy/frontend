@@ -7,13 +7,13 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
-import ContentDisplay from 'src/commons/ContentDisplay';
-import { MissionRepoData } from 'src/commons/githubAssessments/GitHubMissionTypes';
-import GitHubAssessmentsNavigationBar from 'src/commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
-import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
+import ContentDisplay from '../../commons/ContentDisplay';
+import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
+import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
+import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
+import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspace from './GitHubAssessmentWorkspace';
 import GitHubClassroomWelcome from './GitHubClassroomWelcome';

@@ -10,7 +10,7 @@ type DialogProps = {
   onClose: () => void;
 };
 
-const DropdownHelp: React.SFC<DialogProps> = props => {
+const DropdownHelp: React.FC<DialogProps> = props => {
   const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
 
   return (

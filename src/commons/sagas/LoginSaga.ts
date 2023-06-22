@@ -1,12 +1,12 @@
 import * as Sentry from '@sentry/browser';
 import { SagaIterator } from 'redux-saga';
 import { call } from 'redux-saga/effects';
-import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
-import { LOGIN, SET_USER } from 'src/commons/application/types/SessionTypes';
-import { actions } from 'src/commons/utils/ActionsHelper';
-import { computeEndpointUrl } from 'src/commons/utils/AuthHelper';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
+import { LOG_OUT } from '../application/types/CommonsTypes';
+import { LOGIN, SET_USER } from '../application/types/SessionTypes';
+import { actions } from '../utils/ActionsHelper';
+import { computeEndpointUrl } from '../utils/AuthHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* LoginSaga(): SagaIterator {

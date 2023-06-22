@@ -1,13 +1,14 @@
 import { Button, Checkbox, MenuItem, NumericInput } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
 import { useContext, useEffect, useState } from 'react';
-import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import {
   AchievementGoal,
   AchievementUser,
   GoalProgress
 } from 'src/features/achievement/AchievementTypes';
+
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type AchievementManualEditorProps = {
   hiddenState: [boolean, any];

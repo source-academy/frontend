@@ -4,27 +4,24 @@ import {
 } from '@octokit/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { LOGIN_GITHUB, LOGOUT_GITHUB } from 'src/commons/application/types/SessionTypes';
-import FileExplorerDialog, {
-  FileExplorerDialogProps
-} from 'src/commons/gitHubOverlay/FileExplorerDialog';
-import RepositoryDialog, {
-  RepositoryDialogProps
-} from 'src/commons/gitHubOverlay/RepositoryDialog';
-import { actions } from 'src/commons/utils/ActionsHelper';
-import Constants from 'src/commons/utils/Constants';
-import { promisifyDialog } from 'src/commons/utils/DialogHelper';
-import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
-import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
+
 import {
   GITHUB_OPEN_FILE,
   GITHUB_SAVE_FILE,
   GITHUB_SAVE_FILE_AS
-} from 'src/features/github/GitHubTypes';
-import * as GitHubUtils from 'src/features/github/GitHubUtils';
-import { getGitHubOctokitInstance } from 'src/features/github/GitHubUtils';
-import { store } from 'src/pages/createStore';
+} from '../../features/github/GitHubTypes';
+import * as GitHubUtils from '../../features/github/GitHubUtils';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import { store } from '../../pages/createStore';
+import { OverallState } from '../application/ApplicationTypes';
+import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
+import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
+import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
+import { actions } from '../utils/ActionsHelper';
+import Constants from '../utils/Constants';
+import { promisifyDialog } from '../utils/DialogHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);

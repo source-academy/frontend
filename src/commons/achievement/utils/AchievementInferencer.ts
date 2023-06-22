@@ -1,5 +1,6 @@
 import { cloneDeep, uniq } from 'lodash';
-import { showDangerMessage } from 'src/commons/utils/NotificationsHelper';
+import { v4 } from 'uuid';
+
 import {
   AchievementGoal,
   AchievementItem,
@@ -8,9 +9,8 @@ import {
   GoalDefinition,
   GoalProgress,
   GoalType
-} from 'src/features/achievement/AchievementTypes';
-import { v4 } from 'uuid';
-
+} from '../../../features/achievement/AchievementTypes';
+import { showDangerMessage } from '../../utils/notifications/NotificationsHelper';
 import { isExpired, isReleased } from './DateHelper';
 
 /**
