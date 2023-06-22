@@ -4,7 +4,7 @@ import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
-import { showWarningMessage } from '../commons/utils/NotificationsHelper';
+import { showWarningMessage } from '../commons/utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
 import { AchievementItem } from '../features/achievement/AchievementTypes';
 

@@ -87,7 +87,7 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
@@ -729,7 +729,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   }, [isMobileBreakpoint, selectedTab]);
 
   const onEditorValueChange = useCallback(
-    val => {
+    (editorTabIndex: number, val: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, val);
       editCode(currentTaskNumber, val);

@@ -1091,9 +1091,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             </span>
                             <span
                               className="custom-hidden-xxs"
-                            >
-                              
-                            </span>
+                            />
                           </span>
                         </button>
                       </a>
