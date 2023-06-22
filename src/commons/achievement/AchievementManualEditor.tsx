@@ -8,7 +8,7 @@ import {
   GoalProgress
 } from 'src/features/achievement/AchievementTypes';
 
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type AchievementManualEditorProps = {
   hiddenState: [boolean, any];

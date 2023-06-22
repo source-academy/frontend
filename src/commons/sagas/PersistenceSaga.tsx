@@ -22,7 +22,7 @@ import {
   showMessage,
   showSuccessMessage,
   showWarningMessage
-} from '../utils/NotificationsHelper';
+} from '../utils/notifications/NotificationsHelper';
 import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 

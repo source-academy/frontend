@@ -99,7 +99,7 @@ const SideContentTestcaseEditor: React.FunctionComponent<
   );
 
   const convertToTestcaseCard = React.useCallback(
-    (testcase, index) => {
+    (testcase: Testcase, index: number) => {
       if (allowEdits) {
         return (
           <SideContentEditableTestcaseCard
