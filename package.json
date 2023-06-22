@@ -13,13 +13,13 @@
   "scripts": {
     "analyze": "yarn build --stats; webpack-bundle-analyzer build/bundle-stats.json",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build",
-    "//": "TODO: yarn coverage",
+    "coverage": "./scripts/coverage-fix.sh do && vitest watch --coverage && ./scripts/coverage-fix.sh undo",
     "format": "eslint --ext \".js,.jsx,.ts,.tsx\" --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
     "format:ci": "yarn run format:tsx && yarn run format:scss",
     "start": "vite",
-    "//2": "TODO: yarn test",
+    "test": "cross-env TZ=UTF-8 vitest watch",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
     "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src",
@@ -149,6 +149,7 @@
     "vite": "^4.3.9",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-wasm": "^3.2.2",
+    "vitest": "^0.32.2",
     "webpack-bundle-analyzer": "^4.9.0"
   },
   "browserslist": {

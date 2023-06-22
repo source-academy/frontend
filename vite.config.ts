@@ -44,6 +44,9 @@ export default defineConfig(({ mode }) => {
         ]
       }
     },
+    test: {
+      globals: true
+    },
     server: {
       port: 8000
     },
