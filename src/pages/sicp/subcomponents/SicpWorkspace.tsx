@@ -368,7 +368,7 @@ const SicpWorkspace: React.FC<PlaygroundProps> = props => {
   );
 
   const onEditorValueChange = useCallback(
-    (editorTabIndex, newEditorValue) => {
+    (editorTabIndex: number, newEditorValue: string) => {
       setLastEdit(new Date());
       handleEditorValueChange(editorTabIndex, newEditorValue);
     },
