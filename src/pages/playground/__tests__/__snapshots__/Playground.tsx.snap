@@ -27,7 +27,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
               <span
                 class="bp4-control-indicator"
               />
-              
             </label>
           </div>
           <span
@@ -1343,7 +1342,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
               <span
                 class="bp4-control-indicator"
               />
-              
             </label>
           </div>
           <span
