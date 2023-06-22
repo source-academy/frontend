@@ -88,8 +88,10 @@ export class Layout {
   static currentLight: React.ReactNode;
   static currentCompactDark: React.ReactNode;
   static currentCompactLight: React.ReactNode;
-  static currentAgendaStashDark: React.ReactNode;
-  static currentAgendaStashLight: React.ReactNode;
+  static currentStackDark: React.ReactNode;
+  static currentStackTruncDark: React.ReactNode;
+  static currentStackLight: React.ReactNode;
+  static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
@@ -137,8 +139,10 @@ export class Layout {
     Layout.currentDark = undefined;
     Layout.currentCompactLight = undefined;
     Layout.currentCompactDark = undefined;
-    Layout.currentAgendaStashDark = undefined;
-    Layout.currentAgendaStashLight = undefined;
+    Layout.currentStackDark = undefined;
+    Layout.currentStackTruncDark = undefined;
+    Layout.currentStackLight = undefined;
+    Layout.currentStackTruncLight = undefined;
     // clear/initialize data and value arrays
     Layout.values.forEach((v, d) => {
       v.reset();
@@ -567,13 +571,21 @@ export class Layout {
       if (EnvVisualizer.getCompactLayout()) {
         if (EnvVisualizer.getPrintableMode()) {
           if (EnvVisualizer.getAgendaStash()) {
-            Layout.currentAgendaStashLight = layout;
+            if (EnvVisualizer.getStackTruncated()) {
+              Layout.currentStackTruncLight = layout;
+            } else {
+              Layout.currentStackLight = layout;
+            }
           } else {
             Layout.currentCompactLight = layout;
           }
         } else {
           if (EnvVisualizer.getAgendaStash()) {
-            Layout.currentAgendaStashDark = layout;
+            if (EnvVisualizer.getStackTruncated()) {
+              Layout.currentStackTruncDark = layout;
+            } else {
+              Layout.currentStackDark = layout;
+            }
           } else {
             Layout.currentCompactDark = layout;
           }

@@ -203,6 +203,21 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                     />
                   </AnchorButton>
                 </Tooltip2>
+                <Tooltip2 content="Truncate Agenda" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      EnvVisualizer.toggleStackTruncated();
+                      EnvVisualizer.redraw();
+                    }}
+                    icon="minimize"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={EnvVisualizer.getStackTruncated()}
+                      disabled={!EnvVisualizer.getAgendaStash()}
+                    />
+                  </AnchorButton>
+                </Tooltip2>
               </ButtonGroup>
               <ButtonGroup>
                 <Button

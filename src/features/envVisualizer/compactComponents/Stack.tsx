@@ -6,6 +6,7 @@ import React from 'react';
 import { Group } from 'react-konva';
 
 import { Visible } from '../components/Visible';
+import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
@@ -67,7 +68,8 @@ export class Stack extends Visible implements IHoverable {
           this._height = Math.max(this._height, component.height());
           return component;
         };
-    this.stackItemComponents = this.stack.mapStack(stackItemToComponent);
+    const num = EnvVisualizer.getStackTruncated() ? 10 : undefined;
+    this.stackItemComponents = this.stack.mapStack(stackItemToComponent, num);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}
   onMouseLeave(e: KonvaEventObject<MouseEvent>): void {}

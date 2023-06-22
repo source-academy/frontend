@@ -15,6 +15,7 @@ export default class EnvVisualizer {
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
   private static agendaStash: boolean = false;
+  private static stackTruncated: boolean = false;
   private static environmentTree: EnvTree;
   private static currentEnvId: string;
   private static agenda: Agenda;
@@ -28,6 +29,9 @@ export default class EnvVisualizer {
   public static toggleAgendaStash(): void {
     EnvVisualizer.agendaStash = !EnvVisualizer.agendaStash;
   }
+  public static toggleStackTruncated(): void {
+    EnvVisualizer.stackTruncated = !EnvVisualizer.stackTruncated;
+  }
   public static getCurrentEnvId(): string {
     return EnvVisualizer.currentEnvId;
   }
@@ -39,6 +43,9 @@ export default class EnvVisualizer {
   }
   public static getAgendaStash(): boolean {
     return EnvVisualizer.agendaStash;
+  }
+  public static getStackTruncated(): boolean {
+    return EnvVisualizer.stackTruncated;
   }
 
   /** SideContentEnvVis initializes this onMount with the callback function */
@@ -90,16 +97,34 @@ export default class EnvVisualizer {
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
         EnvVisualizer.getAgendaStash() &&
-        Layout.currentAgendaStashLight !== undefined
+        EnvVisualizer.getStackTruncated() &&
+        Layout.currentStackTruncLight !== undefined
       ) {
-        this.setVis(Layout.currentAgendaStashLight);
+        this.setVis(Layout.currentStackTruncLight);
+      } else if (
+        EnvVisualizer.getCompactLayout() &&
+        EnvVisualizer.getPrintableMode() &&
+        EnvVisualizer.getAgendaStash() &&
+        !EnvVisualizer.getStackTruncated() &&
+        Layout.currentStackLight !== undefined
+      ) {
+        this.setVis(Layout.currentStackLight);
+      } else if (
+        EnvVisualizer.getCompactLayout() &&
+        EnvVisualizer.getPrintableMode() &&
+        EnvVisualizer.getAgendaStash() &&
+        EnvVisualizer.getStackTruncated() &&
+        Layout.currentStackTruncDark !== undefined
+      ) {
+        this.setVis(Layout.currentStackTruncDark);
       } else if (
         EnvVisualizer.getCompactLayout() &&
         !EnvVisualizer.getPrintableMode() &&
         EnvVisualizer.getAgendaStash() &&
-        Layout.currentAgendaStashDark !== undefined
+        !EnvVisualizer.getStackTruncated() &&
+        Layout.currentStackLight !== undefined
       ) {
-        this.setVis(Layout.currentAgendaStashDark);
+        this.setVis(Layout.currentStackLight);
       } else if (
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
