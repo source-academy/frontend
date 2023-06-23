@@ -30,6 +30,7 @@ import {
   CourseConfiguration,
   CourseRegistration,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ALL_USER_XP,
@@ -37,24 +38,31 @@ import {
   FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_AUTH,
+  FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
   FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
+  FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
+  NotificationConfiguration,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
+  TimeOption,
   Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_NOTIFICATION_CONFIG,
+  UPDATE_NOTIFICATION_PREFERENCES,
+  UPDATE_TIME_OPTIONS,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
@@ -74,7 +82,7 @@ import {
 } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   deleteAssessment,
@@ -83,11 +91,13 @@ import {
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
+  getConfigurableNotificationConfigs,
   getCourseConfig,
   getGrading,
   getGradingOverviews,
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
+  getNotificationConfigs,
   getNotifications,
   getSourcecastIndex,
   getTotalXp,
@@ -109,8 +119,12 @@ import {
   putCourseResearchAgreement,
   putLatestViewedCourse,
   putNewUsers,
+  putNotificationConfigs,
+  putNotificationPreferences,
+  putTimeOptions,
   putUserRole,
   removeAssessmentConfig,
+  removeTimeOptions,
   removeUserCourseRegistration,
   updateAssessment,
   uploadAssessment
@@ -724,6 +738,37 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(
+    FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
+    function* (action: ReturnType<typeof actions.fetchConfigurableNotificationConfigs>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { courseRegId }: { courseRegId: number } = action.payload;
+
+      const notificationConfigs: NotificationConfiguration[] | null = yield call(
+        getConfigurableNotificationConfigs,
+        tokens,
+        courseRegId
+      );
+
+      if (notificationConfigs) {
+        yield put(actions.setConfigurableNotificationConfigs(notificationConfigs));
+      }
+    }
+  );
+
+  yield takeEvery(FETCH_NOTIFICATION_CONFIGS, function* (): any {
+    const tokens: Tokens = yield selectTokens();
+
+    const notificationConfigs: NotificationConfiguration[] | null = yield call(
+      getNotificationConfigs,
+      tokens
+    );
+
+    if (notificationConfigs) {
+      yield put(actions.setNotificationConfigs(notificationConfigs));
+    }
+  });
+
+  yield takeEvery(
     UPDATE_ASSESSMENT_CONFIGS,
     function* (action: ReturnType<typeof actions.updateAssessmentConfigs>): any {
       const tokens: Tokens = yield selectTokens();
@@ -747,12 +792,81 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
+    UPDATE_NOTIFICATION_CONFIG,
+    function* (action: ReturnType<typeof actions.updateNotificationConfigs>): any {
+      const tokens: Tokens = yield selectTokens();
+      const notificationConfigs: NotificationConfiguration[] = action.payload;
+
+      const resp: Response | null = yield call(putNotificationConfigs, tokens, notificationConfigs);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const updatedNotificationConfigs: NotificationConfiguration[] | null = yield call(
+        getNotificationConfigs,
+        tokens
+      );
+
+      if (updatedNotificationConfigs) {
+        yield put(actions.setNotificationConfigs(updatedNotificationConfigs));
+      }
+
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_NOTIFICATION_PREFERENCES,
+    function* (action: ReturnType<typeof actions.updateNotificationPreferences>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { notificationPreferences, courseRegId } = action.payload;
+      const resp: Response | null = yield call(
+        putNotificationPreferences,
+        tokens,
+        notificationPreferences,
+        courseRegId
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
     DELETE_ASSESSMENT_CONFIG,
     function* (action: ReturnType<typeof actions.deleteAssessmentConfig>): any {
       const tokens: Tokens = yield selectTokens();
       const assessmentConfig: AssessmentConfiguration = action.payload;
 
       const resp: Response | null = yield call(removeAssessmentConfig, tokens, assessmentConfig);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_TIME_OPTIONS,
+    function* (action: ReturnType<typeof actions.updateTimeOptions>): any {
+      const tokens: Tokens = yield selectTokens();
+      const timeOptions: TimeOption[] = action.payload;
+
+      const resp: Response | null = yield call(putTimeOptions, tokens, timeOptions);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+    }
+  );
+
+  yield takeEvery(
+    DELETE_TIME_OPTIONS,
+    function* (action: ReturnType<typeof actions.deleteTimeOptions>): any {
+      const tokens: Tokens = yield selectTokens();
+      const timeOptionIds: number[] = action.payload;
+
+      const resp: Response | null = yield call(removeTimeOptions, tokens, timeOptionIds);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }

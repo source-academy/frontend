@@ -3,7 +3,7 @@ import { CellValueChangedEvent, GridApi, GridReadyEvent, RowDragEvent } from 'ag
 import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash';
 import React from 'react';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
 import BooleanCell from './BooleanCell';

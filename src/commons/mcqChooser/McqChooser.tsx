@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { IMCQQuestion } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 export type McqChooserProps = {
   mcq: IMCQQuestion;
@@ -25,7 +25,7 @@ class McqChooser extends React.PureComponent<McqChooserProps, {}> {
       </Button>
     ));
     return (
-      <div className="MCQChooser row">
+      <div className="MCQChooser row" data-testid="MCQChooser">
         <Card className="mcq-content-parent col-xs-12 middle-xs">
           <div className="row mcq-options-parent between-xs">{options}</div>
         </Card>

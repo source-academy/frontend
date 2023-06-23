@@ -12,7 +12,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
-import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspace from './GitHubAssessmentWorkspace';
@@ -313,5 +313,10 @@ async function fetchAssessmentOverviews(
     }
   }
 }
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GitHubClassroom;
+Component.displayName = 'GitHubClassroom';
 
 export default GitHubClassroom;

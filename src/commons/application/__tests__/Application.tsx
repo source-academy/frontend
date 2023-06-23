@@ -1,5 +1,5 @@
-import { shallow } from 'enzyme';
 import { useSelector } from 'react-redux';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Application from '../Application';
 
@@ -25,6 +25,6 @@ test('Application renders correctly', () => {
   useSelectorMock.mockReturnValue({ name: 'Bob' });
 
   const app = <Application />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });

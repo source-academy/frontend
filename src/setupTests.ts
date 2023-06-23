@@ -1,6 +1,10 @@
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import { configure } from 'enzyme';
-configure({ adapter: new Adapter() });
+import '@testing-library/jest-dom/extend-expect';
 
 // Mock ResizeObserver in tests
 global.ResizeObserver = require('resize-observer-polyfill');
+
+jest.mock('./commons/utils/notifications/createNotification', () => ({
+  notification: {
+    show: jest.fn()
+  }
+}));

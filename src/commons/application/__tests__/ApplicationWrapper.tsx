@@ -1,5 +1,4 @@
-import { act } from '@testing-library/react';
-import { mount } from 'enzyme';
+import { render, screen, waitFor } from '@testing-library/react';
 import moment from 'moment';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
@@ -31,7 +30,7 @@ describe('ApplicationWrapper', () => {
     store = createStore();
   });
 
-  test('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', () => {
+  test('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
     const routerConfig = getFullAcademyRouterConfig({
       name: 'Bob',
       role: Role.Student,
@@ -46,12 +45,12 @@ describe('ApplicationWrapper', () => {
         />
       </Provider>
     );
-    const tree = mount(app);
-    expect(tree.find('.NoPage').length).toBe(1);
-    expect(tree.find('.NavigationBar__link.pt-active').length).toBe(0);
+    render(app);
+    const element = await waitFor(() => screen.getByTestId('NotFound-Component'));
+    expect(element).toBeTruthy();
   });
 
-  test('ApplicationWrapper renders NotFound on unknown routes (Playground Only)', () => {
+  test('ApplicationWrapper renders NotFound on unknown routes (Playground Only)', async () => {
     const routerConfig = playgroundOnlyRouterConfig;
 
     const app = (
@@ -61,12 +60,12 @@ describe('ApplicationWrapper', () => {
         />
       </Provider>
     );
-    const tree = mount(app);
-    expect(tree.find('.NoPage').length).toBe(1);
-    expect(tree.find('.NavigationBar__link.pt-active').length).toBe(0);
+    render(app);
+    const element = await waitFor(() => screen.getByTestId('NotFound-Component'));
+    expect(element).toBeTruthy();
   });
 
-  test('ApplicationWrapper renders Disabled on unknown routes (Disabled)', () => {
+  test('ApplicationWrapper renders Disabled on unknown routes (Disabled)', async () => {
     const store = createStore();
     const routerConfig = getDisabledRouterConfig('testing');
 
@@ -77,12 +76,12 @@ describe('ApplicationWrapper', () => {
         />
       </Provider>
     );
-    const tree = mount(app);
-    expect(tree.find('.NoPage').length).toBe(1);
-    expect(
-      tree.text().includes('The Source Academy has been disabled for this reason: testing.')
-    ).toBe(true);
-    expect(tree.find('.NavigationBar__link.pt-active').length).toBe(0);
+    render(app);
+    const element = await waitFor(() => screen.getByTestId('Disabled-Component'));
+    expect(element).toBeTruthy();
+    expect(element).toHaveTextContent(
+      'The Source Academy has been disabled for this reason: testing.'
+    );
   });
 
   test('Application shows disabled when in disabled period', async () => {
@@ -103,21 +102,15 @@ describe('ApplicationWrapper', () => {
         <ApplicationWrapper />
       </Provider>
     );
-    const tree = mount(app);
 
-    // Let react-router loader functions finish running
-    await waitForComponentToPaint(tree);
-
-    expect(tree.debug()).toMatchSnapshot();
+    render(app);
+    const element = await waitFor(() => screen.getByTestId('Disabled-Component'));
+    expect(element).toBeTruthy();
+    expect(element).toHaveTextContent(
+      'The Source Academy has been disabled for this reason: Testing.'
+    );
 
     Constants.disablePeriods = origPeriods;
     Constants.playgroundOnly = origPlaygroundOnly;
   });
 });
-
-const waitForComponentToPaint = async (wrapper: any) => {
-  await act(async () => {
-    await new Promise(resolve => setTimeout(resolve));
-    wrapper.update();
-  });
-};

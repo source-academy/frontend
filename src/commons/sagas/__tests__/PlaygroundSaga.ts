@@ -15,7 +15,10 @@ import {
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import Constants from '../../utils/Constants';
-import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../utils/notifications/NotificationsHelper';
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 
 describe('Playground saga tests', () => {

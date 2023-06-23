@@ -87,7 +87,7 @@ import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../commons/workspace/WorkspaceTypes';
 import {
@@ -124,7 +124,9 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     handleReplEval,
     handleReplOutputClear,
     handleUpdateHasUnsavedChanges,
-    handleUpdateWorkspace
+    handleUpdateWorkspace,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex
   } = useMemo(() => {
     return {
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
@@ -135,7 +137,11 @@ const GitHubAssessmentWorkspace: React.FC = () => {
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
-        dispatch(updateWorkspace(workspaceLocation, options))
+        dispatch(updateWorkspace(workspaceLocation, options)),
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
     };
   }, [dispatch]);
 
@@ -346,7 +352,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   }, [changeStateDueToChangedTaskNumber, handleUpdateHasUnsavedChanges]);
 
   useEffect(() => {
-    if (assessmentOverview === undefined) {
+    if (assessmentOverview === undefined || assessmentOverview === null) {
       setUpWithoutAssessmentOverview();
     } else {
       setUpWithAssessmentOverview();
@@ -723,7 +729,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   }, [isMobileBreakpoint, selectedTab]);
 
   const onEditorValueChange = useCallback(
-    val => {
+    (editorTabIndex: number, val: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, val);
       editCode(currentTaskNumber, val);
@@ -888,7 +894,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
         afterDynamicTabs: []
       },
       onChange: onChangeTabs,
-      workspaceLocation: 'githubAssessment'
+      workspaceLocation: workspaceLocation
     };
   };
 
@@ -1074,16 +1080,6 @@ const GitHubAssessmentWorkspace: React.FC = () => {
         }
       : undefined;
   }, [currentTaskIsMCQ, displayMCQInEditor, mcqQuestion, handleMCQSubmit]);
-
-  const setActiveEditorTabIndex = React.useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch]
-  );
-  const removeEditorTabByIndex = React.useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch]
-  );
 
   const editorContainerProps: NormalEditorContainerProps = {
     editorVariant: 'normal',

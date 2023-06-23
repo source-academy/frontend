@@ -1,12 +1,14 @@
 import { Intent } from '@blueprintjs/core';
-import { mount, ReactWrapper } from 'enzyme';
+import { fireEvent, render, RenderResult, screen } from '@testing-library/react';
 
 import { PromptDialog, PromptDialogProps } from '../PromptDialog';
 
+const TEXT1 = 'Random';
+const TEXT2 = 'content';
 const CONTENTS = (
   <div>
-    <div>Random</div>
-    <p>content</p>
+    <div>{TEXT1}</div>
+    <p>{TEXT2}</p>
   </div>
 );
 
@@ -24,11 +26,11 @@ const element = (
   <PromptDialog choices={CHOICES} onResponse={RESPONSE_FN} contents={CONTENTS} isOpen={true} />
 );
 
-const setInputValue = (mountedDialog: ReactWrapper, value: string) => {
-  const inputs = mountedDialog.find('input');
+const setInputValue = (mountedDialog: RenderResult, value: string) => {
+  const inputs = mountedDialog.getAllByRole('textbox');
   expect(inputs.length).toBe(1);
-  const input = inputs.first().getDOMNode();
-  (input as HTMLInputElement).value = value;
+  const input = inputs[0];
+  fireEvent.change(input, { target: { value } });
 };
 
 const makeEscapeEvent = () =>
@@ -55,50 +57,50 @@ const makeEnterEvent = () =>
   } as any);
 
 test('shows content', () => {
-  const dialog = mount(element);
-  expect(dialog.contains(CONTENTS)).toBe(true);
+  render(element);
+  screen.getByText(TEXT1);
+  screen.getByText(TEXT2);
 });
 
 test('shows buttons', () => {
-  const dialog = mount(element);
-
-  const buttons = dialog.find('button');
+  render(element);
+  const buttons = screen.getAllByRole('button');
 
   expect(buttons.length).toBe(CHOICES.length);
   buttons.forEach(button =>
-    expect(CHOICES.filter(choice => choice.label === button.text()).length).toBe(1)
+    expect(CHOICES.filter(choice => choice.label === button.textContent).length).toBe(1)
   );
 });
 
 test('returns correctly on Esc if escapeResponse set', () => {
   const ESCAPE_RESPONSE = 'escaped';
-  const dialog = mount(<PromptDialog {...element.props} escapeResponse={ESCAPE_RESPONSE} />);
+  const dialog = render(<PromptDialog {...element.props} escapeResponse={ESCAPE_RESPONSE} />);
 
   setInputValue(dialog, VALUE);
 
   RESPONSE_FN.mockReset();
-  dialog.getDOMNode().dispatchEvent(makeEscapeEvent());
+  fireEvent(dialog.getByRole('dialog'), makeEscapeEvent());
   expect(RESPONSE_FN).toBeCalledWith(ESCAPE_RESPONSE, VALUE);
 });
 
 test('does not return on Esc if escapeResponse not set', () => {
-  const dialog = mount(element);
+  const dialog = render(element);
 
   RESPONSE_FN.mockReset();
-  dialog.getDOMNode().dispatchEvent(makeEscapeEvent());
+  fireEvent(dialog.getByRole('dialog'), makeEscapeEvent());
   expect(RESPONSE_FN).toHaveBeenCalledTimes(0);
 });
 
 test('returns correctly when button clicked', () => {
-  const dialog = mount(element);
+  const dialog = render(element);
 
-  const buttons = dialog.find('button');
+  const buttons = dialog.getAllByRole('button');
   RESPONSE_FN.mockReset();
   buttons.forEach((button, index) => {
     const thisValue = VALUE + index;
-    const choice = CHOICES.find(choice => choice.label === button.text());
+    const choice = CHOICES.find(choice => choice.label === button.textContent);
     setInputValue(dialog, thisValue);
-    button.getDOMNode().dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    fireEvent(button, new MouseEvent('click', { bubbles: true }));
     expect(RESPONSE_FN).toBeCalledWith(choice?.key, thisValue);
   });
   expect(RESPONSE_FN).toHaveBeenCalledTimes(CHOICES.length);
@@ -106,19 +108,19 @@ test('returns correctly when button clicked', () => {
 
 test('returns correctly on Enter if enterResponse set', () => {
   const ENTER_RESPONSE = 'entered';
-  const dialog = mount(<PromptDialog {...element.props} enterResponse={ENTER_RESPONSE} />);
+  const dialog = render(<PromptDialog {...element.props} enterResponse={ENTER_RESPONSE} />);
 
   setInputValue(dialog, VALUE);
 
   RESPONSE_FN.mockReset();
-  dialog.find('input').getDOMNode().dispatchEvent(makeEnterEvent());
+  fireEvent(dialog.getByRole('textbox'), makeEnterEvent());
   expect(RESPONSE_FN).toBeCalledWith(ENTER_RESPONSE, VALUE);
 });
 
 test('does not return on Enter if enterResponse not set', () => {
-  const dialog = mount(element);
+  const dialog = render(element);
 
   RESPONSE_FN.mockReset();
-  dialog.getDOMNode().dispatchEvent(makeEnterEvent());
+  fireEvent(dialog.getByRole('textbox'), makeEnterEvent());
   expect(RESPONSE_FN).toHaveBeenCalledTimes(0);
 });

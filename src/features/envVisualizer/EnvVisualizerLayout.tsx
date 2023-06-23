@@ -499,7 +499,7 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <Fragment>
+        <div className={'sa-env-visualizer'} data-testid="sa-env-visualizer">
           <div
             style={{
               overflow: 'hidden',
@@ -565,7 +565,7 @@ export class Layout {
               </div>
             </div>
           </div>
-        </Fragment>
+        </div>
       );
       Layout.prevLayout = layout;
       if (EnvVisualizer.getCompactLayout()) {

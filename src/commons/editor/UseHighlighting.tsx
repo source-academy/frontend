@@ -78,16 +78,16 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
 
   const { onChange: prevOnChange, onCursorChange: prevOnCursorChange } = outProps;
   outProps.onChange = React.useCallback(
-    (v, e) => {
+    (value: string, event?: any) => {
       handleVariableHighlighting();
-      prevOnChange && prevOnChange(v, e);
+      prevOnChange && prevOnChange(value, event);
     },
     [handleVariableHighlighting, prevOnChange]
   );
   outProps.onCursorChange = React.useCallback(
-    (v, e) => {
+    (value: any, event?: any) => {
       handleVariableHighlighting();
-      prevOnCursorChange && prevOnCursorChange(v, e);
+      prevOnCursorChange && prevOnCursorChange(value, event);
     },
     [handleVariableHighlighting, prevOnCursorChange]
   );
