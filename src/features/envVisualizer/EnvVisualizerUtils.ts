@@ -563,7 +563,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.PUSH_UNDEFINED_IF_NEEDED:
         return new StackItemComponent(
-          'PUSH_UNDEFINED_IF_NEEDED',
+          'PUSH UNDEFINED IF NEEDED',
           true,
           stackHeight,
           undefined,
@@ -572,7 +572,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_LITERAL:
         return new StackItemComponent(
-          'ARRAY_LITERAL',
+          'ARRAY LITERAL',
           true,
           stackHeight,
           undefined,
@@ -581,7 +581,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_ACCESS:
         return new StackItemComponent(
-          'ARRAY_ACCESS',
+          'ARRAY ACCESS',
           true,
           stackHeight,
           undefined,
@@ -590,7 +590,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_ASSIGNMENT:
         return new StackItemComponent(
-          'ARRAY_ASSIGNMENT',
+          'ARRAY ASSIGNMENT',
           true,
           stackHeight,
           undefined,
@@ -599,7 +599,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_LENGTH:
         return new StackItemComponent(
-          'ARRAY_LENGTH',
+          'ARRAY LENGTH',
           true,
           stackHeight,
           undefined,
@@ -617,7 +617,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.CONTINUE_MARKER:
         return new StackItemComponent(
-          'CONTINUE_MARKER',
+          'CONTINUE MARKER',
           true,
           stackHeight,
           undefined,
@@ -635,7 +635,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.BREAK_MARKER:
         return new StackItemComponent(
-          'BREAK_MARKER',
+          'BREAK MARKER',
           true,
           stackHeight,
           undefined,
