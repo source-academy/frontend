@@ -1,8 +1,10 @@
 import { Button } from '@blueprintjs/core';
+import _ from 'lodash';
 import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../application/types/SessionTypes';
 import { postRefresh } from '../sagas/RequestsSaga';
+import { MockResponse } from './__tests__/RequestHelper';
 import { actions } from './ActionsHelper';
 import Constants from './Constants';
 import { dismiss, showWarningMessage } from './notifications/NotificationsHelper';
@@ -24,7 +26,7 @@ type RequestOptions = {
   refreshToken?: string;
 };
 
-type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 let refreshingTokensPromise: Promise<Tokens | null> | undefined;
 
@@ -56,11 +58,7 @@ export const request = async (
 
     // Non-unauthorized errors (these don't need to trigger refresh token flow)
     if (resp.status !== 401) {
-      showWarningMessage(
-        opts.errorMessage
-          ? opts.errorMessage
-          : `Error while communicating with backend: ${resp.status} ${resp.statusText}`
-      );
+      showWarningMessage(opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(resp));
       return null;
     }
 
@@ -85,9 +83,10 @@ export const request = async (
       }
 
       store.dispatch(actions.setTokens(newTokens));
-      fetchOptions.headers.set('Authorization', `Bearer ${newTokens.accessToken}`);
+      const updatedFetchOptions = _.cloneDeep(fetchOptions);
+      updatedFetchOptions.headers.set('Authorization', `Bearer ${newTokens.accessToken}`);
 
-      const retriedResp = await fetch(`${Constants.backendUrl}/v2/${path}`, fetchOptions);
+      const retriedResp = await fetch(`${Constants.backendUrl}/v2/${path}`, updatedFetchOptions);
       if (retriedResp.ok) {
         return retriedResp;
       }
@@ -98,9 +97,7 @@ export const request = async (
       }
 
       showWarningMessage(
-        opts.errorMessage
-          ? opts.errorMessage
-          : `Error while communicating with backend: ${retriedResp.status} ${retriedResp.statusText}`
+        opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(retriedResp)
       );
       return null;
     } catch (err) {
@@ -108,26 +105,15 @@ export const request = async (
       const assessmentPathRegex = /\/courses\/\d+\/[a-zA-Z]+\/\d+\/\d+/;
       const isAssessmentUrl = !!window.location.pathname.match(assessmentPathRegex);
 
-      const userSessionExpiredNotificationKey = 'userSessionExpired';
       if (isAssessmentUrl) {
         showWarningMessage(
-          <div>
-            User session expired. Please copy your work and{' '}
-            <Button
-              onClick={() => {
-                store.dispatch(actions.logOut());
-                dismiss(userSessionExpiredNotificationKey);
-              }}
-            >
-              Relogin
-            </Button>
-          </div>,
+          promptReloginMessage,
           -1, // force toast to not timeout
           userSessionExpiredNotificationKey
         );
       } else {
         store.dispatch(actions.logOut());
-        showWarningMessage('Please login again', undefined, userSessionExpiredNotificationKey);
+        showWarningMessage(autoLogoutMessage, undefined, userSessionExpiredNotificationKey);
       }
 
       return null;
@@ -136,7 +122,7 @@ export const request = async (
     }
   } catch (err) {
     // `fetch` throws only when network error is encountered (https://developer.mozilla.org/en-US/docs/Web/API/fetch)
-    showWarningMessage('Error while communicating with backend; check your network?');
+    showWarningMessage(networkErrorMessage, undefined, networkErrorNotificationKey);
     return null;
   }
 };
@@ -165,3 +151,23 @@ export const generateApiCallHeadersAndFetchOptions = (
 
   return fetchOpts;
 };
+
+export const userSessionExpiredNotificationKey = 'userSessionExpired';
+export const networkErrorNotificationKey = 'networkError';
+export const autoLogoutMessage = 'Please login again';
+export const promptReloginMessage = (
+  <div>
+    User session expired. Please copy your work and{' '}
+    <Button
+      onClick={() => {
+        store.dispatch(actions.logOut());
+        dismiss(userSessionExpiredNotificationKey);
+      }}
+    >
+      Relogin
+    </Button>
+  </div>
+);
+export const networkErrorMessage = 'Error while communicating with backend; check your network?';
+export const getResponseErrorMessage = (resp: Response | MockResponse) =>
+  `Error while communicating with backend: ${resp.status} ${resp.statusText}`;
