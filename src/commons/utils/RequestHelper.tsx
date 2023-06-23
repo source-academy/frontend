@@ -5,7 +5,7 @@ import { Tokens } from '../application/types/SessionTypes';
 import { postRefresh } from '../sagas/RequestsSaga';
 import { actions } from './ActionsHelper';
 import Constants from './Constants';
-import { showWarningMessage } from './notifications/NotificationsHelper';
+import { dismiss, showWarningMessage } from './notifications/NotificationsHelper';
 
 /**
  * @property accessToken - backend access token
@@ -24,6 +24,8 @@ type RequestOptions = {
   refreshToken?: string;
 };
 
+type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
 let refreshingTokensPromise: Promise<Tokens | null> | undefined;
 
 /**
@@ -41,7 +43,7 @@ let refreshingTokensPromise: Promise<Tokens | null> | undefined;
  */
 export const request = async (
   path: string,
-  method: string,
+  method: RequestMethod,
   opts: RequestOptions
 ): Promise<Response | null> => {
   const fetchOptions = generateApiCallHeadersAndFetchOptions(method, opts);
@@ -90,7 +92,7 @@ export const request = async (
         return retriedResp;
       }
 
-      if (resp.status === 401) {
+      if (retriedResp.status === 401) {
         // Something went wrong with the refreshed access token (this should never happen)
         throw Error('Invalid refreshed access token');
       }
@@ -98,7 +100,7 @@ export const request = async (
       showWarningMessage(
         opts.errorMessage
           ? opts.errorMessage
-          : `Error while communicating with backend: ${resp.status} ${resp.statusText}`
+          : `Error while communicating with backend: ${retriedResp.status} ${retriedResp.statusText}`
       );
       return null;
     } catch (err) {
@@ -111,7 +113,14 @@ export const request = async (
         showWarningMessage(
           <div>
             User session expired. Please copy your work and{' '}
-            <Button onClick={() => (window.location.pathname = `/login`)}>Relogin</Button>
+            <Button
+              onClick={() => {
+                store.dispatch(actions.logOut());
+                dismiss(userSessionExpiredNotificationKey);
+              }}
+            >
+              Relogin
+            </Button>
           </div>,
           -1, // force toast to not timeout
           userSessionExpiredNotificationKey
@@ -132,7 +141,10 @@ export const request = async (
   }
 };
 
-const generateApiCallHeadersAndFetchOptions = (method: string, opts: RequestOptions) => {
+export const generateApiCallHeadersAndFetchOptions = (
+  method: RequestMethod,
+  opts: RequestOptions
+) => {
   const headers = new Headers();
   if (!opts.noHeaderAccept) {
     headers.append('Accept', 'application/json');
