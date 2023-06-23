@@ -1,6 +1,6 @@
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { Frame } from 'js-slang/dist/types';
-import React, { Fragment, RefObject } from 'react';
+import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
 import { Level as CompactLevel } from './compactComponents/Level';
