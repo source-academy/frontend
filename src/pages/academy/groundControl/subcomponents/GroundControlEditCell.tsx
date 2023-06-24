@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
-import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
+import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
 
 export type EditCellProps = DispatchProps & StateProps;
 

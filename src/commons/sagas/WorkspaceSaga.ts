@@ -59,7 +59,7 @@ import {
   makeElevatedContext,
   visualizeEnv
 } from '../utils/JsSlangHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../utils/WarningDialogHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';

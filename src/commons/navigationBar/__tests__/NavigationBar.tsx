@@ -1,6 +1,6 @@
-import { shallow } from 'enzyme';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
@@ -26,8 +26,8 @@ describe('NavigationBar', () => {
 
   it('Renders "Not logged in" correctly', () => {
     useSelectorMock.mockReturnValueOnce({});
-    const tree = shallow(<NavigationBar />);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(<NavigationBar />);
+    expect(tree).toMatchSnapshot();
   });
 
   it('Renders correctly for student with course', () => {
@@ -57,15 +57,15 @@ describe('NavigationBar', () => {
       ]
     });
 
-    const tree = shallow(<NavigationBar />);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(<NavigationBar />);
+    expect(tree).toMatchSnapshot();
   });
 
   test('Renders correctly for student without course', () => {
     useSelectorMock.mockReturnValueOnce({
       name: 'Bob'
     });
-    const tree = shallow(<NavigationBar />);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(<NavigationBar />);
+    expect(tree).toMatchSnapshot();
   });
 });

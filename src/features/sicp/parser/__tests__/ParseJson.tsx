@@ -1,6 +1,6 @@
-import { mount } from 'enzyme';
 import lzString from 'lz-string';
 import { BrowserRouter } from 'react-router-dom';
+import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 
 import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
@@ -56,9 +56,8 @@ const processTag = (tag: string, obj: JsonType) => {
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
   test(tag + ' ' + text + ' successful', () => {
-    const tree = mount(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
-
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = renderTreeJson(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
+    expect(tree).toMatchSnapshot();
   });
 };
 
@@ -326,41 +325,39 @@ describe('Parse reference', () => {
 describe('Parse object', () => {
   test('successful', () => {
     const obj = mockData['text'];
-    const tree = mount(parseObj(obj, 0, mockRef));
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = renderTreeJson(parseObj(obj, 0, mockRef));
+    expect(tree).toMatchSnapshot();
   });
 
   test('tag not found', () => {
     const tag = unknownTag;
     const obj = { tag: tag, body: 'text' };
-
     expect(() => parseObj(obj, 0, mockRef)).toThrowError(ParseJsonError);
   });
 
   test('no tag', () => {
     const obj = { child: [mockData['text']] };
-    const tree = mount(parseObj(obj, 0, mockRef));
-
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = renderTreeJson(parseObj(obj, 0, mockRef));
+    expect(tree).toMatchSnapshot();
   });
 });
 
 describe('Parse array', () => {
   test('no child successful', () => {
     const arr = [] as JsonType[];
-    const tree = mount(parseArr(arr, mockRef));
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = renderTreeJson(parseArr(arr, mockRef));
+    expect(tree).toMatchSnapshot();
   });
 
   test('one child successful', () => {
     const arr = [mockData['text']];
-    const tree = mount(parseArr(arr, mockRef));
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = renderTreeJson(parseArr(arr, mockRef));
+    expect(tree).toMatchSnapshot();
   });
 
   test('two child successful', () => {
     const arr = [mockData['text'], mockData['text']];
-    const tree = mount(parseArr(arr, mockRef));
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = renderTreeJson(parseArr(arr, mockRef));
+    expect(tree).toMatchSnapshot();
   });
 });

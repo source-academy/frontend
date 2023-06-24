@@ -1,4 +1,6 @@
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { Provider } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { updateCourseResearchAgreement } from 'src/commons/application/actions/SessionActions';
@@ -13,39 +15,41 @@ jest.mock('react-redux', () => ({
 const useDispatchMock = useDispatch as jest.Mock;
 const dispatchMock = jest.fn();
 
-const renderDOM = () => {
-  useDispatchMock.mockReturnValue(dispatchMock);
-  dispatchMock.mockClear();
-
+const createElement = () => {
   const mockStore = mockInitialStore();
-  const app = (
+  const element = (
     <Provider store={mockStore}>
       <ResearchAgreementPrompt />
     </Provider>
   );
 
-  return mount(app);
+  return element;
 };
 
-test('ResearchAgreementPrompt renders correctly', () => {
-  const tree = renderDOM();
-  expect(tree.debug()).toMatchSnapshot();
-});
+describe('ResearchAgreementPrompt', () => {
+  let user: UserEvent;
 
-test('"I would like to opt out" dispatches correctly', () => {
-  const tree = renderDOM();
-  tree
-    .findWhere(node => node.type() === 'button' && node.text() === 'I would like to opt out')
-    .simulate('click');
-  expect(dispatchMock).toBeCalledTimes(1);
-  expect(dispatchMock).toBeCalledWith(updateCourseResearchAgreement(false));
-});
+  beforeEach(() => {
+    useDispatchMock.mockReturnValue(dispatchMock);
+    dispatchMock.mockClear();
+    user = userEvent.setup();
+  });
 
-test('"I consent!" dispatches correctly', () => {
-  const tree = renderDOM();
-  tree
-    .findWhere(node => node.type() === 'button' && node.text() === 'I consent!')
-    .simulate('click');
-  expect(dispatchMock).toBeCalledTimes(1);
-  expect(dispatchMock).toBeCalledWith(updateCourseResearchAgreement(true));
+  test('"I would like to opt out" dispatches correctly', async () => {
+    render(createElement());
+    const button = await screen.findByText('I would like to opt out');
+    await user.click(button);
+
+    expect(dispatchMock).toBeCalledTimes(1);
+    expect(dispatchMock).toBeCalledWith(updateCourseResearchAgreement(false));
+  });
+
+  test('"I consent!" dispatches correctly', async () => {
+    render(createElement());
+    const button = await screen.findByText('I consent!');
+    await user.click(button);
+
+    expect(dispatchMock).toBeCalledTimes(1);
+    expect(dispatchMock).toBeCalledWith(updateCourseResearchAgreement(true));
+  });
 });

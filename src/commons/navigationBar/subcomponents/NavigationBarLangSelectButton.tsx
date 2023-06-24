@@ -50,7 +50,11 @@ const NavigationBarLangSelectButton = () => {
       }
       onClose={() => setIsOpen(false)}
     >
-      <Button rightIcon="caret-down" onClick={() => setIsOpen(true)}>
+      <Button
+        rightIcon="caret-down"
+        onClick={() => setIsOpen(true)}
+        data-testid="NavigationBarLangSelectButton"
+      >
         {lang}
       </Button>
     </Popover2>

@@ -6,7 +6,7 @@ import {
   GoalProgress,
   GoalType
 } from '../../../features/achievement/AchievementTypes';
-import { showSuccessMessage } from '../../utils/NotificationsHelper';
+import { showSuccessMessage } from '../../utils/notifications/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased, isWithinTimeRange } from './DateHelper';
 

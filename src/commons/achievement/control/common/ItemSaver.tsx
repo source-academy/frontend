@@ -1,7 +1,10 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 
 type ItemSaverProps = {
   discardChanges: () => void;

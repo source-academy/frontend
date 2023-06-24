@@ -10,7 +10,7 @@ import {
   GoalProgress,
   GoalType
 } from '../../../features/achievement/AchievementTypes';
-import { showDangerMessage } from '../../utils/NotificationsHelper';
+import { showDangerMessage } from '../../utils/notifications/NotificationsHelper';
 import { isExpired, isReleased } from './DateHelper';
 
 /**
