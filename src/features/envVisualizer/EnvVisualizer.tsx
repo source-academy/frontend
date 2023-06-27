@@ -7,11 +7,13 @@ import { EnvTree } from './EnvVisualizerTypes';
 import { deepCopyTree } from './EnvVisualizerUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
+type SetEditorHighlightedLines = (segments: [number, number][]) => void;
 
 /** Environment Visualizer is exposed from this class */
 export default class EnvVisualizer {
   /** callback function to update the visualization state in the SideContentEnvVis component */
   private static setVis: SetVis;
+  /** function to highlight editor lines */
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
   private static agendaStash: boolean = false;
@@ -20,6 +22,7 @@ export default class EnvVisualizer {
   private static currentEnvId: string;
   private static agenda: Agenda;
   private static stash: Stash;
+  public static setEditorHighlightedLines: SetEditorHighlightedLines;
   public static togglePrintableMode(): void {
     EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
   }
@@ -53,12 +56,12 @@ export default class EnvVisualizer {
     setVis: SetVis,
     width: number,
     height: number,
-    setEditorHighlightedLines: (start?: number, end?: number) => void
+    setEditorHighlightedLines: (segments: [number, number][]) => void
   ) {
     Layout.visibleHeight = height;
     Layout.visibleWidth = width;
-    Layout.setEditorHighlightedLines = setEditorHighlightedLines;
     this.setVis = setVis;
+    this.setEditorHighlightedLines = setEditorHighlightedLines;
   }
 
   static clear() {

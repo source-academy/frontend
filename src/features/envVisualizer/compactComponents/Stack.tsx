@@ -19,10 +19,7 @@ export class Stack extends Visible implements IHoverable {
   /** Array of the Agenda Item Components */
   readonly stackItemComponents: StackItemComponent[];
 
-  constructor(
-    readonly stack: Agenda | Stash,
-    setEditorHighlightedLines?: (start?: number, end?: number) => void
-  ) {
+  constructor(readonly stack: Agenda | Stash) {
     super();
     this.isAgenda = stack instanceof Agenda;
     this._x = this.isAgenda ? AgendaStashConfig.AgendaPosX : Layout.stashComponentX;
@@ -42,16 +39,14 @@ export class Stack extends Visible implements IHoverable {
           let unhighlightOnHover = () => {};
 
           // TODO: Ideally we can split StackItemComponent into their Agenda and Stash counterparts
-          if (setEditorHighlightedLines) {
-            highlightOnHover = () => {
-              if (node.loc) {
-                const start = node.loc.start.line - 1;
-                const end = node.loc.end.line - 1;
-                setEditorHighlightedLines(start, end);
-              }
-            };
-            unhighlightOnHover = () => setEditorHighlightedLines();
-          }
+          highlightOnHover = () => {
+            if (node.loc) {
+              const start = node.loc.start.line - 1;
+              const end = node.loc.end.line - 1;
+              EnvVisualizer.setEditorHighlightedLines([[start, end]]);
+            }
+          };
+          unhighlightOnHover = () => EnvVisualizer.setEditorHighlightedLines([]);
           const component = getAgendaItemComponent(
             agendaItem,
             this._height,

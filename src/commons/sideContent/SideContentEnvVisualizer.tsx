@@ -75,14 +75,10 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       visualization => this.setState({ visualization }),
       this.state.width,
       this.state.height,
-      (start?, end?) => {
+      (segments: [number, number][]) => {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         // This comment is copied over from workspace saga
-        if (start === undefined || end === undefined) {
-          props.setEditorHighlightedLines(props.workspaceLocation, 0, []);
-        } else {
-          props.setEditorHighlightedLines(props.workspaceLocation, 0, [[start, end]]);
-        }
+        props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
       }
     );
   }
