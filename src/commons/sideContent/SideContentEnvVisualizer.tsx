@@ -151,7 +151,6 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     if (prevProps.needEnvUpdate && !this.props.needEnvUpdate) {
       this.stepFirst();
       this.setState({visualization: undefined})
-      console.log(this.state.visualization)
     }
   }
 
@@ -187,11 +186,13 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 <Tooltip2 content="Agenda and Stash" compact>
                   <AnchorButton
                     onMouseUp={() => {
-                      EnvVisualizer.toggleAgendaStash();
-                      EnvVisualizer.redraw();
+                      if (this.state.visualization && EnvVisualizer.getCompactLayout()) {
+                        EnvVisualizer.toggleAgendaStash();
+                        EnvVisualizer.redraw();
+                      }
                     }}
                     icon="layers"
-                    disabled={!this.state.visualization}
+                    disabled={!this.state.visualization || !EnvVisualizer.getCompactLayout()}
                   >
                     <Checkbox
                       checked={EnvVisualizer.getAgendaStash()}
@@ -202,11 +203,13 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 <Tooltip2 content="Truncate Agenda" compact>
                   <AnchorButton
                     onMouseUp={() => {
-                      EnvVisualizer.toggleStackTruncated();
-                      EnvVisualizer.redraw();
+                      if (this.state.visualization && EnvVisualizer.getAgendaStash()) {
+                        EnvVisualizer.toggleStackTruncated();
+                        EnvVisualizer.redraw();
+                      }
                     }}
                     icon="minimize"
-                    disabled={!this.state.visualization}
+                    disabled={!this.state.visualization || !EnvVisualizer.getAgendaStash()}
                   >
                     <Checkbox
                       checked={EnvVisualizer.getStackTruncated()}
@@ -241,25 +244,35 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 <Tooltip2 content="Experimental" compact>
                   <AnchorButton
                     onMouseUp={() => {
-                      EnvVisualizer.toggleCompactLayout();
-                      EnvVisualizer.redraw();
+                      if (this.state.visualization) {
+                        EnvVisualizer.toggleCompactLayout();
+                        EnvVisualizer.redraw();
+                      }
                     }}
                     icon="build"
                     disabled={!this.state.visualization}
                   >
-                    <Checkbox checked={!EnvVisualizer.getCompactLayout()} />
+                    <Checkbox
+                      checked={!EnvVisualizer.getCompactLayout()}
+                      disabled={!this.state.visualization}
+                    />
                   </AnchorButton>
                 </Tooltip2>
                 <Tooltip2 content="Print" compact>
                   <AnchorButton
                     onMouseUp={() => {
-                      EnvVisualizer.togglePrintableMode();
-                      EnvVisualizer.redraw();
+                      if (this.state.visualization) {
+                        EnvVisualizer.togglePrintableMode();
+                        EnvVisualizer.redraw();
+                      }
                     }}
                     icon="print"
                     disabled={!this.state.visualization}
                   >
-                    <Checkbox checked={EnvVisualizer.getPrintableMode()} />
+                    <Checkbox
+                      disabled={!this.state.visualization}
+                      checked={EnvVisualizer.getPrintableMode()}
+                    />
                   </AnchorButton>
                 </Tooltip2>
                 <Tooltip2 content="Save" compact>
@@ -272,7 +285,13 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
               </ButtonGroup>
             </div>
           </div>{' '}
-          <div style={{ height: '340px', width:'600px', overflow: this.state.visualization ? 'hidden' : 'auto' }}>
+          <div
+            style={{
+              height: '340px',
+              width: '600px',
+              overflow: this.state.visualization ? 'hidden' : 'auto'
+            }}
+          >
             {this.state.visualization || (
               <div
                 id="env-visualizer-default-text"
@@ -294,7 +313,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 program and then dragging the slider above to see the state of the environment at
                 different stages in the evaluation of your program. Clicking on the fast-forward
                 button (double chevron) will take you to the next breakpoint in your program
-                <br /> 
+                <br />
                 <br />
                 <Divider />
                 Some useful keyboard shortcuts:
