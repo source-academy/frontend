@@ -1,14 +1,25 @@
-import { Button, ButtonGroup, Classes, Divider, Slider } from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Button,
+  ButtonGroup,
+  Checkbox,
+  Classes,
+  Divider,
+  Slider
+} from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
 import { OverallState } from '../application/ApplicationTypes';
+import { HighlightedLines } from '../editor/EditorTypes';
 import Constants, { Links } from '../utils/Constants';
-import { updateEnvSteps } from '../workspace/WorkspaceActions';
+import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../workspace/WorkspaceActions';
 import { evalEditor } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
@@ -37,6 +48,11 @@ type OwnProps = {
 type DispatchProps = {
   handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
   handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
+  setEditorHighlightedLines: (
+    workspaceLocation: WorkspaceLocation,
+    editorTabIndex: number,
+    newHighlightedLines: HighlightedLines[]
+  ) => void;
 };
 
 const envVizKeyMap = {
@@ -58,7 +74,12 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     EnvVisualizer.init(
       visualization => this.setState({ visualization }),
       this.state.width,
-      this.state.height
+      this.state.height,
+      (segments: [number, number][]) => {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        // This comment is copied over from workspace saga
+        props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
+      }
     );
   }
 
@@ -161,7 +182,39 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
               onRelease={this.sliderRelease}
               value={this.state.value < 1 ? 1 : this.state.value}
             />
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <ButtonGroup>
+                <Tooltip2 content="Agenda and Stash" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      EnvVisualizer.toggleAgendaStash();
+                      EnvVisualizer.redraw();
+                    }}
+                    icon="layers"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={EnvVisualizer.getAgendaStash()}
+                      disabled={!EnvVisualizer.getCompactLayout()}
+                    />
+                  </AnchorButton>
+                </Tooltip2>
+                <Tooltip2 content="Truncate Agenda" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      EnvVisualizer.toggleStackTruncated();
+                      EnvVisualizer.redraw();
+                    }}
+                    icon="minimize"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={EnvVisualizer.getStackTruncated()}
+                      disabled={!EnvVisualizer.getAgendaStash()}
+                    />
+                  </AnchorButton>
+                </Tooltip2>
+              </ButtonGroup>
               <ButtonGroup>
                 <Button
                   disabled={!this.state.visualization}
@@ -183,6 +236,39 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   icon="double-chevron-right"
                   onClick={this.stepNextBreakpoint}
                 />
+              </ButtonGroup>
+              <ButtonGroup>
+                <Tooltip2 content="Experimental" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      EnvVisualizer.toggleCompactLayout();
+                      EnvVisualizer.redraw();
+                    }}
+                    icon="build"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox checked={!EnvVisualizer.getCompactLayout()} />
+                  </AnchorButton>
+                </Tooltip2>
+                <Tooltip2 content="Print" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      EnvVisualizer.togglePrintableMode();
+                      EnvVisualizer.redraw();
+                    }}
+                    icon="print"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox checked={EnvVisualizer.getPrintableMode()} />
+                  </AnchorButton>
+                </Tooltip2>
+                <Tooltip2 content="Save" compact>
+                  <AnchorButton
+                    icon="floppy-disk"
+                    disabled={!this.state.visualization}
+                    onClick={Layout.exportImage}
+                  />
+                </Tooltip2>
               </ButtonGroup>
             </div>
           </div>
@@ -319,7 +405,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
       handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
-        updateEnvSteps(steps, workspaceLocation)
+        updateEnvSteps(steps, workspaceLocation),
+      setEditorHighlightedLines: (
+        workspaceLocation: WorkspaceLocation,
+        editorTabIndex: number,
+        newHighlightedLines: HighlightedLines[]
+      ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
     },
     dispatch
   );

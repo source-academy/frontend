@@ -12,13 +12,7 @@ import EnvVisualizer from '../../EnvVisualizer';
 import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { CompactReferenceType, IHoverable } from '../../EnvVisualizerTypes';
-import {
-  getBodyText,
-  getParamsText,
-  getTextWidth,
-  setHoveredStyle,
-  setUnhoveredStyle
-} from '../../EnvVisualizerUtils';
+import { getBodyText, getParamsText, getTextWidth } from '../../EnvVisualizerUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
@@ -122,14 +116,12 @@ export class GlobalFnValue extends Value implements IHoverable {
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
     this.labelRef.current.show();
-    setHoveredStyle(currentTarget);
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
     if (!this.selected) {
       this.labelRef.current.hide();
-      setUnhoveredStyle(currentTarget);
     } else {
       const container = currentTarget.getStage()?.container();
       container && (container.style.cursor = 'default');
@@ -140,10 +132,8 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.selected = !this.selected;
     if (!this.selected) {
       this.labelRef.current.hide();
-      setUnhoveredStyle(currentTarget);
     } else {
       this.labelRef.current.show();
-      setHoveredStyle(currentTarget);
     }
   };
 
