@@ -881,12 +881,9 @@ and also the
                           <div
                             tabindex="-1"
                           >
-                            <div
-                              class="bp4-dark"
-                            >
+                            <div>
                               <div
-                                class="sa-substituter"
-                                style="position: sticky; top: 0px; left: 0px; z-index: 1;"
+                                class="sa-substituter bp4-dark"
                               >
                                 <div
                                   class="bp4-slider bp4-disabled"
@@ -1159,9 +1156,10 @@ and also the
                                           class="bp4-button-text"
                                         >
                                           <label
-                                            class="bp4-control bp4-checkbox"
+                                            class="bp4-control bp4-checkbox bp4-disabled"
                                           >
                                             <input
+                                              disabled=""
                                               type="checkbox"
                                             />
                                             <span
@@ -1202,9 +1200,10 @@ and also the
                                           class="bp4-button-text"
                                         >
                                           <label
-                                            class="bp4-control bp4-checkbox"
+                                            class="bp4-control bp4-checkbox bp4-disabled"
                                           >
                                             <input
+                                              disabled=""
                                               type="checkbox"
                                             />
                                             <span
@@ -1246,45 +1245,49 @@ and also the
                                   </div>
                                 </div>
                               </div>
-                              <br />
+                               
                               <div
-                                class="bp4-running-text"
-                                data-testid="env-visualizer-default-text"
-                                id="env-visualizer-default-text"
+                                style="height: 340px; width: 600px; overflow: auto;"
                               >
-                                The environment model visualizer generates environment model diagrams following a notation introduced in
-                                 
-                                <a
-                                  href="https://sourceacademy.org/sicpjs/3.2"
-                                  rel="noopener noreferrer"
-                                  target="_blank"
-                                >
-                                  <i>
-                                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
-                                  </i>
-                                </a>
-                                .
-                                <br />
-                                <br />
-                                 On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program.
-                                <br />
-                                <br />
                                 <div
-                                  class="bp4-divider"
-                                />
-                                Some useful keyboard shortcuts:
-                                <br />
-                                <br />
-                                a: Move to the first step
-                                <br />
-                                e: Move to the last step
-                                <br />
-                                f: Move to the next step
-                                <br />
-                                b: Move to the previous step
-                                <br />
-                                <br />
-                                Note that these shortcuts are only active when the browser focus is on this tab.
+                                  class="bp4-running-text"
+                                  data-testid="env-visualizer-default-text"
+                                  id="env-visualizer-default-text"
+                                >
+                                  The environment model visualizer generates environment model diagrams following a notation introduced in
+                                   
+                                  <a
+                                    href="https://sourceacademy.org/sicpjs/3.2"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                  >
+                                    <i>
+                                      Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
+                                    </i>
+                                  </a>
+                                  .
+                                  <br />
+                                  <br />
+                                   On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program
+                                  <br />
+                                  <br />
+                                  <div
+                                    class="bp4-divider"
+                                  />
+                                  Some useful keyboard shortcuts:
+                                  <br />
+                                  <br />
+                                  a: Move to the first step
+                                  <br />
+                                  e: Move to the last step
+                                  <br />
+                                  f: Move to the next step
+                                  <br />
+                                  b: Move to the previous step
+                                  <br />
+                                  <br />
+                                  Note that these shortcuts are only active when the browser focus is on this tab.
+                                </div>
                               </div>
                             </div>
                           </div>
