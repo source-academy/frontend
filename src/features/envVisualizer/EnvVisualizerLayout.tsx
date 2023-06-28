@@ -1,5 +1,6 @@
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { Frame } from 'js-slang/dist/types';
+import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
@@ -63,6 +64,8 @@ export class Layout {
   static stageWidth: number = window.innerWidth;
   /** the unique key assigned to each node */
   static key: number = 0;
+  /** scale factor for zooming and out of canvas */
+  static scaleFactor = 1.02;
 
   /** the environment tree */
   static environmentTree: EnvTree;
@@ -493,22 +496,47 @@ export class Layout {
     this.stageRef.current.y(-dy);
   }
 
+  /**
+   * Updates the scale of the stage after the user inititates a zoom in or out 
+   * by scrolling or by the trackpad.
+   */
+  private static zoomStage(event: KonvaEventObject<WheelEvent>) {
+      event.evt.preventDefault();
+      if (Layout.stageRef.current !== null) {
+        const stage = Layout.stageRef.current;
+        const oldScale = stage.scaleX();
+        const { x: pointerX, y: pointerY } = stage.getPointerPosition();
+        const mousePointTo = {
+          x: (pointerX - stage.x()) / oldScale,
+          y: (pointerY - stage.y()) / oldScale
+        };
+
+        // zoom in or zoom out
+        let direction = event.evt.deltaY > 0 ? 1 : -1;
+        // reverse when zooming on trackpad i.e. ctrl key is True
+        if (event.evt.ctrlKey) {
+          direction = -direction
+        }
+
+        const newScale = direction > 0 ? oldScale * Layout.scaleFactor : oldScale / Layout.scaleFactor;
+        stage.scale({ x: newScale, y: newScale });
+        const newPos = {
+          x: pointerX - mousePointTo.x * newScale,
+          y: pointerY - mousePointTo.y * newScale
+        };
+        stage.position(newPos);
+        stage.batchDraw();
+      }
+
+  }
+
+
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
       const layout = (
         <div className={'sa-env-visualizer'} data-testid="sa-env-visualizer">
-          <div
-            style={{
-              overflow: 'hidden',
-              marginLeft: 20,
-              marginRight: 0,
-              marginTop: 0,
-              marginBottom: 0,
-              height: '100%'
-            }}
-          ></div>
           <div className={'sa-env-visualizer'}>
             <div
               id="scroll-container"
@@ -534,7 +562,13 @@ export class Layout {
                     : Config.SA_BLUE.toString()
                 }}
               >
-                <Stage width={Layout.stageWidth} height={Layout.stageHeight} ref={this.stageRef}>
+                <Stage
+                  width={Layout.stageWidth}
+                  height={Layout.stageHeight}
+                  ref={this.stageRef}
+                  draggable
+                  onWheel={Layout.zoomStage}
+                >
                   <Layer>
                     <Rect
                       {...ShapeDefaultProps}

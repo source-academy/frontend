@@ -8,6 +8,7 @@ import {
   Slider
 } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import classNames from 'classnames';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
@@ -169,11 +170,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
 
     return (
       <HotKeys keyMap={envVizKeyMap} handlers={envVizHandlers}>
-        <div className={Classes.DARK}>
-          <div
-            className={'sa-substituter'}
-            style={{ position: 'sticky', top: '0', left: '0', zIndex: '1' }}
-          >
+        <div>
+          <div className={classNames('sa-substituter', Classes.DARK)}>
             <Slider
               disabled={!this.state.visualization}
               min={1}
@@ -271,47 +269,49 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 </Tooltip2>
               </ButtonGroup>
             </div>
-          </div>
+          </div>{' '}
           <br />
-          {this.state.visualization || (
-            <div
-              id="env-visualizer-default-text"
-              className={Classes.RUNNING_TEXT}
-              data-testid="env-visualizer-default-text"
-            >
-              The environment model visualizer generates environment model diagrams following a
-              notation introduced in{' '}
-              <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-                <i>
-                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
-                  Section 2
-                </i>
-              </a>
-              .
-              <br />
-              <br /> On this tab, the REPL will be hidden from view, so do check that your code has
-              no errors before running the stepper. You may use this tool by running your program
-              and then dragging the slider above to see the state of the environment at different
-              stages in the evaluation of your program. Clicking on the fast-forward button (double
-              chevron) will take you to the next breakpoint in your program.
-              <br />
-              <br />
-              <Divider />
-              Some useful keyboard shortcuts:
-              <br />
-              <br />
-              a: Move to the first step
-              <br />
-              e: Move to the last step
-              <br />
-              f: Move to the next step
-              <br />
-              b: Move to the previous step
-              <br />
-              <br />
-              Note that these shortcuts are only active when the browser focus is on this tab.
-            </div>
-          )}
+          <div style={{ height: '340px', width:'600px', overflow: this.state.visualization ? 'hidden' : 'auto' }}>
+            {this.state.visualization || (
+              <div
+                id="env-visualizer-default-text"
+                className={Classes.RUNNING_TEXT}
+                data-testid="env-visualizer-default-text"
+              >
+                The environment model visualizer generates environment model diagrams following a
+                notation introduced in{' '}
+                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+                  <i>
+                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
+                    3, Section 2
+                  </i>
+                </a>
+                .
+                <br />
+                <br /> On this tab, the REPL will be hidden from view, so do check that your code
+                has no errors before running the stepper. You may use this tool by running your
+                program and then dragging the slider above to see the state of the environment at
+                different stages in the evaluation of your program. Clicking on the fast-forward
+                button (double chevron) will take you to the next breakpoint in your program
+                <br /> 
+                <br />
+                <Divider />
+                Some useful keyboard shortcuts:
+                <br />
+                <br />
+                a: Move to the first step
+                <br />
+                e: Move to the last step
+                <br />
+                f: Move to the next step
+                <br />
+                b: Move to the previous step
+                <br />
+                <br />
+                Note that these shortcuts are only active when the browser focus is on this tab.
+              </div>
+            )}
+          </div>
         </div>
       </HotKeys>
     );
