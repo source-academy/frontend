@@ -1,8 +1,8 @@
 export enum AgendaStashConfig {
-  AgendaPosX = 30,
-  AgendaPosY = 30,
-  StashPosX = 180,
-  StashPosY = 30,
+  AgendaPosX = 20,
+  AgendaPosY = 5,
+  StashPosX = 170,
+  StashPosY = 5,
 
   AgendaItemWidth = 150,
   AgendaItemTextPadding = 10,

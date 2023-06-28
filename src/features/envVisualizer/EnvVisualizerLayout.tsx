@@ -442,12 +442,13 @@ export class Layout {
   }
 
   /**
-   * Scrolls diagram to top left, and saves the diagram as multiple images of width < MaxExportWidth.
+   * Scrolls diagram to top left, resets the zoom, and saves the diagram as multiple images of width < MaxExportWidth.
    */
   static exportImage = () => {
     const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
     container.scrollTo({ left: 0, top: 0 });
     Layout.handleScrollPosition(0, 0);
+    this.stageRef.current.scale({ x: 1, y: 1 });
     const height = Layout.height();
     const width = Layout.width();
     const horizontalImages = Math.ceil(width / Config.MaxExportWidth);
@@ -497,39 +498,38 @@ export class Layout {
   }
 
   /**
-   * Updates the scale of the stage after the user inititates a zoom in or out 
+   * Updates the scale of the stage after the user inititates a zoom in or out
    * by scrolling or by the trackpad.
    */
   private static zoomStage(event: KonvaEventObject<WheelEvent>) {
-      event.evt.preventDefault();
-      if (Layout.stageRef.current !== null) {
-        const stage = Layout.stageRef.current;
-        const oldScale = stage.scaleX();
-        const { x: pointerX, y: pointerY } = stage.getPointerPosition();
-        const mousePointTo = {
-          x: (pointerX - stage.x()) / oldScale,
-          y: (pointerY - stage.y()) / oldScale
-        };
+    event.evt.preventDefault();
+    if (Layout.stageRef.current !== null) {
+      const stage = Layout.stageRef.current;
+      const oldScale = stage.scaleX();
+      const { x: pointerX, y: pointerY } = stage.getPointerPosition();
+      const mousePointTo = {
+        x: (pointerX - stage.x()) / oldScale,
+        y: (pointerY - stage.y()) / oldScale
+      };
 
-        // zoom in or zoom out
-        let direction = event.evt.deltaY > 0 ? 1 : -1;
-        // reverse when zooming on trackpad i.e. ctrl key is True
-        if (event.evt.ctrlKey) {
-          direction = -direction
-        }
-
-        const newScale = direction > 0 ? oldScale * Layout.scaleFactor : oldScale / Layout.scaleFactor;
-        stage.scale({ x: newScale, y: newScale });
-        const newPos = {
-          x: pointerX - mousePointTo.x * newScale,
-          y: pointerY - mousePointTo.y * newScale
-        };
-        stage.position(newPos);
-        stage.batchDraw();
+      // zoom in or zoom out
+      let direction = event.evt.deltaY > 0 ? 1 : -1;
+      // reverse when zooming on trackpad i.e. ctrl key is True
+      if (event.evt.ctrlKey) {
+        direction = -direction;
       }
 
+      const newScale =
+        direction > 0 ? oldScale * Layout.scaleFactor : oldScale / Layout.scaleFactor;
+      stage.scale({ x: newScale, y: newScale });
+      const newPos = {
+        x: pointerX - mousePointTo.x * newScale,
+        y: pointerY - mousePointTo.y * newScale
+      };
+      stage.position(newPos);
+      stage.batchDraw();
+    }
   }
-
 
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
@@ -537,65 +537,62 @@ export class Layout {
     } else {
       const layout = (
         <div className={'sa-env-visualizer'} data-testid="sa-env-visualizer">
-          <div className={'sa-env-visualizer'}>
+          <div
+            id="scroll-container"
+            ref={Layout.scrollContainerRef}
+            onScroll={e =>
+              Layout.handleScrollPosition(e.currentTarget.scrollLeft, e.currentTarget.scrollTop)
+            }
+            style={{
+              width: Layout.visibleWidth,
+              height: Layout.visibleHeight,
+              overflow: 'auto'
+            }}
+          >
             <div
-              id="scroll-container"
-              ref={Layout.scrollContainerRef}
-              onScroll={e =>
-                Layout.handleScrollPosition(e.currentTarget.scrollLeft, e.currentTarget.scrollTop)
-              }
+              id="large-container"
               style={{
-                width: Layout.visibleWidth,
-                height: Layout.visibleHeight,
-                overflow: 'auto',
-                margin: '10px'
+                width: Layout.width(),
+                height: Layout.height(),
+                overflow: 'hidden',
+                backgroundColor: EnvVisualizer.getPrintableMode()
+                  ? Config.PRINT_BACKGROUND.toString()
+                  : Config.SA_BLUE.toString()
               }}
             >
-              <div
-                id="large-container"
-                style={{
-                  width: Layout.width(),
-                  height: Layout.height(),
-                  overflow: 'hidden',
-                  backgroundColor: EnvVisualizer.getPrintableMode()
-                    ? Config.PRINT_BACKGROUND.toString()
-                    : Config.SA_BLUE.toString()
-                }}
+              <Stage
+                width={Layout.stageWidth}
+                height={Layout.stageHeight}
+                ref={this.stageRef}
+                draggable
+                onWheel={Layout.zoomStage}
               >
-                <Stage
-                  width={Layout.stageWidth}
-                  height={Layout.stageHeight}
-                  ref={this.stageRef}
-                  draggable
-                  onWheel={Layout.zoomStage}
-                >
-                  <Layer>
-                    <Rect
-                      {...ShapeDefaultProps}
-                      x={0}
-                      y={0}
-                      width={Layout.width()}
-                      height={Layout.height()}
-                      fill={
-                        EnvVisualizer.getPrintableMode()
-                          ? Config.PRINT_BACKGROUND.toString()
-                          : Config.SA_BLUE.toString()
-                      }
-                      key={Layout.key++}
-                      listening={false}
-                    />
-                    {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
-                    {EnvVisualizer.getCompactLayout() &&
-                      Layout.compactLevels.map(level => level.draw())}
-                    {EnvVisualizer.getCompactLayout() &&
-                      EnvVisualizer.getAgendaStash() &&
-                      Layout.agendaComponent.draw()}
-                    {EnvVisualizer.getCompactLayout() &&
-                      EnvVisualizer.getAgendaStash() &&
-                      Layout.stashComponent.draw()}
-                  </Layer>
-                </Stage>
-              </div>
+                <Layer>
+                  <Rect
+                    {...ShapeDefaultProps}
+                    x={0}
+                    y={0}
+                    width={Layout.width()}
+                    height={Layout.height()}
+                    fill={
+                      EnvVisualizer.getPrintableMode()
+                        ? Config.PRINT_BACKGROUND.toString()
+                        : Config.SA_BLUE.toString()
+                    }
+                    key={Layout.key++}
+                    listening={false}
+                  />
+                  {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
+                  {EnvVisualizer.getCompactLayout() &&
+                    Layout.compactLevels.map(level => level.draw())}
+                  {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getAgendaStash() &&
+                    Layout.agendaComponent.draw()}
+                  {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getAgendaStash() &&
+                    Layout.stashComponent.draw()}
+                </Layer>
+              </Stage>
             </div>
           </div>
         </div>

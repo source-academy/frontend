@@ -150,6 +150,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     }
     if (prevProps.needEnvUpdate && !this.props.needEnvUpdate) {
       this.stepFirst();
+      this.setState({visualization: undefined})
+      console.log(this.state.visualization)
     }
   }
 
@@ -270,7 +272,6 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
               </ButtonGroup>
             </div>
           </div>{' '}
-          <br />
           <div style={{ height: '340px', width:'600px', overflow: this.state.visualization ? 'hidden' : 'auto' }}>
             {this.state.visualization || (
               <div
