@@ -1,31 +1,47 @@
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
-import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
+import { Button, Collapse, Divider, Icon as BpIcon, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
+  Column,
+  ColumnFilter,
+  ColumnFiltersState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from '@tremor/react';
+import {
+  Flex,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+  Text,
+} from '@tremor/react';
+import { useEffect, useState } from 'react';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { updateGroundControlTableFilters } from 'src/commons/workspace/WorkspaceActions';
 
 import {
   AssessmentConfiguration,
   AssessmentOverview,
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import { AssessmentTypeBadge } from '../grading/subcomponents/GradingBadges';
+import GroundControlFilters from './GroundControlFilters';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
-
 export type GroundControlProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
@@ -46,16 +62,34 @@ const columnHelper = createColumnHelper<AssessmentOverview>();
 
 const GroundControl: React.FC<GroundControlProps> = (props) => {
   const [showDropzone, setShowDropzone] = React.useState(false);
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const dispatch = useDispatch();
+
+  const tableFilters = useTypedSelector(state => state.workspaces.groundControl.GroundControlTableFilters);
+  
+  const defaultFilters = [];
+  if (!tableFilters.columnFilters.find(filter => filter.id === 'type')) {
+    defaultFilters.push({
+      id: 'type',
+      value: ""
+    });
+  }
+  
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    ...tableFilters.columnFilters,
+    ...defaultFilters
+  ]);
 
   const toggleDropzone = () => {
     setShowDropzone(!showDropzone);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     props.handleAssessmentOverviewFetch();
     props.handleFetchCourseConfigs();
-  }, []);
+    dispatch(
+      updateGroundControlTableFilters({columnFilters})
+    );
+  }, [columnFilters, dispatch]);
 
   const columns = [
     columnHelper.accessor('title', {
@@ -66,7 +100,11 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
     }),
     columnHelper.accessor('type', {
       header: 'Category',
-      cell: info => <span>{info.getValue()}</span>,
+      cell: info => (
+        <Filterable column={info.column} value={info.getValue()}>
+          <AssessmentTypeBadge type={info.getValue()} />
+        </Filterable>
+      ),
       enableSorting: true,
     }),
     columnHelper.accessor('openAt', {
@@ -122,27 +160,60 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
     data: props.assessmentOverviews || [],
     columns,
     state: {
-      sorting
+      columnFilters
     },
-    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel()
-  })
+  });
+
+  const handleFilterRemove = ({ id, value }: ColumnFilter) => {
+    const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
+    setColumnFilters(newFilters);
+  };
 
   const grid = (
     <div>
+      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
+        <Flex alignItems="items-center" spaceX="space-x-2">
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
+            <BpIcon icon={IconNames.FILTER_LIST} />
+            <Text>
+              {columnFilters.length > 0
+                ? 'Filters: '
+                : 'No filters applied. Click on any cell to filter by its value.'}{' '}
+            </Text>
+          </div>
+          <GroundControlFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
+        </Flex>
+      </Flex>
       <Table>
         <TableHead>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header => (
                 <TableHeaderCell key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : <div>
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                      </div>}
+                  {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? 'cursor-pointer select-none'
+                            : '',
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: ' 🔼',
+                          desc: ' 🔽',
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    )}
                 </TableHeaderCell>
               ))}
             </TableRow>
@@ -190,4 +261,23 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
 
   return render();
 }
+
+type FilterableProps = {
+  column: Column<any, unknown>;
+  value: string;
+  children?: React.ReactNode;
+};
+
+const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
+  const handleFilterChange = () => {
+    column.setFilterValue(value);
+  };
+
+  return (
+    <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+      {children || value}
+    </button>
+  );
+};
+
 export default GroundControl;

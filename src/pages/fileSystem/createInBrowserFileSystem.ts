@@ -17,6 +17,7 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   assessment: '',
   githubAssessment: '',
   grading: '',
+  groundControl: '',
   playground: '/playground',
   sicp: '/sicp',
   sourcecast: '',
