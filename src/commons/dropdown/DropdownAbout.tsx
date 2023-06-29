@@ -9,7 +9,7 @@ type DialogProps = {
   onClose: () => void;
 };
 
-const DropdownAbout: React.SFC<DialogProps> = props => (
+const DropdownAbout: React.FC<DialogProps> = props => (
   <Dialog
     className="about"
     icon={IconNames.HELP}

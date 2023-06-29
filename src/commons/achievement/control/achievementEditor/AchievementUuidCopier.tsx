@@ -1,7 +1,7 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import { showSuccessMessage } from 'src/commons/utils/NotificationsHelper';
+import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 type AchievementUuidCopierProps = {
   uuid: string;
@@ -17,11 +17,9 @@ function AchievmenetUuidCopier(props: AchievementUuidCopierProps) {
   };
 
   return (
-    <>
-      <Tooltip2 content={hoverText}>
-        <Button icon={IconNames.CLIPBOARD} onClick={copy} />
-      </Tooltip2>
-    </>
+    <Tooltip2 content={hoverText}>
+      <Button icon={IconNames.CLIPBOARD} onClick={copy} />
+    </Tooltip2>
   );
 }
 

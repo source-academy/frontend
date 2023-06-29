@@ -39,34 +39,28 @@ function StorySimulator() {
   }, [session]);
 
   return (
-    <>
-      <div className="StorySimulatorWrapper">
-        <div id="game-display" />
-        <div className="LeftAlign StorySimulatorPanel">
-          {storySimState === StorySimState.Default && (
-            <>
-              <h3>Welcome to story simulator!</h3>
-            </>
-          )}
-          {storySimState === StorySimState.CheckpointSim && <StorySimulatorCheckpointSim />}
-          {storySimState === StorySimState.ObjectPlacement && (
-            <>
-              <h3>Asset Selection</h3>
-              <StorySimulatorAssetSelection />
-            </>
-          )}
-          {storySimState === StorySimState.AssetUploader && (
-            <>
-              <h3>Asset uploader</h3>
-              <StorySimulatorAssetFileUploader />
-              <h3>Asset Viewer</h3>
-              <StorySimulatorAssetSelection />
-            </>
-          )}
-          {storySimState === StorySimState.ChapterSim && <StorySimulatorChapterSim />}
-        </div>
+    <div className="StorySimulatorWrapper">
+      <div id="game-display" />
+      <div className="LeftAlign StorySimulatorPanel">
+        {storySimState === StorySimState.Default && <h3>Welcome to story simulator!</h3>}
+        {storySimState === StorySimState.CheckpointSim && <StorySimulatorCheckpointSim />}
+        {storySimState === StorySimState.ObjectPlacement && (
+          <>
+            <h3>Asset Selection</h3>
+            <StorySimulatorAssetSelection />
+          </>
+        )}
+        {storySimState === StorySimState.AssetUploader && (
+          <>
+            <h3>Asset uploader</h3>
+            <StorySimulatorAssetFileUploader />
+            <h3>Asset Viewer</h3>
+            <StorySimulatorAssetSelection />
+          </>
+        )}
+        {storySimState === StorySimState.ChapterSim && <StorySimulatorChapterSim />}
       </div>
-    </>
+    </div>
   );
 }
 

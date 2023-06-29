@@ -47,4 +47,9 @@ const UserBlogDir: React.FC<UserBlogDirProps> = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = UserBlogDir;
+Component.displayName = 'UserBlogDir';
+
 export default UserBlogDir;

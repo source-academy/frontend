@@ -1,19 +1,254 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnvVisualizer component renders correctly 1`] = `
-"<div className=\\"bp4-dark\\">
-  <p id=\\"env-visualizer-default-text\\" className=\\"bp4-running-text\\">
-    The environment model visualizer generates environment model diagrams following a notation introduced in
-     
-    <a href=\\"https://sourceacademy.org/sicpjs/3.2\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\">
-      <i>
-        Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
-      </i>
-    </a>
-    .
+<div
+  onBlur={[Function]}
+  onFocus={[Function]}
+  onKeyDown={[Function]}
+  onKeyPress={[Function]}
+  onKeyUp={[Function]}
+  tabIndex="-1"
+>
+  <div
+    className="bp4-dark"
+  >
+    <div
+      className="sa-substituter"
+      style={
+        Object {
+          "left": "0",
+          "position": "sticky",
+          "top": "0",
+          "zIndex": "1",
+        }
+      }
+    >
+      <div
+        className="bp4-slider bp4-disabled"
+        onMouseDown={[Function]}
+        onTouchStart={[Function]}
+      >
+        <div
+          className="bp4-slider-track"
+        >
+          <div
+            className="bp4-slider-progress"
+            style={
+              Object {
+                "left": "0.00%",
+                "right": "100.00%",
+                "top": 0,
+              }
+            }
+          />
+          <div
+            className="bp4-slider-progress bp4-intent-primary"
+            style={
+              Object {
+                "left": "0.00%",
+                "right": "100.00%",
+                "top": 0,
+              }
+            }
+          />
+          <div
+            className="bp4-slider-progress"
+            style={
+              Object {
+                "left": "0.00%",
+                "right": "100.00%",
+                "top": 0,
+              }
+            }
+          />
+        </div>
+        <div
+          className="bp4-slider-axis"
+        />
+        <span
+          aria-orientation="horizontal"
+          aria-valuemax={0}
+          aria-valuemin={1}
+          aria-valuenow={1}
+          className="bp4-slider-handle"
+          role="slider"
+          style={Object {}}
+          tabIndex={0}
+        >
+          <span
+            className="bp4-slider-label"
+          >
+            1
+          </span>
+        </span>
+      </div>
+      <div
+        style={
+          Object {
+            "alignItems": "center",
+            "display": "flex",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <div
+          className="bp4-button-group"
+        >
+          <button
+            className="bp4-button bp4-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            tabIndex={-1}
+            type="button"
+          >
+            <span
+              aria-hidden={true}
+              className="bp4-icon bp4-icon-double-chevron-left"
+              icon="double-chevron-left"
+            >
+              <svg
+                data-icon="double-chevron-left"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M4.41 8L7.7 4.71c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C2.11 7.47 2 7.72 2 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L4.41 8zm5 0l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C7.11 7.47 7 7.72 7 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L9.41 8z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </button>
+          <button
+            className="bp4-button bp4-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            tabIndex={-1}
+            type="button"
+          >
+            <span
+              aria-hidden={true}
+              className="bp4-icon bp4-icon-chevron-left"
+              icon="chevron-left"
+            >
+              <svg
+                data-icon="chevron-left"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M7.41 8l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C5.11 7.47 5 7.72 5 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L7.41 8z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </button>
+          <button
+            className="bp4-button bp4-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            tabIndex={-1}
+            type="button"
+          >
+            <span
+              aria-hidden={true}
+              className="bp4-icon bp4-icon-chevron-right"
+              icon="chevron-right"
+            >
+              <svg
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </button>
+          <button
+            className="bp4-button bp4-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            tabIndex={-1}
+            type="button"
+          >
+            <span
+              aria-hidden={true}
+              className="bp4-icon bp4-icon-double-chevron-right"
+              icon="double-chevron-right"
+            >
+              <svg
+                data-icon="double-chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M9 8c0-.28-.11-.53-.29-.71l-4-4a1.003 1.003 0 00-1.42 1.42L6.59 8 3.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4C8.89 8.53 9 8.28 9 8zm4.71-.71l-4-4a1.003 1.003 0 00-1.42 1.42L11.59 8 8.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
     <br />
-    <br />
-    It is activated by setting breakpoints before you run the program. You can set a breakpoint by clicking on the gutter of the editor (where all the line numbers are, on the left). When the program runs into a breakpoint, the visualizer displays the state of the environments before the statement is evaluated, which starts in the line in which you set the breakpoint. Every breakpoint must be at the beginning of a statement.
-  </p>
-</div>"
+    <div
+      className="bp4-running-text"
+      data-testid="env-visualizer-default-text"
+      id="env-visualizer-default-text"
+    >
+      The environment model visualizer generates environment model diagrams following a notation introduced in
+       
+      <a
+        href="https://sourceacademy.org/sicpjs/3.2"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <i>
+          Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
+        </i>
+      </a>
+      .
+      <br />
+      <br />
+       On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program.
+      <br />
+      <br />
+      <div
+        className="bp4-divider"
+      />
+      Some useful keyboard shortcuts:
+      <br />
+      <br />
+      a: Move to the first step
+      <br />
+      e: Move to the last step
+      <br />
+      f: Move to the next step
+      <br />
+      b: Move to the previous step
+      <br />
+      <br />
+      Note that these shortcuts are only active when the browser focus is on this tab.
+    </div>
+  </div>
+</div>
 `;

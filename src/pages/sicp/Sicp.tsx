@@ -4,7 +4,7 @@ import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { RouteComponentProps, useHistory, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
@@ -21,8 +21,6 @@ import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
-type SicpProps = RouteComponentProps<{}>;
-
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
 
@@ -34,14 +32,15 @@ export const CodeSnippetContext = React.createContext({
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-const Sicp: React.FC<SicpProps> = props => {
+const Sicp: React.FC = () => {
   const [data, setData] = React.useState(<></>);
   const [loading, setLoading] = React.useState(false);
   const [active, setActive] = React.useState('0');
   const { section } = useParams<{ section: string }>();
   const parentRef = React.useRef<HTMLDivElement>(null);
   const refs = React.useRef({});
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const scrollRefIntoView = (ref: HTMLDivElement | null) => {
     if (!ref || !parentRef?.current) {
@@ -62,10 +61,10 @@ const Sicp: React.FC<SicpProps> = props => {
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
-       * the main application navbar. history.replace is used to allow the
+       * the main application navbar. Navigate replace logic is used to allow the
        * user to still use the browser back button to navigate the app.
        */
-      history.replace(`/sicpjs/${readSicpSectionLocalStorage()}`);
+      navigate(`/sicpjs/${readSicpSectionLocalStorage()}`, { replace: true });
       return;
     }
 
@@ -109,7 +108,7 @@ const Sicp: React.FC<SicpProps> = props => {
       .finally(() => {
         setLoading(false);
       });
-  }, [section, history]);
+  }, [section, navigate]);
 
   // Scroll to correct position
   React.useEffect(() => {
@@ -117,11 +116,11 @@ const Sicp: React.FC<SicpProps> = props => {
       return;
     }
 
-    const hash = props.location.hash;
+    const hash = location.hash;
     const ref = refs.current[hash];
 
     scrollRefIntoView(ref);
-  }, [props.location.hash, loading]);
+  }, [location.hash, loading]);
 
   // Close all active code snippet when new page is loaded
   React.useEffect(() => {
@@ -135,16 +134,17 @@ const Sicp: React.FC<SicpProps> = props => {
     dispatch(toggleUsingSubst(false, 'sicp'));
   };
   const handleNavigation = (sect: string) => {
-    history.push('/sicpjs/' + sect);
+    navigate('/sicpjs/' + sect);
   };
 
+  // `section` is defined due to the navigate logic in the useEffect above
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
-      {getPrev(section) && (
-        <Button onClick={() => handleNavigation(getPrev(section)!)}>Previous</Button>
+      {getPrev(section!) && (
+        <Button onClick={() => handleNavigation(getPrev(section!)!)}>Previous</Button>
       )}
-      {getNext(section) && (
-        <Button onClick={() => handleNavigation(getNext(section)!)}>Next</Button>
+      {getNext(section!) && (
+        <Button onClick={() => handleNavigation(getNext(section!)!)}>Next</Button>
       )}
     </div>
   );
@@ -171,5 +171,10 @@ const Sicp: React.FC<SicpProps> = props => {
     </div>
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Sicp;
+Component.displayName = 'Sicp';
 
 export default Sicp;

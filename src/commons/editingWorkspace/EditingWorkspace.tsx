@@ -10,10 +10,11 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import { submitAnswer } from '../application/actions/SessionActions';
 import {
   Assessment,
   AssessmentOverview,
@@ -49,10 +50,29 @@ import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
-import { history } from '../utils/HistoryHelper';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { removeEditorTab, updateActiveEditorTabIndex } from '../workspace/WorkspaceActions';
+import {
+  beginClearContext,
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeSideContentHeight,
+  clearReplOutput,
+  evalEditor,
+  evalRepl,
+  evalTestcase,
+  navigateToDeclaration,
+  promptAutocomplete,
+  removeEditorTab,
+  resetWorkspace,
+  setEditorBreakpoint,
+  updateActiveEditorTabIndex,
+  updateCurrentAssessmentId,
+  updateEditorValue,
+  updateHasUnsavedChanges,
+  updateReplValue,
+  updateWorkspace
+} from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
@@ -60,53 +80,13 @@ import {
   storeLocalAssessmentOverview
 } from '../XMLParser/XMLParserHelper';
 
-export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
-
-export type DispatchProps = {
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: any, changeEvent: any) => void;
-  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
-  handleEditorEval: () => void;
-  handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
-  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
-  handleInterruptEval: () => void;
-  handleReplEval: () => void;
-  handleReplOutputClear: () => void;
-  handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-  handleSave: (id: number, answer: number | string) => void;
-  handleSideContentHeightChange: (heightChange: number) => void;
-  handleTestcaseEval: (testcaseId: number) => void;
-  handleDebuggerPause: () => void;
-  handleDebuggerResume: () => void;
-  handleDebuggerReset: () => void;
-  handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-};
-
-export type OwnProps = {
+export type EditingWorkspaceProps = {
   assessmentId: number;
   questionId: number;
   assessmentOverview: AssessmentOverview;
   updateAssessmentOverview: (overview: AssessmentOverview) => void;
   notAttempted: boolean;
   closeDate: string;
-};
-
-export type StateProps = {
-  hasUnsavedChanges: boolean;
-  isRunning: boolean;
-  isDebugging: boolean;
-  enableDebugging: boolean;
-  output: InterpreterOutput[];
-  replValue: string;
-  sideContentHeight?: number;
-  storedAssessmentId?: number;
-  storedQuestionId?: number;
 };
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
@@ -117,11 +97,19 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { isFolderModeEnabled, activeEditorTabIndex, editorTabs } = useTypedSelector(
-    store => store.workspaces[workspaceLocation]
-  );
+  const {
+    isFolderModeEnabled,
+    activeEditorTabIndex,
+    editorTabs,
+    isRunning,
+    output,
+    replValue,
+    sideContentHeight,
+    currentAssessment: storedAssessmentId,
+    currentQuestion: storedQuestionId
+  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
   /**
    * After mounting (either an older copy of the assessment
@@ -142,19 +130,67 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
    */
   useEffect(() => checkWorkspaceReset());
 
-  const setActiveEditorTabIndex = React.useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch]
-  );
-  const removeEditorTabByIndex = React.useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch]
-  );
+  const dispatch = useDispatch();
+  const {
+    handleBrowseHistoryDown,
+    handleBrowseHistoryUp,
+    handleClearContext,
+    handleDeclarationNavigate,
+    handleEditorEval,
+    handleEditorValueChange,
+    handleEditorUpdateBreakpoints,
+    handleReplEval,
+    handleReplOutputClear,
+    handleReplValueChange,
+    handleResetWorkspace,
+    handleUpdateWorkspace,
+    handleSubmitAnswer,
+    handleSideContentHeightChange,
+    handleUpdateHasUnsavedChanges,
+    handleUpdateCurrentAssessmentId,
+    handlePromptAutocomplete,
+    setActiveEditorTabIndex,
+    removeEditorTabByIndex
+  } = useMemo(() => {
+    return {
+      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
+        dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+      handleDeclarationNavigate: (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
+        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
+        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
+      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleReplValueChange: (newValue: string) =>
+        dispatch(updateReplValue(newValue, workspaceLocation)),
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
+        dispatch(resetWorkspace(workspaceLocation, options)),
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
+        dispatch(updateWorkspace(workspaceLocation, options)),
+      handleSubmitAnswer: (id: number, answer: string | number) =>
+        dispatch(submitAnswer(id, answer)),
+      handleSideContentHeightChange: (heightChange: number) =>
+        dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
+      handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
+        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+      handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
+        dispatch(updateCurrentAssessmentId(assessmentId, questionId)),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+    };
+  }, [dispatch]);
 
-  const { handleEditorValueChange } = props;
   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-  const handleFirstEditorValueChange = React.useCallback(
+  const handleFirstEditorValueChange = useCallback(
     (newEditorValue: string) => handleEditorValueChange(0, newEditorValue),
     [handleEditorValueChange]
   );
@@ -233,10 +269,10 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     const assessmentId = -1;
     const questionId = formatedQuestionId();
 
-    if (props.storedAssessmentId !== assessmentId || props.storedQuestionId !== questionId) {
+    if (storedAssessmentId !== assessmentId || storedQuestionId !== questionId) {
       resetWorkspaceValues();
-      props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
-      props.handleUpdateHasUnsavedChanges(false);
+      handleUpdateCurrentAssessmentId(assessmentId, questionId);
+      handleUpdateHasUnsavedChanges(false);
       if (hasUnsavedChanges) {
         setAssessment(retrieveLocalAssessment());
         setHasUnsavedChanges(false);
@@ -261,7 +297,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         }
       };
     }
-    props.handleClearContext(library, true);
+    handleClearContext(library, true);
   };
 
   const resetWorkspaceValues = () => {
@@ -281,7 +317,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       editorValue = '//If you see this, this is a bug. Please report bug.';
     }
 
-    props.handleResetWorkspace({
+    handleResetWorkspace({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [
         {
@@ -294,13 +330,13 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       programPostpendValue
     });
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    props.handleEditorValueChange(0, editorValue);
+    handleEditorValueChange(0, editorValue);
   };
 
   const handleTestcaseEval = (testcase: Testcase) => {
     const editorTestcases = [testcase];
-    props.handleUpdateWorkspace({ editorTestcases });
-    props.handleTestcaseEval(0);
+    handleUpdateWorkspace({ editorTestcases });
+    dispatch(evalTestcase(workspaceLocation, 0));
   };
 
   const handleSave = () => {
@@ -376,7 +412,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
             editorValue={editorTabs[0].value}
             handleEditorValueChange={handleFirstEditorValueChange}
-            handleUpdateWorkspace={props.handleUpdateWorkspace}
+            handleUpdateWorkspace={handleUpdateWorkspace}
           />
         );
 
@@ -539,10 +575,9 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     const questionProgress: [number, number] = [questionId + 1, assessment!.questions.length];
 
     const onClickPrevious = () =>
-      history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-    const onClickNext = () =>
-      history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-    const onClickReturn = () => history.push(listingPath);
+      navigate(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
+    const onClickNext = () => navigate(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
+    const onClickReturn = () => navigate(listingPath);
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(() => hasUnsavedChanges);
@@ -576,7 +611,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     const runButton = (
       <ControlBarRunButton
         isEntrypointFileDefined={activeEditorTabIndex !== null}
-        handleEditorEval={props.handleEditorEval}
+        handleEditorEval={handleEditorEval}
         key="run"
       />
     );
@@ -606,15 +641,11 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
   function replButtons() {
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton handleReplOutputClear={handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={props.handleReplEval}
-        isRunning={props.isRunning}
-        key="eval_repl"
-      />
+      <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
     );
 
     return [evalButton, clearButton];
@@ -650,34 +681,34 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
                 };
               }),
             editorSessionId: '',
-            handleDeclarationNavigate: props.handleDeclarationNavigate,
-            handleEditorEval: props.handleEditorEval,
-            handleEditorValueChange: props.handleEditorValueChange,
-            handleEditorUpdateBreakpoints: props.handleEditorUpdateBreakpoints,
-            handleUpdateHasUnsavedChanges: props.handleUpdateHasUnsavedChanges,
-            handlePromptAutocomplete: props.handlePromptAutocomplete,
+            handleDeclarationNavigate: handleDeclarationNavigate,
+            handleEditorEval: handleEditorEval,
+            handleEditorValueChange: handleEditorValueChange,
+            handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+            handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
+            handlePromptAutocomplete: handlePromptAutocomplete,
             isEditorAutorun: false
           }
         : undefined,
-    handleSideContentHeightChange: props.handleSideContentHeightChange,
+    handleSideContentHeightChange: handleSideContentHeightChange,
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: {
       mcq: question as IMCQQuestion,
       handleMCQSubmit: (option: number) =>
-        props.handleSave(assessment!.questions[questionId].id, option)
+        handleSubmitAnswer(assessment!.questions[questionId].id, option)
     },
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: props.sideContentHeight,
+    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
-      handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-      handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-      handleReplEval: props.handleReplEval,
-      handleReplValueChange: props.handleReplValueChange,
-      output: props.output,
-      replValue: props.replValue,
+      handleBrowseHistoryDown: handleBrowseHistoryDown,
+      handleBrowseHistoryUp: handleBrowseHistoryUp,
+      handleReplEval: handleReplEval,
+      handleReplValueChange: handleReplValueChange,
+      output: output,
+      replValue: replValue,
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',

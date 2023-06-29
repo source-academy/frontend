@@ -1,20 +1,21 @@
-import { mount } from 'enzyme';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
+import { getLanguageConfig } from '../application/ApplicationTypes';
 import Markdown from '../Markdown';
-import { generateSourceIntroduction } from '../utils/IntroductionHelper';
+import { generateLanguageIntroduction } from '../utils/IntroductionHelper';
+import { renderTreeJson } from '../utils/TestUtils';
 
 const mockProps = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return {
-    content: generateSourceIntroduction(sourceChapter, sourceVariant),
+    content: generateLanguageIntroduction(getLanguageConfig(sourceChapter, sourceVariant)),
     openLinksInNewWindow: true
   };
 };
 
 test('Markdown page renders correctly', () => {
   const app = <Markdown {...mockProps(Chapter.SOURCE_1, Variant.DEFAULT)} />;
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = renderTreeJson(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Markdown page renders correct Source information', () => {
@@ -47,9 +48,4 @@ test('Markdown page renders correct Source information', () => {
 
   const source4GPU = <Markdown {...mockProps(Chapter.SOURCE_4, Variant.GPU)} />;
   expect(source4GPU.props.content).toContain('Source \xa74 GPU');
-
-  const invalidSource = <Markdown {...mockProps(5, Variant.DEFAULT)} />;
-  expect(invalidSource.props.content).toContain(
-    'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead'
-  );
 });

@@ -1,372 +1,788 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sicp index page 1`] = `
-"<SicpIndexPage>
-  <div className=\\"sicp-index-page\\">
-    <div className=\\"sicp-cover\\">
-      <img src=\\"http://source-academy.github.io/sicp/sicpjs.png\\" alt=\\"SICP\\" />
-      <div className=\\"sicp-cover-text\\">
-        <div>
-          <Component>
-            <h1 className=\\"bp4-heading\\">
-              Structure and Interpretation of Computer Programs
-            </h1>
-          </Component>
-          <Component>
-            <h2 className=\\"bp4-heading\\">
-              — JavaScript Edition
-            </h2>
-          </Component>
-        </div>
-        <div className=\\"sicp-authors\\">
-          <Component>
-            <h4 className=\\"bp4-heading\\">
-              Harold Abelson and Gerald Jay Sussman
-            </h4>
-          </Component>
-          <p>
-            with Julie Sussman
-            <i>
-              — original authors
-            </i>
-          </p>
-          <Component>
-            <h4 className=\\"bp4-heading\\">
-              Martin Henz and Tobias Wrigstad
-            </h4>
-          </Component>
-          <p>
-            with Julie Sussman
-            <i>
-              — adapters to JavaScript
-            </i>
-          </p>
-          <Component>
-            <h4 className=\\"bp4-heading\\">
-              Samuel Fang
-            </h4>
-          </Component>
-          <p>
-            <i>
-              — designer and developer of this Interactive SICP JS edition
-            </i>
-          </p>
-        </div>
-      </div>
-    </div>
-    <br />
-    <Component>
-      <h2 className=\\"bp4-heading\\">
-        Content
-      </h2>
-    </Component>
-    <SicpToc>
-      <div className=\\"sicp-toc\\">
-        <Blueprint4.Tree className=\\"sicp-toc-tree\\" contents={{...}} onNodeClick={[Function (anonymous)]} onNodeCollapse={[Function: handleNodeCollapse]} onNodeExpand={[Function: handleNodeExpand]}>
-          <div className=\\"bp4-tree sicp-toc-tree\\">
-            <ul className=\\"bp4-tree-node-list bp4-tree-root\\">
-              <Blueprint4.TreeNode id={0} hasCaret={false} label=\\"Foreword\\" nodeData=\\"foreword02\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <span className=\\"bp4-tree-node-caret-none\\" />
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      Foreword
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={1} hasCaret={false} label=\\"Foreword to Structure and Interpretation of Computer Programs, 1984\\" nodeData=\\"foreword84\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <span className=\\"bp4-tree-node-caret-none\\" />
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      Foreword to Structure and Interpretation of Computer Programs, 1984
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={2} hasCaret={false} label=\\"Preface\\" nodeData=\\"prefaces03\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <span className=\\"bp4-tree-node-caret-none\\" />
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      Preface
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={3} hasCaret={false} label=\\"Prefaces to Structure and Interpretation of Computer Programs, 1996 & 1984\\" nodeData=\\"prefaces96\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <span className=\\"bp4-tree-node-caret-none\\" />
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      Prefaces to Structure and Interpretation of Computer Programs, 1996 &amp; 1984
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={4} hasCaret={false} label=\\"Acknowledgments\\" nodeData=\\"acknowledgements\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <span className=\\"bp4-tree-node-caret-none\\" />
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      Acknowledgments
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={6} hasCaret={true} label=\\"1 Building Abstractions with Functions\\" nodeData=\\"1\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-0\\" role=\\"img\\">
-                          <title id=\\"iconTitle-0\\">
-                            Expand group
-                          </title>
-                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
-                        </svg>
-                      </span>
-                    </Blueprint4.Icon>
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      1 Building Abstractions with Functions
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={28} hasCaret={true} label=\\"2 Building Abstractions with Data\\" nodeData=\\"2\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-1\\" role=\\"img\\">
-                          <title id=\\"iconTitle-1\\">
-                            Expand group
-                          </title>
-                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
-                        </svg>
-                      </span>
-                    </Blueprint4.Icon>
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      2 Building Abstractions with Data
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={52} hasCaret={true} label=\\"3 Modularity, Objects, and State\\" nodeData=\\"3\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-2\\" role=\\"img\\">
-                          <title id=\\"iconTitle-2\\">
-                            Expand group
-                          </title>
-                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
-                        </svg>
-                      </span>
-                    </Blueprint4.Icon>
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      3 Modularity, Objects, and State
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={77} hasCaret={true} label=\\"4 Metalinguistic Abstraction\\" nodeData=\\"4\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-3\\" role=\\"img\\">
-                          <title id=\\"iconTitle-3\\">
-                            Expand group
-                          </title>
-                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
-                        </svg>
-                      </span>
-                    </Blueprint4.Icon>
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      4 Metalinguistic Abstraction
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={99} hasCaret={true} label=\\"5 Computing with Register Machines\\" nodeData=\\"5\\" childNodes={{...}} contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <Blueprint4.Icon title=\\"Expand group\\" className=\\"bp4-tree-node-caret bp4-tree-node-caret-closed\\" onClick={[Function (anonymous)]} icon=\\"chevron-right\\">
-                      <span aria-hidden={[undefined]} onClick={[Function (anonymous)]} icon=\\"chevron-right\\" className=\\"bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed\\" title={[undefined]}>
-                        <svg fill={[undefined]} data-icon=\\"chevron-right\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby=\\"iconTitle-4\\" role=\\"img\\">
-                          <title id=\\"iconTitle-4\\">
-                            Expand group
-                          </title>
-                          <path d=\\"M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z\\" fillRule=\\"evenodd\\" />
-                        </svg>
-                      </span>
-                    </Blueprint4.Icon>
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      5 Computing with Register Machines
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={127} hasCaret={false} label=\\"References\\" nodeData=\\"references\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <span className=\\"bp4-tree-node-caret-none\\" />
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      References
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-              <Blueprint4.TreeNode id={128} hasCaret={false} label=\\"About the SICP JS Project\\" nodeData=\\"making-of\\" contentRef={[Function (anonymous)]} depth={0} onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onCollapse={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onExpand={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} path={{...}}>
-                <li className=\\"bp4-tree-node\\">
-                  <div className=\\"bp4-tree-node-content bp4-tree-node-content-0\\" onClick={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onDoubleClick={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                    <span className=\\"bp4-tree-node-caret-none\\" />
-                    <Blueprint4.Icon className=\\"bp4-tree-node-icon\\" icon={[undefined]} aria-hidden={true} tabIndex={-1} />
-                    <span className=\\"bp4-tree-node-label\\">
-                      About the SICP JS Project
-                    </span>
-                  </div>
-                  <Blueprint4.Collapse isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-                    <div className=\\"bp4-collapse\\" style={{...}}>
-                      <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-                    </div>
-                  </Blueprint4.Collapse>
-                </li>
-              </Blueprint4.TreeNode>
-            </ul>
-          </div>
-        </Blueprint4.Tree>
-      </div>
-    </SicpToc>
-    <br />
-    <Component>
-      <h2 className=\\"bp4-heading\\">
-        Licenses
-      </h2>
-    </Component>
-    <div className=\\"sicp-licenses\\">
+<div
+  className="sicp-index-page"
+>
+  <div
+    className="sicp-cover"
+  >
+    <img
+      alt="SICP"
+      src="http://source-academy.github.io/sicp/sicpjs.png"
+    />
+    <div
+      className="sicp-cover-text"
+    >
       <div>
-        <a href=\\"http://creativecommons.org/licenses/by-sa/4.0/\\" rel=\\"nofollow\\">
-          <img src=\\"https://licensebuttons.net/l/by-sa/4.0/88x31.png\\" alt=\\"CC BY-SA 4.0\\" />
-        </a>
+        <h1
+          className="bp4-heading"
+        >
+          Structure and Interpretation of Computer Programs
+        </h1>
+        <h2
+          className="bp4-heading"
+        >
+          — JavaScript Edition
+        </h2>
       </div>
-      <div>
+      <div
+        className="sicp-authors"
+      >
+        <h4
+          className="bp4-heading"
+        >
+          Harold Abelson and Gerald Jay Sussman
+        </h4>
         <p>
-          This work is licensed under a
-           
-          <a href=\\"http://creativecommons.org/licenses/by-sa/4.0/\\" rel=\\"nofollow\\">
-            Creative Commons Attribution-ShareAlike 4.0 International License
-          </a>
-          .
+          with Julie Sussman
+          <i>
+            — original authors
+          </i>
+        </p>
+        <h4
+          className="bp4-heading"
+        >
+          Martin Henz and Tobias Wrigstad
+        </h4>
+        <p>
+          with Julie Sussman
+          <i>
+            — adapters to JavaScript
+          </i>
+        </p>
+        <h4
+          className="bp4-heading"
+        >
+          Samuel Fang
+        </h4>
+        <p>
+          <i>
+            — designer and developer of this Interactive SICP JS edition
+          </i>
         </p>
       </div>
-      <br />
-      <div>
-        <a href=\\"https://www.gnu.org/licenses/gpl-3.0.en.html\\" rel=\\"nofollow\\">
-          <img src=\\"https://camo.githubusercontent.com/46d38fe6087a9b9bdf7e45458901b818765b8391/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f7468756d622f372f37392f4c6963656e73655f69636f6e2d67706c2e7376672f353070782d4c6963656e73655f69636f6e2d67706c2e7376672e706e67\\" alt=\\"GPL 3\\" data-canonical-src=\\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/License_icon-gpl.svg/50px-License_icon-gpl.svg.png\\" />
-        </a>
-      </div>
-      <div>
-        <p>
-          All JavaScript programs in this work are licensed under the
-           
-          <a href=\\"https://www.gnu.org/licenses/gpl-3.0.en.html\\" rel=\\"nofollow\\">
-            GNU General Public License Version 3
-          </a>
-          .
-        </p>
-      </div>
-      <br />
-      <div>
-        <a href=\\"http://creativecommons.org/licenses/by-nc-sa/4.0/\\" rel=\\"nofollow\\">
-          <img src=\\"https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png\\" alt=\\"CC BY-NC-SA 4.0\\" />
-        </a>
-      </div>
-      <div>
-        <p>
-          <a href=\\"https://mitpress.mit.edu/books/structure-and-interpretation-computer-programs-1\\" rel=\\"nofollow\\">
-            Print and Kindle versions of this work
-             
-          </a>
-          are published by The MIT Press under a
-           
-          <a href=\\"http://creativecommons.org/licenses/by-nc-sa/4.0/\\" rel=\\"nofollow\\">
-            Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
-          </a>
-          .
-        </p>
-      </div>
-      <br />
     </div>
   </div>
-</SicpIndexPage>"
+  <br />
+  <h2
+    className="bp4-heading"
+  >
+    Content
+  </h2>
+  <div
+    className="sicp-toc"
+  >
+    <div
+      className="bp4-tree sicp-toc-tree"
+    >
+      <ul
+        className="bp4-tree-node-list bp4-tree-root"
+      >
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-tree-node-caret-none"
+            />
+            <span
+              className="bp4-tree-node-label"
+            >
+              Foreword
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-tree-node-caret-none"
+            />
+            <span
+              className="bp4-tree-node-label"
+            >
+              Foreword to Structure and Interpretation of Computer Programs, 1984
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-tree-node-caret-none"
+            />
+            <span
+              className="bp4-tree-node-label"
+            >
+              Preface
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-tree-node-caret-none"
+            />
+            <span
+              className="bp4-tree-node-label"
+            >
+              Prefaces to Structure and Interpretation of Computer Programs, 1996 & 1984
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-tree-node-caret-none"
+            />
+            <span
+              className="bp4-tree-node-label"
+            >
+              Acknowledgments
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed"
+              icon="chevron-right"
+              onClick={[Function]}
+            >
+              <svg
+                aria-labelledby="iconTitle-0"
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title
+                  id="iconTitle-0"
+                >
+                  Expand group
+                </title>
+                <path
+                  d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp4-tree-node-label"
+            >
+              1 Building Abstractions with Functions
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed"
+              icon="chevron-right"
+              onClick={[Function]}
+            >
+              <svg
+                aria-labelledby="iconTitle-1"
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title
+                  id="iconTitle-1"
+                >
+                  Expand group
+                </title>
+                <path
+                  d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp4-tree-node-label"
+            >
+              2 Building Abstractions with Data
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed"
+              icon="chevron-right"
+              onClick={[Function]}
+            >
+              <svg
+                aria-labelledby="iconTitle-2"
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title
+                  id="iconTitle-2"
+                >
+                  Expand group
+                </title>
+                <path
+                  d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp4-tree-node-label"
+            >
+              3 Modularity, Objects, and State
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed"
+              icon="chevron-right"
+              onClick={[Function]}
+            >
+              <svg
+                aria-labelledby="iconTitle-3"
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title
+                  id="iconTitle-3"
+                >
+                  Expand group
+                </title>
+                <path
+                  d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp4-tree-node-label"
+            >
+              4 Metalinguistic Abstraction
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-icon bp4-icon-chevron-right bp4-tree-node-caret bp4-tree-node-caret-closed"
+              icon="chevron-right"
+              onClick={[Function]}
+            >
+              <svg
+                aria-labelledby="iconTitle-4"
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title
+                  id="iconTitle-4"
+                >
+                  Expand group
+                </title>
+                <path
+                  d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp4-tree-node-label"
+            >
+              5 Computing with Register Machines
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-tree-node-caret-none"
+            />
+            <span
+              className="bp4-tree-node-label"
+            >
+              References
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp4-tree-node"
+        >
+          <div
+            className="bp4-tree-node-content bp4-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp4-tree-node-caret-none"
+            />
+            <span
+              className="bp4-tree-node-label"
+            >
+              About the SICP JS Project
+            </span>
+          </div>
+          <div
+            className="bp4-collapse"
+            style={
+              Object {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp4-collapse-body"
+              style={
+                Object {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <br />
+  <h2
+    className="bp4-heading"
+  >
+    Licenses
+  </h2>
+  <div
+    className="sicp-licenses"
+  >
+    <div>
+      <a
+        href="http://creativecommons.org/licenses/by-sa/4.0/"
+        rel="nofollow"
+      >
+        <img
+          alt="CC BY-SA 4.0"
+          src="https://licensebuttons.net/l/by-sa/4.0/88x31.png"
+        />
+      </a>
+    </div>
+    <div>
+      <p>
+        This work is licensed under a
+         
+        <a
+          href="http://creativecommons.org/licenses/by-sa/4.0/"
+          rel="nofollow"
+        >
+          Creative Commons Attribution-ShareAlike 4.0 International License
+        </a>
+        .
+      </p>
+    </div>
+    <br />
+    <div>
+      <a
+        href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+        rel="nofollow"
+      >
+        <img
+          alt="GPL 3"
+          data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/License_icon-gpl.svg/50px-License_icon-gpl.svg.png"
+          src="https://camo.githubusercontent.com/46d38fe6087a9b9bdf7e45458901b818765b8391/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f7468756d622f372f37392f4c6963656e73655f69636f6e2d67706c2e7376672f353070782d4c6963656e73655f69636f6e2d67706c2e7376672e706e67"
+        />
+      </a>
+    </div>
+    <div>
+      <p>
+        All JavaScript programs in this work are licensed under the
+         
+        <a
+          href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+          rel="nofollow"
+        >
+          GNU General Public License Version 3
+        </a>
+        .
+      </p>
+    </div>
+    <br />
+    <div>
+      <a
+        href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+        rel="nofollow"
+      >
+        <img
+          alt="CC BY-NC-SA 4.0"
+          src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png"
+        />
+      </a>
+    </div>
+    <div>
+      <p>
+        <a
+          href="https://mitpress.mit.edu/books/structure-and-interpretation-computer-programs-1"
+          rel="nofollow"
+        >
+          Print and Kindle versions of this work
+           
+        </a>
+        are published by The MIT Press under a
+         
+        <a
+          href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+          rel="nofollow"
+        >
+          Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+        </a>
+        .
+      </p>
+    </div>
+    <br />
+  </div>
+</div>
 `;

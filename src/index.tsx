@@ -2,17 +2,15 @@ import 'src/styles/index.scss';
 
 import * as Sentry from '@sentry/browser';
 import { setModulesStaticURL } from 'js-slang/dist/modules/moduleLoader';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
-import ApplicationContainer from 'src/commons/application/ApplicationContainer';
 import Constants, { Links } from 'src/commons/utils/Constants';
-import { history } from 'src/commons/utils/HistoryHelper';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { register as registerServiceWorker } from 'src/commons/utils/RegisterServiceWorker';
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
+import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
 if (Constants.sentryDsn) {
@@ -26,6 +24,7 @@ if (Constants.sentryDsn) {
 }
 
 const rootContainer = document.getElementById('root') as HTMLElement;
+const root = createRoot(rootContainer);
 (window as any).__REDUX_STORE__ = store; // need this for slang's display
 console.log(
   `%cSource Academy ${Constants.sourceAcademyEnvironment}-${Constants.sourceAcademyVersion}; ` +
@@ -40,13 +39,10 @@ console.log(`Using module backend: ${Constants.moduleBackendUrl}`);
 createInBrowserFileSystem(store)
   .catch(err => console.error(err))
   .finally(() => {
-    render(
+    root.render(
       <Provider store={store}>
-        <Router history={history}>
-          <ApplicationContainer />
-        </Router>
-      </Provider>,
-      rootContainer
+        <ApplicationWrapper />
+      </Provider>
     );
   });
 

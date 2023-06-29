@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 
-const NotFound: React.SFC<{}> = () => (
-  <div className={classNames('NoPage', Classes.DARK)}>
+const NotFound: React.FC = () => (
+  <div className={classNames('NoPage', Classes.DARK)} data-testid="NotFound-Component">
     <NonIdealState
       icon={IconNames.ERROR}
       title="404 Not Found"
@@ -12,5 +12,10 @@ const NotFound: React.SFC<{}> = () => (
     />
   </div>
 );
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = NotFound;
+Component.displayName = 'NotFound';
 
 export default NotFound;

@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
-import { shallow } from 'enzyme';
 import { useSelector } from 'react-redux';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import GitHubClassroom from '../GitHubClassroom';
 
@@ -92,7 +92,8 @@ const mockStore = {
 
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useSelector: jest.fn()
+  useSelector: jest.fn(),
+  useDispatch: jest.fn()
 }));
 
 jest.mock('react-router-dom', () => ({
@@ -112,15 +113,10 @@ describe('GitHubClassroom', () => {
     });
   });
 
-  const mockProps = {
-    handleGitHubLogIn: () => {},
-    handleGitHubLogOut: () => {}
-  };
-
   it('renders correctly', async () => {
     await act(async () => {
-      const tree = shallow(<GitHubClassroom {...mockProps} />);
-      expect(tree.debug()).toMatchSnapshot();
+      const tree = shallowRender(<GitHubClassroom />);
+      expect(tree).toMatchSnapshot();
     });
   });
 });

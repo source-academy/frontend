@@ -70,4 +70,9 @@ const Stories = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Stories;
+Component.displayName = 'Stories';
+
 export default Stories;

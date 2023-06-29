@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { styliseSublanguage, sublanguages } from '../application/ApplicationTypes';
+import { SALanguage, styliseSublanguage } from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `
@@ -34,14 +34,6 @@ const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) 
     );
   }
 
-  // `.includes` and `.find` are not used here since we are dealing with reference types
-  if (
-    sublanguages.filter(lang => lang.chapter === sourceChapter && lang.variant === sourceVariant)
-      .length === 0
-  ) {
-    return 'You have chosen an invalid sublanguage. Please pick a sublanguage from the dropdown instead.';
-  }
-
   const sourceDocsLink: string = `${Links.sourceDocs}source_${sourceChapter}${
     sourceVariant !== Variant.DEFAULT && sourceVariant !== Variant.NATIVE ? `_${sourceVariant}` : ''
   }/`;
@@ -58,6 +50,11 @@ const generateIntroductionText = (sourceChapter: Chapter, sourceVariant: Variant
   );
 };
 
-export const generateSourceIntroduction = (sourceChapter: Chapter, sourceVariant: Variant) => {
+// TODO: Remove this after migrated to language config
+const generateSourceIntroduction = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return generateIntroductionText(sourceChapter, sourceVariant);
+};
+
+export const generateLanguageIntroduction = (language: SALanguage) => {
+  return generateSourceIntroduction(language.chapter, language.variant);
 };

@@ -1,13 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GitHubClassroom renders correctly 1`] = `
-"<div className=\\"Academy\\" style={{...}}>
-  <GitHubAssessmentsNavigationBar changeCourseHandler={[Function (anonymous)]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} octokit={{...}} courses={[undefined]} selectedCourse=\\"\\" types={[undefined]} assessmentTypeOverviews={[undefined]} />
-  <Switch>
-    <Route path=\\"/githubassessments/login\\" render={[Function: render]} />
-    <Route path=\\"/githubassessments/welcome\\" component={[Function: component]} />
-    <Route path=\\"/githubassessments/editor\\" component={[Function: C] { displayName: 'withRouter(Connect(GitHubAssessmentWorkspace))', WrappedComponent: [Function: GitHubAssessmentWorkspace], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
-    <Route render={[Function: redirectToLogin]} />
-  </Switch>
-</div>"
+<div
+  className="Academy"
+  style={
+    Object {
+      "overflow": "hidden",
+    }
+  }
+>
+  <GitHubAssessmentsNavigationBar
+    changeCourseHandler={[Function]}
+    handleGitHubLogIn={[Function]}
+    handleGitHubLogOut={[Function]}
+    octokit={
+      Object {
+        "orgs": Object {
+          "listForAuthenticatedUser": [Function],
+        },
+        "repos": Object {
+          "getContent": [Function],
+          "listForAuthenticatedUser": [Function],
+        },
+        "users": Object {
+          "getAuthenticated": [Function],
+        },
+      }
+    }
+    selectedCourse=""
+  />
+  <Routes>
+    <Route
+      element={
+        <ContentDisplay
+          display={
+            <Blueprint4.NonIdealState
+              description="Loading..."
+              icon={<Blueprint4.Spinner />}
+              iconSize={48}
+              layout="vertical"
+            />
+          }
+          loadContentDispatch={[Function]}
+        />
+      }
+      path="login"
+    />
+    <Route
+      element={<GitHubClassroomWelcome />}
+      path="welcome"
+    />
+    <Route
+      element={<GitHubAssessmentWorkspace />}
+      path="editor"
+    />
+    <Route
+      element={
+        <Navigate
+          replace={true}
+          to="login"
+        />
+      }
+      path="*"
+    />
+  </Routes>
+</div>
 `;

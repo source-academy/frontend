@@ -1,24 +1,96 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Navbar renders correctly 1`] = `
-"<Blueprint4.Navbar className=\\"NavigationBar secondary-navbar\\">
-  <Blueprint4.NavbarGroup align=\\"left\\">
-    <NavLink to={{...}} activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
-      <Blueprint4.Icon icon=\\"flame\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+<Blueprint4.Navbar
+  className="NavigationBar secondary-navbar"
+>
+  <Blueprint4.NavbarGroup
+    align="left"
+  >
+    <NavLink
+      className={[Function]}
+      state={
+        Object {
+          "assessmentTypeOverviews": undefined,
+          "courses": Array [],
+          "selectedCourse": "",
+        }
+      }
+      to="/githubassessments/missions"
+    >
+      <Blueprint4.Icon
+        icon="flame"
+      />
+      <div
+        className="navbar-button-text hidden-xs hidden-sm"
+      >
         Missions
       </div>
     </NavLink>
-    <NavLink to={{...}} activeClassName=\\"bp4-active\\" className=\\"NavigationBar__link bp4-button bp4-minimal\\">
-      <Blueprint4.Icon icon=\\"lightbulb\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+    <NavLink
+      className={[Function]}
+      state={
+        Object {
+          "assessmentTypeOverviews": undefined,
+          "courses": Array [],
+          "selectedCourse": "",
+        }
+      }
+      to="/githubassessments/quests"
+    >
+      <Blueprint4.Icon
+        icon="lightbulb"
+      />
+      <div
+        className="navbar-button-text hidden-xs hidden-sm"
+      >
         Quests
       </div>
     </NavLink>
   </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup align=\\"right\\">
-    <Blueprint4.InputGroup disabled={true} leftElement={{...}} placeholder=\\"Select Course\\" onChange={[Function: changeCourseHandler]} value=\\"\\" />
-    <ControlBarGitHubLoginButton onClickLogIn={[Function: handleGitHubLogIn]} onClickLogOut={[Function: handleGitHubLogOut]} />
+  <Blueprint4.NavbarGroup
+    align="right"
+  >
+    <Blueprint4.InputGroup
+      disabled={true}
+      leftElement={
+        <Blueprint4.Popover2
+          boundary="clippingParents"
+          captureDismiss={false}
+          content={<Blueprint4.Menu />}
+          defaultIsOpen={false}
+          disabled={false}
+          fill={false}
+          hasBackdrop={false}
+          hoverCloseDelay={300}
+          hoverOpenDelay={150}
+          inheritDarkTheme={true}
+          interactionKind="click"
+          matchTargetWidth={false}
+          minimal={false}
+          openOnTargetFocus={true}
+          placement="bottom-end"
+          positioningStrategy="absolute"
+          shouldReturnFocusOnClose={false}
+          targetTagName="span"
+          transitionDuration={300}
+          usePortal={true}
+        >
+          <Blueprint4.Button
+            aria-label="choose"
+            minimal={true}
+            rightIcon="caret-down"
+          />
+        </Blueprint4.Popover2>
+      }
+      onChange={[Function]}
+      placeholder="Select Course"
+      value=""
+    />
+    <ControlBarGitHubLoginButton
+      onClickLogIn={[Function]}
+      onClickLogOut={[Function]}
+    />
   </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>"
+</Blueprint4.Navbar>
 `;

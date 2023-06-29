@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { StaticRouter } from 'react-router';
+import { StaticRouter } from 'react-router-dom/server';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import Login from '../Login';
@@ -9,7 +9,9 @@ jest.mock('../../../commons/utils/Constants', () => {
   return {
     __esModule: true,
     default: {
-      authProviders: new Map([['luminus', { name: 'LumiNUS' }]])
+      authProviders: new Map([['luminus', { name: 'LumiNUS' }]]),
+      defaultSourceChapter: 4,
+      defaultSourceVariant: 'default'
     }
   };
 });

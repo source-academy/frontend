@@ -9,6 +9,7 @@ import {
   defaultDashboard,
   defaultFileSystem,
   defaultPlayground,
+  defaultRouter,
   defaultSession,
   defaultStories,
   defaultWorkspaceManager,
@@ -18,6 +19,7 @@ import {
 export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<OverallState> {
   const createStore = (mockStore as any)();
   const state: OverallState = {
+    router: defaultRouter,
     academy: defaultAcademy,
     achievement: defaultAchievement,
     application: defaultApplication,

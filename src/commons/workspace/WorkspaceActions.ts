@@ -44,18 +44,25 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
+  SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
+  TOGGLE_UPDATE_ENV,
+  TOGGLE_USING_ENV,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_ENVSTEPS,
+  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
+  UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceState
@@ -308,6 +315,9 @@ export const setIsEditorReadonly = (
     isEditorReadonly: isEditorReadonly
   });
 
+export const updateSubmissionsTableFilters = (filters: SubmissionsTableFilters) =>
+  action(UPDATE_SUBMISSIONS_TABLE_FILTERS, { filters });
+
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>
   action(UPDATE_CURRENT_ASSESSMENT_ID, {
     assessmentId,
@@ -369,3 +379,20 @@ export const addHtmlConsoleError = (
   workspaceLocation: WorkspaceLocation,
   isStoriesBlock: boolean = false
 ) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, isStoriesBlock });
+
+export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
+
+export const toggleUpdateEnv = (updateEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+  action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
+
+export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPS, { steps, workspaceLocation });
+
+export const updateEnvStepsTotal = (steps: number, workspaceLocation: WorkspaceLocation) =>
+  action(UPDATE_ENVSTEPSTOTAL, { steps, workspaceLocation });
+
+export const updateBreakpointSteps = (
+  breakpointSteps: number[],
+  workspaceLocation: WorkspaceLocation
+) => action(UPDATE_BREAKPOINTSTEPS, { breakpointSteps, workspaceLocation });

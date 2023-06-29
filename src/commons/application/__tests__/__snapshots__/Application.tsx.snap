@@ -1,47 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Application renders correctly 1`] = `
-"<ContextProvider value={{...}}>
-  <div className=\\"Application\\">
-    <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
-    <div className=\\"Application__main\\">
-      <Switch>
-        <Route path=\\"/login\\" component={[Function: Login]} />
-        <Route path=\\"/contributors\\" component={[Function: Contributors]} />
-        <Route path=\\"/callback/github\\" component={[Function: GitHubCallback]} />
-        <Redirect from=\\"/interactive-sicp/:section?\\" to=\\"/sicpjs/:section?\\" />
-        <Route path=\\"/sicpjs/:section?\\" component={[Function: Sicp]} />
-        <Route path=\\"/stories/view/:user/:fileName\\" component={[Function: UserBlog]} />
-        <Route path=\\"/stories/view/:user\\" component={[Function: UserBlogDir]} />
-        <Route path=\\"/stories/new\\" component={[Function: Stories]} />
-        <Route path=\\"/stories\\" component={[Function: Stories]} />
-        <Route path=\\"/githubassessments\\" render={[Function: render]} />
-        <Route path=\\"/courses/:courseId(\\\\\\\\d+)?\\" render={[Function: redirectToLogin]} />
-        <Route path=\\"/welcome\\" render={[Function: redirectToLogin]} />
-        <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" component={[Function: C] { displayName: 'withRouter(Connect(MissionControl))', WrappedComponent: [Function: MissionControl], propTypes: { wrappedComponentRef: [Function: bound checkType] { isRequired: [Function: bound checkType] } } }} />
-        <Route path=\\"/playground\\" render={[Function: redirectToLogin]} />
-        <Redirect from=\\"/\\" exact={true} to=\\"/welcome\\" />
-        <Route component={[Function: NotFound]} />
-      </Switch>
+<Context.Provider
+  value={
+    Array [
+      Object {
+        "editorBinding": "",
+      },
+      [Function],
+    ]
+  }
+>
+  <div
+    className="Application"
+  >
+    <NavigationBar />
+    <div
+      className="Application__main"
+    >
+      <Outlet />
     </div>
   </div>
-</ContextProvider>"
-`;
-
-exports[`Application shows disabled when in disabled period 1`] = `
-"<ContextProvider value={{...}}>
-  <div className=\\"Application\\">
-    <NavigationBar handleLogOut={[Function: handleLogOut]} handleGitHubLogIn={[Function: handleGitHubLogIn]} handleGitHubLogOut={[Function: handleGitHubLogOut]} handleCreateCourse={[Function: handleCreateCourse]} role={[undefined]} name={[undefined]} courses={{...}} courseId={[undefined]} courseShortName={[undefined]} enableAchievements={[undefined]} enableSourcecast={[undefined]} assessmentTypes={[undefined]} />
-    <div className=\\"Application__main\\">
-      <Switch>
-        <Route path=\\"/login\\" component={[Function: Login]} />
-        <Route path=\\"/courses\\" render={[Function: redirectToLogin]} />
-        <Route exact={true} path=\\"/\\" render={[Function: redirectToLogin]} />
-        <Route>
-          <Disabled reason=\\"Testing\\" />
-        </Route>
-      </Switch>
-    </div>
-  </div>
-</ContextProvider>"
+</Context.Provider>
 `;

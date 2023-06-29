@@ -29,7 +29,10 @@ const Login: React.FunctionComponent<{}> = () => {
   const location = useLocation();
   const { code, provider: providerId } = parseQuery(location.search);
 
-  const handleLogin = React.useCallback(providerId => dispatch(login(providerId)), [dispatch]);
+  const handleLogin = React.useCallback(
+    (providerId: string) => dispatch(login(providerId)),
+    [dispatch]
+  );
 
   React.useEffect(() => {
     if (code) {
@@ -92,5 +95,10 @@ const LoginButton = ({
     </Button>
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Login;
+Component.displayName = 'Login';
 
 export default Login;

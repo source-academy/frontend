@@ -19,10 +19,12 @@ import {
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
+import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
+  readonly router: RouterState;
   readonly academy: AcademyState;
   readonly achievement: AchievementState;
   readonly application: ApplicationState;
@@ -106,6 +108,18 @@ export enum Role {
   Admin = 'admin'
 }
 
+export enum SupportedLanguage {
+  JAVASCRIPT = 'JavaScript',
+  SCHEME = 'Scheme',
+  PYTHON = 'Python'
+}
+
+export const SUPPORTED_LANGUAGES = [
+  SupportedLanguage.JAVASCRIPT,
+  SupportedLanguage.SCHEME,
+  SupportedLanguage.PYTHON
+];
+
 /**
  * Defines the languages available for use on Source Academy,
  * including Source sublanguages and other languages e.g. full JS.
@@ -113,7 +127,18 @@ export enum Role {
  */
 export interface SALanguage extends Language {
   displayName: string;
+  mainLanguage: SupportedLanguage;
+  /** Whether the language supports the given features */
+  supports: LanguageFeatures;
 }
+// TODO: Remove Partial type when fully migrated
+type LanguageFeatures = Partial<{
+  dataVisualizer: boolean;
+  substVisualizer: boolean;
+  envVisualizer: boolean;
+  multiFile: boolean;
+  repl: boolean;
+}>;
 
 const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
@@ -129,51 +154,73 @@ const variantDisplay: Map<Variant, string> = new Map([
 export const fullJSLanguage: SALanguage = {
   chapter: Chapter.FULL_JS,
   variant: Variant.DEFAULT,
-  displayName: 'full JavaScript'
+  displayName: 'full JavaScript',
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: { dataVisualizer: true, repl: true }
 };
 
 export const fullTSLanguage: SALanguage = {
   chapter: Chapter.FULL_TS,
   variant: Variant.DEFAULT,
-  displayName: 'full TypeScript'
+  displayName: 'full TypeScript',
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: { dataVisualizer: true, repl: true }
 };
 
 export const htmlLanguage: SALanguage = {
   chapter: Chapter.HTML,
   variant: Variant.DEFAULT,
-  displayName: 'HTML'
+  displayName: 'HTML',
+  mainLanguage: SupportedLanguage.JAVASCRIPT,
+  supports: {}
 };
+
+const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
+  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
+  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
+  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
+  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
+  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
+];
+
+export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
+  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: { repl: true } };
+});
+
+const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
+  { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
+  //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
+  //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
+  //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
+  //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
+];
+
+export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
+  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
+});
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
-  switch (chapter) {
-    case Chapter.FULL_JS:
-      return fullJSLanguage.displayName;
-    case Chapter.FULL_TS:
-      return fullTSLanguage.displayName;
-    case Chapter.HTML:
-      return htmlLanguage.displayName;
-    default:
-      return `Source \xa7${chapter}${
-        variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
-      }`;
-  }
+  return getLanguageConfig(chapter, variant).displayName;
 };
 
-export const sublanguages: Language[] = [
+const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
   { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
+
   { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
+
   { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
   { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
   { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
+
   { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_4, variant: Variant.GPU },
@@ -181,23 +228,59 @@ export const sublanguages: Language[] = [
   { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ];
 
-export const sourceLanguages: SALanguage[] = sublanguages.map(sublang => {
+export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
+  const { chapter, variant } = sublang;
+  const supportedFeatures: LanguageFeatures = {};
+
+  // Enable Data Visualizer for Source Chapter 2 and above
+  supportedFeatures.dataVisualizer = chapter >= Chapter.SOURCE_2;
+
+  // Enable Subst Visualizer only for default Source 1 & 2
+  supportedFeatures.substVisualizer =
+    chapter <= Chapter.SOURCE_2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE);
+
+  // Enable Env Visualizer for Source Chapter 3 and above
+  supportedFeatures.envVisualizer =
+    chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET;
+
+  // Local imports/exports require Source 2+ as Source 1 does not have lists.
+  supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
+
+  // Disable REPL for concurrent variants
+  supportedFeatures.repl = variant !== Variant.CONCURRENT;
+
   return {
     ...sublang,
-    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
+    displayName: `Source \xa7${chapter} ${variantDisplay.get(variant) ?? ''}`.trim(),
+    mainLanguage: SupportedLanguage.JAVASCRIPT,
+    supports: supportedFeatures
   };
 });
 
-export const defaultLanguages = sourceLanguages.filter(
-  sublang => sublang.variant === Variant.DEFAULT
-);
-
-export const variantLanguages = sourceLanguages.filter(
-  sublang => sublang.variant !== Variant.DEFAULT
-);
-
 export const isSourceLanguage = (chapter: Chapter) =>
   [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
+
+export const ALL_LANGUAGES: readonly SALanguage[] = [
+  ...sourceLanguages,
+  fullJSLanguage,
+  fullTSLanguage,
+  htmlLanguage,
+  ...schemeLanguages,
+  ...pyLanguages
+];
+// TODO: Remove this function once logic has been fully migrated
+export const getLanguageConfig = (
+  chapter: Chapter,
+  variant: Variant = Variant.DEFAULT
+): SALanguage => {
+  const languageConfig = ALL_LANGUAGES.find(
+    lang => lang.chapter === chapter && lang.variant === variant
+  );
+  if (!languageConfig) {
+    throw new Error(`Language config not found for chapter ${chapter} variant ${variant}`);
+  }
+  return languageConfig;
+};
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -209,6 +292,8 @@ const currentEnvironment = (): ApplicationEnvironment => {
       return ApplicationEnvironment.Test;
   }
 };
+
+export const defaultRouter: RouterState = null;
 
 export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
@@ -232,8 +317,22 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
+const getDefaultLanguageConfig = (): SALanguage => {
+  const languageConfig = ALL_LANGUAGES.find(
+    sublang =>
+      sublang.chapter === Constants.defaultSourceChapter &&
+      sublang.variant === Constants.defaultSourceVariant
+  );
+  if (!languageConfig) {
+    throw new Error('Cannot find language config to match default chapter and variant');
+  }
+  return languageConfig;
+};
+export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
+
 export const defaultPlayground: PlaygroundState = {
-  githubSaveInfo: { repoName: '', filePath: '' }
+  githubSaveInfo: { repoName: '', filePath: '' },
+  languageConfig: defaultLanguageConfig
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -303,6 +402,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   grading: {
     ...createDefaultWorkspace('grading'),
+    submissionsTableFilters: {
+      columnFilters: [],
+      globalFilter: null
+    },
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false
@@ -310,6 +413,11 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
+    usingEnv: false,
+    updateEnv: true,
+    envSteps: -1,
+    envStepsTotal: 0,
+    breakpointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -358,6 +466,11 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sicp: {
     ...createDefaultWorkspace('sicp'),
     usingSubst: false,
+    usingEnv: false,
+    updateEnv: true,
+    envSteps: -1,
+    envStepsTotal: 0,
+    breakpointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -423,6 +536,7 @@ export const defaultFileSystem: FileSystemState = {
 };
 
 export const defaultState: OverallState = {
+  router: defaultRouter,
   academy: defaultAcademy,
   achievement: defaultAchievement,
   application: defaultApplication,

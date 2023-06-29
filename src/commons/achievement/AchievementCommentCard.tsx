@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router';
 
 import { Assessment } from '../assessment/AssessmentTypes';
-import { history } from '../utils/HistoryHelper';
 import { useTypedSelector } from '../utils/Hooks';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
 const AchievementCommentCard = ({
@@ -13,6 +13,7 @@ const AchievementCommentCard = ({
   assessment: Assessment;
   showToQuestion: boolean;
 }) => {
+  const navigate = useNavigate();
   const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
     () => (questionId: number) => {
@@ -23,9 +24,9 @@ const AchievementCommentCard = ({
 
       const listingPath = `/courses/${courseId}/${assessmentTypeLink(assessment?.type)}`;
       const assessmentWorkspacePath = listingPath + `/${assessment?.id.toString()}`;
-      history.push(assessmentWorkspacePath + `/${questionId}`);
+      navigate(assessmentWorkspacePath + `/${questionId}`);
     },
-    [assessment?.id, assessment?.type, courseId]
+    [assessment?.id, assessment?.type, courseId, navigate]
   );
 
   return (

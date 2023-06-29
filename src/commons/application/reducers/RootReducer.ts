@@ -8,10 +8,12 @@ import { StoriesReducer as stories } from '../../../features/stories/StoriesRedu
 import { FileSystemReducer as fileSystem } from '../../fileSystem/FileSystemReducer';
 import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer';
 import { ApplicationReducer as application } from '../ApplicationReducer';
+import { RouterReducer as router } from './CommonsReducer';
 import { SessionsReducer as session } from './SessionsReducer';
 
 const createRootReducer = () =>
   combineReducers({
+    router,
     academy,
     achievement,
     application,

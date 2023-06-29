@@ -1,23 +1,23 @@
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import { require as acequire } from 'ace-builds';
 import { Provider } from 'react-redux';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
+import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
-import { EditorProps } from '../../editor/Editor';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
-const MockEditor = (props: EditorProps) => <div id="mock-editor">{props.editorValue}</div>;
-// mock editor for testing update
-jest.mock('../../editor/Editor', () => (props: EditorProps) => (
-  <MockEditor {...props}></MockEditor>
-));
 
-const mockedHandleEditorValueChange = jest.fn();
+jest.mock('ace-builds', () => ({
+  ...jest.requireActual('ace-builds'),
+  require: jest.fn()
+}));
+const acequireMock = acequire as jest.Mock;
 
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
-  autogradingResults: [],
   notAttempted: true,
   canSave: true,
   assessmentConfiguration: {
@@ -28,21 +28,7 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
-  programPrependValue: '',
-  programPostpendValue: '',
-  editorTestcases: [],
-  hasUnsavedChanges: false,
-  handleEditorValueChange: mockedHandleEditorValueChange,
-  handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
-  handleReplEval: () => {},
-  handleSave: (id: number, answer: number | string | ContestEntry[]) => {},
-  handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => {},
-  isRunning: false,
-  isDebugging: false,
-  enableDebugging: false,
-  output: [],
-  questionId: 0,
-  replValue: ''
+  questionId: 0
 });
 
 const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
@@ -51,8 +37,7 @@ const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
 
 const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[0],
-  assessmentId: 0,
+  assessmentId: 1,
   questionId: 0
 };
 
@@ -63,86 +48,133 @@ const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = 
 
 const mockGradedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[3],
   assessmentId: 4,
   questionId: 0
 };
 
 const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[0],
-  assessmentId: 0,
+  assessmentId: 1,
   questionId: 2
 };
 
 // set questionId to index 0 since contest voting only has 1 question
 const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
-  assessment: mockAssessments[6],
   assessmentId: 7,
   questionId: 0
 };
 
-const mockStore = mockInitialStore();
-
-test('AssessmentWorkspace page "loading" content renders correctly', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <AssessmentWorkspace {...mockUndefinedAssessmentWorkspaceProps} />
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+const mockStore = mockInitialStore({
+  session: {
+    assessments: new Map(mockAssessments.map(assessment => [assessment.id, assessment]))
+  }
 });
 
-test('AssessmentWorkspace page with programming question renders correctly', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <AssessmentWorkspace {...mockProgrammingAssessmentWorkspaceProps} />
-    </Provider>
+const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
+  const routes = [
+    {
+      path: '/courses/1/missions/1/0',
+      element: (
+        <Provider store={mockStore}>
+          <WorkspaceSettingsContext.Provider
+            value={[{ editorBinding: EditorBinding.NONE }, jest.fn()]}
+          >
+            <AssessmentWorkspace {...props} />
+          </WorkspaceSettingsContext.Provider>
+        </Provider>
+      )
+    }
+  ];
+  return (
+    <RouterProvider
+      router={createMemoryRouter(routes, {
+        initialEntries: ['/courses/1/missions/1/0'],
+        initialIndex: 0
+      })}
+    />
   );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
-});
+};
 
-test('AssessmentWorkspace page with overdue assessment renders correctly', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <AssessmentWorkspace {...mockClosedProgrammingAssessmentWorkspaceProps} />
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
-});
+const renderElement = (props: AssessmentWorkspaceProps) =>
+  render(createMemoryRouterWithRoutes(props));
 
-test('AssessmentWorkspace page with MCQ question renders correctly', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <AssessmentWorkspace {...mockMcqAssessmentWorkspaceProps} />
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
-});
+const getEditor = () => screen.queryByTestId('Editor');
+const getMCQChooser = () => screen.queryByTestId('MCQChooser');
+const getQuestionNumberText = (curr: number, end: number) =>
+  screen.queryByText(`Question ${curr} of ${end}`);
+const getGradingResultTab = (tree: HTMLElement) => tree.querySelector('.GradingResult');
+const getContestVotingTab = (tree: HTMLElement) => tree.querySelector('.ContestEntryVoting');
 
-test('AssessmentWorkspace page with ContestVoting question renders correctly', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <AssessmentWorkspace {...mockContestVotingAssessmentWorkspaceProps} />
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
-});
+describe('AssessmentWorkspace', () => {
+  beforeEach(() => {
+    acequireMock.mockReturnValue({
+      Mode: jest.fn(),
+      setCompleters: jest.fn()
+    });
+  });
 
-test('AssessmentWorkspace renders Grading tab correctly if the question has been graded', () => {
-  const app = (
-    <Provider store={mockStore}>
-      <AssessmentWorkspace {...mockGradedProgrammingAssessmentWorkspaceProps} />
-    </Provider>
-  );
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
-  // Uncomment when fixed
-  // expect(tree.find('.grading-icon').hostNodes()).toHaveLength(1);
+  test('AssessmentWorkspace page "loading" content renders correctly', () => {
+    const app = createMemoryRouterWithRoutes(mockUndefinedAssessmentWorkspaceProps);
+    const tree = renderTreeJson(app);
+    expect(tree).toMatchSnapshot();
+
+    render(app);
+    screen.getByText('Getting mission ready...');
+  });
+
+  test('AssessmentWorkspace page with programming question renders correctly', () => {
+    const { container } = renderElement(mockProgrammingAssessmentWorkspaceProps);
+
+    expect(container).toMatchSnapshot();
+    expect(getEditor()).toBeTruthy();
+    expect(getMCQChooser()).toBeNull();
+    expect(getQuestionNumberText(1, 5)).toBeTruthy();
+    expect(getGradingResultTab(container)).toBeNull();
+    expect(getContestVotingTab(container)).toBeNull();
+  });
+
+  test('AssessmentWorkspace page with overdue assessment renders correctly', () => {
+    const { container } = renderElement(mockClosedProgrammingAssessmentWorkspaceProps);
+
+    expect(container).toMatchSnapshot();
+    expect(getEditor()).toBeTruthy();
+    expect(getMCQChooser()).toBeNull();
+    expect(getQuestionNumberText(1, 5)).toBeTruthy();
+    expect(getGradingResultTab(container)).toBeNull();
+    expect(getContestVotingTab(container)).toBeNull();
+  });
+
+  test('AssessmentWorkspace page with MCQ question renders correctly', () => {
+    const { container } = renderElement(mockMcqAssessmentWorkspaceProps);
+
+    expect(container).toMatchSnapshot();
+    expect(getEditor()).toBeNull();
+    expect(getMCQChooser()).toBeTruthy();
+    expect(getQuestionNumberText(3, 5)).toBeTruthy();
+    expect(getGradingResultTab(container)).toBeNull();
+    expect(getContestVotingTab(container)).toBeNull();
+  });
+
+  test('AssessmentWorkspace page with ContestVoting question renders correctly', () => {
+    const { container } = renderElement(mockContestVotingAssessmentWorkspaceProps);
+
+    expect(container).toMatchSnapshot();
+    expect(getEditor()).toBeTruthy();
+    expect(getMCQChooser()).toBeNull();
+    expect(getQuestionNumberText(1, 1)).toBeTruthy();
+    expect(getGradingResultTab(container)).toBeNull();
+    expect(getContestVotingTab(container)).toBeTruthy();
+  });
+
+  test('AssessmentWorkspace renders Grading tab correctly if the question has been graded', () => {
+    const { container } = renderElement(mockGradedProgrammingAssessmentWorkspaceProps);
+
+    expect(container).toMatchSnapshot();
+    expect(getEditor()).toBeTruthy();
+    expect(getMCQChooser()).toBeNull();
+    expect(getQuestionNumberText(1, 2)).toBeTruthy();
+    expect(getGradingResultTab(container)).toBeTruthy();
+    expect(getContestVotingTab(container)).toBeNull();
+  });
 });

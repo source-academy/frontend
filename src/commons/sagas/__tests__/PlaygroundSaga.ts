@@ -15,7 +15,10 @@ import {
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import Constants from '../../utils/Constants';
-import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../utils/notifications/NotificationsHelper';
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 
 describe('Playground saga tests', () => {
@@ -79,7 +82,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -141,7 +149,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -203,7 +216,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -248,7 +266,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -312,7 +335,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };
@@ -365,7 +393,12 @@ describe('Playground saga tests', () => {
               highlightedLines: []
             }
           ],
-          usingSubst: false
+          usingSubst: false,
+          usingEnv: false,
+          updateEnv: true,
+          envSteps: -1,
+          envStepsTotal: 0,
+          breakpointSteps: []
         }
       }
     };

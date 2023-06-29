@@ -1,9 +1,7 @@
-import { shallow } from 'enzyme';
-import moment from 'moment';
-import Constants from 'src/commons/utils/Constants';
+import { useSelector } from 'react-redux';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
-import { mockRouterProps } from '../../mocks/ComponentMocks';
-import Application, { ApplicationProps } from '../Application';
+import Application from '../Application';
 
 // JSDOM does not implement window.matchMedia, so we have to mock it.
 window.matchMedia =
@@ -16,37 +14,17 @@ window.matchMedia =
     };
   };
 
-const props: ApplicationProps = {
-  ...mockRouterProps('/playground', {}),
-  courses: [],
-  handleLogOut: () => {},
-  handleGitHubLogIn: () => {},
-  handleGitHubLogOut: () => {},
-  fetchUserAndCourse: () => {},
-  handleCreateCourse: () => {},
-  updateCourseResearchAgreement: () => {}
-};
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux'),
+  useDispatch: jest.fn(),
+  useSelector: jest.fn()
+}));
+const useSelectorMock = useSelector as jest.Mock;
 
 test('Application renders correctly', () => {
-  const app = <Application {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
-});
+  useSelectorMock.mockReturnValue({ name: 'Bob' });
 
-test('Application shows disabled when in disabled period', () => {
-  const origPeriods = Constants.disablePeriods;
-  const now = moment();
-  Constants.disablePeriods = [
-    {
-      start: now.clone().subtract(1, 'minute'),
-      end: now.clone().add(1, 'minute'),
-      reason: 'Testing'
-    }
-  ];
-
-  const app = <Application {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
-
-  Constants.disablePeriods = origPeriods;
+  const app = <Application />;
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });

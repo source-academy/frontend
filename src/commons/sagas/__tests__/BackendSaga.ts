@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
-import { history } from 'src/commons/utils/HistoryHelper';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -23,7 +23,13 @@ import {
   updateLatestViewedCourse,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import { GameState, Role, SALanguage, Story } from '../../application/ApplicationTypes';
+import {
+  GameState,
+  Role,
+  SALanguage,
+  Story,
+  SupportedLanguage
+} from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -74,7 +80,10 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
-import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../utils/notifications/NotificationsHelper';
 import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {
   CHANGE_SUBLANGUAGE,
@@ -243,7 +252,15 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
   }
 ];
 
+const mockRouter = createMemoryRouter([
+  {
+    path: '/',
+    element: null
+  }
+]);
+
 const mockStates = {
+  router: mockRouter,
   session: {
     assessmentOverviews: mockAssessmentOverviews,
     assessments: mockMapAssessments,
@@ -280,6 +297,7 @@ describe('Test FETCH_AUTH action', () => {
 
   test('when tokens, user, course registration and course configuration are obtained', () => {
     return expectSaga(BackendSaga)
+      .withState(mockStates)
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .put(setTokens(mockTokens))
       .call(getUser, mockTokens)
@@ -301,6 +319,7 @@ describe('Test FETCH_AUTH action', () => {
 
   test('when tokens is null', () => {
     return expectSaga(BackendSaga)
+      .withState(mockStates)
       .provide([[call(postAuth, code, providerId, clientId, redirectUrl), null]])
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .not.put.actionType(SET_TOKENS)
@@ -317,6 +336,7 @@ describe('Test FETCH_AUTH action', () => {
   test('when user is obtained (user has no courses), but course registration, course configuration and assessmentConfigurations are null', () => {
     const userWithNoCourse = { ...user, courses: [] };
     return expectSaga(BackendSaga)
+      .withState(mockStates)
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [
@@ -773,7 +793,9 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
     const sublang: SALanguage = {
       chapter: Chapter.SOURCE_4,
       variant: Variant.GPU,
-      displayName: 'Source \xa74 GPU'
+      displayName: 'Source \xa74 GPU',
+      mainLanguage: SupportedLanguage.JAVASCRIPT,
+      supports: {}
     };
 
     return expectSaga(BackendSaga)
@@ -992,7 +1014,6 @@ describe('Test CREATE_COURSE action', () => {
         placeholderAssessmentConfig,
         courseRegistration.courseId
       )
-      .call([history, 'push'], `/courses/${courseRegistration.courseId}`)
       .call.fn(showSuccessMessage)
       .provide([
         [call(postCreateCourse, mockTokens, courseConfig), okResp],
@@ -1005,8 +1026,7 @@ describe('Test CREATE_COURSE action', () => {
             courseRegistration.courseId
           ),
           okResp
-        ],
-        [call([history, 'push'], `/courses/${courseRegistration.courseId}`), undefined]
+        ]
       ])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();
@@ -1021,7 +1041,6 @@ describe('Test CREATE_COURSE action', () => {
       .not.put.actionType(SET_COURSE_REGISTRATION)
       .not.call.fn(putAssessmentConfigs)
       .not.call.fn(showSuccessMessage)
-      .not.call.fn(history.push)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
       .dispatch({ type: CREATE_COURSE, payload: courseConfig })
       .silentRun();

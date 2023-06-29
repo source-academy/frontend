@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getStory } from '../../features/github/GitHubUtils';
@@ -28,5 +27,10 @@ const UserBlog: React.FC = () => {
     </div>
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = UserBlog;
+Component.displayName = 'UserBlog';
 
 export default UserBlog;

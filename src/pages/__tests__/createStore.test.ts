@@ -1,7 +1,11 @@
 import { Variant } from 'js-slang/dist/types';
 import { compressToUTF16 } from 'lz-string';
 
-import { defaultState, OverallState } from '../../commons/application/ApplicationTypes';
+import {
+  defaultLanguageConfig,
+  defaultState,
+  OverallState
+} from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import Constants from '../../commons/utils/Constants';
 import { createStore } from '../createStore';
@@ -38,7 +42,8 @@ const mockChangedStoredState: SavedState = {
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
-  playgroundExternalLibrary: 'NONE' as ExternalLibraryName
+  playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
+  playgroundLanguage: defaultLanguageConfig
 };
 
 const mockChangedState: OverallState = {

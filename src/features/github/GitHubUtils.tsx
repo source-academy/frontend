@@ -8,7 +8,10 @@ import {
 import { actions } from '../../commons/utils/ActionsHelper';
 import Constants from '../../commons/utils/Constants';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
-import { showSuccessMessage, showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
 import { GithubGetRepoRespData } from './GitHubTypes';
 
