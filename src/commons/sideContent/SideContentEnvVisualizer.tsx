@@ -168,169 +168,166 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
         };
 
     return (
-      <HotKeys keyMap={envVizKeyMap} handlers={envVizHandlers}>
-        <div>
-          <div className={classNames('sa-substituter', Classes.DARK)}>
-            <Slider
-              disabled={!this.state.visualization}
-              min={1}
-              max={this.props.numOfStepsTotal}
-              onChange={this.sliderShift}
-              onRelease={this.sliderRelease}
-              value={this.state.value < 1 ? 1 : this.state.value}
-            />
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <ButtonGroup>
-                <Tooltip2 content="Agenda and Stash" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization && EnvVisualizer.getCompactLayout()) {
-                        EnvVisualizer.toggleAgendaStash();
-                        EnvVisualizer.redraw();
-                      }
-                    }}
-                    icon="layers"
-                    disabled={!this.state.visualization || !EnvVisualizer.getCompactLayout()}
-                  >
-                    <Checkbox
-                      checked={EnvVisualizer.getAgendaStash()}
-                      disabled={!EnvVisualizer.getCompactLayout()}
-                    />
-                  </AnchorButton>
-                </Tooltip2>
-                <Tooltip2 content="Truncate Agenda" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization && EnvVisualizer.getAgendaStash()) {
-                        EnvVisualizer.toggleStackTruncated();
-                        EnvVisualizer.redraw();
-                      }
-                    }}
-                    icon="minimize"
-                    disabled={!this.state.visualization || !EnvVisualizer.getAgendaStash()}
-                  >
-                    <Checkbox
-                      checked={EnvVisualizer.getStackTruncated()}
-                      disabled={!EnvVisualizer.getAgendaStash()}
-                    />
-                  </AnchorButton>
-                </Tooltip2>
-              </ButtonGroup>
-              <ButtonGroup>
-                <Button
-                  disabled={!this.state.visualization}
-                  icon="double-chevron-left"
-                  onClick={this.stepPrevBreakpoint}
-                />
-                <Button
-                  disabled={!this.state.visualization}
-                  icon="chevron-left"
-                  onClick={this.stepPrevious}
-                />
-                <Button
-                  disabled={!this.state.visualization}
-                  icon="chevron-right"
-                  onClick={this.stepNext}
-                />
-                <Button
-                  disabled={!this.state.visualization}
-                  icon="double-chevron-right"
-                  onClick={this.stepNextBreakpoint}
-                />
-              </ButtonGroup>
-              <ButtonGroup>
-                <Tooltip2 content="Experimental" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        EnvVisualizer.toggleCompactLayout();
-                        EnvVisualizer.redraw();
-                      }
-                    }}
-                    icon="build"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={!EnvVisualizer.getCompactLayout()}
-                      disabled={!this.state.visualization}
-                    />
-                  </AnchorButton>
-                </Tooltip2>
-                <Tooltip2 content="Print" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        EnvVisualizer.togglePrintableMode();
-                        EnvVisualizer.redraw();
-                      }
-                    }}
-                    icon="print"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      disabled={!this.state.visualization}
-                      checked={EnvVisualizer.getPrintableMode()}
-                    />
-                  </AnchorButton>
-                </Tooltip2>
-                <Tooltip2 content="Save" compact>
-                  <AnchorButton
-                    icon="floppy-disk"
-                    disabled={!this.state.visualization}
-                    onClick={Layout.exportImage}
+      <HotKeys
+        keyMap={envVizKeyMap}
+        handlers={envVizHandlers}
+        style={{
+          maxHeight: '465px',
+          overflow: this.state.visualization ? 'hidden' : 'auto'
+        }}
+      >
+        <div className={classNames('sa-substituter', Classes.DARK)}>
+          <Slider
+            disabled={!this.state.visualization}
+            min={1}
+            max={this.props.numOfStepsTotal}
+            onChange={this.sliderShift}
+            onRelease={this.sliderRelease}
+            value={this.state.value < 1 ? 1 : this.state.value}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <ButtonGroup>
+              <Tooltip2 content="Agenda and Stash" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization && EnvVisualizer.getCompactLayout()) {
+                      EnvVisualizer.toggleAgendaStash();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="layers"
+                  disabled={!this.state.visualization || !EnvVisualizer.getCompactLayout()}
+                >
+                  <Checkbox
+                    checked={EnvVisualizer.getAgendaStash()}
+                    disabled={!EnvVisualizer.getCompactLayout()}
                   />
-                </Tooltip2>
-              </ButtonGroup>
-            </div>
-          </div>{' '}
-          <div
-            style={{
-              height: '340px',
-              width: '600px',
-              overflow: this.state.visualization ? 'hidden' : 'auto'
-            }}
-          >
-            {this.state.visualization || (
-              <div
-                id="env-visualizer-default-text"
-                className={Classes.RUNNING_TEXT}
-                data-testid="env-visualizer-default-text"
-              >
-                The environment model visualizer generates environment model diagrams following a
-                notation introduced in{' '}
-                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-                  <i>
-                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
-                    3, Section 2
-                  </i>
-                </a>
-                .
-                <br />
-                <br /> On this tab, the REPL will be hidden from view, so do check that your code
-                has no errors before running the stepper. You may use this tool by running your
-                program and then dragging the slider above to see the state of the environment at
-                different stages in the evaluation of your program. Clicking on the fast-forward
-                button (double chevron) will take you to the next breakpoint in your program
-                <br />
-                <br />
-                <Divider />
-                Some useful keyboard shortcuts:
-                <br />
-                <br />
-                a: Move to the first step
-                <br />
-                e: Move to the last step
-                <br />
-                f: Move to the next step
-                <br />
-                b: Move to the previous step
-                <br />
-                <br />
-                Note that these shortcuts are only active when the browser focus is on this tab.
-              </div>
-            )}
+                </AnchorButton>
+              </Tooltip2>
+              <Tooltip2 content="Truncate Agenda" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization && EnvVisualizer.getAgendaStash()) {
+                      EnvVisualizer.toggleStackTruncated();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="minimize"
+                  disabled={!this.state.visualization || !EnvVisualizer.getAgendaStash()}
+                >
+                  <Checkbox
+                    checked={EnvVisualizer.getStackTruncated()}
+                    disabled={!EnvVisualizer.getAgendaStash()}
+                  />
+                </AnchorButton>
+              </Tooltip2>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button
+                disabled={!this.state.visualization}
+                icon="double-chevron-left"
+                onClick={this.stepPrevBreakpoint}
+              />
+              <Button
+                disabled={!this.state.visualization}
+                icon="chevron-left"
+                onClick={this.stepPrevious}
+              />
+              <Button
+                disabled={!this.state.visualization}
+                icon="chevron-right"
+                onClick={this.stepNext}
+              />
+              <Button
+                disabled={!this.state.visualization}
+                icon="double-chevron-right"
+                onClick={this.stepNextBreakpoint}
+              />
+            </ButtonGroup>
+            <ButtonGroup>
+              <Tooltip2 content="Experimental" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      EnvVisualizer.toggleCompactLayout();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="build"
+                  disabled={!this.state.visualization}
+                >
+                  <Checkbox
+                    checked={!EnvVisualizer.getCompactLayout()}
+                    disabled={!this.state.visualization}
+                  />
+                </AnchorButton>
+              </Tooltip2>
+              <Tooltip2 content="Print" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      EnvVisualizer.togglePrintableMode();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="print"
+                  disabled={!this.state.visualization}
+                >
+                  <Checkbox
+                    disabled={!this.state.visualization}
+                    checked={EnvVisualizer.getPrintableMode()}
+                  />
+                </AnchorButton>
+              </Tooltip2>
+              <Tooltip2 content="Save" compact>
+                <AnchorButton
+                  icon="floppy-disk"
+                  disabled={!this.state.visualization}
+                  onClick={Layout.exportImage}
+                />
+              </Tooltip2>
+            </ButtonGroup>
           </div>
-        </div>
+        </div>{' '}
+        {this.state.visualization || (
+          <div
+            id="env-visualizer-default-text"
+            className={Classes.RUNNING_TEXT}
+            data-testid="env-visualizer-default-text"
+          >
+            The environment model visualizer generates environment model diagrams following a
+            notation introduced in{' '}
+            <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+              <i>
+                Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
+                Section 2
+              </i>
+            </a>
+            .
+            <br />
+            <br /> On this tab, the REPL will be hidden from view, so do check that your code has no
+            errors before running the stepper. You may use this tool by running your program and
+            then dragging the slider above to see the state of the environment at different stages
+            in the evaluation of your program. Clicking on the fast-forward button (double chevron)
+            will take you to the next breakpoint in your program
+            <br />
+            <br />
+            <Divider />
+            Some useful keyboard shortcuts:
+            <br />
+            <br />
+            a: Move to the first step
+            <br />
+            e: Move to the last step
+            <br />
+            f: Move to the next step
+            <br />
+            b: Move to the previous step
+            <br />
+            <br />
+            Note that these shortcuts are only active when the browser focus is on this tab.
+          </div>
+        )}
       </HotKeys>
     );
   }

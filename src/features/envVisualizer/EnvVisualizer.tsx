@@ -114,7 +114,7 @@ export default class EnvVisualizer {
         this.setVis(Layout.currentStackLight);
       } else if (
         EnvVisualizer.getCompactLayout() &&
-        EnvVisualizer.getPrintableMode() &&
+        !EnvVisualizer.getPrintableMode() &&
         EnvVisualizer.getAgendaStash() &&
         EnvVisualizer.getStackTruncated() &&
         Layout.currentStackTruncDark !== undefined
@@ -125,9 +125,9 @@ export default class EnvVisualizer {
         !EnvVisualizer.getPrintableMode() &&
         EnvVisualizer.getAgendaStash() &&
         !EnvVisualizer.getStackTruncated() &&
-        Layout.currentStackLight !== undefined
+        Layout.currentStackDark !== undefined
       ) {
-        this.setVis(Layout.currentStackLight);
+        this.setVis(Layout.currentStackDark);
       } else if (
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&

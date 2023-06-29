@@ -546,7 +546,7 @@ export class Layout {
             style={{
               width: Layout.visibleWidth,
               height: Layout.visibleHeight,
-              overflow: 'auto'
+              overflow: 'hidden'
             }}
           >
             <div
