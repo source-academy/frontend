@@ -2,30 +2,21 @@ import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
+import { AgendaItemComponent } from '../AgendaItemComponent';
 import { Frame } from '../Frame';
-import { StackItemComponent } from '../StackItemComponent';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
-export class ArrowFromStackItemComponent extends GenericArrow<
-  StackItemComponent,
+export class ArrowFromAgendaItemComponent extends GenericArrow<
+  AgendaItemComponent,
   Frame | FnValue | GlobalFnValue
 > {
-  constructor(from: StackItemComponent, readonly isAgenda: boolean) {
-    super(from);
-  }
-
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
     if (!to) return [];
 
-    const steps: StepsArray = [
-      (x, y) => [
-        x + from.width() / (this.isAgenda ? 1 : 2),
-        y + from.height() / (this.isAgenda ? 2 : 1)
-      ]
-    ];
+    const steps: StepsArray = [(x, y) => [x + from.width() / 1, y + from.height() / 2]];
 
     if (to.x() < from.x()) {
       steps.push((x, y) => [x + CompactConfig.TextMargin, y]);

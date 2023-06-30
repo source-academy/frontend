@@ -12,29 +12,31 @@ import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
   getTextHeight,
-  getTextWidth,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
   truncateText
 } from '../EnvVisualizerUtils';
-import { ArrowFromStackItemComponent } from './arrows/ArrowFromStackItemComponent';
+import { ArrowFromAgendaItemComponent } from './arrows/ArrowFromAgendaItemComponent';
 import { Frame } from './Frame';
 
-export class StackItemComponent extends Visible implements IHoverable {
+export class AgendaItemComponent extends Visible implements IHoverable {
+  /** text to display */
   readonly text: string;
-  readonly arrow?: ArrowFromStackItemComponent;
-  readonly codeTooltip?: string;
-  readonly codeLabelRef?: RefObject<any>;
+  /** text to display on hover */
+  readonly tooltip: string;
+  readonly tooltipRef: RefObject<any>;
+  readonly arrow?: ArrowFromAgendaItemComponent;
 
   constructor(
     readonly value: any,
-    readonly isAgenda: boolean,
     stackHeightWidth: number,
-    arrowTo?: Frame | FnValue | GlobalFnValue,
-    readonly highlightOnHover?: () => void,
-    readonly unhighlightOnHover?: () => void
+    /** callback function to highlight editor lines on hover */
+    readonly highlightOnHover: () => void,
+    /** callback function to unhighlight editor lines after hover */
+    readonly unhighlightOnHover: () => void,
+    arrowTo?: Frame | FnValue | GlobalFnValue
   ) {
     super();
     this.text = truncateText(
@@ -42,54 +44,40 @@ export class StackItemComponent extends Visible implements IHoverable {
       AgendaStashConfig.AgendaMaxTextWidth,
       AgendaStashConfig.AgendaMaxTextHeight
     );
-    this._width = this.isAgenda
-      ? AgendaStashConfig.AgendaItemWidth
-      : Math.min(
-          AgendaStashConfig.AgendaItemTextPadding * 2 +
-            getTextWidth(
-              this.text,
-              `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`
-            ),
-          AgendaStashConfig.AgendaItemWidth
-        );
+    this.tooltip = this.value;
+    this.tooltipRef = React.createRef();
+    this.highlightOnHover = highlightOnHover;
+    this.unhighlightOnHover = unhighlightOnHover;
+    this._x = AgendaStashConfig.AgendaPosX;
+    this._y = AgendaStashConfig.AgendaPosY + stackHeightWidth;
+    this._width = AgendaStashConfig.AgendaItemWidth;
     this._height =
-      (this.isAgenda
-        ? getTextHeight(
-            this.text,
-            isAgenda ? AgendaStashConfig.AgendaMaxTextWidth : AgendaStashConfig.StashMaxTextWidth,
-            `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`,
-            AgendaStashConfig.FontSize
-          )
-        : AgendaStashConfig.StashMaxTextHeight) +
+      getTextHeight(
+        this.text,
+        AgendaStashConfig.AgendaMaxTextWidth,
+        `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`,
+        AgendaStashConfig.FontSize
+      ) +
       AgendaStashConfig.AgendaItemTextPadding * 2;
-    this._x = isAgenda
-      ? AgendaStashConfig.AgendaPosX
-      : AgendaStashConfig.StashPosX + stackHeightWidth;
-    this._y = isAgenda
-      ? AgendaStashConfig.AgendaPosY + stackHeightWidth
-      : AgendaStashConfig.StashPosY;
     if (arrowTo) {
-      this.arrow = new ArrowFromStackItemComponent(this, this.isAgenda);
-      this.arrow.to(arrowTo);
-    }
-    if (isAgenda) {
-      this.codeTooltip = this.value;
-      this.codeLabelRef = React.createRef();
+      this.arrow = new ArrowFromAgendaItemComponent(this).to(
+        arrowTo
+      ) as ArrowFromAgendaItemComponent;
     }
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    this.highlightOnHover?.();
+    this.highlightOnHover();
     setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
-    this.codeLabelRef?.current.show();
+    this.tooltipRef.current.show();
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
     this.unhighlightOnHover?.();
     setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
-    this.codeLabelRef?.current.hide();
+    this.tooltipRef.current.hide();
   };
 
   destroy() {
@@ -129,28 +117,26 @@ export class StackItemComponent extends Visible implements IHoverable {
             height={this.height()}
           />
         </Label>
-        {this.codeLabelRef && (
-          <Label
-            x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
-            y={this.y() - CompactConfig.TextPaddingY}
-            visible={false}
-            ref={this.codeLabelRef}
-          >
-            <Tag
-              stroke="black"
-              fill={'black'}
-              opacity={Number(AgendaStashConfig.NodeTooltipOpacity)}
-            />
-            <Text
-              text={this.codeTooltip}
-              fontFamily={CompactConfig.FontFamily.toString()}
-              fontSize={Number(CompactConfig.FontSize)}
-              fontStyle={CompactConfig.FontStyle.toString()}
-              fill={CompactConfig.SA_WHITE.toString()}
-              padding={5}
-            />
-          </Label>
-        )}
+        <Label
+          x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
+          y={this.y() - CompactConfig.TextPaddingY}
+          visible={false}
+          ref={this.tooltipRef}
+        >
+          <Tag
+            stroke="black"
+            fill={'black'}
+            opacity={Number(AgendaStashConfig.NodeTooltipOpacity)}
+          />
+          <Text
+            text={this.tooltip}
+            fontFamily={CompactConfig.FontFamily.toString()}
+            fontSize={Number(CompactConfig.FontSize)}
+            fontStyle={CompactConfig.FontStyle.toString()}
+            fill={CompactConfig.SA_WHITE.toString()}
+            padding={5}
+          />
+        </Label>
         {this.arrow?.draw()}
       </React.Fragment>
     );

@@ -4,8 +4,9 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
+import { AgendaStack } from './compactComponents/AgendaStack';
 import { Level as CompactLevel } from './compactComponents/Level';
-import { Stack } from './compactComponents/Stack';
+import { StashStack } from './compactComponents/StashStack';
 import { ArrayValue as CompactArrayValue } from './compactComponents/values/ArrayValue';
 import { FnValue as CompactFnValue } from './compactComponents/values/FnValue';
 import { GlobalFnValue as CompactGlobalFnValue } from './compactComponents/values/GlobalFnValue';
@@ -77,8 +78,8 @@ export class Layout {
   /** the agenda and stash */
   static agenda: Agenda;
   static stash: Stash;
-  static agendaComponent: Stack;
-  static stashComponent: Stack;
+  static agendaComponent: AgendaStack;
+  static stashComponent: StashStack;
   static stashComponentX: number;
 
   /** memoized values */
@@ -218,7 +219,7 @@ export class Layout {
   }
 
   static initializeAgendaStash() {
-    this.agendaComponent = new Stack(this.agenda);
+    this.agendaComponent = new AgendaStack(this.agenda);
     if (EnvVisualizer.getCompactLayout()) {
       Layout.stashComponentX =
         Layout.compactLevels[0].x() +
@@ -227,10 +228,10 @@ export class Layout {
           0
         ) +
         Config.CanvasPaddingX * 2;
-      this.stashComponent = new Stack(this.stash);
+      this.stashComponent = new StashStack(this.stash);
     } else {
       Layout.stashComponentX = this.grid.x() + this.grid.width() + Config.CanvasPaddingX * 2;
-      this.stashComponent = new Stack(this.stash);
+      this.stashComponent = new StashStack(this.stash);
     }
   }
 
