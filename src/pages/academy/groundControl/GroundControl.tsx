@@ -66,17 +66,17 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
 
   const tableFilters = useTypedSelector(state => state.workspaces.groundControl.GroundControlTableFilters);
   
-  const defaultFilters = [];
-  if (!tableFilters.columnFilters.find(filter => filter.id === 'type')) {
-    defaultFilters.push({
-      id: 'type',
-      value: ""
-    });
-  }
+  // const defaultFilters = [];
+  // if (!tableFilters.columnFilters.find(filter => filter.id === 'type')) {
+  //   defaultFilters.push({
+  //     id: 'type',
+  //     value: ""
+  //   });
+  // }
   
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters,
-    ...defaultFilters
+    // ...defaultFilters
   ]);
 
   const toggleDropzone = () => {
