@@ -14,7 +14,7 @@ import { updateStoriesContent } from 'src/features/stories/StoriesActions';
 import ControlBar, { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
-const Stories = () => {
+const NewStory: React.FC = () => {
   const dispatch = useDispatch();
   const [lastEdit, setLastEdit] = useState(new Date());
   const [editorScrollTop, setEditorScrollTop] = useState(0);
@@ -38,7 +38,7 @@ const Stories = () => {
 
   const content = useTypedSelector(store => store.stories.content);
 
-  const onEditorValueChange = useCallback(val => {
+  const onEditorValueChange = useCallback((val: string) => {
     setLastEdit(new Date());
     dispatch(updateStoriesContent(val));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,4 +113,4 @@ const Stories = () => {
 export const Component = NewStory;
 Component.displayName = 'NewStory';
 
-export default Stories;
+export default NewStory;

@@ -18,7 +18,7 @@ const UserBlogDir: React.FC<UserBlogDirProps> = () => {
   const { user } = useParams<{ user: string }>();
   const [repoData, setRepoData] = useState<GithubGetRepoRespData[]>([]);
   useEffect(() => {
-    getFilesFromStoryRepo(user).then(res => {
+    getFilesFromStoryRepo(user!).then(res => {
       setRepoData(res);
     });
   }, [user]);

@@ -1,5 +1,5 @@
 import Constants from 'src/commons/utils/Constants';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 export const getStories = async (): Promise<Response | null> => {
   try {
