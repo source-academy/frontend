@@ -41,6 +41,7 @@ import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer'
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
+import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
 export type GroundControlProps = DispatchProps & StateProps;
 
@@ -116,6 +117,10 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
       header: 'Close Date',
       cell: info => <EditCell handleAssessmentChangeDate={props.handleAssessmentChangeDate} data={info.row.original} forOpenDate={false} />,
       enableSorting: true,
+    }),
+    columnHelper.accessor('maxTeamSize', {
+      header: "Max Team Size",
+      cell: info => <EditTeamSizeCell data={info.row.original}></EditTeamSizeCell>
     }),
     columnHelper.accessor('isPublished', {
       header: 'Publish',
@@ -197,21 +202,21 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
                 <TableHeaderCell key={header.id}>
                   {header.isPlaceholder ? null : (
                       <div
-                        {...{
-                          className: header.column.getCanSort()
-                            ? 'cursor-pointer select-none'
-                            : '',
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
+                        // {...{
+                        //   className: header.column.getCanSort()
+                        //     ? 'cursor-pointer select-none'
+                        //     : '',
+                        //   onClick: header.column.getToggleSortingHandler(),
+                        // }}
                       >
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {{
+                        {/* {{
                           asc: ' 🔼',
                           desc: ' 🔽',
-                        }[header.column.getIsSorted() as string] ?? null}
+                        }[header.column.getIsSorted() as string] ?? null} */}
                       </div>
                     )}
                 </TableHeaderCell>

@@ -72,6 +72,7 @@ export type AssessmentOverview = {
   story: string | null;
   title: string;
   xp: number;
+  maxTeamSize: number; // For team assessment
 };
 
 /*
@@ -240,7 +241,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
     xp: 0,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    maxTeamSize: 1
   };
 };
 
