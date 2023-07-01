@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { RouteComponentProps, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { GithubGetRepoRespData } from 'src/features/github/GitHubTypes';
 
 import { getFilesFromStoryRepo } from '../../features/github/GitHubUtils';
@@ -12,9 +12,7 @@ function getFileExtension(fileName: string): string {
 const FILE = 'file';
 const MARKDOWN = 'md';
 
-type UserBlogDirProps = RouteComponentProps<{}>;
-
-const UserBlogDir: React.FC<UserBlogDirProps> = () => {
+const UserBlogDir: React.FC = () => {
   const { user } = useParams<{ user: string }>();
   const [repoData, setRepoData] = useState<GithubGetRepoRespData[]>([]);
   useEffect(() => {
