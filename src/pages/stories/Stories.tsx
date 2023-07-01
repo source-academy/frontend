@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
 
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
-const Stories = () => {
+const Stories: React.FC = () => {
   const [user, setUser] = useState<string>('');
   const [data, setData] = useState<any[]>([]);
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     setUser(e.currentTarget.value);
   };
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleSubmit = (): void => {
     if (user !== '') {
-      history.push(`/stories/view/${user}`);
+      navigate(`/stories/view/${user}`);
     }
   };
 

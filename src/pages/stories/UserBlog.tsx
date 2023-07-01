@@ -10,7 +10,7 @@ const UserBlog: React.FC = () => {
   const [content, setContent] = useState<string | null>('');
 
   useEffect(() => {
-    getStory(user, fileName).then(res => {
+    getStory(user!, fileName!).then(res => {
       setContent(res);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
