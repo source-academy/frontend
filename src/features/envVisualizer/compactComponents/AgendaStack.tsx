@@ -1,6 +1,6 @@
 import * as es from 'estree';
 import { Agenda } from 'js-slang/dist/ec-evaluator/interpreter';
-import { AgendaItem, Instr, InstrType } from 'js-slang/dist/ec-evaluator/types';
+import { AgendaItem, Instr } from 'js-slang/dist/ec-evaluator/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
@@ -57,12 +57,6 @@ export class AgendaStack extends Visible implements IHoverable {
 
     this.stackItemComponents = this.agenda
       .getStack()
-      .filter(item => {
-        // Hide push undefined if needed instructions
-        // This makes a step hidden in the env viz
-        // TODO: This should be refactored
-        return !(isInstr(item) && item.instrType === InstrType.PUSH_UNDEFINED_IF_NEEDED);
-      })
       .slice(EnvVisualizer.getStackTruncated() ? this.agenda.size() - 10 : 0)
       .map(agendaItemToComponent);
   }
