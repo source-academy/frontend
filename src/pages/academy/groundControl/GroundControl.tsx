@@ -93,6 +93,10 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
   }, [columnFilters, dispatch]);
 
   const columns = [
+    columnHelper.accessor('id', {
+      header: 'ID',
+      cell: info => <span>{info.getValue()}</span>,
+    }),
     columnHelper.accessor('title', {
       header: 'Title',
       cell: info => <span>{info.getValue()}</span>,
@@ -201,22 +205,11 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
               {headerGroup.headers.map(header => (
                 <TableHeaderCell key={header.id}>
                   {header.isPlaceholder ? null : (
-                      <div
-                        // {...{
-                        //   className: header.column.getCanSort()
-                        //     ? 'cursor-pointer select-none'
-                        //     : '',
-                        //   onClick: header.column.getToggleSortingHandler(),
-                        // }}
-                      >
+                      <div>
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                        {/* {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted() as string] ?? null} */}
                       </div>
                     )}
                 </TableHeaderCell>
