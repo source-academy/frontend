@@ -514,11 +514,7 @@ export class Layout {
       };
 
       // zoom in or zoom out
-      let direction = event.evt.deltaY > 0 ? 1 : -1;
-      // reverse when zooming on trackpad i.e. ctrl key is True
-      if (event.evt.ctrlKey) {
-        direction = -direction;
-      }
+      const direction = event.evt.deltaY > 0 ? -1 : 1;
 
       const newScale =
         direction > 0 ? oldScale * Layout.scaleFactor : oldScale / Layout.scaleFactor;

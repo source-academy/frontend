@@ -172,7 +172,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
         keyMap={envVizKeyMap}
         handlers={envVizHandlers}
         style={{
-          maxHeight: '465px',
+          maxHeight: '70vh',
           overflow: this.state.visualization ? 'hidden' : 'auto'
         }}
       >
