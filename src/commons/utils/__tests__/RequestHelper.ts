@@ -123,7 +123,7 @@ describe('request', () => {
     expect(resp).toEqual(OK_RESP);
   });
 
-  test('Non-401 unauthorized response -> shows warning and returns null', async () => {
+  test('Non-401 unauthorized error response -> shows warning and returns null', async () => {
     mockNon401ErrorResponseOnce();
     const resp = await makeRequest();
 
@@ -149,7 +149,7 @@ describe('request', () => {
     expect(resp).toEqual(OK_RESP);
   });
 
-  test('401 unauthorized -> refresh token flow succeeds -> non-401 unauthorized response -> shows warning and returns null', async () => {
+  test('401 unauthorized -> refresh token flow succeeds -> non-401 unauthorized error response -> shows warning and returns null', async () => {
     mock401ErrorResponseOnce();
     mockPostRefresh(true);
     mockNon401ErrorResponseOnce();
@@ -241,7 +241,7 @@ describe('request', () => {
     expect(resp).toBeNull();
   });
 
-  test('multiple 401 unauthorized -> triggers a single refresh token flow (success) -> refires original multiple API calls with refreshed access token', async () => {
+  test('multiple 401 unauthorized requests -> triggers a SINGLE refresh token flow (success) -> refires original multiple API calls with refreshed access token', async () => {
     // Mock 3 parallel requests
     const numRequests = 3;
     for (let i = 0; i < numRequests; i++) {
@@ -267,7 +267,7 @@ describe('request', () => {
     );
   });
 
-  test('multiple 401 unauthorized -> triggers a single refresh token flow (fails) -> does not refire API requests', async () => {
+  test('multiple 401 unauthorized requests -> triggers a SINGLE refresh token flow (fails) -> does not refire API requests', async () => {
     // Mock 3 parallel requests
     const numRequests = 3;
     for (let i = 0; i < numRequests; i++) {
