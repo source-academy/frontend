@@ -1,5 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import _ from 'lodash';
+import { assessmentFullPathRegex } from 'src/features/academy/AcademyTypes';
 import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../application/types/SessionTypes';
@@ -102,8 +103,7 @@ export const request = async (
       return null;
     } catch (err) {
       // Refresh token flow or retried API call 401s again. Force logout in non-AssessmentWorkspace routes.
-      const assessmentPathRegex = /\/courses\/\d+\/[a-zA-Z]+\/\d+\/\d+/;
-      const isAssessmentUrl = !!window.location.pathname.match(assessmentPathRegex);
+      const isAssessmentUrl = !!window.location.pathname.match(assessmentFullPathRegex);
 
       if (isAssessmentUrl) {
         showWarningMessage(
