@@ -43,7 +43,7 @@ import {
 } from '../notificationBadge/NotificationBadgeTypes';
 import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   mockAssessmentConfigurations,

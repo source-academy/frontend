@@ -1,5 +1,5 @@
 import { showSimpleConfirmDialog, SimpleConfirmDialogProps } from './DialogHelper';
-import { showWarningMessage } from './NotificationsHelper';
+import { showWarningMessage } from './notifications/NotificationsHelper';
 
 // Full JS
 const FULL_JS_DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {

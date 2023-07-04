@@ -32,7 +32,10 @@ const Login: React.FunctionComponent<{}> = () => {
   // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
   const authCode = code || ticket;
 
-  const handleLogin = React.useCallback(providerId => dispatch(login(providerId)), [dispatch]);
+  const handleLogin = React.useCallback(
+    (providerId: string) => dispatch(login(providerId)),
+    [dispatch]
+  );
 
   React.useEffect(() => {
     if (authCode) {

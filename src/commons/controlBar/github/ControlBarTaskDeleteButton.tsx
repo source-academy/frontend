@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 
 import ControlButton from '../../ControlButton';
 import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
-import { showWarningMessage } from '../../utils/NotificationsHelper';
+import { showWarningMessage } from '../../utils/notifications/NotificationsHelper';
 
 export type ControlBarTaskDeleteButtonProps = {
   deleteCurrentQuestion: () => void;

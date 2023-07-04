@@ -1,8 +1,10 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
+import * as NotificationHelper from '../../utils/notifications/NotificationsHelper';
 import RepositoryDialog from '../RepositoryDialog';
 
 test('Submitting without selecting causes error message to be displayed', async () => {
+  const notificationMock = jest.spyOn(NotificationHelper, 'showWarningMessage');
   function onSubmit(inputValue: string) {}
 
   const userRepos = [
@@ -17,7 +19,7 @@ test('Submitting without selecting causes error message to be displayed', async 
 
   fireEvent.click(screen.getByText('Select'));
 
-  await screen.findByText('No repository selected!');
+  expect(notificationMock).toBeCalledTimes(1);
 });
 
 test('Selection sets repoName for submission', () => {
