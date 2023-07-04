@@ -138,7 +138,7 @@ export const generateApiCallHeadersAndFetchOptions = (
   if (opts.accessToken) {
     headers.append('Authorization', `Bearer ${opts.accessToken}`);
   }
-  const fetchOpts: { method: string; headers: Headers; body?: any } = { method, headers };
+  const fetchOpts: { method: RequestMethod; headers: Headers; body?: any } = { method, headers };
   if (opts.body) {
     if (opts.noContentType) {
       // Content Type is not needed for sending multipart data
