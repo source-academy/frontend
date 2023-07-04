@@ -5,7 +5,10 @@ import { action } from 'typesafe-actions';
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../application/types/InterpreterTypes';
+import {
+  UPDATE_EDITOR_HIGHLIGHTED_LINES,
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+} from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
@@ -208,6 +211,17 @@ export const setEditorHighlightedLines = (
   newHighlightedLines: HighlightedLines[]
 ) =>
   action(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+    workspaceLocation,
+    editorTabIndex,
+    newHighlightedLines
+  });
+
+export const setEditorHighlightedLinesAgenda = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newHighlightedLines: HighlightedLines[]
+) =>
+  action(UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA, {
     workspaceLocation,
     editorTabIndex,
     newHighlightedLines
