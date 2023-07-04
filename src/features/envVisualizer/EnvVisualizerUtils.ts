@@ -25,7 +25,6 @@ import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { Config } from './EnvVisualizerConfig';
 import { Layout } from './EnvVisualizerLayout';
 import {
@@ -255,7 +254,7 @@ export function setHoveredCursor(target: Node | Group) {
 
 export function setUnhoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
-  container && (container.style.cursor = 'default');
+  container && (container.style.cursor = 'grab');
 }
 
 /** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
@@ -400,30 +399,6 @@ export function getAgendaItemComponent(
 ): AgendaItemComponent {
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
-      // case 'BlockStatement':
-      //   return new StackItemComponent('BlockStatement', true, stackHeight);
-      // case 'WhileStatement':
-      //   return new StackItemComponent('WhileStatement', true, stackHeight);
-      // case 'ForStatement':
-      //   return new StackItemComponent('ForStatement', true, stackHeight);
-      // case 'IfStatement':
-      //   return new StackItemComponent('IfStatement', true, stackHeight);
-      // case 'ExpressionStatement':
-      //   return new StackItemComponent('ExpressionStatement', true, stackHeight);
-      // case 'DebuggerStatement':
-      //   return new StackItemComponent('DebuggerStatement', true, stackHeight);
-      // case 'VariableDeclaration':
-      //   return new StackItemComponent('VariableDeclaration', true, stackHeight);
-      // case 'FunctionDeclaration':
-      //   return new StackItemComponent('FunctionDeclaration', true, stackHeight);
-      // case 'ReturnStatement':
-      //   return new StackItemComponent('ReturnStatement', true, stackHeight);
-      // case 'ContinueStatement':
-      //   return new StackItemComponent('ContinueStatement', true, stackHeight);
-      // case 'BreakStatement':
-      //   return new StackItemComponent('BreakStatement', true, stackHeight);
-      // case 'ImportDeclaration':
-      //   return new StackItemComponent('ImportDeclaration', true, stackHeight);
       case 'Literal':
         return new AgendaItemComponent(
           typeof agendaItem.value === 'string' ? `"${agendaItem.value}"` : agendaItem.value,
@@ -431,26 +406,6 @@ export function getAgendaItemComponent(
           highlightOnHover,
           unhighlightOnHover
         );
-      // case 'AssignmentExpression':
-      //   return new StackItemComponent('AssignmentExpression', true, stackHeight);
-      // case 'ArrayExpression':
-      //   return new StackItemComponent('ArrayExpression', true, stackHeight);
-      // case 'MemberExpression':
-      //   return new StackItemComponent('MemberExpression', true, stackHeight);
-      // case 'ConditionalExpression':
-      //   return new StackItemComponent('ConditionalExpression', true, stackHeight);
-      // case 'Identifier':
-      //   return new StackItemComponent('Identifier', true, stackHeight);
-      // case 'UnaryExpression':
-      //   return new StackItemComponent('UnaryExpression', true, stackHeight);
-      // case 'BinaryExpression':
-      //   return new StackItemComponent('BinaryExpression', true, stackHeight);
-      // case 'LogicalExpression':
-      //   return new StackItemComponent('LogicalExpression', true, stackHeight);
-      // case 'ArrowFunctionExpression':
-      //   return new StackItemComponent('ArrowFunctionExpression', true, stackHeight);
-      // case 'CallExpression':
-      //   return new StackItemComponent('CallExpression', true, stackHeight);
       default:
         return new AgendaItemComponent(
           astToString(agendaItem).trim(),
@@ -596,22 +551,9 @@ export function getStashItemComponent(stashItem: StashValue, stackHeight: number
           }
           return false;
         })?.value as FnValue | GlobalFnValue;
-        if (fn) return new StashItemComponent('', stackHeight, fn);
+        if (fn) return new StashItemComponent(['CLOSURE'], stackHeight, fn);
       }
     }
   }
-  return new StashItemComponent(
-    typeof stashItem === 'string'
-      ? truncateText(
-          `"${stashItem}"`.trim(),
-          AgendaStashConfig.StashMaxTextWidth,
-          AgendaStashConfig.StashMaxTextHeight
-        )
-      : truncateText(
-          String(stashItem),
-          AgendaStashConfig.StashMaxTextWidth,
-          AgendaStashConfig.StashMaxTextHeight
-        ),
-    stackHeight
-  );
+  return new StashItemComponent(stashItem, stackHeight);
 }

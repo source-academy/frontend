@@ -26,7 +26,7 @@ export class AgendaStack extends Visible implements IHoverable {
     this._y = AgendaStashConfig.AgendaPosY;
     this._width = AgendaStashConfig.AgendaItemWidth;
     this._height =
-      AgendaStashConfig.AgendaMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2;
+      AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2;
     this.agenda = agenda;
 
     // Function to convert the stack items to their components

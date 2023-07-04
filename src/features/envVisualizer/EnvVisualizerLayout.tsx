@@ -563,6 +563,7 @@ export class Layout {
                 ref={this.stageRef}
                 draggable
                 onWheel={Layout.zoomStage}
+                className="draggable"
               >
                 <Layer>
                   <Rect

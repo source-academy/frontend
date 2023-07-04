@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { FnValue } from '../components/values/FnValue';
@@ -7,6 +7,7 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
+import { CompactConfig } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
@@ -23,6 +24,9 @@ import { Frame } from './Frame';
 export class StashItemComponent extends Visible implements IHoverable {
   /** text to display */
   readonly text: string;
+  /** text to display on hover */
+  readonly tooltip: string;
+  readonly tooltipRef: RefObject<any>;
   readonly arrow?: ArrowFromStashItemComponent;
 
   constructor(
@@ -31,11 +35,20 @@ export class StashItemComponent extends Visible implements IHoverable {
     arrowTo?: Frame | FnValue | GlobalFnValue
   ) {
     super();
-    this.text = truncateText(
-      String(value),
-      AgendaStashConfig.AgendaMaxTextWidth,
-      AgendaStashConfig.AgendaMaxTextHeight
-    );
+    this.text =
+      typeof value === 'string'
+        ? truncateText(
+            `"${value}"`.trim(),
+            AgendaStashConfig.StashMaxTextWidth,
+            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding
+          )
+        : truncateText(
+            String(value),
+            AgendaStashConfig.StashMaxTextWidth,
+            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding
+          );
+    this.tooltip = this.value;
+    this.tooltipRef = React.createRef();
     this._width = Math.min(
       AgendaStashConfig.AgendaItemTextPadding * 2 +
         getTextWidth(
@@ -56,11 +69,13 @@ export class StashItemComponent extends Visible implements IHoverable {
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
+    this.tooltipRef.current.show();
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
     setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
+    this.tooltipRef.current.hide();
   };
 
   destroy() {
@@ -98,6 +113,26 @@ export class StashItemComponent extends Visible implements IHoverable {
             text={String(this.text)}
             width={this.width()}
             height={this.height()}
+          />
+        </Label>
+        <Label
+          x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
+          y={this.y() - CompactConfig.TextPaddingY}
+          visible={false}
+          ref={this.tooltipRef}
+        >
+          <Tag
+            stroke="black"
+            fill={'black'}
+            opacity={Number(AgendaStashConfig.NodeTooltipOpacity)}
+          />
+          <Text
+            text={this.tooltip}
+            fontFamily={CompactConfig.FontFamily.toString()}
+            fontSize={Number(CompactConfig.FontSize)}
+            fontStyle={CompactConfig.FontStyle.toString()}
+            fill={CompactConfig.SA_WHITE.toString()}
+            padding={5}
           />
         </Label>
         {this.arrow?.draw()}
