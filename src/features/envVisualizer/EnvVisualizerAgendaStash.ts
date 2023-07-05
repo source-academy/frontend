@@ -1,16 +1,18 @@
 export enum AgendaStashConfig {
   AgendaPosX = 20,
   AgendaPosY = 5,
-  StashPosX = 130,
+  StashPosX = 140,
   StashPosY = 5,
 
-  AgendaItemWidth = 110,
+  AgendaItemWidth = 120,
   AgendaItemTextPadding = 10,
   AgendaItemCornerRadius = 5,
-  AgendaMaxTextWidth = 125,
+  AgendaMaxTextWidth = 95,
   AgendaMaxTextHeight = 125,
   StashMaxTextWidth = AgendaMaxTextWidth,
-  StashMaxTextHeight = 15,
+  StashItemHeight = 15,
+  StashMaxTextHeight = 30,
+
   NodeTooltipOpacity = 0.7,
 
   FontFamily = 'monospace, monospace',

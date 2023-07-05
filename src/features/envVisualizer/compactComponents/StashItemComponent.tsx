@@ -35,30 +35,28 @@ export class StashItemComponent extends Visible implements IHoverable {
     arrowTo?: Frame | FnValue | GlobalFnValue
   ) {
     super();
-    this.text =
+    this.text = (
       typeof value === 'string'
         ? truncateText(
-            `"${value}"`.trim(),
+            `'${value}'`.trim(),
             AgendaStashConfig.StashMaxTextWidth,
-            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2
+            AgendaStashConfig.StashMaxTextHeight
           )
         : truncateText(
             String(value),
             AgendaStashConfig.StashMaxTextWidth,
-            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2
-          );
+            AgendaStashConfig.StashMaxTextHeight
+          )
+    ).replace(/[\r\n]/gm, ' ');
     this.tooltip = this.value;
     this.tooltipRef = React.createRef();
-    this._width = Math.min(
+    this._width =
       AgendaStashConfig.AgendaItemTextPadding * 2 +
-        getTextWidth(
-          this.text,
-          `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`
-        ),
-      AgendaStashConfig.AgendaItemWidth
-    );
-    this._height =
-      AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2;
+      getTextWidth(
+        this.text,
+        `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`
+      );
+    this._height = AgendaStashConfig.StashItemHeight + AgendaStashConfig.AgendaItemTextPadding * 2;
     this._x = AgendaStashConfig.StashPosX + stackHeightWidth;
     this._y = AgendaStashConfig.StashPosY;
     if (arrowTo) {
@@ -106,13 +104,7 @@ export class StashItemComponent extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
         >
           <Tag {...ShapeDefaultProps} {...tagProps} />
-          <Text
-            {...ShapeDefaultProps}
-            {...textProps}
-            key={Layout.key++}
-            text={String(this.text)}
-            width={this.width()}
-          />
+          <Text {...ShapeDefaultProps} {...textProps} key={Layout.key++} text={String(this.text)} />
         </Label>
         <Label
           x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}

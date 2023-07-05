@@ -249,12 +249,18 @@ export function getBodyText(data: () => any): string {
 
 export function setHoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
-  container && (container.style.cursor = 'pointer');
+  if (container) {
+    container.classList.remove('draggable');
+    container.classList.add('clickable');
+  }
 }
 
 export function setUnhoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
-  container && (container.style.cursor = 'grab');
+  if (container) {
+    container.classList.remove('clickable');
+    container.classList.add('draggable');
+  }
 }
 
 /** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
