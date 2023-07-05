@@ -80,7 +80,6 @@ export class Layout {
   static stash: Stash;
   static agendaComponent: AgendaStack;
   static stashComponent: StashStack;
-  static stashComponentX: number;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -174,8 +173,7 @@ export class Layout {
     if (EnvVisualizer.getAgendaStash()) {
       Layout.agendaStashHeight = Math.max(
         Config.CanvasMinHeight,
-        Layout.agendaComponent.y() + Layout.agendaComponent.height() + Config.CanvasPaddingY,
-        Layout.stashComponent.y() + Layout.stashComponent.height() + Config.CanvasPaddingY
+        Layout.agendaComponent.y() + Layout.agendaComponent.height() + Config.CanvasPaddingY
       );
       Layout.agendaStashWidth = Math.max(
         Config.CanvasMinWidth,
@@ -200,10 +198,7 @@ export class Layout {
         ) +
           Config.CanvasPaddingX * 2 +
           (EnvVisualizer.getAgendaStash()
-            ? Layout.agendaComponent.width() +
-              Config.CanvasPaddingX * 2 +
-              Layout.stashComponent.width() +
-              Config.CanvasPaddingX * 2
+            ? Layout.agendaComponent.width() + Config.CanvasPaddingX * 2
             : 0)
       );
     } else {
@@ -220,19 +215,7 @@ export class Layout {
 
   static initializeAgendaStash() {
     this.agendaComponent = new AgendaStack(this.agenda);
-    if (EnvVisualizer.getCompactLayout()) {
-      Layout.stashComponentX =
-        Layout.compactLevels[0].x() +
-        Layout.compactLevels.reduce<number>(
-          (maxWidth, level) => Math.max(maxWidth, level.width()),
-          0
-        ) +
-        Config.CanvasPaddingX * 2;
-      this.stashComponent = new StashStack(this.stash);
-    } else {
-      Layout.stashComponentX = this.grid.x() + this.grid.width() + Config.CanvasPaddingX * 2;
-      this.stashComponent = new StashStack(this.stash);
-    }
+    this.stashComponent = new StashStack(this.stash);
   }
 
   /** remove program environment containing predefined functions */
@@ -502,8 +485,8 @@ export class Layout {
    * Updates the scale of the stage after the user inititates a zoom in or out
    * by scrolling or by the trackpad.
    */
-  private static zoomStage(event: KonvaEventObject<WheelEvent>) {
-    event.evt.preventDefault();
+  static zoomStage(event: KonvaEventObject<WheelEvent> | boolean) {
+    typeof event != 'boolean' && event.evt.preventDefault();
     if (Layout.stageRef.current !== null) {
       const stage = Layout.stageRef.current;
       const oldScale = stage.scaleX();
@@ -514,17 +497,23 @@ export class Layout {
       };
 
       // zoom in or zoom out
-      const direction = event.evt.deltaY > 0 ? -1 : 1;
+      const direction =
+        typeof event != 'boolean' ? (event.evt.deltaY > 0 ? -1 : 1) : event ? 1 : -1;
 
-      const newScale =
-        direction > 0 ? oldScale * Layout.scaleFactor : oldScale / Layout.scaleFactor;
-      stage.scale({ x: newScale, y: newScale });
-      const newPos = {
-        x: pointerX - mousePointTo.x * newScale,
-        y: pointerY - mousePointTo.y * newScale
-      };
-      stage.position(newPos);
-      stage.batchDraw();
+      // Check if the zoom limits have been reached
+      if ((direction > 0 && oldScale < 3) || (direction < 0 && oldScale > 0.4)) {
+        const newScale =
+          direction > 0 ? oldScale * Layout.scaleFactor : oldScale / Layout.scaleFactor;
+        stage.scale({ x: newScale, y: newScale });
+        if (typeof event !== 'boolean') {
+          const newPos = {
+            x: pointerX - mousePointTo.x * newScale,
+            y: pointerY - mousePointTo.y * newScale
+          };
+          stage.position(newPos);
+          stage.batchDraw();
+        }
+      }
     }
   }
 

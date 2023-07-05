@@ -21,7 +21,7 @@ export class StashStack extends Visible implements IHoverable {
     readonly stash: Stash
   ) {
     super();
-    this._x = Layout.stashComponentX;
+    this._x = AgendaStashConfig.StashPosX;
     this._y = AgendaStashConfig.StashPosY;
     this._width = 0;
     this._height = 0;

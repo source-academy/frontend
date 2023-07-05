@@ -328,6 +328,18 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
             Note that these shortcuts are only active when the browser focus is on this tab.
           </div>
         )}
+        <ButtonGroup style={{ position: 'fixed', bottom: '10px', right: '10px' }}>
+          <Button
+            icon="plus"
+            disabled={!this.state.visualization}
+            onClick={() => Layout.zoomStage(true)}
+          />
+          <Button
+            icon="minus"
+            disabled={!this.state.visualization}
+            onClick={() => Layout.zoomStage(false)}
+          />
+        </ButtonGroup>
       </HotKeys>
     );
   }

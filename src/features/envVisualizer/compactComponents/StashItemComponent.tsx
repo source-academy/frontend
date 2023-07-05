@@ -40,12 +40,12 @@ export class StashItemComponent extends Visible implements IHoverable {
         ? truncateText(
             `"${value}"`.trim(),
             AgendaStashConfig.StashMaxTextWidth,
-            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding
+            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2
           )
         : truncateText(
             String(value),
             AgendaStashConfig.StashMaxTextWidth,
-            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding
+            AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 2
           );
     this.tooltip = this.value;
     this.tooltipRef = React.createRef();
@@ -112,7 +112,6 @@ export class StashItemComponent extends Visible implements IHoverable {
             key={Layout.key++}
             text={String(this.text)}
             width={this.width()}
-            height={this.height()}
           />
         </Label>
         <Label
