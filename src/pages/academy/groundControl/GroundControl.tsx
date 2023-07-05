@@ -15,6 +15,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import {
+  fetchAssessmentConfigs,
+} from '../../../commons/application/actions/SessionActions';
+import {
   Flex,
   Table,
   TableBody,
@@ -51,6 +54,7 @@ export type DispatchProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
+  handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
   handleFetchCourseConfigs: () => void;
 };
 
@@ -63,26 +67,26 @@ const columnHelper = createColumnHelper<AssessmentOverview>();
 
 const GroundControl: React.FC<GroundControlProps> = (props) => {
   const [showDropzone, setShowDropzone] = React.useState(false);
+  const [hasChangesAssessmentDetails, setHasChangesAssessmentDetails] = React.useState(false);
+
   const dispatch = useDispatch();
 
   const tableFilters = useTypedSelector(state => state.workspaces.groundControl.GroundControlTableFilters);
   
-  // const defaultFilters = [];
-  // if (!tableFilters.columnFilters.find(filter => filter.id === 'type')) {
-  //   defaultFilters.push({
-  //     id: 'type',
-  //     value: ""
-  //   });
-  // }
-  
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters,
-    // ...defaultFilters
   ]);
+
+  const session = useTypedSelector(state => state.session);
+  // const assessmentOverviews = React.useRef(session.assessmentOverviews);
 
   const toggleDropzone = () => {
     setShowDropzone(!showDropzone);
   };
+
+  useEffect(() => {
+    dispatch(fetchAssessmentConfigs());
+  }, [dispatch]);
 
   useEffect(() => {
     props.handleAssessmentOverviewFetch();
@@ -91,6 +95,61 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
       updateGroundControlTableFilters({columnFilters})
     );
   }, [columnFilters, dispatch]);
+
+  // const assessmentConfigPanelProps = React.useMemo(() => {
+  //   return {
+  //     // Would have been loaded by the useEffect above
+  //     assessmentConfig: assessmentConfig as React.MutableRefObject<AssessmentConfiguration[]>,
+  //     setAssessmentConfig: (val: AssessmentConfiguration[]) => {
+  //       assessmentConfig.current = val;
+  //       setHasChangesAssessmentDetails(true);
+  //     },
+  //     setAssessmentsToDelete: (deletedElement: AssessmentConfiguration) => {
+  //       // If it is not a newly created row that is yet to be persisted in the backend
+  //       if (deletedElement.assessmentConfigId !== -1) {
+  //         const temp = [...assessmentsToDelete];
+  //         temp.push(deletedElement);
+  //         setAssessmentsToDelete(temp);
+  //       }
+  //     },
+  //     setHasChangesAssessmentDetails: setHasChangesAssessmentDetails
+  //   };
+  // }, [assessmentsToDelete]);
+
+  const submitHandler = () => {
+    console.log("saved");
+    console.log(session.assessmentOverviews);
+    if (hasChangesAssessmentDetails) {
+      // Reset the store first so that old props do not propagate down and cause a flicker
+      // dispatch(setAssessmentDetails([]));
+      console.log("changed");
+      // console.log();
+
+      // assessmentConfig.current will exist after the first load
+      // dispatch(updateAssessmentDetails(assessmentConfig.current!));
+      setHasChangesAssessmentDetails(false);
+    }
+  }
+
+  // const assessmentConfigPanelProps = React.useMemo(() => {
+  //   return {
+  //     // Would have been loaded by the useEffect above
+  //     assessmentConfig: assessmentConfig as React.MutableRefObject<AssessmentConfiguration[]>,
+  //     setAssessmentConfig: (val: AssessmentConfiguration[]) => {
+  //       assessmentConfig.current = val;
+  //       setHasChangesAssessmentDetails(true);
+  //     },
+  //     setAssessmentsToDelete: (deletedElement: AssessmentConfiguration) => {
+  //       // If it is not a newly created row that is yet to be persisted in the backend
+  //       if (deletedElement.assessmentConfigId !== -1) {
+  //         const temp = [...assessmentsToDelete];
+  //         temp.push(deletedElement);
+  //         setAssessmentsToDelete(temp);
+  //       }
+  //     },
+  //     setHasChangesAssessmentDetails: setHasChangesAssessmentDetails
+  //   };
+  // }, [assessmentsToDelete]);
 
   const columns = [
     columnHelper.accessor('id', {
@@ -124,7 +183,7 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
     }),
     columnHelper.accessor('maxTeamSize', {
       header: "Max Team Size",
-      cell: info => <EditTeamSizeCell data={info.row.original}></EditTeamSizeCell>
+      cell: info => <EditTeamSizeCell handleAssessmentChangeTeamSize={props.handleAssessmentChangeTeamSize} data={info.row.original}></EditTeamSizeCell>
     }),
     columnHelper.accessor('isPublished', {
       header: 'Publish',
@@ -231,6 +290,17 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
           ))}
         </TableBody>
       </Table>
+      <div>
+        <Button
+          text="Save"
+          style={{ marginTop: '15px' }}
+          intent={hasChangesAssessmentDetails
+              ? Intent.WARNING
+              : Intent.NONE
+          }
+          onClick={submitHandler}
+        />
+      </div>
     </div>
   );
 

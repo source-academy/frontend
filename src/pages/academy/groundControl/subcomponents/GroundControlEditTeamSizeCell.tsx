@@ -1,21 +1,16 @@
-
-import { IconNames } from '@blueprintjs/icons';
 import '@tremor/react/dist/esm/tremor.css';
-import { Icon as BpIcon } from '@blueprintjs/core';
 
 import {
-  Button,
   Flex,
 } from '@tremor/react';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 
-
 export type EditTeamSizeCellProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-//   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
+  handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
 };
 
 type StateProps = {
@@ -26,12 +21,21 @@ type StateProps = {
 
 const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props => {
   const minTeamSize = 1;
-  const maxTeamSize = 100;
-  const { data } = props;
+
+  const { handleAssessmentChangeTeamSize, data } = props;
   const currentTeamSize = data.maxTeamSize;
 
-  const [value, setValue] = React.useState(currentTeamSize);
+  const [newTeamSize, setNewTeamSize] = React.useState(currentTeamSize || minTeamSize);
 
+  
+  const handleUpdateTeamSize = React.useCallback(() => {
+    const { id } = data;
+    handleAssessmentChangeTeamSize(
+      id,
+      newTeamSize
+    );
+
+  }, [ newTeamSize, handleAssessmentChangeTeamSize ]);
 
   return (
     <div className="number-input">
@@ -39,14 +43,17 @@ const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props =
         <input
           type="number"
           className="input-value"
-          value={value}
+          value={newTeamSize}
           onChange={e => {    
             const inputValue = parseInt(e.target.value);
-            if (!isNaN(inputValue) && inputValue >= minTeamSize && inputValue <= maxTeamSize) {
-              setValue(inputValue);
+            if (!isNaN(inputValue) && inputValue >= minTeamSize) {
+              setNewTeamSize(inputValue);
             }}}
           style={{ width: '4rem', padding: '0.2rem', textAlign: 'center' }}
         />
+        <button onClick={handleUpdateTeamSize}>
+          update
+        </button>
       </Flex>
     </div>
   );
