@@ -16,6 +16,7 @@ import {
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { EditorTabStateProps } from '../editor/Editor';
 import { Position } from '../editor/EditorTypes';
+import { EditorBinding } from '../WorkspaceSettingsContext';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -50,6 +51,7 @@ type EditorStateProps = {
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
+  editorBinding?: EditorBinding;
 };
 
 type OwnProps = {
@@ -245,6 +247,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             setOptions={{
               fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
+            keyboardHandler={this.props.editorBinding}
           />
         </div>
       </HotKeys>
