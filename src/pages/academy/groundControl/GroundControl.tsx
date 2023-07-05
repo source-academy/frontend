@@ -117,12 +117,9 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
   // }, [assessmentsToDelete]);
 
   const submitHandler = () => {
-    console.log("saved");
-    console.log(session.assessmentOverviews);
     if (hasChangesAssessmentDetails) {
       // Reset the store first so that old props do not propagate down and cause a flicker
       // dispatch(setAssessmentDetails([]));
-      console.log("changed");
       // console.log();
 
       // assessmentConfig.current will exist after the first load

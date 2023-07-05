@@ -454,7 +454,7 @@ export const getAssessmentOverviews = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const assessmentOverviews = await resp.json();
-  console.log(assessmentOverviews);
+  
   return assessmentOverviews.map((overview: any) => {
     overview.gradingStatus = computeGradingStatus(
       overview.isManuallyGraded,
