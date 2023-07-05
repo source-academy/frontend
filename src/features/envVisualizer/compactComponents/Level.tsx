@@ -2,6 +2,8 @@ import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
+import EnvVisualizer from '../EnvVisualizer';
+import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode } from '../EnvVisualizerTypes';
@@ -19,8 +21,16 @@ export class Level extends Visible {
     readonly envTreeNodes: EnvTreeNode[]
   ) {
     super();
-    this._x = CompactConfig.CanvasPaddingX;
+    this._x = EnvVisualizer.getAgendaStash()
+      ? AgendaStashConfig.AgendaPosX +
+        AgendaStashConfig.AgendaItemWidth +
+        CompactConfig.CanvasPaddingX
+      : CompactConfig.CanvasPaddingX;
     this._y = CompactConfig.CanvasPaddingY;
+    EnvVisualizer.getAgendaStash() &&
+      !this.parentLevel &&
+      (this._y +=
+        AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 3);
     this.parentLevel && (this._y += this.parentLevel.height() + this.parentLevel.y());
     let prevFrame: Frame | null = null;
     envTreeNodes.forEach(e => {
@@ -31,7 +41,7 @@ export class Level extends Visible {
       prevFrame = newFrame;
     });
 
-    // get the max height of all the frames in this level
+    // get the max height of all the frames in this level including the label
     this._height = this.frames.reduce<number>(
       (maxHeight, frame) => Math.max(maxHeight, frame.totalHeight),
       0
