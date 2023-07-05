@@ -5,12 +5,6 @@ import EnvVisualizer from '../../EnvVisualizer';
 import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { IHoverable, IVisible, StepsArray } from '../../EnvVisualizerTypes';
-import {
-  setHoveredCursor,
-  setHoveredStyle,
-  setUnhoveredCursor,
-  setUnhoveredStyle
-} from '../../EnvVisualizerUtils';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { Visible } from '../Visible';
@@ -72,10 +66,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return Number(Config.ArrowStrokeWidth);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>) {
-    setHoveredCursor(e.target);
-    setHoveredStyle(e.currentTarget, {
-      strokeWidth: Number(Config.ArrowHoveredStrokeWidth)
-    });
     this.ref.current.opacity = this.unhovered_opacity;
   }
   onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
@@ -85,33 +75,20 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         !(this.source instanceof Text && this.source.frame?.isSelected()) &&
         !(this.source instanceof Frame && this.source.isSelected())
       ) {
-        setUnhoveredStyle(currentTarget, {
-          strokeWidth: this.getStrokeWidth()
-        });
         this.ref.current.opacity = this.unhovered_opacity;
       } else {
-        setHoveredStyle(currentTarget, {
-          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
-        });
         this.ref.current.opacity = this.hovered_opacity;
       }
     }
   }
   onMouseLeave(e: KonvaEventObject<MouseEvent>) {
-    setUnhoveredCursor(e.target);
     if (!this.isSelected()) {
       if (
         (this.source instanceof Text && this.source.frame?.isSelected()) ||
         (this.source instanceof Frame && this.source.isSelected())
       ) {
-        setHoveredStyle(e.currentTarget, {
-          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
-        });
         this.ref.current.opacity = this.hovered_opacity;
       } else {
-        setUnhoveredStyle(e.currentTarget, {
-          strokeWidth: this.getStrokeWidth()
-        });
         this.ref.current.opacity = this.unhovered_opacity;
       }
     }

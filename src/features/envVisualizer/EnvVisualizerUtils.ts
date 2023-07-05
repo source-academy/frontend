@@ -1,16 +1,31 @@
+import {
+  AgendaItem,
+  AssmtInstr,
+  BinOpInstr,
+  EnvInstr,
+  Instr,
+  InstrType,
+  UnOpInstr
+} from 'js-slang/dist/ec-evaluator/types';
+import Closure from 'js-slang/dist/interpreter/closure';
 import { Environment } from 'js-slang/dist/types';
+import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
+import { Frame } from './compactComponents/Frame';
+import { StackItemComponent } from './compactComponents/StackItemComponent';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
+import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { Config } from './EnvVisualizerConfig';
+import { Layout } from './EnvVisualizerLayout';
 import {
   CompactReferenceType,
   Data,
@@ -175,6 +190,36 @@ export function getTextWidth(
   return metrics.width;
 }
 
+/**
+ * Uses canvas.measureText to compute and return the height of the text box
+ * given its font in pixels.
+ *
+ * @param {string} text The text to be rendered.
+ * @param {string} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+ * @param {number} fontSize The size of the font.
+ * @param {number} width The width of the textbox the text will be rendered in.
+ */
+export function getTextHeight(
+  text: string,
+  width: number,
+  font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
+  fontSize: number = Number(Config.FontSize)
+): number {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  if (!context || !text) {
+    return 0;
+  }
+
+  context.font = font;
+  const numberOfLines = text
+    .split('\n')
+    .map(s => context.measureText(s).width)
+    .reduce<number>((accLines, currWidth) => accLines + Math.ceil(currWidth / width), 0);
+  return numberOfLines * fontSize;
+}
+
 /** Returns the parameter string of the given function */
 export function getParamsText(data: () => any): string {
   if (isFn(data)) {
@@ -307,4 +352,345 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   } else {
     return [c];
   }
+}
+
+export const truncateText = (programStr: string, maxWidth: number, maxHeight: number): string => {
+  // Truncate so item component looks like a square
+  // Add ellipsis for each line if needed
+  let lines = programStr.split('\n').map(line => {
+    if (getTextWidth(line) <= maxWidth) {
+      return line;
+    }
+    let truncatedLine = line;
+    while (getTextWidth(truncatedLine + Config.Ellipsis) > maxWidth) {
+      truncatedLine = truncatedLine.slice(0, -1);
+    }
+    return truncatedLine + Config.Ellipsis;
+  });
+
+  // Add ellipsis for entire code block if needed
+  if (getTextHeight([...lines, Config.Ellipsis].join('\n'), maxWidth) <= maxHeight) {
+    return lines.join('\n');
+  }
+  while (getTextHeight([...lines, Config.Ellipsis].join('\n'), maxWidth) > maxHeight) {
+    lines = lines.slice(0, -1);
+  }
+  return [...lines, Config.Ellipsis].join('\n');
+};
+
+/**
+ * Typeguard for Instr to distinguish between program statements and instructions.
+ * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
+ * with circular dependencies so it is redefined here.
+ *
+ * @param command An AgendaItem
+ * @returns true if the AgendaItem is an instruction and false otherwise.
+ */
+export const isInstr = (command: AgendaItem): command is Instr => {
+  return (command as Instr).instrType !== undefined;
+};
+
+export function getAgendaItemComponent(
+  agendaItem: AgendaItem,
+  stackHeight: number,
+  highlightOnHover?: () => void,
+  unhighlightOnHover?: () => void
+): StackItemComponent {
+  if (!isInstr(agendaItem)) {
+    switch (agendaItem.type) {
+      // case 'BlockStatement':
+      //   return new StackItemComponent('BlockStatement', true, stackHeight);
+      // case 'WhileStatement':
+      //   return new StackItemComponent('WhileStatement', true, stackHeight);
+      // case 'ForStatement':
+      //   return new StackItemComponent('ForStatement', true, stackHeight);
+      // case 'IfStatement':
+      //   return new StackItemComponent('IfStatement', true, stackHeight);
+      // case 'ExpressionStatement':
+      //   return new StackItemComponent('ExpressionStatement', true, stackHeight);
+      // case 'DebuggerStatement':
+      //   return new StackItemComponent('DebuggerStatement', true, stackHeight);
+      // case 'VariableDeclaration':
+      //   return new StackItemComponent('VariableDeclaration', true, stackHeight);
+      // case 'FunctionDeclaration':
+      //   return new StackItemComponent('FunctionDeclaration', true, stackHeight);
+      // case 'ReturnStatement':
+      //   return new StackItemComponent('ReturnStatement', true, stackHeight);
+      // case 'ContinueStatement':
+      //   return new StackItemComponent('ContinueStatement', true, stackHeight);
+      // case 'BreakStatement':
+      //   return new StackItemComponent('BreakStatement', true, stackHeight);
+      // case 'ImportDeclaration':
+      //   return new StackItemComponent('ImportDeclaration', true, stackHeight);
+      case 'Literal':
+        return new StackItemComponent(
+          typeof agendaItem.value === 'string' ? `"${agendaItem.value}"` : agendaItem.value,
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      // case 'AssignmentExpression':
+      //   return new StackItemComponent('AssignmentExpression', true, stackHeight);
+      // case 'ArrayExpression':
+      //   return new StackItemComponent('ArrayExpression', true, stackHeight);
+      // case 'MemberExpression':
+      //   return new StackItemComponent('MemberExpression', true, stackHeight);
+      // case 'ConditionalExpression':
+      //   return new StackItemComponent('ConditionalExpression', true, stackHeight);
+      // case 'Identifier':
+      //   return new StackItemComponent('Identifier', true, stackHeight);
+      // case 'UnaryExpression':
+      //   return new StackItemComponent('UnaryExpression', true, stackHeight);
+      // case 'BinaryExpression':
+      //   return new StackItemComponent('BinaryExpression', true, stackHeight);
+      // case 'LogicalExpression':
+      //   return new StackItemComponent('LogicalExpression', true, stackHeight);
+      // case 'ArrowFunctionExpression':
+      //   return new StackItemComponent('ArrowFunctionExpression', true, stackHeight);
+      // case 'CallExpression':
+      //   return new StackItemComponent('CallExpression', true, stackHeight);
+      default:
+        return new StackItemComponent(
+          astToString(agendaItem).trim(),
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+    }
+  } else {
+    switch (agendaItem.instrType) {
+      case InstrType.RESET:
+        return new StackItemComponent(
+          'RESET',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.WHILE:
+        return new StackItemComponent(
+          'WHILE',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.FOR:
+        return new StackItemComponent(
+          'FOR',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.ASSIGNMENT:
+        const assmtInstr = agendaItem as AssmtInstr;
+        return new StackItemComponent(
+          `ASSIGN ${assmtInstr.symbol}`,
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.UNARY_OP:
+        const unOpInstr = agendaItem as UnOpInstr;
+        return new StackItemComponent(
+          unOpInstr.symbol,
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.BINARY_OP:
+        const binOpInstr = agendaItem as BinOpInstr;
+        return new StackItemComponent(
+          binOpInstr.symbol,
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.POP:
+        return new StackItemComponent(
+          'POP',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.APPLICATION:
+        return new StackItemComponent(
+          'APPLICATION',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.BRANCH:
+        return new StackItemComponent(
+          'BRANCH',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.ENVIRONMENT:
+        const envInstr = agendaItem as EnvInstr;
+        return new StackItemComponent(
+          'ENVIRONMENT',
+          true,
+          stackHeight,
+          Layout.compactLevels.reduce<Frame | undefined>(
+            (accum, level) =>
+              accum ? accum : level.frames.find(frame => frame.environment?.id === envInstr.env.id),
+            undefined
+          ),
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.PUSH_UNDEFINED_IF_NEEDED:
+        return new StackItemComponent(
+          'PUSH UNDEFINED IF NEEDED',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.ARRAY_LITERAL:
+        return new StackItemComponent(
+          'ARRAY LITERAL',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.ARRAY_ACCESS:
+        return new StackItemComponent(
+          'ARRAY ACCESS',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.ARRAY_ASSIGNMENT:
+        return new StackItemComponent(
+          'ARRAY ASSIGNMENT',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.ARRAY_LENGTH:
+        return new StackItemComponent(
+          'ARRAY LENGTH',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.CONTINUE:
+        return new StackItemComponent(
+          'CONTINUE',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.CONTINUE_MARKER:
+        return new StackItemComponent(
+          'CONTINUE MARKER',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.BREAK:
+        return new StackItemComponent(
+          'BREAK',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.BREAK_MARKER:
+        return new StackItemComponent(
+          'BREAK MARKER',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      case InstrType.MARKER:
+        return new StackItemComponent(
+          'MARKER',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+      default:
+        return new StackItemComponent(
+          'INSTRUCTION',
+          true,
+          stackHeight,
+          undefined,
+          highlightOnHover,
+          unhighlightOnHover
+        );
+    }
+  }
+}
+
+export function getStashItemComponent(stashItem: any, stackHeight: number) {
+  if (stashItem instanceof Closure) {
+    for (const level of Layout.compactLevels) {
+      for (const frame of level.frames) {
+        const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
+          if (isFn(binding.data)) {
+            return binding.data.id === stashItem.id;
+          }
+          return false;
+        })?.value as FnValue | GlobalFnValue;
+        if (fn) return new StackItemComponent('', false, stackHeight, fn);
+      }
+    }
+  }
+  return new StackItemComponent(
+    typeof stashItem === 'string'
+      ? truncateText(
+          `"${stashItem}"`.trim(),
+          AgendaStashConfig.StashMaxTextWidth,
+          AgendaStashConfig.StashMaxTextHeight
+        )
+      : truncateText(
+          String(stashItem),
+          AgendaStashConfig.StashMaxTextWidth,
+          AgendaStashConfig.StashMaxTextHeight
+        ),
+    false,
+    stackHeight
+  );
 }
