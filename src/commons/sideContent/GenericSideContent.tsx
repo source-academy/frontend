@@ -83,6 +83,7 @@ const GenericSideContent = (props: GenericSideContentProps) => {
         // The new selected tab will still have the "side-content-tab-alert" class, but the CSS hides it
         if (icon) {
           icon.classList.remove('side-content-tab-alert');
+          icon.classList.remove('side-content-tab-alert-error');
         }
       };
 

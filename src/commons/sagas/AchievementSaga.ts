@@ -204,7 +204,7 @@ export default function* AchievementSaga(): SagaIterator {
         (envTab && envTab.ariaHidden === 'false') ||
         (substTab && substTab.ariaHidden === 'false')
       ) {
-        introIcon && introIcon.classList.add('side-content-tab-alert');
+        introIcon && introIcon.classList.add('side-content-tab-alert-error');
       }
     }
     if (role && enableAchievements && !Constants.playgroundOnly) {
