@@ -1091,11 +1091,12 @@ export const putAssessmentConfigs = async (
   return resp;
 };
 
+//Notification related request
 export const putNotificationConfigs = async (
   tokens: Tokens,
   notificationConfigs: NotificationConfiguration[]
 ) => {
-  return await request(`notifications/config`, 'PUT', {
+  return await request(`courses/${courseIdWithoutPrefix()}/admin/notifications/config`, 'PUT', {
     ...tokens,
     body: notificationConfigs,
     noHeaderAccept: true,
@@ -1166,7 +1167,7 @@ export const removeTimeOptions = async (
   tokens: Tokens,
   timeOptionIds: number[]
 ): Promise<Response | null> => {
-  const resp = await request(`notifications/options`, 'DELETE', {
+  const resp = await request(`courses/${courseIdWithoutPrefix()}/admin/notifications/options`, 'DELETE', {
     ...tokens,
     body: timeOptionIds,
     noHeaderAccept: true,
@@ -1181,7 +1182,7 @@ export const putTimeOptions = async (
   tokens: Tokens,
   timeOptions: TimeOption[]
 ): Promise<Response | null> => {
-  const resp = await request(`notifications/options`, 'PUT', {
+  const resp = await request(`courses/${courseIdWithoutPrefix()}/notifications/options`, 'PUT', {
     ...tokens,
     body: timeOptions,
     noHeaderAccept: true,
