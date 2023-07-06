@@ -476,7 +476,8 @@ test('updateAssessmentOverviews generates correct action object', () => {
       status: 'not_attempted',
       story: null,
       xp: 0,
-      gradingStatus: 'none'
+      gradingStatus: 'none',
+      maxTeamSize: 1
     }
   ];
   const action = updateAssessmentOverviews(overviews);

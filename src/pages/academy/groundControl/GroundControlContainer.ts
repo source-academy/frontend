@@ -8,7 +8,7 @@ import {
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   changeDateAssessment,
-  changeTeamSizeAssessment,
+  // changeTeamSizeAssessment,
   deleteAssessment,
   publishAssessment,
   uploadAssessment
@@ -24,7 +24,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleAssessmentChangeDate: changeDateAssessment,
-      handleAssessmentChangeTeamSize: changeTeamSizeAssessment,
+      // handleAssessmentChangeTeamSize: changeTeamSizeAssessment,
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,

@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions';
 
 import {
   CHANGE_DATE_ASSESSMENT,
-  CHANGE_TEAM_SIZE_ASSESSMENT,
+  // CHANGE_TEAM_SIZE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
@@ -11,8 +11,8 @@ import {
 export const changeDateAssessment = (id: number, openAt: string, closeAt: string) =>
   action(CHANGE_DATE_ASSESSMENT, { id, openAt, closeAt });
 
-export const changeTeamSizeAssessment = (id: number, maxTeamSize: number) =>
-  action(CHANGE_TEAM_SIZE_ASSESSMENT, { id, maxTeamSize });
+// export const changeTeamSizeAssessment = (id: number, maxTeamSize: number) =>
+//   action(CHANGE_TEAM_SIZE_ASSESSMENT, { id, maxTeamSize });
 
 export const deleteAssessment = (id: number) => action(DELETE_ASSESSMENT, id);
 
