@@ -472,7 +472,9 @@ export function getAgendaItemComponent(
           unhighlightOnHover,
           Layout.compactLevels.reduce<Frame | undefined>(
             (accum, level) =>
-              accum ? accum : level.frames.find(frame => frame.environment?.id === envInstr.env.id),
+              accum
+                ? accum
+                : level.frames.find(frame => frame.environment?.id === getEnvID(envInstr.env)),
             undefined
           )
         );
@@ -563,3 +565,9 @@ export function getStashItemComponent(stashItem: StashValue, stackHeight: number
   }
   return new StashItemComponent(stashItem, stackHeight);
 }
+
+// Helper function to get environment ID. Accounts for the hidden prelude environment right
+// after the global environment. Does not need to be used for frame environments, only for
+// environments from the context.
+export const getEnvID = (environment: Environment): string =>
+  environment.tail?.name === 'global' ? environment.tail.id : environment.id;

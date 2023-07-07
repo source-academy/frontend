@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Layout } from './EnvVisualizerLayout';
 import { EnvTree } from './EnvVisualizerTypes';
-import { deepCopyTree } from './EnvVisualizerUtils';
+import { deepCopyTree, getEnvID } from './EnvVisualizerUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -74,7 +74,7 @@ export default class EnvVisualizer {
   static drawEnv(context: Context) {
     // store environmentTree at last breakpoint.
     EnvVisualizer.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
-    EnvVisualizer.currentEnvId = context.runtime.environments[0].id;
+    EnvVisualizer.currentEnvId = getEnvID(context.runtime.environments[0]);
     if (!this.setVis || !context.runtime.agenda || !context.runtime.stash)
       throw new Error('env visualizer not initialized');
     EnvVisualizer.agenda = context.runtime.agenda;

@@ -34,7 +34,6 @@ export class AgendaStack extends Visible implements IHoverable {
       let highlightOnHover = () => {};
       let unhighlightOnHover = () => {};
 
-      // TODO: Ideally we can split StackItemComponent into their Agenda and Stash counterparts
       highlightOnHover = () => {
         if (node.loc) {
           const start = node.loc.start.line - 1;
