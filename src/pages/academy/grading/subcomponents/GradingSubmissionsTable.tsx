@@ -90,12 +90,14 @@ const columns = [
       );
     }
   }),
-  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
+  columnHelper.accessor(({ submissionId, isGradingPublished, gradingStatus }) => 
+  ({ submissionId, isGradingPublished, gradingStatus }), {
     header: 'Actions',
     enableColumnFilter: false,
     cell: info => {
-      const { submissionId } = info.getValue();
-      return <GradingActions submissionId={submissionId} />;
+      const { submissionId, isGradingPublished, gradingStatus } = info.getValue();
+      return <GradingActions submissionId={submissionId} isGradingPublished={isGradingPublished} 
+        gradingStatus={gradingStatus} />;
     }
   })
 ];

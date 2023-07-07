@@ -4,19 +4,25 @@ import { Flex, Icon } from '@tremor/react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
+  publishGrades,
   reautogradeSubmission,
+  unpublishGrades,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
+import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type GradingActionsProps = {
   submissionId: number;
+  isGradingPublished: boolean;
+  gradingStatus: GradingStatus;
 };
 
-const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
+const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isGradingPublished, gradingStatus }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
+  const isFullyGraded = gradingStatus === 'graded';
 
   const handleReautogradeClick = async () => {
     const confirm = await showSimpleConfirmDialog({
@@ -42,8 +48,44 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
     });
     if (confirm) {
       dispatch(unsubmitSubmission(submissionId));
+      dispatch(unpublishGrades(submissionId));
     }
   };
+
+  const handlePublishClick = async () => {
+    const confirm = await showSimpleConfirmDialog({
+      contents: 'Are you sure you want to publish? Student will be able to see their grade.',
+      positiveIntent: 'danger',
+      positiveLabel: 'Publish'
+    });
+    if (confirm) {
+      dispatch(publishGrades(submissionId));
+    }
+  };
+
+  const handleUnpublishClick = async () => {
+    const confirm = await showSimpleConfirmDialog({
+      contents: 'Are you sure you want to unpublish? Student\'s grade will be hidden.',
+      positiveIntent: 'danger',
+      positiveLabel: 'Unpublish'
+    });
+    if (confirm) {
+      dispatch(unpublishGrades(submissionId));
+    }
+  };
+
+  let publishButton;
+  if(isGradingPublished) {
+    publishButton = <button type="button" style={{ padding: 0 }} onClick={handleUnpublishClick}>
+    <Icon tooltip="Unpublish" icon={() => <BpIcon icon={IconNames.RESET} />} variant={"simple"}/>
+  </button>;
+  }
+  else {
+    publishButton = <button type="button" style={{ padding: 0 }} onClick={() => isFullyGraded ? handlePublishClick() : null}>
+    <Icon tooltip={isFullyGraded ? "Publish" : "Grading not complete"} icon={() => <BpIcon icon={IconNames.CLOUD_UPLOAD} />} variant={"simple"}
+    color={isFullyGraded ? undefined : "neutral"}/>
+  </button>;
+  }
 
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-2">
@@ -62,6 +104,8 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
       <button type="button" style={{ padding: 0 }} onClick={handleUnsubmitClick}>
         <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
       </button>
+
+      {publishButton}
     </Flex>
   );
 };

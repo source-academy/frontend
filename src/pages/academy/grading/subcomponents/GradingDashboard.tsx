@@ -26,7 +26,7 @@ const GradingDashboard: React.FC<GradingDashboardProps> = ({ submissions, handle
     submission =>
       !(
         submission.submissionStatus === 'submitted' &&
-        submission.gradingStatus === GradingStatuses.graded
+        submission.gradingStatus === GradingStatuses.published
       )
   );
   const submissionsData = showGraded ? submissions : ungraded;

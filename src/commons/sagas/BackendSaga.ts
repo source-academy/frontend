@@ -44,12 +44,14 @@ import {
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
+  PUBLISH_GRADES,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
+  UNPUBLISH_GRADES,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
@@ -100,9 +102,11 @@ import {
   postAuth,
   postCreateCourse,
   postGrading,
+  postPublishGrades,
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
+  postUnpublishGrades,
   postUnsubmit,
   putAssessmentConfigs,
   putCourseConfig,
@@ -427,6 +431,44 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.updateGradingOverviews(newOverviews));
     }
   );
+
+  /**
+   * Publishes the grades for the submission and refreshes the grading overviews to reflect backend 
+   * changes to the grading published status.
+   */
+  yield takeEvery(
+    PUBLISH_GRADES,
+    function* (action: ReturnType<typeof actions.publishGrades>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { submissionId } = action.payload;
+
+      const resp: Response | null = yield postPublishGrades(submissionId, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+      
+      yield call(showSuccessMessage, 'Publish successful', 1000);
+    }
+  );
+
+  /**
+   * Unpublished the grades for the submission and refreshes the whole page automatically.
+   */
+  yield takeEvery(
+    UNPUBLISH_GRADES,
+    function* (action: ReturnType<typeof actions.unpublishGrades>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { submissionId } = action.payload;
+      
+      const resp: Response | null = yield postUnpublishGrades(submissionId, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield call(showSuccessMessage, 'Unpublish successful', 1000);
+    }
+  );
+
 
   const sendGrade = function* (
     action:

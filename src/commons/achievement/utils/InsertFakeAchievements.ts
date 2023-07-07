@@ -69,7 +69,7 @@ function insertFakeAchievements(
               requiredCompletionFrac: 0
             }
           },
-          assessmentOverview.gradingStatus === 'graded'
+          assessmentOverview.gradingStatus === 'published'
         );
       }
 

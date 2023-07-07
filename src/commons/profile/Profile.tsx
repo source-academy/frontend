@@ -135,7 +135,7 @@ const Profile: React.FC<ProfileProps> = props => {
         .filter(
           item =>
             item.status === AssessmentStatuses.submitted &&
-            (item.gradingStatus === GradingStatuses.graded ||
+            (item.gradingStatus === GradingStatuses.published ||
               item.gradingStatus === GradingStatuses.excluded)
         )
         .map((assessment, index) => {

@@ -30,6 +30,7 @@ export type GradingOverview = {
   gradingStatus: GradingStatus;
   questionCount: number;
   gradedCount: number;
+  isGradingPublished: boolean;
 };
 
 export type GradingOverviewWithNotifications = {

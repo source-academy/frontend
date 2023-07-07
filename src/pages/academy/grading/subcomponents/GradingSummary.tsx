@@ -33,7 +33,7 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
     ({ groupName }) => group === null || groupName === group
   );
   const ungraded = groupSubmissions.filter(
-    ({ gradingStatus }) => gradingStatus !== GradingStatuses.graded
+    ({ gradingStatus }) => gradingStatus !== GradingStatuses.published
   );
   const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))].reduce(
     (acc: AssessmentSummary[], assessmentId) => {

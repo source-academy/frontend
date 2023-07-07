@@ -171,7 +171,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderGradingStatus: boolean
   ) => {
     const showGrade =
-      overview.gradingStatus === 'graded' || !props.assessmentConfiguration.isManuallyGraded;
+      overview.gradingStatus === 'published' || !props.assessmentConfiguration.isManuallyGraded;
     const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>
@@ -411,11 +411,16 @@ const makeGradingStatus = (gradingStatus: string) => {
   let tooltip: string;
 
   switch (gradingStatus) {
-    case GradingStatuses.graded:
+    case GradingStatuses.published:
       iconName = IconNames.TICK;
       intent = Intent.SUCCESS;
-      tooltip = 'Fully graded';
+      tooltip = 'Grade published';
       break;
+      case GradingStatuses.graded:
+        iconName = IconNames.TIME;
+        intent = Intent.WARNING;
+        tooltip = 'Grading in progress';
+        break;
     case GradingStatuses.grading:
       iconName = IconNames.TIME;
       intent = Intent.WARNING;

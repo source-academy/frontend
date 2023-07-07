@@ -22,7 +22,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     groupName: '1D',
     gradingStatus: 'graded',
     questionCount: 6,
-    gradedCount: 6
+    gradedCount: 6,
+    isGradingPublished: false
   },
   {
     xpAdjustment: -2,
@@ -40,7 +41,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     groupName: '1F',
     gradingStatus: 'grading',
     questionCount: 6,
-    gradedCount: 2
+    gradedCount: 2,
+    isGradingPublished: false
   },
   {
     xpAdjustment: 4,
@@ -58,7 +60,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     groupName: '1F',
     gradingStatus: 'none',
     questionCount: 6,
-    gradedCount: 0
+    gradedCount: 0,
+    isGradingPublished: false
   }
 ];
 

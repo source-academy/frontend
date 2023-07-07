@@ -38,6 +38,7 @@ import {
   LOGIN_GITHUB,
   LOGOUT_GITHUB,
   LOGOUT_GOOGLE,
+  PUBLISH_GRADES,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
@@ -56,6 +57,7 @@ import {
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
   Tokens,
+  UNPUBLISH_GRADES,
   UNSUBMIT_SUBMISSION,
   UPDATE_ALL_USER_XP,
   UPDATE_ASSESSMENT,
@@ -209,6 +211,16 @@ export const updateGrading = (submissionId: number, grading: Grading) =>
 
 export const unsubmitSubmission = (submissionId: number) =>
   action(UNSUBMIT_SUBMISSION, {
+    submissionId
+  });
+
+export const unpublishGrades = (submissionId: number) =>
+  action(UNPUBLISH_GRADES, {
+    submissionId
+  });
+
+export const publishGrades = (submissionId: number) =>
+  action(PUBLISH_GRADES, {
     submissionId
   });
 
