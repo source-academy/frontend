@@ -10,6 +10,7 @@ import { isEqual, isUndefined } from 'lodash';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+// import { consoleOverloads } from 'src/commons/utils/ConsoleOverload';
 
 export type EditTeamSizeCellProps = DispatchProps & StateProps;
 
@@ -23,48 +24,43 @@ type StateProps = {
   data: AssessmentOverview;
 };
 
-// export type EditTeamSizeCellProps = OwnProps;
-
-// type OwnProps = {
-//   assessmentOverview: React.MutableRefObject<AssessmentOverview[]>;
-//   setAssessmentOverview: (assessmentOverview: AssessmentOverview[]) => void;
-//   setHasChangesAssessmentOverview: (val: boolean) => void;
-// };
-
-
-
 const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props => {
   const minTeamSize = 1;
 
-  const { assessmentOverviews, setAssessmentOverview, data } = props;
-
-  const currentTeamSize = data.maxTeamSize;
+  const { assessmentOverviews, setAssessmentOverview, setHasChangesAssessmentOverview, data } = props;
 
   const index = indexOfObject(assessmentOverviews.current, data);
+  console.log("resetting all");
+  const [newTeamSize, setNewTeamSize] = React.useState(data.maxTeamSize);
+  console.log("new",newTeamSize,"actual",data);
 
-  const [newTeamSize, setNewTeamSize] = React.useState(currentTeamSize);
-
-  const handleTeamSizeChange = (index: number, maxTeamSize: number) => {
+  const handleTeamSizeChange = () => {
     const temp = [...assessmentOverviews.current];
-    temp[index] = {
-      ...temp[index],
-      maxTeamSize: maxTeamSize
-    };
-
-    setAssessmentOverview(temp);
+    if (data.maxTeamSize != newTeamSize) {
+      temp[index] = {
+        ...temp[index],
+        maxTeamSize: newTeamSize
+      };
+      setHasChangesAssessmentOverview(true);
+      setAssessmentOverview(temp);
+    } 
   }
+
+  React.useEffect(() => {
+    if (index != -1) {
+      handleTeamSizeChange();
+    }
+  }, [newTeamSize]);
 
   const handleIncrement = () => {
     const updatedTeamSize = newTeamSize + 1;
     setNewTeamSize(updatedTeamSize);
-    handleTeamSizeChange(index, updatedTeamSize);
   };
   
   const handleDecrement = () => {
     if (newTeamSize > minTeamSize) {
       const updatedTeamSize = newTeamSize - 1;
       setNewTeamSize(updatedTeamSize);
-      handleTeamSizeChange(index, updatedTeamSize);
     }
   };
 
@@ -78,7 +74,7 @@ const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props =
           onClick={handleDecrement}
           disabled={newTeamSize === minTeamSize}
         />
-        <span style={{ width: '4rem', padding: '0.2rem', textAlign: 'center' }}>
+        <span style={{ width: '4rem', padding: '0.2rem', textAlign: 'center'}}>
           {newTeamSize}
         </span>
         <Button

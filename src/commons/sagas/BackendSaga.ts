@@ -1067,9 +1067,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     UPDATE_ASSESSMENT_OVERVIEWS,
     function* (action: ReturnType<typeof actions.updateAssessmentOverviews>): any {
-      
       const assessmentOverviews: AssessmentOverview[] = action.payload;
-
       for (let i = 0; i < assessmentOverviews.length; i++) {
         const assessmentOverview = assessmentOverviews[i];
         const tokens: Tokens = yield selectTokens();

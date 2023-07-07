@@ -87,9 +87,7 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
   };
 
   useEffect(() => {
-    if (session.assessmentOverviews) {
-      assessmentOverviews.current = cloneDeep(session.assessmentOverviews);
-    }
+    assessmentOverviews.current = cloneDeep(session.assessmentOverviews);
   }, [session]);
 
   useEffect(() => {
@@ -152,9 +150,7 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
     columnHelper.accessor('maxTeamSize', {
       header: "Max Team Size",
       cell: info => <EditTeamSizeCell 
-        assessmentOverviews={EditTeamSizeCellProps.assessmentOverviews}
-        setAssessmentOverview={EditTeamSizeCellProps.setAssessmentOverview}
-        setHasChangesAssessmentOverview={EditTeamSizeCellProps.setHasChangesAssessmentOverview}
+        {...EditTeamSizeCellProps}
         data={info.row.original}></EditTeamSizeCell>
     }),
     columnHelper.accessor('isPublished', {
@@ -197,7 +193,7 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
   );
 
   const table = useReactTable({
-    data: props.assessmentOverviews || [],
+    data: assessmentOverviews.current || [],
     columns,
     state: {
       columnFilters
