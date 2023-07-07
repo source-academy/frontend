@@ -12,7 +12,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
 import GitHubAssessmentsNavigationBar from '../../commons/navigationBar/subcomponents/GitHubAssessmentsNavigationBar';
-import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
 import GitHubAssessmentListing from './GitHubAssessmentListing';
 import GitHubAssessmentWorkspace from './GitHubAssessmentWorkspace';

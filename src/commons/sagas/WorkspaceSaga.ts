@@ -41,7 +41,8 @@ import {
   BEGIN_INTERRUPT_EXECUTION,
   DEBUG_RESET,
   DEBUG_RESUME,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES
+  UPDATE_EDITOR_HIGHLIGHTED_LINES,
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
@@ -55,11 +56,13 @@ import {
   getRestoreExtraMethodsString,
   getStoreExtraMethodsString,
   highlightClean,
+  highlightCleanForAgenda,
   highlightLine,
+  highlightLineForAgenda,
   makeElevatedContext,
   visualizeEnv
 } from '../utils/JsSlangHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../utils/WarningDialogHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
@@ -350,9 +353,33 @@ export default function* WorkspaceSaga(): SagaIterator {
         highlightClean();
       } else {
         try {
-          newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
-            highlightLine(startRow)
-          );
+          newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
+            for (let row = startRow; row <= endRow; row++) {
+              highlightLine(row);
+            }
+          });
+        } catch (e) {
+          // Error most likely caused by trying to highlight the lines of the prelude
+          // in Env Viz. Can be ignored.
+        }
+      }
+      yield;
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA,
+    function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
+      const newHighlightedLines = action.payload.newHighlightedLines;
+      if (newHighlightedLines.length === 0) {
+        highlightCleanForAgenda();
+      } else {
+        try {
+          newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
+            for (let row = startRow; row <= endRow; row++) {
+              highlightLineForAgenda(row);
+            }
+          });
         } catch (e) {
           // Error most likely caused by trying to highlight the lines of the prelude
           // in Env Viz. Can be ignored.
@@ -549,11 +576,13 @@ let lastDebuggerResult: any;
 let lastNonDetResult: Result;
 function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
-    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
+    const row = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[start, end]]));
+    // We highlight only one row to show the current line
+    // If we highlight from start to end, the whole program block will be highlighted at the start
+    // since the first node is the program node
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[row, row]]));
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.

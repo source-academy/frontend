@@ -8,7 +8,7 @@ const Disabled: React.FC = () => {
   const disabledReason = useLoaderData() as string | undefined;
 
   return (
-    <div className={classNames('NoPage', Classes.DARK)}>
+    <div className={classNames('NoPage', Classes.DARK)} data-testid="Disabled-Component">
       <NonIdealState
         icon={IconNames.ERROR}
         title="Disabled"

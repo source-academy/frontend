@@ -1,6 +1,6 @@
-import { fireEvent } from '@testing-library/react';
-import { mount } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import SideContentHtmlDisplay from '../SideContentHtmlDisplay';
 
@@ -9,8 +9,8 @@ test('HTML Display renders correctly', () => {
     content: stringify('<p>Hello World!</p>'),
     handleAddHtmlConsoleError: (errorMsg: string) => {}
   };
-  const htmlDisplay = mount(<SideContentHtmlDisplay {...mockProps} />);
-  expect(htmlDisplay.debug()).toMatchSnapshot();
+  const htmlDisplay = renderTreeJson(<SideContentHtmlDisplay {...mockProps} />);
+  expect(htmlDisplay).toMatchSnapshot();
 });
 
 describe('HTML Display postMessage Listener', () => {
@@ -21,11 +21,10 @@ describe('HTML Display postMessage Listener', () => {
     handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError
   };
 
-  beforeAll(() => {
-    mount(<SideContentHtmlDisplay {...mockProps} />);
-  });
+  const element = <SideContentHtmlDisplay {...mockProps} />;
 
   test('Does not call handleAddHtmlConsoleError if error message format is invalid', async () => {
+    render(element);
     const mockMessage = {
       data: 'Invalid error',
       origin: '*'
@@ -35,6 +34,7 @@ describe('HTML Display postMessage Listener', () => {
   });
 
   test('Calls handleAddHtmlConsoleError if error message format is valid', async () => {
+    render(element);
     const mockMessage = {
       data: 'Line 1: Syntax Error',
       origin: '*'

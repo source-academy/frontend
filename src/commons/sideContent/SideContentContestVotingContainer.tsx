@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';

@@ -13,14 +13,7 @@ import EnvVisualizer from '../../EnvVisualizer';
 import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { CompactReferenceType, EnvTreeNode, FnTypes, IHoverable } from '../../EnvVisualizerTypes';
-import {
-  getBodyText,
-  getNonEmptyEnv,
-  getParamsText,
-  getTextWidth,
-  setHoveredStyle,
-  setUnhoveredStyle
-} from '../../EnvVisualizerUtils';
+import { getBodyText, getNonEmptyEnv, getParamsText, getTextWidth } from '../../EnvVisualizerUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
@@ -104,13 +97,11 @@ export class FnValue extends Value implements IHoverable {
     if (EnvVisualizer.getPrintableMode()) return;
     this.ref.current.moveToTop();
     this.labelRef.current.show();
-    setHoveredStyle(currentTarget);
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
     this.labelRef.current.hide();
-    setUnhoveredStyle(currentTarget);
   };
   updatePosition(): void {}
   draw(): React.ReactNode {

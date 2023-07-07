@@ -1,8 +1,8 @@
-import { Card, Pre } from '@blueprintjs/core';
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import SideContentContestLeaderboard from '../SideContentContestLeaderboard';
-import SideContentLeaderboardCard from '../SideContentLeaderboardCard';
 
 const mockLeaderboardEntries = [
   {
@@ -32,27 +32,16 @@ const mockProps = {
 
 // Basic snapshot testing to catch unexpected changes
 test('SideContentContestLeaderboard matches snapshot', () => {
-  const contestLeaderboardComponentRender = mount(<SideContentContestLeaderboard {...mockProps} />);
-
-  expect(contestLeaderboardComponentRender.debug()).toMatchSnapshot();
+  const contestLeaderboardComponentRender = shallowRender(
+    <SideContentContestLeaderboard {...mockProps} />
+  );
+  expect(contestLeaderboardComponentRender).toMatchSnapshot();
 });
 
 test('SideContentContestLeaderboard component renders correct number of entries.', () => {
   const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;
-  const SideContentContestLeaderboardRender = mount(contestVotingContainer);
-
-  expect(SideContentContestLeaderboardRender.find('SideContentLeaderboardCard')).toHaveLength(
-    mockLeaderboardEntries.length
-  );
-
-  SideContentContestLeaderboardRender.setProps({
-    contestEntries: [
-      ...mockLeaderboardEntries,
-      { submission_id: 4, answer: { code: '' }, score: 70, student_name: 'student_4' }
-    ]
-  });
-
-  expect(SideContentContestLeaderboardRender.find('SideContentLeaderboardCard')).toHaveLength(
+  render(contestVotingContainer);
+  expect(screen.getAllByTestId('SideContentLeaderboardCard')).toHaveLength(
     mockLeaderboardEntries.length
   );
 });
@@ -60,16 +49,13 @@ test('SideContentContestLeaderboard component renders correct number of entries.
 // test rendering behaviour
 test('SideContentContestLeaderboard orders entry in the same order as orderedContestEntries prop', () => {
   const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;
-  const SideContentContestLeaderboardRender = mount(contestVotingContainer);
-
-  expect(SideContentContestLeaderboardRender.find(Card).at(0).find(Pre).at(2).text()).toBe('100');
-
-  expect(SideContentContestLeaderboardRender.find(Card).at(1).find(Pre).at(2).text()).toBe('90');
-
-  expect(SideContentContestLeaderboardRender.find(Card).at(2).find(Pre).at(2).text()).toBe('80');
+  render(contestVotingContainer);
+  const scores = screen.getAllByTestId('contestentry-score').map(elem => elem.textContent);
+  expect(scores).toEqual(['100', '90', '80']);
 });
 
-test('Clicking the contest entry updates the editor for contest leaderboard.', () => {
+test('Clicking the contest entry updates the editor for contest leaderboard.', async () => {
+  const user = userEvent.setup();
   const mockedHandleContestEntryClick = jest.fn();
 
   const mockProps = {
@@ -78,15 +64,16 @@ test('Clicking the contest entry updates the editor for contest leaderboard.', (
   };
 
   const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;
-  const contestVotingContainerRender = mount(contestVotingContainer);
-
+  render(contestVotingContainer);
   mockedHandleContestEntryClick.mockClear();
-  contestVotingContainerRender.find(SideContentLeaderboardCard).find(Card).at(0).simulate('click');
+
+  const cards = screen.getAllByTestId('SideContentLeaderboardCard');
+  await user.click(cards[0]);
   expect(mockedHandleContestEntryClick).toBeCalledTimes(1);
   expect(mockedHandleContestEntryClick.mock.calls[0][0]).toBe(1);
   expect(mockedHandleContestEntryClick.mock.calls[0][1]).toBe("display('hello world')");
 
-  contestVotingContainerRender.find(SideContentLeaderboardCard).find(Card).at(1).simulate('click');
+  await user.click(cards[1]);
   expect(mockedHandleContestEntryClick).toBeCalledTimes(2);
   expect(mockedHandleContestEntryClick.mock.calls[1][0]).toBe(2);
   expect(mockedHandleContestEntryClick.mock.calls[1][1]).toBe('function test() { return 1; }');

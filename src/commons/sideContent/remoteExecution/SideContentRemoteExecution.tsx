@@ -15,7 +15,7 @@ import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
 import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
 import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
 import {

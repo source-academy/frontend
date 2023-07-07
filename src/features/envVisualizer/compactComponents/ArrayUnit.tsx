@@ -1,4 +1,3 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 
 import { RoundedRect } from '../components/shapes/RoundedRect';
@@ -7,7 +6,6 @@ import EnvVisualizer from '../EnvVisualizer';
 import { CompactConfig } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data } from '../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { ArrayValue } from './values/ArrayValue';
@@ -50,13 +48,9 @@ export class ArrayUnit extends Visible {
 
   updatePosition = () => {};
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-  };
+  onMouseEnter = () => {};
 
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
-  };
+  onMouseLeave = () => {};
 
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;

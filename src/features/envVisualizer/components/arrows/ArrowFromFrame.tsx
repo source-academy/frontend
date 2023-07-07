@@ -2,7 +2,6 @@ import { KonvaEventObject } from 'konva/lib/Node';
 
 import { Config } from '../../EnvVisualizerConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from '../../EnvVisualizerUtils';
 import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
@@ -38,28 +37,13 @@ export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
 
   onClick(e: KonvaEventObject<MouseEvent>) {
     super.onClick(e);
-    setHoveredStyle(e.currentTarget, {
-      strokeWidth: Number(Config.FrameArrowHoveredStrokeWidth)
-    });
   }
 
   onMouseEnter(e: KonvaEventObject<MouseEvent>) {
     super.onMouseEnter(e);
-    setHoveredStyle(e.currentTarget, {
-      strokeWidth: Number(Config.FrameArrowHoveredStrokeWidth)
-    });
   }
 
   onMouseLeave(e: KonvaEventObject<MouseEvent>) {
     super.onMouseLeave(e);
-    if (this.isSelected() || (this.source as Frame).isSelected()) {
-      setHoveredStyle(e.currentTarget, {
-        strokeWidth: Number(Config.FrameArrowStrokeWidth)
-      });
-    } else {
-      setUnhoveredStyle(e.currentTarget, {
-        strokeWidth: Number(Config.FrameArrowStrokeWidth)
-      });
-    }
   }
 }
