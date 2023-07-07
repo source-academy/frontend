@@ -1163,6 +1163,7 @@ export const removeAssessmentConfig = async (
   return resp;
 };
 
+
 export const removeTimeOptions = async (
   tokens: Tokens,
   timeOptionIds: number[]
@@ -1246,12 +1247,13 @@ export const postNotificationPreference = async (
   return resp;
 };
 
+
 export const putNotificationPreferences = async (
   tokens: Tokens,
   notiPrefs: NotificationPreference[],
   courseRegId: number
 ): Promise<Response | null> => {
-  const resp = await request(`notifications/preferences`, 'PUT', {
+  const resp = await request(`courses/${courseIdWithoutPrefix()}/notifications/preferences`, 'PUT', {
     ...tokens,
     body: notiPrefs.map(pref => {
       return { ...pref, courseRegId: courseRegId };
