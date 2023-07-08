@@ -507,15 +507,15 @@ exports[`EnvVisualizer component renders correctly 1`] = `
     b: Move to the previous step
     <br />
     <br />
-    Note that these shortcuts are only active when the browser focus is on this tab.
+    Note that these shortcuts are only active when the browser focus is on this tab. asdkada
   </div>
   <div
-    className="bp4-button-group"
+    className="bp4-button-group bp4-vertical"
     style={
       Object {
-        "bottom": "10px",
-        "position": "fixed",
-        "right": "10px",
+        "bottom": "20px",
+        "position": "absolute",
+        "right": "20px",
       }
     }
   >
@@ -525,6 +525,12 @@ exports[`EnvVisualizer component renders correctly 1`] = `
       onBlur={[Function]}
       onKeyDown={[Function]}
       onKeyUp={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px",
+          "marginBottom": "5px",
+        }
+      }
       tabIndex={-1}
       type="button"
     >
@@ -553,6 +559,11 @@ exports[`EnvVisualizer component renders correctly 1`] = `
       onBlur={[Function]}
       onKeyDown={[Function]}
       onKeyUp={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px",
+        }
+      }
       tabIndex={-1}
       type="button"
     >

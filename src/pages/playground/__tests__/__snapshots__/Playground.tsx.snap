@@ -1283,15 +1283,16 @@ and also the
                               b: Move to the previous step
                               <br />
                               <br />
-                              Note that these shortcuts are only active when the browser focus is on this tab.
+                              Note that these shortcuts are only active when the browser focus is on this tab. asdkada
                             </div>
                             <div
-                              class="bp4-button-group"
-                              style="position: fixed; bottom: 10px; right: 10px;"
+                              class="bp4-button-group bp4-vertical"
+                              style="position: absolute; bottom: 20px; right: 20px;"
                             >
                               <button
                                 class="bp4-button bp4-disabled"
                                 disabled=""
+                                style="margin-bottom: 5px; border-radius: 3px;"
                                 tabindex="-1"
                                 type="button"
                               >
@@ -1317,6 +1318,7 @@ and also the
                               <button
                                 class="bp4-button bp4-disabled"
                                 disabled=""
+                                style="border-radius: 3px;"
                                 tabindex="-1"
                                 type="button"
                               >
