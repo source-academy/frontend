@@ -2,7 +2,10 @@ export const SAVE_CANVAS = 'SAVE_CANVAS';
 
 export const numberRegExp = /^-?\d+$/;
 
+// Full assessment path: /courses/:courseId/:assessmentType/:assessmentId?/:questionId?
+export const assessmentFullPathRegex = /\/courses\/\d+\/[a-zA-Z]+\/\d+\/\d+/;
 export const assessmentRegExp = ':assessmentId?/:questionId?';
+
 export const gradingRegExp = ':submissionId?/:questionId?';
 
 export const CREATE_COURSE = 'CREATE_COURSE';
