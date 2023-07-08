@@ -35,7 +35,7 @@ export class StashStack extends Visible implements IHoverable {
     };
     this.stashItemComponents = this.stash
       .getStack()
-      .slice(EnvVisualizer.getStackTruncated() ? this.stash.size() - 10 : 0)
+      .slice(EnvVisualizer.getStackTruncated() ? -10 : 0)
       .map(stashItemToComponent);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}

@@ -55,7 +55,7 @@ export class AgendaStack extends Visible implements IHoverable {
 
     this.stackItemComponents = this.agenda
       .getStack()
-      .slice(EnvVisualizer.getStackTruncated() ? this.agenda.size() - 10 : 0)
+      .slice(EnvVisualizer.getStackTruncated() ? -10 : 0)
       .map(agendaItemToComponent);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}
