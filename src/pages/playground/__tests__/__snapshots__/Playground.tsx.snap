@@ -879,7 +879,7 @@ and also the
                           class="side-content-text"
                         >
                           <div
-                            style="max-height: 70vh; overflow: auto;"
+                            style="max-height: 100%; overflow: auto;"
                             tabindex="-1"
                           >
                             <div
@@ -962,6 +962,7 @@ and also the
                                       >
                                         <label
                                           class="bp4-control bp4-checkbox"
+                                          style="margin: 0px;"
                                         >
                                           <input
                                             type="checkbox"
@@ -1005,6 +1006,7 @@ and also the
                                       >
                                         <label
                                           class="bp4-control bp4-checkbox bp4-disabled"
+                                          style="margin: 0px;"
                                         >
                                           <input
                                             disabled=""
@@ -1157,6 +1159,7 @@ and also the
                                       >
                                         <label
                                           class="bp4-control bp4-checkbox bp4-disabled"
+                                          style="margin: 0px;"
                                         >
                                           <input
                                             disabled=""
@@ -1201,6 +1204,7 @@ and also the
                                       >
                                         <label
                                           class="bp4-control bp4-checkbox bp4-disabled"
+                                          style="margin: 0px;"
                                         >
                                           <input
                                             disabled=""

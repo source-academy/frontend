@@ -9,7 +9,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
   onKeyUp={[Function]}
   style={
     Object {
-      "maxHeight": "70vh",
+      "maxHeight": "100%",
       "overflow": "auto",
     }
   }
@@ -130,6 +130,11 @@ exports[`EnvVisualizer component renders correctly 1`] = `
             >
               <label
                 className="bp4-control bp4-checkbox"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
               >
                 <input
                   checked={false}
@@ -185,6 +190,11 @@ exports[`EnvVisualizer component renders correctly 1`] = `
             >
               <label
                 className="bp4-control bp4-checkbox bp4-disabled"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
               >
                 <input
                   checked={false}
@@ -360,6 +370,11 @@ exports[`EnvVisualizer component renders correctly 1`] = `
             >
               <label
                 className="bp4-control bp4-checkbox bp4-disabled"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
               >
                 <input
                   checked={false}
@@ -415,6 +430,11 @@ exports[`EnvVisualizer component renders correctly 1`] = `
             >
               <label
                 className="bp4-control bp4-checkbox bp4-disabled"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
               >
                 <input
                   checked={false}

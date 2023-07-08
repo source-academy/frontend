@@ -201,6 +201,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   <Checkbox
                     checked={EnvVisualizer.getAgendaStash()}
                     disabled={!EnvVisualizer.getCompactLayout()}
+                    style={{ margin: 0 }}
                   />
                 </AnchorButton>
               </Tooltip2>
@@ -218,6 +219,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   <Checkbox
                     checked={EnvVisualizer.getStackTruncated()}
                     disabled={!EnvVisualizer.getAgendaStash()}
+                    style={{ margin: 0 }}
                   />
                 </AnchorButton>
               </Tooltip2>
@@ -259,6 +261,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   <Checkbox
                     checked={!EnvVisualizer.getCompactLayout()}
                     disabled={!this.state.visualization}
+                    style={{ margin: 0 }}
                   />
                 </AnchorButton>
               </Tooltip2>
@@ -276,6 +279,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   <Checkbox
                     disabled={!this.state.visualization}
                     checked={EnvVisualizer.getPrintableMode()}
+                    style={{ margin: 0 }}
                   />
                 </AnchorButton>
               </Tooltip2>
