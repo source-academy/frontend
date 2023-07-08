@@ -485,7 +485,7 @@ export class Layout {
    * Updates the scale of the stage after the user inititates a zoom in or out
    * by scrolling or by the trackpad.
    */
-  static zoomStage(event: KonvaEventObject<WheelEvent> | boolean) {
+  static zoomStage(event: KonvaEventObject<WheelEvent> | boolean, multiplier: number = 1) {
     typeof event != 'boolean' && event.evt.preventDefault();
     if (Layout.stageRef.current !== null) {
       const stage = Layout.stageRef.current;
@@ -503,7 +503,9 @@ export class Layout {
       // Check if the zoom limits have been reached
       if ((direction > 0 && oldScale < 3) || (direction < 0 && oldScale > 0.4)) {
         const newScale =
-          direction > 0 ? oldScale * Layout.scaleFactor : oldScale / Layout.scaleFactor;
+          direction > 0
+            ? oldScale * Layout.scaleFactor ** multiplier
+            : oldScale / Layout.scaleFactor ** multiplier;
         stage.scale({ x: newScale, y: newScale });
         if (typeof event !== 'boolean') {
           const newPos = {

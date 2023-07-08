@@ -507,7 +507,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
     b: Move to the previous step
     <br />
     <br />
-    Note that these shortcuts are only active when the browser focus is on this tab. asdkada
+    Note that these shortcuts are only active when the browser focus is on this tab.
   </div>
   <div
     className="bp4-button-group bp4-vertical"
