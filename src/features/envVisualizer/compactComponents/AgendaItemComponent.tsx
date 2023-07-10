@@ -2,8 +2,6 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
-import { FnValue } from '../components/values/FnValue';
-import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
@@ -36,7 +34,7 @@ export class AgendaItemComponent extends Visible implements IHoverable {
     readonly highlightOnHover: () => void,
     /** callback function to unhighlight editor lines after hover */
     readonly unhighlightOnHover: () => void,
-    arrowTo?: Frame | FnValue | GlobalFnValue
+    arrowTo?: Frame
   ) {
     super();
     this.text = truncateText(

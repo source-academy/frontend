@@ -12,6 +12,7 @@ import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
   getTextWidth,
+  isArray,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -19,7 +20,7 @@ import {
   truncateText
 } from '../EnvVisualizerUtils';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
-import { Frame } from './Frame';
+import { ArrayValue } from './values/ArrayValue';
 
 export class StashItemComponent extends Visible implements IHoverable {
   /** text to display */
@@ -32,23 +33,22 @@ export class StashItemComponent extends Visible implements IHoverable {
   constructor(
     readonly value: any,
     stackHeightWidth: number,
-    arrowTo?: Frame | FnValue | GlobalFnValue
+    arrowTo?: FnValue | GlobalFnValue | ArrayValue
   ) {
     super();
-    this.text = (
-      typeof value === 'string'
-        ? truncateText(
-            `'${value}'`.trim(),
-            AgendaStashConfig.StashMaxTextWidth,
-            AgendaStashConfig.StashMaxTextHeight
-          )
-        : truncateText(
-            String(value),
-            AgendaStashConfig.StashMaxTextWidth,
-            AgendaStashConfig.StashMaxTextHeight
-          )
+    const valToStashRep = (val: any): string => {
+      return typeof val === 'string' && !arrowTo
+        ? `'${val}'`.trim()
+        : isArray(val) && !arrowTo
+        ? JSON.stringify(val)
+        : String(value);
+    };
+    this.text = truncateText(
+      valToStashRep(value),
+      AgendaStashConfig.StashMaxTextWidth,
+      AgendaStashConfig.StashMaxTextHeight
     ).replace(/[\r\n]/gm, ' ');
-    this.tooltip = this.value;
+    this.tooltip = valToStashRep(value);
     this.tooltipRef = React.createRef();
     this._width =
       AgendaStashConfig.AgendaItemTextPadding * 2 +

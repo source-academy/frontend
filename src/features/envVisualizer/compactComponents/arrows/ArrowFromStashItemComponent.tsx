@@ -4,12 +4,13 @@ import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
+import { ArrayValue } from '../values/ArrayValue';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromStashItemComponent extends GenericArrow<
   StashItemComponent,
-  Frame | FnValue | GlobalFnValue
+  Frame | FnValue | GlobalFnValue | ArrayValue
 > {
   protected calculateSteps() {
     const from = this.source;
