@@ -91,8 +91,8 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
   }, [session]);
 
   useEffect(() => {
-    props.handleAssessmentOverviewFetch();
-    props.handleFetchCourseConfigs();
+    // props.handleAssessmentOverviewFetch();
+    // props.handleFetchCourseConfigs();
     dispatch(
       updateGroundControlTableFilters({columnFilters})
     );
