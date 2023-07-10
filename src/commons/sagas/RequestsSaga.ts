@@ -405,6 +405,7 @@ export const getAssessmentOverviews = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const assessmentOverviews = await resp.json();
+  
   return assessmentOverviews.map((overview: any) => {
     overview.gradingStatus = computeGradingStatus(
       overview.isManuallyGraded,
@@ -884,7 +885,7 @@ export const deleteSourcecastEntry = async (
  */
 export const updateAssessment = async (
   id: number,
-  body: { openAt?: string; closeAt?: string; isPublished?: boolean },
+  body: { openAt?: string; closeAt?: string; isPublished?: boolean, maxTeamSize?: number },
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {

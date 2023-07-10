@@ -407,6 +407,12 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
+  groundControl: {
+    ...createDefaultWorkspace('groundControl'),
+    GroundControlTableFilters: {
+      columnFilters: []
+    }
+  },
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,

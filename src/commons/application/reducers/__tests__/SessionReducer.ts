@@ -323,7 +323,8 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 5
   }
 ];
 
@@ -342,7 +343,8 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    maxTeamSize: 1
   }
 ];
 

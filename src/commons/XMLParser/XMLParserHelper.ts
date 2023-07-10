@@ -84,7 +84,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     xp: 0,
-    gradingStatus: 'none' as GradingStatuses
+    gradingStatus: 'none' as GradingStatuses,
+    maxTeamSize: 1 // TODO: This is temporarily hardcoded to 1.
   };
 };
 

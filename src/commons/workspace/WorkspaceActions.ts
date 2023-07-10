@@ -33,6 +33,7 @@ import {
   EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
+  GroundControlTableFilters,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -62,6 +63,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_ENVSTEPS,
   UPDATE_ENVSTEPSTOTAL,
+  UPDATE_GROUND_CONTROL_TABLE_FILTERS,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -331,6 +333,9 @@ export const setIsEditorReadonly = (
 
 export const updateSubmissionsTableFilters = (filters: SubmissionsTableFilters) =>
   action(UPDATE_SUBMISSIONS_TABLE_FILTERS, { filters });
+
+export const updateGroundControlTableFilters = (filters: GroundControlTableFilters) =>
+  action(UPDATE_GROUND_CONTROL_TABLE_FILTERS, { filters });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>
   action(UPDATE_CURRENT_ASSESSMENT_ID, {

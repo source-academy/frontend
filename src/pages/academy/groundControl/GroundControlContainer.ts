@@ -8,6 +8,7 @@ import {
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   changeDateAssessment,
+  // changeTeamSizeAssessment,
   deleteAssessment,
   publishAssessment,
   uploadAssessment
@@ -23,6 +24,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleAssessmentChangeDate: changeDateAssessment,
+      // handleAssessmentChangeTeamSize: changeTeamSizeAssessment,
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
@@ -31,7 +33,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     },
     dispatch
   );
-
+  
 const GroundControlContainer = connect(mapStateToProps, mapDispatchToProps)(GroundControl);
 
 export default GroundControlContainer;
