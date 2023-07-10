@@ -788,10 +788,14 @@ export const postUnpublishGrades = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/grading/${submissionId}/unpublish_grades`, 'POST', {
-    ...tokens,
-    noHeaderAccept: true
-  });
+  const resp = await request(
+    `${courseId()}/admin/grading/${submissionId}/unpublish_grades`,
+    'POST',
+    {
+      ...tokens,
+      noHeaderAccept: true
+    }
+  );
 
   return resp;
 };
@@ -807,7 +811,7 @@ export const postPublishGrades = async (
     ...tokens,
     noHeaderAccept: true
   });
-  
+
   return resp;
 };
 

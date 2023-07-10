@@ -419,11 +419,11 @@ const makeGradingStatus = (gradingStatus: string) => {
       intent = Intent.SUCCESS;
       tooltip = 'Grade published';
       break;
-      case GradingStatuses.graded:
-        iconName = IconNames.TIME;
-        intent = Intent.WARNING;
-        tooltip = 'Grading in progress';
-        break;
+    case GradingStatuses.graded:
+      iconName = IconNames.TIME;
+      intent = Intent.WARNING;
+      tooltip = 'Grading in progress';
+      break;
     case GradingStatuses.grading:
       iconName = IconNames.TIME;
       intent = Intent.WARNING;

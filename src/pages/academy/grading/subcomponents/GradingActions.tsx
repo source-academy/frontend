@@ -19,7 +19,11 @@ type GradingActionsProps = {
   gradingStatus: GradingStatus;
 };
 
-const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isGradingPublished, gradingStatus }) => {
+const GradingActions: React.FC<GradingActionsProps> = ({
+  submissionId,
+  isGradingPublished,
+  gradingStatus
+}) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
   const isFullyGraded = gradingStatus === 'graded';
@@ -65,7 +69,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isGrading
 
   const handleUnpublishClick = async () => {
     const confirm = await showSimpleConfirmDialog({
-      contents: 'Are you sure you want to unpublish? Student\'s grade will be hidden.',
+      contents: "Are you sure you want to unpublish? Student's grade will be hidden.",
       positiveIntent: 'danger',
       positiveLabel: 'Unpublish'
     });
@@ -75,16 +79,31 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isGrading
   };
 
   let publishButton;
-  if(isGradingPublished) {
-    publishButton = <button type="button" style={{ padding: 0 }} onClick={handleUnpublishClick}>
-    <Icon tooltip="Unpublish" icon={() => <BpIcon icon={IconNames.RESET} />} variant={"simple"}/>
-  </button>;
-  }
-  else {
-    publishButton = <button type="button" style={{ padding: 0 }} onClick={() => isFullyGraded ? handlePublishClick() : null}>
-    <Icon tooltip={isFullyGraded ? "Publish" : "Grading not complete"} icon={() => <BpIcon icon={IconNames.CLOUD_UPLOAD} />} variant={"simple"}
-    color={isFullyGraded ? undefined : "neutral"}/>
-  </button>;
+  if (isGradingPublished) {
+    publishButton = (
+      <button type="button" style={{ padding: 0 }} onClick={handleUnpublishClick}>
+        <Icon
+          tooltip="Unpublish"
+          icon={() => <BpIcon icon={IconNames.RESET} />}
+          variant={'simple'}
+        />
+      </button>
+    );
+  } else {
+    publishButton = (
+      <button
+        type="button"
+        style={{ padding: 0 }}
+        onClick={() => (isFullyGraded ? handlePublishClick() : null)}
+      >
+        <Icon
+          tooltip={isFullyGraded ? 'Publish' : 'Grading not complete'}
+          icon={() => <BpIcon icon={IconNames.CLOUD_UPLOAD} />}
+          variant={'simple'}
+          color={isFullyGraded ? undefined : 'neutral'}
+        />
+      </button>
+    );
   }
 
   return (
