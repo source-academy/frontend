@@ -32,23 +32,23 @@ const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props =
   const index = indexOfObject(assessmentOverviews.current, data);
   const [newTeamSize, setNewTeamSize] = React.useState(data.maxTeamSize);
 
-  const handleTeamSizeChange = () => {
-    const temp = [...assessmentOverviews.current];
-    if (data.maxTeamSize !== newTeamSize) {
-      temp[index] = {
-        ...temp[index],
-        maxTeamSize: newTeamSize
-      };
-      setHasChangesAssessmentOverview(true);
-      setAssessmentOverview(temp);
-    } 
-  }
-
   React.useEffect(() => {
+    const handleTeamSizeChange = () => {
+      const temp = [...assessmentOverviews.current];
+      if (data.maxTeamSize !== newTeamSize) {
+        temp[index] = {
+          ...temp[index],
+          maxTeamSize: newTeamSize
+        };
+        setHasChangesAssessmentOverview(true);
+        setAssessmentOverview(temp);
+      }
+    };
+  
     if (index !== -1) {
       handleTeamSizeChange();
     }
-  }, [newTeamSize]);
+  }, [newTeamSize, index, assessmentOverviews, data.maxTeamSize, setHasChangesAssessmentOverview, setAssessmentOverview]);
 
   const handleIncrement = () => {
     const updatedTeamSize = newTeamSize + 1;
