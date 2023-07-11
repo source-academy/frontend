@@ -1,3 +1,4 @@
+import Closure from 'js-slang/dist/interpreter/closure';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
@@ -5,17 +6,18 @@ import { Label, Tag, Text } from 'react-konva';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
   getTextWidth,
   isArray,
+  isStashItemInDanger,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
+  stackItemSAColor,
   truncateText
 } from '../EnvVisualizerUtils';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
@@ -33,14 +35,20 @@ export class StashItemComponent extends Visible implements IHoverable {
     readonly value: any,
     /** The width of the stack so far */
     stackWidth: number,
+    /** The index number of this stack item */
+    readonly index: number,
     arrowTo?: FnValue | GlobalFnValue | ArrayValue
   ) {
     super();
     const valToStashRep = (val: any): string => {
-      return typeof val === 'string' && !arrowTo
+      return typeof val === 'string'
         ? `'${val}'`.trim()
-        : isArray(val) && !arrowTo
-        ? JSON.stringify(val)
+        : val instanceof Closure
+        ? 'CLOSURE'
+        : isArray(val)
+        ? arrowTo
+          ? 'PAIR/ARRAY'
+          : JSON.stringify(val)
         : String(value);
     };
     this.text = truncateText(
@@ -65,13 +73,13 @@ export class StashItemComponent extends Visible implements IHoverable {
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(e.currentTarget);
+    !isStashItemInDanger(this.index) && setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
     this.tooltipRef.current.show();
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(e.currentTarget);
+    !isStashItemInDanger(this.index) && setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
     this.tooltipRef.current.hide();
   };
@@ -90,9 +98,7 @@ export class StashItemComponent extends Visible implements IHoverable {
       fontVariant: AgendaStashConfig.FontVariant.toString()
     };
     const tagProps = {
-      stroke: EnvVisualizer.getPrintableMode()
-        ? AgendaStashConfig.SA_BLUE.toString()
-        : AgendaStashConfig.SA_WHITE.toString(),
+      stroke: stackItemSAColor(this.index),
       cornerRadius: Number(AgendaStashConfig.StashItemCornerRadius)
     };
     return (

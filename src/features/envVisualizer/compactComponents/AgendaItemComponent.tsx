@@ -3,11 +3,11 @@ import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
+  currentItemSAColor,
   getTextHeight,
   setHoveredCursor,
   setHoveredStyle,
@@ -34,6 +34,7 @@ export class AgendaItemComponent extends Visible implements IHoverable {
     readonly highlightOnHover: () => void,
     /** callback function to unhighlight editor lines after hover */
     readonly unhighlightOnHover: () => void,
+    readonly topItem: boolean,
     arrowTo?: Frame
   ) {
     super();
@@ -66,14 +67,14 @@ export class AgendaItemComponent extends Visible implements IHoverable {
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     this.highlightOnHover();
-    setHoveredStyle(e.currentTarget);
+    !this.topItem && setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
     this.tooltipRef.current.show();
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
     this.unhighlightOnHover?.();
-    setUnhoveredStyle(e.currentTarget);
+    !this.topItem && setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
     this.tooltipRef.current.hide();
   };
@@ -92,9 +93,7 @@ export class AgendaItemComponent extends Visible implements IHoverable {
       fontVariant: AgendaStashConfig.FontVariant.toString()
     };
     const tagProps = {
-      stroke: EnvVisualizer.getPrintableMode()
-        ? AgendaStashConfig.SA_BLUE.toString()
-        : AgendaStashConfig.SA_WHITE.toString(),
+      stroke: currentItemSAColor(this.topItem),
       cornerRadius: Number(AgendaStashConfig.AgendaItemCornerRadius)
     };
     return (

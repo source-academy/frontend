@@ -27,10 +27,12 @@ export class StashStack extends Visible implements IHoverable {
     this._height = 0;
 
     // Function to convert the stack items to their components
+    let i = 0;
     const stashItemToComponent = (stashItem: Value) => {
-      const component = getStashItemComponent(stashItem, this._width);
+      const component = getStashItemComponent(stashItem, this._width, i);
       this._width += component.width();
       this._height = Math.max(this._height, component.height());
+      i += 1;
       return component;
     };
     this.stashItemComponents = this.stash
