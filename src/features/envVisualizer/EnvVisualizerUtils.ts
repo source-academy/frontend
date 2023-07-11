@@ -405,9 +405,13 @@ export const isInstr = (command: AgendaItem): command is Instr => {
 export function getAgendaItemComponent(
   agendaItem: AgendaItem,
   stackHeight: number,
+  index: number,
   highlightOnHover: () => void,
   unhighlightOnHover: () => void
 ): AgendaItemComponent {
+  const topItem = EnvVisualizer.getStackTruncated()
+    ? index === Math.min(Layout.agenda.size() - 1, 9)
+    : index === Layout.agenda.size() - 1;
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
       case 'Literal':
@@ -416,7 +420,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       default:
         return new AgendaItemComponent(
@@ -424,7 +428,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
     }
   } else {
@@ -435,7 +439,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.WHILE:
         return new AgendaItemComponent(
@@ -443,7 +447,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.FOR:
         return new AgendaItemComponent(
@@ -451,7 +455,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.ASSIGNMENT:
         const assmtInstr = agendaItem as AssmtInstr;
@@ -460,7 +464,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.UNARY_OP:
         const unOpInstr = agendaItem as UnOpInstr;
@@ -469,7 +473,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.BINARY_OP:
         const binOpInstr = agendaItem as BinOpInstr;
@@ -478,7 +482,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.POP:
         return new AgendaItemComponent(
@@ -486,7 +490,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.APPLICATION:
         return new AgendaItemComponent(
@@ -494,7 +498,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.BRANCH:
         return new AgendaItemComponent(
@@ -502,7 +506,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.ENVIRONMENT:
         const envInstr = agendaItem as EnvInstr;
@@ -511,7 +515,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek(),
+          topItem,
           Layout.compactLevels.reduce<Frame | undefined>(
             (accum, level) =>
               accum
@@ -526,7 +530,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.ARRAY_LITERAL:
         return new AgendaItemComponent(
@@ -534,7 +538,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.ARRAY_ACCESS:
         return new AgendaItemComponent(
@@ -542,7 +546,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.ARRAY_ASSIGNMENT:
         return new AgendaItemComponent(
@@ -550,7 +554,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.ARRAY_LENGTH:
         return new AgendaItemComponent(
@@ -558,7 +562,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.CONTINUE:
         return new AgendaItemComponent(
@@ -566,7 +570,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.CONTINUE_MARKER:
         return new AgendaItemComponent(
@@ -574,7 +578,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.BREAK:
         return new AgendaItemComponent(
@@ -582,7 +586,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.BREAK_MARKER:
         return new AgendaItemComponent(
@@ -590,7 +594,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       case InstrType.MARKER:
         return new AgendaItemComponent(
@@ -598,7 +602,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
       default:
         return new AgendaItemComponent(
@@ -606,7 +610,7 @@ export function getAgendaItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          agendaItem === Layout.agenda.peek()
+          topItem
         );
     }
   }

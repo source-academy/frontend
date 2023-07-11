@@ -29,6 +29,7 @@ export class AgendaStack extends Visible implements IHoverable {
     this.agenda = agenda;
 
     // Function to convert the stack items to their components
+    let i = 0;
     const agendaItemToComponent = (agendaItem: AgendaItem) => {
       const node = isNode(agendaItem) ? agendaItem : agendaItem.srcNode;
       let highlightOnHover = () => {};
@@ -45,10 +46,12 @@ export class AgendaStack extends Visible implements IHoverable {
       const component = getAgendaItemComponent(
         agendaItem,
         this._height,
+        i,
         highlightOnHover,
         unhighlightOnHover
       );
       this._height += component.height();
+      i += 1;
 
       return component;
     };
