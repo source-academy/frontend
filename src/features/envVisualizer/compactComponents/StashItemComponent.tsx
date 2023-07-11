@@ -7,7 +7,6 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
-import { CompactConfig } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
@@ -32,7 +31,8 @@ export class StashItemComponent extends Visible implements IHoverable {
 
   constructor(
     readonly value: any,
-    stackHeightWidth: number,
+    /** The width of the stack so far */
+    stackWidth: number,
     arrowTo?: FnValue | GlobalFnValue | ArrayValue
   ) {
     super();
@@ -51,13 +51,13 @@ export class StashItemComponent extends Visible implements IHoverable {
     this.tooltip = valToStashRep(value);
     this.tooltipRef = React.createRef();
     this._width =
-      AgendaStashConfig.AgendaItemTextPadding * 2 +
+      AgendaStashConfig.StashItemTextPadding * 2 +
       getTextWidth(
         this.text,
         `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`
       );
-    this._height = AgendaStashConfig.StashItemHeight + AgendaStashConfig.AgendaItemTextPadding * 2;
-    this._x = AgendaStashConfig.StashPosX + stackHeightWidth;
+    this._height = AgendaStashConfig.StashItemHeight + AgendaStashConfig.StashItemTextPadding * 2;
+    this._x = AgendaStashConfig.StashPosX + stackWidth;
     this._y = AgendaStashConfig.StashPosY;
     if (arrowTo) {
       this.arrow = new ArrowFromStashItemComponent(this).to(arrowTo) as ArrowFromStashItemComponent;
@@ -83,7 +83,7 @@ export class StashItemComponent extends Visible implements IHoverable {
   draw(): React.ReactNode {
     const textProps = {
       fill: AgendaStashConfig.SA_WHITE.toString(),
-      padding: Number(AgendaStashConfig.AgendaItemTextPadding),
+      padding: Number(AgendaStashConfig.StashItemTextPadding),
       fontFamily: AgendaStashConfig.FontFamily.toString(),
       fontSize: Number(AgendaStashConfig.FontSize),
       fontStyle: AgendaStashConfig.FontStyle.toString(),
@@ -93,7 +93,7 @@ export class StashItemComponent extends Visible implements IHoverable {
       stroke: EnvVisualizer.getPrintableMode()
         ? AgendaStashConfig.SA_BLUE.toString()
         : AgendaStashConfig.SA_WHITE.toString(),
-      cornerRadius: Number(AgendaStashConfig.AgendaItemCornerRadius)
+      cornerRadius: Number(AgendaStashConfig.StashItemCornerRadius)
     };
     return (
       <React.Fragment key={Layout.key++}>
@@ -104,26 +104,25 @@ export class StashItemComponent extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
         >
           <Tag {...ShapeDefaultProps} {...tagProps} />
-          <Text {...ShapeDefaultProps} {...textProps} key={Layout.key++} text={String(this.text)} />
+          <Text {...ShapeDefaultProps} {...textProps} text={this.text} />
         </Label>
         <Label
-          x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
-          y={this.y() - CompactConfig.TextPaddingY}
+          x={this.x() + AgendaStashConfig.TooltipMargin}
+          y={this.y() + this.height() + AgendaStashConfig.TooltipMargin}
           visible={false}
           ref={this.tooltipRef}
         >
           <Tag
+            {...ShapeDefaultProps}
             stroke="black"
             fill={'black'}
-            opacity={Number(AgendaStashConfig.NodeTooltipOpacity)}
+            opacity={Number(AgendaStashConfig.TooltipOpacity)}
           />
           <Text
+            {...ShapeDefaultProps}
+            {...textProps}
             text={this.tooltip}
-            fontFamily={CompactConfig.FontFamily.toString()}
-            fontSize={Number(CompactConfig.FontSize)}
-            fontStyle={CompactConfig.FontStyle.toString()}
-            fill={CompactConfig.SA_WHITE.toString()}
-            padding={5}
+            padding={Number(AgendaStashConfig.TooltipPadding)}
           />
         </Label>
         {this.arrow?.draw()}

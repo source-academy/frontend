@@ -5,7 +5,6 @@ import { Label, Tag, Text } from 'react-konva';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
-import { CompactConfig } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
@@ -29,7 +28,8 @@ export class AgendaItemComponent extends Visible implements IHoverable {
 
   constructor(
     readonly value: any,
-    stackHeightWidth: number,
+    /** The height of the stack so far */
+    stackHeight: number,
     /** callback function to highlight editor lines on hover */
     readonly highlightOnHover: () => void,
     /** callback function to unhighlight editor lines after hover */
@@ -47,7 +47,7 @@ export class AgendaItemComponent extends Visible implements IHoverable {
     this.highlightOnHover = highlightOnHover;
     this.unhighlightOnHover = unhighlightOnHover;
     this._x = AgendaStashConfig.AgendaPosX;
-    this._y = AgendaStashConfig.AgendaPosY + stackHeightWidth;
+    this._y = AgendaStashConfig.AgendaPosY + stackHeight;
     this._width = AgendaStashConfig.AgendaItemWidth;
     this._height =
       getTextHeight(
@@ -109,30 +109,28 @@ export class AgendaItemComponent extends Visible implements IHoverable {
           <Text
             {...ShapeDefaultProps}
             {...textProps}
-            key={Layout.key++}
-            text={String(this.text)}
+            text={this.text}
             width={this.width()}
             height={this.height()}
           />
         </Label>
         <Label
-          x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
-          y={this.y() - CompactConfig.TextPaddingY}
+          x={this.x() + this.width() + AgendaStashConfig.TooltipMargin}
+          y={this.y() + AgendaStashConfig.TooltipMargin}
           visible={false}
           ref={this.tooltipRef}
         >
           <Tag
+            {...ShapeDefaultProps}
             stroke="black"
             fill={'black'}
-            opacity={Number(AgendaStashConfig.NodeTooltipOpacity)}
+            opacity={Number(AgendaStashConfig.TooltipOpacity)}
           />
           <Text
+            {...ShapeDefaultProps}
+            {...textProps}
             text={this.tooltip}
-            fontFamily={CompactConfig.FontFamily.toString()}
-            fontSize={Number(CompactConfig.FontSize)}
-            fontStyle={CompactConfig.FontStyle.toString()}
-            fill={CompactConfig.SA_WHITE.toString()}
-            padding={5}
+            padding={Number(AgendaStashConfig.TooltipPadding)}
           />
         </Label>
         {this.arrow?.draw()}
