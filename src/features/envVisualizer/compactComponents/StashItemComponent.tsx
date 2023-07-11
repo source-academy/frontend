@@ -1,4 +1,3 @@
-import Closure from 'js-slang/dist/interpreter/closure';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
@@ -12,6 +11,7 @@ import { IHoverable } from '../EnvVisualizerTypes';
 import {
   getTextWidth,
   isArray,
+  isFn,
   isStashItemInDanger,
   setHoveredCursor,
   setHoveredStyle,
@@ -43,7 +43,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     const valToStashRep = (val: any): string => {
       return typeof val === 'string'
         ? `'${val}'`.trim()
-        : val instanceof Closure
+        : isFn(val)
         ? 'CLOSURE'
         : isArray(val)
         ? arrowTo

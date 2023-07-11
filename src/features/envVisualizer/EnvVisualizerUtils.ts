@@ -9,7 +9,6 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/ec-evaluator/types';
-import Closure from 'js-slang/dist/interpreter/closure';
 import { Value as StashValue } from 'js-slang/dist/types';
 import { Environment } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
@@ -617,10 +616,10 @@ export function getAgendaItemComponent(
 }
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
-  if (stashItem instanceof Closure || isArray(stashItem)) {
+  if (isFn(stashItem) || isArray(stashItem)) {
     for (const level of Layout.compactLevels) {
       for (const frame of level.frames) {
-        if (stashItem instanceof Closure) {
+        if (isFn(stashItem)) {
           const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
             if (isFn(binding.data)) {
               return binding.data.id === stashItem.id;
