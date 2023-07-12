@@ -32,8 +32,12 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
   const groupSubmissions = submissions.filter(
     ({ groupName }) => group === null || groupName === group
   );
-  const ungraded = groupSubmissions.filter(
+  const unpublished = groupSubmissions.filter(
     ({ gradingStatus }) => gradingStatus !== GradingStatuses.published
+  );
+  const ungraded = groupSubmissions.filter(
+    ({ gradingStatus }) =>
+      gradingStatus !== GradingStatuses.graded && gradingStatus !== GradingStatuses.published
   );
   const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))].reduce(
     (acc: AssessmentSummary[], assessmentId) => {
@@ -53,7 +57,9 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
 
   const numSubmissions = groupSubmissions.length;
   const numGraded = numSubmissions - ungraded.length;
+  const numPublished = numSubmissions - unpublished.length;
   const percentGraded = Math.round((numGraded / numSubmissions) * 100);
+  const percentPublished = Math.round((numPublished / numSubmissions) * 100);
 
   const numUngradedByAssessment = (assessmentId: number) => {
     return ungraded.filter(({ assessmentId: id }) => id === assessmentId).length;
@@ -62,6 +68,36 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
   return (
     <>
       <Title>My gradings</Title>
+      <Flex
+        marginTop="mt-4"
+        justifyContent="justify-start"
+        spaceX="space-x-1"
+        alignItems="items-baseline"
+      >
+        <Metric>{numPublished} </Metric>
+        <Text>/ {numSubmissions} published</Text>
+      </Flex>
+
+      <ProgressBar
+        percentageValue={percentPublished}
+        color={percentPublished < 50 ? 'red' : 'emerald'}
+        marginTop="mt-4"
+      />
+      <Flex marginTop="mt-4">
+        <Block>
+          <Text>Published</Text>
+          <Text color={percentPublished < 50 ? 'red' : 'emerald'}>
+            <Bold>{numPublished}</Bold> ({percentPublished}%)
+          </Text>
+        </Block>
+        <Block>
+          <Text textAlignment="text-right">Unpublished</Text>
+          <Text textAlignment="text-right">
+            <Bold>{numSubmissions - numPublished}</Bold> ({100 - percentPublished}%)
+          </Text>
+        </Block>
+      </Flex>
+
       <Flex
         marginTop="mt-4"
         justifyContent="justify-start"

@@ -17,16 +17,20 @@ type GradingActionsProps = {
   submissionId: number;
   isGradingPublished: boolean;
   gradingStatus: GradingStatus;
+  submissionStatus: string;
 };
 
 const GradingActions: React.FC<GradingActionsProps> = ({
   submissionId,
   isGradingPublished,
-  gradingStatus
+  gradingStatus,
+  submissionStatus
 }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
-  const isFullyGraded = gradingStatus === 'graded';
+  const isFullyGraded =
+    gradingStatus === 'graded' ||
+    (gradingStatus === 'excluded' && submissionStatus === 'submitted');
 
   const handleReautogradeClick = async () => {
     const confirm = await showSimpleConfirmDialog({

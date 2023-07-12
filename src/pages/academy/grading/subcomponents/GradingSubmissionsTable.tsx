@@ -91,21 +91,24 @@ const columns = [
     }
   }),
   columnHelper.accessor(
-    ({ submissionId, isGradingPublished, gradingStatus }) => ({
+    ({ submissionId, isGradingPublished, gradingStatus, submissionStatus }) => ({
       submissionId,
       isGradingPublished,
-      gradingStatus
+      gradingStatus,
+      submissionStatus
     }),
     {
       header: 'Actions',
       enableColumnFilter: false,
       cell: info => {
-        const { submissionId, isGradingPublished, gradingStatus } = info.getValue();
+        const { submissionId, isGradingPublished, gradingStatus, submissionStatus } =
+          info.getValue();
         return (
           <GradingActions
             submissionId={submissionId}
             isGradingPublished={isGradingPublished}
             gradingStatus={gradingStatus}
+            submissionStatus={submissionStatus}
           />
         );
       }

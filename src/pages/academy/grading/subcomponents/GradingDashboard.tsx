@@ -53,7 +53,7 @@ const GradingDashboard: React.FC<GradingDashboardProps> = ({ submissions, handle
             </Flex>
 
             <Toggle color="gray" defaultValue={false} handleSelect={handleShowGradedChange}>
-              <ToggleItem value={false} text="Ungraded" />
+              <ToggleItem value={false} text="Unpublished" />
               <ToggleItem value={true} text="All" />
             </Toggle>
           </Flex>
