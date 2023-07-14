@@ -2,6 +2,8 @@ import { runInContext } from 'js-slang/dist/';
 import createContext from 'js-slang/dist/createContext';
 import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
 
+import { AgendaItemComponent } from '../compactComponents/AgendaItemComponent';
+import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { ArrayUnit } from '../components/ArrayUnit';
 import { ArrowFromArrayUnit } from '../components/arrows/ArrowFromArrayUnit';
 import { Frame } from '../components/Frame';
@@ -11,8 +13,6 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import EnvVisualizer from '../EnvVisualizer';
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTree } from '../EnvVisualizerTypes';
-import { AgendaItemComponent } from '../compactComponents/AgendaItemComponent';
-import { StashItemComponent } from '../compactComponents/StashItemComponent';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -200,18 +200,19 @@ const codeSamplesAgendaStash = [
     }
     math_sin(math_PI / 2); 
     `,
-    7],
-    [
-      'Agenda is truncated properly',
-      `
+    7
+  ],
+  [
+    'Agenda is truncated properly',
+    `
       function fact(n) {
         return n <= 1 ? 1 : n * fact(n - 1);
       }
       fact(10);
       `,
-      171,
-      true
-    ]
+    171,
+    true
+  ]
 ];
 
 codeSamplesAgendaStash.forEach((codeSample, idx) => {
@@ -228,24 +229,23 @@ codeSamplesAgendaStash.forEach((codeSample, idx) => {
     EnvVisualizer.toggleAgendaStash();
     const context = createContext(4);
     context.runtime.envSteps = envSteps;
-    context.executionMethod = 'ec-evaluator'
+    context.executionMethod = 'ec-evaluator';
     await runInContext(code, context);
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.agenda!,
       context.runtime.stash!
     );
-    Layout.draw()
+    Layout.draw();
     const agendaItemsToTest: AgendaItemComponent[] = Layout.agendaComponent.stackItemComponents;
     const stashItemsToTest: StashItemComponent[] = Layout.stashComponent.stashItemComponents;
     agendaItemsToTest.forEach(item => {
-      expect(item.draw()).toMatchSnapshot()
-      if (item.value == 'ENVIRONMENT') expect(item.arrow).toBeDefined()
+      expect(item.draw()).toMatchSnapshot();
+      if (item.value == 'ENVIRONMENT') expect(item.arrow).toBeDefined();
     });
-    if (truncate) expect(agendaItemsToTest.length).toBeLessThanOrEqual(10)
+    if (truncate) expect(agendaItemsToTest.length).toBeLessThanOrEqual(10);
     stashItemsToTest.forEach(item => {
-      expect(item.draw()).toMatchSnapshot()
+      expect(item.draw()).toMatchSnapshot();
     });
   });
 });
-
