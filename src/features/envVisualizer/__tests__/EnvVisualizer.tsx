@@ -11,6 +11,8 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import EnvVisualizer from '../EnvVisualizer';
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTree } from '../EnvVisualizerTypes';
+import { AgendaItemComponent } from '../compactComponents/AgendaItemComponent';
+import { StashItemComponent } from '../compactComponents/StashItemComponent';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -171,3 +173,79 @@ codeSamples.forEach((code, idx) => {
     checkNonCompactLayout();
   });
 });
+
+const codeSamplesAgendaStash = [
+  [
+    'arrows from the environment instruction to the frame and arrows from the stash to closures',
+    `
+    function create(n) {
+      const arr = [];
+      let x = 0;
+      
+      while (x < n) {
+          arr[x] = () => x;
+          x = x + 1;
+      }
+    return arr;
+    }
+    create(3)[1]();
+    `,
+    35
+  ],
+  [
+    'global environments are treated correctly',
+    `
+    {
+      const math_sin = x => x;
+    }
+    math_sin(math_PI / 2); 
+    `,
+    7],
+    [
+      'Agenda is truncated properly',
+      `
+      function fact(n) {
+        return n <= 1 ? 1 : n * fact(n - 1);
+      }
+      fact(10);
+      `,
+      171,
+      true
+    ]
+];
+
+codeSamplesAgendaStash.forEach((codeSample, idx) => {
+  test('EnvVisualizer Agenda Stash correctly renders: ' + codeSample[0], async () => {
+    const code = codeSample[1] as string;
+    const envSteps = codeSample[2] as number;
+    const truncate = codeSample[3];
+    if (!EnvVisualizer.getCompactLayout()) {
+      EnvVisualizer.toggleCompactLayout();
+    }
+    if (truncate) {
+      EnvVisualizer.toggleStackTruncated();
+    }
+    EnvVisualizer.toggleAgendaStash();
+    const context = createContext(4);
+    context.runtime.envSteps = envSteps;
+    context.executionMethod = 'ec-evaluator'
+    await runInContext(code, context);
+    Layout.setContext(
+      context.runtime.environmentTree as EnvTree,
+      context.runtime.agenda!,
+      context.runtime.stash!
+    );
+    Layout.draw()
+    const agendaItemsToTest: AgendaItemComponent[] = Layout.agendaComponent.stackItemComponents;
+    const stashItemsToTest: StashItemComponent[] = Layout.stashComponent.stashItemComponents;
+    agendaItemsToTest.forEach(item => {
+      expect(item.draw()).toMatchSnapshot()
+      if (item.value == 'ENVIRONMENT') expect(item.arrow).toBeDefined()
+    });
+    if (truncate) expect(agendaItemsToTest.length).toBeLessThanOrEqual(10)
+    stashItemsToTest.forEach(item => {
+      expect(item.draw()).toMatchSnapshot()
+    });
+  });
+});
+
