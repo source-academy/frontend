@@ -186,11 +186,11 @@ const codeSamplesAgendaStash = [
           arr[x] = () => x;
           x = x + 1;
       }
-    return arr;
+      return arr;
     }
     create(3)[1]();
     `,
-    35
+    34
   ],
   [
     'global environments are treated correctly',
@@ -210,7 +210,7 @@ const codeSamplesAgendaStash = [
       }
       fact(10);
       `,
-    171,
+    161,
     true
   ]
 ];

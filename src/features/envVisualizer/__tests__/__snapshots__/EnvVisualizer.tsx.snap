@@ -1483,7 +1483,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="BREAK MAR…"
+      text="POP"
       width={120}
     />
   </Label>
@@ -1506,7 +1506,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="BREAK MARKER"
+      text="POP"
     />
   </Label>
 </React.Fragment>
@@ -1534,7 +1534,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="WHILE"
+      text="BREAK MAR…"
       width={120}
     />
   </Label>
@@ -1557,7 +1557,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="WHILE"
+      text="BREAK MARKER"
     />
   </Label>
 </React.Fragment>
@@ -1585,7 +1585,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="x < n"
+      text="WHILE"
       width={120}
     />
   </Label>
@@ -1608,7 +1608,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="x < n"
+      text="WHILE"
     />
   </Label>
 </React.Fragment>
@@ -1636,7 +1636,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="CONTINUE …"
+      text="x < n"
       width={120}
     />
   </Label>
@@ -1659,7 +1659,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="CONTINUE MARKER"
+      text="x < n"
     />
   </Label>
 </React.Fragment>
@@ -1687,7 +1687,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="PUSH UNDE…"
+      text="CONTINUE …"
       width={120}
     />
   </Label>
@@ -1710,7 +1710,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="PUSH UNDEFINED IF NEEDED"
+      text="CONTINUE MARKER"
     />
   </Label>
 </React.Fragment>
@@ -1738,7 +1738,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="x = x + 1;"
+      text="PUSH UNDE…"
       width={120}
     />
   </Label>
@@ -1761,7 +1761,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="x = x + 1;"
+      text="PUSH UNDEFINED IF NEEDED"
     />
   </Label>
 </React.Fragment>
@@ -1789,7 +1789,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="POP"
+      text="x = x + 1;"
       width={120}
     />
   </Label>
@@ -1812,7 +1812,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="POP"
+      text="x = x + 1;"
     />
   </Label>
 </React.Fragment>
@@ -1829,7 +1829,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#030fff"
+      stroke="#999999"
     />
     <Text
       fill="#999999"
@@ -1840,7 +1840,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="ARRAY ASS…"
+      text="POP"
       width={120}
     />
   </Label>
@@ -1863,13 +1863,64 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="ARRAY ASSIGNMENT"
+      text="POP"
     />
   </Label>
 </React.Fragment>
 `;
 
 exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={565}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="ARRAY ASS…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={570}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="ARRAY ASSIGNMENT"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 17`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -1944,7 +1995,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 17`] = `
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 18`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -1993,7 +2044,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 18`] = `
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 19`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
