@@ -10,7 +10,7 @@ import {
   playgroundOnlyRouterConfig
 } from '../../routes/routerConfig';
 import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import { useSession } from '../utils/Hooks';
 import { updateReactRouter } from './actions/CommonsActions';
 
 /**
@@ -23,8 +23,7 @@ import { updateReactRouter } from './actions/CommonsActions';
  */
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
-  const session = useTypedSelector(state => state.session);
-  const { role, name, courseId } = session;
+  const { isLoggedIn, role, name, courseId } = useSession();
 
   // Used in determining the disabled state of any type of Source Academy deployment (e.g. during exams)
   const intervalId = useRef<number | undefined>(undefined);
@@ -48,7 +47,6 @@ const ApplicationWrapper: React.FC = () => {
   }, [isDisabled]);
 
   const router = useMemo(() => {
-    const isLoggedIn = typeof name === 'string';
     const isDisabledEffective = !['staff', 'admin'].includes(role!) && isDisabled;
 
     const routerConfig = isDisabledEffective
@@ -66,7 +64,7 @@ const ApplicationWrapper: React.FC = () => {
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [isDisabled, role, name, courseId, dispatch]);
+  }, [isLoggedIn, isDisabled, role, name, courseId, dispatch]);
 
   return <RouterProvider router={router} />;
 };

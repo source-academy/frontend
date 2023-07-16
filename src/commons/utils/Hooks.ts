@@ -116,3 +116,16 @@ export const useResponsive = () => {
   const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
   return { isMobileBreakpoint };
 };
+
+/**
+ * Returns session related information.
+ */
+export const useSession = () => {
+  const session = useTypedSelector(state => state.session);
+  const isLoggedIn = typeof session.name === 'string';
+
+  return {
+    ...session,
+    isLoggedIn
+  };
+};
