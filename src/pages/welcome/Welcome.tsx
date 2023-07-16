@@ -1,9 +1,9 @@
 import { Card, H2, UL } from '@blueprintjs/core';
 import Constants, { Links } from 'src/commons/utils/Constants';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 
 const Welcome: React.FC = () => {
-  const name = useTypedSelector(store => store.session.name);
+  const { name } = useSession();
 
   return (
     <div className="fullpage">
