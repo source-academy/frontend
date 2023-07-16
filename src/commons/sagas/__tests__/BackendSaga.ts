@@ -173,6 +173,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
+  defaultPrompt: 'default prompt',
   assetsPrefix: ''
 };
 
@@ -203,6 +204,7 @@ const mockCourseConfiguration2: CourseConfiguration = {
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
+  defaultPrompt: 'default prompt',
   assetsPrefix: ''
 };
 
@@ -886,6 +888,7 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
+    defaultPrompt: 'default prompt',
     assetsPrefix: ''
   };
 
@@ -982,7 +985,8 @@ describe('Test CREATE_COURSE action', () => {
     enableSourcecast: true,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: 'Help Text'
+    moduleHelpText: 'Help Text',
+    defaultPrompt: 'default prompt'
   };
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;

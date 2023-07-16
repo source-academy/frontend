@@ -27,10 +27,19 @@ export enum CourseHelpTextEditorTab {
   PREVIEW = 'PREVIEW'
 }
 
+export enum DefaultPromptTab {
+  WRITE = 'WRITE',
+  PREVIEW = 'PREVIEW'
+}
+
+
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
+
+  const [defaultPromptSelectedTab, setDefaultPromptSelectedTab] =
+    React.useState<DefaultPromptTab>(DefaultPromptTab.WRITE);  
 
   const {
     courseName,
@@ -39,7 +48,8 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
     enableGame,
     enableAchievements,
     enableSourcecast,
-    moduleHelpText
+    moduleHelpText,
+    defaultPrompt
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -51,7 +61,22 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
       onChange={e =>
         props.setCourseConfiguration({
           ...props.courseConfiguration,
-          moduleHelpText: e.target.value
+          moduleHelpText: e.target.value,
+        })
+      }
+    />
+  );
+
+  const writePanel1 = (
+    <TextArea
+      id="defaultPrompt"
+      className="input-textarea"
+      fill={true}
+      value={defaultPrompt || ''}
+      onChange={e =>
+        props.setCourseConfiguration({
+          ...props.courseConfiguration,
+          defaultPrompt: e.target.value
         })
       }
     />
@@ -60,6 +85,12 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
   const previewPanel = (
     <div className="input-markdown">
       <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
+    </div>
+  );
+
+  const previewPanel1 = (
+    <div className="input-markdown">
+      <Markdown content={defaultPrompt || ''} openLinksInNewWindow />
     </div>
   );
 
@@ -75,6 +106,20 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
       setCourseHelpTextSelectedTab(newTabId);
     },
     [setCourseHelpTextSelectedTab]
+  );
+
+  const onChangeTab = React.useCallback(
+    (
+      newTabId: DefaultPromptTab,
+      prevTabId: DefaultPromptTab,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      if (newTabId === prevTabId) {
+        return;
+      }
+      setDefaultPromptSelectedTab(newTabId);
+    },
+    [setDefaultPromptSelectedTab]
   );
 
   return (
@@ -133,6 +178,23 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
             </Tabs>
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
+          </FormGroup>
+          <FormGroup
+            helperText="Please enter the default prompt that will be used in this course"
+            inline={true}
+            label="Default Prompt"
+            labelFor="defaultPrompt"
+          >
+            <Tabs
+              selectedTabId={defaultPromptSelectedTab}
+              onChange={onChangeTab}
+              className="default-propmt-tabs"
+            >
+              <Tab id={DefaultPromptTab.WRITE} title="Write" />
+              <Tab id={DefaultPromptTab.PREVIEW} title="Preview" />
+            </Tabs>
+            {defaultPromptSelectedTab === DefaultPromptTab.WRITE && writePanel1}
+            {defaultPromptSelectedTab === DefaultPromptTab.PREVIEW && previewPanel1}
           </FormGroup>
         </div>
         {!isMobileBreakpoint && <Divider />}

@@ -99,6 +99,7 @@ test('SET_COURSE_CONFIGURATION works correctly', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
+    defaultPrompt: 'default Prompt',
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };
   const action = {

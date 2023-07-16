@@ -39,7 +39,8 @@ const AdminPanel: React.FC = () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
-    moduleHelpText: ''
+    moduleHelpText: '',
+    defaultPrompt:''
   });
 
   const dispatch = useDispatch();
@@ -77,7 +78,8 @@ const AdminPanel: React.FC = () => {
       enableGame: session.enableGame,
       enableAchievements: session.enableAchievements,
       enableSourcecast: session.enableSourcecast,
-      moduleHelpText: session.moduleHelpText
+      moduleHelpText: session.moduleHelpText,
+      defaultPrompt: session.defaultPrompt
     });
 
     // IMPT: To prevent mutation of props

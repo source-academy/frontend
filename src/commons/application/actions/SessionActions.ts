@@ -197,6 +197,7 @@ export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESS
 export const updateGradingOverviews = (overviews: GradingOverview[]) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);
 
+
 /**
  * An extra id parameter is included here because of
  * no id for Grading.

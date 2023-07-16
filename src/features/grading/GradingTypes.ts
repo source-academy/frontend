@@ -25,6 +25,7 @@ export type GradingOverview = {
   studentName: string;
   submissionId: number;
   submissionStatus: string;
+  questions:string;
   groupName: string;
   groupLeaderId?: number;
   gradingStatus: GradingStatus;

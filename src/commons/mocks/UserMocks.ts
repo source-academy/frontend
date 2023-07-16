@@ -133,6 +133,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
+    defaultPrompt:'',
     assetsPrefix: ''
   },
   {
@@ -145,6 +146,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     sourceChapter: Chapter.SOURCE_2,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text!',
+    defaultPrompt:'Default Prompt',
     assetsPrefix: ''
   }
 ];

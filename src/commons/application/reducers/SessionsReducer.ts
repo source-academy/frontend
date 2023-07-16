@@ -114,6 +114,12 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         gradingOverviews: action.payload
       };
+
+      case UPDATE_GRADING_OVERVIEWS:
+      return {
+        ...state,
+        gradingOverviews: action.payload
+      };
     case UPDATE_NOTIFICATIONS:
       return {
         ...state,

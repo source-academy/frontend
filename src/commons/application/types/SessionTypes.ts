@@ -51,6 +51,7 @@ export const UPDATE_TOTAL_XP = 'UPDATE_TOTAL_XP';
 export const UPDATE_ALL_USER_XP = 'UPDATE_ALL_USER_XP';
 export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
 export const UPDATE_GRADING_OVERVIEWS = 'UPDATE_GRADING_OVERVIEWS';
+export const UPDATE_GRADING_OVERVIEWS_TEST = 'UPDATE_GRADING_OVERVIEWS_TEST';
 export const UPDATE_GRADING = 'UPDATE_GRADING';
 export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
@@ -98,6 +99,7 @@ export type SessionState = {
   readonly sourceChapter?: number;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
+  readonly defaultPrompt?: string;
   readonly assetsPrefix?: string;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
@@ -110,6 +112,7 @@ export type SessionState = {
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
+  readonly gradingOverviewsTest?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly notifications: Notification[];
   readonly googleUser?: string;
@@ -160,6 +163,7 @@ export type CourseConfiguration = {
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
+  defaultPrompt: string;
   assetsPrefix: string;
 };
 

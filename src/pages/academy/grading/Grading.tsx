@@ -61,19 +61,43 @@ const Grading: React.FC = () => {
       return;
     }
 
+    // const content = new Blob(
+    //   [
+    //     '"Assessment Name","Question Number","Student Name","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
+    //     ...gradingOverviews.map(
+    //       e =>
+    //         [
+    //           e.assessmentName,
+    //           e.studentName,
+    //           e.groupName,
+    //           e.submissionStatus,
+    //           e.gradingStatus,
+    //           e.questionCount,
+    //           e.gradedCount,
+    //           e.initialXp,
+    //           e.xpAdjustment,
+    //           e.currentXp,
+    //           e.maxXp,
+    //           e.xpBonus
+    //         ]
+    //           .map(field => `"${field}"`) // wrap each field in double quotes in case it contains a comma
+    //           .join(',') + '\n'
+    //     )
+    //   ],
+    //   { type: 'text/csv' }
+    // );
+    // const fileName = `SA submissions (${new Date().toISOString()}).csv`;
+
     const content = new Blob(
       [
-        '"Assessment Name","Student Name","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
+        '"Student Name","Group","Status","Question","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
         ...gradingOverviews.map(
           e =>
             [
-              e.assessmentName,
               e.studentName,
               e.groupName,
               e.submissionStatus,
-              e.gradingStatus,
-              e.questionCount,
-              e.gradedCount,
+              e.questions,
               e.initialXp,
               e.xpAdjustment,
               e.currentXp,
