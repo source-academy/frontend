@@ -202,10 +202,14 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      return yield routerNavigate(`/courses/${courseRegistration.courseId}`);
     }
-
-    return yield routerNavigate('/welcome');
+    /**
+     * NOTE: Navigation logic is now handled in <Login /> component.
+     * - Due to route hoisting in react-router v6, which requires us to declare routes at the top level,
+     *   we need to rerender the router to include Academy routes when the user logs in, which occurs in ApplicationWrapper.tsx.
+     * - However, the current router instance we have access to HERE in this saga via `routerNavigate` is the old router instance.
+     * - Thus handling navigation in <Login /> allows us to directly access the latest router via `useNavigate`.
+     */
   });
 
   yield takeEvery(

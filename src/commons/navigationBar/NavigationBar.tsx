@@ -23,7 +23,7 @@ import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
+import { useResponsive, useSession } from '../utils/Hooks';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
   getAcademyNavbarRightInfo
@@ -47,23 +47,21 @@ const NavigationBar: React.FC = () => {
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
   const {
+    isLoggedIn,
+    isEnrolledInACourse,
     role,
-    name,
     courseId,
     courseShortName,
     enableAchievements,
     enableSourcecast,
     assessmentConfigurations
-  } = useTypedSelector(state => state.session);
+  } = useSession();
   const assessmentTypes = useMemo(
     () => assessmentConfigurations?.map(c => c.type),
     [assessmentConfigurations]
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
-
-  const isLoggedIn = !!name;
-  const isEnrolledInACourse = !!role;
 
   const createMobileNavlink: CreateNavlinkFunction = useCallback(
     navbarEntry => (
@@ -320,7 +318,7 @@ const NavigationBar: React.FC = () => {
         <Route
           path="*"
           element={
-            !Constants.playgroundOnly && role && !isMobileBreakpoint ? (
+            !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
               <AcademyNavigationBar assessmentTypes={assessmentTypes} />
             ) : null
           }
