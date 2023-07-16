@@ -2,10 +2,10 @@ import React from 'react';
 
 import { RoundedRect } from '../components/shapes/RoundedRect';
 import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
 import { CompactConfig } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data } from '../EnvVisualizerTypes';
+import { defaultSAColor } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { ArrayValue } from './values/ArrayValue';
@@ -76,11 +76,7 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={
-            EnvVisualizer.getPrintableMode()
-              ? CompactConfig.SA_BLUE.toString()
-              : CompactConfig.SA_WHITE.toString()
-          }
+          stroke={defaultSAColor()}
           hitStrokeWidth={Number(CompactConfig.DataHitStrokeWidth)}
           fillEnabled={false}
           onMouseEnter={this.onMouseEnter}

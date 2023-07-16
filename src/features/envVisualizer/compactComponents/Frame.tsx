@@ -7,6 +7,7 @@ import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig'
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
 import {
+  currentItemSAColor,
   getNonEmptyEnv,
   getTextWidth,
   isDummyKey,
@@ -140,13 +141,7 @@ export class Frame extends Visible implements IHoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={
-            EnvVisualizer.getCurrentEnvId() === this.environment?.id
-              ? 'blue'
-              : EnvVisualizer.getPrintableMode()
-              ? CompactConfig.SA_BLUE.toString()
-              : CompactConfig.SA_WHITE.toString()
-          }
+          stroke={currentItemSAColor(EnvVisualizer.getCurrentEnvId() === this.environment?.id)}
           cornerRadius={Number(CompactConfig.FrameCornerRadius)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
