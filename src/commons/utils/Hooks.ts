@@ -124,9 +124,11 @@ export const useResponsive = () => {
 export const useSession = () => {
   const session = useTypedSelector(state => state.session);
   const isLoggedIn = typeof session.name === 'string';
+  const isEnrolledInACourse = !!session.role;
 
   return {
     ...session,
+    isEnrolledInACourse,
     isLoggedIn
   };
 };
