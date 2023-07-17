@@ -3,14 +3,14 @@ import { Agenda } from 'js-slang/dist/ec-evaluator/interpreter';
 import { AgendaItem, Instr } from 'js-slang/dist/ec-evaluator/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-import { Group } from 'react-konva';
+import { Group, Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
-import { getAgendaItemComponent } from '../EnvVisualizerUtils';
+import { defaultSAColor, getAgendaItemComponent, setHoveredCursor, setHoveredStyle, setUnhoveredCursor, setUnhoveredStyle } from '../EnvVisualizerUtils';
 import { AgendaItemComponent } from './AgendaItemComponent';
 
 export class AgendaStack extends Visible implements IHoverable {
@@ -25,7 +25,7 @@ export class AgendaStack extends Visible implements IHoverable {
     this._x = AgendaStashConfig.AgendaPosX;
     this._y = AgendaStashConfig.AgendaPosY;
     this._width = AgendaStashConfig.AgendaItemWidth;
-    this._height = AgendaStashConfig.StashItemHeight + AgendaStashConfig.AgendaItemTextPadding * 2;
+    this._height = AgendaStashConfig.StashItemHeight + AgendaStashConfig.StashItemTextPadding * 2;
     this.agenda = agenda;
 
     // Function to convert the stack items to their components
@@ -61,16 +61,53 @@ export class AgendaStack extends Visible implements IHoverable {
       .slice(EnvVisualizer.getStackTruncated() ? -10 : 0)
       .map(agendaItemToComponent);
   }
-  onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}
-  onMouseLeave(e: KonvaEventObject<MouseEvent>): void {}
+  onMouseEnter(e: KonvaEventObject<MouseEvent>): void {
+    setHoveredStyle(e.currentTarget);
+    setHoveredCursor(e.currentTarget);
+  }
+  onMouseLeave(e: KonvaEventObject<MouseEvent>): void {
+    setUnhoveredStyle(e.currentTarget);
+    setUnhoveredCursor(e.currentTarget);
+  }
 
   destroy() {
     this.ref.current.destroyChildren();
   }
 
   draw(): React.ReactNode {
+    const textProps = {
+      fontFamily: AgendaStashConfig.FontFamily.toString(),
+      fontSize: 12,
+      fontStyle: AgendaStashConfig.FontStyle.toString(),
+      fontVariant: AgendaStashConfig.FontVariant.toString()
+    };
     return (
       <Group key={Layout.key++} ref={this.ref}>
+        {EnvVisualizer.getStackTruncated() && Layout.agenda.size() > 10 && (
+          <Label
+            x={Number(AgendaStashConfig.ShowMoreButtonX)}
+            y={Number(AgendaStashConfig.ShowMoreButtonY)}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+            onMouseUp={() => {
+              EnvVisualizer.toggleStackTruncated();
+              EnvVisualizer.redraw();
+            }}
+          >
+            <Tag
+              stroke={defaultSAColor()}
+              cornerRadius={Number(AgendaStashConfig.AgendaItemCornerRadius)}
+            />
+            <Text
+              {...textProps}
+              text={'Show More'}
+              align="center"
+              fill={defaultSAColor()}
+              width={Number(AgendaStashConfig.ShowMoreButtonWidth)}
+              height={Number(AgendaStashConfig.ShowMoreButtonHeight)}
+            />
+          </Label>
+        )}
         {this.stackItemComponents.map(c => c?.draw())}
       </Group>
     );
