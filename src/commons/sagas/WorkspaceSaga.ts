@@ -1081,7 +1081,10 @@ export function* evalCode(
             .updateEnv
       )
     : false;
-  const envSteps: number = correctWorkspace
+  // When envSteps is -1, the entire code is run from the start.
+  const envSteps: number = needUpdateEnv
+    ? -1
+    : correctWorkspace
     ? yield select(
         (state: OverallState) =>
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
@@ -1092,8 +1095,6 @@ export function* evalCode(
   if (envActiveAndCorrectChapter) {
     context.executionMethod = 'ec-evaluator';
   }
-  // When envSteps is -1, the entire code is run from the start.
-  context.runtime.envSteps = needUpdateEnv ? -1 : envSteps;
 
   const entrypointCode = files[entrypointFilePath];
 
@@ -1105,14 +1106,16 @@ export function* evalCode(
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
-            useSubst: substActiveAndCorrectChapter
+            useSubst: substActiveAndCorrectChapter,
+            envSteps: envSteps
           });
     } else if (variant === Variant.LAZY) {
       return call(runFilesInContext, files, entrypointFilePath, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
         stepLimit: stepLimit,
-        useSubst: substActiveAndCorrectChapter
+        useSubst: substActiveAndCorrectChapter,
+        envSteps: envSteps
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
@@ -1167,7 +1170,8 @@ export function* evalCode(
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
             throwInfiniteLoops: true,
-            useSubst: substActiveAndCorrectChapter
+            useSubst: substActiveAndCorrectChapter,
+            envSteps: envSteps
           }),
 
     /**

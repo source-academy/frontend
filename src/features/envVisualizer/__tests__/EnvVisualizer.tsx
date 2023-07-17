@@ -228,9 +228,7 @@ codeSamplesAgendaStash.forEach((codeSample, idx) => {
     }
     EnvVisualizer.toggleAgendaStash();
     const context = createContext(4);
-    context.runtime.envSteps = envSteps;
-    context.executionMethod = 'ec-evaluator';
-    await runInContext(code, context);
+    await runInContext(code, context, { executionMethod: 'ec-evaluator', envSteps: envSteps });
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.agenda!,

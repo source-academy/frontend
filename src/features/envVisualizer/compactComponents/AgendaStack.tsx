@@ -10,7 +10,14 @@ import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
-import { defaultSAColor, getAgendaItemComponent, setHoveredCursor, setHoveredStyle, setUnhoveredCursor, setUnhoveredStyle } from '../EnvVisualizerUtils';
+import {
+  defaultSAColor,
+  getAgendaItemComponent,
+  setHoveredCursor,
+  setHoveredStyle,
+  setUnhoveredCursor,
+  setUnhoveredStyle
+} from '../EnvVisualizerUtils';
 import { AgendaItemComponent } from './AgendaItemComponent';
 
 export class AgendaStack extends Visible implements IHoverable {
