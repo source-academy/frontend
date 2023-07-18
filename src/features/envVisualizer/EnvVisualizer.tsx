@@ -8,12 +8,16 @@ import { deepCopyTree, getEnvID } from './EnvVisualizerUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
+type SetisStepLimitExceeded = (isAgendaEmpty: boolean) => void;
 
 /** Environment Visualizer is exposed from this class */
 export default class EnvVisualizer {
   /** callback function to update the visualization state in the SideContentEnvVis component */
   private static setVis: SetVis;
   /** function to highlight editor lines */
+  public static setEditorHighlightedLines: SetEditorHighlightedLines;
+  /** callback function to update the step limit exceeded state in the SideContentEnvVis component */
+  private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
   private static agendaStash: boolean = false;
@@ -22,7 +26,6 @@ export default class EnvVisualizer {
   private static currentEnvId: string;
   private static agenda: Agenda;
   private static stash: Stash;
-  public static setEditorHighlightedLines: SetEditorHighlightedLines;
   public static togglePrintableMode(): void {
     EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
   }
@@ -51,17 +54,23 @@ export default class EnvVisualizer {
     return EnvVisualizer.stackTruncated;
   }
 
+  public static isAgenda(): boolean {
+    return this.agenda ? !this.agenda.isEmpty() : false;
+  }
+
   /** SideContentEnvVis initializes this onMount with the callback function */
   static init(
     setVis: SetVis,
     width: number,
     height: number,
-    setEditorHighlightedLines: (segments: [number, number][]) => void
+    setEditorHighlightedLines: (segments: [number, number][]) => void,
+    setIsStepLimitExceeded: SetisStepLimitExceeded
   ) {
     Layout.visibleHeight = height;
     Layout.visibleWidth = width;
     this.setVis = setVis;
     this.setEditorHighlightedLines = setEditorHighlightedLines;
+    this.setIsStepLimitExceeded = setIsStepLimitExceeded;
   }
 
   static clear() {
@@ -86,6 +95,7 @@ export default class EnvVisualizer {
       context.runtime.stash
     );
     this.setVis(Layout.draw());
+    this.setIsStepLimitExceeded(context.runtime.agenda.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
 
     // icon to blink

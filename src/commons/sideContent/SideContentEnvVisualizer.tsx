@@ -29,6 +29,8 @@ type State = {
   value: number;
   height: number;
   width: number;
+  lastStep: boolean;
+  stepLimitExceeded: boolean;
 };
 
 type EnvVisualizerProps = OwnProps & StateProps & DispatchProps;
@@ -70,7 +72,9 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       visualization: null,
       value: -1,
       width: this.calculateWidth(props.editorWidth),
-      height: this.calculateHeight(props.sideContentHeight)
+      height: this.calculateHeight(props.sideContentHeight),
+      lastStep: false,
+      stepLimitExceeded: false
     };
     EnvVisualizer.init(
       visualization => this.setState({ visualization }),
@@ -80,6 +84,9 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         // This comment is copied over from workspace saga
         props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
+      },
+      isAgendaEmpty => {
+        this.setState({ stepLimitExceeded: !isAgendaEmpty && this.state.lastStep });
       }
     );
   }
@@ -293,7 +300,21 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
             </ButtonGroup>
           </div>
         </div>{' '}
-        {this.state.visualization || (
+        {this.state.visualization ? (
+          this.state.stepLimitExceeded ? (
+            <div
+              id="env-visualizer-default-text"
+              className={Classes.RUNNING_TEXT}
+              data-testid="env-visualizer-default-text"
+            >
+              Maximum number of steps exceeded.
+              <Divider />
+              Please increase the step limit if you would like to see futher evaluation.
+            </div>
+          ) : (
+            this.state.visualization
+          )
+        ) : (
           <div
             id="env-visualizer-default-text"
             className={Classes.RUNNING_TEXT}
@@ -354,6 +375,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   }
 
   private sliderRelease = (newValue: number) => {
+    if (newValue === this.props.numOfStepsTotal) {
+      this.setState({ lastStep: true });
+    } else {
+      this.setState({ lastStep: false });
+    }
     this.props.handleEditorEval(this.props.workspaceLocation);
   };
 
@@ -367,7 +393,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   private stepPrevious = () => {
     if (this.state.value !== 1) {
       this.sliderShift(this.state.value - 1);
-      this.props.handleEditorEval(this.props.workspaceLocation);
+      this.sliderRelease(this.state.value - 1);
     }
   };
 
@@ -375,32 +401,32 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     const lastStepValue = this.props.numOfStepsTotal;
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
-      this.props.handleEditorEval(this.props.workspaceLocation);
+      this.sliderRelease(this.state.value + 1);
     }
   };
 
   private stepFirst = () => {
     // Move to the first step
     this.sliderShift(1);
-    this.props.handleEditorEval(this.props.workspaceLocation);
+    this.sliderRelease(1);
   };
 
   private stepLast = (lastStepValue: number) => () => {
     // Move to the last step
     this.sliderShift(lastStepValue);
-    this.props.handleEditorEval(this.props.workspaceLocation);
+    this.sliderRelease(lastStepValue);
   };
 
   private stepNextBreakpoint = () => {
     for (const step of this.props.breakpointSteps) {
       if (step > this.state.value) {
         this.sliderShift(step);
-        this.props.handleEditorEval(this.props.workspaceLocation);
+        this.sliderRelease(step);
         return;
       }
     }
     this.sliderShift(this.props.numOfStepsTotal);
-    this.props.handleEditorEval(this.props.workspaceLocation);
+    this.sliderRelease(this.props.numOfStepsTotal);
   };
 
   private stepPrevBreakpoint = () => {
@@ -408,12 +434,12 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       const step = this.props.breakpointSteps[i];
       if (step < this.state.value) {
         this.sliderShift(step);
-        this.props.handleEditorEval(this.props.workspaceLocation);
+        this.sliderRelease(step);
         return;
       }
     }
     this.sliderShift(1);
-    this.props.handleEditorEval(this.props.workspaceLocation);
+    this.sliderRelease(1);
   };
 }
 
