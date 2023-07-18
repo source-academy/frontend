@@ -285,14 +285,13 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             xpAdjustment={grading![questionId].grade.xpAdjustment}
             maxXp={grading![questionId].question.maxXp}
             studentName={grading![questionId].student.name}
-            questions={""}
+            questions={''}
             comments={grading![questionId].grade.comments ?? ''}
-            graderName={grading![questionId].grade.grader
-              ? grading![questionId].grade.grader!.name
-              : undefined}
-            gradedAt={grading![questionId].grade.grader
-              ?grading![questionId].grade.gradedAt!
-              : undefined}          />
+            graderName={grading![questionId].grade.grader?.name}
+            gradedAt={
+              grading![questionId].grade.grader ? grading![questionId].grade.gradedAt! : undefined
+            }
+          />
         ),
         id: SideContentType.grading
       },
