@@ -32,14 +32,14 @@ export enum DefaultPromptTab {
   PREVIEW = 'PREVIEW'
 }
 
-
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
-  const [defaultPromptSelectedTab, setDefaultPromptSelectedTab] =
-    React.useState<DefaultPromptTab>(DefaultPromptTab.WRITE);  
+  const [defaultPromptSelectedTab, setDefaultPromptSelectedTab] = React.useState<DefaultPromptTab>(
+    DefaultPromptTab.WRITE
+  );
 
   const {
     courseName,
@@ -61,7 +61,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
       onChange={e =>
         props.setCourseConfiguration({
           ...props.courseConfiguration,
-          moduleHelpText: e.target.value,
+          moduleHelpText: e.target.value
         })
       }
     />

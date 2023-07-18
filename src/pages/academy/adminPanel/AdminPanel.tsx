@@ -42,7 +42,7 @@ const AdminPanel: React.FC = () => {
     enableAchievements: true,
     enableSourcecast: true,
     moduleHelpText: '',
-    defaultPrompt:''
+    defaultPrompt: ''
   });
 
   const dispatch = useDispatch();
