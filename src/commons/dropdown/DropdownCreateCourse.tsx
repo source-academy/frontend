@@ -174,10 +174,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
           )}
         </FormGroup>
 
-        <FormGroup
-          helperText="defaultPrompt"
-          labelFor="defaultPrompt"
-        >
+        <FormGroup helperText="defaultPrompt" labelFor="defaultPrompt">
           <Text tagName="span">Default Prompt&nbsp;</Text>
           <Text tagName="span" className="optional-text">
             (optional)
