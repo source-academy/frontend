@@ -22,7 +22,7 @@ import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import useTypeInference from './UseTypeInference';
 import { getModeString, selectMode } from '../utils/AceHelper';
-import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
+import { EditorBinding } from '../WorkspaceSettingsContext';
 import { IAceEditor } from 'react-ace/lib/types';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
@@ -53,6 +53,7 @@ type EditorStateProps = {
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
+  editorBinding?: EditorBinding;
 };
 
 export type EditorTabStateProps = {
@@ -65,7 +66,6 @@ export type EditorTabStateProps = {
 };
 
 type LocalStateProps = {
-  editorBinding: EditorBinding;
   session: Ace.EditSession;
 };
 
@@ -541,7 +541,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
   return (
     <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
-      <div className="row editor-react-ace">
+      <div className="row editor-react-ace" data-testid="Editor">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
       </div>
     </HotKeys>
@@ -552,7 +552,6 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor];
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
-  const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
   const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});
 
   // Create new edit session.
@@ -571,7 +570,6 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
     <EditorBase
       {...props}
       session={props.filePath ? sessions[props.filePath] : defaultEditSession}
-      editorBinding={workspaceSettings.editorBinding}
       hooks={hooks}
     />
   );

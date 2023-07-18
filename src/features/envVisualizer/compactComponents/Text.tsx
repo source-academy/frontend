@@ -6,7 +6,7 @@ import { Visible } from '../components/Visible';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Data, IHoverable } from '../EnvVisualizerTypes';
-import { getTextWidth } from '../EnvVisualizerUtils';
+import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
 
 export interface TextOptions {
   maxWidth: number;
@@ -70,16 +70,14 @@ export class Text extends Visible implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'pointer');
+    setHoveredCursor(currentTarget);
     this.ref.current.moveToTop();
     this.ref.current.show();
     currentTarget.getLayer()?.draw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'default');
+    setUnhoveredCursor(currentTarget);
     this.ref.current.hide();
     currentTarget.getLayer()?.draw();
   };

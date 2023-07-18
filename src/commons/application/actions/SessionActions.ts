@@ -19,6 +19,7 @@ import {
   AdminPanelCourseRegistration,
   CourseRegistration,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ALL_USER_XP,
@@ -27,9 +28,11 @@ import {
   FETCH_ASSESSMENT_CONFIGS,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
+  FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
   FETCH_COURSE_CONFIG,
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
+  FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
@@ -38,23 +41,28 @@ import {
   LOGIN_GITHUB,
   LOGOUT_GITHUB,
   LOGOUT_GOOGLE,
+  NotificationConfiguration,
+  NotificationPreference,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
+  SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
+  SET_NOTIFICATION_CONFIGS,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
   SUBMIT_ASSESSMENT,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
+  TimeOption,
   Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ALL_USER_XP,
@@ -66,7 +74,10 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_NOTIFICATION_CONFIG,
+  UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_NOTIFICATIONS,
+  UPDATE_TIME_OPTIONS,
   UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -126,6 +137,13 @@ export const setCourseRegistration = (courseRegistration: Partial<CourseRegistra
 
 export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
   action(SET_ASSESSMENT_CONFIGURATIONS, assessmentConfigurations);
+
+export const setConfigurableNotificationConfigs = (
+  notificationConfigs: NotificationConfiguration[]
+) => action(SET_CONFIGURABLE_NOTIFICATION_CONFIGS, notificationConfigs);
+
+export const setNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
+  action(SET_NOTIFICATION_CONFIGS, notificationConfigs);
 
 export const setAdminPanelCourseRegistrations = (
   courseRegistrations: AdminPanelCourseRegistration[]
@@ -238,11 +256,34 @@ export const fetchAssessmentConfigs = () => action(FETCH_ASSESSMENT_CONFIGS);
 export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfiguration[]) =>
   action(UPDATE_ASSESSMENT_CONFIGS, assessmentConfigs);
 
+export const updateNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
+  action(UPDATE_NOTIFICATION_CONFIG, notificationConfigs);
+
+export const updateNotificationPreferences = (
+  notificationPreferences: NotificationPreference[],
+  courseRegId: number
+) =>
+  action(UPDATE_NOTIFICATION_PREFERENCES, {
+    notificationPreferences,
+    courseRegId
+  });
+
 export const deleteAssessmentConfig = (assessmentConfig: AssessmentConfiguration) =>
   action(DELETE_ASSESSMENT_CONFIG, assessmentConfig);
 
 export const fetchAdminPanelCourseRegistrations = () =>
   action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);
+
+export const fetchConfigurableNotificationConfigs = (courseRegId: number) =>
+  action(FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS, { courseRegId });
+
+export const fetchNotificationConfigs = () => action(FETCH_NOTIFICATION_CONFIGS);
+
+export const updateTimeOptions = (timeOptions: TimeOption[]) =>
+  action(UPDATE_TIME_OPTIONS, timeOptions);
+
+export const deleteTimeOptions = (timeOptionIds: number[]) =>
+  action(DELETE_TIME_OPTIONS, timeOptionIds);
 
 export const updateUserRole = (courseRegId: number, role: Role) =>
   action(UPDATE_USER_ROLE, { courseRegId, role });

@@ -2,6 +2,7 @@ import { Button, Classes, Dialog, H4, Intent } from '@blueprintjs/core';
 import { useDispatch } from 'react-redux';
 
 import { updateCourseResearchAgreement } from '../application/actions/SessionActions';
+import Constants from '../utils/Constants';
 
 const ResearchAgreementPrompt: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,18 +18,18 @@ const ResearchAgreementPrompt: React.FC = () => {
         isOpen
       >
         <div className={Classes.DIALOG_BODY}>
-          <H4>Welcome to your new Source Academy @ NUS course!</H4>
+          <H4>Welcome to your new {Constants.sourceAcademyDeploymentName} course!</H4>
           <div>
-            Here at Source Academy @ NUS, our mission is to bring out the beauty and fun in
-            programming and the ideas behind programming, and to make these ideas universally
-            accessible. This includes educational research!
+            Here at {Constants.sourceAcademyDeploymentName}, our mission is to bring out the beauty
+            and fun in programming and the ideas behind programming, and to make these ideas
+            universally accessible. This includes educational research!
           </div>
           <br />
           <div>
-            We collect programs that students run in Source Academy @ NUS and store them anonymously
-            for our research. You are free to opt out of this collection, with no penalty for you
-            whatsoever. Contact your course instructor if you have questions or concerns about this
-            research.
+            We collect programs that students run in {Constants.sourceAcademyDeploymentName} and
+            store them anonymously for our research. You are free to opt out of this collection,
+            with no penalty for you whatsoever. Contact your course instructor if you have questions
+            or concerns about this research.
           </div>
         </div>
         <div className={Classes.DIALOG_FOOTER}>

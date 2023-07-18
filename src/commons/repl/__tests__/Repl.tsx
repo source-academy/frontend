@@ -1,6 +1,6 @@
-import { shallow } from 'enzyme';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import {
   CodeOutput,
@@ -49,26 +49,26 @@ test('Repl renders correctly', () => {
     replButtons: []
   };
   const app = <Repl {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Code output renders correctly', () => {
   const app = <Output {...{ output: mockCodeOutput }} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Running output renders correctly', () => {
   const app = <Output {...{ output: mockRunningOutput }} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Result output (no consoleLogs) renders correctly', () => {
   const app = <Output {...{ output: mockResultOutput }} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Result output (with consoleLogs) renders correctly', () => {
@@ -77,14 +77,14 @@ test('Result output (with consoleLogs) renders correctly', () => {
     consoleLogs: mockRunningOutput.consoleLogs
   };
   const app = <Output {...{ output: props }} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Error output (no consoleLogs) renders correctly', () => {
   const app = <Output {...{ output: mockErrorOutput }} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Error output (with consoleLogs) renders correctly', () => {
@@ -93,12 +93,12 @@ test('Error output (with consoleLogs) renders correctly', () => {
     consoleLogs: mockRunningOutput.consoleLogs
   };
   const app = <Output {...{ output: props }} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });
 
 test('Empty output renders an empty card', () => {
   const app = <Output {...{ output: {} as InterpreterOutput }} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
 });

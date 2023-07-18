@@ -80,7 +80,10 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
-import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../utils/notifications/NotificationsHelper';
 import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {
   CHANGE_SUBLANGUAGE,

@@ -14,10 +14,10 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 0 2`] = `
 Object {
   "head": Object {
-    "3": [Function],
-    "4": [Function],
-    "5": [Function],
-    "6": [Function],
+    "50": [Function],
+    "52": [Function],
+    "54": [Function],
+    "56": [Function],
     "fn": [Function],
     "x": Array [
       "long string",
@@ -222,13 +222,13 @@ Array [
       ],
     ],
   ],
-  "3:= ",
+  "50:= ",
   [Function],
-  "4:= ",
+  "52:= ",
   [Function],
-  "5:= ",
+  "54:= ",
   [Function],
-  "6:= ",
+  "56:= ",
   [Function],
 ]
 `;
@@ -247,7 +247,7 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 1 2`] = `
 Object {
   "head": Object {
-    "9": [Function],
+    "106": [Function],
     "fn": [Function],
     "l": Array [
       1,
@@ -373,7 +373,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "7",
+    "id": "57",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -472,7 +472,7 @@ Array [
       ],
     ],
   ],
-  "9:= ",
+  "106:= ",
   [Function],
 ]
 `;
@@ -568,7 +568,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "10",
+    "id": "107",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -635,8 +635,8 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 3 2`] = `
 Object {
   "head": Object {
-    "14": [Function],
-    "15": [Function],
+    "202": [Function],
+    "204": [Function],
     "e": Array [
       Array [
         3,
@@ -761,7 +761,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "12",
+    "id": "154",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -860,9 +860,9 @@ Array [
       ],
     ],
   ],
-  "14:= ",
+  "202:= ",
   [Function],
-  "15:= ",
+  "204:= ",
   [Function],
 ]
 `;
@@ -936,7 +936,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "16",
+    "id": "205",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -991,7 +991,7 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "21": [Function],
+    "255": [Function],
     "x": 11,
   },
   "id": Any<String>,
@@ -1003,7 +1003,7 @@ Object {
       "y": 10,
       "z": [Function],
     },
-    "id": "17",
+    "id": "251",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1053,7 +1053,7 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "16",
+      "id": "205",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1088,7 +1088,7 @@ Array [
   2,
   "x: ",
   11,
-  "21:= ",
+  "255:= ",
   [Function],
 ]
 `;
@@ -1170,7 +1170,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "22",
+    "id": "256",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1278,7 +1278,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "24",
+    "id": "303",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1320,7 +1320,7 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 2`] = `
 Object {
   "head": Object {
-    "42": [Function],
+    "412": [Function],
     "eval_stream": [Function],
     "x": 1,
     "y": Array [
@@ -1382,7 +1382,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "26",
+    "id": "350",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1438,8 +1438,8 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "45": [Function],
-    "54": [Function],
+    "414": [Function],
+    "422": [Function],
     "n": 1,
   },
   "id": Any<String>,
@@ -1492,7 +1492,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "26",
+    "id": "350",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1548,7 +1548,7 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "58": [Function],
+    "426": [Function],
     "n": 2,
   },
   "id": Any<String>,
@@ -1601,7 +1601,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "26",
+    "id": "350",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1625,7 +1625,7 @@ Object {
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "42": [Function],
+      "412": [Function],
       "eval_stream": [Function],
       "x": 1,
       "y": Array [
@@ -1637,7 +1637,7 @@ Object {
         ],
       ],
     },
-    "id": "27",
+    "id": "396",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1687,7 +1687,7 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "26",
+      "id": "350",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1762,7 +1762,7 @@ Object {
   "name": "eval_stream",
   "tail": Object {
     "head": Object {
-      "42": [Function],
+      "412": [Function],
       "eval_stream": [Function],
       "x": 1,
       "y": Array [
@@ -1774,7 +1774,7 @@ Object {
         ],
       ],
     },
-    "id": "27",
+    "id": "396",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1824,7 +1824,7 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "26",
+      "id": "350",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1851,11 +1851,11 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "28",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "42": [Function],
+        "412": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -1867,7 +1867,7 @@ Object {
           ],
         ],
       },
-      "id": "27",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1917,7 +1917,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "26",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -1945,11 +1945,11 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "28",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "42": [Function],
+        "412": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -1961,7 +1961,7 @@ Object {
           ],
         ],
       },
-      "id": "27",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2011,7 +2011,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "26",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2039,11 +2039,11 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "28",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "42": [Function],
+        "412": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -2055,7 +2055,7 @@ Object {
           ],
         ],
       },
-      "id": "27",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2105,7 +2105,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "26",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2133,11 +2133,11 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "28",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "42": [Function],
+        "412": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -2149,7 +2149,7 @@ Object {
           ],
         ],
       },
-      "id": "27",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2199,7 +2199,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "26",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2277,11 +2277,11 @@ Object {
         [Function],
       ],
     },
-    "id": "46",
+    "id": "415",
     "name": "eval_stream",
     "tail": Object {
       "head": Object {
-        "42": [Function],
+        "412": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -2293,7 +2293,7 @@ Object {
           ],
         ],
       },
-      "id": "27",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2343,7 +2343,7 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "26",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2371,17 +2371,17 @@ Object {
     "head": Object {
       "_copy_of_i": 1,
     },
-    "id": "29",
+    "id": "398",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "28",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "42": [Function],
+          "412": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2393,7 +2393,7 @@ Object {
             ],
           ],
         },
-        "id": "27",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2443,7 +2443,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "26",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2472,17 +2472,17 @@ Object {
     "head": Object {
       "_copy_of_i": 2,
     },
-    "id": "32",
+    "id": "401",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "28",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "42": [Function],
+          "412": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2494,7 +2494,7 @@ Object {
             ],
           ],
         },
-        "id": "27",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2544,7 +2544,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "26",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2573,17 +2573,17 @@ Object {
     "head": Object {
       "_copy_of_i": 3,
     },
-    "id": "35",
+    "id": "404",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "28",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "42": [Function],
+          "412": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2595,7 +2595,7 @@ Object {
             ],
           ],
         },
-        "id": "27",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2645,7 +2645,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "26",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2674,17 +2674,17 @@ Object {
     "head": Object {
       "_copy_of_i": 4,
     },
-    "id": "38",
+    "id": "407",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "28",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "42": [Function],
+          "412": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2696,7 +2696,7 @@ Object {
             ],
           ],
         },
-        "id": "27",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2746,7 +2746,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "26",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -2825,7 +2825,7 @@ Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "48",
+    "id": "416",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -2881,11 +2881,11 @@ Object {
           [Function],
         ],
       },
-      "id": "46",
+      "id": "415",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
-          "42": [Function],
+          "412": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2897,7 +2897,7 @@ Object {
             ],
           ],
         },
-        "id": "27",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2947,7 +2947,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "26",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3026,7 +3026,7 @@ Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "48",
+    "id": "416",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -3082,11 +3082,11 @@ Object {
           [Function],
         ],
       },
-      "id": "46",
+      "id": "415",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
-          "42": [Function],
+          "412": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -3098,7 +3098,7 @@ Object {
             ],
           ],
         },
-        "id": "27",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -3148,7 +3148,7 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "26",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3179,23 +3179,23 @@ Object {
     "head": Object {
       "i": 1,
     },
-    "id": "30",
+    "id": "399",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 1,
       },
-      "id": "29",
+      "id": "398",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "28",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "42": [Function],
+            "412": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3207,7 +3207,7 @@ Object {
               ],
             ],
           },
-          "id": "27",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3257,7 +3257,7 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "26",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
@@ -3289,23 +3289,23 @@ Object {
     "head": Object {
       "i": 2,
     },
-    "id": "33",
+    "id": "402",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 2,
       },
-      "id": "32",
+      "id": "401",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "28",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "42": [Function],
+            "412": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3317,7 +3317,7 @@ Object {
               ],
             ],
           },
-          "id": "27",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3367,7 +3367,7 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "26",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
@@ -3399,23 +3399,23 @@ Object {
     "head": Object {
       "i": 3,
     },
-    "id": "36",
+    "id": "405",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 3,
       },
-      "id": "35",
+      "id": "404",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "28",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "42": [Function],
+            "412": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3427,7 +3427,7 @@ Object {
               ],
             ],
           },
-          "id": "27",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3477,7 +3477,7 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "26",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
@@ -3509,23 +3509,23 @@ Object {
     "head": Object {
       "i": 4,
     },
-    "id": "39",
+    "id": "408",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 4,
       },
-      "id": "38",
+      "id": "407",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "28",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "42": [Function],
+            "412": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3537,7 +3537,7 @@ Object {
               ],
             ],
           },
-          "id": "27",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3587,7 +3587,7 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "26",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
@@ -3676,13 +3676,13 @@ Object {
         [Function],
       ],
     },
-    "id": "49",
+    "id": "418",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "48",
+      "id": "416",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -3738,11 +3738,11 @@ Object {
             [Function],
           ],
         },
-        "id": "46",
+        "id": "415",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
-            "42": [Function],
+            "412": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3754,7 +3754,7 @@ Object {
               ],
             ],
           },
-          "id": "27",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3804,7 +3804,7 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "26",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
@@ -3893,13 +3893,13 @@ Object {
         [Function],
       ],
     },
-    "id": "59",
+    "id": "427",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "48",
+      "id": "416",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -3955,11 +3955,11 @@ Object {
             [Function],
           ],
         },
-        "id": "46",
+        "id": "415",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
-            "42": [Function],
+            "412": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3971,7 +3971,7 @@ Object {
               ],
             ],
           },
-          "id": "27",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -4021,7 +4021,7 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "26",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
@@ -4067,13 +4067,13 @@ Array [
   1,
   "n: ",
   1,
-  "45:= ",
+  "414:= ",
   [Function],
   2,
   1,
   "n: ",
   2,
-  "58:= ",
+  "426:= ",
   [Function],
   0,
   2,

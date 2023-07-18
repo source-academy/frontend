@@ -45,6 +45,7 @@ export enum CompactConfig {
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',
   PRINT_BACKGROUND = 'white',
+  SA_CURRENT_ITEM = '#030fff',
 
   ConstantColon = ':= ',
   VariableColon = ': ',

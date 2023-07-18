@@ -7,8 +7,7 @@ import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingDashboard from './subcomponents/GradingDashboard';
-import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspace';
-import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
+import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
   const { courseId, gradingOverviews } = useTypedSelector(state => state.session);
@@ -31,11 +30,7 @@ const Grading: React.FC = () => {
 
   /* Create a workspace to grade a submission. */
   if (submissionId !== null) {
-    const props: GradingWorkspaceOwnProps = {
-      submissionId,
-      questionId
-    };
-    return <GradingWorkspaceContainer {...props} />;
+    return <GradingWorkspace questionId={questionId} submissionId={submissionId} />;
   }
 
   /* Display either a loading screen or a table with overviews. */

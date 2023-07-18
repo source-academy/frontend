@@ -21,7 +21,7 @@ import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper'
 import {
   showSuccessMessage,
   showWarningMessage
-} from '../../../../commons/utils/NotificationsHelper';
+} from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
 type GradingEditorProps = DispatchProps & OwnProps;

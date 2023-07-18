@@ -2,8 +2,8 @@ import 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import 'ace-builds/src-noconflict/ace';
 
-import { shallow } from 'enzyme';
 import lzString from 'lz-string';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import CodeSnippet from '../CodeSnippet';
 
@@ -21,8 +21,8 @@ describe('Sicp Code Snippet', () => {
       prependLength: 1
     };
 
-    const tree = shallow(<CodeSnippet {...props} />);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(<CodeSnippet {...props} />);
+    expect(tree).toMatchSnapshot();
   });
 
   test('renders correctly without prepend', () => {
@@ -34,7 +34,7 @@ describe('Sicp Code Snippet', () => {
       prependLength: 0
     };
 
-    const tree = shallow(<CodeSnippet {...props} />);
-    expect(tree.debug()).toMatchSnapshot();
+    const tree = shallowRender(<CodeSnippet {...props} />);
+    expect(tree).toMatchSnapshot();
   });
 });
