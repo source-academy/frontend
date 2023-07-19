@@ -61,7 +61,7 @@ const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) =
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const SideContent: React.FC<SideContentProps> = ({
+const StoriesSideContent: React.FC<SideContentProps> = ({
   selectedTabId,
   renderActiveTabPanelOnly,
   ...otherProps
@@ -89,4 +89,4 @@ const SideContent: React.FC<SideContentProps> = ({
   );
 };
 
-export default React.memo(SideContent, propsAreEqual);
+export default React.memo(StoriesSideContent, propsAreEqual);
