@@ -230,7 +230,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
             <button onClick={execEvaluate}>Run</button>
             <button onClick={execResetEnv}>Reset Env</button>
           </div>
-          <p>{env === 'default' ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
+          <p>{env === DEFAULT_ENV ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
           <div className="row workspace-parent" style={{ maxWidth: '800px' }}>
             <div className="right-parent">
               <Card>
