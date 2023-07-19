@@ -11,7 +11,7 @@ import { propsAreEqual } from '../../../commons/utils/MemoizeHelper';
 import { assertType } from '../../../commons/utils/TypeHelper';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 
-export type SideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
+export type StoriesSideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
 
 type StateProps = {
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
@@ -61,7 +61,7 @@ const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) =
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const StoriesSideContent: React.FC<SideContentProps> = ({
+const StoriesSideContent: React.FC<StoriesSideContentProps> = ({
   selectedTabId,
   renderActiveTabPanelOnly,
   ...otherProps
