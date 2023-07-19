@@ -321,7 +321,8 @@ export default function* WorkspaceSaga(): SagaIterator {
     const codeFiles = {
       [codeFilePath]: code
     };
-    yield call(evalCode, codeFiles, codeFilePath, context, execTime, env, EVAL_STORY);
+    // TODO: Check what happens to the env here
+    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY);
   });
 
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
