@@ -107,14 +107,14 @@ const NotiPreference: React.FC = () => {
 
   const columnDefs = [
     {
-      headerName: 'Notification Type',
-      field: 'notificationType.name',
+      headerName: 'Assessment Type',
+      field: 'assessmentConfig.type',
+      valueFormatter: assessmentTypeFormatter,
       rowDrag: true
     },
     {
-      headerName: 'Assessment Type',
-      field: 'assessmentConfig.type',
-      valueFormatter: assessmentTypeFormatter
+      headerName: 'Notification Type',
+      field: 'notificationType.name',
     },
     {
       headerName: 'Recipients',
