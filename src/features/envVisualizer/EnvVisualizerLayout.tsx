@@ -1,9 +1,12 @@
-import { Button, ButtonGroup, Checkbox } from '@blueprintjs/core';
+import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { Frame } from 'js-slang/dist/types';
+import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
+import { AgendaStack } from './compactComponents/AgendaStack';
 import { Level as CompactLevel } from './compactComponents/Level';
+import { StashStack } from './compactComponents/StashStack';
 import { ArrayValue as CompactArrayValue } from './compactComponents/values/ArrayValue';
 import { FnValue as CompactFnValue } from './compactComponents/values/FnValue';
 import { GlobalFnValue as CompactGlobalFnValue } from './compactComponents/values/GlobalFnValue';
@@ -48,6 +51,10 @@ export class Layout {
   static compactWidth: number;
   /** the height of the compact stage */
   static compactHeight: number;
+  /** the width of the agendaStash stage */
+  static agendaStashWidth: number;
+  /** the height of the agendaStash stage */
+  static agendaStashHeight: number;
   /** the visible height of the stage */
   static visibleHeight: number = window.innerHeight;
   /** the visible width of the stage */
@@ -58,6 +65,8 @@ export class Layout {
   static stageWidth: number = window.innerWidth;
   /** the unique key assigned to each node */
   static key: number = 0;
+  /** scale factor for zooming and out of canvas */
+  static scaleFactor = 1.02;
 
   /** the environment tree */
   static environmentTree: EnvTree;
@@ -66,6 +75,11 @@ export class Layout {
   /** grid of frames */
   static grid: Grid;
   static compactLevels: CompactLevel[] = [];
+  /** the agenda and stash */
+  static agenda: Agenda;
+  static stash: Stash;
+  static agendaComponent: AgendaStack;
+  static stashComponent: StashStack;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -76,6 +90,10 @@ export class Layout {
   static currentLight: React.ReactNode;
   static currentCompactDark: React.ReactNode;
   static currentCompactLight: React.ReactNode;
+  static currentStackDark: React.ReactNode;
+  static currentStackTruncDark: React.ReactNode;
+  static currentStackLight: React.ReactNode;
+  static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
@@ -118,11 +136,15 @@ export class Layout {
   }
 
   /** processes the runtime context from JS Slang */
-  static setContext(envTree: EnvTree): void {
+  static setContext(envTree: EnvTree, agenda: Agenda, stash: Stash): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentCompactLight = undefined;
     Layout.currentCompactDark = undefined;
+    Layout.currentStackDark = undefined;
+    Layout.currentStackTruncDark = undefined;
+    Layout.currentStackLight = undefined;
+    Layout.currentStackTruncLight = undefined;
     // clear/initialize data and value arrays
     Layout.values.forEach((v, d) => {
       v.reset();
@@ -136,6 +158,8 @@ export class Layout {
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(envTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
+    Layout.agenda = agenda;
+    Layout.stash = stash;
 
     // remove program environment and merge bindings into global env
     Layout.removeProgramEnv();
@@ -143,13 +167,27 @@ export class Layout {
     Layout.removeUnreferencedGlobalFns();
     // initialize levels and frames
     Layout.initializeGrid();
+    // initialize agenda and stash
+    Layout.initializeAgendaStash();
 
-    // calculate height and width by considering lowest and widest level
+    if (EnvVisualizer.getAgendaStash()) {
+      Layout.agendaStashHeight = Math.max(
+        Config.CanvasMinHeight,
+        Layout.agendaComponent.y() + Layout.agendaComponent.height() + Config.CanvasPaddingY
+      );
+      Layout.agendaStashWidth = Math.max(
+        Config.CanvasMinWidth,
+        Layout.agendaComponent.x() + Layout.agendaComponent.width() + Config.CanvasPaddingX,
+        Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX
+      );
+    }
     if (EnvVisualizer.getCompactLayout()) {
+      // calculate height and width by considering lowest and widest level
       const lastLevel = Layout.compactLevels[Layout.compactLevels.length - 1];
       Layout.compactHeight = Math.max(
         Config.CanvasMinHeight,
-        lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY
+        lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
+        Layout.agendaStashHeight
       );
 
       Layout.compactWidth = Math.max(
@@ -158,7 +196,10 @@ export class Layout {
           (maxWidth, level) => Math.max(maxWidth, level.width()),
           0
         ) +
-          Config.CanvasPaddingX * 2
+          Config.CanvasPaddingX * 2 +
+          (EnvVisualizer.getAgendaStash()
+            ? Layout.agendaComponent.width() + Config.CanvasPaddingX * 2
+            : 0)
       );
     } else {
       Layout.nonCompactHeight = Math.max(
@@ -170,6 +211,11 @@ export class Layout {
         this.grid.width() + Config.CanvasPaddingX * 2
       );
     }
+  }
+
+  static initializeAgendaStash() {
+    this.agendaComponent = new AgendaStack(this.agenda);
+    this.stashComponent = new StashStack(this.stash);
   }
 
   /** remove program environment containing predefined functions */
@@ -380,12 +426,13 @@ export class Layout {
   }
 
   /**
-   * Scrolls diagram to top left, and saves the diagram as multiple images of width < MaxExportWidth.
+   * Scrolls diagram to top left, resets the zoom, and saves the diagram as multiple images of width < MaxExportWidth.
    */
   static exportImage = () => {
     const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
     container.scrollTo({ left: 0, top: 0 });
     Layout.handleScrollPosition(0, 0);
+    this.stageRef.current.scale({ x: 1, y: 1 });
     const height = Layout.height();
     const width = Layout.width();
     const horizontalImages = Math.ceil(width / Config.MaxExportWidth);
@@ -421,17 +468,6 @@ export class Layout {
     download_images();
   };
 
-  /** Calculate the test to be displayed for button to save the images.*/
-  private static saveButtonText(): String {
-    return `Save ${
-      Layout.width() > Config.MaxExportWidth || Layout.height() > Config.MaxExportHeight
-        ? Math.ceil(Layout.width() / Config.MaxExportWidth) *
-            Math.ceil(Layout.height() / Config.MaxExportHeight) +
-          ' images'
-        : 'image'
-    }`;
-  }
-
   /**
    * Calculates the required transformation for the stage given the scroll-container div scroll position.
    * @param x x position of the scroll container
@@ -443,6 +479,44 @@ export class Layout {
     this.stageRef.current.container().style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
     this.stageRef.current.x(-dx);
     this.stageRef.current.y(-dy);
+  }
+
+  /**
+   * Updates the scale of the stage after the user inititates a zoom in or out
+   * by scrolling or by the trackpad.
+   */
+  static zoomStage(event: KonvaEventObject<WheelEvent> | boolean, multiplier: number = 1) {
+    typeof event != 'boolean' && event.evt.preventDefault();
+    if (Layout.stageRef.current !== null) {
+      const stage = Layout.stageRef.current;
+      const oldScale = stage.scaleX();
+      const { x: pointerX, y: pointerY } = stage.getPointerPosition();
+      const mousePointTo = {
+        x: (pointerX - stage.x()) / oldScale,
+        y: (pointerY - stage.y()) / oldScale
+      };
+
+      // zoom in or zoom out
+      const direction =
+        typeof event != 'boolean' ? (event.evt.deltaY > 0 ? -1 : 1) : event ? 1 : -1;
+
+      // Check if the zoom limits have been reached
+      if ((direction > 0 && oldScale < 3) || (direction < 0 && oldScale > 0.4)) {
+        const newScale =
+          direction > 0
+            ? oldScale * Layout.scaleFactor ** multiplier
+            : oldScale / Layout.scaleFactor ** multiplier;
+        stage.scale({ x: newScale, y: newScale });
+        if (typeof event !== 'boolean') {
+          const newPos = {
+            x: pointerX - mousePointTo.x * newScale,
+            y: pointerY - mousePointTo.y * newScale
+          };
+          stage.position(newPos);
+          stage.batchDraw();
+        }
+      }
+    }
   }
 
   static draw(): React.ReactNode {
@@ -460,8 +534,7 @@ export class Layout {
             style={{
               width: Layout.visibleWidth,
               height: Layout.visibleHeight,
-              overflow: 'auto',
-              margin: '10px'
+              overflow: 'hidden'
             }}
           >
             <div
@@ -475,85 +548,14 @@ export class Layout {
                   : Config.SA_BLUE.toString()
               }}
             >
-              <div style={{ right: 40, position: 'absolute', display: 'flex', alignSelf: 'right' }}>
-                <ButtonGroup vertical>
-                  <Button
-                    large={true}
-                    outlined={true}
-                    style={{
-                      backgroundColor: EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString(),
-                      opacity: 0.8,
-                      borderColor: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString()
-                    }}
-                    onMouseUp={() => {
-                      EnvVisualizer.toggleCompactLayout();
-                      EnvVisualizer.redraw();
-                    }}
-                  >
-                    <Checkbox
-                      checked={!EnvVisualizer.getCompactLayout()}
-                      label="Experimental"
-                      style={{
-                        marginBottom: '0px',
-                        color: EnvVisualizer.getPrintableMode()
-                          ? Config.SA_BLUE.toString()
-                          : Config.PRINT_BACKGROUND.toString()
-                      }}
-                    />
-                  </Button>
-                  <Button
-                    large={true}
-                    outlined={true}
-                    style={{
-                      backgroundColor: EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString(),
-                      opacity: 0.8,
-                      borderColor: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString()
-                    }}
-                    onMouseUp={() => {
-                      EnvVisualizer.togglePrintableMode();
-                      EnvVisualizer.redraw();
-                    }}
-                  >
-                    <Checkbox
-                      checked={EnvVisualizer.getPrintableMode()}
-                      label="Printable"
-                      style={{
-                        marginBottom: '0px',
-                        color: EnvVisualizer.getPrintableMode()
-                          ? Config.SA_BLUE.toString()
-                          : Config.PRINT_BACKGROUND.toString()
-                      }}
-                    />
-                  </Button>
-                  <Button
-                    outlined={true}
-                    text={Layout.saveButtonText()}
-                    large={true}
-                    onClick={this.exportImage}
-                    style={{
-                      color: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString(),
-                      backgroundColor: EnvVisualizer.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString(),
-                      opacity: 0.8,
-                      borderColor: EnvVisualizer.getPrintableMode()
-                        ? Config.SA_BLUE.toString()
-                        : Config.PRINT_BACKGROUND.toString()
-                    }}
-                  />
-                </ButtonGroup>
-              </div>
-              <Stage width={Layout.stageWidth} height={Layout.stageHeight} ref={this.stageRef}>
+              <Stage
+                width={Layout.stageWidth}
+                height={Layout.stageHeight}
+                ref={this.stageRef}
+                draggable
+                onWheel={Layout.zoomStage}
+                className="draggable"
+              >
                 <Layer>
                   <Rect
                     {...ShapeDefaultProps}
@@ -572,6 +574,12 @@ export class Layout {
                   {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
                   {EnvVisualizer.getCompactLayout() &&
                     Layout.compactLevels.map(level => level.draw())}
+                  {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getAgendaStash() &&
+                    Layout.agendaComponent.draw()}
+                  {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getAgendaStash() &&
+                    Layout.stashComponent.draw()}
                 </Layer>
               </Stage>
             </div>
@@ -581,9 +589,25 @@ export class Layout {
       Layout.prevLayout = layout;
       if (EnvVisualizer.getCompactLayout()) {
         if (EnvVisualizer.getPrintableMode()) {
-          Layout.currentCompactLight = layout;
+          if (EnvVisualizer.getAgendaStash()) {
+            if (EnvVisualizer.getStackTruncated()) {
+              Layout.currentStackTruncLight = layout;
+            } else {
+              Layout.currentStackLight = layout;
+            }
+          } else {
+            Layout.currentCompactLight = layout;
+          }
         } else {
-          Layout.currentCompactDark = layout;
+          if (EnvVisualizer.getAgendaStash()) {
+            if (EnvVisualizer.getStackTruncated()) {
+              Layout.currentStackTruncDark = layout;
+            } else {
+              Layout.currentStackDark = layout;
+            }
+          } else {
+            Layout.currentCompactDark = layout;
+          }
         }
       } else {
         if (EnvVisualizer.getPrintableMode()) {

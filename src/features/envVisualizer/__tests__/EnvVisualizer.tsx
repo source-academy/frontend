@@ -83,7 +83,11 @@ codeSamples.forEach((code, idx) => {
     }
     const context = createContext(4);
     await runInContext(code, context);
-    Layout.setContext(context.runtime.environmentTree as EnvTree);
+    Layout.setContext(
+      context.runtime.environmentTree as EnvTree,
+      context.runtime.agenda!,
+      context.runtime.stash!
+    );
 
     const toTest: any[] = [];
     const environmentsToTest: Env[] = [];

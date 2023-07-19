@@ -14,12 +14,11 @@ import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConf
 import { Layout } from '../../EnvVisualizerLayout';
 import { CompactReferenceType, EnvTreeNode, FnTypes, IHoverable } from '../../EnvVisualizerTypes';
 import {
+  defaultSAColor,
   getBodyText,
   getNonEmptyEnv,
   getParamsText,
-  getTextWidth,
-  setHoveredStyle,
-  setUnhoveredStyle
+  getTextWidth
 } from '../../EnvVisualizerUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -104,13 +103,11 @@ export class FnValue extends Value implements IHoverable {
     if (EnvVisualizer.getPrintableMode()) return;
     this.ref.current.moveToTop();
     this.labelRef.current.show();
-    setHoveredStyle(currentTarget);
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (EnvVisualizer.getPrintableMode()) return;
     this.labelRef.current.hide();
-    setUnhoveredStyle(currentTarget);
   };
   updatePosition(): void {}
   draw(): React.ReactNode {
@@ -130,11 +127,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              EnvVisualizer.getPrintableMode()
-                ? CompactConfig.SA_BLUE.toString()
-                : CompactConfig.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -142,11 +135,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              EnvVisualizer.getPrintableMode()
-                ? CompactConfig.SA_BLUE.toString()
-                : CompactConfig.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -154,11 +143,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              EnvVisualizer.getPrintableMode()
-                ? CompactConfig.SA_BLUE.toString()
-                : CompactConfig.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -166,11 +151,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              EnvVisualizer.getPrintableMode()
-                ? CompactConfig.SA_BLUE.toString()
-                : CompactConfig.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
         </Group>
         {EnvVisualizer.getPrintableMode() ? (
