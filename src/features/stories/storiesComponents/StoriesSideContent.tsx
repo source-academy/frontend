@@ -62,6 +62,7 @@ const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) =
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
+// TODO: Reduce code duplication with the main SideContent component
 const StoriesSideContent: React.FC<StoriesSideContentProps> = ({
   selectedTabId,
   renderActiveTabPanelOnly,
