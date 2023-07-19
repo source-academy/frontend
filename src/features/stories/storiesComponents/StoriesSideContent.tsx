@@ -16,6 +16,7 @@ export type StoriesSideContentProps = Omit<GenericSideContentProps, 'renderFunct
 type StateProps = {
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
+  storyEnv: string;
 };
 
 /**
