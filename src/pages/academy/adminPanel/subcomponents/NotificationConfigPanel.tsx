@@ -15,7 +15,7 @@ import { NotificationConfiguration, TimeOption } from 'src/commons/application/t
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './assessmentConfigPanel/BooleanCell';
-import SelectCell from './notificationConfigPanel/SelectCell';
+//import SelectCell from './notificationConfigPanel/SelectCell';
 import TimeOptionCell from './notificationConfigPanel/TimeOptionCell';
 
 const NotificationConfigPanel = () => {
@@ -120,7 +120,7 @@ const NotificationConfigPanel = () => {
     //   field: 'notificationType.id'
     // },
     {
-      headerName: 'Reminder Time Options (hours)',
+      headerName: 'Default Reminder Time(hours)',
       field: 'timeOptions',
       cellRendererFramework: TimeOptionCell,
       cellRendererParams: {
@@ -129,6 +129,7 @@ const NotificationConfigPanel = () => {
         field: 'timeOptions'
       }
     },
+    /*
     {
       headerName: 'Default Reminder (hours)',
       field: 'timeOptions',
@@ -138,6 +139,7 @@ const NotificationConfigPanel = () => {
         field: 'timeOptions'
       }
     },
+    */
     {
       headerName: 'Enabled',
       field: 'isEnabled',
