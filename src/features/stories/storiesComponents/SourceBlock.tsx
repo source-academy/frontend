@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
-import { SideContentProps } from 'src/commons/sideContent/SideContent';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
@@ -20,7 +19,7 @@ import {
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import StoriesSideContent from './StoriesSideContent';
+import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideContent';
 import { DEFAULT_ENV } from './UserBlogContent';
 
 type SourceBlockProps = {
@@ -193,14 +192,14 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter, variant, output, dispatch, env]);
 
-  const sideContentProps: SideContentProps = {
+  const sideContentProps: StoriesSideContentProps = {
     selectedTabId: selectedTab,
     onChange: onChangeTabs,
     tabs: {
       beforeDynamicTabs: tabs,
       afterDynamicTabs: []
     },
-    workspaceLocation: env,
+    storyEnv: env,
     isStories: true
   };
 
