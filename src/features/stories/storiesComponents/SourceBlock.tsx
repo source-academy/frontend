@@ -1,15 +1,11 @@
 import { Card, Classes } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import { Chapter } from 'js-slang/dist/types';
 import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
-import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
-import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
+import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { addHtmlConsoleError } from 'src/commons/workspace/WorkspaceActions';
 import {
   clearStoryEnv,
   evalStory,
@@ -142,27 +138,27 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
 
-    // For HTML Chapter, HTML Display tab is added only after code is run
-    if (chapter === Chapter.HTML) {
-      if (output.length > outputIndex && output[outputIndex].type === 'result') {
-        tabs.push({
-          label: 'HTML Display',
-          iconName: IconNames.MODAL,
-          body: (
-            <SideContentHtmlDisplay
-              content={(output[outputIndex] as ResultOutput).value}
-              handleAddHtmlConsoleError={errorMsg =>
-                dispatch(addHtmlConsoleError(errorMsg, env, true))
-              }
-            />
-          ),
-          id: SideContentType.htmlDisplay
-        });
-      }
-      return tabs;
-    }
-
     // TODO: Restore logic post refactor
+
+    // // For HTML Chapter, HTML Display tab is added only after code is run
+    // if (chapter === Chapter.HTML) {
+    //   if (output.length > outputIndex && output[outputIndex].type === 'result') {
+    //     tabs.push({
+    //       label: 'HTML Display',
+    //       iconName: IconNames.MODAL,
+    //       body: (
+    //         <SideContentHtmlDisplay
+    //           content={(output[outputIndex] as ResultOutput).value}
+    //           handleAddHtmlConsoleError={errorMsg =>
+    //             dispatch(addHtmlConsoleError(errorMsg, 'stories', true))
+    //           }
+    //         />
+    //       ),
+    //       id: SideContentType.htmlDisplay
+    //     });
+    //   }
+    //   return tabs;
+    // }
 
     // // (TEMP) Remove tabs for fullJS until support is integrated
     // if (chapter === Chapter.FULL_JS) {
@@ -199,6 +195,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       beforeDynamicTabs: tabs,
       afterDynamicTabs: []
     },
+    workspaceLocation: 'stories',
     storyEnv: env,
     isStories: true
   };
