@@ -9,6 +9,7 @@ import {
   ResultOutput
 } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
+import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 import {
   ADD_STORY_ENV,
   CLEAR_STORY_ENV,
@@ -27,7 +28,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
   state = defaultStories,
   action: SourceActionType
 ) => {
-  const env: string = (action as any).payload ? (action as any).payload.env : 'default';
+  const env: string = (action as any).payload ? (action as any).payload.env : DEFAULT_ENV;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
   switch (action.type) {
