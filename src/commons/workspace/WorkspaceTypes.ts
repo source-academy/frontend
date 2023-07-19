@@ -62,7 +62,7 @@ export const UPDATE_ENVSTEPSTOTAL = 'UPDATE_ENVSTEPSTOTAL';
 export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
-export type WorkspaceLocation = keyof WorkspaceManagerState | string;
+export type WorkspaceLocation = keyof WorkspaceManagerState;
 
 type AssessmentWorkspaceAttr = {
   readonly currentAssessment?: number;
