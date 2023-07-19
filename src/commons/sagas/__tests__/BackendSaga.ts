@@ -131,6 +131,7 @@ const mockTokens = { accessToken: 'access', refreshToken: 'refresherOrb' };
 const mockUser: User = {
   userId: 123,
   name: 'user',
+  username: 'user',
   courses: [
     {
       courseId: 1,

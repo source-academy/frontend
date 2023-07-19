@@ -23,14 +23,18 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { OverallState, Role } from '../application/ApplicationTypes';
 import { RouterState } from '../application/types/CommonsTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
+  BULK_UPLOAD_TEAM,
   CourseConfiguration,
   CourseRegistration,
+  CREATE_TEAM,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_TEAM,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
@@ -45,6 +49,8 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
@@ -64,6 +70,7 @@ import {
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
+  UPDATE_TEAM,
   UPDATE_TIME_OPTIONS,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -89,6 +96,7 @@ import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTyp
 import {
   deleteAssessment,
   deleteSourcecastEntry,
+  deleteTeam,
   getAllUserXp,
   getAssessment,
   getAssessmentConfigs,
@@ -102,6 +110,8 @@ import {
   getNotificationConfigs,
   getNotifications,
   getSourcecastIndex,
+  getStudents,
+  getTeamFormationOverviews,
   getTotalXp,
   getUser,
   getUserCourseRegistrations,
@@ -115,7 +125,9 @@ import {
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
+  postTeams,
   postUnsubmit,
+  postUploadTeams,
   putAssessmentConfigs,
   putCourseConfig,
   putCourseResearchAgreement,
@@ -123,6 +135,7 @@ import {
   putNewUsers,
   putNotificationConfigs,
   putNotificationPreferences,
+  putTeams,
   putTimeOptions,
   putUserRole,
   removeAssessmentConfig,
@@ -404,6 +417,97 @@ function* BackendSaga(): SagaIterator {
       }
     }
   );
+
+  yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEWS, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  });
+
+  yield takeEvery(FETCH_STUDENTS, function* (): any {
+    const tokens: Tokens = yield selectTokens();
+    // const resp: Response | null = yield call(getStudents, tokens);
+    // if (!resp || !resp.ok) {
+    //   return yield handleResponseError(resp);
+    // }
+    const students: User[] | null = yield call(getStudents, tokens);
+    if (students) {
+      yield put(actions.updateStudents(students));
+    }
+  });
+
+  yield takeEvery(CREATE_TEAM, function* (action: ReturnType<typeof actions.createTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { assessment, teams } = action.payload;
+
+    const resp: Response | null = yield call(postTeams, assessment.id, teams, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] = yield select(
+      (state: OverallState) => state.session.teamFormationOverviews || []
+    );
+
+    yield call(showSuccessMessage, 'Team created successfully', 1000);
+    yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+  });
+
+  yield takeEvery(
+    BULK_UPLOAD_TEAM,
+    function* (action: ReturnType<typeof actions.bulkUploadTeam>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { assessment, file } = action.payload;
+
+      const resp: Response | null = yield call(postUploadTeams, assessment.id, file, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+      const teamFormationOverviews: TeamFormationOverview[] = yield select(
+        (state: OverallState) => state.session.teamFormationOverviews || []
+      );
+
+      yield call(showSuccessMessage, 'Team created successfully', 1000);
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  );
+
+  yield takeEvery(UPDATE_TEAM, function* (action: ReturnType<typeof actions.updateTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { teamId, assessment, teams } = action.payload;
+
+    const resp: Response | null = yield call(putTeams, teamId, assessment.id, teams, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] = yield select(
+      (state: OverallState) => state.session.teamFormationOverviews || []
+    );
+
+    yield call(showSuccessMessage, 'Team updated successfully', 1000);
+    yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+  });
+
+  yield takeEvery(DELETE_TEAM, function* (action: ReturnType<typeof actions.deleteTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { teamId } = action.payload;
+
+    const resp: Response | null = yield call(deleteTeam, teamId, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] = yield select(
+      (state: OverallState) => state.session.teamFormationOverviews || []
+    );
+
+    yield call(showSuccessMessage, 'Team deleted successfully', 1000);
+    yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+  });
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
     const tokens: Tokens = yield selectTokens();

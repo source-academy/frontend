@@ -28,6 +28,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_NOTIFICATIONS,
+  UPDATE_STUDENTS,
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
   UPDATE_TOTAL_XP
 } from '../types/SessionTypes';
 
@@ -130,6 +132,16 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         notifications: action.payload
+      };
+    case UPDATE_STUDENTS:
+      return {
+        ...state,
+        students: action.payload
+      };
+    case UPDATE_TEAM_FORMATION_OVERVIEWS:
+      return {
+        ...state,
+        teamFormationOverviews: action.payload
       };
     case REMOTE_EXEC_UPDATE_DEVICES:
       return {

@@ -44,6 +44,7 @@ const mockStudentInfo = [
 export const mockUser: User = {
   userId: 123,
   name: 'DevAdmin',
+  username: 'DevAdmin',
   courses: [
     {
       courseId: 1,
@@ -68,6 +69,247 @@ export const mockUser: User = {
     }
   ]
 };
+
+export const mockStudents: User[] = [
+  {
+    userId: 101,
+    name: 'Papito Sakolomoto',
+    username: 'Papito Sakolomoto',
+    courses: [
+      {
+        courseId: 1,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 102,
+    name: 'Carina Heng Xin Ting',
+    username: 'Carina Heng Xin Ting',
+    courses: [
+      {
+        courseId: 2,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 103,
+    name: 'Valentino Gusion',
+    username: 'Valentino Gusion',
+    courses: [
+      {
+        courseId: 3,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 104,
+    name: 'Ixia Arlot Rambutan',
+    username: 'Ixia Arlot Rambutan',
+    courses: [
+      {
+        courseId: 4,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 105,
+    name: 'Ariel Shockatia Ligament',
+    username: 'Ariel Shockatia Ligament',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 106,
+    name: 'Lolita Sim',
+    username: 'Lolita Sim',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 107,
+    name: 'Lim Jun Ming',
+    username: 'Lim Jun Ming',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 108,
+    name: 'Tobias Gray',
+    username: 'Tobias Gray',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 109,
+    name: 'Lenard Toh See Ming',
+    username: 'Lenard Toh See Ming',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 110,
+    name: 'Richard Gray',
+    username: 'Richard Gray',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 111,
+    name: 'Benedict Lim',
+    username: 'Benedict Lim',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 112,
+    name: 'Harshvathini Tharman',
+    username: 'Harshvathini Tharman',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 113,
+    name: 'James Cook',
+    username: 'James Cook',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 114,
+    name: 'Mike Chang',
+    username: 'Mike Chang',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 115,
+    name: 'Giyu Tomioka',
+    username: 'Giyu Tomioka',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 116,
+    name: 'Oliver Sandy',
+    username: 'Oliver Sandy',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  },
+  {
+    userId: 117,
+    name: 'Muthu Valakrishnan',
+    username: 'Muthu Valakrishnan',
+    courses: [
+      {
+        courseId: 5,
+        courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
+        courseShortName: `CS1101S`,
+        role: Role.Student,
+        viewable: true
+      }
+    ]
+  }
+];
 
 export const mockCourseRegistrations: CourseRegistration[] = [
   {
@@ -148,6 +390,23 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     assetsPrefix: ''
   }
 ];
+
+/**
+ * Mock for fetching a students.
+ * A null value is returned for invalid token or role.
+ *
+ * @param accessToken a valid access token for the cadet backend.
+ */
+export const mockFetchStudents = (accessToken: string): User[] | null => {
+  // const permittedRoles: Role[] = [Role.Admin, Role.Staff, Role.Student];
+  // const role: Role | null = mockFetchRole(accessToken);
+  // if (role === null || !permittedRoles.includes(role)) {
+  //   return null;
+  // } else {
+  //   return mockStudents;
+  // }
+  return mockStudents;
+};
 
 /**
  * Mock for fetching a trainer/admin's student information. A null value

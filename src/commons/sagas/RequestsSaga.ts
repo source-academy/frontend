@@ -1,4 +1,5 @@
 import { call } from 'redux-saga/effects';
+import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
   AchievementGoal,
@@ -14,6 +15,7 @@ import {
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
@@ -405,7 +407,7 @@ export const getAssessmentOverviews = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const assessmentOverviews = await resp.json();
-  
+
   return assessmentOverviews.map((overview: any) => {
     overview.gradingStatus = computeGradingStatus(
       overview.isManuallyGraded,
@@ -654,6 +656,124 @@ export const getGradingOverviews = async (
     );
 };
 
+/*
+ * GET /courses/{courseId}/admin/teams
+ */
+export const getTeamFormationOverviews = async (
+  tokens: Tokens
+): Promise<TeamFormationOverview[] | null> => {
+  const resp = await request(`${courseId()}/admin/teams`, 'GET', {
+    ...tokens
+  });
+  if (!resp) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const teamFormationOverviews = await resp.json();
+  return teamFormationOverviews
+    .map((overview: any) => {
+      const teamFormationOverview: TeamFormationOverview = {
+        teamId: overview.teamId,
+        assessmentId: overview.assessmentId,
+        assessmentName: overview.assessmentName,
+        assessmentType: overview.assessmentType,
+        studentIds: overview.studentIds,
+        studentNames: overview.studentNames
+      };
+      return teamFormationOverview;
+    })
+    .sort(
+      (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
+        subY.assessmentId - subX.assessmentId
+    );
+};
+
+export const postTeams = async (
+  assessmentId: number,
+  teams: OptionType[][],
+  tokens: Tokens
+): Promise<Response | null> => {
+  const data = {
+    assessmentId: assessmentId,
+    teams: teams
+  };
+
+  const resp = await request(`${courseId()}/admin/teams`, 'POST', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+export const postUploadTeams = async (
+  assessmentId: number,
+  teams: File,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const data = {
+    assessmentId: assessmentId,
+    teams: teams
+  };
+
+  const resp = await request(`${courseId()}/admin/teams/upload`, 'POST', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+export const putTeams = async (
+  assessmentId: number,
+  teamId: number,
+  teams: OptionType[][],
+  tokens: Tokens
+): Promise<Response | null> => {
+  const data = {
+    teamId: teamId,
+    assessmentId: assessmentId,
+    teams: teams
+  };
+
+  const resp = await request(`${courseId()}/admin/teams/${teamId}`, 'PUT', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Response | null> => {
+  const data = {
+    teamId: teamId
+  };
+
+  const resp = await request(`${courseId()}/admin/teams/${teamId}`, 'DELETE', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+export const getStudents = async (tokens: Tokens): Promise<User[] | null> => {
+  const data = {};
+
+  const resp = await request(`${courseId()}/admin/teams`, 'GET', {
+    body: data,
+    ...tokens
+  });
+  if (!resp) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const students = await resp.json();
+  return students.map((overview: any) => {
+    const user: User = {
+      userId: overview.userId,
+      name: overview.name,
+      username: overview.username,
+      courses: overview.courses
+    };
+    return user;
+  });
+};
+
 /**
  * GET /courses/{courseId}/admin/grading/{submissionId}
  */
@@ -885,7 +1005,7 @@ export const deleteSourcecastEntry = async (
  */
 export const updateAssessment = async (
   id: number,
-  body: { openAt?: string; closeAt?: string; isPublished?: boolean, maxTeamSize?: number },
+  body: { openAt?: string; closeAt?: string; isPublished?: boolean; maxTeamSize?: number },
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {
