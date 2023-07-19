@@ -88,19 +88,19 @@ const commonChildrenRoutes: RouteObject[] = [
     loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
   },
   {
-    path: '/stories/view/:user/:fileName',
+    path: 'stories/view/:user/:fileName',
     lazy: UserBlog
   },
   {
-    path: '/stories/view/:user',
+    path: 'stories/view/:user',
     lazy: UserBlogDir
   },
   {
-    path: '/stories/new',
+    path: 'stories/new',
     lazy: NewStory
   },
   {
-    path: '/stories',
+    path: 'stories',
     lazy: Stories
   }
 ];
