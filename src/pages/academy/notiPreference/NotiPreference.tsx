@@ -87,6 +87,24 @@ const NotiPreference: React.FC = () => {
     return params.data!.notificationType.forStaff ? 'Staff' : 'Student';
   };
 
+  const defaultTimeFormatter: ValueFormatterFunc<NotificationConfiguration> = params => {
+    const timeOptions = params.data!.timeOptions;
+    timeOptions.sort((to1, to2) => to1.minutes - to2.minutes);
+
+    const getUserFriendlyText = (option: TimeOption) =>
+      option.minutes >= 60
+        ? `${Math.round((option.minutes / 60) * 100) / 100} hour(s)`
+        : `${option.minutes} minute(s)`;
+
+    let result = "";
+    for (const timeOption of timeOptions) {
+      result += getUserFriendlyText(timeOption);
+      result += " "
+    }
+
+    return result;
+  };
+
   const columnDefs = [
     {
       headerName: 'Notification Type',
@@ -102,6 +120,11 @@ const NotiPreference: React.FC = () => {
       headerName: 'Recipients',
       field: 'notificationType.forStaff',
       valueFormatter: recipientFormatter
+    },
+    {
+      headerName: 'Default Time',
+      field: 'timeOptions',
+      valueFormatter: defaultTimeFormatter
     },
     {
       headerName: 'Reminder',
@@ -177,7 +200,7 @@ const NotiPreference: React.FC = () => {
     </div>
   );
 
-  return <ContentDisplay loadContentDispatch={() => {}} display={data} fullWidth={false} />;
+  return <ContentDisplay loadContentDispatch={() => { }} display={data} fullWidth={false} />;
 };
 
 export default NotiPreference;
