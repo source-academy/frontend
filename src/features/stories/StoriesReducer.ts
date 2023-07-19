@@ -175,7 +175,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
               lastDebuggerResult: action.payload.lastDebuggerResult,
               code: action.payload.code,
               context: action.payload.context,
-              workspaceLocation: action.payload.env
+              workspaceLocation: 'stories' // TODO: Check again
             }
           }
         }
