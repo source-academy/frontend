@@ -1,21 +1,12 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect } from 'react';
-import { useRef, useState } from 'react';
+import { Chapter } from 'js-slang/dist/types';
+import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
-import {
-  InterpreterOutput,
-  ResultOutput,
-  styliseSublanguage
-} from 'src/commons/application/ApplicationTypes';
+import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
-import SideContentDataVisualizer from 'src/commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from 'src/commons/sideContent/SideContentEnvVisualizer';
 import SideContentHtmlDisplay from 'src/commons/sideContent/SideContentHtmlDisplay';
-import SideContentSubstVisualizer from 'src/commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -118,34 +109,36 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
   const chapterVariantDisplay = chapter ? styliseSublanguage(chapter, variant) : '';
 
-  const dataVisualizerTab: SideContentTab = {
-    label: 'Data Visualizer',
-    iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer />,
-    id: SideContentType.dataVisualizer
-  };
+  // TODO: Add data visualiser and env visualiser tabs
 
-  const envVisualizerTab: SideContentTab = {
-    label: 'Env Visualizer',
-    iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer />,
-    id: SideContentType.envVisualizer
-  };
+  // const dataVisualizerTab: SideContentTab = {
+  //   label: 'Data Visualizer',
+  //   iconName: IconNames.EYE_OPEN,
+  //   body: <SideContentDataVisualizer />,
+  //   id: SideContentType.dataVisualizer
+  // };
 
-  const processStepperOutput = (output: InterpreterOutput[]) => {
-    const editorOutput = output[0];
-    if (
-      editorOutput &&
-      editorOutput.type === 'result' &&
-      editorOutput.value instanceof Array &&
-      editorOutput.value[0] === Object(editorOutput.value[0]) &&
-      isStepperOutput(editorOutput.value[0])
-    ) {
-      return editorOutput.value;
-    } else {
-      return [];
-    }
-  };
+  // const envVisualizerTab: SideContentTab = {
+  //   label: 'Env Visualizer',
+  //   iconName: IconNames.GLOBE,
+  //   body: <SideContentEnvVisualizer />,
+  //   id: SideContentType.envVisualizer
+  // };
+
+  // const processStepperOutput = (output: InterpreterOutput[]) => {
+  //   const editorOutput = output[0];
+  //   if (
+  //     editorOutput &&
+  //     editorOutput.type === 'result' &&
+  //     editorOutput.value instanceof Array &&
+  //     editorOutput.value[0] === Object(editorOutput.value[0]) &&
+  //     isStepperOutput(editorOutput.value[0])
+  //   ) {
+  //     return editorOutput.value;
+  //   } else {
+  //     return [];
+  //   }
+  // };
 
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
@@ -170,29 +163,31 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       return tabs;
     }
 
-    // (TEMP) Remove tabs for fullJS until support is integrated
-    if (chapter === Chapter.FULL_JS) {
-      return [...tabs, dataVisualizerTab];
-    }
+    // TODO: Restore logic post refactor
 
-    if (chapter >= 2) {
-      // Enable Data Visualizer for Source Chapter 2 and above
-      tabs.push(dataVisualizerTab);
-    }
-    if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
-      // Enable Env Visualizer for Source Chapter 3 and above
-      tabs.push(envVisualizerTab);
-    }
+    // // (TEMP) Remove tabs for fullJS until support is integrated
+    // if (chapter === Chapter.FULL_JS) {
+    //   return [...tabs, dataVisualizerTab];
+    // }
 
-    if (chapter <= 2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE)) {
-      // Enable Subst Visualizer only for default Source 1 & 2
-      tabs.push({
-        label: 'Stepper',
-        iconName: IconNames.FLOW_REVIEW,
-        body: <SideContentSubstVisualizer content={processStepperOutput(output)} />,
-        id: SideContentType.substVisualizer
-      });
-    }
+    // if (chapter >= 2) {
+    //   // Enable Data Visualizer for Source Chapter 2 and above
+    //   tabs.push(dataVisualizerTab);
+    // }
+    // if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
+    //   // Enable Env Visualizer for Source Chapter 3 and above
+    //   tabs.push(envVisualizerTab);
+    // }
+
+    // if (chapter <= 2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE)) {
+    //   // Enable Subst Visualizer only for default Source 1 & 2
+    //   tabs.push({
+    //     label: 'Stepper',
+    //     iconName: IconNames.FLOW_REVIEW,
+    //     body: <SideContentSubstVisualizer content={processStepperOutput(output)} />,
+    //     id: SideContentType.substVisualizer
+    //   });
+    // }
 
     return tabs;
     // eslint-disable-next-line react-hooks/exhaustive-deps
