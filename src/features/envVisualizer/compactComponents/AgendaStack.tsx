@@ -8,6 +8,7 @@ import { Group, Label, Tag, Text } from 'react-konva';
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
 import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
+import { CompactConfig } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
@@ -107,7 +108,7 @@ export class AgendaStack extends Visible implements IHoverable {
             />
             <Text
               {...textProps}
-              text={'Show More'}
+              text={`${CompactConfig.Ellipsis}`}
               align="center"
               fill={defaultSAColor()}
               width={Number(AgendaStashConfig.ShowMoreButtonWidth)}
