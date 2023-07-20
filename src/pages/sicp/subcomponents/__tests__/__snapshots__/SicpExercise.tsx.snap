@@ -1,34 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sicp exercise renders correctly 1`] = `
-"<SicpExercise title=\\"Title\\" body={{...}} solution={{...}}>
-  <Blueprint4.Card className=\\"sicp-exercise\\" interactive={false} elevation={1}>
-    <div className=\\"bp4-card bp4-elevation-1 sicp-exercise\\">
-      <b>
-        Title
-      </b>
-      <div>
-        <div>
-          body
-        </div>
-      </div>
-      <div className=\\"sicp-button-container\\">
-        <Blueprint4.Button onClick={[Function: onClick]} large={true} className=\\"sicp-show-solution-button\\">
-          <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp4-button bp4-large sicp-show-solution-button\\" disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-            <Blueprint4.Icon icon={[undefined]} />
-            <span className=\\"bp4-button-text\\">
-              Show Solution
-            </span>
-            <Blueprint4.Icon icon={[undefined]} />
-          </button>
-        </Blueprint4.Button>
-      </div>
-      <Blueprint4.Collapse className=\\"sicp-solution\\" isOpen={false} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
-        <div className=\\"bp4-collapse sicp-solution\\" style={{...}}>
-          <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={true} />
-        </div>
-      </Blueprint4.Collapse>
+<div
+  className="bp4-card bp4-elevation-1 sicp-exercise"
+>
+  <b>
+    Title
+  </b>
+  <div>
+    <div>
+      body
     </div>
-  </Blueprint4.Card>
-</SicpExercise>"
+  </div>
+  <div
+    className="sicp-button-container"
+  >
+    <button
+      className="bp4-button bp4-large sicp-show-solution-button"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      type="button"
+    >
+      <span
+        className="bp4-button-text"
+      >
+        Show Solution
+      </span>
+    </button>
+  </div>
+  <div
+    className="bp4-collapse sicp-solution"
+    style={
+      Object {
+        "height": undefined,
+        "overflowY": undefined,
+        "transition": undefined,
+      }
+    }
+  >
+    <div
+      aria-hidden={true}
+      className="bp4-collapse-body"
+      style={
+        Object {
+          "transform": "translateY(-undefinedpx)",
+          "transition": undefined,
+        }
+      }
+    />
+  </div>
+</div>
 `;

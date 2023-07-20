@@ -20,7 +20,7 @@ import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/Reposi
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
@@ -67,7 +67,9 @@ function* githubLogoutSaga() {
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
-function* githubOpenFile(): any {
+function* githubOpenFile(action: ReturnType<typeof actions.githubOpenFile>): any {
+  const isStories = action.payload;
+
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;
@@ -84,12 +86,16 @@ function* githubOpenFile(): any {
       })
   );
 
-  const getRepoName = async () =>
-    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
-      userRepos: userRepos,
-      onSubmit: resolve
-    }));
-  const repoName = yield call(getRepoName);
+  let repoName = Constants.storiesRepoName;
+
+  if (!isStories) {
+    const getRepoName = async () =>
+      await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+        userRepos: userRepos,
+        onSubmit: resolve
+      }));
+    repoName = yield call(getRepoName);
+  }
 
   const editorContent = '';
 
@@ -101,14 +107,17 @@ function* githubOpenFile(): any {
         pickerType: pickerType,
         octokit: octokit,
         editorContent: editorContent,
-        onSubmit: resolve
+        onSubmit: resolve,
+        isStories: isStories
       }));
 
     yield call(promisifiedDialog);
   }
 }
 
-function* githubSaveFile(): any {
+function* githubSaveFile(action: ReturnType<typeof actions.githubSaveFile>): any {
+  const isStories = action.payload;
+
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
 
@@ -118,21 +127,31 @@ function* githubSaveFile(): any {
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const repoName = store.getState().playground.githubSaveInfo.repoName;
-  const filePath = store.getState().playground.githubSaveInfo.filePath;
+  const repoName = isStories
+    ? store.getState().stories.githubSaveInfo.repoName
+    : store.getState().playground.githubSaveInfo.repoName;
+  const filePath = isStories
+    ? store.getState().stories.githubSaveInfo.filePath
+    : store.getState().playground.githubSaveInfo.filePath;
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
-  if (activeEditorTabIndex === null) {
-    throw new Error('No active editor tab found.');
+
+  let content = '';
+  if (isStories) {
+    content = store.getState().stories.content;
+  } else {
+    const activeEditorTabIndex: number | null = yield select(
+      (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+    );
+    if (activeEditorTabIndex === null) {
+      throw new Error('No active editor tab found.');
+    }
+    const editorTabs: EditorTabState[] = yield select(
+      (state: OverallState) => state.workspaces.playground.editorTabs
+    );
+    content = editorTabs[activeEditorTabIndex].value;
   }
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
-  const content = editorTabs[activeEditorTabIndex].value;
 
   GitHubUtils.performOverwritingSave(
     octokit,
@@ -142,11 +161,14 @@ function* githubSaveFile(): any {
     githubEmail,
     githubName,
     commitMessage,
-    content
+    content,
+    isStories
   );
 }
 
-function* githubSaveFileAs(): any {
+function* githubSaveFileAs(action: ReturnType<typeof actions.githubSaveFileAs>): any {
+  const isStories = action.payload;
+
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;
@@ -163,23 +185,32 @@ function* githubSaveFileAs(): any {
       })
   );
 
-  const getRepoName = async () =>
-    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
-      userRepos: userRepos,
-      onSubmit: resolve
-    }));
-  const repoName = yield call(getRepoName);
+  let repoName = Constants.storiesRepoName;
 
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
-  if (activeEditorTabIndex === null) {
-    throw new Error('No active editor tab found.');
+  if (!isStories) {
+    const getRepoName = async () =>
+      await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+        userRepos: userRepos,
+        onSubmit: resolve
+      }));
+    repoName = yield call(getRepoName);
   }
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
-  const editorContent = editorTabs[activeEditorTabIndex].value;
+
+  let editorContent = '';
+  if (isStories) {
+    editorContent = store.getState().stories.content;
+  } else {
+    const activeEditorTabIndex: number | null = yield select(
+      (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+    );
+    if (activeEditorTabIndex === null) {
+      throw new Error('No active editor tab found.');
+    }
+    const editorTabs: EditorTabState[] = yield select(
+      (state: OverallState) => state.workspaces.playground.editorTabs
+    );
+    editorContent = editorTabs[activeEditorTabIndex].value;
+  }
 
   if (repoName !== '') {
     const pickerType = 'Save';
@@ -190,7 +221,8 @@ function* githubSaveFileAs(): any {
         pickerType: pickerType,
         octokit: octokit,
         editorContent: editorContent,
-        onSubmit: resolve
+        onSubmit: resolve,
+        isStories
       }));
 
     yield call(promisifiedFileExplorer);

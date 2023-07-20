@@ -1,5 +1,6 @@
-import { mount, shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockGrading } from '../../mocks/GradingMocks';
@@ -75,18 +76,6 @@ const resultCardClasses = [
   'ResultCard wrong'
 ];
 
-/*  ===== Tester comments =====
-    Issue:
-      https://github.com/airbnb/enzyme/issues/836
-    Description:
-      tree.find(<HTML Selector>) returns two copies of every non-top-level element, as Enzyme
-      returns both React component instances in addition to DOM nodes. This is INTENDED behaviour.
-      For example, the <div> with id of '.testcase-actual' is returned twice since one of them
-      is a React Component, whilst the other is the actual HTML <div> node that Component renders
-    Fix:
-      Append .hostNodes() when desired to only retrieve the HTML DOM nodes from the rendered tree.
-*/
-
 test('Autograder renders placeholders correctly when testcases and results are empty', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
@@ -95,16 +84,21 @@ test('Autograder renders placeholders correctly when testcases and results are e
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+
   // Both noResults <div>s are rendered (one under 'Testcases', other under 'Autograder Results')
-  expect(tree.find('.noResults').hostNodes()).toHaveLength(2);
+  expect(screen.queryAllByTestId('noResults')).toHaveLength(2);
+
   // Both header <div>s should not be rendered
-  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(false);
-  expect(tree.find('.results-header').hostNodes().exists()).toEqual(false);
+  expect(screen.queryAllByTestId('testcases-header')).toHaveLength(0);
+  expect(screen.queryAllByTestId('results-header')).toHaveLength(0);
+
   // No testcase or autograder result Card components should be rendered
-  expect(tree.find('.AutograderCard')).toHaveLength(0);
-  expect(tree.find('.ResultCard')).toHaveLength(0);
+  expect(screen.queryAllByTestId('AutograderCard')).toHaveLength(0);
+  expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
 });
 
 test('Autograder renders public testcases with different statuses correctly', () => {
@@ -115,22 +109,25 @@ test('Autograder renders public testcases with different statuses correctly', ()
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+
   // Expect only the header <div> for testcases section to be rendered
-  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(true);
-  expect(tree.find('.results-header').hostNodes().exists()).toEqual(false);
+  expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
+  expect(screen.queryAllByTestId('results-header')).toHaveLength(0);
+
   // No autograder result Card components should be rendered
-  expect(tree.find('.ResultCard')).toHaveLength(0);
+  expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
+
   // Expect each of the five testcases to have:
   //    Correct result rendered in the 'Actual result' cell
   //    Correct CSS styling applied to each Card (by className)
-  const cards = tree.find('.AutograderCard');
+  const cards = screen.getAllByTestId('AutograderCard');
   expect(cards).toHaveLength(5);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(publicTestcaseCardClasses);
-  const resultCells = cards.map(card => {
-    return card.find('.testcase-actual').hostNodes().getDOMNode();
-  });
+  expect(cards.map(card => card.className)).toEqual(publicTestcaseCardClasses);
+
   // textContent returns the value wrapped by the opening and closing tags of the
   // enclosing HTML node as a string: this means the
   //    === INTERPRETER RETURN TYPES ===
@@ -139,6 +136,7 @@ test('Autograder renders public testcases with different statuses correctly', ()
   //      error message [Line 1: Error: 'Msg'] will be returned as "Line 1: Error \"Msg\""
   //    === OTHER TYPES ===
   //      default rendered ['No Answer'] will be returned as "No Answer"
+  const resultCells = screen.getAllByTestId('testcase-actual');
   expect(resultCells.map(node => node.textContent)).toEqual([
     '"string"',
     'No Answer',
@@ -156,19 +154,24 @@ test('Autograder renders opaque testcases with different statuses correctly in A
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+
   // No autograder result Card components should be rendered
-  expect(tree.find('.ResultCard')).toHaveLength(0);
+  expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
+
   // Expect each of the four testcases to have:
   //    A placeholder cell rendered in place of the actual testcase data
   //    Correct CSS styling applied to each Card (by className)
-  const cards = tree.find('.AutograderCard');
+  const cards = screen.getAllByTestId('AutograderCard');
+  const placeholders = screen.getAllByTestId('testcase-placeholder');
   expect(cards).toHaveLength(4);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(opaqueTestcaseCardClasses);
-  cards.forEach(card => {
-    const placeholder = card.find('.testcase-placeholder').hostNodes().getDOMNode();
-    expect(placeholder.textContent).toEqual('Hidden testcase');
+  expect(placeholders).toHaveLength(4);
+  expect(cards.map(node => node.className)).toEqual(opaqueTestcaseCardClasses);
+  placeholders.forEach(p => {
+    expect(p.textContent).toEqual('Hidden testcase');
   });
 });
 
@@ -180,19 +183,21 @@ test('Autograder renders opaque testcases with different statuses correctly in G
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+
   // No autograder result Card components should be rendered
-  expect(tree.find('.ResultCard')).toHaveLength(0);
+  expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
+
   // Expect each of the four testcases to have:
   //    A placeholder cell rendered in place of the actual testcase data
   //    Correct CSS styling applied to each Card (by className)
-  const cards = tree.find('.AutograderCard');
+  const cards = screen.getAllByTestId('AutograderCard');
   expect(cards).toHaveLength(4);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(opaqueTestcaseCardClasses);
-  const resultCells = cards.map(card => {
-    return card.find('.testcase-actual').hostNodes().getDOMNode();
-  });
+  expect(cards.map(node => node.className)).toEqual(opaqueTestcaseCardClasses);
+  const resultCells = screen.getAllByTestId('testcase-actual');
   expect(resultCells.map(node => node.textContent)).toEqual([
     'No Answer',
     '7',
@@ -209,22 +214,26 @@ test('Autograder renders secret testcases with different statuses correctly', ()
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+
   // Expect only the header <div> for testcases section to be rendered
-  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(true);
-  expect(tree.find('.results-header').hostNodes().exists()).toEqual(false);
+  expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
+  expect(screen.queryAllByTestId('results-header')).toHaveLength(0);
+
   // No autograder result Card components should be rendered
-  expect(tree.find('.ResultCard')).toHaveLength(0);
+  expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
+
   // Expect each of the five testcases to have:
   //    Correct result rendered in the 'Actual result' cell
   //    Correct CSS styling applied to each Card (by className)
-  const cards = tree.find('.AutograderCard');
+  const cards = screen.getAllByTestId('AutograderCard');
   expect(cards).toHaveLength(5);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(secretTestcaseCardClasses);
-  const resultCells = cards.map(card => {
-    return card.find('.testcase-actual').hostNodes().getDOMNode();
-  });
+  expect(cards.map(node => node.className)).toEqual(secretTestcaseCardClasses);
+  const resultCells = screen.getAllByTestId('testcase-actual');
+
   // textContent returns the value wrapped by the opening and closing tags of the
   // enclosing HTML node as a string
   expect(resultCells.map(node => node.textContent)).toEqual([
@@ -244,25 +253,39 @@ test('Autograder renders autograder results with different statuses correctly', 
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = mount(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const tree = shallowRender(app);
+  expect(tree).toMatchSnapshot();
+
+  render(app);
+
   // Expect only the header <div> for autograder results section to be rendered
-  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(false);
-  expect(tree.find('.results-header').hostNodes().exists()).toEqual(true);
+  expect(screen.queryAllByTestId('testcases-header')).toHaveLength(0);
+  expect(screen.queryAllByTestId('results-header')).toHaveLength(1);
+
   // No testcase Card components should be rendered
-  expect(tree.find('.AutograderCard')).toHaveLength(0);
+  expect(screen.queryAllByTestId('AutograderCard')).toHaveLength(0);
+
   // Expect each of the three autograder results to have:
   //    Correct data rendered in the 'Testcase status', 'Expected result' and 'Actual result' cells
   //    Correct CSS styling applied to each Card
-  const cards = tree.find('.ResultCard');
+  const cards = screen.getAllByTestId('ResultCard');
   expect(cards).toHaveLength(5);
-  expect(cards.map(node => node.getDOMNode().className)).toEqual(resultCardClasses);
+  expect(cards.map(node => node.className)).toEqual(resultCardClasses);
+
   // Extract the text contained within the cells: see above comment for textContent
-  const resultCellsValues = cards.map(card => {
-    return ['.result-idx', '.result-status', '.result-expected', '.result-actual'].map(id => {
-      return card.find(id).hostNodes().getDOMNode().textContent;
-    });
+  const resultIdxs = screen.getAllByTestId('result-idx');
+  const resultStatuses = screen.getAllByTestId('result-status');
+  const resultExpecteds = screen.getAllByTestId('result-expected');
+  const resultActuals = screen.getAllByTestId('result-actual');
+
+  [resultIdxs, resultStatuses, resultExpecteds, resultActuals].forEach(e => {
+    expect(e).toHaveLength(5);
   });
+
+  const resultCellsValues = resultIdxs
+    .map((e, idx) => [e, resultStatuses[idx], resultExpecteds[idx], resultActuals[idx]])
+    .map(set => set.map(value => value.textContent));
+
   expect(resultCellsValues).toEqual([
     ['1', 'PASS', '', ''],
     ['2', 'FAIL', '8', '5'],

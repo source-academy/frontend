@@ -15,7 +15,7 @@ import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import Constants from '../utils/Constants';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 

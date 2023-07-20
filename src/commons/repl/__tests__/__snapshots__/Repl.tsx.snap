@@ -1,85 +1,257 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Code output renders correctly 1`] = `
-"<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"code-output\\">
-    display(&#39;&#39;);
-  </Component>
-</Blueprint4.Card>"
+<Blueprint4.Card
+  elevation={0}
+  interactive={false}
+>
+  <Unknown
+    className="code-output"
+  >
+    display('');
+  </Unknown>
+</Blueprint4.Card>
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-"<Blueprint4.Card elevation={0} interactive={false}>
-  &#39;&#39;
-</Blueprint4.Card>"
+<Blueprint4.Card
+  elevation={0}
+  interactive={false}
+>
+  ''
+</Blueprint4.Card>
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-"<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"error-output\\">
+<Blueprint4.Card
+  elevation={0}
+  interactive={false}
+>
+  <Unknown
+    className="error-output"
+  >
     Expected , got .
-  </Component>
-</Blueprint4.Card>"
+  </Unknown>
+</Blueprint4.Card>
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-"<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"log-output\\">
+<Blueprint4.Card
+  elevation={0}
+  interactive={false}
+>
+  <Unknown
+    className="log-output"
+  >
     a
-    bb
-    cccccccccccccccccccccccccccccccc
-    d
-  </Component>
+bb
+cccccccccccccccccccccccccccccccc
+d
+  </Unknown>
   <br />
-  <Component className=\\"error-output\\">
+  <Unknown
+    className="error-output"
+  >
     Expected , got .
-  </Component>
-</Blueprint4.Card>"
+  </Unknown>
+</Blueprint4.Card>
 `;
 
 exports[`Repl renders correctly 1`] = `
-"<div className=\\"Repl\\" style={{...}}>
-  <div className=\\"repl-output-parent\\">
-    <Output output={{...}} usingSubst={false} isHtml={false} />
-    <Output output={{...}} usingSubst={false} isHtml={false} />
-    <Output output={{...}} usingSubst={false} isHtml={false} />
-    <Output output={{...}} usingSubst={false} isHtml={false} />
-    <HotKeysEnabled className=\\"repl-input-parent row bp4-card bp4-elevation-0\\" handlers={{...}}>
-      <ReplInput handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} output={{...}} replValue=\\"\\" sourceChapter={1} sourceVariant=\\"default\\" externalLibrary=\\"NONE\\" replButtons={{...}} />
+<div
+  className="Repl"
+  style={
+    Object {
+      "display": undefined,
+    }
+  }
+>
+  <div
+    className="repl-output-parent"
+  >
+    <Output
+      isHtml={false}
+      output={
+        Object {
+          "consoleLogs": Array [],
+          "type": "result",
+          "value": 42,
+        }
+      }
+      usingSubst={false}
+    />
+    <Output
+      isHtml={false}
+      output={
+        Object {
+          "type": "code",
+          "value": "display('');",
+        }
+      }
+      usingSubst={false}
+    />
+    <Output
+      isHtml={false}
+      output={
+        Object {
+          "consoleLogs": Array [],
+          "errors": Array [
+            TypeError {
+              "chapter": 4,
+              "expected": "",
+              "got": "",
+              "location": Object {
+                "end": Object {
+                  "column": -1,
+                  "line": -1,
+                },
+                "start": Object {
+                  "column": -1,
+                  "line": -1,
+                },
+              },
+              "severity": "Error",
+              "side": "",
+              "type": "Runtime",
+            },
+          ],
+          "type": "errors",
+        }
+      }
+      usingSubst={false}
+    />
+    <Output
+      isHtml={false}
+      output={
+        Object {
+          "consoleLogs": Array [
+            "a",
+            "bb",
+            "cccccccccccccccccccccccccccccccc",
+            "d",
+          ],
+          "type": "running",
+        }
+      }
+      usingSubst={false}
+    />
+    <HotKeysEnabled
+      className="repl-input-parent row bp4-card bp4-elevation-0"
+      handlers={
+        Object {
+          "goGreen": [Function],
+        }
+      }
+    >
+      <ReplInput
+        externalLibrary="NONE"
+        handleBrowseHistoryDown={[Function]}
+        handleBrowseHistoryUp={[Function]}
+        handleReplEval={[Function]}
+        handleReplOutputClear={[Function]}
+        handleReplValueChange={[Function]}
+        output={
+          Array [
+            Object {
+              "consoleLogs": Array [],
+              "type": "result",
+              "value": 42,
+            },
+            Object {
+              "type": "code",
+              "value": "display('');",
+            },
+            Object {
+              "consoleLogs": Array [],
+              "errors": Array [
+                TypeError {
+                  "chapter": 4,
+                  "expected": "",
+                  "got": "",
+                  "location": Object {
+                    "end": Object {
+                      "column": -1,
+                      "line": -1,
+                    },
+                    "start": Object {
+                      "column": -1,
+                      "line": -1,
+                    },
+                  },
+                  "severity": "Error",
+                  "side": "",
+                  "type": "Runtime",
+                },
+              ],
+              "type": "errors",
+            },
+            Object {
+              "consoleLogs": Array [
+                "a",
+                "bb",
+                "cccccccccccccccccccccccccccccccc",
+                "d",
+              ],
+              "type": "running",
+            },
+          ]
+        }
+        replButtons={Array []}
+        replValue=""
+        sourceChapter={1}
+        sourceVariant="default"
+      />
     </HotKeysEnabled>
   </div>
-</div>"
+</div>
 `;
 
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
-"<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"result-output\\">
+<Blueprint4.Card
+  elevation={0}
+  interactive={false}
+>
+  <Unknown
+    className="result-output"
+  >
     42
-  </Component>
-</Blueprint4.Card>"
+  </Unknown>
+</Blueprint4.Card>
 `;
 
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
-"<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"log-output\\">
+<Blueprint4.Card
+  elevation={0}
+  interactive={false}
+>
+  <Unknown
+    className="log-output"
+  >
     a
-    bb
-    cccccccccccccccccccccccccccccccc
-    d
-  </Component>
-  <Component className=\\"result-output\\">
+bb
+cccccccccccccccccccccccccccccccc
+d
+  </Unknown>
+  <Unknown
+    className="result-output"
+  >
     42
-  </Component>
-</Blueprint4.Card>"
+  </Unknown>
+</Blueprint4.Card>
 `;
 
 exports[`Running output renders correctly 1`] = `
-"<Blueprint4.Card elevation={0} interactive={false}>
-  <Component className=\\"log-output\\">
+<Blueprint4.Card
+  elevation={0}
+  interactive={false}
+>
+  <Unknown
+    className="log-output"
+  >
     a
-    bb
-    cccccccccccccccccccccccccccccccc
-    d
-  </Component>
-</Blueprint4.Card>"
+bb
+cccccccccccccccccccccccccccccccc
+d
+  </Unknown>
+</Blueprint4.Card>
 `;

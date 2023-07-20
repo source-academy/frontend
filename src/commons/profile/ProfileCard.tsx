@@ -25,9 +25,11 @@ const ProfileCard: React.FC<ProfileCardProps> = props => {
   const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
 
   const xpDetails = (
-    <div className="xp-details">
-      <div className="title">XP</div>
-      <div className="value">
+    <div className="xp-details" data-testid="profile-xp-details">
+      <div className="title" data-testid="profile-title">
+        XP
+      </div>
+      <div className="value" data-testid="profile-value">
         {item.xp} / {item.maxXp}
       </div>
       <ProgressBar
@@ -46,12 +48,14 @@ const ProfileCard: React.FC<ProfileCardProps> = props => {
       key={`${item.title}-${item.id}`}
       target="_blank"
       to={`/courses/${props.courseId}/${assessmentTypeLink(item.type)}/${item.id}/0`}
+      data-testid="profile-summary-navlink"
     >
       <Callout
         className="profile-summary-callout"
         key={`${item.title}-${item.id}`}
         icon={props.renderIcon(item.type)}
         title={item.title}
+        data-testid="profile-summary-callout"
       >
         {isInvalidXP ? '' : xpDetails}
       </Callout>

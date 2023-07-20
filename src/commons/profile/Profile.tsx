@@ -4,28 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
-import { Role } from '../application/ApplicationTypes';
-import {
-  AssessmentConfiguration,
-  AssessmentOverview,
-  AssessmentStatuses,
-  AssessmentType,
-  GradingStatuses
-} from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, AssessmentType, GradingStatuses } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import { useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
 
 export type ProfileProps = OwnProps;
-
-type StateProps = {
-  name?: string;
-  role?: Role;
-  assessmentOverviews?: AssessmentOverview[];
-  assessmentConfigurations?: AssessmentConfiguration[];
-  xp?: number;
-  courseId?: number;
-};
 
 type OwnProps = {
   isOpen: boolean;
@@ -35,28 +19,38 @@ type OwnProps = {
 const Profile: React.FC<ProfileProps> = props => {
   // FIXME: `xp` is actually of type number | undefined here!
   // Fix the session type, then remove the typecast below
-  const { name, role, assessmentOverviews, assessmentConfigurations, xp, courseId } =
-    useTypedSelector(state => state.session) as StateProps;
+  const {
+    isLoggedIn,
+    isEnrolledInACourse,
+    name,
+    role,
+    assessmentOverviews,
+    assessmentConfigurations,
+    xp,
+    courseId
+  } = useSession();
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (name && role && !assessmentOverviews) {
+    if (isLoggedIn && isEnrolledInACourse && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
       dispatch(fetchAssessmentOverviews());
     }
-  }, [assessmentOverviews, dispatch, name, role, xp]);
+  }, [assessmentOverviews, dispatch, isLoggedIn, isEnrolledInACourse, xp]);
 
   useEffect(() => {
-    if (courseId && !xp) {
+    if (isEnrolledInACourse && !xp) {
       dispatch(fetchTotalXp());
     }
-  }, [courseId, dispatch, xp]);
+  }, [isEnrolledInACourse, dispatch, xp]);
 
-  const [isLoaded, setIsLoaded] = useState(name && role && assessmentOverviews);
+  const [isLoaded, setIsLoaded] = useState(
+    isLoggedIn && isEnrolledInACourse && assessmentOverviews
+  );
 
   useEffect(() => {
-    setIsLoaded(name && role && assessmentOverviews);
-  }, [assessmentOverviews, name, role]);
+    setIsLoaded(isLoggedIn && isEnrolledInACourse && assessmentOverviews);
+  }, [assessmentOverviews, isLoggedIn, isEnrolledInACourse]);
 
   // Render
   let content: JSX.Element;
@@ -86,7 +80,7 @@ const Profile: React.FC<ProfileProps> = props => {
       content = (
         <div className="profile-content">
           {userDetails}
-          <div className="profile-placeholder">
+          <div className="profile-placeholder" data-testid="profile-placeholder">
             There are no closed assessments to render grade and XP of.
           </div>
         </div>
@@ -155,24 +149,31 @@ const Profile: React.FC<ProfileProps> = props => {
         <div className="profile-content">
           {userDetails}
 
-          <div className="profile-progress">
+          <div className="profile-progress" data-testid="profile-progress">
             <div className="profile-xp">
               <Spinner
                 className={'profile-spinner' + parseColour(getFrac(userXp, fullXp))}
                 size={144}
                 value={getFrac(userXp, fullXp)}
+                data-testid="profile-spinner"
               />
-              <div className="type">XP Progress</div>
-              <div className="total-value">
+              <div className="type" data-testid="profile-type">
+                XP Progress
+              </div>
+              <div className="total-value" data-testid="profile-total-value">
                 {userXp} / {fullXp}*
               </div>
-              <div className="percentage">{(getFrac(userXp, fullXp) * 100).toFixed(2)}%</div>
+              <div className="percentage" data-testid="profile-percentage">
+                {(getFrac(userXp, fullXp) * 100).toFixed(2)}%
+              </div>
             </div>
           </div>
           <div className="profile-xp-footer">
             *{fullXp}XP needed to reach full CA level of {caFulfillmentLevel}
           </div>
-          <div className="profile-callouts">{summaryCallouts}</div>
+          <div className="profile-callouts" data-testid="profile-callouts">
+            {summaryCallouts}
+          </div>
         </div>
       );
     }

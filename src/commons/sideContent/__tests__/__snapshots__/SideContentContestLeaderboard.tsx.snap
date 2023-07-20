@@ -1,158 +1,110 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SideContentContestLeaderboard matches snapshot 1`] = `
-"<SideContentContestLeaderboard handleContestEntryClick={[Function: handleContestEntryClick]} orderedContestEntries={{...}}>
-  <div className=\\"ContestLeaderboard\\">
-    <Blueprint4.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function: onClick]}>
-      <button type=\\"button\\" className=\\"bp4-button bp4-minimal collapse-button\\" onClick={[Function: onClick]} disabled={false} onBlur={[Function (anonymous)]} onFocus={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-        <Blueprint4.Icon icon=\\"caret-down\\">
-          <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-            <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-              <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-            </svg>
-          </span>
-        </Blueprint4.Icon>
-        <span className=\\"bp4-button-text\\">
-          <span>
-            Contest Leaderboard
-          </span>
-          <Blueprint4.Tooltip2 content=\\"View the top-rated contest entries!\\" compact={false} hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100}>
-            <Tooltip2Provider>
-              <Blueprint4.Popover2 modifiers={{...}} content=\\"View the top-rated contest entries!\\" hoverCloseDelay={0} hoverOpenDelay={100} interactionKind=\\"hover-target\\" minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} disabled={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp4-tooltip2\\" portalContainer={[undefined]} boundary=\\"clippingParents\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} matchTargetWidth={false} openOnTargetFocus={true} positioningStrategy=\\"absolute\\" renderTarget={[undefined]} shouldReturnFocusOnClose={false} targetTagName=\\"span\\" usePortal={true}>
-                <Manager>
-                  <Reference>
-                    <Blueprint4.ResizeSensor2 targetRef={[Function (anonymous)]} onResize={[Function (anonymous)]}>
-                      <span aria-haspopup={[undefined]} className=\\"bp4-popover2-target\\" onBlur={[Function (anonymous)]} onContextMenu={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]}>
-                        <Blueprint4.Icon icon=\\"help\\" className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                          <span aria-hidden={true} icon=\\"help\\" disabled={[undefined]} tabIndex={0} className=\\"bp4-icon bp4-icon-help\\" title={[undefined]}>
-                            <svg fill={[undefined]} data-icon=\\"help\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                              <path d=\\"M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z\\" fillRule=\\"evenodd\\" />
-                            </svg>
-                          </span>
-                        </Blueprint4.Icon>
-                      </span>
-                    </Blueprint4.ResizeSensor2>
-                  </Reference>
-                  <Popper innerRef={[Function (anonymous)]} placement=\\"auto\\" strategy=\\"absolute\\" modifiers={{...}}>
-                    <Blueprint4.Overlay autoFocus={false} backdropClassName=\\"bp4-popover2-backdrop\\" backdropProps={{...}} canEscapeKeyClose={false} canOutsideClickClose={false} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[undefined]} onOpened={[undefined]} onOpening={[undefined]} transitionDuration={100} transitionName=\\"bp4-popover2\\" usePortal={true} portalClassName={[undefined]} portalContainer={[undefined]} shouldReturnFocusOnClose={false} lazy={true} />
-                  </Popper>
-                </Manager>
-              </Blueprint4.Popover2>
-            </Tooltip2Provider>
-          </Blueprint4.Tooltip2>
-        </span>
-        <Blueprint4.Icon icon={[undefined]} />
-      </button>
-    </Blueprint4.Button>
-    <Blueprint4.Collapse isOpen={true} keepChildrenMounted={true} component=\\"div\\" transitionDuration={200}>
-      <div className=\\"bp4-collapse\\" style={{...}}>
-        <div className=\\"bp4-collapse-body\\" style={{...}} aria-hidden={false}>
-          <div>
-            <div className=\\"leaderboard-header\\">
-              <div className=\\"header-entryid\\">
-                Student Name
-                <Blueprint4.Icon icon=\\"caret-down\\">
-                  <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                    </svg>
-                  </span>
-                </Blueprint4.Icon>
-              </div>
-              <div className=\\"header-entryrank\\">
-                Rank
-                <Blueprint4.Icon icon=\\"caret-down\\">
-                  <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                    </svg>
-                  </span>
-                </Blueprint4.Icon>
-              </div>
-              <div className=\\"header-score\\">
-                Score
-                <Blueprint4.Icon icon=\\"caret-down\\">
-                  <span aria-hidden={true} icon=\\"caret-down\\" className=\\"bp4-icon bp4-icon-caret-down\\" title={[undefined]}>
-                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\" aria-labelledby={[undefined]} role=\\"img\\">
-                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
-                    </svg>
-                  </span>
-                </Blueprint4.Icon>
-              </div>
-            </div>
-            <SideContentLeaderboardCard handleContestEntryClick={[Function: handleContestEntryClick]} contestEntry={{...}} rank={1}>
-              <div className=\\"LeaderboardCard\\">
-                <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
-                  <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
-                    <Component className=\\"contestentry-entryid\\">
-                      <pre className=\\"bp4-code-block contestentry-entryid\\">
-                        student_1
-                      </pre>
-                    </Component>
-                    <Component className=\\"contestentry-rank\\">
-                      <pre className=\\"bp4-code-block contestentry-rank\\">
-                        1
-                      </pre>
-                    </Component>
-                    <Component className=\\"contestentry-score\\">
-                      <pre className=\\"bp4-code-block contestentry-score\\">
-                        100
-                      </pre>
-                    </Component>
-                  </div>
-                </Blueprint4.Card>
-              </div>
-            </SideContentLeaderboardCard>
-            <SideContentLeaderboardCard handleContestEntryClick={[Function: handleContestEntryClick]} contestEntry={{...}} rank={2}>
-              <div className=\\"LeaderboardCard\\">
-                <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
-                  <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
-                    <Component className=\\"contestentry-entryid\\">
-                      <pre className=\\"bp4-code-block contestentry-entryid\\">
-                        student_2
-                      </pre>
-                    </Component>
-                    <Component className=\\"contestentry-rank\\">
-                      <pre className=\\"bp4-code-block contestentry-rank\\">
-                        2
-                      </pre>
-                    </Component>
-                    <Component className=\\"contestentry-score\\">
-                      <pre className=\\"bp4-code-block contestentry-score\\">
-                        90
-                      </pre>
-                    </Component>
-                  </div>
-                </Blueprint4.Card>
-              </div>
-            </SideContentLeaderboardCard>
-            <SideContentLeaderboardCard handleContestEntryClick={[Function: handleContestEntryClick]} contestEntry={{...}} rank={3}>
-              <div className=\\"LeaderboardCard\\">
-                <Blueprint4.Card className=\\"bp4-interactive\\" elevation={1} onClick={[Function: onClick]} interactive={false}>
-                  <div className=\\"bp4-card bp4-elevation-1 bp4-interactive\\" onClick={[Function: onClick]}>
-                    <Component className=\\"contestentry-entryid\\">
-                      <pre className=\\"bp4-code-block contestentry-entryid\\">
-                        student_3
-                      </pre>
-                    </Component>
-                    <Component className=\\"contestentry-rank\\">
-                      <pre className=\\"bp4-code-block contestentry-rank\\">
-                        3
-                      </pre>
-                    </Component>
-                    <Component className=\\"contestentry-score\\">
-                      <pre className=\\"bp4-code-block contestentry-score\\">
-                        80
-                      </pre>
-                    </Component>
-                  </div>
-                </Blueprint4.Card>
-              </div>
-            </SideContentLeaderboardCard>
-          </div>
+<div
+  className="ContestLeaderboard"
+>
+  <Blueprint4.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Contest Leaderboard
+    </span>
+    <Blueprint4.Tooltip2
+      compact={false}
+      content="View the top-rated contest entries!"
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      transitionDuration={100}
+    >
+      <Blueprint4.Icon
+        icon="help"
+      />
+    </Blueprint4.Tooltip2>
+  </Blueprint4.Button>
+  <Blueprint4.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div>
+      <div
+        className="leaderboard-header"
+      >
+        <div
+          className="header-entryid"
+        >
+          Student Name
+          <Blueprint4.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-entryrank"
+        >
+          Rank
+          <Blueprint4.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-score"
+        >
+          Score
+          <Blueprint4.Icon
+            icon="caret-down"
+          />
         </div>
       </div>
-    </Blueprint4.Collapse>
-  </div>
-</SideContentContestLeaderboard>"
+      <SideContentLeaderboardCard
+        contestEntry={
+          Object {
+            "answer": Object {
+              "code": "display('hello world')",
+            },
+            "final_score": 100,
+            "student_name": "student_1",
+            "submission_id": 1,
+          }
+        }
+        handleContestEntryClick={[Function]}
+        rank={1}
+      />
+      <SideContentLeaderboardCard
+        contestEntry={
+          Object {
+            "answer": Object {
+              "code": "function test() { return 1; }",
+            },
+            "final_score": 90,
+            "student_name": "student_2",
+            "submission_id": 2,
+          }
+        }
+        handleContestEntryClick={[Function]}
+        rank={2}
+      />
+      <SideContentLeaderboardCard
+        contestEntry={
+          Object {
+            "answer": Object {
+              "code": "function test() { return 1; }",
+            },
+            "final_score": 80,
+            "student_name": "student_3",
+            "submission_id": 3,
+          }
+        }
+        handleContestEntryClick={[Function]}
+        rank={3}
+      />
+    </div>
+  </Blueprint4.Collapse>
+</div>
 `;

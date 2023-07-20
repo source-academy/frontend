@@ -6,7 +6,7 @@ import { LOG_OUT } from '../application/types/CommonsTypes';
 import { LOGIN, SET_USER } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeEndpointUrl } from '../utils/AuthHelper';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* LoginSaga(): SagaIterator {

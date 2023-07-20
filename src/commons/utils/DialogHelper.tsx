@@ -1,6 +1,6 @@
 import { IconName, Intent } from '@blueprintjs/core';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
 import { PromptDialog, PromptDialogProps } from '../dialogs/PromptDialog';
@@ -20,14 +20,20 @@ class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
     dialogOnClose: null
   };
 
-  public static create(): DialogHelper {
+  /**
+   * Blueprintjs v4 OverlayToaster still uses ReactDOM.render, which is deprecated in React v18.
+   * Temporary custom workaround as follows.
+   *
+   * https://github.com/palantir/blueprint/issues/5212
+   */
+  public static create() {
     const containerElement = document.createElement('div');
     document.body.appendChild(containerElement);
-    const dialogHelper = ReactDOM.render<{}>(<DialogHelper />, containerElement) as DialogHelper;
-    if (dialogHelper == null) {
-      throw new Error('Could not create DialogHelper - are you in a React lifecycle method?');
-    }
-    return dialogHelper;
+    const root = createRoot(containerElement);
+
+    const dialogRef = React.createRef<DialogHelper>();
+    root.render(<DialogHelper ref={dialogRef} />);
+    return dialogRef;
   }
 
   public show(dialog: DialogHelperState['dialog'], onClose?: () => void) {
@@ -48,12 +54,13 @@ class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
 
 const singleton = DialogHelper.create();
 
+// singleton should be rendered by the time React lifecycle completes
 export function showDialog(dialog: DialogHelperState['dialog'], dialogOnClose?: () => void) {
-  singleton.show(dialog, dialogOnClose);
+  singleton.current!.show(dialog, dialogOnClose);
 }
 
 export function closeDialog() {
-  singleton.close();
+  singleton.current!.close();
 }
 
 export function promisifyDialog<P extends PropsType<React.Component>, R>(

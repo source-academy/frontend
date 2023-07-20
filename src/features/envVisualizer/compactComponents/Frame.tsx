@@ -1,4 +1,3 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -8,13 +7,12 @@ import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig'
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
 import {
+  currentItemSAColor,
   getNonEmptyEnv,
   getTextWidth,
   isDummyKey,
   isPrimitiveData,
-  isUnassigned,
-  setHoveredStyle,
-  setUnhoveredStyle
+  isUnassigned
 } from '../EnvVisualizerUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
@@ -129,13 +127,9 @@ export class Frame extends Visible implements IHoverable {
     this.totalHeight = this.height() + this.name.height() + CompactConfig.TextPaddingY / 2;
   }
 
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setHoveredStyle(currentTarget);
-  };
+  onMouseEnter = () => {};
 
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    setUnhoveredStyle(currentTarget);
-  };
+  onMouseLeave = () => {};
 
   draw(): React.ReactNode {
     return (
@@ -147,11 +141,7 @@ export class Frame extends Visible implements IHoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={
-            EnvVisualizer.getPrintableMode()
-              ? CompactConfig.SA_BLUE.toString()
-              : CompactConfig.SA_WHITE.toString()
-          }
+          stroke={currentItemSAColor(EnvVisualizer.getCurrentEnvId() === this.environment?.id)}
           cornerRadius={Number(CompactConfig.FrameCornerRadius)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}

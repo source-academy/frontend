@@ -50,7 +50,9 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
           ))}
         </div>
       ) : (
-        <div className="noResults">There are no testcases provided for this question.</div>
+        <div className="noResults" data-testid="noResults">
+          There are no testcases provided for this question.
+        </div>
       ),
     [testcases, handleTestcaseEval, workspaceLocation]
   );
@@ -65,7 +67,9 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
           ))}
         </div>
       ) : (
-        <div className="noResults">There are no results to show.</div>
+        <div className="noResults" data-testid="noResults">
+          There are no results to show.
+        </div>
       ),
     [autogradingResults]
   );
@@ -119,7 +123,7 @@ const columnHeader = (colClass: string, colTitle: string) => (
 );
 
 const testcasesHeader = (
-  <div className="testcases-header">
+  <div className="testcases-header" data-testid="testcases-header">
     {columnHeader('header-fn', 'Testcase')}
     {columnHeader('header-expected', 'Expected result')}
     {columnHeader('header-actual', 'Actual result')}
@@ -127,7 +131,7 @@ const testcasesHeader = (
 );
 
 const resultsHeader = (
-  <div className="results-header">
+  <div className="results-header" data-testid="results-header">
     <div className="header-data">
       {columnHeader('header-sn', 'S/N')}
       {columnHeader('header-status', 'Testcase status')}
