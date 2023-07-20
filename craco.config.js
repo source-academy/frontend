@@ -55,7 +55,10 @@ const cracoConfig = (module.exports = {
       webpackConfig.module.rules.push({
         test: /\.mjs$/,
         include: /node_modules/,
-        type: 'javascript/auto'
+        type: 'javascript/auto',
+        resolve: {
+          fullySpecified: false
+        },
       });
 
       // Ignore warnings for dependencies that do not ship with a source map.
@@ -86,7 +89,7 @@ const cracoConfig = (module.exports = {
   jest: {
     configure: jestConfig => {
       jestConfig.transformIgnorePatterns = [
-        '[/\\\\]node_modules[/\\\\](?!(@ion-phaser[/\\\\]react[/\\\\])|(js-slang[/\\\\])|(array-move[/\\\\])|(konva[/\\\\.*])|(react-konva[/\\\\.*])).*\\.(js|jsx|ts|tsx)$',
+        '[/\\\\]node_modules[/\\\\](?!(@ion-phaser[/\\\\]react[/\\\\])|(js-slang[/\\\\])|(array-move[/\\\\])|(konva[/\\\\.*])|(react-konva[/\\\\.*])|(react-debounce-render[/\\\\.*])|(react-markdown[/\\\\.*])|(vfile.*[/\\\\.*])|(unist-util.*[/\\\\.*])|(unified[/\\\\.*])|(bail[/\\\\.*])|(is-plain-obj[/\\\\.*])|(trough[/\\\\.*])|(remark.*[/\\\\.*])|(mdast.*[/\\\\.*])|(micromark.*[/\\\\.*])|(decode.*[/\\\\.*])|(character-entities[/\\\\.*])|(trim-lines[/\\\\.*])|(property-information[/\\\\.*])|(hast-util-whitespace[/\\\\.*])|(space-separated-tokens[/\\\\.*])|(comma-separated-tokens[/\\\\.*])).*.(js|jsx|ts|tsx)$',
         '^.+\\.module\\.(css|sass|scss)$'
       ];
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';

@@ -388,8 +388,11 @@ export const notifyProgramEvaluated = (
 export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
 
-export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: WorkspaceLocation) =>
-  action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation });
+export const addHtmlConsoleError = (
+  errorMsg: string,
+  workspaceLocation: WorkspaceLocation,
+  isStoriesBlock: boolean = false
+) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, isStoriesBlock });
 
 export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
