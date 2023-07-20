@@ -29,8 +29,7 @@ export class Level extends Visible {
     this._y = CompactConfig.CanvasPaddingY;
     EnvVisualizer.getAgendaStash() &&
       !this.parentLevel &&
-      (this._y +=
-        AgendaStashConfig.StashMaxTextHeight + AgendaStashConfig.AgendaItemTextPadding * 3);
+      (this._y += AgendaStashConfig.StashItemHeight + AgendaStashConfig.AgendaItemTextPadding * 3);
     this.parentLevel && (this._y += this.parentLevel.height() + this.parentLevel.y());
     let prevFrame: Frame | null = null;
     envTreeNodes.forEach(e => {
