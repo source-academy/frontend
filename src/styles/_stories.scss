@@ -170,16 +170,16 @@
   margin-top: 30px;
   width: 80vw;
   height: 85vh;
+  overflow: auto;
 
   .storiesInteract {
     margin: auto;
     margin-top: 30px;
-    width: fit-content;
     display: flex;
-    flex-direction: column;
     align-items: center;
     font-size: large;
-    gap: 15px;
+    padding-left: 50px;
+    padding-right: 50px;
 
     .titleText {
       width: 100%;
@@ -198,16 +198,22 @@
       }
     }
     .storiesButton {
-      width: 400px;
+      width: 110px;
       background-color: #0696d7;
-      border: 0px;
+      border:0px;
       color: white;
       border-radius: 4px;
-      padding: 5px;
+      padding: 8px;
+      font-size: 0.85em;
     }
     .storiesInput {
-      width: 400px;
+      width: 20vw;
+      height: 30px;
+      font-size: 0.9em;
+      padding: 10px;
+      margin-left: 2px;
     }
+    
   }
 }
 
