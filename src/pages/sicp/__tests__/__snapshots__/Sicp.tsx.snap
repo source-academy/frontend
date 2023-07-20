@@ -5,8 +5,6 @@ exports[`Sicp renders correctly 1`] = `
   value={
     Object {
       "getServerState": undefined,
-      "noopCheck": "once",
-      "stabilityCheck": "once",
       "store": Object {
         "clearActions": [Function],
         "dispatch": [Function],
