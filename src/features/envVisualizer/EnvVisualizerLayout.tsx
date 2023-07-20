@@ -1,10 +1,12 @@
 import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
 import { Frame } from 'js-slang/dist/types';
+import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
+import { AgendaStack } from './compactComponents/AgendaStack';
 import { Level as CompactLevel } from './compactComponents/Level';
-import { Stack } from './compactComponents/Stack';
+import { StashStack } from './compactComponents/StashStack';
 import { ArrayValue as CompactArrayValue } from './compactComponents/values/ArrayValue';
 import { FnValue as CompactFnValue } from './compactComponents/values/FnValue';
 import { GlobalFnValue as CompactGlobalFnValue } from './compactComponents/values/GlobalFnValue';
@@ -63,6 +65,8 @@ export class Layout {
   static stageWidth: number = window.innerWidth;
   /** the unique key assigned to each node */
   static key: number = 0;
+  /** scale factor for zooming and out of canvas */
+  static scaleFactor = 1.02;
 
   /** the environment tree */
   static environmentTree: EnvTree;
@@ -74,9 +78,8 @@ export class Layout {
   /** the agenda and stash */
   static agenda: Agenda;
   static stash: Stash;
-  static agendaComponent: Stack;
-  static stashComponent: Stack;
-  static stashComponentX: number;
+  static agendaComponent: AgendaStack;
+  static stashComponent: StashStack;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -170,8 +173,7 @@ export class Layout {
     if (EnvVisualizer.getAgendaStash()) {
       Layout.agendaStashHeight = Math.max(
         Config.CanvasMinHeight,
-        Layout.agendaComponent.y() + Layout.agendaComponent.height() + Config.CanvasPaddingY,
-        Layout.stashComponent.y() + Layout.stashComponent.height() + Config.CanvasPaddingY
+        Layout.agendaComponent.y() + Layout.agendaComponent.height() + Config.CanvasPaddingY
       );
       Layout.agendaStashWidth = Math.max(
         Config.CanvasMinWidth,
@@ -196,10 +198,7 @@ export class Layout {
         ) +
           Config.CanvasPaddingX * 2 +
           (EnvVisualizer.getAgendaStash()
-            ? Layout.agendaComponent.width() +
-              Config.CanvasPaddingX * 2 +
-              Layout.stashComponent.width() +
-              Config.CanvasPaddingX * 2
+            ? Layout.agendaComponent.width() + Config.CanvasPaddingX * 2
             : 0)
       );
     } else {
@@ -215,20 +214,8 @@ export class Layout {
   }
 
   static initializeAgendaStash() {
-    this.agendaComponent = new Stack(this.agenda);
-    if (EnvVisualizer.getCompactLayout()) {
-      Layout.stashComponentX =
-        Layout.compactLevels[0].x() +
-        Layout.compactLevels.reduce<number>(
-          (maxWidth, level) => Math.max(maxWidth, level.width()),
-          0
-        ) +
-        Config.CanvasPaddingX * 2;
-      this.stashComponent = new Stack(this.stash);
-    } else {
-      Layout.stashComponentX = this.grid.x() + this.grid.width() + Config.CanvasPaddingX * 2;
-      this.stashComponent = new Stack(this.stash);
-    }
+    this.agendaComponent = new AgendaStack(this.agenda);
+    this.stashComponent = new StashStack(this.stash);
   }
 
   /** remove program environment containing predefined functions */
@@ -439,12 +426,13 @@ export class Layout {
   }
 
   /**
-   * Scrolls diagram to top left, and saves the diagram as multiple images of width < MaxExportWidth.
+   * Scrolls diagram to top left, resets the zoom, and saves the diagram as multiple images of width < MaxExportWidth.
    */
   static exportImage = () => {
     const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
     container.scrollTo({ left: 0, top: 0 });
     Layout.handleScrollPosition(0, 0);
+    this.stageRef.current.scale({ x: 1, y: 1 });
     const height = Layout.height();
     const width = Layout.width();
     const horizontalImages = Math.ceil(width / Config.MaxExportWidth);
@@ -493,6 +481,44 @@ export class Layout {
     this.stageRef.current.y(-dy);
   }
 
+  /**
+   * Updates the scale of the stage after the user inititates a zoom in or out
+   * by scrolling or by the trackpad.
+   */
+  static zoomStage(event: KonvaEventObject<WheelEvent> | boolean, multiplier: number = 1) {
+    typeof event != 'boolean' && event.evt.preventDefault();
+    if (Layout.stageRef.current !== null) {
+      const stage = Layout.stageRef.current;
+      const oldScale = stage.scaleX();
+      const { x: pointerX, y: pointerY } = stage.getPointerPosition();
+      const mousePointTo = {
+        x: (pointerX - stage.x()) / oldScale,
+        y: (pointerY - stage.y()) / oldScale
+      };
+
+      // zoom in or zoom out
+      const direction =
+        typeof event != 'boolean' ? (event.evt.deltaY > 0 ? -1 : 1) : event ? 1 : -1;
+
+      // Check if the zoom limits have been reached
+      if ((direction > 0 && oldScale < 3) || (direction < 0 && oldScale > 0.4)) {
+        const newScale =
+          direction > 0
+            ? oldScale * Layout.scaleFactor ** multiplier
+            : oldScale / Layout.scaleFactor ** multiplier;
+        stage.scale({ x: newScale, y: newScale });
+        if (typeof event !== 'boolean') {
+          const newPos = {
+            x: pointerX - mousePointTo.x * newScale,
+            y: pointerY - mousePointTo.y * newScale
+          };
+          stage.position(newPos);
+          stage.batchDraw();
+        }
+      }
+    }
+  }
+
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
@@ -500,68 +526,62 @@ export class Layout {
       const layout = (
         <div className={'sa-env-visualizer'} data-testid="sa-env-visualizer">
           <div
+            id="scroll-container"
+            ref={Layout.scrollContainerRef}
+            onScroll={e =>
+              Layout.handleScrollPosition(e.currentTarget.scrollLeft, e.currentTarget.scrollTop)
+            }
             style={{
-              overflow: 'hidden',
-              marginLeft: 20,
-              marginRight: 0,
-              marginTop: 0,
-              marginBottom: 0,
-              height: '100%'
+              width: Layout.visibleWidth,
+              height: Layout.visibleHeight,
+              overflow: 'hidden'
             }}
-          ></div>
-          <div className={'sa-env-visualizer'}>
+          >
             <div
-              id="scroll-container"
-              ref={Layout.scrollContainerRef}
-              onScroll={e =>
-                Layout.handleScrollPosition(e.currentTarget.scrollLeft, e.currentTarget.scrollTop)
-              }
+              id="large-container"
               style={{
-                width: Layout.visibleWidth,
-                height: Layout.visibleHeight,
-                overflow: 'auto',
-                margin: '10px'
+                width: Layout.width(),
+                height: Layout.height(),
+                overflow: 'hidden',
+                backgroundColor: EnvVisualizer.getPrintableMode()
+                  ? Config.PRINT_BACKGROUND.toString()
+                  : Config.SA_BLUE.toString()
               }}
             >
-              <div
-                id="large-container"
-                style={{
-                  width: Layout.width(),
-                  height: Layout.height(),
-                  overflow: 'hidden',
-                  backgroundColor: EnvVisualizer.getPrintableMode()
-                    ? Config.PRINT_BACKGROUND.toString()
-                    : Config.SA_BLUE.toString()
-                }}
+              <Stage
+                width={Layout.stageWidth}
+                height={Layout.stageHeight}
+                ref={this.stageRef}
+                draggable
+                onWheel={Layout.zoomStage}
+                className="draggable"
               >
-                <Stage width={Layout.stageWidth} height={Layout.stageHeight} ref={this.stageRef}>
-                  <Layer>
-                    <Rect
-                      {...ShapeDefaultProps}
-                      x={0}
-                      y={0}
-                      width={Layout.width()}
-                      height={Layout.height()}
-                      fill={
-                        EnvVisualizer.getPrintableMode()
-                          ? Config.PRINT_BACKGROUND.toString()
-                          : Config.SA_BLUE.toString()
-                      }
-                      key={Layout.key++}
-                      listening={false}
-                    />
-                    {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
-                    {EnvVisualizer.getCompactLayout() &&
-                      Layout.compactLevels.map(level => level.draw())}
-                    {EnvVisualizer.getCompactLayout() &&
-                      EnvVisualizer.getAgendaStash() &&
-                      Layout.agendaComponent.draw()}
-                    {EnvVisualizer.getCompactLayout() &&
-                      EnvVisualizer.getAgendaStash() &&
-                      Layout.stashComponent.draw()}
-                  </Layer>
-                </Stage>
-              </div>
+                <Layer>
+                  <Rect
+                    {...ShapeDefaultProps}
+                    x={0}
+                    y={0}
+                    width={Layout.width()}
+                    height={Layout.height()}
+                    fill={
+                      EnvVisualizer.getPrintableMode()
+                        ? Config.PRINT_BACKGROUND.toString()
+                        : Config.SA_BLUE.toString()
+                    }
+                    key={Layout.key++}
+                    listening={false}
+                  />
+                  {!EnvVisualizer.getCompactLayout() && Layout.grid.draw()}
+                  {EnvVisualizer.getCompactLayout() &&
+                    Layout.compactLevels.map(level => level.draw())}
+                  {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getAgendaStash() &&
+                    Layout.agendaComponent.draw()}
+                  {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getAgendaStash() &&
+                    Layout.stashComponent.draw()}
+                </Layer>
+              </Stage>
             </div>
           </div>
         </div>

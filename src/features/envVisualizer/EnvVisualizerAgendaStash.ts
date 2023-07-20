@@ -1,17 +1,23 @@
 export enum AgendaStashConfig {
-  AgendaPosX = 30,
-  AgendaPosY = 30,
-  StashPosX = 180,
-  StashPosY = 30,
+  AgendaPosX = 20,
+  AgendaPosY = 5,
+  StashPosX = 140,
+  StashPosY = 5,
 
-  AgendaItemWidth = 150,
+  AgendaItemWidth = 120,
   AgendaItemTextPadding = 10,
   AgendaItemCornerRadius = 5,
-  AgendaMaxTextWidth = 125,
+  AgendaMaxTextWidth = 95,
   AgendaMaxTextHeight = 125,
   StashMaxTextWidth = AgendaMaxTextWidth,
-  StashMaxTextHeight = 50,
-  NodeTooltipOpacity = 0.7,
+  StashItemHeight = 15,
+  StashItemTextPadding = AgendaItemTextPadding,
+  StashMaxTextHeight = 30,
+  StashItemCornerRadius = AgendaItemCornerRadius,
+
+  TooltipOpacity = 0.7,
+  TooltipMargin = 5,
+  TooltipPadding = 5,
 
   FontFamily = 'monospace, monospace',
   FontSize = 15,
@@ -22,7 +28,8 @@ export enum AgendaStashConfig {
 
   SA_WHITE = '#999999',
   SA_BLUE = '#2c3e50',
-  PRINT_BACKGROUND = 'white'
+  PRINT_BACKGROUND = 'white',
+  STASH_DANGER_ITEM = '#ff0000'
 }
 
 export const ShapeDefaultProps = {
