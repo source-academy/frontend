@@ -91,25 +91,25 @@ const commonChildrenRoutes: RouteObject[] = [
     path: 'stories/view/:user/:fileName',
     lazy: UserBlog,
     // TODO: Remove redirect when stories are implemented
-    loader: conditionalLoader(false, '/')
+    // loader: conditionalLoader(false, '/')
   },
   {
     path: 'stories/view/:user',
     lazy: UserBlogDir,
     // TODO: Remove redirect when stories are implemented
-    loader: conditionalLoader(false, '/')
+    // loader: conditionalLoader(false, '/')
   },
   {
     path: 'stories/new',
     lazy: NewStory,
     // TODO: Remove redirect when stories are implemented
-    loader: conditionalLoader(false, '/')
+    // loader: conditionalLoader(false, '/')
   },
   {
     path: 'stories',
     lazy: Stories,
     // TODO: Remove redirect when stories are implemented
-    loader: conditionalLoader(false, '/')
+    // loader: conditionalLoader(false, '/')
   }
 ];
 

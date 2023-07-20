@@ -183,7 +183,8 @@ const NavigationBar: React.FC = () => {
         icon: IconNames.GIT_REPO,
         text: 'Stories',
         // TODO: Enable when stories are implemented
-        disabled: true && !isLoggedIn
+        // disabled: true && !isLoggedIn
+        disabled: !isLoggedIn
       }
     ];
   }, [isLoggedIn, isEnrolledInACourse, courseId, enableSourcecast, enableAchievements]);
@@ -357,7 +358,7 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     icon: IconNames.GIT_REPO,
     text: 'Stories',
     // TODO: Enable when stories are implemented
-    disabled: true
+    // disabled: true
   }
 ];
 
