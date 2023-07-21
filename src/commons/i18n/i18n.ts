@@ -3,7 +3,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
 import { InternationalLanguage } from '../application/ApplicationTypes';
-import { Links } from '../utils/Constants';
+import deNs1 from './locales/de.json';
+// import { Links } from '../utils/Constants';
+import enNs1 from './locales/en.json';
+import zhNs1 from './locales/zh.json';
+
+export const defaultNS = 'ns1';
 
 i18n
   // detect user language
@@ -19,26 +24,16 @@ i18n
     interpolation: {
       escapeValue: false // not needed for react as it escapes by default
     },
+    defaultNS,
     resources: {
       en: {
-        translation: {
-          introduction: {
-            main: `Welcome to the Source Academy playground!<br /><br />
-            The book [_Structure and Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}) uses JavaScript sublanguages that we call [_Source_](${Links.sourceDocs}).`,
-            docs: ``,
-            hotkeys: `\nIn the editor on the left, you can use the [_Ace keyboard shortcuts_](${Links.aceHotkeys}) and the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).`
-          }
-        }
+        ns1: enNs1
       },
-
       zh: {
-        translation: {
-          introduction: {
-            main: `欢迎来到源学院游乐场！ 这本书 [_Structure and Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}) 使用了我们称之为 [_Source_](${Links.sourceDocs}) 的 JavaScript 子语言。`,
-            docs: ``,
-            hotkeys: `\n在左侧的编辑器中，您可以使用 [_Ace 键盘快捷键_](${Links.aceHotkeys}) 和 [_Source Academy 键盘快捷键_](${Links.sourceHotkeys})。`
-          }
-        }
+        ns1: zhNs1
+      },
+      de: {
+        ns1: deNs1
       }
     }
   });
