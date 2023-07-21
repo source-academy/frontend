@@ -2,6 +2,7 @@ import { Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ControlButton from '../ControlButton';
 
@@ -19,13 +20,14 @@ type StateProps = {
 };
 
 export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props => {
+  const { t: translate } = useTranslation();
   const tooltipContent = props.isEntrypointFileDefined
     ? '...or press shift-enter in the editor'
     : 'Open a file to evaluate the program with the file as the entrypoint';
   return (
     <Tooltip2 content={tooltipContent} placement={Position.TOP}>
       <ControlButton
-        label="Run"
+        label={translate('ns1:PLAYGROUND.RUN' as any)}
         icon={IconNames.PLAY}
         onClick={props.handleEditorEval}
         options={{ iconColor: props.color, className: props.className }}

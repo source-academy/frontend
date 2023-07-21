@@ -1,7 +1,8 @@
 {
-  "introduction": {
-    "main": "欢迎来到源学院游乐场！ 这本书 [_Structure and Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}) 使用了我们称之为 [_Source_](${Links.sourceDocs}) 的 JavaScript 子语言。",
-    "docs": "",
-    "hotkeys": "\n在左侧的编辑器中，您可以使用 [_Ace 键盘快捷键_](${Links.aceHotkeys}) 和 [_Source Academy 键盘快捷键_](${Links.sourceHotkeys})。"
+  "PLAYGROUND": {
+    "GOOGLE_DRIVE": "谷歌云端硬盘",
+    "RUN": "执行",
+    "SESSION": "会议",
+    "SHARE": " 分享"
   }
 }

@@ -141,7 +141,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
           disabled={this.props.isFolderModeEnabled}
         >
           <ControlButton
-            label="Session"
+            label="f"
             icon={IconNames.SOCIAL_MEDIA}
             options={{
               iconColor:
