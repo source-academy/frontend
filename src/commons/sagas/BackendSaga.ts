@@ -450,12 +450,14 @@ function* BackendSaga(): SagaIterator {
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
-    const teamFormationOverviews: TeamFormationOverview[] = yield select(
-      (state: OverallState) => state.session.teamFormationOverviews || []
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
     );
-
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
     yield call(showSuccessMessage, 'Team created successfully', 1000);
-    yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
   });
 
   yield takeEvery(
