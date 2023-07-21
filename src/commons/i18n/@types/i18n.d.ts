@@ -11,6 +11,7 @@ declare module 'i18next' {
 }
 // eslint-disable-next-line import/first
 import { defaultNS } from '../i18n';
+// eslint-disable-next-line import/first
 import enNs1 from '../locales/en.json';
 // eslint-disable-next-line import/first
 import Resources from './resources';

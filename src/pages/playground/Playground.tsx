@@ -238,7 +238,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
-  const { t: translate } = useTranslation();
+  // const { t: translate } = useTranslation();
 
   const [deviceSecret, setDeviceSecret] = React.useState<string | undefined>();
   const location = useLocation();
