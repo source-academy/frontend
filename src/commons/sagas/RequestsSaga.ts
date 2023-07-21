@@ -693,8 +693,10 @@ export const postTeams = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const data = {
-    assessmentId: assessmentId,
-    teams: teams
+    team: {
+      assessment_id: assessmentId,
+      student_ids: teams.map((team) => team.map((option) => option?.value))
+    }
   };
 
   const resp = await request(`${courseId()}/admin/teams`, 'POST', {
@@ -752,26 +754,17 @@ export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Respon
   return resp;
 };
 
-export const getStudents = async (tokens: Tokens): Promise<User[] | null> => {
-  const data = {};
-
-  const resp = await request(`${courseId()}/admin/teams`, 'GET', {
-    body: data,
+export const getStudents = async (
+  tokens: Tokens
+): Promise<AdminPanelCourseRegistration[] | null> => {
+  const resp = await request(`${courseId()}/admin/users`, 'GET', {
     ...tokens
   });
-  if (!resp) {
-    return null; // invalid accessToken _and_ refreshToken
+  if (!resp || !resp.ok) {
+    return null;
   }
-  const students = await resp.json();
-  return students.map((overview: any) => {
-    const user: User = {
-      userId: overview.userId,
-      name: overview.name,
-      username: overview.username,
-      courses: overview.courses
-    };
-    return user;
-  });
+
+  return await resp.json();
 };
 
 /**
