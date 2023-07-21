@@ -22,10 +22,10 @@ export default class EnvVisualizer {
   private static compactLayout: boolean = true;
   private static agendaStash: boolean = false;
   private static stackTruncated: boolean = false;
-  private static environmentTree: EnvTree;
+  private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
-  private static agenda: Agenda;
-  private static stash: Stash;
+  private static agenda: Agenda | undefined;
+  private static stash: Stash | undefined;
   public static togglePrintableMode(): void {
     EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
   }
@@ -104,7 +104,7 @@ export default class EnvVisualizer {
   }
 
   static redraw() {
-    if (this.environmentTree) {
+    if (EnvVisualizer.environmentTree && EnvVisualizer.agenda && EnvVisualizer.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
       if (
         EnvVisualizer.getCompactLayout() &&
@@ -183,6 +183,9 @@ export default class EnvVisualizer {
   static clearEnv() {
     if (this.setVis) {
       this.setVis(undefined);
+      EnvVisualizer.environmentTree = undefined;
+      EnvVisualizer.agenda = undefined;
+      EnvVisualizer.stash = undefined;
     }
     this.clear();
   }

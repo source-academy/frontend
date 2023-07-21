@@ -136,7 +136,9 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   componentDidMount() {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
+    EnvVisualizer.redraw();
   }
+
   componentWillUnmount() {
     this.handleResize.cancel();
     window.removeEventListener('resize', this.handleResize);
@@ -156,6 +158,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     }
     if (prevProps.needEnvUpdate && !this.props.needEnvUpdate) {
       this.stepFirst();
+      EnvVisualizer.clearEnv();
     }
   }
 
