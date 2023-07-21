@@ -32,7 +32,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
   </Blueprint4.Navbar>
   <Routes>
     <Route path=\\"/playground\\" element={{...}} />
-    <Route path=\\"/githubassessments\\" element={{...}} />
+    <Route path=\\"/githubassessments/*\\" element={{...}} />
     <Route path=\\"/contributors\\" element={{...}} />
     <Route path=\\"/courses/:courseId/sourcecast\\" element={{...}} />
     <Route path=\\"/courses/:courseId/achievements\\" element={{...}} />
@@ -98,7 +98,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
   </Blueprint4.Navbar>
   <Routes>
     <Route path=\\"/playground\\" element={{...}} />
-    <Route path=\\"/githubassessments\\" element={{...}} />
+    <Route path=\\"/githubassessments/*\\" element={{...}} />
     <Route path=\\"/contributors\\" element={{...}} />
     <Route path=\\"/courses/:courseId/sourcecast\\" element={{...}} />
     <Route path=\\"/courses/:courseId/achievements\\" element={{...}} />
@@ -146,7 +146,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
   </Blueprint4.Navbar>
   <Routes>
     <Route path=\\"/playground\\" element={{...}} />
-    <Route path=\\"/githubassessments\\" element={{...}} />
+    <Route path=\\"/githubassessments/*\\" element={{...}} />
     <Route path=\\"/contributors\\" element={{...}} />
     <Route path=\\"/courses/:courseId/sourcecast\\" element={{...}} />
     <Route path=\\"/courses/:courseId/achievements\\" element={{...}} />
