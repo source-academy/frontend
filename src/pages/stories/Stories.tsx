@@ -22,8 +22,9 @@ import { Link, useNavigate } from 'react-router-dom';
 // import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 const Stories: React.FC = () => {
-  const [user, setUser] = useState<string>('');
+  // const [user, setUser] = useState<string>('');
   // const [data, setData] = useState<any[]>([]);
+  const [query, setQuery] = useState("")
 
   const navigate = useNavigate();
   const handleSubmit = (): void => {
@@ -146,20 +147,14 @@ const Stories: React.FC = () => {
           <button className="storiesButton" onClick={handleSubmit}>
             + Add Story
           </button>
-
-          <form onSubmit={handleSubmit}>
-            <div>
-              <div>
-                <TextInput
-                  maxWidth="max-w-xl"
-                  icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-                  placeholder="Search for stories..."
-                  onChange={e => setUser(e.target.value)}
-                  value={user}
-                />
-              </div>
-            </div>
-          </form>
+          <div>
+            <TextInput
+              maxWidth="max-w-xl"
+              icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+              placeholder="Search for author..."
+              onChange={e => setQuery(e.target.value)}
+            />
+          </div>
         </Flex>
         {/* {Constants.storiesBackendUrl && (
           <div>
@@ -193,7 +188,9 @@ const Stories: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {fakeData.map(item => (
+              {fakeData.filter(item=>
+                item.author.toLowerCase().includes(query)
+                ).map(item => (
                 <TableRow key={item.id}>
                   <TableCell>{item.author}</TableCell>
                   <TableCell>
