@@ -24,7 +24,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const Stories: React.FC = () => {
   // const [user, setUser] = useState<string>('');
   // const [data, setData] = useState<any[]>([]);
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
   const handleSubmit = (): void => {
@@ -49,85 +49,89 @@ const Stories: React.FC = () => {
       id: 1,
       author: 'Evangeline Blake',
       title: 'Try this hack to make your code faster',
-      summary: 'Many people discuss about...'
+      summary:
+        'Many people discuss about people discuss about people discuss about people discuss about people discuss about'
     },
     {
       id: 2,
       author: 'Jasper Tan',
       title: 'Recursive Recursion Recursiveness',
-      summary: 'Recursion may seem complex...'
+      summary:
+        'Recursion may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex'
     },
     {
       id: 3,
       author: 'Wei Zhang',
       title: 'i-i-i-terators',
-      summary: 'What exactly are iterators...'
+      summary:
+        'What exactly are iterators exactly are iterators exactly are iterators exactly are iterators'
     },
     {
       id: 4,
       author: 'Ying Liu',
       title: 'Harnessing the Power of Object-Oriented Programming',
-      summary: 'Object-Oriented Programming is...'
+      summary:
+        'Object-Oriented Programming (OOP) is a programming paradigm or style that organizes code and data into reusable, self-contained units called objects. In OOP, an object represents a real-world entity, and the code is designed to model the interactions and behaviors of these entities. OOP is one of the most popular programming paradigms used in modern software development.'
     },
     {
       id: 5,
       author: 'Ji-Yeon Kim',
       title: 'Debugging 101',
-      summary: 'Bugs are extremely common...'
+      summary: 'Bugs are extremely common'
     },
     {
       id: 6,
       author: 'Wu Mei Ling',
       title: 'The Big-O Notion',
-      summary: 'We will delve into understanding...'
+      summary: 'We will delve into understanding'
     },
     {
       id: 7,
       author: 'Eugene Tan',
       title: 'BFS and DFS comparison',
-      summary: 'What is BFS and DFS? Let us...'
+      summary: 'What is BFS and DFS? Let us'
     },
     {
       id: 8,
       author: 'Evangeline Blake',
       title: 'Try this hack to make your code faster',
-      summary: 'Many people discuss about...'
+      summary: 'Many people discuss about'
     },
     {
       id: 9,
       author: 'Jasper Tan',
       title: 'Recursive Recursion Recursiveness',
-      summary: 'Recursion may seem complex...'
+      summary: 'Recursion may seem complex'
     },
     {
       id: 10,
       author: 'Wei Zhang',
       title: 'i-i-i-terators',
-      summary: 'What exactly are iterators...'
+      summary: 'What exactly are iterators'
     },
     {
       id: 11,
       author: 'Ying Liu',
       title: 'Harnessing the Power of Object-Oriented Programming',
-      summary: 'Object-Oriented Programming is...'
+      summary: 'Object-Oriented Programming is'
     },
     {
       id: 12,
       author: 'Ji-Yeon Kim',
       title: 'Debugging 101',
-      summary: 'Bugs are extremely common...'
+      summary: 'Bugs are extremely common'
     },
     {
       id: 13,
       author: 'Wu Mei Ling',
       title: 'The Big-O Notion',
-      summary: 'We will delve into understanding...'
+      summary: 'We will delve into understanding'
     },
     {
       id: 14,
       author: 'Eugene Tan',
       title: 'BFS and DFS comparison',
-      summary: 'What is BFS and DFS? Let us...'
+      summary: 'What is BFS and DFS? Let us'
     }
   ];
 
@@ -188,42 +192,43 @@ const Stories: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {fakeData.filter(item=>
-                item.author.toLowerCase().includes(query)
-                ).map(item => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.author}</TableCell>
-                  <TableCell>
-                    <Text>{item.title}</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Text>{item.summary}</Text>
-                  </TableCell>
-                  <TableCell>
-                    <Flex spaceX="space-x-2">
-                      <Link to={`/stories/view`}>
-                        <Icon
-                          tooltip="View"
-                          icon={() => <BpIcon icon={IconNames.EyeOpen} />}
-                          variant="light"
-                        />
-                      </Link>
-                      <Link to={`/stories/edit`}>
-                        <Icon
-                          tooltip="Edit"
-                          icon={() => <BpIcon icon={IconNames.EDIT} />}
-                          variant="light"
-                        />
-                      </Link>
-                    </Flex>
-                  </TableCell>
-                  {/* <TableCell>
-                <Badge color="emerald" icon={StatusOnlineIcon}>
-                  {item.status}
-                </Badge>
-              </TableCell> */}
-                </TableRow>
-              ))}
+              {fakeData
+                .filter(item => item.author.toLowerCase().includes(query))
+                .map(item => (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.author}</TableCell>
+                    <TableCell>
+                      <Text>{item.title}</Text>
+                    </TableCell>
+                    <div className="storiesSummary">
+                      <TableCell>
+                        <Text>
+                          {item.summary.length > 35
+                            ? `${item.summary.substring(0, 35)} ...`
+                            : item.summary}
+                        </Text>
+                      </TableCell>
+                    </div>
+                    <TableCell>
+                      <Flex spaceX="space-x-2">
+                        <Link to={`/stories/view`}>
+                          <Icon
+                            tooltip="View"
+                            icon={() => <BpIcon icon={IconNames.EyeOpen} />}
+                            variant="light"
+                          />
+                        </Link>
+                        <Link to={`/stories/edit`}>
+                          <Icon
+                            tooltip="Edit"
+                            icon={() => <BpIcon icon={IconNames.EDIT} />}
+                            variant="light"
+                          />
+                        </Link>
+                      </Flex>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </div>
