@@ -17,7 +17,6 @@ import {
   Bold,
   Button,
   Flex,
-  Footer,
   Table,
   TableBody,
   TableCell,
@@ -166,28 +165,28 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
           ))}
         </TableBody>
 
-        <Footer>
-          <Flex justifyContent="justify-center" spaceX="space-x-3">
-            <Button
-              size="xs"
-              icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
-              variant="light"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            />
-            <Bold>
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-            </Bold>
-            <Button
-              size="xs"
-              icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
-              variant="light"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            />
-          </Flex>
-        </Footer>
       </Table>
+      <div>
+        <Flex justifyContent="justify-center" spaceX="space-x-3">
+          <Button
+            size="xs"
+            icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
+            variant="light"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          />
+          <Bold>
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </Bold>
+          <Button
+            size="xs"
+            icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
+            variant="light"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          />
+        </Flex>
+      </div>
     </>
   );
 };
