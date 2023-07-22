@@ -756,8 +756,8 @@ export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Respon
 
 export const getStudents = async (
   tokens: Tokens
-): Promise<AdminPanelCourseRegistration[] | null> => {
-  const resp = await request(`${courseId()}/admin/users`, 'GET', {
+): Promise<User[] | null> => {
+  const resp = await request(`${courseId()}/admin/users/teamformation`, 'GET', {
     ...tokens
   });
   if (!resp || !resp.ok) {
