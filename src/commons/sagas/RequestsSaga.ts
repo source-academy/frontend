@@ -53,6 +53,9 @@ import { castLibrary } from '../utils/CastBackend';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const XLSX = require('xlsx');
+
 /**
  * POST /auth/login
  */
@@ -706,21 +709,95 @@ export const postTeams = async (
   return resp;
 };
 
+type CsvData = string[][];
+
 export const postUploadTeams = async (
   assessmentId: number,
   teams: File,
+  students: User[] | undefined,
   tokens: Tokens
 ): Promise<Response | null> => {
+  const parsed_teams : OptionType[][] = []
+
+  const teamsArrayBuffer = await readFileAsArrayBuffer(teams);
+  const workbook = XLSX.read(teamsArrayBuffer, { type: 'array' });
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  const csvData: CsvData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+  const headers = csvData[0];
+
+    for (let i = 1; i < csvData.length; i++) {
+      const row = csvData[i];
+      const team: OptionType[] = [];
+      let isUsernameColumn = false;
+
+      for (let j = 0; j < row.length; j++) {
+        const value = row[j];
+        const header = headers[j];
+
+        if (header === 'Username' && value) {
+          // Assuming the "Username" column contains the names of students separated by a comma
+          const studentNames = value.split(',');
+          studentNames.forEach((username: string) => {
+            // Find student by username
+            const student = students?.find((s: any) => s.username.trim() === username.trim());
+            if (student) {
+              team.push({
+                label: student.name,
+                value: student
+              });
+            }
+          });
+          isUsernameColumn = true; // Set to true after processing the "Username" column
+        } else if (isUsernameColumn && value) {
+          // Assuming subsequent columns contain additional team members
+          const studentNames = value.split(',');
+          studentNames.forEach((username: string) => {
+            // Find student by username
+            const student = students?.find((s: any) => s.username.trim() === username.trim());
+            if (student) {
+              team.push({
+                label: student.name,
+                value: student
+              });
+            }
+          });
+        }
+      }
+      parsed_teams.push(team)
+    }
+
   const data = {
-    assessmentId: assessmentId,
-    teams: teams
+    team: {
+      assessment_id: assessmentId,
+      student_ids: parsed_teams.map(team => team.map(option => option?.value))
+    }
   };
 
-  const resp = await request(`${courseId()}/admin/teams/upload`, 'POST', {
+  const resp = await request(`${courseId()}/admin/teams`, 'POST', {
     body: data,
     ...tokens
   });
   return resp;
+};
+
+const readFileAsArrayBuffer = async (file: File): Promise<ArrayBuffer> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = event => {
+      if (event.target) {
+        const result = event.target.result as ArrayBuffer;
+        resolve(result);
+      } else {
+        reject(new Error('Error reading file'));
+      }
+    };
+    reader.onerror = event => {
+      reject(new Error('Error reading file'));
+    };
+    reader.readAsArrayBuffer(file);
+  });
 };
 
 export const putTeams = async (

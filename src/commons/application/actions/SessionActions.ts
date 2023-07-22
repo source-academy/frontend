@@ -238,8 +238,8 @@ export const updateTeam = (teamId: number, assessment: AssessmentOverview, teams
 
 export const deleteTeam = (teamId: number) => action(DELETE_TEAM, { teamId });
 
-export const bulkUploadTeam = (assessment: AssessmentOverview, file: File) =>
-  action(BULK_UPLOAD_TEAM, { assessment, file });
+export const bulkUploadTeam = (assessment: AssessmentOverview, file: File, students: User[] | undefined) =>
+  action(BULK_UPLOAD_TEAM, { assessment, file, students });
 
 export const updateTeamFormationOverviews = (overviews: TeamFormationOverview[]) =>
   action(UPDATE_TEAM_FORMATION_OVERVIEWS, overviews);

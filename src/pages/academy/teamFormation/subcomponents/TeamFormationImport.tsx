@@ -16,7 +16,7 @@ const TeamFormationImport: React.FC = () => {
   const dispatch = useDispatch();
   const fileTypes = ['XLSX', 'XLS'];
   const [file, setFile] = useState<File | null>(null); // Specify the type of 'file'
-  const { courseId } = useTypedSelector(state => state.session);
+  const { courseId, students } = useTypedSelector(state => state.session);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
     undefined
@@ -46,7 +46,7 @@ const TeamFormationImport: React.FC = () => {
       alert('Please upload the teams.');
       return;
     }
-    dispatch(bulkUploadTeam(selectedAssessment, file));
+    dispatch(bulkUploadTeam(selectedAssessment, file, students));
     navigate(`/courses/${courseId}/teamformation`);
   };
 

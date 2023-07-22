@@ -471,9 +471,9 @@ function* BackendSaga(): SagaIterator {
     BULK_UPLOAD_TEAM,
     function* (action: ReturnType<typeof actions.bulkUploadTeam>): any {
       const tokens: Tokens = yield selectTokens();
-      const { assessment, file } = action.payload;
+      const { assessment, file, students } = action.payload;
 
-      const resp: Response | null = yield call(postUploadTeams, assessment.id, file, tokens);
+      const resp: Response | null = yield call(postUploadTeams, assessment.id, file, students, tokens);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
