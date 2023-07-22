@@ -695,7 +695,7 @@ export const postTeams = async (
   const data = {
     team: {
       assessment_id: assessmentId,
-      student_ids: teams.map((team) => team.map((option) => option?.value))
+      student_ids: teams.map(team => team.map(option => option?.value))
     }
   };
 
@@ -732,7 +732,7 @@ export const putTeams = async (
   const data = {
     teamId: teamId,
     assessmentId: assessmentId,
-    teams: teams
+    student_ids: teams.map(team => team.map(option => option?.value))
   };
 
   const resp = await request(`${courseId()}/admin/teams/${teamId}`, 'PUT', {
@@ -754,9 +754,7 @@ export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Respon
   return resp;
 };
 
-export const getStudents = async (
-  tokens: Tokens
-): Promise<User[] | null> => {
+export const getStudents = async (tokens: Tokens): Promise<User[] | null> => {
   const resp = await request(`${courseId()}/admin/users/teamformation`, 'GET', {
     ...tokens
   });

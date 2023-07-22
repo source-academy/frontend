@@ -447,6 +447,7 @@ function* BackendSaga(): SagaIterator {
     const { assessment, teams } = action.payload;
 
     const resp: Response | null = yield call(postTeams, assessment.id, teams, tokens);
+    console.log(resp);
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
@@ -458,6 +459,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
     yield call(showSuccessMessage, 'Team created successfully', 1000);
+    if (resp && resp.status === 409) {
+      return yield call(
+        showWarningMessage,
+        'Team with the same members already exists for this assessment!'
+      );
+    }
   });
 
   yield takeEvery(
@@ -470,29 +477,35 @@ function* BackendSaga(): SagaIterator {
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
-      const teamFormationOverviews: TeamFormationOverview[] = yield select(
-        (state: OverallState) => state.session.teamFormationOverviews || []
+      const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+        getTeamFormationOverviews,
+        tokens
       );
 
       yield call(showSuccessMessage, 'Team created successfully', 1000);
-      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+      if (teamFormationOverviews) {
+        yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+      }
     }
   );
 
   yield takeEvery(UPDATE_TEAM, function* (action: ReturnType<typeof actions.updateTeam>): any {
     const tokens: Tokens = yield selectTokens();
     const { teamId, assessment, teams } = action.payload;
-
-    const resp: Response | null = yield call(putTeams, teamId, assessment.id, teams, tokens);
+    console.log(teamId);
+    const resp: Response | null = yield call(putTeams, assessment.id, teamId, teams, tokens);
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
-    const teamFormationOverviews: TeamFormationOverview[] = yield select(
-      (state: OverallState) => state.session.teamFormationOverviews || []
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
     );
 
     yield call(showSuccessMessage, 'Team updated successfully', 1000);
-    yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
   });
 
   yield takeEvery(DELETE_TEAM, function* (action: ReturnType<typeof actions.deleteTeam>): any {
@@ -503,12 +516,15 @@ function* BackendSaga(): SagaIterator {
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
-    const teamFormationOverviews: TeamFormationOverview[] = yield select(
-      (state: OverallState) => state.session.teamFormationOverviews || []
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
     );
 
     yield call(showSuccessMessage, 'Team deleted successfully', 1000);
-    yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
   });
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
