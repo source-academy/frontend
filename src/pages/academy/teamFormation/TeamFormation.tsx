@@ -18,7 +18,7 @@ const TeamFormation: React.FC = () => {
       icon={<Spinner size={SpinnerSize.LARGE} />}
     />
   );
-
+  
   return (
     <ContentDisplay
       display={

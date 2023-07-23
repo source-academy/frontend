@@ -73,11 +73,16 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const teamFormationOverviewsUnfiltered = useTypedSelector(
     state => state.session.teamFormationOverviews || []
   );
+
+  const courseId = useTypedSelector(state => state.session.courseId);
+  const courseRegId = useTypedSelector(state => state.session.courseRegId);
+  const teamFormationOverview = teamFormationOverviewsUnfiltered?.filter(ao => courseRegId !== undefined && ao.studentIds.includes(courseRegId))[0];
+    
   const isStudent = useTypedSelector(state =>
     state.session.role ? state.session.role === Role.Student : true
   );
-  const courseId = useTypedSelector(state => state.session.courseId);
-  const courseRegId = useTypedSelector(state => state.session.courseRegId);
+
+  const hasFormedTeam = teamFormationOverview !== undefined; 
 
   const dispatch = useDispatch();
 
@@ -175,7 +180,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
     overview: AssessmentOverview,
     index: number,
     renderAttemptButton: boolean,
-    renderGradingStatus: boolean
+    renderGradingStatus: boolean,
+    formedTeam: boolean
   ) => {
     const showGrade =
       overview.gradingStatus === 'graded' || !props.assessmentConfiguration.isManuallyGraded;
@@ -205,6 +211,17 @@ const Assessment: React.FC<AssessmentProps> = props => {
             <div className="listing-description">
               <Markdown content={overview.shortSummary} />
             </div>
+            {overview.maxTeamSize > 1 
+              ? (<div className="listing-team_information">
+                  <H6> This is a team assessment. </H6>
+                  <H6>
+                    {formedTeam ? `You have joined a team!` : `You have not joined a team!`}
+                  </H6>
+                </div>) 
+              : (<div>
+                  <H6> This is an individual assessment. </H6>
+              </div>)
+            }
             <div className="listing-footer">
               <div>
                 <Text className="listing-due-date">
@@ -276,7 +293,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // overviews must still be loaded for this, to send the due date.
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
-    const teamFormationOverview = teamFormationOverviewsUnfiltered?.filter(ao => courseRegId !== undefined && ao.studentIds.includes(courseRegId))[0];
     
     // const teamId = 1;
     if (!overview) {
@@ -307,7 +323,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
 
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
-      (overview, index) => makeOverviewCard(overview, index, !isStudent, false)
+      (overview, index) => makeOverviewCard(overview, index, !isStudent, false, hasFormedTeam)
     );
 
     /** Opened assessments, that are released and can be attempted. */
@@ -317,14 +333,14 @@ const Assessment: React.FC<AssessmentProps> = props => {
       overview.status !== AssessmentStatuses.submitted;
     const openedCards = sortAssessments(
       assessmentOverviews.filter(overview => isOverviewOpened(overview))
-    ).map((overview, index) => makeOverviewCard(overview, index, true, false));
+    ).map((overview, index) => makeOverviewCard(overview, index, true, false, hasFormedTeam));
 
     /** Closed assessments, that are past the due date or cannot be attempted further. */
     const closedCards = sortAssessments(
       assessmentOverviews.filter(
         overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
       )
-    ).map((overview, index) => makeOverviewCard(overview, index, true, true));
+    ).map((overview, index) => makeOverviewCard(overview, index, true, true, hasFormedTeam));
 
     /** Render cards */
     const upcomingCardsCollapsible = (

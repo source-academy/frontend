@@ -113,6 +113,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const students = useTypedSelector(state => state.session.students);
+  const session = useTypedSelector(state => state.session);
+  console.log(session);
   const [selectedTab, setSelectedTab] = useState(
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
@@ -447,8 +449,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       );
     } else {
 
-      const teamMembers = students?.filter(ao => props.teamFormationOverview.studentIds.includes(ao.userId));
-    
+      const teamMembers = (props.teamFormationOverview === undefined || props.teamFormationOverview.studentIds === undefined)
+      ? undefined
+      : students?.filter(ao => props.teamFormationOverview.studentIds !== undefined &&
+          props.teamFormationOverview.studentIds.includes(ao.userId));
+       
       tabs.push(
         {
           label: `Briefing`,
@@ -456,6 +461,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
           id: SideContentType.briefing
         },
+        // TODO: 
         {
           label: `Team`,
           iconName: IconNames.PEOPLE,
@@ -466,7 +472,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                       {teamMembers.map((user, index) => (
                         <span key={index}>
                           {index > 0 ? ", " : ""}
-                          {user.username}
+                          {user.name}
                         </span>
                       ))}
                     </div>
