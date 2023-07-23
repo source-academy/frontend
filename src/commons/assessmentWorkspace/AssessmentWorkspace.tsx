@@ -92,10 +92,11 @@ import {
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
+import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
   questionId: number;
-  teamId: number;
+  teamFormationOverview: TeamFormationOverview;
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
@@ -110,6 +111,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
+  const students = useTypedSelector(state => state.session.students);
   const [selectedTab, setSelectedTab] = useState(
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
@@ -443,6 +445,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         }
       );
     } else {
+
+      const teamMembers = students?.filter(ao => props.teamFormationOverview.studentIds.includes(ao.userId));
+    
       tabs.push(
         {
           label: `Briefing`,
@@ -452,8 +457,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         },
         {
           label: `Team`,
-          iconName: IconNames.BRIEFCASE,
-          body: <div>{props.teamId}</div>
+          iconName: IconNames.PEOPLE,
+          body: <div> 
+                  {teamMembers === undefined ? "You have yet to form a team" : (
+                    <div>
+                      Your teammates for this assessment:{" "}
+                      {teamMembers.map((user, index) => (
+                        <span key={index}>
+                          {index > 0 ? ", " : ""}
+                          {user.username}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
         },
         {
           label: `Autograder`,

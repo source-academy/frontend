@@ -276,15 +276,16 @@ const Assessment: React.FC<AssessmentProps> = props => {
   // overviews must still be loaded for this, to send the due date.
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
-    const teamFormationOverview = teamFormationOverviewsUnfiltered?.filter(ao => ao.assessmentId === assessmentId && courseRegId && courseRegId in ao.studentIds);
-    const teamId = 1;
+    const teamFormationOverview = teamFormationOverviewsUnfiltered?.filter(ao => courseRegId !== undefined && ao.studentIds.includes(courseRegId))[0];
+    
+    // const teamId = 1;
     if (!overview) {
       return <AssessmentNotFound />;
     }
     const assessmentWorkspaceProps: AssessmentWorkspaceProps = {
       assessmentId,
       questionId,
-      teamId,
+      teamFormationOverview,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
         !isStudent ||
