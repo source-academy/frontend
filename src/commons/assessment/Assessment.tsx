@@ -73,10 +73,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const teamFormationOverviewsUnfiltered = useTypedSelector(
     state => state.session.teamFormationOverviews || []
   );
-  // const session = useTypedSelector(
-  //   state => state.session
-  // );
-  // console.log(session);
   const isStudent = useTypedSelector(state =>
     state.session.role ? state.session.role === Role.Student : true
   );
@@ -281,8 +277,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
     const teamFormationOverview = teamFormationOverviewsUnfiltered?.filter(ao => ao.assessmentId === assessmentId && courseRegId && courseRegId in ao.studentIds);
-    // const teamId = teamFormationOverview[0].teamId;
-    
     const teamId = 1;
     if (!overview) {
       return <AssessmentNotFound />;
