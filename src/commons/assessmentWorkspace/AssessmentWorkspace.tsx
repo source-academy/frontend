@@ -17,6 +17,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
@@ -92,7 +93,7 @@ import {
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
   questionId: number;
