@@ -95,6 +95,7 @@ import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
   questionId: number;
+  teamId: number;
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
@@ -448,6 +449,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           iconName: IconNames.BRIEFCASE,
           body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
           id: SideContentType.briefing
+        },
+        {
+          label: `Team`,
+          iconName: IconNames.BRIEFCASE,
+          body: <div>{props.teamId}</div>
         },
         {
           label: `Autograder`,

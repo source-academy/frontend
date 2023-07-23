@@ -70,10 +70,18 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const assessmentOverviewsUnfiltered = useTypedSelector(
     state => state.session.assessmentOverviews
   );
+  const teamFormationOverviewsUnfiltered = useTypedSelector(
+    state => state.session.teamFormationOverviews || []
+  );
+  // const session = useTypedSelector(
+  //   state => state.session
+  // );
+  // console.log(session);
   const isStudent = useTypedSelector(state =>
     state.session.role ? state.session.role === Role.Student : true
   );
   const courseId = useTypedSelector(state => state.session.courseId);
+  const courseRegId = useTypedSelector(state => state.session.courseRegId);
 
   const dispatch = useDispatch();
 
@@ -267,17 +275,22 @@ const Assessment: React.FC<AssessmentProps> = props => {
 
   const assessmentId: number | null = convertParamToInt(params.assessmentId);
   const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
-
+  
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
+    const teamFormationOverview = teamFormationOverviewsUnfiltered?.filter(ao => ao.assessmentId === assessmentId && courseRegId && courseRegId in ao.studentIds);
+    // const teamId = teamFormationOverview[0].teamId;
+    
+    const teamId = 1;
     if (!overview) {
       return <AssessmentNotFound />;
     }
     const assessmentWorkspaceProps: AssessmentWorkspaceProps = {
       assessmentId,
       questionId,
+      teamId,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
         !isStudent ||
