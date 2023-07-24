@@ -97,7 +97,7 @@ import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
   questionId: number;
-  teamFormationOverview: TeamFormationOverview;
+  teamFormationOverview: TeamFormationOverview | undefined;
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
@@ -113,8 +113,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const students = useTypedSelector(state => state.session.students);
-  const session = useTypedSelector(state => state.session);
-  console.log(session);
+
   const [selectedTab, setSelectedTab] = useState(
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
@@ -448,11 +447,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         }
       );
     } else {
-
       const teamMembers = (props.teamFormationOverview === undefined || props.teamFormationOverview.studentIds === undefined)
       ? undefined
-      : students?.filter(ao => props.teamFormationOverview.studentIds !== undefined &&
-          props.teamFormationOverview.studentIds.includes(ao.userId));
+      : students?.filter(ao => props.teamFormationOverview?.studentIds.includes(ao.userId));
        
       tabs.push(
         {
@@ -461,12 +458,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
           id: SideContentType.briefing
         },
-        // TODO: 
         {
           label: `Team`,
           iconName: IconNames.PEOPLE,
           body: <div> 
-                  {teamMembers === undefined ? "You have yet to form a team" : (
+                  {teamMembers === undefined ? "You are not assigned to any team" : (
                     <div>
                       Your teammates for this assessment:{" "}
                       {teamMembers.map((user, index) => (
