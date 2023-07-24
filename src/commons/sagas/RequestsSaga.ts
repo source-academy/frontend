@@ -717,7 +717,7 @@ export const postUploadTeams = async (
   students: User[] | undefined,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const parsed_teams : OptionType[][] = []
+  const parsed_teams: OptionType[][] = [];
 
   const teamsArrayBuffer = await readFileAsArrayBuffer(teams);
   const workbook = XLSX.read(teamsArrayBuffer, { type: 'array' });
@@ -725,48 +725,20 @@ export const postUploadTeams = async (
   const worksheet = workbook.Sheets[sheetName];
   const csvData: CsvData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-  const headers = csvData[0];
-
-    for (let i = 1; i < csvData.length; i++) {
-      const row = csvData[i];
-      const team: OptionType[] = [];
-      let isUsernameColumn = false;
-
-      for (let j = 0; j < row.length; j++) {
-        const value = row[j];
-        const header = headers[j];
-
-        if (header === 'Username' && value) {
-          // Assuming the "Username" column contains the names of students separated by a comma
-          const studentNames = value.split(',');
-          studentNames.forEach((username: string) => {
-            // Find student by username
-            const student = students?.find((s: any) => s.username.trim() === username.trim());
-            if (student) {
-              team.push({
-                label: student.name,
-                value: student
-              });
-            }
-          });
-          isUsernameColumn = true; // Set to true after processing the "Username" column
-        } else if (isUsernameColumn && value) {
-          // Assuming subsequent columns contain additional team members
-          const studentNames = value.split(',');
-          studentNames.forEach((username: string) => {
-            // Find student by username
-            const student = students?.find((s: any) => s.username.trim() === username.trim());
-            if (student) {
-              team.push({
-                label: student.name,
-                value: student
-              });
-            }
-          });
-        }
+  for (let i = 0; i < csvData.length; i++) {
+    const studentNames = csvData[i];
+    const team: OptionType[] = [];
+    studentNames.forEach((username: string) => {
+      const student = students?.find((s: any) => s.username.trim() === username.trim());
+      if (student) {
+        team.push({
+          label: student.name,
+          value: student
+        });
       }
-      parsed_teams.push(team)
-    }
+    });
+    parsed_teams.push(team);
+  }
 
   const data = {
     team: {
