@@ -1,6 +1,7 @@
 import { TabId } from '@blueprintjs/core';
 import React from 'react';
 
+import { DEFAULT_ENV } from '../../features/stories/storiesComponents/UserBlogContent';
 import { useTypedSelector } from '../utils/Hooks';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs } from './SideContentHelper';
@@ -56,10 +57,11 @@ const GenericSideContent = (props: GenericSideContentProps) => {
     tabs.beforeDynamicTabs.concat(tabs.afterDynamicTabs)
   );
 
+  const env = DEFAULT_ENV;
   // Fetch debuggerContext from store
   const debuggerContext = useTypedSelector(state =>
     props.isStories
-      ? props.workspaceLocation && state.stories.envs[props.workspaceLocation].debuggerContext
+      ? props.workspaceLocation && state.stories.envs[env].debuggerContext
       : props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
   );
 
