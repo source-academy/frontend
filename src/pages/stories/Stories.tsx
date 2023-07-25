@@ -106,18 +106,15 @@ const Stories: React.FC = () => {
                   <TableRow key={story.id}>
                     <TableCell>{story.authorId}</TableCell>
                     <TableCell>
-                      {/* <Text>{story.title}</Text> */}
-                      <Text> Title </Text>
+                      <Text>{story.title}</Text>
                     </TableCell>
-                    <div className="storiesSummary">
-                      <TableCell>
-                        <Text>
-                          {story.content.length > 35
-                            ? `${story.content.substring(0, 35)} ...`
-                            : story.content}
-                        </Text>
-                      </TableCell>
-                    </div>
+                    <TableCell>
+                      <Text>
+                        {story.content.length > 35
+                          ? `${story.content.substring(0, 35)} ...`
+                          : story.content}
+                      </Text>
+                    </TableCell>
                     <TableCell>
                       <Flex spaceX="space-x-2">
                         <Link to={`/stories/view`}>
