@@ -39,7 +39,7 @@ const Stories: React.FC = () => {
   const columns = [
     { id: 'author', header: 'Author' },
     { id: 'title', header: 'Title' },
-    { id: 'summary', header: 'Summary' },
+    { id: 'content', header: 'Content' },
     { id: 'actions', header: 'Actions' }
   ];
 
