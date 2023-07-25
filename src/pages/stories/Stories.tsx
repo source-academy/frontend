@@ -5,7 +5,6 @@ import { IconNames } from '@blueprintjs/icons';
 import {
   Flex,
   Icon,
-  // Footer,
   Table,
   TableBody,
   TableCell,
@@ -15,16 +14,16 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
-// import React, { useEffect, useState } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 // import Constants from 'src/commons/utils/Constants';
-// import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
+import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 const Stories: React.FC = () => {
   // const [user, setUser] = useState<string>('');
-  // const [data, setData] = useState<any[]>([]);
-  const [query, setQuery] = useState('');
+  const [data, setData] = useState<any[]>([]);
+  // const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
   const handleSubmit = (): void => {
@@ -44,105 +43,14 @@ const Stories: React.FC = () => {
     { id: 'actions', header: 'Actions' }
   ];
 
-  const fakeData = [
-    {
-      id: 1,
-      author: 'Evangeline Blake',
-      title: 'Try this hack to make your code faster',
-      summary:
-        'Many people discuss about people discuss about people discuss about people discuss about people discuss about'
-    },
-    {
-      id: 2,
-      author: 'Jasper Tan',
-      title: 'Recursive Recursion Recursiveness',
-      summary:
-        'Recursion may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex may seem complex'
-    },
-    {
-      id: 3,
-      author: 'Wei Zhang',
-      title: 'i-i-i-terators',
-      summary:
-        'What exactly are iterators exactly are iterators exactly are iterators exactly are iterators'
-    },
-    {
-      id: 4,
-      author: 'Ying Liu',
-      title: 'Harnessing the Power of Object-Oriented Programming',
-      summary:
-        'Object-Oriented Programming (OOP) is a programming paradigm or style that organizes code and data into reusable, self-contained units called objects. In OOP, an object represents a real-world entity, and the code is designed to model the interactions and behaviors of these entities. OOP is one of the most popular programming paradigms used in modern software development.'
-    },
-    {
-      id: 5,
-      author: 'Ji-Yeon Kim',
-      title: 'Debugging 101',
-      summary: 'Bugs are extremely common'
-    },
-    {
-      id: 6,
-      author: 'Wu Mei Ling',
-      title: 'The Big-O Notion',
-      summary: 'We will delve into understanding'
-    },
-    {
-      id: 7,
-      author: 'Eugene Tan',
-      title: 'BFS and DFS comparison',
-      summary: 'What is BFS and DFS? Let us'
-    },
-    {
-      id: 8,
-      author: 'Evangeline Blake',
-      title: 'Try this hack to make your code faster',
-      summary: 'Many people discuss about'
-    },
-    {
-      id: 9,
-      author: 'Jasper Tan',
-      title: 'Recursive Recursion Recursiveness',
-      summary: 'Recursion may seem complex'
-    },
-    {
-      id: 10,
-      author: 'Wei Zhang',
-      title: 'i-i-i-terators',
-      summary: 'What exactly are iterators'
-    },
-    {
-      id: 11,
-      author: 'Ying Liu',
-      title: 'Harnessing the Power of Object-Oriented Programming',
-      summary: 'Object-Oriented Programming is'
-    },
-    {
-      id: 12,
-      author: 'Ji-Yeon Kim',
-      title: 'Debugging 101',
-      summary: 'Bugs are extremely common'
-    },
-    {
-      id: 13,
-      author: 'Wu Mei Ling',
-      title: 'The Big-O Notion',
-      summary: 'We will delve into understanding'
-    },
-    {
-      id: 14,
-      author: 'Eugene Tan',
-      title: 'BFS and DFS comparison',
-      summary: 'What is BFS and DFS? Let us'
-    }
-  ];
-
-  // useEffect(() => {
-  //   getStories().then(res => {
-  //     res?.json().then(r2 => {
-  //       console.log(r2.data);
-  //       setData(r2.data);
-  //     });
-  //   });
-  // }, []);
+  useEffect(() => {
+    getStories().then(res => {
+      res?.json().then(r2 => {
+        console.log(r2);
+        setData(r2);
+      });
+    });
+  }, []);
 
   return (
     <div className="storiesHome">
@@ -156,7 +64,7 @@ const Stories: React.FC = () => {
               maxWidth="max-w-xl"
               icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
               placeholder="Search for author..."
-              onChange={e => setQuery(e.target.value)}
+              // onChange={e => setQuery(e.target.value)}
             />
           </div>
         </Flex>
@@ -192,20 +100,21 @@ const Stories: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {fakeData
-                .filter(item => item.author.toLowerCase().includes(query))
-                .map(item => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.author}</TableCell>
+              {data
+                // .filter(story => story.authorId.toLowerCase().includes(query)
+                .map(story => (
+                  <TableRow key={story.id}>
+                    <TableCell>{story.authorId}</TableCell>
                     <TableCell>
-                      <Text>{item.title}</Text>
+                      {/* <Text>{story.title}</Text> */}
+                      <Text> Title </Text>
                     </TableCell>
                     <div className="storiesSummary">
                       <TableCell>
                         <Text>
-                          {item.summary.length > 35
-                            ? `${item.summary.substring(0, 35)} ...`
-                            : item.summary}
+                          {story.content.length > 35
+                            ? `${story.content.substring(0, 35)} ...`
+                            : story.content}
                         </Text>
                       </TableCell>
                     </div>

@@ -3,7 +3,7 @@ import { showWarningMessage } from 'src/commons/utils/notifications/Notification
 
 export const getStories = async (): Promise<Response | null> => {
   try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/api/story_list`);
+    const resp = await fetch(`${Constants.storiesBackendUrl}/stories`);
     if (!resp.ok) {
       showWarningMessage(
         `Error while communicating with stories backend: ${resp.status} ${resp.statusText}${
