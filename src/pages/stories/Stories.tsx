@@ -19,7 +19,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-// import Constants from 'src/commons/utils/Constants';
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 type StoryListView = {
@@ -30,18 +29,10 @@ type StoryListView = {
 };
 
 const Stories: React.FC = () => {
-  // const [user, setUser] = useState<string>('');
   const [data, setData] = useState<StoryListView[]>([]);
   const [query, setQuery] = useState<string>('');
-  const [filteredData, setFilteredData] = useState<StoryListView[]>([]);
 
   const navigate = useNavigate();
-
-  // const handleSubmitUser = (): void => {
-  //   if (user !== '') {
-  //     navigate(`/stories/view/${user}`);
-  //   }
-  // };
 
   const columns = [
     { id: 'author', header: 'Author' },
@@ -54,18 +45,9 @@ const Stories: React.FC = () => {
     getStories().then((res) => {
       res?.json().then((data) => {
         setData(data);
-        setFilteredData(data); 
       });
     });
   }, []);
-
-  useEffect(() => {
-    // Filter data when query changes
-    const filtered = data.filter((story) =>
-      story.authorName.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredData(filtered);
-  }, [data, query]);
 
   return (
     <div className="storiesHome">
@@ -81,7 +63,7 @@ const Stories: React.FC = () => {
             maxWidth="max-w-xl"
             icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
             placeholder="Search for author..."
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
           />
         </Flex>
 
@@ -94,10 +76,10 @@ const Stories: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData
-              // .filter(story => story.authorId.toLowerCase().includes(query)
+            {data
+              .filter(story => story.authorName.toLowerCase().includes(query.toLowerCase()))
               .map(story => (
-                <TableRow>
+                <TableRow key={story.authorId}>
                   <TableCell>{story.authorName}</TableCell>
                   <TableCell>
                     <Text>{story.title}</Text>
