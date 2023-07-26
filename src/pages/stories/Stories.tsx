@@ -13,7 +13,8 @@ import {
   TableHeaderCell,
   TableRow,
   Text,
-  TextInput
+  TextInput,
+  Title
 } from '@tremor/react';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -56,18 +57,19 @@ const Stories: React.FC = () => {
   return (
     <div className="storiesHome">
       <Card>
-        <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
-          <BpButton onClick={handleSubmit} icon={IconNames.PLUS}>
-            Add Story
-          </BpButton>
-          <div>
-            <TextInput
-              maxWidth="max-w-xl"
-              icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-              placeholder="Search for author..."
-              // onChange={e => setQuery(e.target.value)}
-            />
-          </div>
+        <Flex justifyContent="justify-between">
+          <Flex justifyContent="justify-start" spaceX="space-x-6">
+            <Title>All Stories</Title>
+            <BpButton onClick={handleSubmit} icon={IconNames.PLUS}>
+              Add Story
+            </BpButton>
+          </Flex>
+          <TextInput
+            maxWidth="max-w-xl"
+            icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+            placeholder="Search for author..."
+            // onChange={e => setQuery(e.target.value)}
+          />
         </Flex>
         {/* {Constants.storiesBackendUrl && (
           <div>
