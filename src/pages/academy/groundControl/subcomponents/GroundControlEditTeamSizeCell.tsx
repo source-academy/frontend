@@ -25,7 +25,7 @@ type StateProps = {
 };
 
 const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props => {
-  const minTeamSize = 1;
+  const minTeamSize = 0;
 
   const { assessmentOverviews, setAssessmentOverview, setHasChangesAssessmentOverview, data } = props;
 
