@@ -152,23 +152,22 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
     <div />
   ) : (
     <div className="userblogContent">
-      <div className="content">
-        <ReactMarkdown
-          children={content}
-          components={{
-            code({ node, inline, className, children, ...props }) {
-              const match = /language-source(.*)/.exec(className || '');
-              return !inline && match ? (
-                <SourceBlock commands={match[1]}>{String(children)}</SourceBlock>
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            }
-          }}
-        />
-      </div>
+      <ReactMarkdown
+        className="content"
+        children={content}
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-source(.*)/.exec(className || '');
+            return !inline && match ? (
+              <SourceBlock commands={match[1]}>{String(children)}</SourceBlock>
+            ) : (
+              <code className={className} {...props}>
+                {children}
+              </code>
+            );
+          }
+        }}
+      />
     </div>
   );
 };
