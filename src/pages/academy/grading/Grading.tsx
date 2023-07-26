@@ -14,6 +14,7 @@ const Grading: React.FC = () => {
   const params = useParams<{
     submissionId: string;
     questionId: string;
+    
   }>();
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
