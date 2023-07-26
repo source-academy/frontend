@@ -30,7 +30,7 @@ type StoryListView = {
 
 const Stories: React.FC = () => {
   const [data, setData] = useState<StoryListView[]>([]);
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
 
@@ -43,9 +43,7 @@ const Stories: React.FC = () => {
 
   useEffect(() => {
     getStories().then(res => {
-      res?.json().then(data => {
-        setData(data);
-      });
+      res?.json().then(setData);
     });
   }, []);
 
