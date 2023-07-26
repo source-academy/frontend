@@ -16,6 +16,7 @@ const sourceAcademyDeploymentName = isTest
   : process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
 const showResearchPrompt = isTest || isTrue(process.env.REACT_APP_SHOW_RESEARCH_PROMPT);
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const storiesBackendUrl = process.env.REACT_APP_STORIES_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
@@ -38,6 +39,7 @@ const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
+const storiesRepoName = process.env.STORIES_GITHUB_REPO_NAME || 'placeholder-name';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
 
 // For achievements feature (CA - Continual Assessment)
@@ -122,6 +124,7 @@ const Constants = {
   sourceAcademyDeploymentName,
   showResearchPrompt,
   backendUrl,
+  storiesBackendUrl,
   cadetLoggerUrl,
   useBackend,
   defaultSourceChapter,
@@ -145,6 +148,7 @@ const Constants = {
   disablePeriods,
   cadetLoggerInterval,
   sicpBackendUrl,
+  storiesRepoName,
   workspaceSettingsLocalStorageKey,
   caFulfillmentLevel
 };
