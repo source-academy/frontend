@@ -42,8 +42,8 @@ const Stories: React.FC = () => {
   ];
 
   useEffect(() => {
-    getStories().then((res) => {
-      res?.json().then((data) => {
+    getStories().then(res => {
+      res?.json().then(data => {
         setData(data);
       });
     });
@@ -63,7 +63,7 @@ const Stories: React.FC = () => {
             maxWidth="max-w-xl"
             icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
             placeholder="Search for author..."
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={e => setQuery(e.target.value)}
           />
         </Flex>
 
