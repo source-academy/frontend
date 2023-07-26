@@ -20,7 +20,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { getAllStories } from 'src/features/stories/StoriesActions';
+import { getStoriesList } from 'src/features/stories/StoriesActions';
 
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -37,7 +37,7 @@ const Stories: React.FC = () => {
   const dispatch = useDispatch();
   const data = useTypedSelector(state => state.stories.storyList);
   useEffect(() => {
-    dispatch(getAllStories());
+    dispatch(getStoriesList());
   }, [dispatch]);
 
   return (

@@ -7,14 +7,14 @@ import {
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
-  GET_ALL_STORIES,
+  GET_STORIES_LIST,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   STORIES_UPDATE_GITHUB_SAVE_INFO,
   StoryListView,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_ALL_STORIES,
-  UPDATE_STORIES_CONTENT
+  UPDATE_STORIES_CONTENT,
+  UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
 export const addStoryEnv = (env: string, chapter: Chapter, variant: Variant) =>
@@ -58,6 +58,6 @@ export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_C
 
 // New action creators post-refactor
 
-export const getAllStories = () => action(GET_ALL_STORIES);
-export const updateAllStoriesList = (storyList: StoryListView[]) =>
-  action(UPDATE_ALL_STORIES, storyList);
+export const getStoriesList = () => action(GET_STORIES_LIST);
+export const updateStoriesList = (storyList: StoryListView[]) =>
+  action(UPDATE_STORIES_LIST, storyList);
