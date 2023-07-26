@@ -33,7 +33,14 @@ const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../pages/welcome/Welcome');
 const Academy = () => import('../pages/academy/Academy');
 const MissionControl = () => import('../pages/missionControl/MissionControl');
-const NewStory = () => import('../pages/stories/Story');
+const EditStory = async () => {
+  const { EditStoryComponent } = await import('../pages/stories/Story');
+  return { Component: EditStoryComponent };
+};
+const ViewStory = async () => {
+  const { ViewStoryComponent } = await import('../pages/stories/Story');
+  return { Component: ViewStoryComponent };
+};
 const Stories = () => import('../pages/stories/Stories');
 
 export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
@@ -86,23 +93,20 @@ const commonChildrenRoutes: RouteObject[] = [
     loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
   },
   {
-    path: 'stories/view/:id',
-    // lazy: UserBlog,
-    lazy: NewStory,
-    // TODO: Remove redirect when stories are implemented
-    loader: conditionalLoader(false, '/')
+    path: 'stories/new',
+    lazy: EditStory
   },
   {
-    path: 'stories/new',
-    lazy: NewStory,
-    // TODO: Remove redirect when stories are implemented
-    loader: conditionalLoader(false, '/')
+    path: 'stories/view/:id',
+    lazy: ViewStory
+  },
+  {
+    path: 'stories/edit/:id',
+    lazy: EditStory
   },
   {
     path: 'stories',
-    lazy: Stories,
-    // TODO: Remove redirect when stories are implemented
-    loader: conditionalLoader(false, '/')
+    lazy: Stories
   }
 ];
 
