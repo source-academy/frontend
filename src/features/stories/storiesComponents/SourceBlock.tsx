@@ -197,7 +197,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     },
     workspaceLocation: 'stories',
     storyEnv: env,
-    isStories: true
+    // isStories: true
   };
 
   const execEvaluate = () => {
