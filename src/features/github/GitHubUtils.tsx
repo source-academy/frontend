@@ -4,6 +4,7 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
+import Constants from 'src/commons/utils/Constants';
 
 import { actions } from '../../commons/utils/ActionsHelper';
 // import Constants from '../../commons/utils/Constants';
@@ -13,7 +14,6 @@ import {
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
-import Constants from 'src/commons/utils/Constants';
 // import { GithubGetRepoRespData } from './GitHubTypes';
 
 /**
@@ -406,5 +406,4 @@ export async function getStory(storyId: string): Promise<Response | null> {
     showWarningMessage('Error while communicating with stories backend; check your network?');
     return null;
   }
-};
-
+}

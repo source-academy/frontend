@@ -26,8 +26,7 @@ export const insertStory = async (
   authorId: number,
   title: string,
   content: string,
-  pinOrder ?: number,
-
+  pinOrder?: number
 ): Promise<Response | null> => {
   try {
     const resp = await fetch(`${Constants.storiesBackendUrl}/stories`, {
@@ -67,8 +66,7 @@ export const updateStory = async (
   authorId: number,
   title: string,
   content: string,
-  pinOrder ?: number,
-
+  pinOrder?: number
 ): Promise<Response | null> => {
   try {
     const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${id}`, {
@@ -102,4 +100,3 @@ export const updateStory = async (
     return null;
   }
 };
-
