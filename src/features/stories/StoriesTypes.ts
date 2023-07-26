@@ -49,6 +49,6 @@ export type StoriesEnvState = {
 export type StoriesState = {
   readonly storyList: StoryListView[];
   readonly envs: { [key: string]: StoriesEnvState };
-  readonly content: string;
+  readonly content: string; // TODO: Deprecate this
   readonly githubSaveInfo: GitHubSaveInfo;
 };
