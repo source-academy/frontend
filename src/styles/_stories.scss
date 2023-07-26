@@ -165,55 +165,11 @@
 }
 
 .storiesHome {
-  background-color: white;
   margin: auto;
   margin-top: 30px;
-  width: 80vw;
+  width: 90vw;
   height: 85vh;
   overflow: auto;
-
-  .storiesInteract {
-    margin: auto;
-    margin-top: 30px;
-    display: flex;
-    align-items: center;
-    font-size: large;
-    padding-left: 50px;
-    padding-right: 50px;
-
-    .titleText {
-      width: 100%;
-      font-size: larger;
-      font-weight: 500;
-      text-align: left;
-    }
-    .recent {
-      width: 100%;
-      .postTitle {
-        text-align: left;
-      }
-      .postUser {
-        font-size: small;
-        text-align: right;
-      }
-    }
-    .storiesButton {
-      width: 110px;
-      background-color: #0696d7;
-      border: 0px;
-      color: white;
-      border-radius: 4px;
-      padding: 8px;
-      font-size: 0.85em;
-    }
-    .storiesInput {
-      width: 20vw;
-      height: 30px;
-      font-size: 0.9em;
-      padding: 10px;
-      margin-left: 2px;
-    }
-  }
 }
 
 .ControlBar {
