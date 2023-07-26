@@ -19,14 +19,14 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
+import { getStoriesList } from 'src/features/stories/StoriesActions';
 
 import { deleteStory } from '../../features/stories/storiesComponents/BackendAccess';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { getStoriesList } from 'src/features/stories/StoriesActions';
 
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
