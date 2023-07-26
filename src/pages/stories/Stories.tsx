@@ -16,10 +16,14 @@ import {
   TextInput,
   Title
 } from '@tremor/react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 
-import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
+import { deleteStory, getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 type StoryListView = {
   id: number;
@@ -47,6 +51,22 @@ const Stories: React.FC = () => {
     getStories().then(res => {
       res?.json().then(setData);
     });
+  }, []);
+
+  // TODO: Refactor together with the rest of the state logic
+  const handleDeleteStory = useCallback((id: number) => {
+    const confirm = window.confirm('Are you sure you want to delete this story?');
+    if (confirm) {
+      deleteStory(id)
+        .then(() => {
+          showSuccessMessage('Story deleted successfully');
+          // Get stories again to update the list
+          // Blocked by getStories not being handled by Saga
+        })
+        .catch(() => {
+          showWarningMessage('Something went wrong while deleting the story');
+        });
+    }
   }, []);
 
   return (
@@ -77,7 +97,11 @@ const Stories: React.FC = () => {
           </TableHead>
           <TableBody>
             {data
-              .filter(story => story.authorName.toLowerCase().includes(query.toLowerCase()))
+              .filter(
+                story =>
+                  // Always show pinned stories
+                  story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+              )
               .map(story => (
                 <TableRow key={story.id}>
                   <TableCell>{story.authorName}</TableCell>
@@ -101,6 +125,7 @@ const Stories: React.FC = () => {
                           tooltip="View"
                           icon={() => <BpIcon icon={IconNames.EyeOpen} />}
                           variant="light"
+                          color="green"
                         />
                       </Link>
                       <Link to={`/stories/edit/${story.id}`}>
@@ -110,6 +135,14 @@ const Stories: React.FC = () => {
                           variant="light"
                         />
                       </Link>
+                      <button style={{ padding: 0 }} onClick={() => handleDeleteStory(story.id)}>
+                        <Icon
+                          tooltip="Delete"
+                          icon={() => <BpIcon icon={IconNames.TRASH} />}
+                          variant="light"
+                          color="red"
+                        />
+                      </button>
                     </Flex>
                   </TableCell>
                 </TableRow>
