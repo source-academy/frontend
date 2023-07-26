@@ -18,17 +18,11 @@ import {
 } from '@tremor/react';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { StoryListView } from 'src/features/stories/StoriesTypes';
 
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
-type StoryListView = {
-  id: number;
-  authorId: number;
-  authorName: string;
-  title: string;
-  content: string;
-  isPinned: boolean;
-};
+
 
 const Stories: React.FC = () => {
   const [data, setData] = useState<StoryListView[]>([]);

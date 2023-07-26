@@ -17,6 +17,15 @@ export const UPDATE_STORIES_CONTENT = 'UPDATE_STORIES_CONTENT';
 // New actions post-refactor
 export const GET_ALL_STORIES = 'GET_ALL_STORIES';
 
+export type StoryListView = {
+  id: number;
+  authorId: number;
+  authorName: string;
+  title: string;
+  content: string;
+  isPinned: boolean;
+};
+
 export type StoriesEnvState = {
   readonly context: Context;
   readonly execTime: number;
