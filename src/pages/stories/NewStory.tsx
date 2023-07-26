@@ -1,5 +1,7 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
+import { Classes } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
@@ -52,7 +54,7 @@ const NewStory: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
       <div
         style={{
