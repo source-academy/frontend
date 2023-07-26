@@ -91,54 +91,52 @@ const Stories: React.FC = () => {
           </div>
         )} */}
 
-        <div style={{ padding: '0px 50px 0px 50px' }}>
-          <Table marginTop="mt-10">
-            <TableHead>
-              <TableRow>
-                {columns.map(column => (
-                  <TableHeaderCell key={column.id}>{column.header}</TableHeaderCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data
-                // .filter(story => story.authorId.toLowerCase().includes(query)
-                .map(story => (
-                  <TableRow key={story.id}>
-                    <TableCell>{story.authorId}</TableCell>
-                    <TableCell>
-                      <Text>{story.title}</Text>
-                    </TableCell>
-                    <TableCell>
-                      <Text>
-                        {story.content.length > 35
-                          ? `${story.content.substring(0, 35)} ...`
-                          : story.content}
-                      </Text>
-                    </TableCell>
-                    <TableCell>
-                      <Flex spaceX="space-x-2">
-                        <Link to={`/stories/view`}>
-                          <Icon
-                            tooltip="View"
-                            icon={() => <BpIcon icon={IconNames.EyeOpen} />}
-                            variant="light"
-                          />
-                        </Link>
-                        <Link to={`/stories/edit`}>
-                          <Icon
-                            tooltip="Edit"
-                            icon={() => <BpIcon icon={IconNames.EDIT} />}
-                            variant="light"
-                          />
-                        </Link>
-                      </Flex>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </div>
+        <Table marginTop="mt-10">
+          <TableHead>
+            <TableRow>
+              {columns.map(column => (
+                <TableHeaderCell key={column.id}>{column.header}</TableHeaderCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data
+              // .filter(story => story.authorId.toLowerCase().includes(query)
+              .map(story => (
+                <TableRow key={story.id}>
+                  <TableCell>{story.authorId}</TableCell>
+                  <TableCell>
+                    <Text>{story.title}</Text>
+                  </TableCell>
+                  <TableCell>
+                    <Text>
+                      {story.content.length > 35
+                        ? `${story.content.substring(0, 35)} ...`
+                        : story.content}
+                    </Text>
+                  </TableCell>
+                  <TableCell>
+                    <Flex spaceX="space-x-2">
+                      <Link to={`/stories/view`}>
+                        <Icon
+                          tooltip="View"
+                          icon={() => <BpIcon icon={IconNames.EyeOpen} />}
+                          variant="light"
+                        />
+                      </Link>
+                      <Link to={`/stories/edit`}>
+                        <Icon
+                          tooltip="Edit"
+                          icon={() => <BpIcon icon={IconNames.EDIT} />}
+                          variant="light"
+                        />
+                      </Link>
+                    </Flex>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
       </Card>
     </div>
   );
