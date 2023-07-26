@@ -35,9 +35,6 @@ const Stories: React.FC = () => {
   // const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
-  const handleSubmit = (): void => {
-    navigate(`/stories/new`);
-  };
 
   // const handleSubmitUser = (): void => {
   //   if (user !== '') {
@@ -54,10 +51,7 @@ const Stories: React.FC = () => {
 
   useEffect(() => {
     getStories().then(res => {
-      res?.json().then(r2 => {
-        console.log(r2);
-        setData(r2);
-      });
+      res?.json().then(setData);
     });
   }, []);
 
@@ -67,7 +61,7 @@ const Stories: React.FC = () => {
         <Flex justifyContent="justify-between">
           <Flex justifyContent="justify-start" spaceX="space-x-6">
             <Title>All Stories</Title>
-            <BpButton onClick={handleSubmit} icon={IconNames.PLUS}>
+            <BpButton onClick={() => navigate(`/stories/new`)} icon={IconNames.PLUS}>
               Add Story
             </BpButton>
           </Flex>
