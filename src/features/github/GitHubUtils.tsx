@@ -4,7 +4,6 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
-import Constants from 'src/commons/utils/Constants';
 
 import { actions } from '../../commons/utils/ActionsHelper';
 // import Constants from '../../commons/utils/Constants';
@@ -382,28 +381,3 @@ export async function performFolderDeletion(
 //     return [];
 //   }
 // }
-
-// /**
-//  * Gets Blog Content from markdown Files.
-//  */
-
-export async function getStory(storyId: number): Promise<Response | null> {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${storyId}`);
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with stories backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    console.log(e);
-    showWarningMessage('Error while communicating with stories backend; check your network?');
-    return null;
-  }
-}
