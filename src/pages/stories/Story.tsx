@@ -85,22 +85,24 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
           display: 'flex'
         }}
       >
-        <AceEditor
-          className="repl-react-ace react-ace"
-          width="100%"
-          height="100%"
-          theme="source"
-          value={content}
-          onChange={onEditorValueChange}
-          onScroll={onScroll}
-          fontSize={17}
-          highlightActiveLine={false}
-          showPrintMargin={false}
-          wrapEnabled={true}
-          setOptions={{
-            fontFamily: "'Inconsolata', 'Consolas', monospace"
-          }}
-        />
+        {!isViewOnly && (
+          <AceEditor
+            className="repl-react-ace react-ace"
+            width="100%"
+            height="100%"
+            theme="source"
+            value={content}
+            onChange={onEditorValueChange}
+            onScroll={onScroll}
+            fontSize={17}
+            highlightActiveLine={false}
+            showPrintMargin={false}
+            wrapEnabled={true}
+            setOptions={{
+              fontFamily: "'Inconsolata', 'Consolas', monospace"
+            }}
+          />
+        )}
         <div className="newUserblog" id="userblogContainer">
           <UserBlogContent fileContent={content} />
         </div>
