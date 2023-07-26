@@ -22,6 +22,27 @@ export const getStories = async (): Promise<Response | null> => {
   }
 };
 
+export const getStory = async (storyId: number): Promise<Response | null> => {
+  try {
+    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${storyId}`);
+    if (!resp.ok) {
+      showWarningMessage(
+        `Error while communicating with stories backend: ${resp.status} ${resp.statusText}${
+          resp.status === 401 || resp.status === 403
+            ? '; try logging in again, after manually saving any work.'
+            : ''
+        }`
+      );
+      return null;
+    }
+    return resp;
+  } catch (e) {
+    console.log(e);
+    showWarningMessage('Error while communicating with stories backend; check your network?');
+    return null;
+  }
+};
+
 export const insertStory = async (
   authorId: number,
   title: string,
@@ -35,12 +56,10 @@ export const insertStory = async (
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        story: {
-          authorId: authorId,
-          title: title,
-          content: content,
-          pinOrder: pinOrder
-        }
+        authorId: authorId,
+        title: title,
+        content: content,
+        pinOrder: pinOrder
       })
     });
     if (!resp.ok) {
@@ -74,11 +93,9 @@ export const updateStory = async (
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        story: {
-          title: title,
-          content: content,
-          pinOrder: pinOrder
-        }
+        title: title,
+        content: content,
+        pinOrder: pinOrder
       })
     });
     if (!resp.ok) {
