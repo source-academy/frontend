@@ -63,7 +63,6 @@ export const insertStory = async (
 
 export const updateStory = async (
   id: number,
-  authorId: number,
   title: string,
   content: string,
   pinOrder?: number
@@ -76,7 +75,6 @@ export const updateStory = async (
       },
       body: JSON.stringify({
         story: {
-          authorId: authorId,
           title: title,
           content: content,
           pinOrder: pinOrder

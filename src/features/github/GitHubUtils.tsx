@@ -387,7 +387,7 @@ export async function performFolderDeletion(
 //  * Gets Blog Content from markdown Files.
 //  */
 
-export async function getStory(storyId: string): Promise<Response | null> {
+export async function getStory(storyId: number): Promise<Response | null> {
   try {
     const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${storyId}`);
     if (!resp.ok) {
