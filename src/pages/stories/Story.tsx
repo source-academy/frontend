@@ -6,10 +6,16 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 import { updateStoriesContent } from 'src/features/stories/StoriesActions';
+import { getStory, updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
@@ -49,13 +55,41 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorScrollTop]);
 
+  const [story, setStory] = useState<StoryView | null>(null);
   const content = useTypedSelector(store => store.stories.content);
+
+  const { id: storyId } = useParams<{ id: string }>();
+  useEffect(() => {
+    if (storyId) {
+      const id = parseInt(storyId);
+      getStory(id).then(res => {
+        res?.json().then(setStory);
+      });
+    }
+  }, [storyId]);
+
+  useEffect(() => {
+    if (!story) {
+      return;
+    }
+    // TODO: Refactor to store current story, not just the content,
+    //       in the state.
+    setStoryTitle(story.title);
+    dispatch(updateStoriesContent(story.content));
+  }, [dispatch, story]);
 
   const onEditorValueChange = useCallback((val: string) => {
     setIsDirty(true);
     dispatch(updateStoriesContent(val));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Currently, creating a new story would result in an initially
+  // null state, thus, we can't early return.
+  // TODO: Enable this once state refactoring is finished.
+  // if (story === null) {
+  //   return <></>;
+  // }
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
@@ -76,7 +110,21 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
         <ControlButtonSaveButton
           key="save_story"
           // TODO: implement save
-          onClickSave={() => {}}
+          onClickSave={() => {
+            // TODO: Remove if in favour of early return above
+            //       once state refactoring is complete.
+            if (!story) {
+              return;
+            }
+            updateStory(story.id, storyTitle, content)
+              .then(() => {
+                showSuccessMessage('Story saved');
+                setIsDirty(false);
+              })
+              .catch(() => {
+                showWarningMessage('Failed to save story');
+              });
+          }}
           hasUnsavedChanges={isDirty}
         />
       )
