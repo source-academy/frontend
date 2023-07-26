@@ -3,7 +3,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { Classes } from '@blueprintjs/core';
 import { TextInput } from '@tremor/react';
 import classNames from 'classnames';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
@@ -14,11 +14,7 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
-import {
-  fetchStory,
-  setCurrentStory,
-  updateStoriesContent
-} from 'src/features/stories/StoriesActions';
+import { fetchStory, setCurrentStory } from 'src/features/stories/StoriesActions';
 import { updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
@@ -38,8 +34,6 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     setEditorScrollHeight(e.renderer.layerConfig.maxHeight);
   };
 
-  const [storyTitle, setStoryTitle] = useState('');
-
   useEffect(() => {
     const userblogContainer = document.getElementById('userblogContainer');
     const previewScrollHeight = Math.max(userblogContainer?.scrollHeight ?? 1, 1);
@@ -52,7 +46,8 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   }, [editorScrollTop]);
 
   const story = useTypedSelector(store => store.stories.currentStory);
-  const content = useTypedSelector(store => store.stories.content);
+  const storyTitle = story?.title ?? '';
+  const content = story?.content ?? '';
 
   const { id: storyId } = useParams<{ id: string }>();
   useEffect(() => {
@@ -64,28 +59,14 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     dispatch(fetchStory(id));
   }, [dispatch, storyId]);
 
-  useEffect(() => {
-    if (!story) {
-      return;
-    }
-    // TODO: Refactor to store current story, not just the content,
-    //       in the state.
-    setStoryTitle(story.title);
-    dispatch(updateStoriesContent(story.content));
-  }, [dispatch, story]);
+  if (!story) {
+    return <></>;
+  }
 
-  const onEditorValueChange = useCallback((val: string) => {
+  const onEditorValueChange = (val: string) => {
     setIsDirty(true);
-    dispatch(updateStoriesContent(val));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Currently, creating a new story would result in an initially
-  // null state, thus, we can't early return.
-  // TODO: Enable this once state refactoring is finished.
-  // if (story === null) {
-  //   return <></>;
-  // }
+    dispatch(setCurrentStory({ ...story, content: val }));
+  };
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
@@ -97,7 +78,8 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
           placeholder="Enter story title"
           value={storyTitle}
           onChange={e => {
-            setStoryTitle(e.target.value);
+            const newTitle = e.target.value;
+            dispatch(setCurrentStory({ ...story, title: newTitle }));
             setIsDirty(true);
           }}
         />
