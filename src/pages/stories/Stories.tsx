@@ -22,9 +22,16 @@ import { Link, useNavigate } from 'react-router-dom';
 // import Constants from 'src/commons/utils/Constants';
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
+type StoryListView = {
+  authorId: number;
+  authorName: string;
+  title: string;
+  content: string;
+};
+
 const Stories: React.FC = () => {
   // const [user, setUser] = useState<string>('');
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<StoryListView[]>([]);
   // const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
