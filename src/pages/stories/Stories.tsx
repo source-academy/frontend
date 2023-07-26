@@ -104,7 +104,7 @@ const Stories: React.FC = () => {
                     </Text>
                   </TableCell>
                   <TableCell>
-                    <Flex spaceX="space-x-2">
+                    <Flex justifyContent="justify-start" spaceX="space-x-2">
                       <Link to={`/stories/view`}>
                         <Icon
                           tooltip="View"
