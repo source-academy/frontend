@@ -1,27 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Constants from 'src/commons/utils/Constants';
+import '@tremor/react/dist/esm/tremor.css';
 
+import { Icon as BpIcon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import {
+  Flex,
+  Icon,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+  Text,
+  TextInput
+} from '@tremor/react';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+// import Constants from 'src/commons/utils/Constants';
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 const Stories: React.FC = () => {
-  const [user, setUser] = useState<string>('');
+  // const [user, setUser] = useState<string>('');
   const [data, setData] = useState<any[]>([]);
-  const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    setUser(e.currentTarget.value);
-  };
+  // const [query, setQuery] = useState('');
+
   const navigate = useNavigate();
   const handleSubmit = (): void => {
-    if (user !== '') {
-      navigate(`/stories/view/${user}`);
-    }
+    navigate(`/stories/new`);
   };
+
+  // const handleSubmitUser = (): void => {
+  //   if (user !== '') {
+  //     navigate(`/stories/view/${user}`);
+  //   }
+  // };
+
+  const columns = [
+    { id: 'author', header: 'Author' },
+    { id: 'title', header: 'Title' },
+    { id: 'content', header: 'Content' },
+    { id: 'actions', header: 'Actions' }
+  ];
 
   useEffect(() => {
     getStories().then(res => {
       res?.json().then(r2 => {
-        console.log(r2.data);
-        setData(r2.data);
+        console.log(r2);
+        setData(r2);
       });
     });
   }, []);
@@ -29,24 +55,21 @@ const Stories: React.FC = () => {
   return (
     <div className="storiesHome">
       <div className="storiesInteract">
-        <p className="titleText">Stories</p>
-        <form onSubmit={handleSubmit}>
-          <input
-            className="storiesInput"
-            type="text"
-            placeholder="GitHub username here"
-            value={user}
-            onChange={onChange}
-            required
-          />
-        </form>
-        <button className="storiesButton" onClick={handleSubmit}>
-          Explore user's blogs
-        </button>
-        <p>
-          <a href={`/stories/new`}>Write your own</a> story!
-        </p>
-        {Constants.storiesBackendUrl && (
+        <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
+          <button className="storiesButton" onClick={handleSubmit}>
+            <BpIcon icon={IconNames.PLUS} />
+            Add Story
+          </button>
+          <div>
+            <TextInput
+              maxWidth="max-w-xl"
+              icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+              placeholder="Search for author..."
+              // onChange={e => setQuery(e.target.value)}
+            />
+          </div>
+        </Flex>
+        {/* {Constants.storiesBackendUrl && (
           <div>
             <p className="titleText">Recent Posts</p>
             <div className="recent">
@@ -64,7 +87,58 @@ const Stories: React.FC = () => {
               ))}
             </div>
           </div>
-        )}
+        )} */}
+      </div>
+
+      <div>
+        <div style={{ padding: '0px 50px 0px 50px' }}>
+          <Table marginTop="mt-10">
+            <TableHead>
+              <TableRow>
+                {columns.map(column => (
+                  <TableHeaderCell key={column.id}>{column.header}</TableHeaderCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data
+                // .filter(story => story.authorId.toLowerCase().includes(query)
+                .map(story => (
+                  <TableRow key={story.id}>
+                    <TableCell>{story.authorId}</TableCell>
+                    <TableCell>
+                      <Text>{story.title}</Text>
+                    </TableCell>
+                    <TableCell>
+                      <Text>
+                        {story.content.length > 35
+                          ? `${story.content.substring(0, 35)} ...`
+                          : story.content}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <Flex spaceX="space-x-2">
+                        <Link to={`/stories/view`}>
+                          <Icon
+                            tooltip="View"
+                            icon={() => <BpIcon icon={IconNames.EyeOpen} />}
+                            variant="light"
+                          />
+                        </Link>
+                        <Link to={`/stories/edit`}>
+                          <Icon
+                            tooltip="Edit"
+                            icon={() => <BpIcon icon={IconNames.EDIT} />}
+                            variant="light"
+                          />
+                        </Link>
+                      </Flex>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );
