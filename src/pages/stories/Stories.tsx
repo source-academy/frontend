@@ -17,15 +17,12 @@ import {
   Title
 } from '@tremor/react';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { StoryListView } from 'src/features/stories/StoriesTypes';
-
-import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
-
-
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { getAllStories } from 'src/features/stories/StoriesActions';
 
 const Stories: React.FC = () => {
-  const [data, setData] = useState<StoryListView[]>([]);
   const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
@@ -37,11 +34,11 @@ const Stories: React.FC = () => {
     { id: 'actions', header: 'Actions' }
   ];
 
+  const dispatch = useDispatch();
+  const data = useTypedSelector(state => state.stories.storyList);
   useEffect(() => {
-    getStories().then(res => {
-      res?.json().then(setData);
-    });
-  }, []);
+    dispatch(getAllStories());
+  }, [dispatch]);
 
   return (
     <div className="storiesHome">
