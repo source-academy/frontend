@@ -121,6 +121,7 @@ const Stories: React.FC = () => {
                           tooltip="View"
                           icon={() => <BpIcon icon={IconNames.EyeOpen} />}
                           variant="light"
+                          color="green"
                         />
                       </Link>
                       <Link to={`/stories/edit/${story.id}`}>
