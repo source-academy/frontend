@@ -23,10 +23,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 type StoryListView = {
+  id: number;
   authorId: number;
   authorName: string;
   title: string;
   content: string;
+  isPinned: boolean;
 };
 
 const Stories: React.FC = () => {
