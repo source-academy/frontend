@@ -16,6 +16,7 @@ export const TOGGLE_STORIES_USING_SUBST = 'TOGGLE_STORIES_USING_SUBST';
 export const UPDATE_STORIES_CONTENT = 'UPDATE_STORIES_CONTENT';
 // New actions post-refactor
 export const GET_ALL_STORIES = 'GET_ALL_STORIES';
+export const UPDATE_ALL_STORIES = 'UPDATE_ALL_STORIES';
 
 export type StoryListView = {
   id: number;
@@ -38,6 +39,7 @@ export type StoriesEnvState = {
 };
 
 export type StoriesState = {
+  readonly storyList: StoryListView[];
   readonly envs: { [key: string]: StoriesEnvState };
   readonly content: string;
   readonly githubSaveInfo: GitHubSaveInfo;

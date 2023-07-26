@@ -11,7 +11,9 @@ import {
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   STORIES_UPDATE_GITHUB_SAVE_INFO,
+  StoryListView,
   TOGGLE_STORIES_USING_SUBST,
+  UPDATE_ALL_STORIES,
   UPDATE_STORIES_CONTENT
 } from './StoriesTypes';
 
@@ -57,3 +59,5 @@ export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_C
 // New action creators post-refactor
 
 export const getAllStories = () => action(GET_ALL_STORIES);
+export const updateAllStoriesList = (storyList: StoryListView[]) =>
+  action(UPDATE_ALL_STORIES, storyList);
