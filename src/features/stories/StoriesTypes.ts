@@ -17,6 +17,9 @@ export const UPDATE_STORIES_CONTENT = 'UPDATE_STORIES_CONTENT';
 // New actions post-refactor
 export const GET_STORIES_LIST = 'GET_STORIES_LIST';
 export const UPDATE_STORIES_LIST = 'UPDATE_STORIES_LIST';
+export const FETCH_STORY = 'FETCH_STORY';
+export const CREATE_STORY = 'CREATE_STORY';
+export const SAVE_STORY = 'SAVE_STORY';
 
 export type StoryListView = {
   id: number;
