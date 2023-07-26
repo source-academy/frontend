@@ -97,7 +97,11 @@ const Stories: React.FC = () => {
           </TableHead>
           <TableBody>
             {data
-              .filter(story => story.authorName.toLowerCase().includes(query.toLowerCase()))
+              .filter(
+                story =>
+                  // Always show pinned stories
+                  story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+              )
               .map(story => (
                 <TableRow key={story.id}>
                   <TableCell>{story.authorName}</TableCell>
