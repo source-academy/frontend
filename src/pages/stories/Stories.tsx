@@ -71,25 +71,6 @@ const Stories: React.FC = () => {
             // onChange={e => setQuery(e.target.value)}
           />
         </Flex>
-        {/* {Constants.storiesBackendUrl && (
-          <div>
-            <p className="titleText">Recent Posts</p>
-            <div className="recent">
-              {data.map(user => (
-                <div>
-                  <p className="postTitle">
-                    <a href={`/stories/view/${user.githubname}/${user.filename}`}>
-                      {user.filename}
-                    </a>
-                  </p>
-                  <p className="postUser">
-                    by <a href={`/stories/view/${user.githubname}`}>{user.githubname}</a>
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )} */}
 
         <Table marginTop="mt-10">
           <TableHead>
