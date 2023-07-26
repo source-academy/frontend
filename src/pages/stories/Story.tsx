@@ -14,9 +14,12 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
-import { updateStoriesContent } from 'src/features/stories/StoriesActions';
-import { getStory, updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
-import { StoryView } from 'src/features/stories/StoriesTypes';
+import {
+  fetchStory,
+  setCurrentStory,
+  updateStoriesContent
+} from 'src/features/stories/StoriesActions';
+import { updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
@@ -48,18 +51,18 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorScrollTop]);
 
-  const [story, setStory] = useState<StoryView | null>(null);
+  const story = useTypedSelector(store => store.stories.currentStory);
   const content = useTypedSelector(store => store.stories.content);
 
   const { id: storyId } = useParams<{ id: string }>();
   useEffect(() => {
-    if (storyId) {
-      const id = parseInt(storyId);
-      getStory(id).then(res => {
-        res?.json().then(setStory);
-      });
+    if (!storyId) {
+      dispatch(setCurrentStory(null));
+      return;
     }
-  }, [storyId]);
+    const id = parseInt(storyId);
+    dispatch(fetchStory(id));
+  }, [dispatch, storyId]);
 
   useEffect(() => {
     if (!story) {
