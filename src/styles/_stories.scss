@@ -22,7 +22,10 @@
         * output. Taken from react-ace
         * sourcecode, font size modified.
         */
-      font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+      font:
+        16px / normal "Inconsolata",
+        "Consolas",
+        monospace;
     }
 
     .variantChapText {
@@ -43,8 +46,17 @@
       word-wrap: break-word;
       background-color: white;
       padding: 10px;
-      font: 400 16px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      font:
+        400 16px/1.5 -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol";
 
       code:not(pre code) {
         border: 1px solid #cacaca;
@@ -65,7 +77,12 @@
       pre:has(> code) {
         border: 1px solid #cacaca;
         line-height: 1.2em;
-        font: 12px Monaco, 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+        font:
+          12px Monaco,
+          "Courier New",
+          "DejaVu Sans Mono",
+          "Bitstream Vera Sans Mono",
+          monospace;
         padding: 10px;
         overflow: auto;
         -webkit-border-radius: 3px;
@@ -103,8 +120,17 @@
       margin: auto;
       background-color: white;
       padding: 10px;
-      font: 400 16px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      font:
+        400 16px/1.5 -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol";
 
       code:not(pre code) {
         border: 1px solid #cacaca;
@@ -125,7 +151,12 @@
       pre:has(> code) {
         border: 1px solid #cacaca;
         line-height: 1.2em;
-        font: 12px Monaco, 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+        font:
+          12px Monaco,
+          "Courier New",
+          "DejaVu Sans Mono",
+          "Bitstream Vera Sans Mono",
+          monospace;
         padding: 10px;
         overflow: auto;
         -webkit-border-radius: 3px;
