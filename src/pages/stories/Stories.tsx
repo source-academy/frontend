@@ -1,6 +1,6 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button as BpButton, Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
   Flex,
@@ -56,10 +56,9 @@ const Stories: React.FC = () => {
     <div className="storiesHome">
       <div className="storiesInteract">
         <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
-          <button className="storiesButton" onClick={handleSubmit}>
-            <BpIcon icon={IconNames.PLUS} />
+          <BpButton onClick={handleSubmit} icon={IconNames.PLUS}>
             Add Story
-          </button>
+          </BpButton>
           <div>
             <TextInput
               maxWidth="max-w-xl"
