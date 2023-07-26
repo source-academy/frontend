@@ -57,7 +57,8 @@ const Stories: React.FC = () => {
       <div className="storiesInteract">
         <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
           <button className="storiesButton" onClick={handleSubmit}>
-            + Add Story
+            <BpIcon icon={IconNames.PLUS} />
+            Add Story
           </button>
           <div>
             <TextInput
