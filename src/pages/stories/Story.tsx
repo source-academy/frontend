@@ -16,16 +16,9 @@ import {
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { updateStoriesContent } from 'src/features/stories/StoriesActions';
 import { getStory, updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
+import { StoryView } from 'src/features/stories/StoriesTypes';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
-
-type StoryView = {
-  id: number;
-  authorId: number;
-  authorName: string;
-  title: string;
-  content: string;
-};
 
 type Props = {
   isViewOnly?: boolean;

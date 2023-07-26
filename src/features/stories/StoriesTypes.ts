@@ -27,6 +27,14 @@ export type StoryListView = {
   isPinned: boolean;
 };
 
+export type StoryView = {
+  id: number;
+  authorId: number;
+  authorName: string;
+  title: string;
+  content: string;
+};
+
 export type StoriesEnvState = {
   readonly context: Context;
   readonly execTime: number;
