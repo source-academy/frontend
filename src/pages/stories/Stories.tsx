@@ -22,10 +22,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 type StoryListView = {
+  id: number;
   authorId: number;
   authorName: string;
   title: string;
   content: string;
+  isPinned: boolean;
 };
 
 const Stories: React.FC = () => {
@@ -77,10 +79,13 @@ const Stories: React.FC = () => {
             {data
               .filter(story => story.authorName.toLowerCase().includes(query.toLowerCase()))
               .map(story => (
-                <TableRow key={story.authorId}>
+                <TableRow key={story.id}>
                   <TableCell>{story.authorName}</TableCell>
                   <TableCell>
-                    <Text>{story.title}</Text>
+                    <Flex justifyContent="justify-start">
+                      {story.isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
+                      <Text>{story.title}</Text>
+                    </Flex>
                   </TableCell>
                   <TableCell>
                     <Text>
@@ -91,14 +96,14 @@ const Stories: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Flex justifyContent="justify-start" spaceX="space-x-2">
-                      <Link to={`/stories/view`}>
+                      <Link to={`/stories/view/${story.id}`}>
                         <Icon
                           tooltip="View"
                           icon={() => <BpIcon icon={IconNames.EyeOpen} />}
                           variant="light"
                         />
                       </Link>
-                      <Link to={`/stories/edit`}>
+                      <Link to={`/stories/edit/${story.id}`}>
                         <Icon
                           tooltip="Edit"
                           icon={() => <BpIcon icon={IconNames.EDIT} />}
