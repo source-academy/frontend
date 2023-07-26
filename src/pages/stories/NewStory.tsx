@@ -1,3 +1,5 @@
+import 'js-slang/dist/editors/ace/theme/source';
+
 import { useCallback, useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
