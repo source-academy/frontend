@@ -7,6 +7,7 @@ import {
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
+  GET_ALL_STORIES,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   STORIES_UPDATE_GITHUB_SAVE_INFO,
@@ -52,3 +53,7 @@ export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
   action(TOGGLE_STORIES_USING_SUBST, { usingSubst, env });
 
 export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_CONTENT, content);
+
+// New action creators post-refactor
+
+export const getAllStories = () => action(GET_ALL_STORIES);
