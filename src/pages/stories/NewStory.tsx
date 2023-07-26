@@ -37,38 +37,32 @@ const NewStory: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <div
-        style={{
-          height: 'calc(100vh - 90px)',
-          width: '100vw',
-          display: 'flex',
-          flexDirection: 'row',
-          paddingBottom: 10,
-          justifyContent: 'center'
+    <div
+      style={{
+        width: '100vw',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
+      }}
+    >
+      <AceEditor
+        className="repl-react-ace react-ace"
+        width="50%"
+        height="100%"
+        theme="source"
+        value={content}
+        onChange={onEditorValueChange}
+        onScroll={onScroll}
+        fontSize={17}
+        highlightActiveLine={false}
+        showPrintMargin={false}
+        wrapEnabled={true}
+        setOptions={{
+          fontFamily: "'Inconsolata', 'Consolas', monospace"
         }}
-      >
-        <AceEditor
-          className="repl-react-ace react-ace"
-          width="40%"
-          height="100%"
-          theme="source"
-          value={content}
-          onChange={c => {
-            onEditorValueChange(c);
-          }}
-          onScroll={onScroll}
-          fontSize={17}
-          highlightActiveLine={false}
-          showPrintMargin={false}
-          wrapEnabled={true}
-          setOptions={{
-            fontFamily: "'Inconsolata', 'Consolas', monospace"
-          }}
-        />
-        <div className="newUserblog" id="userblogContainer">
-          <UserBlogContent fileContent={content} />
-        </div>
+      />
+      <div className="newUserblog" id="userblogContainer">
+        <UserBlogContent fileContent={content} />
       </div>
     </div>
   );
