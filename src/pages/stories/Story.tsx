@@ -13,7 +13,11 @@ import { updateStoriesContent } from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
-const Story: React.FC = () => {
+type Props = {
+  isViewOnly?: boolean;
+};
+
+const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
   const [editorScrollTop, setEditorScrollTop] = useState(0);
@@ -47,21 +51,27 @@ const Story: React.FC = () => {
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
-      <TextInput
-        maxWidth="max-w-xl"
-        placeholder="Enter story title"
-        value={storyTitle}
-        onChange={e => {
-          setStoryTitle(e.target.value);
-          setIsDirty(true);
-        }}
-      />,
-      <ControlButtonSaveButton
-        key="save_story"
-        // TODO: implement save
-        onClickSave={() => {}}
-        hasUnsavedChanges={isDirty}
-      />
+      isViewOnly ? (
+        <>{storyTitle}</>
+      ) : (
+        <TextInput
+          maxWidth="max-w-xl"
+          placeholder="Enter story title"
+          value={storyTitle}
+          onChange={e => {
+            setStoryTitle(e.target.value);
+            setIsDirty(true);
+          }}
+        />
+      ),
+      isViewOnly ? null : (
+        <ControlButtonSaveButton
+          key="save_story"
+          // TODO: implement save
+          onClickSave={() => {}}
+          hasUnsavedChanges={isDirty}
+        />
+      )
     ]
   };
 
@@ -101,7 +111,10 @@ const Story: React.FC = () => {
 
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
-export const Component = Story;
-Component.displayName = 'Story';
+export const EditStoryComponent = () => <Story isViewOnly={false} />;
+EditStoryComponent.displayName = 'EditStory';
+
+export const ViewStoryComponent = () => <Story isViewOnly />;
+ViewStoryComponent.displayName = 'ViewStory';
 
 export default Story;
