@@ -35,6 +35,23 @@ export function* storiesSaga(): SagaIterator {
 
     yield put(actions.setCurrentStory(story));
   });
+
+  //   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
+  //     const story = action.payload;
+  //     const updatedStory: StoryView | null = yield call(async () => {
+  //       // TODO: Support pin order
+  //       const resp = await updateStory(story.id, story.title, story.content);
+  //       if (!resp) {
+  //         return null;
+  //       }
+  //       return resp.json();
+  //     });
+
+  //     // TODO: Check correctness
+  //     if (updatedStory) {
+  //       yield put(actions.setCurrentStory(updatedStory));
+  //     }
+  //   });
 }
 
 export default storiesSaga;
