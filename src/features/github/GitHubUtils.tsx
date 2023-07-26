@@ -13,6 +13,7 @@ import {
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
+import Constants from 'src/commons/utils/Constants';
 // import { GithubGetRepoRespData } from './GitHubTypes';
 
 /**
@@ -385,22 +386,25 @@ export async function performFolderDeletion(
 // /**
 //  * Gets Blog Content from markdown Files.
 //  */
-// export async function getStory(user: string, filePath: string): Promise<string | null> {
-//   try {
-//     const response = await request(
-//       `GET /repos/${user}/${Constants.storiesRepoName}/contents/${filePath}`
-//     );
-//     const content = response.data.content;
-//     if (content) {
-//       return Buffer.from(content, 'base64').toString();
-//     }
-//     return null;
-//   } catch (err) {
-//     if (err.status !== 404) {
-//       showWarningMessage('Something went wrong when trying to access the file.');
-//       return null;
-//     }
-//     // if err status is 404 means file is not found
-//     return null;
-//   }
-// }
+
+export async function getStory(storyId: string): Promise<Response | null> {
+  try {
+    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${storyId}`);
+    if (!resp.ok) {
+      showWarningMessage(
+        `Error while communicating with stories backend: ${resp.status} ${resp.statusText}${
+          resp.status === 401 || resp.status === 403
+            ? '; try logging in again, after manually saving any work.'
+            : ''
+        }`
+      );
+      return null;
+    }
+    return resp;
+  } catch (e) {
+    console.log(e);
+    showWarningMessage('Error while communicating with stories backend; check your network?');
+    return null;
+  }
+};
+
