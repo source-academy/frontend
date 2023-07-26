@@ -13,7 +13,11 @@ import { updateStoriesContent } from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
-const NewStory: React.FC = () => {
+type Props = {
+  isViewOnly?: boolean;
+};
+
+const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
   const [editorScrollTop, setEditorScrollTop] = useState(0);
@@ -47,21 +51,27 @@ const NewStory: React.FC = () => {
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
-      <TextInput
-        maxWidth="max-w-xl"
-        placeholder="Enter story title"
-        value={storyTitle}
-        onChange={e => {
-          setStoryTitle(e.target.value);
-          setIsDirty(true);
-        }}
-      />,
-      <ControlButtonSaveButton
-        key="save_story"
-        // TODO: implement save
-        onClickSave={() => {}}
-        hasUnsavedChanges={isDirty}
-      />
+      isViewOnly ? (
+        <>{storyTitle}</>
+      ) : (
+        <TextInput
+          maxWidth="max-w-xl"
+          placeholder="Enter story title"
+          value={storyTitle}
+          onChange={e => {
+            setStoryTitle(e.target.value);
+            setIsDirty(true);
+          }}
+        />
+      ),
+      isViewOnly ? null : (
+        <ControlButtonSaveButton
+          key="save_story"
+          // TODO: implement save
+          onClickSave={() => {}}
+          hasUnsavedChanges={isDirty}
+        />
+      )
     ]
   };
 
@@ -75,22 +85,24 @@ const NewStory: React.FC = () => {
           display: 'flex'
         }}
       >
-        <AceEditor
-          className="repl-react-ace react-ace"
-          width="100%"
-          height="100%"
-          theme="source"
-          value={content}
-          onChange={onEditorValueChange}
-          onScroll={onScroll}
-          fontSize={17}
-          highlightActiveLine={false}
-          showPrintMargin={false}
-          wrapEnabled={true}
-          setOptions={{
-            fontFamily: "'Inconsolata', 'Consolas', monospace"
-          }}
-        />
+        {!isViewOnly && (
+          <AceEditor
+            className="repl-react-ace react-ace"
+            width="100%"
+            height="100%"
+            theme="source"
+            value={content}
+            onChange={onEditorValueChange}
+            onScroll={onScroll}
+            fontSize={17}
+            highlightActiveLine={false}
+            showPrintMargin={false}
+            wrapEnabled={true}
+            setOptions={{
+              fontFamily: "'Inconsolata', 'Consolas', monospace"
+            }}
+          />
+        )}
         <div className="newUserblog" id="userblogContainer">
           <UserBlogContent fileContent={content} />
         </div>
@@ -101,7 +113,10 @@ const NewStory: React.FC = () => {
 
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
-export const Component = NewStory;
-Component.displayName = 'NewStory';
+export const EditStoryComponent = () => <Story isViewOnly={false} />;
+EditStoryComponent.displayName = 'EditStory';
 
-export default NewStory;
+export const ViewStoryComponent = () => <Story isViewOnly />;
+ViewStoryComponent.displayName = 'ViewStory';
+
+export default Story;
