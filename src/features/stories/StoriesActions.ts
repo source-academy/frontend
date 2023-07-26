@@ -66,6 +66,6 @@ export const getStoriesList = () => action(GET_STORIES_LIST);
 export const updateStoriesList = (storyList: StoryListView[]) =>
   action(UPDATE_STORIES_LIST, storyList);
 export const fetchStory = (id: number) => action(FETCH_STORY, id);
-export const setCurrentStory = (story: StoryView) => action(SET_CURRENT_STORY, story);
+export const setCurrentStory = (story: StoryView | null) => action(SET_CURRENT_STORY, story);
 export const createStory = (story: StoryView) => action(CREATE_STORY, story);
 export const saveStory = (story: StoryView) => action(SAVE_STORY, story);
