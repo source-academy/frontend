@@ -23,10 +23,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
 
 type StoryListView = {
+  id: number;
   authorId: number;
   authorName: string;
   title: string;
   content: string;
+  isPinned: boolean;
 };
 
 const Stories: React.FC = () => {
@@ -85,10 +87,13 @@ const Stories: React.FC = () => {
             {data
               // .filter(story => story.authorId.toLowerCase().includes(query)
               .map(story => (
-                <TableRow>
+                <TableRow key={story.id}>
                   <TableCell>{story.authorId}</TableCell>
                   <TableCell>
-                    <Text>{story.title}</Text>
+                    <Flex justifyContent="justify-start">
+                      {story.isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
+                      <Text>{story.title}</Text>
+                    </Flex>
                   </TableCell>
                   <TableCell>
                     <Text>
