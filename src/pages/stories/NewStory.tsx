@@ -1,6 +1,7 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
 import { Classes } from '@blueprintjs/core';
+import { TextInput } from '@tremor/react';
 import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
@@ -23,6 +24,8 @@ const NewStory: React.FC = () => {
     setEditorScrollHeight(e.renderer.layerConfig.maxHeight);
   };
 
+  const [storyTitle, setStoryTitle] = useState('');
+
   useEffect(() => {
     const userblogContainer = document.getElementById('userblogContainer');
     const previewScrollHeight = Math.max(userblogContainer?.scrollHeight ?? 1, 1);
@@ -44,6 +47,15 @@ const NewStory: React.FC = () => {
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
+      <TextInput
+        maxWidth="max-w-xl"
+        placeholder="Enter story title"
+        value={storyTitle}
+        onChange={e => {
+          setStoryTitle(e.target.value);
+          setIsDirty(true);
+        }}
+      />,
       <ControlButtonSaveButton
         key="save_story"
         // TODO: implement save
