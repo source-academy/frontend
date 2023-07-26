@@ -56,12 +56,10 @@ export const insertStory = async (
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        story: {
-          authorId: authorId,
-          title: title,
-          content: content,
-          pinOrder: pinOrder
-        }
+        authorId: authorId,
+        title: title,
+        content: content,
+        pinOrder: pinOrder
       })
     });
     if (!resp.ok) {
@@ -95,11 +93,9 @@ export const updateStory = async (
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        story: {
-          title: title,
-          content: content,
-          pinOrder: pinOrder
-        }
+        title: title,
+        content: content,
+        pinOrder: pinOrder
       })
     });
     if (!resp.ok) {
