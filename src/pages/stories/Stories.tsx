@@ -3,6 +3,7 @@ import '@tremor/react/dist/esm/tremor.css';
 import { Button as BpButton, Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
+  Card,
   Flex,
   Icon,
   Table,
@@ -54,7 +55,7 @@ const Stories: React.FC = () => {
 
   return (
     <div className="storiesHome">
-      <div className="storiesInteract">
+      <Card>
         <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
           <BpButton onClick={handleSubmit} icon={IconNames.PLUS}>
             Add Story
@@ -87,9 +88,7 @@ const Stories: React.FC = () => {
             </div>
           </div>
         )} */}
-      </div>
 
-      <div>
         <div style={{ padding: '0px 50px 0px 50px' }}>
           <Table marginTop="mt-10">
             <TableHead>
@@ -138,7 +137,7 @@ const Stories: React.FC = () => {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
