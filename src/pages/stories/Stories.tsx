@@ -87,10 +87,13 @@ const Stories: React.FC = () => {
             {data
               // .filter(story => story.authorId.toLowerCase().includes(query)
               .map(story => (
-                <TableRow>
+                <TableRow key={story.id}>
                   <TableCell>{story.authorId}</TableCell>
                   <TableCell>
-                    <Text>{story.title}</Text>
+                    <Flex justifyContent="justify-start">
+                      {story.isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
+                      <Text>{story.title}</Text>
+                    </Flex>
                   </TableCell>
                   <TableCell>
                     <Text>
