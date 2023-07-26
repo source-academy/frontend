@@ -18,6 +18,7 @@ import {
   EVAL_STORY_SUCCESS,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
+  SET_CURRENT_STORY,
   STORIES_UPDATE_GITHUB_SAVE_INFO,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
@@ -207,6 +208,11 @@ export const StoriesReducer: Reducer<StoriesState> = (
       return {
         ...state,
         storyList: action.payload
+      };
+    case SET_CURRENT_STORY:
+      return {
+        ...state,
+        currentStory: action.payload
       };
     default:
       return state;
