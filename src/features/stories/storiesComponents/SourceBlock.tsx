@@ -196,7 +196,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       afterDynamicTabs: []
     },
     workspaceLocation: 'stories',
-    storyEnv: env,
+    storyEnv: env
     // isStories: true
   };
 

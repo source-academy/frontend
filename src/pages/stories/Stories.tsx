@@ -86,7 +86,7 @@ const Stories: React.FC = () => {
               // .filter(story => story.authorId.toLowerCase().includes(query)
               .map(story => (
                 <TableRow>
-                  <TableCell>{story.authorId}</TableCell>
+                  <TableCell>{story.authorName}</TableCell>
                   <TableCell>
                     <Text>{story.title}</Text>
                   </TableCell>
