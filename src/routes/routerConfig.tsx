@@ -33,7 +33,7 @@ const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../pages/welcome/Welcome');
 const Academy = () => import('../pages/academy/Academy');
 const MissionControl = () => import('../pages/missionControl/MissionControl');
-const NewStory = () => import('../pages/stories/NewStory');
+const NewStory = () => import('../pages/stories/Story');
 const Stories = () => import('../pages/stories/Stories');
 
 export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {

@@ -13,7 +13,7 @@ import { updateStoriesContent } from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
-const NewStory: React.FC = () => {
+const Story: React.FC = () => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
   const [editorScrollTop, setEditorScrollTop] = useState(0);
@@ -101,7 +101,7 @@ const NewStory: React.FC = () => {
 
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
-export const Component = NewStory;
-Component.displayName = 'NewStory';
+export const Component = Story;
+Component.displayName = 'Story';
 
-export default NewStory;
+export default Story;
