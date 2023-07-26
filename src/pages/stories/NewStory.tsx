@@ -1,22 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
-import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
-import { ControlBarGitHubButtons } from 'src/commons/controlBar/github/ControlBarGitHubButtons';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  githubOpenFile,
-  githubSaveFile,
-  githubSaveFileAs
-} from 'src/features/github/GitHubActions';
 import { updateStoriesContent } from 'src/features/stories/StoriesActions';
 
-import ControlBar, { ControlBarProps } from '../../commons/controlBar/ControlBar';
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
 const NewStory: React.FC = () => {
   const dispatch = useDispatch();
-  const [lastEdit, setLastEdit] = useState(new Date());
+  // const [lastEdit, setLastEdit] = useState(new Date());
   const [editorScrollTop, setEditorScrollTop] = useState(0);
   const [editorScrollHeight, setEditorScrollHeight] = useState(1);
 
@@ -39,39 +31,13 @@ const NewStory: React.FC = () => {
   const content = useTypedSelector(store => store.stories.content);
 
   const onEditorValueChange = useCallback((val: string) => {
-    setLastEdit(new Date());
+    // setLastEdit(new Date());
     dispatch(updateStoriesContent(val));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const githubOctokitObject = useTypedSelector(store => store.session.githubOctokitObject);
-  const githubSaveInfo = useTypedSelector(store => store.stories.githubSaveInfo);
-  const githubPersistenceIsDirty =
-    githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
-  const githubButtons = useMemo(() => {
-    return (
-      <ControlBarGitHubButtons
-        key="github"
-        loggedInAs={githubOctokitObject.octokit}
-        githubSaveInfo={githubSaveInfo}
-        isDirty={githubPersistenceIsDirty}
-        onClickOpen={() => dispatch(githubOpenFile(true))}
-        onClickSaveAs={() => dispatch(githubSaveFileAs(true))}
-        onClickSave={() => dispatch(githubSaveFile(true))}
-        onClickLogIn={() => dispatch(loginGitHub())}
-        onClickLogOut={() => dispatch(logoutGitHub())}
-        isFolderModeEnabled={false}
-      />
-    );
-  }, [dispatch, githubOctokitObject, githubPersistenceIsDirty, githubSaveInfo]);
-
-  const controlBarProps: ControlBarProps = {
-    editorButtons: [githubButtons]
-  };
-
   return (
     <div>
-      <ControlBar {...controlBarProps} />
       <div
         style={{
           height: 'calc(100vh - 90px)',
