@@ -104,14 +104,14 @@ const Stories: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Flex justifyContent="justify-start" spaceX="space-x-2">
-                      <Link to={`/stories/view`}>
+                      <Link to={`/stories/view/${story.id}`}>
                         <Icon
                           tooltip="View"
                           icon={() => <BpIcon icon={IconNames.EyeOpen} />}
                           variant="light"
                         />
                       </Link>
-                      <Link to={`/stories/edit`}>
+                      <Link to={`/stories/edit/${story.id}`}>
                         <Icon
                           tooltip="Edit"
                           icon={() => <BpIcon icon={IconNames.EDIT} />}
