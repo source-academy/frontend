@@ -14,6 +14,8 @@ export const NOTIFY_STORIES_EVALUATED = 'NOTIFY_STORIES_EVALUATED';
 export const STORIES_UPDATE_GITHUB_SAVE_INFO = 'STORIES_UPDATE_GITHUB_SAVE_INFO';
 export const TOGGLE_STORIES_USING_SUBST = 'TOGGLE_STORIES_USING_SUBST';
 export const UPDATE_STORIES_CONTENT = 'UPDATE_STORIES_CONTENT';
+// New actions post-refactor
+export const GET_ALL_STORIES = 'GET_ALL_STORIES';
 
 export type StoriesEnvState = {
   readonly context: Context;
