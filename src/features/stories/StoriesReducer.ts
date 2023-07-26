@@ -21,7 +21,8 @@ import {
   STORIES_UPDATE_GITHUB_SAVE_INFO,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_CONTENT
+  UPDATE_STORIES_CONTENT,
+  UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
 export const StoriesReducer: Reducer<StoriesState> = (
@@ -200,6 +201,12 @@ export const StoriesReducer: Reducer<StoriesState> = (
       return {
         ...state,
         content: action.payload
+      };
+    // New cases post-refactor
+    case UPDATE_STORIES_LIST:
+      return {
+        ...state,
+        storyList: action.payload
       };
     default:
       return state;

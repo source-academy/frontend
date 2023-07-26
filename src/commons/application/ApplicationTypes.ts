@@ -515,6 +515,7 @@ export const defaultSession: SessionState = {
 };
 
 export const defaultStories: StoriesState = {
+  storyList: [],
   envs: {},
   content: DEFAULT_STORY,
   githubSaveInfo: { repoName: '', filePath: '' }

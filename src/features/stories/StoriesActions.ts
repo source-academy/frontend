@@ -7,11 +7,14 @@ import {
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
+  GET_STORIES_LIST,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   STORIES_UPDATE_GITHUB_SAVE_INFO,
+  StoryListView,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_CONTENT
+  UPDATE_STORIES_CONTENT,
+  UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
 export const addStoryEnv = (env: string, chapter: Chapter, variant: Variant) =>
@@ -52,3 +55,9 @@ export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
   action(TOGGLE_STORIES_USING_SUBST, { usingSubst, env });
 
 export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_CONTENT, content);
+
+// New action creators post-refactor
+
+export const getStoriesList = () => action(GET_STORIES_LIST);
+export const updateStoriesList = (storyList: StoryListView[]) =>
+  action(UPDATE_STORIES_LIST, storyList);

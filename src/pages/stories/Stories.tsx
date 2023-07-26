@@ -17,25 +17,18 @@ import {
   Title
 } from '@tremor/react';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
+import { getStoriesList } from 'src/features/stories/StoriesActions';
 
-import { deleteStory, getStories } from '../../features/stories/storiesComponents/BackendAccess';
-
-type StoryListView = {
-  id: number;
-  authorId: number;
-  authorName: string;
-  title: string;
-  content: string;
-  isPinned: boolean;
-};
+import { deleteStory } from '../../features/stories/storiesComponents/BackendAccess';
 
 const Stories: React.FC = () => {
-  const [data, setData] = useState<StoryListView[]>([]);
   const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
@@ -47,11 +40,11 @@ const Stories: React.FC = () => {
     { id: 'actions', header: 'Actions' }
   ];
 
+  const dispatch = useDispatch();
+  const data = useTypedSelector(state => state.stories.storyList);
   useEffect(() => {
-    getStories().then(res => {
-      res?.json().then(setData);
-    });
-  }, []);
+    dispatch(getStoriesList());
+  }, [dispatch]);
 
   // TODO: Refactor together with the rest of the state logic
   const handleDeleteStory = useCallback((id: number) => {
