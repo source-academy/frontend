@@ -1,4 +1,4 @@
-import { request } from '@octokit/request';
+// import { request } from '@octokit/request';
 import { Octokit } from '@octokit/rest';
 import {
   GetResponseDataTypeFromEndpointMethod,
@@ -6,14 +6,14 @@ import {
 } from '@octokit/types';
 
 import { actions } from '../../commons/utils/ActionsHelper';
-import Constants from '../../commons/utils/Constants';
+// import Constants from '../../commons/utils/Constants';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import {
   showSuccessMessage,
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
-import { GithubGetRepoRespData } from './GitHubTypes';
+// import { GithubGetRepoRespData } from './GitHubTypes';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -365,41 +365,42 @@ export async function performFolderDeletion(
   }
 }
 
-/**
- * Gets Files from the fixed story repo. No need for octokit as the repo should be
- * publicly accessible. Returns an object of the repo.
- */
-export async function getFilesFromStoryRepo(user: string): Promise<GithubGetRepoRespData[]> {
-  try {
-    const response = await request(`GET /repos/${user}/${Constants.storiesRepoName}/contents`);
-    return response.data as GithubGetRepoRespData[];
-  } catch (err) {
-    if (err.status !== 404) {
-      showWarningMessage('Something went wrong when trying to access the repo.');
-    }
-    return [];
-  }
-}
+// FIXME: Move to story backend for story-query logic
+// /**
+//  * Gets Files from the fixed story repo. No need for octokit as the repo should be
+//  * publicly accessible. Returns an object of the repo.
+//  */
+// export async function getFilesFromStoryRepo(user: string): Promise<GithubGetRepoRespData[]> {
+//   try {
+//     const response = await request(`GET /repos/${user}/${Constants.storiesRepoName}/contents`);
+//     return response.data as GithubGetRepoRespData[];
+//   } catch (err) {
+//     if (err.status !== 404) {
+//       showWarningMessage('Something went wrong when trying to access the repo.');
+//     }
+//     return [];
+//   }
+// }
 
-/**
- * Gets Blog Content from markdown Files.
- */
-export async function getStory(user: string, filePath: string): Promise<string | null> {
-  try {
-    const response = await request(
-      `GET /repos/${user}/${Constants.storiesRepoName}/contents/${filePath}`
-    );
-    const content = response.data.content;
-    if (content) {
-      return Buffer.from(content, 'base64').toString();
-    }
-    return null;
-  } catch (err) {
-    if (err.status !== 404) {
-      showWarningMessage('Something went wrong when trying to access the file.');
-      return null;
-    }
-    // if err status is 404 means file is not found
-    return null;
-  }
-}
+// /**
+//  * Gets Blog Content from markdown Files.
+//  */
+// export async function getStory(user: string, filePath: string): Promise<string | null> {
+//   try {
+//     const response = await request(
+//       `GET /repos/${user}/${Constants.storiesRepoName}/contents/${filePath}`
+//     );
+//     const content = response.data.content;
+//     if (content) {
+//       return Buffer.from(content, 'base64').toString();
+//     }
+//     return null;
+//   } catch (err) {
+//     if (err.status !== 404) {
+//       showWarningMessage('Something went wrong when trying to access the file.');
+//       return null;
+//     }
+//     // if err status is 404 means file is not found
+//     return null;
+//   }
+// }
