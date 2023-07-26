@@ -4,14 +4,18 @@ import { action } from 'typesafe-actions';
 import {
   ADD_STORY_ENV,
   CLEAR_STORY_ENV,
+  CREATE_STORY,
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
+  FETCH_STORY,
   GET_STORIES_LIST,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
+  SAVE_STORY,
   STORIES_UPDATE_GITHUB_SAVE_INFO,
   StoryListView,
+  StoryView,
   TOGGLE_STORIES_USING_SUBST,
   UPDATE_STORIES_CONTENT,
   UPDATE_STORIES_LIST
@@ -57,7 +61,9 @@ export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
 export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_CONTENT, content);
 
 // New action creators post-refactor
-
 export const getStoriesList = () => action(GET_STORIES_LIST);
 export const updateStoriesList = (storyList: StoryListView[]) =>
   action(UPDATE_STORIES_LIST, storyList);
+export const fetchStory = (id: number) => action(FETCH_STORY, id);
+export const createStory = (story: StoryView) => action(CREATE_STORY, story);
+export const saveStory = (story: StoryView) => action(SAVE_STORY, story);
