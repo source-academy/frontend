@@ -13,6 +13,14 @@ import { updateStoriesContent } from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
+type StoryView = {
+  id: number;
+  authorId: number;
+  authorName: string;
+  title: string;
+  content: string;
+};
+
 type Props = {
   isViewOnly?: boolean;
 };
