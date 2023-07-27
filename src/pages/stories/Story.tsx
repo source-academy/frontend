@@ -14,7 +14,11 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
-import { fetchStory, setCurrentStory } from 'src/features/stories/StoriesActions';
+import {
+  fetchStory,
+  setCurrentStory,
+  setCurrentStoryId
+} from 'src/features/stories/StoriesActions';
 import { updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
@@ -45,20 +49,26 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorScrollTop]);
 
-  const story = useTypedSelector(store => store.stories.currentStory);
+  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const storyTitle = story?.title ?? '';
   const content = story?.content ?? '';
 
-  const { id: storyId } = useParams<{ id: string }>();
+  const { id: idToSet } = useParams<{ id: string }>();
   useEffect(() => {
-    if (!storyId) {
-      dispatch(setCurrentStory(null));
-      return;
+    // Clear screen on first load
+    dispatch(setCurrentStory(null));
+    // Either a new story (idToSet is null) or an existing story
+    dispatch(setCurrentStoryId(idToSet ? parseInt(idToSet) : null));
+  }, [dispatch, idToSet]);
+
+  useEffect(() => {
+    // If existing story, fetch it
+    if (storyId) {
+      dispatch(fetchStory(storyId));
     }
-    const id = parseInt(storyId);
-    dispatch(fetchStory(id));
   }, [dispatch, storyId]);
 
+  // Loading state, show empty screen
   if (!story) {
     return <></>;
   }
@@ -87,14 +97,12 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
       isViewOnly ? null : (
         <ControlButtonSaveButton
           key="save_story"
-          // TODO: implement save
           onClickSave={() => {
-            // TODO: Remove if in favour of early return above
-            //       once state refactoring is complete.
-            if (!story) {
+            if (!storyId) {
+              // TODO: Create story
               return;
             }
-            updateStory(story.id, storyTitle, content)
+            updateStory(storyId, storyTitle, content)
               .then(() => {
                 showSuccessMessage('Story saved');
                 setIsDirty(false);
