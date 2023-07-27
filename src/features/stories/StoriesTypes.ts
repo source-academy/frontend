@@ -20,21 +20,20 @@ export const CREATE_STORY = 'CREATE_STORY';
 export const SAVE_STORY = 'SAVE_STORY';
 export const DELETE_STORY = 'DELETE_STORY';
 
-export type StoryListView = {
-  id: number;
+export type StoryData = {
   authorId: number;
   authorName: string;
   title: string;
   content: string;
+};
+
+export type StoryListView = StoryData & {
+  id: number;
   isPinned: boolean;
 };
 
-export type StoryView = {
+export type StoryView = StoryData & {
   id: number;
-  authorId: number;
-  authorName: string;
-  title: string;
-  content: string;
 };
 
 export type StoriesEnvState = {
