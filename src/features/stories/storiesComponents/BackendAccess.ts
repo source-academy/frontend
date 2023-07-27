@@ -29,7 +29,7 @@ export const getStory = async (storyId: number): Promise<StoryView | null> => {
   return story;
 };
 
-export const insertStory = async (
+export const postStory = async (
   authorId: number,
   title: string,
   content: string,
