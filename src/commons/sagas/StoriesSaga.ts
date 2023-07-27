@@ -72,13 +72,7 @@ export function* storiesSaga(): SagaIterator {
 
   yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
     const storyId = action.payload;
-    yield call(async () => {
-      const resp = await deleteStory(storyId);
-      if (!resp) {
-        return null;
-      }
-      return resp.json();
-    });
+    yield call(deleteStory, storyId);
 
     yield put(actions.getStoriesList());
   });

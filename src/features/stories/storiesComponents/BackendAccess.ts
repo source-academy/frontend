@@ -102,25 +102,12 @@ export const updateStory = async (
   }
 };
 
-export const deleteStory = async (id: number): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${id}`, {
-      method: 'DELETE'
-    });
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    showWarningMessage('Error while communicating with backend; check your network?');
-
+// Returns the deleted story, or null if errors occur
+export const deleteStory = async (id: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', {});
+  if (!resp) {
     return null;
   }
+  const story = await resp.json();
+  return story;
 };
