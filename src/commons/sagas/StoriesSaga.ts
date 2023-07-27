@@ -1,6 +1,12 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
+import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import { getStories, getStory } from 'src/features/stories/storiesComponents/BackendAccess';
+import { OverallState} from '../application/ApplicationTypes';
+import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+import { putNewStoriesUsers, handleResponseError } from './RequestsSaga';
+import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import {
   FETCH_STORY,
   GET_STORIES_LIST,
@@ -8,7 +14,17 @@ import {
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
+import { Tokens } from '../application/types/SessionTypes';
+
 import { actions } from '../utils/ActionsHelper';
+
+function selectTokens() {
+  return select((state: OverallState) => ({
+    accessToken: state.session.accessToken,
+    refreshToken: state.session.refreshToken
+  }));
+}
+
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
@@ -22,6 +38,22 @@ export function* storiesSaga(): SagaIterator {
 
     yield put(actions.updateStoriesList(allStories));
   });
+
+  yield takeEvery(
+    ADD_NEW_STORIES_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider }: { users: NameUsernameRole[]; provider: string } = action.payload;
+
+      const resp: Response | null = yield call(putNewStoriesUsers, tokens, users, provider);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAdminPanelCourseRegistrations());
+      yield call(showSuccessMessage, 'Users added!');
+    }
+  );
 
   yield takeLatest(FETCH_STORY, function* (action: ReturnType<typeof actions.fetchStory>) {
     const storyId = action.payload;

@@ -1,4 +1,5 @@
 import { call } from 'redux-saga/effects';
+import Constants from 'src/commons/utils/Constants';
 
 import {
   AchievementGoal,
@@ -15,6 +16,7 @@ import {
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { NameUsernameRole } from '../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { store } from '../../pages/createStore';
 import {
   backendifyAchievementItem,
@@ -1177,6 +1179,20 @@ export const putNewUsers = async (
   provider: string
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'PUT', {
+    ...tokens,
+    body: { users, provider },
+    noHeaderAccept: true
+  });
+
+  return resp;
+};
+
+export const putNewStoriesUsers = async (
+  tokens: Tokens,
+  users: NameUsernameRole[],
+  provider: string
+): Promise<Response | null> => {
+  const resp = await request(`${Constants.storiesBackendUrl}/stories`, 'PUT', {
     ...tokens,
     body: { users, provider },
     noHeaderAccept: true
