@@ -629,6 +629,24 @@ $code-color-error: #ff4444;
         background-image: rgba(138, 155, 168, 0.3);
       }
     }
+
+    &.side-content-tab-alert-error {
+      -webkit-animation: error 1s infinite;
+      -moz-animation: error 1s infinite;
+      -o-animation: error 1s infinite;
+      animation: error 1s infinite;
+    }
+
+    @keyframes error {
+      0%,
+      50% {
+        background-color: rgb(255, 68, 68);
+      }
+      51%,
+      100% {
+        background-image: rgba(102, 42, 50, 0.3);
+      }
+    }
     .side-content-text .slider {
       $a: 100%;
       $b: 140px;

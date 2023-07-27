@@ -1,6 +1,7 @@
 import {
   AnchorButton,
   Button,
+  Checkbox,
   Classes,
   Dialog,
   InputGroup,
@@ -22,6 +23,7 @@ import {
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
+import Constants from '../utils/Constants';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -30,6 +32,7 @@ export type FileExplorerDialogProps = {
   pickerType: string;
   octokit: Octokit;
   editorContent: string;
+  isStories?: boolean;
   onSubmit: (submitContent: string) => void;
 };
 
@@ -37,6 +40,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   const [repoFiles, setRepoFiles] = useState<TreeNodeInfo<GitHubFileNodeData>[]>([]);
   const [filePath, setFilePath] = useState('');
   const [commitMessage, setCommitMessage] = useState('');
+  const [addToStoriesBackend, setAddToStoriesBackend] = useState(false);
 
   useEffect(() => {
     setFirstLayerRepoFiles(props.repoName, setRepoFiles);
@@ -69,6 +73,13 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
               placeholder={'Enter Commit Message'}
               value={commitMessage}
             />
+            {props.isStories && Constants.storiesBackendUrl && (
+              <Checkbox
+                checked={addToStoriesBackend}
+                onClick={() => setAddToStoriesBackend(!addToStoriesBackend)}
+                label="Add to Stories Database"
+              />
+            )}
           </div>
         )}
       </div>
@@ -106,7 +117,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     if (props.pickerType === 'Open') {
       if (await checkIfFileCanBeOpened(props.octokit, githubLoginID, props.repoName, filePath)) {
         if (await checkIfUserAgreesToOverwriteEditorData()) {
-          openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath);
+          openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath, props.isStories);
         }
       }
     }
@@ -129,7 +140,8 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
+            props.isStories
           );
         }
 
@@ -142,9 +154,11 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
+            props.isStories
           );
         }
+        // add stories backend here
       }
     }
     props.onSubmit('');
