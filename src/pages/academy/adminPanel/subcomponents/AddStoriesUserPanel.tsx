@@ -21,20 +21,20 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 
 import Constants from '../../../../commons/utils/Constants';
 
-export type AddUserPanelProps = OwnProps;
+export type AddStoriesUserPanelProps = OwnProps;
 
 type OwnProps = {
-  handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => void;
+  handleAddNewUsersToCourse: (users: NameUsernameRole[], provider: string) => void;
 };
 
-export type UsernameRoleGroup = {
+export type NameUsernameRole = {
+  name: string;
   username: string;
   role: Role;
-  group?: string;
 };
 
-const AddUserPanel: React.FC<AddUserPanelProps> = props => {
-  const [users, setUsers] = React.useState<UsernameRoleGroup[]>([]);
+const AddStoriesUserPanel: React.FC<AddStoriesUserPanelProps> = props => {
+  const [users, setUsers] = React.useState<NameUsernameRole[]>([]);
   const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
   const gridApi = React.useRef<GridApi>();
   const { CSVReader } = useCSVReader();
@@ -49,8 +49,8 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
       field: 'username'
     },
     {
-      headerName: 'LoginProvider',
-      field: 'provider'
+      headerName: 'Role',
+      field: 'role'
     }
   ];
 
@@ -101,7 +101,7 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
      * Terminate early if validation errors are encountered, and do not add to existing
      * valid uploaded entries in the table
      */
-    const processed: UsernameRoleGroup[] = [...users];
+    const processed: NameUsernameRole[] = [...users];
 
     if (data.length + users.length > 1000) {
       setInvalidCsvMsg('Please limit each upload to 1000 entries!');
@@ -140,7 +140,7 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
       processed.push({
         username: e[0],
         role: e[1] as Role,
-        group: e[2]
+        name: e[2]
       });
     });
 
@@ -190,40 +190,27 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
                             </b>
                             &nbsp;&nbsp;OR&nbsp;&nbsp;
                             <b>
-                              <i>name,username,provider</i>
+                              <i>name,username,role</i>
                             </b>
                           </p>
                           <p>
                             <b>
                               <i>name</i>
                             </b>
-                            : the name of the story creator
+                            : the name of the user
                           </p>
                           <p>
                             <b>
                               <i>username</i>
                             </b>
-                            : username of the story creator in the corresponding authentication
-                            {/* <i>(admin | staff | student)</i> */}
+                            : username of the user in the corresponding authentication
                           </p>
                           <p>
                             <b>
-                              <i>provider</i>
+                              <i>role</i>
                             </b>
-                            : provider
+                            : the role of the user <i>(admin | staff | student)</i>
                           </p>
-                          {/* <p>
-                              <i>
-                                (*Note that staff or admin will automatically be assigned as group
-                                leader and each group
-                              </i>
-                            </p> */}
-                          {/* <p>
-                              <i>
-                                can only have one leader. If there are duplicates the latest entry
-                                will take effect)
-                              </i>
-                            </p> */}
 
                           <p>&nbsp;</p>
                           <p>
@@ -231,19 +218,20 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
                           </p>
                           <p>
                             <i>
-                              (Luminus): &nbsp;e1234567,student &nbsp;•&nbsp;
-                              e1234567,student,Group1
+                              (Luminus): &nbsp;e1234567,student &nbsp;•&nbsp; wei
+                              kai,e1234567,student
                             </i>
                           </p>
                           <p>
                             <i>
                               (Google): &nbsp;learner@gmail.com,staff &nbsp;•&nbsp;
-                              learner@gmail.com,staff,Group1
+                              timothy,learner@gmail.com,staff
                             </i>
                           </p>
                           <p>
                             <i>
-                              (GitHub): &nbsp;ghusername,admin &nbsp;•&nbsp; ghusername,admin,Group1
+                              (GitHub): &nbsp;ghusername,admin &nbsp;•&nbsp;
+                              mingkai,ghusername,admin
                             </i>
                           </p>
                         </div>
@@ -300,4 +288,4 @@ const AddUserPanel: React.FC<AddUserPanelProps> = props => {
   );
 };
 
-export default AddUserPanel;
+export default AddStoriesUserPanel;
