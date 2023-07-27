@@ -22,10 +22,7 @@ export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
     const allStories: StoryListView[] = yield call(async () => {
       const resp = await getStories();
-      if (!resp) {
-        return [];
-      }
-      return resp.json();
+      return resp ?? [];
     });
 
     yield put(actions.updateStoriesList(allStories));

@@ -2,6 +2,8 @@ import Constants from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 
+import { StoryListView } from '../StoriesTypes';
+
 type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
 const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperParams) => {
@@ -9,25 +11,13 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
-export const getStories = async (): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories`);
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with stories backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    console.log(e);
-    showWarningMessage('Error while communicating with stories backend; check your network?');
+export const getStories = async (): Promise<StoryListView[] | null> => {
+  const resp = await requestStoryBackend('/stories', 'GET', {});
+  if (!resp) {
     return null;
   }
+  const stories = await resp.json();
+  return stories;
 };
 
 export const getStory = async (storyId: number): Promise<Response | null> => {
