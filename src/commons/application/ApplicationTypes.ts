@@ -108,8 +108,9 @@ export enum Role {
   Admin = 'admin'
 }
 
+// Must match https://github.com/source-academy/stories-backend/blob/main/internal/enums/groups/role.go
 export enum StoriesRole {
-  Standard = 'standard',
+  Standard = 'user',
   Moderator = 'moderator',
   Admin = 'admin'
 }
