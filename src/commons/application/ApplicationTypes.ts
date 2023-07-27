@@ -518,8 +518,7 @@ export const defaultStories: StoriesState = {
   storyList: [],
   currentStory: null,
   envs: {},
-  content: DEFAULT_STORY,
-  githubSaveInfo: { repoName: '', filePath: '' }
+  content: DEFAULT_STORY
 };
 
 export const createDefaultStoriesEnv = (
