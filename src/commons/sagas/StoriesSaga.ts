@@ -41,7 +41,8 @@ export function* storiesSaga(): SagaIterator {
         return yield handleResponseError(resp);
       }
 
-      yield put(actions.fetchAdminPanelCourseRegistrations());
+      // TODO: Refresh the list of story users
+      //       once that page is implemented
       yield call(showSuccessMessage, 'Users added!');
     }
   );
