@@ -16,9 +16,10 @@ import {
   TextInput,
   Title
 } from '@tremor/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import ContentDisplay from 'src/commons/ContentDisplay';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
@@ -39,10 +40,6 @@ const Stories: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getStoriesList());
-  }, [dispatch]);
-
   const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
   const handleDeleteStory = useCallback(
     async (id: number) => {
@@ -62,73 +59,76 @@ const Stories: React.FC = () => {
   const storyList = useTypedSelector(state => state.stories.storyList);
 
   return (
-    <div className="storiesHome">
-      <Card>
-        <Flex justifyContent="justify-between">
-          <Flex justifyContent="justify-start" spaceX="space-x-6">
-            <Title>All Stories</Title>
-            <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
-              Add Story
-            </BpButton>
+    <ContentDisplay
+      loadContentDispatch={() => dispatch(getStoriesList())}
+      display={
+        <Card>
+          <Flex justifyContent="justify-between">
+            <Flex justifyContent="justify-start" spaceX="space-x-6">
+              <Title>All Stories</Title>
+              <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
+                Add Story
+              </BpButton>
+            </Flex>
+            <TextInput
+              maxWidth="max-w-xl"
+              icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+              placeholder="Search for author..."
+              onChange={e => setQuery(e.target.value)}
+            />
           </Flex>
-          <TextInput
-            maxWidth="max-w-xl"
-            icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-            placeholder="Search for author..."
-            onChange={e => setQuery(e.target.value)}
-          />
-        </Flex>
 
-        <Table marginTop="mt-10">
-          <TableHead>
-            <TableRow>
-              {columns.map(column => (
-                <TableHeaderCell key={column.id}>{column.header}</TableHeaderCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {storyList
-              .filter(
-                story =>
-                  // Always show pinned stories
-                  story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
-              )
-              .map(({ id, authorName, isPinned, title, content }) => (
-                <TableRow key={id}>
-                  <TableCell>{authorName}</TableCell>
-                  <TableCell>
-                    <Flex justifyContent="justify-start">
-                      {isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
-                      <Text>{title}</Text>
-                    </Flex>
-                  </TableCell>
-                  <TableCell>
-                    <Text>
-                      {content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
-                        ? content.replaceAll(/\s+/g, ' ')
-                        : content.split(/\s+/).reduce((acc, cur) => {
-                            return acc.length + cur.length <= MAX_EXCERPT_LENGTH
-                              ? acc + ' ' + cur
-                              : acc;
-                          }, '') + '…'}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <StoryActions
-                      storyId={id}
-                      handleDeleteStory={handleDeleteStory}
-                      canView
-                      canEdit
-                      canDelete
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </Card>
-    </div>
+          <Table marginTop="mt-10">
+            <TableHead>
+              <TableRow>
+                {columns.map(column => (
+                  <TableHeaderCell key={column.id}>{column.header}</TableHeaderCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {storyList
+                .filter(
+                  story =>
+                    // Always show pinned stories
+                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+                )
+                .map(({ id, authorName, isPinned, title, content }) => (
+                  <TableRow key={id}>
+                    <TableCell>{authorName}</TableCell>
+                    <TableCell>
+                      <Flex justifyContent="justify-start">
+                        {isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
+                        <Text>{title}</Text>
+                      </Flex>
+                    </TableCell>
+                    <TableCell>
+                      <Text>
+                        {content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
+                          ? content.replaceAll(/\s+/g, ' ')
+                          : content.split(/\s+/).reduce((acc, cur) => {
+                              return acc.length + cur.length <= MAX_EXCERPT_LENGTH
+                                ? acc + ' ' + cur
+                                : acc;
+                            }, '') + '…'}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <StoryActions
+                        storyId={id}
+                        handleDeleteStory={handleDeleteStory}
+                        canView
+                        canEdit
+                        canDelete
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Card>
+      }
+    />
   );
 };
 
