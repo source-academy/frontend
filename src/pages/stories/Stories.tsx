@@ -20,13 +20,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  showSuccessMessage,
-  showWarningMessage
-} from 'src/commons/utils/notifications/NotificationsHelper';
-import { getStoriesList } from 'src/features/stories/StoriesActions';
-
-import { deleteStory } from '../../features/stories/storiesComponents/BackendAccess';
+import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
 
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -47,20 +41,16 @@ const Stories: React.FC = () => {
   }, [dispatch]);
 
   // TODO: Refactor together with the rest of the state logic
-  const handleDeleteStory = useCallback((id: number) => {
-    const confirm = window.confirm('Are you sure you want to delete this story?');
-    if (confirm) {
-      deleteStory(id)
-        .then(() => {
-          showSuccessMessage('Story deleted successfully');
-          // Get stories again to update the list
-          // Blocked by getStories not being handled by Saga
-        })
-        .catch(() => {
-          showWarningMessage('Something went wrong while deleting the story');
-        });
-    }
-  }, []);
+  const handleDeleteStory = useCallback(
+    (id: number) => {
+      const confirm = window.confirm('Are you sure you want to delete this story?');
+      if (confirm) {
+        dispatch(deleteStory(id));
+        // deleteStory will auto-refresh the list of stories after
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <div className="storiesHome">

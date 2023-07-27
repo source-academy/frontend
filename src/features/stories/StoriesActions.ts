@@ -5,6 +5,7 @@ import {
   ADD_STORY_ENV,
   CLEAR_STORY_ENV,
   CREATE_STORY,
+  DELETE_STORY,
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
@@ -17,7 +18,6 @@ import {
   StoryListView,
   StoryView,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_CONTENT,
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
@@ -55,8 +55,6 @@ export const notifyStoriesEvaluated = (
 export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
   action(TOGGLE_STORIES_USING_SUBST, { usingSubst, env });
 
-export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_CONTENT, content);
-
 // New action creators post-refactor
 export const getStoriesList = () => action(GET_STORIES_LIST);
 export const updateStoriesList = (storyList: StoryListView[]) =>
@@ -65,3 +63,4 @@ export const fetchStory = (id: number) => action(FETCH_STORY, id);
 export const setCurrentStory = (story: StoryView | null) => action(SET_CURRENT_STORY, story);
 export const createStory = (story: StoryView) => action(CREATE_STORY, story); // TODO: Unused as of now
 export const saveStory = (story: StoryView) => action(SAVE_STORY, story); // TODO: Unused as of now
+export const deleteStory = (id: number) => action(DELETE_STORY, id);
