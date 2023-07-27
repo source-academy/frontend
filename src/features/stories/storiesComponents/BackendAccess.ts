@@ -34,36 +34,15 @@ export const postStory = async (
   title: string,
   content: string,
   pinOrder?: number
-): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        authorId: authorId,
-        title: title,
-        content: content,
-        pinOrder: pinOrder
-      })
-    });
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    showWarningMessage('Error while communicating with backend; check your network?');
-
+): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend('/stories', 'POST', {
+    body: { authorId, title, content, pinOrder }
+  });
+  if (!resp) {
     return null;
   }
+  const story = await resp.json();
+  return story;
 };
 
 export const updateStory = async (
