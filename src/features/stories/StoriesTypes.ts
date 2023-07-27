@@ -49,6 +49,7 @@ export type StoriesEnvState = {
 
 export type StoriesState = {
   readonly storyList: StoryListView[];
-  readonly currentStory: StoryView | null;
+  readonly currentStoryId: number | null;
+  readonly currentStory: StoryData | null;
   readonly envs: { [key: string]: StoriesEnvState };
 };
