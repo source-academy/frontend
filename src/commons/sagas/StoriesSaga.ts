@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import { getStories, getStory } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
@@ -10,19 +10,12 @@ import {
 } from 'src/features/stories/StoriesTypes';
 import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 
-import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
+import { selectTokens } from './BackendSaga';
 import { handleResponseError, putNewStoriesUsers } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
-
-function selectTokens() {
-  return select((state: OverallState) => ({
-    accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
-  }));
-}
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
