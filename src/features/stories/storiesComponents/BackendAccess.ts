@@ -1,6 +1,24 @@
 import Constants from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
+import { Tokens } from '../../../commons/application/types/SessionTypes';
+import { request } from '../../../commons/utils/RequestHelper';
+import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+
+export const putNewStoriesUsers = async (
+  tokens: Tokens,
+  users: NameUsernameRole[],
+  provider: string
+): Promise<Response | null> => {
+  const resp = await request(`${Constants.storiesBackendUrl}/stories`, 'PUT', {
+    ...tokens,
+    body: { users, provider },
+    noHeaderAccept: true
+  });
+
+  return resp;
+};
+
 export const getStories = async (): Promise<Response | null> => {
   try {
     const resp = await fetch(`${Constants.storiesBackendUrl}/stories`);
