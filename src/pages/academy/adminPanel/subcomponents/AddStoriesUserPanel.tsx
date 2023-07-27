@@ -21,9 +21,7 @@ import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 
 import Constants from '../../../../commons/utils/Constants';
 
-export type AddStoriesUserPanelProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   handleAddNewUsersToCourse: (users: NameUsernameRole[], provider: string) => void;
 };
 
@@ -33,7 +31,7 @@ export type NameUsernameRole = {
   role: StoriesRole;
 };
 
-const AddStoriesUserPanel: React.FC<AddStoriesUserPanelProps> = props => {
+const AddStoriesUserPanel: React.FC<Props> = props => {
   const [users, setUsers] = React.useState<NameUsernameRole[]>([]);
   const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
   const gridApi = React.useRef<GridApi>();
