@@ -108,6 +108,12 @@ export enum Role {
   Admin = 'admin'
 }
 
+export enum StoriesRole {
+  Standard = 'standard',
+  Moderator = 'moderator',
+  Admin = 'admin'
+}
+
 export enum SupportedLanguage {
   JAVASCRIPT = 'JavaScript',
   SCHEME = 'Scheme',
