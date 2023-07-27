@@ -19,7 +19,6 @@ import {
   StoryListView,
   StoryView,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_CONTENT,
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
@@ -59,8 +58,6 @@ export const storiesUpdateGitHubSaveInfo = (repoName: string, filePath: string, 
 
 export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
   action(TOGGLE_STORIES_USING_SUBST, { usingSubst, env });
-
-export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_CONTENT, content);
 
 // New action creators post-refactor
 export const getStoriesList = () => action(GET_STORIES_LIST);

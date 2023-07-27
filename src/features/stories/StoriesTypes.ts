@@ -13,7 +13,6 @@ export const HANDLE_STORIES_CONSOLE_LOG = 'HANDLE_STORIES_CONSOLE_LOG';
 export const NOTIFY_STORIES_EVALUATED = 'NOTIFY_STORIES_EVALUATED';
 export const STORIES_UPDATE_GITHUB_SAVE_INFO = 'STORIES_UPDATE_GITHUB_SAVE_INFO';
 export const TOGGLE_STORIES_USING_SUBST = 'TOGGLE_STORIES_USING_SUBST';
-export const UPDATE_STORIES_CONTENT = 'UPDATE_STORIES_CONTENT';
 // New actions post-refactor
 export const GET_STORIES_LIST = 'GET_STORIES_LIST';
 export const UPDATE_STORIES_LIST = 'UPDATE_STORIES_LIST';
@@ -55,6 +54,5 @@ export type StoriesState = {
   readonly storyList: StoryListView[];
   readonly currentStory: StoryView | null;
   readonly envs: { [key: string]: StoriesEnvState };
-  readonly content: string; // TODO: Deprecate this
   readonly githubSaveInfo: GitHubSaveInfo;
 };
