@@ -108,16 +108,16 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
 
     for (let i = 0; i < data.length; i++) {
       // Incorrect number of columns
-      if (!(data[i].length === 2 || data[i].length === 3)) {
+      if (data[i].length !== 3) {
         setInvalidCsvMsg(
           <>
             <div>
-              Invalid format (line {i})! Please ensure that the username and role is specified for
-              each row entry!
+              Invalid format (line {i})! Please ensure that the name, username and role is specified
+              for each row entry!
             </div>
             <br />
             <div>
-              Format: <i>username,role</i> <b>OR</b> <i>username,role,group</i>
+              Format: <i>name,username,role</i>
             </div>
             <br />
             <div>(please hover over the question mark above for more details)</div>
