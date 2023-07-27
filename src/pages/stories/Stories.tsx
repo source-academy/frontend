@@ -18,7 +18,7 @@ import {
 } from '@tremor/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showSuccessMessage,
@@ -27,6 +27,7 @@ import {
 import { getStoriesList } from 'src/features/stories/StoriesActions';
 
 import { deleteStory } from '../../features/stories/storiesComponents/BackendAccess';
+import StoryActions from './StoryActions';
 
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -112,31 +113,13 @@ const Stories: React.FC = () => {
                     </Text>
                   </TableCell>
                   <TableCell>
-                    <Flex justifyContent="justify-start" spaceX="space-x-2">
-                      <Link to={`/stories/view/${story.id}`}>
-                        <Icon
-                          tooltip="View"
-                          icon={() => <BpIcon icon={IconNames.EyeOpen} />}
-                          variant="light"
-                          color="green"
-                        />
-                      </Link>
-                      <Link to={`/stories/edit/${story.id}`}>
-                        <Icon
-                          tooltip="Edit"
-                          icon={() => <BpIcon icon={IconNames.EDIT} />}
-                          variant="light"
-                        />
-                      </Link>
-                      <button style={{ padding: 0 }} onClick={() => handleDeleteStory(story.id)}>
-                        <Icon
-                          tooltip="Delete"
-                          icon={() => <BpIcon icon={IconNames.TRASH} />}
-                          variant="light"
-                          color="red"
-                        />
-                      </button>
-                    </Flex>
+                    <StoryActions
+                      storyId={story.id}
+                      handleDeleteStory={handleDeleteStory}
+                      canView
+                      canEdit
+                      canDelete
+                    />
                   </TableCell>
                 </TableRow>
               ))}
