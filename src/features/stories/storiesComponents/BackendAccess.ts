@@ -2,7 +2,7 @@ import Constants from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 
-import { StoryListView } from '../StoriesTypes';
+import { StoryListView, StoryView } from '../StoriesTypes';
 
 type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
@@ -20,25 +20,13 @@ export const getStories = async (): Promise<StoryListView[] | null> => {
   return stories;
 };
 
-export const getStory = async (storyId: number): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${storyId}`);
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with stories backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    console.log(e);
-    showWarningMessage('Error while communicating with stories backend; check your network?');
+export const getStory = async (storyId: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', {});
+  if (!resp) {
     return null;
   }
+  const story = await resp.json();
+  return story;
 };
 
 export const insertStory = async (

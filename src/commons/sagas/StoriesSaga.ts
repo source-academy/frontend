@@ -30,13 +30,7 @@ export function* storiesSaga(): SagaIterator {
 
   yield takeLatest(FETCH_STORY, function* (action: ReturnType<typeof actions.fetchStory>) {
     const storyId = action.payload;
-    const story: StoryView = yield call(async () => {
-      const resp = await getStory(storyId);
-      if (!resp) {
-        return null;
-      }
-      return resp.json();
-    });
+    const story: StoryView = yield call(getStory, storyId);
 
     yield put(actions.setCurrentStory(story));
   });
