@@ -1,5 +1,13 @@
 import Constants from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import { request } from 'src/commons/utils/RequestHelper';
+
+type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
+type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
+const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperParams) => {
+  const resp = await request('', method, opts, `${Constants.storiesBackendUrl}${path}`);
+  return resp;
+};
 
 export const getStories = async (): Promise<Response | null> => {
   try {
