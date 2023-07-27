@@ -44,6 +44,8 @@ export function* storiesSaga(): SagaIterator {
     yield put(actions.setCurrentStory(story));
   });
 
+  // takeEvery used to ensure that setting to null (clearing the story) is always
+  // handled even if a refresh is triggered later.
   yield takeEvery(
     SET_CURRENT_STORY_ID,
     function* (action: ReturnType<typeof actions.setCurrentStoryId>) {
