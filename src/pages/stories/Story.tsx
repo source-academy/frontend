@@ -14,6 +14,7 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
+import { scrollSync } from 'src/commons/utils/StoriesHelper';
 import {
   fetchStory,
   setCurrentStory,
@@ -30,24 +31,13 @@ type Props = {
 const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
-  const [editorScrollTop, setEditorScrollTop] = useState(0);
-  const [editorScrollHeight, setEditorScrollHeight] = useState(1);
 
   const onScroll = (e: IEditorProps) => {
-    setEditorScrollTop(e.session.getScrollTop());
-    setEditorScrollHeight(e.renderer.layerConfig.maxHeight);
-  };
-
-  useEffect(() => {
     const userblogContainer = document.getElementById('userblogContainer');
-    const previewScrollHeight = Math.max(userblogContainer?.scrollHeight ?? 1, 1);
-    const previewVisibleHeight = Math.max(userblogContainer?.offsetHeight ?? 1, 1);
-    const relativeHeight =
-      (editorScrollTop / (editorScrollHeight - previewVisibleHeight)) *
-      (previewScrollHeight - previewVisibleHeight);
-    userblogContainer?.scrollTo(0, relativeHeight);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorScrollTop]);
+    if (userblogContainer) {
+      scrollSync(e, userblogContainer);
+    }
+  };
 
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const storyTitle = story?.title ?? '';
