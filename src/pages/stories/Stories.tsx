@@ -25,18 +25,16 @@ import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions
 
 import StoryActions from './StoryActions';
 
+const columns = [
+  { id: 'author', header: 'Author' },
+  { id: 'title', header: 'Title' },
+  { id: 'content', header: 'Content' },
+  { id: 'actions', header: 'Actions' }
+];
+
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
-
   const navigate = useNavigate();
-
-  const columns = [
-    { id: 'author', header: 'Author' },
-    { id: 'title', header: 'Title' },
-    { id: 'content', header: 'Content' },
-    { id: 'actions', header: 'Actions' }
-  ];
-
   const dispatch = useDispatch();
   const data = useTypedSelector(state => state.stories.storyList);
   useEffect(() => {
