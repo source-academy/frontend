@@ -184,10 +184,6 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                           <p>
                             <u>CSV Format</u>: &nbsp;
                             <b>
-                              <i>username,role</i>
-                            </b>
-                            &nbsp;&nbsp;OR&nbsp;&nbsp;
-                            <b>
                               <i>name,username,role</i>
                             </b>
                           </p>
@@ -207,7 +203,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                             <b>
                               <i>role</i>
                             </b>
-                            : the role of the user <i>(admin | staff | student)</i>
+                            : the role of the user <i>(user | moderator | admin)</i>
                           </p>
 
                           <p>&nbsp;</p>
@@ -215,22 +211,13 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                             <u>Examples:</u>
                           </p>
                           <p>
-                            <i>
-                              (Luminus): &nbsp;e1234567,student &nbsp;•&nbsp; wei
-                              kai,e1234567,student
-                            </i>
+                            <i>(Luminus): &nbsp; Wei Kai,e1234567,user</i>
                           </p>
                           <p>
-                            <i>
-                              (Google): &nbsp;learner@gmail.com,staff &nbsp;•&nbsp;
-                              timothy,learner@gmail.com,staff
-                            </i>
+                            <i>(Google): &nbsp; Timothy,learner@gmail.com,moderator</i>
                           </p>
                           <p>
-                            <i>
-                              (GitHub): &nbsp;ghusername,admin &nbsp;•&nbsp;
-                              mingkai,ghusername,admin
-                            </i>
+                            <i>(GitHub): &nbsp; Mingkai,ghusername,admin</i>
                           </p>
                         </div>
                       }
