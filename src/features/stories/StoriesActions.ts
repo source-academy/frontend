@@ -5,6 +5,7 @@ import {
   ADD_STORY_ENV,
   CLEAR_STORY_ENV,
   CREATE_STORY,
+  DELETE_STORY,
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
@@ -69,3 +70,4 @@ export const fetchStory = (id: number) => action(FETCH_STORY, id);
 export const setCurrentStory = (story: StoryView | null) => action(SET_CURRENT_STORY, story);
 export const createStory = (story: StoryView) => action(CREATE_STORY, story); // TODO: Unused as of now
 export const saveStory = (story: StoryView) => action(SAVE_STORY, story); // TODO: Unused as of now
+export const deleteStory = (id: number) => action(DELETE_STORY, id);

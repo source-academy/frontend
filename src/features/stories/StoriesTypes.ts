@@ -21,6 +21,7 @@ export const FETCH_STORY = 'FETCH_STORY';
 export const SET_CURRENT_STORY = 'SET_CURRENT_STORY';
 export const CREATE_STORY = 'CREATE_STORY';
 export const SAVE_STORY = 'SAVE_STORY';
+export const DELETE_STORY = 'DELETE_STORY';
 
 export type StoryListView = {
   id: number;
