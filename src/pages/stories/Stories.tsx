@@ -92,25 +92,21 @@ const Stories: React.FC = () => {
                   // Always show pinned stories
                   story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
               )
-              .map(story => (
-                <TableRow key={story.id}>
-                  <TableCell>{story.authorName}</TableCell>
+              .map(({ id, authorName, isPinned, title, content }) => (
+                <TableRow key={id}>
+                  <TableCell>{authorName}</TableCell>
                   <TableCell>
                     <Flex justifyContent="justify-start">
-                      {story.isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
-                      <Text>{story.title}</Text>
+                      {isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
+                      <Text>{title}</Text>
                     </Flex>
                   </TableCell>
                   <TableCell>
-                    <Text>
-                      {story.content.length > 35
-                        ? `${story.content.substring(0, 35)} ...`
-                        : story.content}
-                    </Text>
+                    <Text>{content.length > 35 ? `${content.substring(0, 35)} ...` : content}</Text>
                   </TableCell>
                   <TableCell>
                     <StoryActions
-                      storyId={story.id}
+                      storyId={id}
                       handleDeleteStory={handleDeleteStory}
                       canView
                       canEdit
