@@ -32,6 +32,8 @@ const columns = [
   { id: 'actions', header: 'Actions' }
 ];
 
+const MAX_EXCERPT_LENGTH = 35;
+
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
@@ -102,7 +104,15 @@ const Stories: React.FC = () => {
                     </Flex>
                   </TableCell>
                   <TableCell>
-                    <Text>{content.length > 35 ? `${content.substring(0, 35)} ...` : content}</Text>
+                    <Text>
+                      {content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
+                        ? content.replaceAll(/\s+/g, ' ')
+                        : content.split(/\s+/).reduce((acc, cur) => {
+                            return acc.length + cur.length <= MAX_EXCERPT_LENGTH
+                              ? acc + ' ' + cur
+                              : acc;
+                          }, '') + '…'}
+                    </Text>
                   </TableCell>
                   <TableCell>
                     <StoryActions
