@@ -21,21 +21,26 @@ export const CREATE_STORY = 'CREATE_STORY';
 export const SAVE_STORY = 'SAVE_STORY';
 export const DELETE_STORY = 'DELETE_STORY';
 
-export type StoryData = {
+export type StoryMetadata = {
   authorId: number;
   authorName: string;
+};
+
+export type StoryData = {
   title: string;
   content: string;
 };
 
-export type StoryListView = StoryData & {
-  id: number;
-  isPinned: boolean;
-};
+export type StoryListView = StoryData &
+  StoryMetadata & {
+    id: number;
+    isPinned: boolean;
+  };
 
-export type StoryView = StoryData & {
-  id: number;
-};
+export type StoryView = StoryData &
+  StoryMetadata & {
+    id: number;
+  };
 
 export type StoriesEnvState = {
   readonly context: Context;
