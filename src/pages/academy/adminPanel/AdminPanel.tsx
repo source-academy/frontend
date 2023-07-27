@@ -7,7 +7,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
+import {
+  addNewStoriesUsersToCourse,
+  addNewUsersToCourse
+} from 'src/features/academy/AcademyActions';
 
 import {
   deleteAssessmentConfig,
@@ -132,7 +135,7 @@ const AdminPanel: React.FC = () => {
 
   const addStoriesUserPanelProps = {
     handleAddNewUsersToCourse: (users: NameUsernameRole[], provider: string) =>
-      dispatch(addNewUsersToCourse(users, provider))
+      dispatch(addNewStoriesUsersToCourse(users, provider))
   };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
