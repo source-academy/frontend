@@ -348,20 +348,3 @@ export async function performFolderDeletion(
     showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
   }
 }
-
-// FIXME: Move to story backend for story-query logic
-// /**
-//  * Gets Files from the fixed story repo. No need for octokit as the repo should be
-//  * publicly accessible. Returns an object of the repo.
-//  */
-// export async function getFilesFromStoryRepo(user: string): Promise<GithubGetRepoRespData[]> {
-//   try {
-//     const response = await request(`GET /repos/${user}/${Constants.storiesRepoName}/contents`);
-//     return response.data as GithubGetRepoRespData[];
-//   } catch (err) {
-//     if (err.status !== 404) {
-//       showWarningMessage('Something went wrong when trying to access the repo.');
-//     }
-//     return [];
-//   }
-// }
