@@ -1,4 +1,4 @@
-const DEFAULT_STORY = `---
+export const defaultStoryContent = `---
 config:
   chapter: 4
   variant: default
@@ -117,5 +117,3 @@ import {show, heart} from 'rune';
 show(heart);
 \`\`\`
 `;
-
-export default DEFAULT_STORY;
