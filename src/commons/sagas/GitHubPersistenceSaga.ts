@@ -67,9 +67,7 @@ function* githubLogoutSaga() {
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
-function* githubOpenFile(action: ReturnType<typeof actions.githubOpenFile>): any {
-  const isStories = action.payload;
-
+function* githubOpenFile(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;
@@ -86,16 +84,12 @@ function* githubOpenFile(action: ReturnType<typeof actions.githubOpenFile>): any
       })
   );
 
-  let repoName = Constants.storiesRepoName;
-
-  if (!isStories) {
-    const getRepoName = async () =>
-      await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
-        userRepos: userRepos,
-        onSubmit: resolve
-      }));
-    repoName = yield call(getRepoName);
-  }
+  const getRepoName = async () =>
+    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+      userRepos: userRepos,
+      onSubmit: resolve
+    }));
+  const repoName = yield call(getRepoName);
 
   const editorContent = '';
 
@@ -107,17 +101,14 @@ function* githubOpenFile(action: ReturnType<typeof actions.githubOpenFile>): any
         pickerType: pickerType,
         octokit: octokit,
         editorContent: editorContent,
-        onSubmit: resolve,
-        isStories: isStories
+        onSubmit: resolve
       }));
 
     yield call(promisifiedDialog);
   }
 }
 
-function* githubSaveFile(action: ReturnType<typeof actions.githubSaveFile>): any {
-  const isStories = action.payload;
-
+function* githubSaveFile(): any {
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
 
@@ -127,31 +118,21 @@ function* githubSaveFile(action: ReturnType<typeof actions.githubSaveFile>): any
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const repoName = isStories
-    ? store.getState().stories.githubSaveInfo.repoName
-    : store.getState().playground.githubSaveInfo.repoName;
-  const filePath = isStories
-    ? store.getState().stories.githubSaveInfo.filePath
-    : store.getState().playground.githubSaveInfo.filePath;
+  const repoName = store.getState().playground.githubSaveInfo.repoName;
+  const filePath = store.getState().playground.githubSaveInfo.filePath;
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
-
-  let content = '';
-  if (isStories) {
-    content = store.getState().stories.content;
-  } else {
-    const activeEditorTabIndex: number | null = yield select(
-      (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-    );
-    if (activeEditorTabIndex === null) {
-      throw new Error('No active editor tab found.');
-    }
-    const editorTabs: EditorTabState[] = yield select(
-      (state: OverallState) => state.workspaces.playground.editorTabs
-    );
-    content = editorTabs[activeEditorTabIndex].value;
+  const activeEditorTabIndex: number | null = yield select(
+    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+  );
+  if (activeEditorTabIndex === null) {
+    throw new Error('No active editor tab found.');
   }
+  const editorTabs: EditorTabState[] = yield select(
+    (state: OverallState) => state.workspaces.playground.editorTabs
+  );
+  const content = editorTabs[activeEditorTabIndex].value;
 
   GitHubUtils.performOverwritingSave(
     octokit,
@@ -161,14 +142,11 @@ function* githubSaveFile(action: ReturnType<typeof actions.githubSaveFile>): any
     githubEmail,
     githubName,
     commitMessage,
-    content,
-    isStories
+    content
   );
 }
 
-function* githubSaveFileAs(action: ReturnType<typeof actions.githubSaveFileAs>): any {
-  const isStories = action.payload;
-
+function* githubSaveFileAs(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;
@@ -185,32 +163,23 @@ function* githubSaveFileAs(action: ReturnType<typeof actions.githubSaveFileAs>):
       })
   );
 
-  let repoName = Constants.storiesRepoName;
+  const getRepoName = async () =>
+    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+      userRepos: userRepos,
+      onSubmit: resolve
+    }));
+  const repoName = yield call(getRepoName);
 
-  if (!isStories) {
-    const getRepoName = async () =>
-      await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
-        userRepos: userRepos,
-        onSubmit: resolve
-      }));
-    repoName = yield call(getRepoName);
+  const activeEditorTabIndex: number | null = yield select(
+    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+  );
+  if (activeEditorTabIndex === null) {
+    throw new Error('No active editor tab found.');
   }
-
-  let editorContent = '';
-  if (isStories) {
-    editorContent = store.getState().stories.content;
-  } else {
-    const activeEditorTabIndex: number | null = yield select(
-      (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-    );
-    if (activeEditorTabIndex === null) {
-      throw new Error('No active editor tab found.');
-    }
-    const editorTabs: EditorTabState[] = yield select(
-      (state: OverallState) => state.workspaces.playground.editorTabs
-    );
-    editorContent = editorTabs[activeEditorTabIndex].value;
-  }
+  const editorTabs: EditorTabState[] = yield select(
+    (state: OverallState) => state.workspaces.playground.editorTabs
+  );
+  const editorContent = editorTabs[activeEditorTabIndex].value;
 
   if (repoName !== '') {
     const pickerType = 'Save';
@@ -221,8 +190,7 @@ function* githubSaveFileAs(action: ReturnType<typeof actions.githubSaveFileAs>):
         pickerType: pickerType,
         octokit: octokit,
         editorContent: editorContent,
-        onSubmit: resolve,
-        isStories
+        onSubmit: resolve
       }));
 
     yield call(promisifiedFileExplorer);

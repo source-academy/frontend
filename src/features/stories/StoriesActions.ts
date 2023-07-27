@@ -14,7 +14,6 @@ import {
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
   SET_CURRENT_STORY,
-  STORIES_UPDATE_GITHUB_SAVE_INFO,
   StoryListView,
   StoryView,
   TOGGLE_STORIES_USING_SUBST,
@@ -52,9 +51,6 @@ export const notifyStoriesEvaluated = (
     context,
     env
   });
-
-export const storiesUpdateGitHubSaveInfo = (repoName: string, filePath: string, lastSaved: Date) =>
-  action(STORIES_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath, lastSaved });
 
 export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
   action(TOGGLE_STORIES_USING_SUBST, { usingSubst, env });
