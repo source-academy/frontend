@@ -43,7 +43,7 @@ const Stories: React.FC = () => {
     dispatch(getStoriesList());
   }, [dispatch]);
 
-  // TODO: Refactor together with the rest of the state logic
+  const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
   const handleDeleteStory = useCallback(
     async (id: number) => {
       const confirm = await showSimpleConfirmDialog({
@@ -67,7 +67,7 @@ const Stories: React.FC = () => {
         <Flex justifyContent="justify-between">
           <Flex justifyContent="justify-start" spaceX="space-x-6">
             <Title>All Stories</Title>
-            <BpButton onClick={() => navigate(`/stories/new`)} icon={IconNames.PLUS}>
+            <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
               Add Story
             </BpButton>
           </Flex>
