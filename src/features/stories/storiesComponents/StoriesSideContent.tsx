@@ -2,6 +2,7 @@ import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
+import { OverallState } from '../../../commons/application/ApplicationTypes';
 import GenericSideContent, {
   generateIconId,
   GenericSideContentProps
@@ -9,7 +10,10 @@ import GenericSideContent, {
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import { propsAreEqual } from '../../../commons/utils/MemoizeHelper';
 import { assertType } from '../../../commons/utils/TypeHelper';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { DebuggerContext, WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+// import { DEFAULT_ENV } from './UserBlogContent';
+
+// const env = DEFAULT_ENV;
 
 export type StoriesSideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
 
@@ -22,6 +26,7 @@ type StateProps = {
 /**
  * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
  */
+
 const generateClassName = (id: string | undefined) =>
   id === SideContentType.module || id === SideContentType.htmlDisplay
     ? 'side-content-tooltip side-content-tab-alert'
@@ -62,6 +67,11 @@ const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) =
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
+// const getDebuggerContext = (state: OverallState): DebuggerContext => {
+//   const workspaceLocation: WorkspaceLocation = 'stories';
+//   return workspaceLocation && state.stories.envs[props.storyEnv].debuggerContext;
+// };
+
 // TODO: Reduce code duplication with the main SideContent component
 const StoriesSideContent: React.FC<StoriesSideContentProps> = ({
   selectedTabId,
@@ -71,6 +81,10 @@ const StoriesSideContent: React.FC<StoriesSideContentProps> = ({
   return (
     <GenericSideContent
       {...otherProps}
+      getDebuggerContext={(state: OverallState): DebuggerContext => {
+        const workspaceLocation: WorkspaceLocation = 'stories';
+        return workspaceLocation && state.stories.envs[otherProps.storyEnv].debuggerContext;
+      }}
       renderFunction={(dynamicTabs, changeTabsCallback) => (
         <div className="side-content">
           <Card>

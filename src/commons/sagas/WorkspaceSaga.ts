@@ -26,6 +26,7 @@ import * as Sourceror from 'sourceror';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
+import { action } from 'typesafe-actions';
 
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
@@ -1051,10 +1052,10 @@ export function* evalCode(
             .usingSubst
       )
     : isStoriesBlock
-    ? yield select((state: OverallState) => state.stories.envs[workspaceLocation].usingSubst)
+    ? yield select((state: OverallState) => state.stories.envs['default'].usingSubst)
     : false;
   const stepLimit: number = isStoriesBlock
-    ? yield select((state: OverallState) => state.stories.envs[workspaceLocation].stepLimit)
+    ? yield select((state: OverallState) => state.stories.envs['default'].stepLimit)
     : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
   const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
   if (substActiveAndCorrectChapter) {

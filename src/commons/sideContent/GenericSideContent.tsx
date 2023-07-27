@@ -48,7 +48,7 @@ type StateProps = {
     afterDynamicTabs: SideContentTab[];
   };
   workspaceLocation?: WorkspaceLocation;
-  getDebuggerContext?: () => DebuggerContext;
+  getDebuggerContext?: (state: OverallState) => DebuggerContext;
 };
 
 const GenericSideContent = (props: GenericSideContentProps) => {

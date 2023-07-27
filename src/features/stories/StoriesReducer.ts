@@ -137,10 +137,10 @@ export const StoriesReducer: Reducer<StoriesState> = (
        * (1) state.envs[env].output === [], i.e. state.envs[env].output[-1] === undefined
        * (2) state.envs[env].output[-1] is not RunningOutput
        * (3) state.envs[env].output[-1] is RunningOutput */
-      lastOutput = state.envs[env].output.slice(-1)[0];
+      lastOutput = state.envs['default'].output.slice(-1)[0];
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         // New block of output.
-        newOutput = state.envs[env].output.concat({
+        newOutput = state.envs['default'].output.concat({
           type: 'running',
           consoleLogs: [...action.payload.logString]
         });
