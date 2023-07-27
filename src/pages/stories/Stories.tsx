@@ -81,8 +81,8 @@ const Stories: React.FC = () => {
           <Table marginTop="mt-10">
             <TableHead>
               <TableRow>
-                {columns.map(column => (
-                  <TableHeaderCell key={column.id}>{column.header}</TableHeaderCell>
+                {columns.map(({ id, header }) => (
+                  <TableHeaderCell key={id}>{header}</TableHeaderCell>
                 ))}
               </TableRow>
             </TableHead>
