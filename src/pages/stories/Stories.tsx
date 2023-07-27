@@ -36,7 +36,7 @@ const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const data = useTypedSelector(state => state.stories.storyList);
+
   useEffect(() => {
     dispatch(getStoriesList());
   }, [dispatch]);
@@ -56,6 +56,8 @@ const Stories: React.FC = () => {
     },
     [dispatch]
   );
+
+  const storyList = useTypedSelector(state => state.stories.storyList);
 
   return (
     <div className="storiesHome">
@@ -84,7 +86,7 @@ const Stories: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data
+            {storyList
               .filter(
                 story =>
                   // Always show pinned stories
