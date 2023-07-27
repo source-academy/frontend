@@ -17,7 +17,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
 import React from 'react';
 import { useCSVReader } from 'react-papaparse';
-import { Role } from 'src/commons/application/ApplicationTypes';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 
 import Constants from '../../../../commons/utils/Constants';
 
@@ -30,7 +30,7 @@ type OwnProps = {
 export type NameUsernameRole = {
   name: string;
   username: string;
-  role: Role;
+  role: StoriesRole;
 };
 
 const AddStoriesUserPanel: React.FC<AddStoriesUserPanelProps> = props => {
@@ -128,7 +128,7 @@ const AddStoriesUserPanel: React.FC<AddStoriesUserPanelProps> = props => {
         return;
       }
       // Invalid role specified
-      if (!Object.values(Role).includes(data[i][1] as Role)) {
+      if (!Object.values(StoriesRole).includes(data[i][1] as StoriesRole)) {
         setInvalidCsvMsg(
           `Invalid role (line ${i})! Please ensure that the second column of each entry contains one of the following: 'admin, staff, student'`
         );
@@ -139,7 +139,7 @@ const AddStoriesUserPanel: React.FC<AddStoriesUserPanelProps> = props => {
     data.forEach(e => {
       processed.push({
         username: e[0],
-        role: e[1] as Role,
+        role: e[1] as StoriesRole,
         name: e[2]
       });
     });
