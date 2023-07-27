@@ -136,9 +136,9 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
 
     data.forEach(e => {
       processed.push({
-        username: e[0],
-        role: e[1] as StoriesRole,
-        name: e[2]
+        name: e[0],
+        username: e[1],
+        role: e[2] as StoriesRole
       });
     });
 
