@@ -15,8 +15,8 @@ import {
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { NameUsernameRole } from '../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
   backendifyAchievementItem,
