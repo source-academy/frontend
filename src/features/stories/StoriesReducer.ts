@@ -21,7 +21,6 @@ import {
   SET_CURRENT_STORY,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_CONTENT,
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
@@ -191,11 +190,6 @@ export const StoriesReducer: Reducer<StoriesState> = (
             usingSubst: action.payload.usingSubst
           }
         }
-      };
-    case UPDATE_STORIES_CONTENT:
-      return {
-        ...state,
-        content: action.payload
       };
     // New cases post-refactor
     case UPDATE_STORIES_LIST:

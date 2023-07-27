@@ -1,7 +1,12 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
-import { getStories, getStory } from 'src/features/stories/storiesComponents/BackendAccess';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import {
+  deleteStory,
+  getStories,
+  getStory
+} from 'src/features/stories/storiesComponents/BackendAccess';
+import {
+  DELETE_STORY,
   FETCH_STORY,
   GET_STORIES_LIST,
   StoryListView,
@@ -52,6 +57,19 @@ export function* storiesSaga(): SagaIterator {
   //       yield put(actions.setCurrentStory(updatedStory));
   //     }
   //   });
+
+  yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
+    const storyId = action.payload;
+    yield call(async () => {
+      const resp = await deleteStory(storyId);
+      if (!resp) {
+        return null;
+      }
+      return resp.json();
+    });
+
+    yield put(actions.getStoriesList());
+  });
 }
 
 export default storiesSaga;

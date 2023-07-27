@@ -1,12 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { addStoryEnv, clearStoryEnv, evalStory, updateStoriesContent } from '../StoriesActions';
-import {
-  ADD_STORY_ENV,
-  CLEAR_STORY_ENV,
-  EVAL_STORY,
-  UPDATE_STORIES_CONTENT
-} from '../StoriesTypes';
+import { addStoryEnv, clearStoryEnv, evalStory } from '../StoriesActions';
+import { ADD_STORY_ENV, CLEAR_STORY_ENV, EVAL_STORY } from '../StoriesTypes';
 
 test('addStoryEnv generates correct action object', () => {
   const action = addStoryEnv('testEnv', Chapter.SOURCE_4, Variant.DEFAULT);
@@ -48,13 +43,5 @@ test('evalStory generates correct action object', () => {
       env: 'testEnv',
       code: '1;'
     }
-  });
-});
-
-test('updateStoriesContent generates correct action object', () => {
-  const action = updateStoriesContent('# new text');
-  expect(action).toEqual({
-    type: UPDATE_STORIES_CONTENT,
-    payload: '# new text'
   });
 });
