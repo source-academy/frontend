@@ -126,7 +126,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
         return;
       }
       // Invalid role specified
-      if (!Object.values(StoriesRole).includes(data[i][1] as StoriesRole)) {
+      if (!Object.values(StoriesRole).includes(data[i][2] as StoriesRole)) {
         setInvalidCsvMsg(
           `Invalid role (line ${i})! Please ensure that the third column of each entry contains one of the following: 'user, moderator, admin'`
         );
