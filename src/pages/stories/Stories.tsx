@@ -19,6 +19,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
 
@@ -44,8 +45,12 @@ const Stories: React.FC = () => {
 
   // TODO: Refactor together with the rest of the state logic
   const handleDeleteStory = useCallback(
-    (id: number) => {
-      const confirm = window.confirm('Are you sure you want to delete this story?');
+    async (id: number) => {
+      const confirm = await showSimpleConfirmDialog({
+        contents: <p>Are you sure you want to delete this story?</p>,
+        positiveIntent: 'danger',
+        positiveLabel: 'Delete'
+      });
       if (confirm) {
         dispatch(deleteStory(id));
         // deleteStory will auto-refresh the list of stories after
