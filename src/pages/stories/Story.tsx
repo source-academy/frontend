@@ -120,13 +120,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
-      <div
-        style={{
-          width: '100vw',
-          height: '100%',
-          display: 'flex'
-        }}
-      >
+      <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
         {!isViewOnly && (
           <AceEditor
             className="repl-react-ace react-ace"
@@ -140,9 +134,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
             highlightActiveLine={false}
             showPrintMargin={false}
             wrapEnabled={true}
-            setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
-            }}
+            setOptions={{ fontFamily: "'Inconsolata', 'Consolas', monospace" }}
           />
         )}
         <div className="newUserblog" id="userblogContainer">
