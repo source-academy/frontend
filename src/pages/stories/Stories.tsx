@@ -2,20 +2,7 @@ import '@tremor/react/dist/esm/tremor.css';
 
 import { Button as BpButton, Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import {
-  Card,
-  Flex,
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Text,
-  TextInput,
-  Title
-} from '@tremor/react';
+import { Card, Flex, TextInput, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +11,7 @@ import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
 
+import StoriesTable from './StoriesTable';
 import StoryActions from './StoryActions';
 
 const columns = [
@@ -32,8 +20,6 @@ const columns = [
   { id: 'content', header: 'Content' },
   { id: 'actions', header: 'Actions' }
 ];
-
-const MAX_EXCERPT_LENGTH = 35;
 
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -78,54 +64,23 @@ const Stories: React.FC = () => {
             />
           </Flex>
 
-          <Table marginTop="mt-10">
-            <TableHead>
-              <TableRow>
-                {columns.map(({ id, header }) => (
-                  <TableHeaderCell key={id}>{header}</TableHeaderCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {storyList
-                .filter(
-                  story =>
-                    // Always show pinned stories
-                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
-                )
-                .map(({ id, authorName, isPinned, title, content }) => (
-                  <TableRow key={id}>
-                    <TableCell>{authorName}</TableCell>
-                    <TableCell>
-                      <Flex justifyContent="justify-start">
-                        {isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
-                        <Text>{title}</Text>
-                      </Flex>
-                    </TableCell>
-                    <TableCell>
-                      <Text>
-                        {content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
-                          ? content.replaceAll(/\s+/g, ' ')
-                          : content.split(/\s+/).reduce((acc, cur) => {
-                              return acc.length + cur.length <= MAX_EXCERPT_LENGTH
-                                ? acc + ' ' + cur
-                                : acc;
-                            }, '') + '…'}
-                      </Text>
-                    </TableCell>
-                    <TableCell>
-                      <StoryActions
-                        storyId={id}
-                        handleDeleteStory={handleDeleteStory}
-                        canView
-                        canEdit
-                        canDelete
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
+          <StoriesTable
+            headers={columns}
+            stories={storyList.filter(
+              story =>
+                // Always show pinned stories
+                story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+            )}
+            storyActions={story => (
+              <StoryActions
+                storyId={story.id}
+                handleDeleteStory={handleDeleteStory}
+                canView
+                canEdit
+                canDelete
+              />
+            )}
+          />
         </Card>
       }
     />
