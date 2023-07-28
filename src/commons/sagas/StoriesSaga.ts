@@ -1,17 +1,11 @@
 import { SagaIterator } from 'redux-saga';
-
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
-import {
-  getStories,
-  getStory,
-  putNewStoriesUsers
-} from 'src/features/stories/storiesComponents/BackendAccess';
-
 import {
   deleteStory,
   getStories,
-  getStory
+  getStory,
+  putNewStoriesUsers
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   DELETE_STORY,
@@ -26,12 +20,11 @@ import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/Add
 
 import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
-
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
+import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { handleResponseError } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
-import { defaultStoryContent } from '../utils/StoriesHelper';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
