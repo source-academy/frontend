@@ -32,13 +32,6 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
 
-  const onScroll = (e: IEditorProps) => {
-    const userblogContainer = document.getElementById('userblogContainer');
-    if (userblogContainer) {
-      scrollSync(e, userblogContainer);
-    }
-  };
-
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const storyTitle = story?.title ?? '';
   const content = story?.content ?? '';
@@ -62,6 +55,13 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   if (!story) {
     return <></>;
   }
+
+  const onEditorScroll = (e: IEditorProps) => {
+    const userblogContainer = document.getElementById('userblogContainer');
+    if (userblogContainer) {
+      scrollSync(e, userblogContainer);
+    }
+  };
 
   const onEditorValueChange = (val: string) => {
     setIsDirty(true);
@@ -119,7 +119,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
             theme="source"
             value={content}
             onChange={onEditorValueChange}
-            onScroll={onScroll}
+            onScroll={onEditorScroll}
             fontSize={17}
             highlightActiveLine={false}
             showPrintMargin={false}
