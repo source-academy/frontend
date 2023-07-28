@@ -15,11 +15,7 @@ import {
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { scrollSync } from 'src/commons/utils/StoriesHelper';
-import {
-  fetchStory,
-  setCurrentStory,
-  setCurrentStoryId
-} from 'src/features/stories/StoriesActions';
+import { setCurrentStory, setCurrentStoryId } from 'src/features/stories/StoriesActions';
 import { updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
@@ -48,15 +44,9 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     // Clear screen on first load
     dispatch(setCurrentStory(null));
     // Either a new story (idToSet is null) or an existing story
+    // If existing story, setting it will automatically fetch the new story
     dispatch(setCurrentStoryId(idToSet ? parseInt(idToSet) : null));
   }, [dispatch, idToSet]);
-
-  useEffect(() => {
-    // If existing story, fetch it
-    if (storyId) {
-      dispatch(fetchStory(storyId));
-    }
-  }, [dispatch, storyId]);
 
   // Loading state, show empty screen
   if (!story) {
