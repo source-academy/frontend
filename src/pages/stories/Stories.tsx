@@ -16,34 +16,38 @@ import {
   TextInput,
   Title
 } from '@tremor/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
 
+import StoryActions from './StoryActions';
+
+const columns = [
+  { id: 'author', header: 'Author' },
+  { id: 'title', header: 'Title' },
+  { id: 'content', header: 'Content' },
+  { id: 'actions', header: 'Actions' }
+];
+
+const MAX_EXCERPT_LENGTH = 35;
+
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
-
   const navigate = useNavigate();
-
-  const columns = [
-    { id: 'author', header: 'Author' },
-    { id: 'title', header: 'Title' },
-    { id: 'content', header: 'Content' },
-    { id: 'actions', header: 'Actions' }
-  ];
-
   const dispatch = useDispatch();
-  const data = useTypedSelector(state => state.stories.storyList);
-  useEffect(() => {
-    dispatch(getStoriesList());
-  }, [dispatch]);
 
-  // TODO: Refactor together with the rest of the state logic
+  const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
   const handleDeleteStory = useCallback(
-    (id: number) => {
-      const confirm = window.confirm('Are you sure you want to delete this story?');
+    async (id: number) => {
+      const confirm = await showSimpleConfirmDialog({
+        contents: <p>Are you sure you want to delete this story?</p>,
+        positiveIntent: 'danger',
+        positiveLabel: 'Delete'
+      });
       if (confirm) {
         dispatch(deleteStory(id));
         // deleteStory will auto-refresh the list of stories after
@@ -52,88 +56,79 @@ const Stories: React.FC = () => {
     [dispatch]
   );
 
-  return (
-    <div className="storiesHome">
-      <Card>
-        <Flex justifyContent="justify-between">
-          <Flex justifyContent="justify-start" spaceX="space-x-6">
-            <Title>All Stories</Title>
-            <BpButton onClick={() => navigate(`/stories/new`)} icon={IconNames.PLUS}>
-              Add Story
-            </BpButton>
-          </Flex>
-          <TextInput
-            maxWidth="max-w-xl"
-            icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-            placeholder="Search for author..."
-            onChange={e => setQuery(e.target.value)}
-          />
-        </Flex>
+  const storyList = useTypedSelector(state => state.stories.storyList);
 
-        <Table marginTop="mt-10">
-          <TableHead>
-            <TableRow>
-              {columns.map(column => (
-                <TableHeaderCell key={column.id}>{column.header}</TableHeaderCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data
-              .filter(
-                story =>
-                  // Always show pinned stories
-                  story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
-              )
-              .map(story => (
-                <TableRow key={story.id}>
-                  <TableCell>{story.authorName}</TableCell>
-                  <TableCell>
-                    <Flex justifyContent="justify-start">
-                      {story.isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
-                      <Text>{story.title}</Text>
-                    </Flex>
-                  </TableCell>
-                  <TableCell>
-                    <Text>
-                      {story.content.length > 35
-                        ? `${story.content.substring(0, 35)} ...`
-                        : story.content}
-                    </Text>
-                  </TableCell>
-                  <TableCell>
-                    <Flex justifyContent="justify-start" spaceX="space-x-2">
-                      <Link to={`/stories/view/${story.id}`}>
-                        <Icon
-                          tooltip="View"
-                          icon={() => <BpIcon icon={IconNames.EyeOpen} />}
-                          variant="light"
-                          color="green"
-                        />
-                      </Link>
-                      <Link to={`/stories/edit/${story.id}`}>
-                        <Icon
-                          tooltip="Edit"
-                          icon={() => <BpIcon icon={IconNames.EDIT} />}
-                          variant="light"
-                        />
-                      </Link>
-                      <button style={{ padding: 0 }} onClick={() => handleDeleteStory(story.id)}>
-                        <Icon
-                          tooltip="Delete"
-                          icon={() => <BpIcon icon={IconNames.TRASH} />}
-                          variant="light"
-                          color="red"
-                        />
-                      </button>
-                    </Flex>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </Card>
-    </div>
+  return (
+    <ContentDisplay
+      loadContentDispatch={() => dispatch(getStoriesList())}
+      display={
+        <Card>
+          <Flex justifyContent="justify-between">
+            <Flex justifyContent="justify-start" spaceX="space-x-6">
+              <Title>All Stories</Title>
+              <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
+                Add Story
+              </BpButton>
+            </Flex>
+            <TextInput
+              maxWidth="max-w-xl"
+              icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+              placeholder="Search for author..."
+              onChange={e => setQuery(e.target.value)}
+            />
+          </Flex>
+
+          <Table marginTop="mt-10">
+            <TableHead>
+              <TableRow>
+                {columns.map(({ id, header }) => (
+                  <TableHeaderCell key={id}>{header}</TableHeaderCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {storyList
+                .filter(
+                  story =>
+                    // Always show pinned stories
+                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+                )
+                .map(({ id, authorName, isPinned, title, content }) => (
+                  <TableRow key={id}>
+                    <TableCell>{authorName}</TableCell>
+                    <TableCell>
+                      <Flex justifyContent="justify-start">
+                        {isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
+                        <Text>{title}</Text>
+                      </Flex>
+                    </TableCell>
+                    <TableCell>
+                      <Text>
+                        {content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
+                          ? content.replaceAll(/\s+/g, ' ')
+                          : content.split(/\s+/).reduce((acc, cur) => {
+                              return acc.length + cur.length <= MAX_EXCERPT_LENGTH
+                                ? acc + ' ' + cur
+                                : acc;
+                            }, '') + '…'}
+                      </Text>
+                    </TableCell>
+                    <TableCell>
+                      <StoryActions
+                        storyId={id}
+                        handleDeleteStory={handleDeleteStory}
+                        canView
+                        canEdit
+                        canDelete
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Card>
+      }
+    />
   );
 };
 
