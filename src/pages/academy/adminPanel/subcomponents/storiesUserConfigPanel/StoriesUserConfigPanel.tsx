@@ -5,7 +5,7 @@ import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
-// import RolesCell from './RolesCell';
+import RolesCell from './RolesCell';
 // import UserActionsCell from './UserActionsCell';
 
 export type StoriesUserConfigPanelProps = OwnProps;
@@ -44,11 +44,11 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
     {
       headerName: 'Role',
       field: 'role',
-      //   cellRendererFramework: RolesCell,
-      //   cellRendererParams: {
-      //     courseRegId: props.courseRegId,
-      //     handleUpdateUserRole: props.handleUpdateUserRole
-      //   },
+      cellRendererFramework: RolesCell,
+      cellRendererParams: {
+        courseRegId: props.courseRegId,
+        handleUpdateUserRole: props.handleUpdateUserRole
+      },
       width: 110
     },
     {
@@ -102,7 +102,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
             if (gridApi.current) {
               gridApi.current.exportDataAsCsv({
                 fileName: `SA Users (${new Date().toISOString()}).csv`,
-                columnKeys: ['name', 'username', 'group', 'role']
+                columnKeys: ['name', 'username', 'role']
               });
             }
           }}
