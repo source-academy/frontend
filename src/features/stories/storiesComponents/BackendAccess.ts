@@ -2,7 +2,6 @@ import Constants from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
-import { request } from '../../../commons/utils/RequestHelper';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 
 export const putNewStoriesUsers = async (
@@ -10,13 +9,32 @@ export const putNewStoriesUsers = async (
   users: NameUsernameRole[],
   provider: string
 ): Promise<Response | null> => {
-  const resp = await request(`${Constants.storiesBackendUrl}/stories`, 'PUT', {
-    ...tokens,
-    body: { users, provider },
-    noHeaderAccept: true
-  });
+  try {
+    const resp = await fetch(`${Constants.storiesBackendUrl}/batch`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        users: users
+      })
+    });
+    if (!resp.ok) {
+      showWarningMessage(
+        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
+          resp.status === 401 || resp.status === 403
+            ? '; try logging in again, after manually saving any work.'
+            : ''
+        }`
+      );
+      return null;
+    }
+    return resp;
+  } catch (e) {
+    showWarningMessage('Error while communicating with backend; check your network?');
 
-  return resp;
+    return null;
+  }
 };
 
 export const getStories = async (): Promise<Response | null> => {
