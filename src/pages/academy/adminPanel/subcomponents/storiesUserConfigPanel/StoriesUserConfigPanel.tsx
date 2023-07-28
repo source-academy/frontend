@@ -42,10 +42,6 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
       field: 'username'
     },
     {
-      headerName: 'Group',
-      field: 'group'
-    },
-    {
       headerName: 'Role',
       field: 'role',
       //   cellRendererFramework: RolesCell,
