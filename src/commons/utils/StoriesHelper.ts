@@ -1,4 +1,6 @@
-const DEFAULT_STORY = `---
+import { IEditorProps } from 'react-ace';
+
+export const defaultStoryContent = `---
 config:
   chapter: 4
   variant: default
@@ -118,4 +120,14 @@ show(heart);
 \`\`\`
 `;
 
-export default DEFAULT_STORY;
+export const scrollSync = (editor: IEditorProps, preview: HTMLElement) => {
+  const editorScrollTop = editor.session.getScrollTop();
+  const editorScrollHeight = editor.renderer.layerConfig.maxHeight;
+
+  const previewScrollH = Math.max(preview.scrollHeight, 1);
+  const previewVisibleH = Math.max(preview.offsetHeight, 1);
+
+  const relativeHeight =
+    (editorScrollTop / (editorScrollHeight - previewVisibleH)) * (previewScrollH - previewVisibleH);
+  preview.scrollTo(0, relativeHeight);
+};
