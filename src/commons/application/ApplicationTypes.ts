@@ -12,7 +12,6 @@ import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
-import DEFAULT_STORY from '../utils/StoriesHelper';
 import {
   DebuggerContext,
   WorkspaceLocation,
@@ -515,9 +514,9 @@ export const defaultSession: SessionState = {
 };
 
 export const defaultStories: StoriesState = {
-  envs: {},
-  content: DEFAULT_STORY,
-  githubSaveInfo: { repoName: '', filePath: '' }
+  storyList: [],
+  currentStory: null,
+  envs: {}
 };
 
 export const createDefaultStoriesEnv = (

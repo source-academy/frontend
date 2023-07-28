@@ -16,22 +16,13 @@ import {
   TextInput,
   Title
 } from '@tremor/react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
-
-type StoryListView = {
-  id: number;
-  authorId: number;
-  authorName: string;
-  title: string;
-  content: string;
-  isPinned: boolean;
-};
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
 
 const Stories: React.FC = () => {
-  const [data, setData] = useState<StoryListView[]>([]);
   const [query, setQuery] = useState('');
 
   const navigate = useNavigate();
@@ -43,11 +34,23 @@ const Stories: React.FC = () => {
     { id: 'actions', header: 'Actions' }
   ];
 
+  const dispatch = useDispatch();
+  const data = useTypedSelector(state => state.stories.storyList);
   useEffect(() => {
-    getStories().then(res => {
-      res?.json().then(setData);
-    });
-  }, []);
+    dispatch(getStoriesList());
+  }, [dispatch]);
+
+  // TODO: Refactor together with the rest of the state logic
+  const handleDeleteStory = useCallback(
+    (id: number) => {
+      const confirm = window.confirm('Are you sure you want to delete this story?');
+      if (confirm) {
+        dispatch(deleteStory(id));
+        // deleteStory will auto-refresh the list of stories after
+      }
+    },
+    [dispatch]
+  );
 
   return (
     <div className="storiesHome">
@@ -77,7 +80,11 @@ const Stories: React.FC = () => {
           </TableHead>
           <TableBody>
             {data
-              .filter(story => story.authorName.toLowerCase().includes(query.toLowerCase()))
+              .filter(
+                story =>
+                  // Always show pinned stories
+                  story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+              )
               .map(story => (
                 <TableRow key={story.id}>
                   <TableCell>{story.authorName}</TableCell>
@@ -101,6 +108,7 @@ const Stories: React.FC = () => {
                           tooltip="View"
                           icon={() => <BpIcon icon={IconNames.EyeOpen} />}
                           variant="light"
+                          color="green"
                         />
                       </Link>
                       <Link to={`/stories/edit/${story.id}`}>
@@ -110,6 +118,14 @@ const Stories: React.FC = () => {
                           variant="light"
                         />
                       </Link>
+                      <button style={{ padding: 0 }} onClick={() => handleDeleteStory(story.id)}>
+                        <Icon
+                          tooltip="Delete"
+                          icon={() => <BpIcon icon={IconNames.TRASH} />}
+                          variant="light"
+                          color="red"
+                        />
+                      </button>
                     </Flex>
                   </TableCell>
                 </TableRow>
