@@ -14,7 +14,7 @@ export enum NotificationTypes {
   graded = 'graded',
   submitted = 'submitted',
   unsubmitted = 'unsubmitted',
-  unpublishedGrading = 'unpublishedGrading',
+  unpublished_grading = 'unpublished_grading',
   new_message = 'new_message'
 }
 
