@@ -9,7 +9,6 @@ import {
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
-  FETCH_STORY,
   GET_STORIES_LIST,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
@@ -60,7 +59,6 @@ export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
 export const getStoriesList = () => action(GET_STORIES_LIST);
 export const updateStoriesList = (storyList: StoryListView[]) =>
   action(UPDATE_STORIES_LIST, storyList);
-export const fetchStory = (id: number) => action(FETCH_STORY, id);
 export const setCurrentStory = (story: StoryData | null) => action(SET_CURRENT_STORY, story);
 export const setCurrentStoryId = (id: number | null) => action(SET_CURRENT_STORY_ID, id);
 export const createStory = (story: StoryData) => action(CREATE_STORY, story); // TODO: Unused as of now

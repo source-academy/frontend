@@ -7,7 +7,6 @@ import {
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   DELETE_STORY,
-  FETCH_STORY,
   GET_STORIES_LIST,
   SET_CURRENT_STORY_ID,
   StoryData,
@@ -28,13 +27,6 @@ export function* storiesSaga(): SagaIterator {
     yield put(actions.updateStoriesList(allStories));
   });
 
-  yield takeLatest(FETCH_STORY, function* (action: ReturnType<typeof actions.fetchStory>) {
-    const storyId = action.payload;
-    const story: StoryView = yield call(getStory, storyId);
-
-    yield put(actions.setCurrentStory(story));
-  });
-
   // takeEvery used to ensure that setting to null (clearing the story) is always
   // handled even if a refresh is triggered later.
   yield takeEvery(
@@ -42,7 +34,8 @@ export function* storiesSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.setCurrentStoryId>) {
       const storyId = action.payload;
       if (storyId) {
-        yield put(actions.fetchStory(storyId));
+        const story: StoryView = yield call(getStory, storyId);
+        yield put(actions.setCurrentStory(story));
       } else {
         const defaultStory: StoryData = {
           title: '',
