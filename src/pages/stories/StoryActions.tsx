@@ -33,7 +33,12 @@ const StoryActions: React.FC<Props> = ({
       )}
       {canEdit && (
         <Link to={`/stories/edit/${storyId}`}>
-          <Icon tooltip="Edit" icon={() => <BpIcon icon={IconNames.EDIT} />} variant="light" />
+          <Icon
+            tooltip="Edit"
+            icon={() => <BpIcon icon={IconNames.EDIT} />}
+            variant="light"
+            color="sky"
+          />
         </Link>
       )}
       {canDelete && (
