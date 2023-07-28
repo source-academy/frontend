@@ -33,9 +33,6 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const [isDirty, setIsDirty] = useState(false);
 
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
-  const storyTitle = story?.title ?? '';
-  const content = story?.content ?? '';
-
   const { id: idToSet } = useParams<{ id: string }>();
   useEffect(() => {
     // Clear screen on first load
@@ -68,15 +65,17 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     dispatch(setCurrentStory({ ...story, content: val }));
   };
 
+  const { title, content } = story;
+
   const controlBarProps: ControlBarProps = {
     editorButtons: [
       isViewOnly ? (
-        <>{storyTitle}</>
+        <>{title}</>
       ) : (
         <TextInput
           maxWidth="max-w-xl"
           placeholder="Enter story title"
-          value={storyTitle}
+          value={title}
           onChange={e => {
             const newTitle = e.target.value;
             dispatch(setCurrentStory({ ...story, title: newTitle }));
@@ -92,7 +91,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
               // TODO: Create story
               return;
             }
-            updateStory(storyId, storyTitle, content)
+            updateStory(storyId, title, content)
               .then(() => {
                 showSuccessMessage('Story saved');
                 setIsDirty(false);
