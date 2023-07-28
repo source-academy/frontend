@@ -19,6 +19,7 @@ import {
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SET_CURRENT_STORY,
+  SET_CURRENT_STORY_ID,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
   UPDATE_STORIES_LIST
@@ -196,6 +197,11 @@ export const StoriesReducer: Reducer<StoriesState> = (
       return {
         ...state,
         storyList: action.payload
+      };
+    case SET_CURRENT_STORY_ID:
+      return {
+        ...state,
+        currentStoryId: action.payload
       };
     case SET_CURRENT_STORY:
       return {
