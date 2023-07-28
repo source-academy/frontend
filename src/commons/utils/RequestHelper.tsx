@@ -47,12 +47,14 @@ let refreshingTokensPromise: Promise<Tokens | null> | undefined;
 export const request = async (
   path: string,
   method: RequestMethod,
-  opts: RequestOptions
+  opts: RequestOptions,
+  rawUrl?: string
 ): Promise<Response | null> => {
   const fetchOptions = generateApiCallHeadersAndFetchOptions(method, opts);
 
   try {
-    const resp = await fetch(`${Constants.backendUrl}/v2/${path}`, fetchOptions);
+    const url = rawUrl ? rawUrl : `${Constants.backendUrl}/v2/${path}`;
+    const resp = await fetch(url, fetchOptions);
     if (resp.ok) {
       return resp;
     }
