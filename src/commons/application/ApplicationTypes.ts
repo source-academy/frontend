@@ -515,6 +515,7 @@ export const defaultSession: SessionState = {
 
 export const defaultStories: StoriesState = {
   storyList: [],
+  currentStoryId: null,
   currentStory: null,
   envs: {}
 };
