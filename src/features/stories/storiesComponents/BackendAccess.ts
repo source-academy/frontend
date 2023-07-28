@@ -16,7 +16,14 @@ export const putNewStoriesUsers = async (
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        users: users
+        // TODO: backend create params does not support roles yet (aka) the role in NameUsernameRole is currently still unused
+        users: users.map(user => {
+          return {
+            name: user.name,
+            username: user.username,
+            provider: provider
+          };
+        })
       })
     });
     if (!resp.ok) {
