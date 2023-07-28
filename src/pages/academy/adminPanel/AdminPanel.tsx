@@ -28,6 +28,7 @@ import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
+import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
 const AdminPanel: React.FC = () => {
@@ -129,6 +130,15 @@ const AdminPanel: React.FC = () => {
       dispatch(addNewUsersToCourse(users, provider))
   };
 
+  const storiesUserConfigPanelProps = {
+    courseRegId: session.courseRegId,
+    userCourseRegistrations: session.userCourseRegistrations,
+    handleUpdateUserRole: (courseRegId: number, role: Role) =>
+      dispatch(updateUserRole(courseRegId, role)),
+    handleDeleteUserFromCourse: (courseRegId: number) =>
+      dispatch(deleteUserCourseRegistration(courseRegId))
+  };
+
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = () => {
@@ -180,6 +190,11 @@ const AdminPanel: React.FC = () => {
         />
         <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
         <Tab id="add-users" title="Add Users" panel={<AddUserPanel {...addUserPanelProps} />} />
+        <Tab
+          id="stories-users"
+          title="Stories Users"
+          panel={<StoriesUserConfigPanel {...storiesUserConfigPanelProps} />}
+        />
         <Tab id="notification-config" title="Notifications" panel={<NotificationConfigPanel />} />
       </Tabs>
     </div>
