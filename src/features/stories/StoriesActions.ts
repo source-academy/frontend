@@ -5,6 +5,7 @@ import {
   ADD_STORY_ENV,
   CLEAR_STORY_ENV,
   CREATE_STORY,
+  DELETE_STORY,
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
@@ -14,11 +15,10 @@ import {
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
   SET_CURRENT_STORY,
-  STORIES_UPDATE_GITHUB_SAVE_INFO,
+  SET_CURRENT_STORY_ID,
+  StoryData,
   StoryListView,
-  StoryView,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_CONTENT,
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
@@ -53,19 +53,16 @@ export const notifyStoriesEvaluated = (
     env
   });
 
-export const storiesUpdateGitHubSaveInfo = (repoName: string, filePath: string, lastSaved: Date) =>
-  action(STORIES_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath, lastSaved });
-
 export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
   action(TOGGLE_STORIES_USING_SUBST, { usingSubst, env });
-
-export const updateStoriesContent = (content: string) => action(UPDATE_STORIES_CONTENT, content);
 
 // New action creators post-refactor
 export const getStoriesList = () => action(GET_STORIES_LIST);
 export const updateStoriesList = (storyList: StoryListView[]) =>
   action(UPDATE_STORIES_LIST, storyList);
 export const fetchStory = (id: number) => action(FETCH_STORY, id);
-export const setCurrentStory = (story: StoryView | null) => action(SET_CURRENT_STORY, story);
-export const createStory = (story: StoryView) => action(CREATE_STORY, story); // TODO: Unused as of now
-export const saveStory = (story: StoryView) => action(SAVE_STORY, story); // TODO: Unused as of now
+export const setCurrentStory = (story: StoryData | null) => action(SET_CURRENT_STORY, story);
+export const setCurrentStoryId = (id: number | null) => action(SET_CURRENT_STORY_ID, id);
+export const createStory = (story: StoryData) => action(CREATE_STORY, story); // TODO: Unused as of now
+export const saveStory = (story: StoryData, id: number) => action(SAVE_STORY, story, id); // TODO: Unused as of now
+export const deleteStory = (id: number) => action(DELETE_STORY, id);
