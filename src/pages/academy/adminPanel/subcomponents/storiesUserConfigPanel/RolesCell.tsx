@@ -10,7 +10,7 @@ type OwnProps = {
   data: AdminPanelCourseRegistration;
   rowIndex: number;
   courseRegId: number;
-  handleUpdateUserStoriesRole: (courseRegId: number, storiesRole: StoriesRole) => void;
+  handleUpdateUserRole: (courseRegId: number, storiesRole: StoriesRole) => void;
 };
 
 const RolesCell: React.FC<RolesCellProps> = props => {
@@ -18,7 +18,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
 
   const changeHandler = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      props.handleUpdateUserStoriesRole(data.courseRegId, e.target.value as StoriesRole);
+      props.handleUpdateUserRole(data.courseRegId, e.target.value as StoriesRole);
     },
     [data, props]
   );
