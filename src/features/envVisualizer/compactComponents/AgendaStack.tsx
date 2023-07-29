@@ -4,13 +4,13 @@ import { AgendaItem, Instr } from 'js-slang/dist/ec-evaluator/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { AgendaStashConfig } from 'src/features/envVisualizer/EnvVisualizerAgendaStash';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { getAgendaItemComponent } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
-import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
-import { Layout } from '../EnvVisualizerLayout';
-import { IHoverable } from '../EnvVisualizerTypes';
-import { getAgendaItemComponent } from '../EnvVisualizerUtils';
 import { AgendaItemComponent } from './AgendaItemComponent';
 
 export class AgendaStack extends Visible implements IHoverable {

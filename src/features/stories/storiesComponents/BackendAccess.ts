@@ -1,8 +1,7 @@
 import Constants from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
-
-import { StoryListView, StoryView } from '../StoriesTypes';
+import { StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
 type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;

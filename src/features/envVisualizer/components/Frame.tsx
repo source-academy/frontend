@@ -1,18 +1,18 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
-
-import EnvVisualizer from '../EnvVisualizer';
-import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Env, EnvTreeNode, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   getNonEmptyEnv,
   getTextWidth,
   isDummyKey,
   isPrimitiveData,
   isUnassigned
-} from '../EnvVisualizerUtils';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';

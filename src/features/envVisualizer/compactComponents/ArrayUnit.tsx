@@ -1,11 +1,11 @@
 import React from 'react';
+import { RoundedRect } from 'src/features/envVisualizer/components/shapes/RoundedRect';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { defaultSAColor } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { RoundedRect } from '../components/shapes/RoundedRect';
-import { Visible } from '../components/Visible';
-import { CompactConfig } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Data } from '../EnvVisualizerTypes';
-import { defaultSAColor } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { ArrayValue } from './values/ArrayValue';

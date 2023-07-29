@@ -1,14 +1,14 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
+import { AgendaItemComponent } from 'src/features/envVisualizer/compactComponents/AgendaItemComponent';
+import { ArrayUnit } from 'src/features/envVisualizer/compactComponents/ArrayUnit';
+import { Frame } from 'src/features/envVisualizer/compactComponents/Frame';
+import { StashItemComponent } from 'src/features/envVisualizer/compactComponents/StashItemComponent';
+import { Text } from 'src/features/envVisualizer/compactComponents/Text';
+import { FnValue } from 'src/features/envVisualizer/compactComponents/values/FnValue';
+import { GlobalFnValue } from 'src/features/envVisualizer/compactComponents/values/GlobalFnValue';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
 
-import { Visible } from '../../components/Visible';
-import { AgendaItemComponent } from '../AgendaItemComponent';
-import { ArrayUnit } from '../ArrayUnit';
-import { Frame } from '../Frame';
-import { StashItemComponent } from '../StashItemComponent';
-import { Text } from '../Text';
-import { FnValue } from '../values/FnValue';
-import { GlobalFnValue } from '../values/GlobalFnValue';
 import { ArrowFromAgendaItemComponent } from './ArrowFromAgendaItemComponent';
 import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
 import { ArrowFromFn } from './ArrowFromFn';

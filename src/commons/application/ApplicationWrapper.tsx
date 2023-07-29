@@ -2,14 +2,14 @@ import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-
+import Constants from 'src/commons/utils/Constants';
+import { useDisabled, useSession } from 'src/commons/utils/Hooks';
 import {
   getDisabledRouterConfig,
   getFullAcademyRouterConfig,
   playgroundOnlyRouterConfig
-} from '../../routes/routerConfig';
-import Constants from '../utils/Constants';
-import { useDisabled, useSession } from '../utils/Hooks';
+} from 'src/routes/routerConfig';
+
 import { updateReactRouter } from './actions/CommonsActions';
 
 /**

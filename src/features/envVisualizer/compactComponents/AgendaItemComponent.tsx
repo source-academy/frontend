@@ -1,11 +1,13 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
-
-import { Visible } from '../components/Visible';
-import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
-import { Layout } from '../EnvVisualizerLayout';
-import { IHoverable } from '../EnvVisualizerTypes';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import {
+  AgendaStashConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerAgendaStash';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   currentItemSAColor,
   getTextHeight,
@@ -14,7 +16,8 @@ import {
   setUnhoveredCursor,
   setUnhoveredStyle,
   truncateText
-} from '../EnvVisualizerUtils';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
 import { ArrowFromAgendaItemComponent } from './arrows/ArrowFromAgendaItemComponent';
 import { Frame } from './Frame';
 

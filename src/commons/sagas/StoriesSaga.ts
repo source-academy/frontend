@@ -1,5 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import { defaultStoryContent } from 'src/commons/utils/StoriesHelper';
 import {
   deleteStory,
   getStories,
@@ -13,9 +15,6 @@ import {
   StoryListView,
   StoryView
 } from 'src/features/stories/StoriesTypes';
-
-import { actions } from '../utils/ActionsHelper';
-import { defaultStoryContent } from '../utils/StoriesHelper';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {

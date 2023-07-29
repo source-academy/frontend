@@ -1,14 +1,14 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
-
 import {
   createDefaultStoriesEnv,
   defaultStories,
   ErrorOutput,
   InterpreterOutput,
   ResultOutput
-} from '../../commons/application/ApplicationTypes';
-import { SourceActionType } from '../../commons/utils/ActionsHelper';
+} from 'src/commons/application/ApplicationTypes';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+
 import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 import {
   ADD_STORY_ENV,

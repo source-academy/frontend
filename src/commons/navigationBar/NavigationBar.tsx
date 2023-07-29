@@ -18,12 +18,12 @@ import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import Dropdown from 'src/commons/dropdown/Dropdown';
+import NotificationBadge from 'src/commons/notificationBadge/NotificationBadge';
+import { filterNotificationsByType } from 'src/commons/notificationBadge/NotificationBadgeHelper';
+import Constants from 'src/commons/utils/Constants';
+import { useResponsive, useSession } from 'src/commons/utils/Hooks';
 
-import Dropdown from '../dropdown/Dropdown';
-import NotificationBadge from '../notificationBadge/NotificationBadge';
-import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
-import Constants from '../utils/Constants';
-import { useResponsive, useSession } from '../utils/Hooks';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
   getAcademyNavbarRightInfo

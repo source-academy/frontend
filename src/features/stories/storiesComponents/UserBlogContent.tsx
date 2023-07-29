@@ -5,8 +5,8 @@ import debounceRender from 'react-debounce-render';
 import ReactMarkdown from 'react-markdown';
 import Constants from 'src/commons/utils/Constants';
 import { addStoryEnv, clearStoryEnv } from 'src/features/stories/StoriesActions';
+import { store } from 'src/pages/createStore';
 
-import { store } from '../../../pages/createStore';
 import SourceBlock from './SourceBlock';
 
 type UserBlogProps = {

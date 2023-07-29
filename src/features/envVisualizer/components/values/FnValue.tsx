@@ -8,16 +8,26 @@ import {
   Tag as KonvaTag,
   Text as KonvaText
 } from 'react-konva';
+import { ArrowFromFn } from 'src/features/envVisualizer/components/arrows/ArrowFromFn';
+import { GenericArrow } from 'src/features/envVisualizer/components/arrows/GenericArrow';
+import { Binding } from 'src/features/envVisualizer/components/Binding';
+import { Frame } from 'src/features/envVisualizer/components/Frame';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import {
+  EnvTreeNode,
+  FnTypes,
+  IHoverable,
+  ReferenceType
+} from 'src/features/envVisualizer/EnvVisualizerTypes';
+import {
+  getBodyText,
+  getNonEmptyEnv,
+  getParamsText,
+  getTextWidth
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import EnvVisualizer from '../../EnvVisualizer';
-import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from '../../EnvVisualizerTypes';
-import { getBodyText, getNonEmptyEnv, getParamsText, getTextWidth } from '../../EnvVisualizerUtils';
-import { ArrowFromFn } from '../arrows/ArrowFromFn';
-import { GenericArrow } from '../arrows/GenericArrow';
-import { Binding } from '../Binding';
-import { Frame } from '../Frame';
 import { GlobalFnValue } from './GlobalFnValue';
 import { Value } from './Value';
 
