@@ -999,7 +999,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       workspaceLocation: workspaceLocation,
       sideContentHeight: sideContentHeight
     },
-    sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
+    sideContentIsResizeable:
+      selectedTab !== SideContentType.substVisualizer &&
+      selectedTab !== SideContentType.envVisualizer
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

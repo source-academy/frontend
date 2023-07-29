@@ -6,6 +6,7 @@ import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
@@ -28,6 +29,7 @@ export type OverallState = {
   readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
+  readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
@@ -481,6 +483,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   githubAssessment: {
     ...createDefaultWorkspace('githubAssessment'),
     hasUnsavedChanges: false
+  },
+  stories: {
+    ...createDefaultWorkspace('stories')
+    // TODO: Perhaps we can add default values?
   }
 };
 
@@ -507,6 +513,28 @@ export const defaultSession: SessionState = {
   notifications: []
 };
 
+export const defaultStories: StoriesState = {
+  storyList: [],
+  currentStoryId: null,
+  currentStory: null,
+  envs: {}
+};
+
+export const createDefaultStoriesEnv = (
+  envName: string,
+  chapter: Chapter,
+  variant: Variant
+): StoriesEnvState => ({
+  context: createContext<String>(chapter, [], envName, variant),
+  execTime: 1000,
+  isRunning: false,
+  output: [],
+  stepLimit: 1000,
+  globals: [],
+  usingSubst: false,
+  debuggerContext: {} as DebuggerContext
+});
+
 export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null
 };
@@ -519,6 +547,7 @@ export const defaultState: OverallState = {
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
+  stories: defaultStories,
   workspaces: defaultWorkspaceManager,
   fileSystem: defaultFileSystem
 };
