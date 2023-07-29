@@ -616,13 +616,15 @@ export function getAgendaItemComponent(
 }
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
-  if (isFn(stashItem) || isArray(stashItem)) {
+  if (isFn(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
     for (const level of Layout.compactLevels) {
       for (const frame of level.frames) {
-        if (isFn(stashItem)) {
+        if (isFn(stashItem) || isGlobalFn(stashItem)) {
           const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
-            if (isFn(binding.data)) {
+            if (isFn(stashItem) && isFn(binding.data)) {
               return binding.data.id === stashItem.id;
+            } else if (isGlobalFn(stashItem) && isGlobalFn(binding.data)) {
+              return binding.data?.toString() === stashItem.toString();
             }
             return false;
           })?.value as FnValue | GlobalFnValue;
