@@ -1,15 +1,19 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
-import { ArrayUnit } from 'src/features/envVisualizer/compactComponents/ArrayUnit';
-import { Frame } from 'src/features/envVisualizer/compactComponents/Frame';
-import { Text } from 'src/features/envVisualizer/compactComponents/Text';
-import { FnValue } from 'src/features/envVisualizer/compactComponents/values/FnValue';
-import { GlobalFnValue } from 'src/features/envVisualizer/compactComponents/values/GlobalFnValue';
-import { Visible } from 'src/features/envVisualizer/components/Visible';
 
+import { Visible } from '../../components/Visible';
+import { AgendaItemComponent } from '../AgendaItemComponent';
+import { ArrayUnit } from '../ArrayUnit';
+import { Frame } from '../Frame';
+import { StashItemComponent } from '../StashItemComponent';
+import { Text } from '../Text';
+import { FnValue } from '../values/FnValue';
+import { GlobalFnValue } from '../values/GlobalFnValue';
+import { ArrowFromAgendaItemComponent } from './ArrowFromAgendaItemComponent';
 import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
 import { ArrowFromFn } from './ArrowFromFn';
 import { ArrowFromFrame } from './ArrowFromFrame';
+import { ArrowFromStashItemComponent } from './ArrowFromStashItemComponent';
 import { ArrowFromText } from './ArrowFromText';
 import { GenericArrow } from './GenericArrow';
 
@@ -36,6 +40,8 @@ export abstract class Arrow {
       return new ArrowFromFn(source);
     if (source instanceof Text) return new ArrowFromText(source);
     if (source instanceof ArrayUnit) return new ArrowFromArrayUnit(source);
+    if (source instanceof AgendaItemComponent) return new ArrowFromAgendaItemComponent(source);
+    if (source instanceof StashItemComponent) return new ArrowFromStashItemComponent(source);
 
     // else return a generic arrow
     return new GenericArrow(source);

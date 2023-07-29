@@ -1,14 +1,12 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
-import { Visible } from 'src/features/envVisualizer/components/Visible';
-import {
-  CompactConfig,
-  ShapeDefaultProps
-} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
-import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { Data, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
-import { getTextWidth } from 'src/features/envVisualizer/EnvVisualizerUtils';
+
+import { Visible } from '../components/Visible';
+import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data, IHoverable } from '../EnvVisualizerTypes';
+import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
 
 export interface TextOptions {
   maxWidth: number;
@@ -72,16 +70,14 @@ export class Text extends Visible implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'pointer');
+    setHoveredCursor(currentTarget);
     this.ref.current.moveToTop();
     this.ref.current.show();
     currentTarget.getLayer()?.draw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    const container = currentTarget.getStage()?.container();
-    container && (container.style.cursor = 'default');
+    setUnhoveredCursor(currentTarget);
     this.ref.current.hide();
     currentTarget.getLayer()?.draw();
   };

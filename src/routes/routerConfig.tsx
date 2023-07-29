@@ -32,6 +32,15 @@ const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../pages/welcome/Welcome');
 const Academy = () => import('../pages/academy/Academy');
 const MissionControl = () => import('../pages/missionControl/MissionControl');
+const EditStory = async () => {
+  const { EditStoryComponent } = await import('../pages/stories/Story');
+  return { Component: EditStoryComponent };
+};
+const ViewStory = async () => {
+  const { ViewStoryComponent } = await import('../pages/stories/Story');
+  return { Component: ViewStoryComponent };
+};
+const Stories = () => import('../pages/stories/Stories');
 
 export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
   const disabledReason = typeof reason === 'string' ? reason : undefined;
@@ -81,6 +90,22 @@ const commonChildrenRoutes: RouteObject[] = [
     path: 'githubassessments/*',
     lazy: GitHubClassroom,
     loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
+  },
+  {
+    path: 'stories/new',
+    lazy: EditStory
+  },
+  {
+    path: 'stories/view/:id',
+    lazy: ViewStory
+  },
+  {
+    path: 'stories/edit/:id',
+    lazy: EditStory
+  },
+  {
+    path: 'stories',
+    lazy: Stories
   }
 ];
 

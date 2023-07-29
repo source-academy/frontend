@@ -1,18 +1,13 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
-import { Frame } from 'src/features/envVisualizer/components/Frame';
-import { Text } from 'src/features/envVisualizer/components/Text';
-import { Visible } from 'src/features/envVisualizer/components/Visible';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
-import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { IHoverable, IVisible, StepsArray } from 'src/features/envVisualizer/EnvVisualizerTypes';
-import {
-  setHoveredCursor,
-  setHoveredStyle,
-  setUnhoveredCursor,
-  setUnhoveredStyle
-} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
+import EnvVisualizer from '../../EnvVisualizer';
+import { Config, ShapeDefaultProps } from '../../EnvVisualizerConfig';
+import { Layout } from '../../EnvVisualizerLayout';
+import { IHoverable, IVisible, StepsArray } from '../../EnvVisualizerTypes';
+import { Frame } from '../Frame';
+import { Text } from '../Text';
+import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible>
@@ -71,10 +66,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return Number(Config.ArrowStrokeWidth);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>) {
-    setHoveredCursor(e.target);
-    setHoveredStyle(e.currentTarget, {
-      strokeWidth: Number(Config.ArrowHoveredStrokeWidth)
-    });
     this.ref.current.opacity = this.unhovered_opacity;
   }
   onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
@@ -84,33 +75,20 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         !(this.source instanceof Text && this.source.frame?.isSelected()) &&
         !(this.source instanceof Frame && this.source.isSelected())
       ) {
-        setUnhoveredStyle(currentTarget, {
-          strokeWidth: this.getStrokeWidth()
-        });
         this.ref.current.opacity = this.unhovered_opacity;
       } else {
-        setHoveredStyle(currentTarget, {
-          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
-        });
         this.ref.current.opacity = this.hovered_opacity;
       }
     }
   }
   onMouseLeave(e: KonvaEventObject<MouseEvent>) {
-    setUnhoveredCursor(e.target);
     if (!this.isSelected()) {
       if (
         (this.source instanceof Text && this.source.frame?.isSelected()) ||
         (this.source instanceof Frame && this.source.isSelected())
       ) {
-        setHoveredStyle(e.currentTarget, {
-          strokeWidth: Number(Config.ArrowHoveredStrokeWidth) * this.unhovered_opacity
-        });
         this.ref.current.opacity = this.hovered_opacity;
       } else {
-        setUnhoveredStyle(e.currentTarget, {
-          strokeWidth: this.getStrokeWidth()
-        });
         this.ref.current.opacity = this.unhovered_opacity;
       }
     }

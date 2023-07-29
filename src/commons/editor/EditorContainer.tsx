@@ -1,14 +1,17 @@
 // Necessary to prevent "ReferenceError: ace is not defined" error.
 // See https://github.com/securingsincity/react-ace/issues/1233 (although there is no explanation).
 import 'ace-builds/src-noconflict/ace';
+// For webpack to resolve properly during lazy loading (see https://github.com/source-academy/frontend/issues/2543)
+import 'ace-builds/webpack-resolver';
 
 import _ from 'lodash';
 import React from 'react';
+
 import SourcecastEditor, {
   SourceRecorderEditorProps
-} from 'src/commons/sourceRecorder/SourceRecorderEditor';
-import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
-
+} from '../sourceRecorder/SourceRecorderEditor';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
+import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
 
@@ -60,6 +63,7 @@ const createSourcecastEditorTab =
   };
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
+  const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
   const {
     baseFilePath,
     isFolderModeEnabled,
@@ -69,6 +73,8 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
     editorTabs,
     ...editorProps
   } = props;
+  editorProps.editorBinding = workspaceSettings.editorBinding;
+
   const createEditorTab =
     editorProps.editorVariant === 'sourcecast'
       ? createSourcecastEditorTab(editorProps)

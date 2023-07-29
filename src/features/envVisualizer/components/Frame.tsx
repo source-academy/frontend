@@ -1,22 +1,18 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
-import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { Env, EnvTreeNode, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
+
+import EnvVisualizer from '../EnvVisualizer';
+import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
 import {
   getNonEmptyEnv,
   getTextWidth,
   isDummyKey,
   isPrimitiveData,
-  isUnassigned,
-  setHoveredCursor,
-  setHoveredStyle,
-  setUnhoveredCursor,
-  setUnhoveredStyle
-} from 'src/features/envVisualizer/EnvVisualizerUtils';
-
+  isUnassigned
+} from '../EnvVisualizerUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
@@ -231,60 +227,15 @@ export class Frame extends Visible implements IHoverable {
     return this.selected;
   };
 
-  onMouseEnter = () => {
-    setHoveredCursor(this.ref.current);
-    setHoveredStyle(this.ref.current);
-    this.bindings.forEach(x => {
-      const arrow = x.getArrow();
-      arrow && setHoveredStyle(arrow.ref.current);
-    });
-    this.values.forEach(x => {
-      x && setHoveredStyle(x.ref.current);
-    });
-  };
+  onMouseEnter = () => {};
 
-  onMouseLeave = () => {
-    setUnhoveredCursor(this.ref.current);
-    if (!this.selected) {
-      setUnhoveredStyle(this.ref.current);
-      this.bindings.forEach(x => {
-        const arrow = x.getArrow();
-        arrow && !arrow.isSelected() && setUnhoveredStyle(arrow.ref.current);
-      });
-      this.values.forEach(x => {
-        if (!(x instanceof ArrayValue) || !x.isSelected()) {
-          x && setUnhoveredStyle(x.ref.current);
-        }
-      });
-    }
-  };
+  onMouseLeave = () => {};
 
   /**
    * Highlights frame and
    */
   onClick = (e: KonvaEventObject<MouseEvent>) => {
     this.selected = !this.selected;
-    if (!this.selected) {
-      setUnhoveredStyle(this.ref.current);
-      this.bindings.forEach(x => {
-        const arrow = x.getArrow();
-        arrow && !arrow.isSelected() && setUnhoveredStyle(arrow.ref.current);
-      });
-      this.values.forEach(x => {
-        if (!(x instanceof ArrayValue) || !x.isSelected()) {
-          x && setUnhoveredStyle(x.ref.current);
-        }
-      });
-    } else {
-      setHoveredStyle(this.ref.current);
-      this.bindings.forEach(x => {
-        const arrow = x.getArrow();
-        arrow && setHoveredStyle(arrow.ref.current);
-      });
-      this.values.forEach(x => {
-        x && setHoveredStyle(x.ref.current);
-      });
-    }
   };
 
   draw(): React.ReactNode {

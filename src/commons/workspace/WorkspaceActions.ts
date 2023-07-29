@@ -1,14 +1,17 @@
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { SALanguage } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from 'src/commons/application/types/InterpreterTypes';
-import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
-import { NOTIFY_PROGRAM_EVALUATED } from 'src/commons/sideContent/SideContentTypes';
-import { SET_IS_EDITOR_READONLY } from 'src/features/sourceRecorder/sourcecast/SourcecastTypes';
 import { action } from 'typesafe-actions';
 
+import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SALanguage } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import {
+  UPDATE_EDITOR_HIGHLIGHTED_LINES,
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+} from '../application/types/InterpreterTypes';
+import { Library } from '../assessment/AssessmentTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   ADD_EDITOR_TAB,
   ADD_HTML_CONSOLE_ERROR,
@@ -213,6 +216,17 @@ export const setEditorHighlightedLines = (
     newHighlightedLines
   });
 
+export const setEditorHighlightedLinesAgenda = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newHighlightedLines: HighlightedLines[]
+) =>
+  action(UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA, {
+    workspaceLocation,
+    editorTabIndex,
+    newHighlightedLines
+  });
+
 export const moveCursor = (
   workspaceLocation: WorkspaceLocation,
   editorTabIndex: number,
@@ -374,8 +388,11 @@ export const notifyProgramEvaluated = (
 export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
 
-export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: WorkspaceLocation) =>
-  action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation });
+export const addHtmlConsoleError = (
+  errorMsg: string,
+  workspaceLocation: WorkspaceLocation,
+  isStoriesBlock: boolean = false
+) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, isStoriesBlock });
 
 export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });

@@ -23,54 +23,51 @@ import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
+import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
+
+import { EventType } from '../../features/achievement/AchievementTypes';
+import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
+import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
+import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
   isSourceLanguage,
   OverallState,
   styliseSublanguage
-} from 'src/commons/application/ApplicationTypes';
-import {
-  externalLibraries,
-  ExternalLibraryName
-} from 'src/commons/application/types/ExternalTypes';
+} from '../application/ApplicationTypes';
+import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
   DEBUG_RESET,
   DEBUG_RESUME,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES
-} from 'src/commons/application/types/InterpreterTypes';
-import {
-  Library,
-  Testcase,
-  TestcaseType,
-  TestcaseTypes
-} from 'src/commons/assessment/AssessmentTypes';
-import { Documentation } from 'src/commons/documentation/Documentation';
-import {
-  retrieveFilesInWorkspaceAsRecord,
-  writeFileRecursively
-} from 'src/commons/fileSystem/utils';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { actions } from 'src/commons/utils/ActionsHelper';
-import DisplayBufferService from 'src/commons/utils/DisplayBufferService';
+  UPDATE_EDITOR_HIGHLIGHTED_LINES,
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+} from '../application/types/InterpreterTypes';
+import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
+import { Documentation } from '../documentation/Documentation';
+import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/utils';
+import { SideContentType } from '../sideContent/SideContentTypes';
+import { actions } from '../utils/ActionsHelper';
+import DisplayBufferService from '../utils/DisplayBufferService';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
   getRestoreExtraMethodsString,
   getStoreExtraMethodsString,
   highlightClean,
+  highlightCleanForAgenda,
   highlightLine,
+  highlightLineForAgenda,
   makeElevatedContext,
   visualizeEnv
-} from 'src/commons/utils/JsSlangHelper';
-import {
-  showSuccessMessage,
-  showWarningMessage
-} from 'src/commons/utils/notifications/NotificationsHelper';
-import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from 'src/commons/utils/SourcerorHelper';
-import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
-import { notifyProgramEvaluated } from 'src/commons/workspace/WorkspaceActions';
+} from '../utils/JsSlangHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
+import { showFullJSDisclaimer, showFullTSDisclaimer } from '../utils/WarningDialogHelper';
+import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
@@ -92,13 +89,7 @@ import {
   TOGGLE_FOLDER_MODE,
   UPDATE_EDITOR_VALUE,
   WorkspaceLocation
-} from 'src/commons/workspace/WorkspaceTypes';
-import { EventType } from 'src/features/achievement/AchievementTypes';
-import DataVisualizer from 'src/features/dataVisualizer/dataVisualizer';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
-import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
-
+} from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from './SafeEffects';
 
 export default function* WorkspaceSaga(): SagaIterator {
@@ -107,9 +98,15 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     ADD_HTML_CONSOLE_ERROR,
     function* (action: ReturnType<typeof actions.addHtmlConsoleError>) {
-      yield put(
-        actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
-      );
+      if (!action.payload.isStoriesBlock) {
+        yield put(
+          actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
+        );
+      } else {
+        yield put(
+          actions.handleStoriesConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
+        );
+      }
     }
   );
 
@@ -316,6 +313,21 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield call(evalCode, codeFiles, codeFilePath, context, execTime, workspaceLocation, EVAL_REPL);
   });
 
+  yield takeEvery(EVAL_STORY, function* (action: ReturnType<typeof actions.evalStory>) {
+    const env = action.payload.env;
+    const code = action.payload.code;
+    const execTime: number = yield select(
+      (state: OverallState) => state.stories.envs[env].execTime
+    );
+    context = yield select((state: OverallState) => state.stories.envs[env].context);
+    const codeFilePath = '/code.js';
+    const codeFiles = {
+      [codeFilePath]: code
+    };
+    // TODO: Check what happens to the env here
+    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY);
+  });
+
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
@@ -364,9 +376,33 @@ export default function* WorkspaceSaga(): SagaIterator {
         highlightClean();
       } else {
         try {
-          newHighlightedLines.forEach(([startRow, _endRow]: [number, number]) =>
-            highlightLine(startRow)
-          );
+          newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
+            for (let row = startRow; row <= endRow; row++) {
+              highlightLine(row);
+            }
+          });
+        } catch (e) {
+          // Error most likely caused by trying to highlight the lines of the prelude
+          // in Env Viz. Can be ignored.
+        }
+      }
+      yield;
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA,
+    function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
+      const newHighlightedLines = action.payload.newHighlightedLines;
+      if (newHighlightedLines.length === 0) {
+        highlightCleanForAgenda();
+      } else {
+        try {
+          newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
+            for (let row = startRow; row <= endRow; row++) {
+              highlightLineForAgenda(row);
+            }
+          });
         } catch (e) {
           // Error most likely caused by trying to highlight the lines of the prelude
           // in Env Viz. Can be ignored.
@@ -563,11 +599,13 @@ let lastDebuggerResult: any;
 let lastNonDetResult: Result;
 function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
-    const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
-    const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
+    const row = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[start, end]]));
+    // We highlight only one row to show the current line
+    // If we highlight from start to end, the whole program block will be highlighted at the start
+    // since the first node is the program node
+    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[row, row]]));
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
@@ -615,9 +653,14 @@ function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: str
 }
 
 export function* dumpDisplayBuffer(
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  isStoriesBlock: boolean = false
 ): Generator<StrictEffect, void, any> {
-  yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
+  if (!isStoriesBlock) {
+    yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
+  } else {
+    yield put(actions.handleStoriesConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
+  }
 }
 
 /**
@@ -997,6 +1040,7 @@ export function* evalCode(
 ): SagaIterator {
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
+  const isStoriesBlock = actionType === EVAL_STORY;
 
   // Logic for execution of substitution model visualizer
   const correctWorkspace = workspaceLocation === 'playground' || workspaceLocation === 'sicp';
@@ -1006,10 +1050,12 @@ export function* evalCode(
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
             .usingSubst
       )
+    : isStoriesBlock
+    ? yield select((state: OverallState) => state.stories.envs[workspaceLocation].usingSubst)
     : false;
-  const stepLimit: number = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
-  );
+  const stepLimit: number = isStoriesBlock
+    ? yield select((state: OverallState) => state.stories.envs[workspaceLocation].stepLimit)
+    : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
   const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
@@ -1155,7 +1201,11 @@ export function* evalCode(
   if (actionType === EVAL_EDITOR) {
     lastDebuggerResult = result;
   }
-  yield call(updateInspector, workspaceLocation);
+
+  // do not highlight for stories
+  if (!isStoriesBlock) {
+    yield call(updateInspector, workspaceLocation);
+  }
 
   if (
     result.status !== 'suspended' &&
@@ -1163,9 +1213,12 @@ export function* evalCode(
     result.status !== 'suspended-non-det' &&
     result.status !== 'suspended-ec-eval'
   ) {
-    yield* dumpDisplayBuffer(workspaceLocation);
-    yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-
+    yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock);
+    if (!isStoriesBlock) {
+      yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+    } else {
+      yield put(actions.evalStoryError(context.errors, workspaceLocation));
+    }
     // we need to parse again, but preserve the errors in context
     const oldErrors = context.errors;
     context.errors = [];
@@ -1176,7 +1229,7 @@ export function* evalCode(
     // for achievement event tracking
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
 
-    if (typeErrors && typeErrors.length > 0) {
+    if (typeErrors && typeErrors.length > 0 && !isStoriesBlock) {
       events.push(EventType.ERROR);
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
@@ -1195,11 +1248,15 @@ export function* evalCode(
     lastNonDetResult = result;
   }
 
-  yield* dumpDisplayBuffer(workspaceLocation);
+  yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock);
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
-    yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+    if (!isStoriesBlock) {
+      yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+    } else {
+      yield put(actions.evalStorySuccess(result.value, workspaceLocation));
+    }
   }
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
@@ -1211,6 +1268,11 @@ export function* evalCode(
       notifyProgramEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
     );
   }
+  if (isStoriesBlock) {
+    yield put(
+      notifyStoriesEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
+    );
+  }
 
   // The first time the code is executed using the explicit control evaluator,
   // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
@@ -1218,6 +1280,11 @@ export function* evalCode(
     yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
     yield put(actions.toggleUpdateEnv(false, workspaceLocation));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
+  }
+  // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
+  if (context.executionMethod === 'ec-evaluator' || context.executionMethod === 'interpreter') {
+    const introIcon = document.getElementById(SideContentType.introduction + '-icon');
+    introIcon && introIcon.classList.remove('side-content-tab-alert-error');
   }
 }
 

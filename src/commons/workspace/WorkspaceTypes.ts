@@ -98,7 +98,13 @@ export type WorkspaceManagerState = {
   readonly sourcereel: SourcereelWorkspaceState;
   readonly sicp: SicpWorkspaceState;
   readonly githubAssessment: GitHubAssessmentWorkspaceState;
+  readonly stories: StoriesWorkspaceState;
 };
+
+type StoriesWorkspaceAttr = {
+  // TODO: Add stories workspace attributes
+};
+type StoriesWorkspaceState = StoriesWorkspaceAttr & WorkspaceState;
 
 export type EditorTabState = {
   readonly filePath?: string;

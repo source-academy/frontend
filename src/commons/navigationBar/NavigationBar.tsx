@@ -18,12 +18,12 @@ import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
-import Dropdown from 'src/commons/dropdown/Dropdown';
-import NotificationBadge from 'src/commons/notificationBadge/NotificationBadge';
-import { filterNotificationsByType } from 'src/commons/notificationBadge/NotificationBadgeHelper';
-import Constants from 'src/commons/utils/Constants';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 
+import Dropdown from '../dropdown/Dropdown';
+import NotificationBadge from '../notificationBadge/NotificationBadge';
+import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
+import Constants from '../utils/Constants';
+import { useResponsive, useSession } from '../utils/Hooks';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
   getAcademyNavbarRightInfo
@@ -47,23 +47,21 @@ const NavigationBar: React.FC = () => {
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
   const {
+    isLoggedIn,
+    isEnrolledInACourse,
     role,
-    name,
     courseId,
     courseShortName,
     enableAchievements,
     enableSourcecast,
     assessmentConfigurations
-  } = useTypedSelector(state => state.session);
+  } = useSession();
   const assessmentTypes = useMemo(
     () => assessmentConfigurations?.map(c => c.type),
     [assessmentConfigurations]
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
-
-  const isLoggedIn = !!name;
-  const isEnrolledInACourse = !!role;
 
   const createMobileNavlink: CreateNavlinkFunction = useCallback(
     navbarEntry => (
@@ -179,6 +177,13 @@ const NavigationBar: React.FC = () => {
         icon: IconNames.MOUNTAIN,
         text: 'Achievements',
         disabled: !(isEnrolledInACourse && enableAchievements)
+      },
+      {
+        to: '/stories',
+        icon: IconNames.GIT_REPO,
+        text: 'Stories',
+        // TODO: Enable when stories are implemented
+        disabled: true && !isLoggedIn
       }
     ];
   }, [isLoggedIn, isEnrolledInACourse, courseId, enableSourcecast, enableAchievements]);
@@ -320,7 +325,7 @@ const NavigationBar: React.FC = () => {
         <Route
           path="*"
           element={
-            !Constants.playgroundOnly && role && !isMobileBreakpoint ? (
+            !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
               <AcademyNavigationBar assessmentTypes={assessmentTypes} />
             ) : null
           }
@@ -346,6 +351,13 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     to: '/sicpjs',
     icon: IconNames.BOOK,
     text: 'SICP JS'
+  },
+  {
+    to: '/stories',
+    icon: IconNames.GIT_REPO,
+    text: 'Stories',
+    // TODO: Enable when stories are implemented
+    disabled: true
   }
 ];
 

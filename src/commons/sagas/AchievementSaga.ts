@@ -1,12 +1,6 @@
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, select } from 'redux-saga/effects';
-import { updateGoalProcessed } from 'src/commons/achievement/AchievementManualEditor';
-import AchievementInferencer from 'src/commons/achievement/utils/AchievementInferencer';
-import { goalIncludesEvents, incrementCount } from 'src/commons/achievement/utils/EventHandler';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { Tokens } from 'src/commons/application/types/SessionTypes';
-import { actions } from 'src/commons/utils/ActionsHelper';
-import Constants from 'src/commons/utils/Constants';
+
 import {
   AchievementGoal,
   ADD_EVENT,
@@ -23,8 +17,15 @@ import {
   REMOVE_GOAL,
   UPDATE_GOAL_PROGRESS,
   UPDATE_OWN_GOAL_PROGRESS
-} from 'src/features/achievement/AchievementTypes';
-
+} from '../../features/achievement/AchievementTypes';
+import { updateGoalProcessed } from '../achievement/AchievementManualEditor';
+import AchievementInferencer from '../achievement/utils/AchievementInferencer';
+import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
+import { OverallState } from '../application/ApplicationTypes';
+import { Tokens } from '../application/types/SessionTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
+import { actions } from '../utils/ActionsHelper';
+import Constants from '../utils/Constants';
 import {
   bulkUpdateAchievements,
   bulkUpdateGoals,
@@ -190,6 +191,22 @@ export default function* AchievementSaga(): SagaIterator {
     const enableAchievements = yield select(
       (state: OverallState) => state.session.enableAchievements
     );
+    if (action.payload.find(e => e === EventType.ERROR)) {
+      // Flash the home icon if there is an error and the user is in the env viz or subst viz tab
+      const introIcon = document.getElementById(SideContentType.introduction + '-icon');
+      const envTab = document.getElementById(
+        'bp4-tab-panel_side-content-tabs_' + SideContentType.envVisualizer
+      );
+      const substTab = document.getElementById(
+        'bp4-tab-panel_side-content-tabs_' + SideContentType.substVisualizer
+      );
+      if (
+        (envTab && envTab.ariaHidden === 'false') ||
+        (substTab && substTab.ariaHidden === 'false')
+      ) {
+        introIcon && introIcon.classList.add('side-content-tab-alert-error');
+      }
+    }
     if (role && enableAchievements && !Constants.playgroundOnly) {
       loggedEvents.push(action.payload);
 

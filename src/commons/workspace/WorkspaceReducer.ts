@@ -1,5 +1,9 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
+
+import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
+import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -7,8 +11,8 @@ import {
   ErrorOutput,
   InterpreterOutput,
   ResultOutput
-} from 'src/commons/application/ApplicationTypes';
-import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
+} from '../application/ApplicationTypes';
+import { LOG_OUT } from '../application/types/CommonsTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
@@ -19,21 +23,15 @@ import {
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES
-} from 'src/commons/application/types/InterpreterTypes';
-import { Testcase } from 'src/commons/assessment/AssessmentTypes';
-import {
-  SET_EDITOR_SESSION_ID,
-  SET_SHAREDB_CONNECTED
-} from 'src/commons/collabEditing/CollabEditingTypes';
-import { NOTIFY_PROGRAM_EVALUATED } from 'src/commons/sideContent/SideContentTypes';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
-import Constants from 'src/commons/utils/Constants';
-import { createContext } from 'src/commons/utils/JsSlangHelper';
-import { SourcecastReducer } from 'src/features/sourceRecorder/sourcecast/SourcecastReducer';
-import { SET_IS_EDITOR_READONLY } from 'src/features/sourceRecorder/sourcecast/SourcecastTypes';
-import { SourcereelReducer } from 'src/features/sourceRecorder/sourcereel/SourcereelReducer';
-
+  UPDATE_EDITOR_HIGHLIGHTED_LINES,
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+} from '../application/types/InterpreterTypes';
+import { Testcase } from '../assessment/AssessmentTypes';
+import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
+import { SourceActionType } from '../utils/ActionsHelper';
+import Constants from '../utils/Constants';
+import { createContext } from '../utils/JsSlangHelper';
 import {
   ADD_EDITOR_TAB,
   BROWSE_REPL_HISTORY_DOWN,
@@ -732,6 +730,30 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     }
     case UPDATE_EDITOR_HIGHLIGHTED_LINES: {
       const { editorTabIndex, newHighlightedLines } = action.payload;
+      if (editorTabIndex < 0) {
+        throw new Error('Editor tab index must be non-negative!');
+      }
+      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        throw new Error('Editor tab index must have a corresponding editor tab!');
+      }
+
+      const newEditorTabs = [...state[workspaceLocation].editorTabs];
+      newEditorTabs[editorTabIndex] = {
+        ...newEditorTabs[editorTabIndex],
+        highlightedLines: newHighlightedLines
+      };
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+    case UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA: {
+      const { editorTabIndex, newHighlightedLines } = action.payload;
+
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');
       }

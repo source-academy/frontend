@@ -1,11 +1,9 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
-import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
-import { setHoveredStyle, setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
+import EnvVisualizer from '../EnvVisualizer';
+import { Config } from '../EnvVisualizerConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data } from '../EnvVisualizerTypes';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
@@ -58,22 +56,9 @@ export class ArrayUnit extends Visible {
     this.value instanceof PrimitiveValue && this.value.updatePosition();
   };
 
-  onMouseEnter = () => {
-    this.parent.units.forEach(u => {
-      setHoveredStyle(u.ref.current);
-    });
-  };
+  onMouseEnter = () => {};
 
-  onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (!this.parent.isSelected()) {
-      this.parent.units.forEach(u => {
-        setUnhoveredStyle(u.ref.current);
-      });
-    } else {
-      const container = currentTarget.getStage()?.container();
-      container && (container.style.cursor = 'default');
-    }
-  };
+  onMouseLeave = () => {};
 
   onClick = () => {
     this.parent.onClick();

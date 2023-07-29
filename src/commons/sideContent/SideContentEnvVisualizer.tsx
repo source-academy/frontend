@@ -1,15 +1,28 @@
-import { Button, ButtonGroup, Classes, Divider, Slider } from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Button,
+  ButtonGroup,
+  Checkbox,
+  Classes,
+  Divider,
+  Slider
+} from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
+import classNames from 'classnames';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import Constants, { Links } from 'src/commons/utils/Constants';
-import { updateEnvSteps } from 'src/commons/workspace/WorkspaceActions';
-import { evalEditor } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+
+import { OverallState } from '../application/ApplicationTypes';
+import { HighlightedLines } from '../editor/EditorTypes';
+import Constants, { Links } from '../utils/Constants';
+import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../workspace/WorkspaceActions';
+import { evalEditor } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -36,6 +49,11 @@ type OwnProps = {
 type DispatchProps = {
   handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
   handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
+  setEditorHighlightedLines: (
+    workspaceLocation: WorkspaceLocation,
+    editorTabIndex: number,
+    newHighlightedLines: HighlightedLines[]
+  ) => void;
 };
 
 const envVizKeyMap = {
@@ -57,7 +75,12 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     EnvVisualizer.init(
       visualization => this.setState({ visualization }),
       this.state.width,
-      this.state.height
+      this.state.height,
+      (segments: [number, number][]) => {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        // This comment is copied over from workspace saga
+        props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
+      }
     );
   }
 
@@ -106,7 +129,6 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   componentDidMount() {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
-    EnvVisualizer.redraw();
   }
   componentWillUnmount() {
     this.handleResize.cancel();
@@ -146,86 +168,187 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
         };
 
     return (
-      <HotKeys keyMap={envVizKeyMap} handlers={envVizHandlers}>
-        <div className={Classes.DARK}>
-          <div
-            className={'sa-substituter'}
-            style={{ position: 'sticky', top: '0', left: '0', zIndex: '1' }}
-          >
-            <Slider
-              disabled={!this.state.visualization}
-              min={1}
-              max={this.props.numOfStepsTotal}
-              onChange={this.sliderShift}
-              onRelease={this.sliderRelease}
-              value={this.state.value < 1 ? 1 : this.state.value}
-            />
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <ButtonGroup>
-                <Button
+      <HotKeys
+        keyMap={envVizKeyMap}
+        handlers={envVizHandlers}
+        style={{
+          maxHeight: '100%',
+          overflow: this.state.visualization ? 'hidden' : 'auto'
+        }}
+      >
+        <div className={classNames('sa-substituter', Classes.DARK)}>
+          <Slider
+            disabled={!this.state.visualization}
+            min={1}
+            max={this.props.numOfStepsTotal}
+            onChange={this.sliderShift}
+            onRelease={this.sliderRelease}
+            value={this.state.value < 1 ? 1 : this.state.value}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <ButtonGroup>
+              <Tooltip2 content="Agenda and Stash" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization && EnvVisualizer.getCompactLayout()) {
+                      EnvVisualizer.toggleAgendaStash();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="layers"
+                  disabled={!this.state.visualization || !EnvVisualizer.getCompactLayout()}
+                >
+                  <Checkbox
+                    checked={EnvVisualizer.getAgendaStash()}
+                    disabled={!EnvVisualizer.getCompactLayout()}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip2>
+              <Tooltip2 content="Truncate Agenda" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization && EnvVisualizer.getAgendaStash()) {
+                      EnvVisualizer.toggleStackTruncated();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="minimize"
+                  disabled={!this.state.visualization || !EnvVisualizer.getAgendaStash()}
+                >
+                  <Checkbox
+                    checked={EnvVisualizer.getStackTruncated()}
+                    disabled={!EnvVisualizer.getAgendaStash()}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip2>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button
+                disabled={!this.state.visualization}
+                icon="double-chevron-left"
+                onClick={this.stepPrevBreakpoint}
+              />
+              <Button
+                disabled={!this.state.visualization}
+                icon="chevron-left"
+                onClick={this.stepPrevious}
+              />
+              <Button
+                disabled={!this.state.visualization}
+                icon="chevron-right"
+                onClick={this.stepNext}
+              />
+              <Button
+                disabled={!this.state.visualization}
+                icon="double-chevron-right"
+                onClick={this.stepNextBreakpoint}
+              />
+            </ButtonGroup>
+            <ButtonGroup>
+              <Tooltip2 content="Experimental" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      EnvVisualizer.toggleCompactLayout();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="build"
                   disabled={!this.state.visualization}
-                  icon="double-chevron-left"
-                  onClick={this.stepPrevBreakpoint}
-                />
-                <Button
+                >
+                  <Checkbox
+                    checked={!EnvVisualizer.getCompactLayout()}
+                    disabled={!this.state.visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip2>
+              <Tooltip2 content="Print" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      EnvVisualizer.togglePrintableMode();
+                      EnvVisualizer.redraw();
+                    }
+                  }}
+                  icon="print"
                   disabled={!this.state.visualization}
-                  icon="chevron-left"
-                  onClick={this.stepPrevious}
-                />
-                <Button
+                >
+                  <Checkbox
+                    disabled={!this.state.visualization}
+                    checked={EnvVisualizer.getPrintableMode()}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip2>
+              <Tooltip2 content="Save" compact>
+                <AnchorButton
+                  icon="floppy-disk"
                   disabled={!this.state.visualization}
-                  icon="chevron-right"
-                  onClick={this.stepNext}
+                  onClick={Layout.exportImage}
                 />
-                <Button
-                  disabled={!this.state.visualization}
-                  icon="double-chevron-right"
-                  onClick={this.stepNextBreakpoint}
-                />
-              </ButtonGroup>
-            </div>
+              </Tooltip2>
+            </ButtonGroup>
           </div>
-          <br />
-          {this.state.visualization || (
-            <div
-              id="env-visualizer-default-text"
-              className={Classes.RUNNING_TEXT}
-              data-testid="env-visualizer-default-text"
-            >
-              The environment model visualizer generates environment model diagrams following a
-              notation introduced in{' '}
-              <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-                <i>
-                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
-                  Section 2
-                </i>
-              </a>
-              .
-              <br />
-              <br /> On this tab, the REPL will be hidden from view, so do check that your code has
-              no errors before running the stepper. You may use this tool by running your program
-              and then dragging the slider above to see the state of the environment at different
-              stages in the evaluation of your program. Clicking on the fast-forward button (double
-              chevron) will take you to the next breakpoint in your program.
-              <br />
-              <br />
-              <Divider />
-              Some useful keyboard shortcuts:
-              <br />
-              <br />
-              a: Move to the first step
-              <br />
-              e: Move to the last step
-              <br />
-              f: Move to the next step
-              <br />
-              b: Move to the previous step
-              <br />
-              <br />
-              Note that these shortcuts are only active when the browser focus is on this tab.
-            </div>
-          )}
-        </div>
+        </div>{' '}
+        {this.state.visualization || (
+          <div
+            id="env-visualizer-default-text"
+            className={Classes.RUNNING_TEXT}
+            data-testid="env-visualizer-default-text"
+          >
+            The environment model visualizer generates environment model diagrams following a
+            notation introduced in{' '}
+            <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+              <i>
+                Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
+                Section 2
+              </i>
+            </a>
+            .
+            <br />
+            <br /> On this tab, the REPL will be hidden from view, so do check that your code has no
+            errors before running the stepper. You may use this tool by running your program and
+            then dragging the slider above to see the state of the environment at different stages
+            in the evaluation of your program. Clicking on the fast-forward button (double chevron)
+            will take you to the next breakpoint in your program
+            <br />
+            <br />
+            <Divider />
+            Some useful keyboard shortcuts:
+            <br />
+            <br />
+            a: Move to the first step
+            <br />
+            e: Move to the last step
+            <br />
+            f: Move to the next step
+            <br />
+            b: Move to the previous step
+            <br />
+            <br />
+            Note that these shortcuts are only active when the browser focus is on this tab.
+          </div>
+        )}
+        <ButtonGroup
+          vertical={true}
+          style={{ position: 'absolute', bottom: '20px', right: '20px' }}
+        >
+          <Button
+            icon="plus"
+            disabled={!this.state.visualization}
+            onClick={() => Layout.zoomStage(true, 5)}
+            style={{ marginBottom: '5px', borderRadius: '3px' }}
+          />
+          <Button
+            icon="minus"
+            disabled={!this.state.visualization}
+            onClick={() => Layout.zoomStage(false, 5)}
+            style={{ borderRadius: '3px' }}
+          />
+        </ButtonGroup>
       </HotKeys>
     );
   }
@@ -318,7 +441,12 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
       handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
-        updateEnvSteps(steps, workspaceLocation)
+        updateEnvSteps(steps, workspaceLocation),
+      setEditorHighlightedLines: (
+        workspaceLocation: WorkspaceLocation,
+        editorTabIndex: number,
+        newHighlightedLines: HighlightedLines[]
+      ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
     },
     dispatch
   );

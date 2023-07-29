@@ -1,14 +1,11 @@
 import React from 'react';
 import { Rect } from 'react-konva';
-import { Visible } from 'src/features/envVisualizer/components/Visible';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import {
-  CompactConfig,
-  ShapeDefaultProps
-} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
-import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
+import { Visible } from '../components/Visible';
+import { ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { Data } from '../EnvVisualizerTypes';
+import { defaultSAColor } from '../EnvVisualizerUtils';
 import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
@@ -51,11 +48,7 @@ export class ArrayEmptyUnit extends Visible {
         y={this.y()}
         width={this.width()}
         height={this.height()}
-        stroke={
-          EnvVisualizer.getPrintableMode()
-            ? CompactConfig.SA_BLUE.toString()
-            : CompactConfig.SA_WHITE.toString()
-        }
+        stroke={defaultSAColor()}
         ref={this.ref}
       />
     );

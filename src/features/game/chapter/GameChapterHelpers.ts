@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { request } from 'src/commons/sagas/RequestsSaga';
-import { toTxtPath } from 'src/features/game/assets/TextAssets';
-import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
-import { store } from 'src/pages/createStore';
+import { request } from 'src/commons/utils/RequestHelper';
 
+import { store } from '../../../pages/createStore';
+import { toTxtPath } from '../assets/TextAssets';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { GameChapter } from './GameChapterTypes';
 
 /**
@@ -15,9 +15,7 @@ export async function fetchGameChapters(): Promise<GameChapter[]> {
   const courseId = store.getState().session.courseId;
   const response = await request(`courses/${courseId}/stories`, 'GET', {
     accessToken: SourceAcademyGame.getInstance().getAccountInfo().accessToken,
-    refreshToken: SourceAcademyGame.getInstance().getAccountInfo().refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    refreshToken: SourceAcademyGame.getInstance().getAccountInfo().refreshToken
   });
   if (!response) return [];
   const chapterDetails = response.status === 200 ? await response.json() : [];

@@ -25,7 +25,7 @@ export class ArrayLevel extends Level {
     readonly parentLevel: FrameLevel
   ) {
     super(parentLevel);
-    this._x = Config.CanvasPaddingX;
+    this._x = 0;
     this._y = 0;
     this._width = 0;
     this._rowCount = 0;

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
-import { Visible } from 'src/features/envVisualizer/components/Visible';
-import {
-  CompactConfig,
-  ShapeDefaultProps
-} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
-import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { EnvTreeNode } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
+import { Visible } from '../components/Visible';
+import EnvVisualizer from '../EnvVisualizer';
+import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
+import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { EnvTreeNode } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */
@@ -22,8 +21,15 @@ export class Level extends Visible {
     readonly envTreeNodes: EnvTreeNode[]
   ) {
     super();
-    this._x = CompactConfig.CanvasPaddingX;
+    this._x = EnvVisualizer.getAgendaStash()
+      ? AgendaStashConfig.AgendaPosX +
+        AgendaStashConfig.AgendaItemWidth +
+        CompactConfig.CanvasPaddingX
+      : CompactConfig.CanvasPaddingX;
     this._y = CompactConfig.CanvasPaddingY;
+    EnvVisualizer.getAgendaStash() &&
+      !this.parentLevel &&
+      (this._y += AgendaStashConfig.StashItemHeight + AgendaStashConfig.AgendaItemTextPadding * 3);
     this.parentLevel && (this._y += this.parentLevel.height() + this.parentLevel.y());
     let prevFrame: Frame | null = null;
     envTreeNodes.forEach(e => {
@@ -34,7 +40,7 @@ export class Level extends Visible {
       prevFrame = newFrame;
     });
 
-    // get the max height of all the frames in this level
+    // get the max height of all the frames in this level including the label
     this._height = this.frames.reduce<number>(
       (maxHeight, frame) => Math.max(maxHeight, frame.totalHeight),
       0

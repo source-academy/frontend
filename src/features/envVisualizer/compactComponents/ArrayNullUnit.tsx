@@ -1,13 +1,11 @@
 import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
-import { Visible } from 'src/features/envVisualizer/components/Visible';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import {
-  CompactConfig,
-  ShapeDefaultProps
-} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
-import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
-import { CompactReferenceType, ReferenceType } from 'src/features/envVisualizer/EnvVisualizerTypes';
+
+import { Visible } from '../components/Visible';
+import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
+import { Layout } from '../EnvVisualizerLayout';
+import { CompactReferenceType, ReferenceType } from '../EnvVisualizerTypes';
+import { defaultSAColor } from '../EnvVisualizerUtils';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit extends Visible {
@@ -32,11 +30,7 @@ export class ArrayNullUnit extends Visible {
         {...ShapeDefaultProps}
         key={Layout.key++}
         points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
-        stroke={
-          EnvVisualizer.getPrintableMode()
-            ? CompactConfig.SA_BLUE.toString()
-            : CompactConfig.SA_WHITE.toString()
-        }
+        stroke={defaultSAColor()}
         hitStrokeWidth={Number(CompactConfig.DataHitStrokeWidth)}
         ref={this.ref}
         listening={false}

@@ -7,14 +7,16 @@ import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
-import { EditorTabStateProps } from 'src/commons/editor/Editor';
-import { Position } from 'src/commons/editor/EditorTypes';
+
 import {
   CodeDelta,
   Input,
   KeyboardCommand,
   SelectionRange
-} from 'src/features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/sourceRecorder/SourceRecorderTypes';
+import { EditorTabStateProps } from '../editor/Editor';
+import { Position } from '../editor/EditorTypes';
+import { EditorBinding } from '../WorkspaceSettingsContext';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -49,6 +51,7 @@ type EditorStateProps = {
   inputToApply?: Input | null;
   isPlaying?: boolean;
   isRecording?: boolean;
+  editorBinding?: EditorBinding;
 };
 
 type OwnProps = {
@@ -244,6 +247,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             setOptions={{
               fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
+            keyboardHandler={this.props.editorBinding}
           />
         </div>
       </HotKeys>

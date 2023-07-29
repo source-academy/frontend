@@ -114,6 +114,22 @@ export function highlightLine(line: number) {
   }
 }
 
+export function highlightCleanForAgenda() {
+  if ((window as any).Inspector) {
+    (window as any).Inspector.highlightCleanForAgenda();
+  } else {
+    throw new Error('Inspector not loaded');
+  }
+}
+
+export function highlightLineForAgenda(line: number) {
+  if ((window as any).Inspector) {
+    (window as any).Inspector.highlightLineForAgenda(line);
+  } else {
+    throw new Error('Inspector not loaded');
+  }
+}
+
 export const externalBuiltIns = {
   display,
   rawDisplay,

@@ -3,11 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { logOut } from 'src/commons/application/actions/CommonsActions';
-import ControlButton from 'src/commons/ControlButton';
-import Profile from 'src/commons/profile/Profile';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
 
+import { logOut } from '../application/actions/CommonsActions';
+import ControlButton from '../ControlButton';
+import Profile from '../profile/Profile';
+import { useSession } from '../utils/Hooks';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';
@@ -22,7 +22,7 @@ const Dropdown: React.FC = () => {
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
 
-  const { name, courses, courseId } = useTypedSelector(state => state.session);
+  const { isLoggedIn, name, courses, courseId } = useSession();
   const dispatch = useDispatch();
   const handleLogOut = () => dispatch(logOut());
 
@@ -38,19 +38,20 @@ const Dropdown: React.FC = () => {
   const toggleCreateCourseOpen = () => setIsCreateCourseOpen(oldValue => !oldValue);
 
   const profile =
-    name && courseId != null ? (
-      <MenuItem icon={IconNames.USER} onClick={toggleProfileOpen} text={titleCase(name)} />
+    isLoggedIn && courseId != null ? (
+      // Name is defined when user is logged in
+      <MenuItem icon={IconNames.USER} onClick={toggleProfileOpen} text={titleCase(name!)} />
     ) : null;
 
-  const myCourses = name ? (
+  const myCourses = isLoggedIn ? (
     <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text="My Courses" />
   ) : null;
 
-  const createCourse = name ? (
+  const createCourse = isLoggedIn ? (
     <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text="Create Course" />
   ) : null;
 
-  const logout = name ? (
+  const logout = isLoggedIn ? (
     <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={handleLogOut} />
   ) : null;
 
@@ -74,18 +75,18 @@ const Dropdown: React.FC = () => {
       <DropdownSettings isOpen={isSettingsOpen} onClose={toggleSettingsOpen} />
       <DropdownAbout isOpen={isAboutOpen} onClose={toggleAboutOpen} />
       <DropdownHelp isOpen={isHelpOpen} onClose={toggleHelpOpen} />
-      {name ? (
-        <DropdownCourses
-          isOpen={isMyCoursesOpen}
-          onClose={toggleMyCoursesOpen}
-          courses={courses}
-          courseId={courseId}
-        />
+      {isLoggedIn ? (
+        <>
+          <DropdownCourses
+            isOpen={isMyCoursesOpen}
+            onClose={toggleMyCoursesOpen}
+            courses={courses}
+            courseId={courseId}
+          />
+          <DropdownCreateCourse isOpen={isCreateCourseOpen} onClose={toggleCreateCourseOpen} />
+          <Profile isOpen={isProfileOpen} onClose={toggleProfileOpen} />
+        </>
       ) : null}
-      {name ? (
-        <DropdownCreateCourse isOpen={isCreateCourseOpen} onClose={toggleCreateCourseOpen} />
-      ) : null}
-      {name ? <Profile isOpen={isProfileOpen} onClose={toggleProfileOpen} /> : null}
     </>
   );
 };
