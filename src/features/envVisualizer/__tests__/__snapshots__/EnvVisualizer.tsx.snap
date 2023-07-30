@@ -232,7 +232,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 162.5 L 486 390 L 486 390 M 140 162.5 L 486 390 L 486 390 "
+      data="M 140 162.5 L 486.12109375 390 L 486.12109375 390 M 140 162.5 L 486.12109375 390 L 486.12109375 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -245,7 +245,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
         Array [
           140,
           162.5,
-          486,
+          486.12109375,
           390,
         ]
       }
@@ -360,7 +360,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 232.5 L 802 390 L 802 390 M 140 232.5 L 802 390 L 802 390 "
+      data="M 140 232.5 L 802.2421875 390 L 802.2421875 390 M 140 232.5 L 802.2421875 390 L 802.2421875 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -373,7 +373,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
         Array [
           140,
           232.5,
-          802,
+          802.2421875,
           390,
         ]
       }
@@ -488,7 +488,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 302.5 L 1118 390 L 1118 390 M 140 302.5 L 1118 390 L 1118 390 "
+      data="M 140 302.5 L 1118.36328125 390 L 1118.36328125 390 M 140 302.5 L 1118.36328125 390 L 1118.36328125 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -501,7 +501,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
         Array [
           140,
           302.5,
-          1118,
+          1118.36328125,
           390,
         ]
       }
@@ -616,7 +616,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 372.5 L 1434 390 L 1434 390 M 140 372.5 L 1434 390 L 1434 390 "
+      data="M 140 372.5 L 1434.484375 390 L 1434.484375 390 M 140 372.5 L 1434.484375 390 L 1434.484375 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -629,7 +629,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
         Array [
           140,
           372.5,
-          1434,
+          1434.484375,
           390,
         ]
       }
@@ -694,7 +694,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={178}
+    x={178.060546875}
     y={5}
   >
     <Tag
@@ -715,7 +715,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   </Label>
   <Label
     visible={false}
-    x={183}
+    x={183.060546875}
     y={45}
   >
     <Tag
@@ -743,7 +743,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={207}
+    x={207.0908203125}
     y={5}
   >
     <Tag
@@ -764,7 +764,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   </Label>
   <Label
     visible={false}
-    x={212}
+    x={212.0908203125}
     y={45}
   >
     <Tag
@@ -792,7 +792,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={236}
+    x={236.12109375}
     y={5}
   >
     <Tag
@@ -813,7 +813,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   </Label>
   <Label
     visible={false}
-    x={241}
+    x={241.12109375}
     y={45}
   >
     <Tag
@@ -841,7 +841,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={265}
+    x={265.1513671875}
     y={5}
   >
     <Tag
@@ -862,7 +862,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   </Label>
   <Label
     visible={false}
-    x={270}
+    x={270.1513671875}
     y={45}
   >
     <Tag
@@ -890,7 +890,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={294}
+    x={294.181640625}
     y={5}
   >
     <Tag
@@ -911,7 +911,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   </Label>
   <Label
     visible={false}
-    x={299}
+    x={299.181640625}
     y={45}
   >
     <Tag
@@ -1416,7 +1416,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="BREAK MAR…"
+      text="WHILE"
       width={120}
     />
   </Label>
@@ -1439,7 +1439,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="BREAK MARKER"
+      text="WHILE"
     />
   </Label>
 </React.Fragment>
@@ -1467,7 +1467,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="WHILE"
+      text="x < n"
       width={120}
     />
   </Label>
@@ -1490,7 +1490,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="WHILE"
+      text="x < n"
     />
   </Label>
 </React.Fragment>
@@ -1518,7 +1518,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="x < n"
+      text="PUSH UNDE…"
       width={120}
     />
   </Label>
@@ -1541,7 +1541,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="x < n"
+      text="PUSH UNDEFINED IF NEEDED"
     />
   </Label>
 </React.Fragment>
@@ -1569,7 +1569,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="CONTINUE …"
+      text="x = x + 1;"
       width={120}
     />
   </Label>
@@ -1592,7 +1592,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="CONTINUE MARKER"
+      text="x = x + 1;"
     />
   </Label>
 </React.Fragment>
@@ -1620,7 +1620,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="PUSH UNDE…"
+      text="POP"
       width={120}
     />
   </Label>
@@ -1643,7 +1643,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="PUSH UNDEFINED IF NEEDED"
+      text="POP"
     />
   </Label>
 </React.Fragment>
@@ -1671,7 +1671,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="x = x + 1;"
+      text="ARRAY ASS…"
       width={120}
     />
   </Label>
@@ -1694,7 +1694,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="x = x + 1;"
+      text="ARRAY ASSIGNMENT"
     />
   </Label>
 </React.Fragment>
@@ -1711,7 +1711,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#030fff"
     />
     <Text
       fill="#999999"
@@ -1722,7 +1722,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="POP"
+      text="() => x"
       width={120}
     />
   </Label>
@@ -1745,7 +1745,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="POP"
+      text="() => x"
     />
   </Label>
 </React.Fragment>
@@ -1756,64 +1756,13 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={20}
-    y={565}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#030fff"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="ARRAY ASS…"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={570}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="ARRAY ASSIGNMENT"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 17`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     x={140}
     y={5}
   >
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#ff0000"
+      stroke="#999999"
     />
     <Text
       fill="#999999"
@@ -1853,7 +1802,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 195 40 L 316 555 L 316 555 M 195 40 L 316 555 L 316 555 "
+      data="M 195.1513671875 40 L 316.12109375 555 L 316.12109375 555 M 195.1513671875 40 L 316.12109375 555 L 316.12109375 555 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -1864,9 +1813,9 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       pointerWidth={10}
       points={
         Array [
-          195,
+          195.1513671875,
           40,
-          316,
+          316.12109375,
           555,
         ]
       }
@@ -1877,127 +1826,52 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 18`] = `
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 17`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={250}
+    x={250.302734375}
     y={5}
   >
     <Tag
       cornerRadius={5}
-      preventDefault={false}
-      stroke="#ff0000"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={10}
-      preventDefault={false}
-      text="0"
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={255}
-    y={45}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="0"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 19`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={279}
-    y={5}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#ff0000"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={10}
-      preventDefault={false}
-      text="CLOSURE"
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={284}
-    y={45}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="CLOSURE"
-    />
-  </Label>
-  <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <Path
-      data="M 320.5 40 L 293.5 685 L 293.5 685 M 320.5 40 L 293.5 685 L 293.5 685 "
-      hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
-      strokeWidth={1}
     />
-    <Arrow
+    <Text
       fill="#999999"
-      pointerWidth={10}
-      points={
-        Array [
-          320.5,
-          40,
-          293.5,
-          685,
-        ]
-      }
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
       preventDefault={false}
-      strokeEnabled={false}
+      text="0"
     />
-  </Group>
+  </Label>
+  <Label
+    visible={false}
+    x={255.302734375}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="0"
+    />
+  </Label>
 </React.Fragment>
 `;
 

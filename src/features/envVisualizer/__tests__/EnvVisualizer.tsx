@@ -190,7 +190,7 @@ const codeSamplesAgendaStash = [
     }
     create(3)[1]();
     `,
-    34
+    33
   ],
   [
     'global environments are treated correctly',
