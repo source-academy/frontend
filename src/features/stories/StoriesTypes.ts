@@ -30,6 +30,11 @@ export type StoryData = {
   content: string;
 };
 
+export type StoryParams = StoryData & {
+  // StoryMetadata &
+  pinOrder: number | null;
+};
+
 export type StoryListView = StoryData &
   StoryMetadata & {
     id: number;
