@@ -79,7 +79,7 @@ export const postStory = async (
   authorId: number,
   title: string,
   content: string,
-  pinOrder?: number
+  pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend('/stories', 'POST', {
     body: { authorId, title, content, pinOrder }
