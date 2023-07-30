@@ -85,8 +85,10 @@ export const postStory = async (
     body: { authorId, title, content, pinOrder }
   });
   if (!resp) {
+    showWarningMessage('Failed to create story');
     return null;
   }
+  showSuccessMessage('Story created');
   const story = await resp.json();
   return story;
 };
