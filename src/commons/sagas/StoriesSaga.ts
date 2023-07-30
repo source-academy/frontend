@@ -15,7 +15,6 @@ import {
   StoryListView,
   StoryView
 } from 'src/features/stories/StoriesTypes';
-import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 
 import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -39,7 +38,7 @@ export function* storiesSaga(): SagaIterator {
     ADD_NEW_STORIES_USERS_TO_COURSE,
     function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
       const tokens: Tokens = yield selectTokens();
-      const { users, provider }: { users: NameUsernameRole[]; provider: string } = action.payload;
+      const { users, provider } = action.payload;
 
       const resp: Response | null = yield call(postNewStoriesUsers, tokens, users, provider);
       if (!resp || !resp.ok) {
