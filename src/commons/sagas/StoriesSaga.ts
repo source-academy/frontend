@@ -1,40 +1,50 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
-import { getStories, getStory } from 'src/features/stories/storiesComponents/BackendAccess';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import {
-  FETCH_STORY,
+  deleteStory,
+  getStories,
+  getStory
+} from 'src/features/stories/storiesComponents/BackendAccess';
+import {
+  DELETE_STORY,
   GET_STORIES_LIST,
+  SET_CURRENT_STORY_ID,
+  StoryData,
   StoryListView,
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
 import { actions } from '../utils/ActionsHelper';
+import { defaultStoryContent } from '../utils/StoriesHelper';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
     const allStories: StoryListView[] = yield call(async () => {
       const resp = await getStories();
-      if (!resp) {
-        return [];
-      }
-      return resp.json();
+      return resp ?? [];
     });
 
     yield put(actions.updateStoriesList(allStories));
   });
 
-  yield takeLatest(FETCH_STORY, function* (action: ReturnType<typeof actions.fetchStory>) {
-    const storyId = action.payload;
-    const story: StoryView = yield call(async () => {
-      const resp = await getStory(storyId);
-      if (!resp) {
-        return null;
+  // takeEvery used to ensure that setting to null (clearing the story) is always
+  // handled even if a refresh is triggered later.
+  yield takeEvery(
+    SET_CURRENT_STORY_ID,
+    function* (action: ReturnType<typeof actions.setCurrentStoryId>) {
+      const storyId = action.payload;
+      if (storyId) {
+        const story: StoryView = yield call(getStory, storyId);
+        yield put(actions.setCurrentStory(story));
+      } else {
+        const defaultStory: StoryData = {
+          title: '',
+          content: defaultStoryContent
+        };
+        yield put(actions.setCurrentStory(defaultStory));
       }
-      return resp.json();
-    });
-
-    yield put(actions.setCurrentStory(story));
-  });
+    }
+  );
 
   //   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
   //     const story = action.payload;
@@ -52,6 +62,13 @@ export function* storiesSaga(): SagaIterator {
   //       yield put(actions.setCurrentStory(updatedStory));
   //     }
   //   });
+
+  yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
+    const storyId = action.payload;
+    yield call(deleteStory, storyId);
+
+    yield put(actions.getStoriesList());
+  });
 }
 
 export default storiesSaga;
