@@ -91,7 +91,7 @@ export const updateStory = async (
   id: number,
   title: string,
   content: string,
-  pinOrder?: number
+  pinOrder?: number | null
 ): Promise<Response | null> => {
   try {
     const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${id}`, {
@@ -102,7 +102,7 @@ export const updateStory = async (
       body: JSON.stringify({
         title: title,
         content: content,
-        pinOrder: pinOrder
+        pinOrder: pinOrder ?? null
       })
     });
     if (!resp.ok) {
