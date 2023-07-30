@@ -13,6 +13,7 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
+// TODO: Refactor to use requestStoryBackend
 export const postNewStoriesUsers = async (
   tokens: Tokens,
   users: NameUsernameRole[],
@@ -87,11 +88,12 @@ export const postStory = async (
   return story;
 };
 
+// TODO: Refactor to use requestStoryBackend
 export const updateStory = async (
   id: number,
   title: string,
   content: string,
-  pinOrder?: number
+  pinOrder?: number | null
 ): Promise<Response | null> => {
   try {
     const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${id}`, {
@@ -102,7 +104,7 @@ export const updateStory = async (
       body: JSON.stringify({
         title: title,
         content: content,
-        pinOrder: pinOrder
+        pinOrder: pinOrder ?? null
       })
     });
     if (!resp.ok) {

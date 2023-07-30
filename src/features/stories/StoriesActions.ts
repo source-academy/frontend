@@ -17,6 +17,7 @@ import {
   SET_CURRENT_STORY_ID,
   StoryData,
   StoryListView,
+  StoryParams,
   TOGGLE_STORIES_USING_SUBST,
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
@@ -61,6 +62,6 @@ export const updateStoriesList = (storyList: StoryListView[]) =>
   action(UPDATE_STORIES_LIST, storyList);
 export const setCurrentStory = (story: StoryData | null) => action(SET_CURRENT_STORY, story);
 export const setCurrentStoryId = (id: number | null) => action(SET_CURRENT_STORY_ID, id);
-export const createStory = (story: StoryData) => action(CREATE_STORY, story); // TODO: Unused as of now
-export const saveStory = (story: StoryData, id: number) => action(SAVE_STORY, story, id); // TODO: Unused as of now
+export const createStory = (story: StoryParams) => action(CREATE_STORY, story); // TODO: Unused as of now
+export const saveStory = (story: StoryParams, id: number) => action(SAVE_STORY, { story, id });
 export const deleteStory = (id: number) => action(DELETE_STORY, id);

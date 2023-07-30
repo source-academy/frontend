@@ -30,10 +30,16 @@ export type StoryData = {
   content: string;
 };
 
+export type StoryParams = StoryData & {
+  // StoryMetadata &
+  pinOrder: number | null;
+};
+
 export type StoryListView = StoryData &
   StoryMetadata & {
     id: number;
     isPinned: boolean;
+    pinOrder: number | null;
   };
 
 export type StoryView = StoryData &

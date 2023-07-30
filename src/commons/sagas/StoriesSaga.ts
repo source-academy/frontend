@@ -5,11 +5,13 @@ import {
   deleteStory,
   getStories,
   getStory,
-  postNewStoriesUsers
+  postNewStoriesUsers,
+  updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   DELETE_STORY,
   GET_STORIES_LIST,
+  SAVE_STORY,
   SET_CURRENT_STORY_ID,
   StoryData,
   StoryListView,
@@ -70,22 +72,23 @@ export function* storiesSaga(): SagaIterator {
     }
   );
 
-  //   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
-  //     const story = action.payload;
-  //     const updatedStory: StoryView | null = yield call(async () => {
-  //       // TODO: Support pin order
-  //       const resp = await updateStory(story.id, story.title, story.content);
-  //       if (!resp) {
-  //         return null;
-  //       }
-  //       return resp.json();
-  //     });
+  yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
+    const { story, id } = action.payload;
+    const updatedStory: StoryView | null = yield call(async () => {
+      const resp = await updateStory(id, story.title, story.content, story.pinOrder);
+      if (!resp) {
+        return null;
+      }
+      return resp.json();
+    });
 
-  //     // TODO: Check correctness
-  //     if (updatedStory) {
-  //       yield put(actions.setCurrentStory(updatedStory));
-  //     }
-  //   });
+    // TODO: Check correctness
+    if (updatedStory) {
+      yield put(actions.setCurrentStory(updatedStory));
+    }
+
+    yield put(actions.getStoriesList());
+  });
 
   yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
     const storyId = action.payload;
