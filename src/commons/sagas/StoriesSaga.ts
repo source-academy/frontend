@@ -1,14 +1,16 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import {
   deleteStory,
   getStories,
   getStory,
   postNewStoriesUsers,
+  postStory,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
+  CREATE_STORY,
   DELETE_STORY,
   GET_STORIES_LIST,
   SAVE_STORY,
@@ -18,9 +20,10 @@ import {
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
+import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { handleResponseError } from './RequestsSaga';
@@ -72,6 +75,32 @@ export function* storiesSaga(): SagaIterator {
       }
     }
   );
+
+  yield takeEvery(CREATE_STORY, function* (action: ReturnType<typeof actions.createStory>) {
+    const story = action.payload;
+    // FIXME: User a separate storyUserId instead of the current user
+    const userId: number | undefined = yield select((state: OverallState) => state.session.userId);
+
+    if (userId === undefined) {
+      showWarningMessage('Failed to create story: Invalid user');
+      return;
+    }
+
+    const createdStory: StoryView | null = yield call(
+      postStory,
+      userId,
+      story.title,
+      story.content,
+      story.pinOrder
+    );
+
+    // TODO: Check correctness
+    if (createdStory) {
+      yield put(actions.setCurrentStoryId(createdStory.id));
+    }
+
+    yield put(actions.getStoriesList());
+  });
 
   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
     const { story, id } = action.payload;
