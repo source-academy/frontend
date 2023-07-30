@@ -2,9 +2,9 @@ import Constants from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 
-import { StoryListView, StoryView } from '../StoriesTypes';
 import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+import { StoryListView, StoryView } from '../StoriesTypes';
 
 type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
@@ -52,7 +52,6 @@ export const putNewStoriesUsers = async (
     return null;
   }
 };
-
 
 export const getStories = async (): Promise<StoryListView[] | null> => {
   const resp = await requestStoryBackend('/stories', 'GET', {});
