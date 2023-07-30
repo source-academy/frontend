@@ -59,7 +59,9 @@ const GenericSideContent = (props: GenericSideContentProps) => {
 
   // Fetch debuggerContext from store
   const debuggerContext = useTypedSelector(
-    state => props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
+    props.getDebuggerContext ??
+      (state =>
+        props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext)
   );
 
   React.useEffect(() => {
