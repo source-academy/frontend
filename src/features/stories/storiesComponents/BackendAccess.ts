@@ -1,5 +1,8 @@
 import Constants from 'src/commons/utils/Constants';
-import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
@@ -88,41 +91,22 @@ export const postStory = async (
   return story;
 };
 
-// TODO: Refactor to use requestStoryBackend
 export const updateStory = async (
   id: number,
   title: string,
   content: string,
-  pinOrder?: number | null
-): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        pinOrder: pinOrder ?? null
-      })
-    });
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    showWarningMessage('Error while communicating with backend; check your network?');
-
+  pinOrder: number | null
+): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${id}`, 'PUT', {
+    body: { title, content, pinOrder }
+  });
+  if (!resp) {
+    showWarningMessage('Failed to save story');
     return null;
   }
+  showSuccessMessage('Story saved');
+  const updatedStory = await resp.json();
+  return updatedStory;
 };
 
 // Returns the deleted story, or null if errors occur

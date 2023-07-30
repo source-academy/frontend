@@ -75,13 +75,13 @@ export function* storiesSaga(): SagaIterator {
 
   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
     const { story, id } = action.payload;
-    const updatedStory: StoryView | null = yield call(async () => {
-      const resp = await updateStory(id, story.title, story.content, story.pinOrder);
-      if (!resp) {
-        return null;
-      }
-      return resp.json();
-    });
+    const updatedStory: StoryView | null = yield call(
+      updateStory,
+      id,
+      story.title,
+      story.content,
+      story.pinOrder
+    );
 
     // TODO: Check correctness
     if (updatedStory) {
