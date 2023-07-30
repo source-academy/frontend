@@ -1,9 +1,11 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import {
   deleteStory,
   getStories,
-  getStory
+  getStory,
+  postNewStoriesUsers
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   DELETE_STORY,
@@ -14,8 +16,13 @@ import {
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
+import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
+import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
+import { selectTokens } from './BackendSaga';
+import { handleResponseError } from './RequestsSaga';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
@@ -26,6 +33,23 @@ export function* storiesSaga(): SagaIterator {
 
     yield put(actions.updateStoriesList(allStories));
   });
+
+  yield takeEvery(
+    ADD_NEW_STORIES_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider } = action.payload;
+
+      const resp: Response | null = yield call(postNewStoriesUsers, tokens, users, provider);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      // TODO: Refresh the list of story users
+      //       once that page is implemented
+      yield call(showSuccessMessage, 'Users added!');
+    }
+  );
 
   // takeEvery used to ensure that setting to null (clearing the story) is always
   // handled even if a refresh is triggered later.
