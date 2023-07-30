@@ -103,6 +103,7 @@ export default function* WorkspaceSaga(): SagaIterator {
           actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
         );
       } else {
+        // FIXME: Use story env
         yield put(
           actions.handleStoriesConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
         );
