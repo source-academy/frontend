@@ -197,7 +197,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     },
     workspaceLocation: 'stories',
     storyEnv: env,
-    isStories: true
+    getDebuggerContext: state => state.stories.envs[env].debuggerContext
   };
 
   const execEvaluate = () => {
