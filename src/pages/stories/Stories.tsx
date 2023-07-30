@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
+import { deleteStory, getStoriesList, saveStory } from 'src/features/stories/StoriesActions';
 
 import StoriesTable from './StoriesTable';
 import StoryActions from './StoryActions';
@@ -44,6 +44,62 @@ const Stories: React.FC = () => {
 
   const storyList = useTypedSelector(state => state.stories.storyList);
 
+  const handleTogglePinStory = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const story = storyList.find(story => story.id === id)!;
+      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      const newStory = {
+        ...story,
+        isPinned: !story.isPinned,
+        // Pinning a story appends to the end of the pinned list
+        pinOrder: story.isPinned ? null : pinnedLength
+      };
+      dispatch(saveStory(newStory, id));
+    },
+    [dispatch, storyList]
+  );
+
+  const handleMovePinUp = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      if (oldIndex === 0) {
+        return;
+      }
+
+      const toMoveUp = storyList[oldIndex];
+      const toMoveDown = storyList[oldIndex - 1];
+
+      const storiesToUpdate = [
+        { ...toMoveUp, pinOrder: oldIndex - 1 },
+        { ...toMoveDown, pinOrder: oldIndex }
+      ];
+      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+    },
+    [dispatch, storyList]
+  );
+
+  const handleMovePinDown = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      if (oldIndex === pinnedLength - 1) {
+        return;
+      }
+      const toMoveDown = storyList[oldIndex];
+      const toMoveUp = storyList[oldIndex + 1];
+
+      const storiesToUpdate = [
+        { ...toMoveDown, pinOrder: oldIndex + 1 },
+        { ...toMoveUp, pinOrder: oldIndex }
+      ];
+      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+    },
+    [dispatch, storyList]
+  );
+
   return (
     <ContentDisplay
       loadContentDispatch={() => dispatch(getStoriesList())}
@@ -75,9 +131,14 @@ const Stories: React.FC = () => {
               <StoryActions
                 storyId={story.id}
                 handleDeleteStory={handleDeleteStory}
+                handleTogglePin={handleTogglePinStory}
+                handleMovePinUp={handleMovePinUp}
+                handleMovePinDown={handleMovePinDown}
                 canView
                 canEdit
                 canDelete
+                canPin
+                isPinned={story.isPinned}
               />
             )}
           />
