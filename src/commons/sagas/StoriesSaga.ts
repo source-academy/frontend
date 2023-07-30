@@ -23,10 +23,9 @@ import {
 import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
-import { handleResponseError } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export function* storiesSaga(): SagaIterator {
@@ -45,14 +44,10 @@ export function* storiesSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { users, provider } = action.payload;
 
-      const resp: Response | null = yield call(postNewStoriesUsers, tokens, users, provider);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+      yield call(postNewStoriesUsers, tokens, users, provider);
 
       // TODO: Refresh the list of story users
       //       once that page is implemented
-      yield call(showSuccessMessage, 'Users added!');
     }
   );
 

@@ -16,45 +16,25 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
-// TODO: Refactor to use requestStoryBackend
 export const postNewStoriesUsers = async (
   tokens: Tokens,
   users: NameUsernameRole[],
   provider: string
 ): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/batch`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        // TODO: backend create params does not support roles yet (aka) the role in NameUsernameRole is currently still unused
-        users: users.map(user => {
-          return {
-            name: user.name,
-            username: user.username,
-            provider: provider
-          };
-        })
-      })
-    });
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    showWarningMessage('Error while communicating with backend; check your network?');
+  const resp = await requestStoryBackend('/users/batch', 'POST', {
+    // TODO: backend create params does not support roles yet, i.e.
+    //       the role in NameUsernameRole is currently still unused
+    body: { users: users.map(user => ({ ...user, provider })) }
+  });
 
+  if (!resp) {
+    showWarningMessage('Failed to add users');
     return null;
   }
+
+  showSuccessMessage('Users added!');
+  return resp;
+  // TODO: Return response JSON directly.
 };
 
 export const getStories = async (): Promise<StoryListView[] | null> => {
