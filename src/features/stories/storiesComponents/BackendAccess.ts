@@ -126,8 +126,8 @@ export const updateStory = async (
 };
 
 // Returns the deleted story, or null if errors occur
-export const deleteStory = async (id: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', {});
+export const deleteStory = async (tokens: Tokens, id: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', { ...tokens });
   if (!resp) {
     return null;
   }

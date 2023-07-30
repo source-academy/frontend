@@ -93,8 +93,9 @@ export function* storiesSaga(): SagaIterator {
   });
 
   yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
+    const tokens: Tokens = yield selectTokens();
     const storyId = action.payload;
-    yield call(deleteStory, storyId);
+    yield call(deleteStory, tokens, storyId);
 
     yield put(actions.getStoriesList());
   });
