@@ -35,7 +35,7 @@ export const evalStoryError = (errors: SourceError[], env: string) =>
 export const evalStorySuccess = (value: Value, env: string) =>
   action(EVAL_STORY_SUCCESS, { type: 'result', value, env });
 
-export const handleStoriesConsoleLog = (env: String, ...logString: string[]) =>
+export const handleStoriesConsoleLog = (env: string, ...logString: string[]) =>
   action(HANDLE_STORIES_CONSOLE_LOG, { logString, env });
 
 export const notifyStoriesEvaluated = (
