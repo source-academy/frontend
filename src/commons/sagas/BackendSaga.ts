@@ -131,7 +131,7 @@ import {
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-function selectTokens() {
+export function selectTokens() {
   return select((state: OverallState) => ({
     accessToken: state.session.accessToken,
     refreshToken: state.session.refreshToken
