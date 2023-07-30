@@ -13,7 +13,7 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
-export const putNewStoriesUsers = async (
+export const postNewStoriesUsers = async (
   tokens: Tokens,
   users: NameUsernameRole[],
   provider: string

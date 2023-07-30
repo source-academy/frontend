@@ -5,7 +5,7 @@ import {
   deleteStory,
   getStories,
   getStory,
-  putNewStoriesUsers
+  postNewStoriesUsers
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   DELETE_STORY,
@@ -41,7 +41,7 @@ export function* storiesSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { users, provider }: { users: NameUsernameRole[]; provider: string } = action.payload;
 
-      const resp: Response | null = yield call(putNewStoriesUsers, tokens, users, provider);
+      const resp: Response | null = yield call(postNewStoriesUsers, tokens, users, provider);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
