@@ -13,6 +13,7 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
+// TODO: Refactor to use requestStoryBackend
 export const postNewStoriesUsers = async (
   tokens: Tokens,
   users: NameUsernameRole[],
@@ -87,6 +88,7 @@ export const postStory = async (
   return story;
 };
 
+// TODO: Refactor to use requestStoryBackend
 export const updateStory = async (
   id: number,
   title: string,
