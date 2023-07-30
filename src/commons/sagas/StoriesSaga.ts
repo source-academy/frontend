@@ -9,7 +9,6 @@ import {
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   DELETE_STORY,
-  FETCH_STORY,
   GET_STORIES_LIST,
   SET_CURRENT_STORY_ID,
   StoryData,
@@ -30,10 +29,7 @@ export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
     const allStories: StoryListView[] = yield call(async () => {
       const resp = await getStories();
-      if (!resp) {
-        return [];
-      }
-      return resp.json();
+      return resp ?? [];
     });
 
     yield put(actions.updateStoriesList(allStories));
@@ -56,19 +52,6 @@ export function* storiesSaga(): SagaIterator {
     }
   );
 
-  yield takeLatest(FETCH_STORY, function* (action: ReturnType<typeof actions.fetchStory>) {
-    const storyId = action.payload;
-    const story: StoryView = yield call(async () => {
-      const resp = await getStory(storyId);
-      if (!resp) {
-        return null;
-      }
-      return resp.json();
-    });
-
-    yield put(actions.setCurrentStory(story));
-  });
-
   // takeEvery used to ensure that setting to null (clearing the story) is always
   // handled even if a refresh is triggered later.
   yield takeEvery(
@@ -76,7 +59,8 @@ export function* storiesSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.setCurrentStoryId>) {
       const storyId = action.payload;
       if (storyId) {
-        yield put(actions.fetchStory(storyId));
+        const story: StoryView = yield call(getStory, storyId);
+        yield put(actions.setCurrentStory(story));
       } else {
         const defaultStory: StoryData = {
           title: '',
@@ -106,13 +90,7 @@ export function* storiesSaga(): SagaIterator {
 
   yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
     const storyId = action.payload;
-    yield call(async () => {
-      const resp = await deleteStory(storyId);
-      if (!resp) {
-        return null;
-      }
-      return resp.json();
-    });
+    yield call(deleteStory, storyId);
 
     yield put(actions.getStoriesList());
   });
