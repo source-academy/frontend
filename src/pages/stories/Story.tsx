@@ -28,17 +28,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
 
-  const onScroll = (e: IEditorProps) => {
-    const userblogContainer = document.getElementById('userblogContainer');
-    if (userblogContainer) {
-      scrollSync(e, userblogContainer);
-    }
-  };
-
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
-  const storyTitle = story?.title ?? '';
-  const content = story?.content ?? '';
-
   const { id: idToSet } = useParams<{ id: string }>();
   useEffect(() => {
     // Clear screen on first load
@@ -53,20 +43,29 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     return <></>;
   }
 
+  const onEditorScroll = (e: IEditorProps) => {
+    const userblogContainer = document.getElementById('userblogContainer');
+    if (userblogContainer) {
+      scrollSync(e, userblogContainer);
+    }
+  };
+
   const onEditorValueChange = (val: string) => {
     setIsDirty(true);
     dispatch(setCurrentStory({ ...story, content: val }));
   };
 
+  const { title, content } = story;
+
   const controlBarProps: ControlBarProps = {
     editorButtons: [
       isViewOnly ? (
-        <>{storyTitle}</>
+        <>{title}</>
       ) : (
         <TextInput
           maxWidth="max-w-xl"
           placeholder="Enter story title"
-          value={storyTitle}
+          value={title}
           onChange={e => {
             const newTitle = e.target.value;
             dispatch(setCurrentStory({ ...story, title: newTitle }));
@@ -82,7 +81,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
               // TODO: Create story
               return;
             }
-            updateStory(storyId, storyTitle, content)
+            updateStory(storyId, title, content)
               .then(() => {
                 showSuccessMessage('Story saved');
                 setIsDirty(false);
@@ -109,7 +108,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
             theme="source"
             value={content}
             onChange={onEditorValueChange}
-            onScroll={onScroll}
+            onScroll={onEditorScroll}
             fontSize={17}
             highlightActiveLine={false}
             showPrintMargin={false}
