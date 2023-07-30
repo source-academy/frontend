@@ -65,7 +65,8 @@ export function* storiesSaga(): SagaIterator {
       } else {
         const defaultStory: StoryData = {
           title: '',
-          content: defaultStoryContent
+          content: defaultStoryContent,
+          pinOrder: null
         };
         yield put(actions.setCurrentStory(defaultStory));
       }
