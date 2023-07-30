@@ -8,9 +8,7 @@ import { AdminPanelCourseRegistration } from 'src/commons/application/types/Sess
 import RolesCell from './RolesCell';
 // import UserActionsCell from './UserActionsCell';
 
-export type StoriesUserConfigPanelProps = OwnProps;
-
-type OwnProps = {
+type StoriesUserConfigPanelProps = {
   courseRegId?: number;
   userCourseRegistrations?: AdminPanelCourseRegistration[];
   handleUpdateUserRole: (courseRegId: number, role: Role) => void;
