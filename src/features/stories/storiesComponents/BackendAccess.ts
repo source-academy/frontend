@@ -54,8 +54,8 @@ export const postNewStoriesUsers = async (
   }
 };
 
-export const getStories = async (): Promise<StoryListView[] | null> => {
-  const resp = await requestStoryBackend('/stories', 'GET', {});
+export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null> => {
+  const resp = await requestStoryBackend('/stories', 'GET', { ...tokens });
   if (!resp) {
     return null;
   }
@@ -63,8 +63,8 @@ export const getStories = async (): Promise<StoryListView[] | null> => {
   return stories;
 };
 
-export const getStory = async (storyId: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', {});
+export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', { ...tokens });
   if (!resp) {
     return null;
   }

@@ -28,8 +28,9 @@ import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
+    const tokens: Tokens = yield selectTokens();
     const allStories: StoryListView[] = yield call(async () => {
-      const resp = await getStories();
+      const resp = await getStories(tokens);
       return resp ?? [];
     });
 
@@ -58,9 +59,10 @@ export function* storiesSaga(): SagaIterator {
   yield takeEvery(
     SET_CURRENT_STORY_ID,
     function* (action: ReturnType<typeof actions.setCurrentStoryId>) {
+      const tokens: Tokens = yield selectTokens();
       const storyId = action.payload;
       if (storyId) {
-        const story: StoryView = yield call(getStory, storyId);
+        const story: StoryView = yield call(getStory, tokens, storyId);
         yield put(actions.setCurrentStory(story));
       } else {
         const defaultStory: StoryData = {
