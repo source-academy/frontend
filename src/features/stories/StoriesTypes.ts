@@ -45,6 +45,7 @@ export type StoryListView = StoryData &
 export type StoryView = StoryData &
   StoryMetadata & {
     id: number;
+    pinOrder: number | null;
   };
 
 export type StoriesEnvState = {
