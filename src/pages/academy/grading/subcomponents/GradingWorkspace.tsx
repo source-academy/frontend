@@ -6,7 +6,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import { fetchAssessment } from 'src/commons/application/actions/SessionActions';
+//import { fetchAssessment } from 'src/commons/application/actions/SessionActions';
 import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
@@ -28,13 +28,13 @@ import {
   updateActiveEditorTabIndex,
   updateCurrentSubmissionId,
   updateEditorValue,
+  updateCurrentAssessmentId,
   updateHasUnsavedChanges,
   updateReplValue,
 } from 'src/commons/workspace/WorkspaceActions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import {
-  AssessmentConfiguration,
   AutogradingResult,
   IMCQQuestion,
   Library,
@@ -61,10 +61,9 @@ import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
 type GradingWorkspaceProps = {
-  assessmentId: number;
+  assessmentId: number; // TODO
   submissionId: number;
   questionId: number;
-  assessmentConfiguration: AssessmentConfiguration;
 };
 
 const workspaceLocation: WorkspaceLocation = 'grading';
@@ -73,9 +72,9 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
 
+  const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId)); // TODO
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
-  const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
 
   const {
     autogradingResults,
@@ -103,6 +102,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     handleSetActiveEditorTabIndex,
     handleRemoveEditorTabByIndex,
     handleEditorValueChange,
+    handleUpdateCurrentAssessmentId,
     handleEditorUpdateBreakpoints,
     handleGradingFetch,
     handleReplEval,
@@ -116,7 +116,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     handleUpdateCurrentSubmissionId,
     handleUpdateHasUnsavedChanges,
     handlePromptAutocomplete,
-    handleAssessmentFetch
+    //handleAssessmentFetch
   } = useMemo(() => {
     return {
       handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
@@ -126,6 +126,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
+        dispatch(updateCurrentAssessmentId(assessmentId, questionId)),
       handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
       handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
@@ -155,7 +157,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
      
-      handleAssessmentFetch: (assessmentId: number) => dispatch(fetchAssessment(assessmentId))
+      //handleAssessmentFetch: (assessmentId: number) => dispatch(fetchAssessment(assessmentId))
     };
   }, [dispatch]);
 
@@ -217,10 +219,10 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       checkWorkspaceReset(props);
     }
 
-    handleAssessmentFetch(props.assessmentId);
+    /*handleAssessmentFetch(props.assessmentId);
     if (!assessment) {
       return;
-    }
+    }*/
   });
 
   /**
@@ -233,8 +235,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     /* Reset grading if it has changed.*/
     const submissionId = props.submissionId;
     const questionId = props.questionId;
-
-    
+    const assessmentId = props.assessmentId;
 
     if (storedSubmissionId === submissionId && storedQuestionId === questionId) {
       return;
@@ -263,6 +264,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorUpdateBreakpoints(0, []);
     handleUpdateCurrentSubmissionId(submissionId, questionId);
+    handleUpdateCurrentAssessmentId(assessmentId, questionId);//TODO
     handleResetWorkspace({
       autogradingResults,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
@@ -340,7 +342,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       {
         label: 'Assessment Briefing',
         iconName: IconNames.BRIEFCASE,
-        body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
+        body: <Markdown content={assessment!.longSummary} />,
         id: undefined
       }
     ];
