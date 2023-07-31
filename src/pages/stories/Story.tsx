@@ -10,13 +10,13 @@ import { useParams } from 'react-router';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  showSuccessMessage,
-  showWarningMessage
-} from 'src/commons/utils/notifications/NotificationsHelper';
 import { scrollSync } from 'src/commons/utils/StoriesHelper';
-import { setCurrentStory, setCurrentStoryId } from 'src/features/stories/StoriesActions';
-import { updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
+import {
+  createStory,
+  saveStory,
+  setCurrentStory,
+  setCurrentStoryId
+} from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
@@ -77,18 +77,14 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
         <ControlButtonSaveButton
           key="save_story"
           onClickSave={() => {
-            if (!storyId) {
-              // TODO: Create story
-              return;
+            if (storyId) {
+              // Update story
+              dispatch(saveStory(story, storyId));
+            } else {
+              // Create story
+              dispatch(createStory(story));
             }
-            updateStory(storyId, title, content)
-              .then(() => {
-                showSuccessMessage('Story saved');
-                setIsDirty(false);
-              })
-              .catch(() => {
-                showWarningMessage('Failed to save story');
-              });
+            // TODO: Set isDirty to false
           }}
           hasUnsavedChanges={isDirty}
         />
