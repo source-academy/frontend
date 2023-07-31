@@ -24,7 +24,8 @@ export const postNewStoriesUsers = async (
   const resp = await requestStoryBackend('/users/batch', 'POST', {
     // TODO: backend create params does not support roles yet, i.e.
     //       the role in NameUsernameRole is currently still unused
-    body: { users: users.map(user => ({ ...user, provider })) }
+    body: { users: users.map(user => ({ ...user, provider })) },
+    ...tokens
   });
 
   if (!resp) {
