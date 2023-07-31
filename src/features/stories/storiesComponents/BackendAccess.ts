@@ -56,13 +56,15 @@ export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryVi
 };
 
 export const postStory = async (
+  tokens: Tokens,
   authorId: number,
   title: string,
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend('/stories', 'POST', {
-    body: { authorId, title, content, pinOrder }
+    body: { authorId, title, content, pinOrder },
+    ...tokens
   });
   if (!resp) {
     showWarningMessage('Failed to create story');
@@ -74,13 +76,15 @@ export const postStory = async (
 };
 
 export const updateStory = async (
+  tokens: Tokens,
   id: number,
   title: string,
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend(`/stories/${id}`, 'PUT', {
-    body: { title, content, pinOrder }
+    body: { title, content, pinOrder },
+    ...tokens
   });
   if (!resp) {
     showWarningMessage('Failed to save story');

@@ -74,6 +74,7 @@ export function* storiesSaga(): SagaIterator {
   );
 
   yield takeEvery(CREATE_STORY, function* (action: ReturnType<typeof actions.createStory>) {
+    const tokens: Tokens = yield selectTokens();
     const story = action.payload;
     // FIXME: User a separate storyUserId instead of the current user
     const userId: number | undefined = yield select((state: OverallState) => state.session.userId);
@@ -85,6 +86,7 @@ export function* storiesSaga(): SagaIterator {
 
     const createdStory: StoryView | null = yield call(
       postStory,
+      tokens,
       userId,
       story.title,
       story.content,
@@ -100,9 +102,11 @@ export function* storiesSaga(): SagaIterator {
   });
 
   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
+    const tokens: Tokens = yield selectTokens();
     const { story, id } = action.payload;
     const updatedStory: StoryView | null = yield call(
       updateStory,
+      tokens,
       id,
       story.title,
       story.content,
