@@ -10,6 +10,7 @@ import {
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
   GET_STORIES_LIST,
+  GET_STORIES_USER,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
@@ -65,3 +66,5 @@ export const setCurrentStoryId = (id: number | null) => action(SET_CURRENT_STORY
 export const createStory = (story: StoryParams) => action(CREATE_STORY, story);
 export const saveStory = (story: StoryParams, id: number) => action(SAVE_STORY, { story, id });
 export const deleteStory = (id: number) => action(DELETE_STORY, id);
+// Auth-related actions
+export const getStoriesUser = () => action(GET_STORIES_USER);

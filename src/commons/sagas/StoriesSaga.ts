@@ -4,6 +4,7 @@ import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTyp
 import {
   deleteStory,
   getStories,
+  getStoriesUser,
   getStory,
   postNewStoriesUsers,
   postStory,
@@ -13,6 +14,7 @@ import {
   CREATE_STORY,
   DELETE_STORY,
   GET_STORIES_LIST,
+  GET_STORIES_USER,
   SAVE_STORY,
   SET_CURRENT_STORY_ID,
   StoryData,
@@ -114,6 +116,18 @@ export function* storiesSaga(): SagaIterator {
     yield call(deleteStory, tokens, storyId);
 
     yield put(actions.getStoriesList());
+  });
+
+  yield takeEvery(GET_STORIES_USER, function* () {
+    const tokens: Tokens = yield selectTokens();
+    const me: {
+      id: number;
+      name: string;
+    } | null = yield call(getStoriesUser, tokens);
+
+    if (!me) {
+      // set state to undefined
+    }
   });
 
   yield takeEvery(
