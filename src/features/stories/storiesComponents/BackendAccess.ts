@@ -1,5 +1,8 @@
 import Constants from 'src/commons/utils/Constants';
-import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
@@ -13,45 +16,25 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
-// TODO: Refactor to use requestStoryBackend
 export const postNewStoriesUsers = async (
   tokens: Tokens,
   users: NameUsernameRole[],
   provider: string
 ): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/batch`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        // TODO: backend create params does not support roles yet (aka) the role in NameUsernameRole is currently still unused
-        users: users.map(user => {
-          return {
-            name: user.name,
-            username: user.username,
-            provider: provider
-          };
-        })
-      })
-    });
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    showWarningMessage('Error while communicating with backend; check your network?');
+  const resp = await requestStoryBackend('/users/batch', 'POST', {
+    // TODO: backend create params does not support roles yet, i.e.
+    //       the role in NameUsernameRole is currently still unused
+    body: { users: users.map(user => ({ ...user, provider })) }
+  });
 
+  if (!resp) {
+    showWarningMessage('Failed to add users');
     return null;
   }
+
+  showSuccessMessage('Users added!');
+  return resp;
+  // TODO: Return response JSON directly.
 };
 
 export const getStories = async (): Promise<StoryListView[] | null> => {
@@ -76,53 +59,36 @@ export const postStory = async (
   authorId: number,
   title: string,
   content: string,
-  pinOrder?: number
+  pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend('/stories', 'POST', {
     body: { authorId, title, content, pinOrder }
   });
   if (!resp) {
+    showWarningMessage('Failed to create story');
     return null;
   }
+  showSuccessMessage('Story created');
   const story = await resp.json();
   return story;
 };
 
-// TODO: Refactor to use requestStoryBackend
 export const updateStory = async (
   id: number,
   title: string,
   content: string,
-  pinOrder?: number | null
-): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        pinOrder: pinOrder ?? null
-      })
-    });
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    showWarningMessage('Error while communicating with backend; check your network?');
-
+  pinOrder: number | null
+): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${id}`, 'PUT', {
+    body: { title, content, pinOrder }
+  });
+  if (!resp) {
+    showWarningMessage('Failed to save story');
     return null;
   }
+  showSuccessMessage('Story saved');
+  const updatedStory = await resp.json();
+  return updatedStory;
 };
 
 // Returns the deleted story, or null if errors occur

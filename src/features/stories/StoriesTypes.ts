@@ -28,18 +28,15 @@ export type StoryMetadata = {
 export type StoryData = {
   title: string;
   content: string;
-};
-
-export type StoryParams = StoryData & {
-  // StoryMetadata &
   pinOrder: number | null;
 };
+
+export type StoryParams = StoryData;
 
 export type StoryListView = StoryData &
   StoryMetadata & {
     id: number;
     isPinned: boolean;
-    pinOrder: number | null;
   };
 
 export type StoryView = StoryData &
