@@ -212,7 +212,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     FETCH_USER_AND_COURSE,
     function* (action: ReturnType<typeof actions.fetchUserAndCourse>): any {
-      const tokens = yield selectTokens();
+      const tokens: Tokens = yield selectTokens();
 
       const {
         user,
