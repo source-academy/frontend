@@ -39,19 +39,6 @@ export function* storiesSaga(): SagaIterator {
     yield put(actions.updateStoriesList(allStories));
   });
 
-  yield takeEvery(
-    ADD_NEW_STORIES_USERS_TO_COURSE,
-    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { users, provider } = action.payload;
-
-      yield call(postNewStoriesUsers, tokens, users, provider);
-
-      // TODO: Refresh the list of story users
-      //       once that page is implemented
-    }
-  );
-
   // takeEvery used to ensure that setting to null (clearing the story) is always
   // handled even if a refresh is triggered later.
   yield takeEvery(
@@ -128,6 +115,19 @@ export function* storiesSaga(): SagaIterator {
 
     yield put(actions.getStoriesList());
   });
+
+  yield takeEvery(
+    ADD_NEW_STORIES_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider } = action.payload;
+
+      yield call(postNewStoriesUsers, tokens, users, provider);
+
+      // TODO: Refresh the list of story users
+      //       once that page is implemented
+    }
+  );
 }
 
 export default storiesSaga;
