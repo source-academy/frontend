@@ -1,14 +1,16 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import {
   deleteStory,
   getStories,
   getStory,
   postNewStoriesUsers,
+  postStory,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
+  CREATE_STORY,
   DELETE_STORY,
   GET_STORIES_LIST,
   SAVE_STORY,
@@ -18,12 +20,12 @@ import {
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
+import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
-import { handleResponseError } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export function* storiesSaga(): SagaIterator {
@@ -43,14 +45,10 @@ export function* storiesSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { users, provider } = action.payload;
 
-      const resp: Response | null = yield call(postNewStoriesUsers, tokens, users, provider);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+      yield call(postNewStoriesUsers, tokens, users, provider);
 
       // TODO: Refresh the list of story users
       //       once that page is implemented
-      yield call(showSuccessMessage, 'Users added!');
     }
   );
 
@@ -67,22 +65,49 @@ export function* storiesSaga(): SagaIterator {
       } else {
         const defaultStory: StoryData = {
           title: '',
-          content: defaultStoryContent
+          content: defaultStoryContent,
+          pinOrder: null
         };
         yield put(actions.setCurrentStory(defaultStory));
       }
     }
   );
 
+  yield takeEvery(CREATE_STORY, function* (action: ReturnType<typeof actions.createStory>) {
+    const story = action.payload;
+    // FIXME: User a separate storyUserId instead of the current user
+    const userId: number | undefined = yield select((state: OverallState) => state.session.userId);
+
+    if (userId === undefined) {
+      showWarningMessage('Failed to create story: Invalid user');
+      return;
+    }
+
+    const createdStory: StoryView | null = yield call(
+      postStory,
+      userId,
+      story.title,
+      story.content,
+      story.pinOrder
+    );
+
+    // TODO: Check correctness
+    if (createdStory) {
+      yield put(actions.setCurrentStoryId(createdStory.id));
+    }
+
+    yield put(actions.getStoriesList());
+  });
+
   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
     const { story, id } = action.payload;
-    const updatedStory: StoryView | null = yield call(async () => {
-      const resp = await updateStory(id, story.title, story.content, story.pinOrder);
-      if (!resp) {
-        return null;
-      }
-      return resp.json();
-    });
+    const updatedStory: StoryView | null = yield call(
+      updateStory,
+      id,
+      story.title,
+      story.content,
+      story.pinOrder
+    );
 
     // TODO: Check correctness
     if (updatedStory) {
