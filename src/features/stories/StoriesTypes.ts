@@ -21,6 +21,7 @@ export const SAVE_STORY = 'SAVE_STORY';
 export const DELETE_STORY = 'DELETE_STORY';
 // Auth-related actions
 export const GET_STORIES_USER = 'GET_STORIES_USER';
+export const SET_CURRENT_STORIES_USER = 'SET_CURRENT_STORIES_USER';
 
 export type StoryMetadata = {
   authorId: number;

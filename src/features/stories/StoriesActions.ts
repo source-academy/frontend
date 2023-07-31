@@ -14,6 +14,7 @@ import {
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
+  SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
   StoryData,
@@ -68,3 +69,5 @@ export const saveStory = (story: StoryParams, id: number) => action(SAVE_STORY, 
 export const deleteStory = (id: number) => action(DELETE_STORY, id);
 // Auth-related actions
 export const getStoriesUser = () => action(GET_STORIES_USER);
+export const setCurrentStoriesUser = (id: number | undefined, name: string | undefined) =>
+  action(SET_CURRENT_STORIES_USER, { id, name });
