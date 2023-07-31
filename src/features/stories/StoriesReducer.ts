@@ -18,17 +18,18 @@ import {
   EVAL_STORY_SUCCESS,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
-  STORIES_UPDATE_GITHUB_SAVE_INFO,
+  SET_CURRENT_STORY,
+  SET_CURRENT_STORY_ID,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_CONTENT
+  UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
 export const StoriesReducer: Reducer<StoriesState> = (
   state = defaultStories,
   action: SourceActionType
 ) => {
-  const env: string = (action as any).payload ? (action as any).payload.env : DEFAULT_ENV;
+  const env: string = (action as any).payload?.env ?? DEFAULT_ENV;
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
   switch (action.type) {
@@ -180,11 +181,6 @@ export const StoriesReducer: Reducer<StoriesState> = (
           }
         }
       };
-    case STORIES_UPDATE_GITHUB_SAVE_INFO:
-      return {
-        ...state,
-        githubSaveInfo: action.payload
-      };
     case TOGGLE_STORIES_USING_SUBST:
       return {
         ...state,
@@ -196,10 +192,21 @@ export const StoriesReducer: Reducer<StoriesState> = (
           }
         }
       };
-    case UPDATE_STORIES_CONTENT:
+    // New cases post-refactor
+    case UPDATE_STORIES_LIST:
       return {
         ...state,
-        content: action.payload
+        storyList: action.payload
+      };
+    case SET_CURRENT_STORY_ID:
+      return {
+        ...state,
+        currentStoryId: action.payload
+      };
+    case SET_CURRENT_STORY:
+      return {
+        ...state,
+        currentStory: action.payload
       };
     default:
       return state;

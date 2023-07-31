@@ -1,72 +1,150 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Constants from 'src/commons/utils/Constants';
+import '@tremor/react/dist/esm/tremor.css';
 
-import { getStories } from '../../features/stories/storiesComponents/BackendAccess';
+import { Button as BpButton, Icon as BpIcon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { Card, Flex, TextInput, Title } from '@tremor/react';
+import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { deleteStory, getStoriesList, saveStory } from 'src/features/stories/StoriesActions';
+
+import StoriesTable from './StoriesTable';
+import StoryActions from './StoryActions';
+
+const columns = [
+  { id: 'author', header: 'Author' },
+  { id: 'title', header: 'Title' },
+  { id: 'content', header: 'Content' },
+  { id: 'actions', header: 'Actions' }
+];
 
 const Stories: React.FC = () => {
-  const [user, setUser] = useState<string>('');
-  const [data, setData] = useState<any[]>([]);
-  const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    setUser(e.currentTarget.value);
-  };
+  const [query, setQuery] = useState('');
   const navigate = useNavigate();
-  const handleSubmit = (): void => {
-    if (user !== '') {
-      navigate(`/stories/view/${user}`);
-    }
-  };
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    getStories().then(res => {
-      res?.json().then(r2 => {
-        console.log(r2.data);
-        setData(r2.data);
+  const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
+  const handleDeleteStory = useCallback(
+    async (id: number) => {
+      const confirm = await showSimpleConfirmDialog({
+        contents: <p>Are you sure you want to delete this story?</p>,
+        positiveIntent: 'danger',
+        positiveLabel: 'Delete'
       });
-    });
-  }, []);
+      if (confirm) {
+        dispatch(deleteStory(id));
+        // deleteStory will auto-refresh the list of stories after
+      }
+    },
+    [dispatch]
+  );
+
+  const storyList = useTypedSelector(state => state.stories.storyList);
+
+  const handleTogglePinStory = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const story = storyList.find(story => story.id === id)!;
+      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      const newStory = {
+        ...story,
+        isPinned: !story.isPinned,
+        // Pinning a story appends to the end of the pinned list
+        pinOrder: story.isPinned ? null : pinnedLength
+      };
+      dispatch(saveStory(newStory, id));
+    },
+    [dispatch, storyList]
+  );
+
+  const handleMovePinUp = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      if (oldIndex === 0) {
+        return;
+      }
+
+      const toMoveUp = storyList[oldIndex];
+      const toMoveDown = storyList[oldIndex - 1];
+
+      const storiesToUpdate = [
+        { ...toMoveUp, pinOrder: oldIndex - 1 },
+        { ...toMoveDown, pinOrder: oldIndex }
+      ];
+      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+    },
+    [dispatch, storyList]
+  );
+
+  const handleMovePinDown = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      if (oldIndex === pinnedLength - 1) {
+        return;
+      }
+      const toMoveDown = storyList[oldIndex];
+      const toMoveUp = storyList[oldIndex + 1];
+
+      const storiesToUpdate = [
+        { ...toMoveDown, pinOrder: oldIndex + 1 },
+        { ...toMoveUp, pinOrder: oldIndex }
+      ];
+      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+    },
+    [dispatch, storyList]
+  );
 
   return (
-    <div className="storiesHome">
-      <div className="storiesInteract">
-        <p className="titleText">Stories</p>
-        <form onSubmit={handleSubmit}>
-          <input
-            className="storiesInput"
-            type="text"
-            placeholder="GitHub username here"
-            value={user}
-            onChange={onChange}
-            required
+    <ContentDisplay
+      loadContentDispatch={() => dispatch(getStoriesList())}
+      display={
+        <Card>
+          <Flex justifyContent="justify-between">
+            <Flex justifyContent="justify-start" spaceX="space-x-6">
+              <Title>All Stories</Title>
+              <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
+                Add Story
+              </BpButton>
+            </Flex>
+            <TextInput
+              maxWidth="max-w-xl"
+              icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+              placeholder="Search for author..."
+              onChange={e => setQuery(e.target.value)}
+            />
+          </Flex>
+
+          <StoriesTable
+            headers={columns}
+            stories={storyList.filter(
+              story =>
+                // Always show pinned stories
+                story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+            )}
+            storyActions={story => (
+              <StoryActions
+                storyId={story.id}
+                handleDeleteStory={handleDeleteStory}
+                handleTogglePin={handleTogglePinStory}
+                handleMovePinUp={handleMovePinUp}
+                handleMovePinDown={handleMovePinDown}
+                canView
+                canEdit
+                canDelete
+                canPin
+                isPinned={story.isPinned}
+              />
+            )}
           />
-        </form>
-        <button className="storiesButton" onClick={handleSubmit}>
-          Explore user's blogs
-        </button>
-        <p>
-          <a href={`/stories/new`}>Write your own</a> story!
-        </p>
-        {Constants.storiesBackendUrl && (
-          <div>
-            <p className="titleText">Recent Posts</p>
-            <div className="recent">
-              {data.map(user => (
-                <div>
-                  <p className="postTitle">
-                    <a href={`/stories/view/${user.githubname}/${user.filename}`}>
-                      {user.filename}
-                    </a>
-                  </p>
-                  <p className="postUser">
-                    by <a href={`/stories/view/${user.githubname}`}>{user.githubname}</a>
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+        </Card>
+      }
+    />
   );
 };
 

@@ -1,7 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import yaml from 'js-yaml';
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
 import ReactMarkdown from 'react-markdown';
 import Constants from 'src/commons/utils/Constants';
@@ -135,7 +134,7 @@ function parseHeaders(content: string): { headersYaml: string; content: string }
   };
 }
 
-const UserBlog: React.FC<UserBlogProps> = props => {
+const UserBlogContent: React.FC<UserBlogProps> = props => {
   const [content, setContent] = useState<string>('');
 
   useEffect(() => {
@@ -153,25 +152,24 @@ const UserBlog: React.FC<UserBlogProps> = props => {
     <div />
   ) : (
     <div className="userblogContent">
-      <div className="content">
-        <ReactMarkdown
-          children={content}
-          components={{
-            code({ node, inline, className, children, ...props }) {
-              const match = /language-source(.*)/.exec(className || '');
-              return !inline && match ? (
-                <SourceBlock commands={match[1]}>{String(children)}</SourceBlock>
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            }
-          }}
-        />
-      </div>
+      <ReactMarkdown
+        className="content"
+        children={content}
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-source(.*)/.exec(className || '');
+            return !inline && match ? (
+              <SourceBlock commands={match[1]}>{String(children)}</SourceBlock>
+            ) : (
+              <code className={className} {...props}>
+                {children}
+              </code>
+            );
+          }
+        }}
+      />
     </div>
   );
 };
 
-export default debounceRender(UserBlog, 500);
+export default debounceRender(UserBlogContent, 500);

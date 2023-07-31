@@ -12,7 +12,6 @@ import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
-import DEFAULT_STORY from '../utils/StoriesHelper';
 import {
   DebuggerContext,
   WorkspaceLocation,
@@ -105,6 +104,13 @@ export enum ApplicationEnvironment {
 export enum Role {
   Student = 'student',
   Staff = 'staff',
+  Admin = 'admin'
+}
+
+// Must match https://github.com/source-academy/stories-backend/blob/main/internal/enums/groups/role.go
+export enum StoriesRole {
+  Standard = 'user',
+  Moderator = 'moderator',
   Admin = 'admin'
 }
 
@@ -515,9 +521,10 @@ export const defaultSession: SessionState = {
 };
 
 export const defaultStories: StoriesState = {
-  envs: {},
-  content: DEFAULT_STORY,
-  githubSaveInfo: { repoName: '', filePath: '' }
+  storyList: [],
+  currentStoryId: null,
+  currentStory: null,
+  envs: {}
 };
 
 export const createDefaultStoriesEnv = (

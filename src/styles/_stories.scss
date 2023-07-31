@@ -32,17 +32,17 @@
 }
 
 .newUserblog {
-  width: 60%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1050px;
   overflow-y: scroll;
   .userblogContent {
-    padding-left: 10px;
-    padding-right: 10px;
-    max-width: 850px;
-    margin: auto;
     .content {
+      color: black;
       word-wrap: break-word;
       background-color: white;
-      padding: 10px;
+      padding: 16px 24px;
       font: 400 16px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
         sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
@@ -82,131 +82,6 @@
       pre code {
         white-space: pre;
       }
-    }
-  }
-}
-
-.userblog {
-  width: 100%;
-  .path {
-    color: white;
-    a {
-      color: rgb(0, 187, 255);
-    }
-  }
-  .userblogContent {
-    width: 100vw;
-    padding-left: 10px;
-    .content {
-      word-wrap: break-word;
-      max-width: 850px;
-      margin: auto;
-      background-color: white;
-      padding: 10px;
-      font: 400 16px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
-        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-
-      code:not(pre code) {
-        border: 1px solid #cacaca;
-        background-color: #fafafb;
-        color: #393939;
-        margin: 0px;
-        white-space: nowrap;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        border-radius: 3px;
-        padding: 1px;
-      }
-
-      code {
-        white-space: nowrap;
-      }
-
-      pre:has(> code) {
-        border: 1px solid #cacaca;
-        line-height: 1.2em;
-        font: 12px Monaco, 'Courier New', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
-        padding: 10px;
-        overflow: auto;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        border-radius: 3px;
-        -moz-background-clip: padding;
-        -webkit-background-clip: padding-box;
-        background-clip: padding-box;
-        background-color: #fafafb;
-        color: #393939;
-        margin: 0px;
-      }
-
-      pre code {
-        white-space: pre;
-      }
-    }
-  }
-  .userblogDir {
-    background-color: white;
-    margin: auto;
-    width: 60vw;
-    height: 85vh;
-    .repoList {
-      padding: 25px;
-      font-size: large;
-      width: auto;
-
-      .titleText {
-        width: 100%;
-        font-size: xx-large;
-        font-weight: 500;
-        text-align: left;
-      }
-    }
-  }
-}
-
-.storiesHome {
-  background-color: white;
-  margin: auto;
-  margin-top: 30px;
-  width: 80vw;
-  height: 85vh;
-
-  .storiesInteract {
-    margin: auto;
-    margin-top: 30px;
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: large;
-    gap: 15px;
-
-    .titleText {
-      width: 100%;
-      font-size: larger;
-      font-weight: 500;
-      text-align: left;
-    }
-    .recent {
-      width: 100%;
-      .postTitle {
-        text-align: left;
-      }
-      .postUser {
-        font-size: small;
-        text-align: right;
-      }
-    }
-    .storiesButton {
-      width: 400px;
-      background-color: #0696d7;
-      border: 0px;
-      color: white;
-      border-radius: 4px;
-      padding: 5px;
-    }
-    .storiesInput {
-      width: 400px;
     }
   }
 }
@@ -214,11 +89,5 @@
 .ControlBar {
   display: flex;
   background-color: $cadet-color-1;
-  color: white;
   padding: 5px;
-
-  .bp4-button {
-    width: 80px;
-    color: wheat;
-  }
 }
