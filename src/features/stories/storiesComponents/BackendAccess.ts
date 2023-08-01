@@ -16,6 +16,21 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
+export const getStoriesUser = async (
+  tokens: Tokens
+): Promise<{
+  id: number;
+  name: string;
+  // TODO: Return role once permissions framework is implemented
+} | null> => {
+  const resp = await requestStoryBackend('/user', 'GET', { ...tokens });
+  if (!resp) {
+    return null;
+  }
+  const me = await resp.json();
+  return me;
+};
+
 export const postNewStoriesUsers = async (
   tokens: Tokens,
   users: NameUsernameRole[],
