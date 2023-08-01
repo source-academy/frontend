@@ -24,7 +24,8 @@ export const postNewStoriesUsers = async (
   const resp = await requestStoryBackend('/users/batch', 'POST', {
     // TODO: backend create params does not support roles yet, i.e.
     //       the role in NameUsernameRole is currently still unused
-    body: { users: users.map(user => ({ ...user, provider })) }
+    body: { users: users.map(user => ({ ...user, provider })) },
+    ...tokens
   });
 
   if (!resp) {
@@ -37,8 +38,8 @@ export const postNewStoriesUsers = async (
   // TODO: Return response JSON directly.
 };
 
-export const getStories = async (): Promise<StoryListView[] | null> => {
-  const resp = await requestStoryBackend('/stories', 'GET', {});
+export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null> => {
+  const resp = await requestStoryBackend('/stories', 'GET', { ...tokens });
   if (!resp) {
     return null;
   }
@@ -46,8 +47,8 @@ export const getStories = async (): Promise<StoryListView[] | null> => {
   return stories;
 };
 
-export const getStory = async (storyId: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', {});
+export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', { ...tokens });
   if (!resp) {
     return null;
   }
@@ -56,13 +57,15 @@ export const getStory = async (storyId: number): Promise<StoryView | null> => {
 };
 
 export const postStory = async (
+  tokens: Tokens,
   authorId: number,
   title: string,
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend('/stories', 'POST', {
-    body: { authorId, title, content, pinOrder }
+    body: { authorId, title, content, pinOrder },
+    ...tokens
   });
   if (!resp) {
     showWarningMessage('Failed to create story');
@@ -74,13 +77,15 @@ export const postStory = async (
 };
 
 export const updateStory = async (
+  tokens: Tokens,
   id: number,
   title: string,
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend(`/stories/${id}`, 'PUT', {
-    body: { title, content, pinOrder }
+    body: { title, content, pinOrder },
+    ...tokens
   });
   if (!resp) {
     showWarningMessage('Failed to save story');
@@ -92,8 +97,8 @@ export const updateStory = async (
 };
 
 // Returns the deleted story, or null if errors occur
-export const deleteStory = async (id: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', {});
+export const deleteStory = async (tokens: Tokens, id: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', { ...tokens });
   if (!resp) {
     return null;
   }

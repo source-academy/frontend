@@ -103,6 +103,7 @@ export default function* WorkspaceSaga(): SagaIterator {
           actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
         );
       } else {
+        // FIXME: Use story env
         yield put(
           actions.handleStoriesConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
         );
@@ -324,8 +325,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     const codeFiles = {
       [codeFilePath]: code
     };
-    // TODO: Check what happens to the env here
-    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY);
+    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY, env);
   });
 
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
@@ -654,12 +654,13 @@ function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: str
 
 export function* dumpDisplayBuffer(
   workspaceLocation: WorkspaceLocation,
-  isStoriesBlock: boolean = false
+  isStoriesBlock: boolean = false,
+  storyEnv?: string
 ): Generator<StrictEffect, void, any> {
   if (!isStoriesBlock) {
     yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
   } else {
-    yield put(actions.handleStoriesConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
+    yield put(actions.handleStoriesConsoleLog(storyEnv!, ...DisplayBufferService.dump()));
   }
 }
 
@@ -1036,11 +1037,12 @@ export function* evalCode(
   context: Context,
   execTime: number,
   workspaceLocation: WorkspaceLocation,
-  actionType: string
+  actionType: string,
+  storyEnv?: string
 ): SagaIterator {
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
-  const isStoriesBlock = actionType === EVAL_STORY;
+  const isStoriesBlock = actionType === EVAL_STORY || workspaceLocation === 'stories';
 
   // Logic for execution of substitution model visualizer
   const correctWorkspace = workspaceLocation === 'playground' || workspaceLocation === 'sicp';
@@ -1051,10 +1053,11 @@ export function* evalCode(
             .usingSubst
       )
     : isStoriesBlock
-    ? yield select((state: OverallState) => state.stories.envs[workspaceLocation].usingSubst)
+    ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
     : false;
   const stepLimit: number = isStoriesBlock
-    ? yield select((state: OverallState) => state.stories.envs[workspaceLocation].stepLimit)
+    ? yield select((state: OverallState) => state.stories.envs[storyEnv!].stepLimit)
     : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
   const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
   if (substActiveAndCorrectChapter) {
@@ -1217,11 +1220,12 @@ export function* evalCode(
     result.status !== 'suspended-non-det' &&
     result.status !== 'suspended-ec-eval'
   ) {
-    yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock);
+    yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
       yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
     } else {
-      yield put(actions.evalStoryError(context.errors, workspaceLocation));
+      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      yield put(actions.evalStoryError(context.errors, storyEnv!));
     }
     // we need to parse again, but preserve the errors in context
     const oldErrors = context.errors;
@@ -1252,14 +1256,15 @@ export function* evalCode(
     lastNonDetResult = result;
   }
 
-  yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock);
+  yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
     if (!isStoriesBlock) {
       yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
     } else {
-      yield put(actions.evalStorySuccess(result.value, workspaceLocation));
+      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      yield put(actions.evalStorySuccess(result.value, storyEnv!));
     }
   }
 
@@ -1274,7 +1279,8 @@ export function* evalCode(
   }
   if (isStoriesBlock) {
     yield put(
-      notifyStoriesEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
+      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      notifyStoriesEvaluated(result, lastDebuggerResult, entrypointCode, context, storyEnv!)
     );
   }
 
