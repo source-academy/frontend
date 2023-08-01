@@ -65,8 +65,7 @@ export function* storiesSaga(): SagaIterator {
   yield takeEvery(CREATE_STORY, function* (action: ReturnType<typeof actions.createStory>) {
     const tokens: Tokens = yield selectTokens();
     const story = action.payload;
-    // FIXME: User a separate storyUserId instead of the current user
-    const userId: number | undefined = yield select((state: OverallState) => state.session.userId);
+    const userId: number | undefined = yield select((state: OverallState) => state.stories.userId);
 
     if (userId === undefined) {
       showWarningMessage('Failed to create story: Invalid user');
