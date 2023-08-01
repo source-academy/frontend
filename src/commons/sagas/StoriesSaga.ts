@@ -4,6 +4,7 @@ import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTyp
 import {
   deleteStory,
   getStories,
+  getStoriesUser,
   getStory,
   postNewStoriesUsers,
   postStory,
@@ -13,6 +14,7 @@ import {
   CREATE_STORY,
   DELETE_STORY,
   GET_STORIES_LIST,
+  GET_STORIES_USER,
   SAVE_STORY,
   SET_CURRENT_STORY_ID,
   StoryData,
@@ -39,19 +41,6 @@ export function* storiesSaga(): SagaIterator {
     yield put(actions.updateStoriesList(allStories));
   });
 
-  yield takeEvery(
-    ADD_NEW_STORIES_USERS_TO_COURSE,
-    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { users, provider } = action.payload;
-
-      yield call(postNewStoriesUsers, tokens, users, provider);
-
-      // TODO: Refresh the list of story users
-      //       once that page is implemented
-    }
-  );
-
   // takeEvery used to ensure that setting to null (clearing the story) is always
   // handled even if a refresh is triggered later.
   yield takeEvery(
@@ -76,8 +65,7 @@ export function* storiesSaga(): SagaIterator {
   yield takeEvery(CREATE_STORY, function* (action: ReturnType<typeof actions.createStory>) {
     const tokens: Tokens = yield selectTokens();
     const story = action.payload;
-    // FIXME: User a separate storyUserId instead of the current user
-    const userId: number | undefined = yield select((state: OverallState) => state.session.userId);
+    const userId: number | undefined = yield select((state: OverallState) => state.stories.userId);
 
     if (userId === undefined) {
       showWarningMessage('Failed to create story: Invalid user');
@@ -128,6 +116,31 @@ export function* storiesSaga(): SagaIterator {
 
     yield put(actions.getStoriesList());
   });
+
+  yield takeEvery(GET_STORIES_USER, function* () {
+    const tokens: Tokens = yield selectTokens();
+    const me: {
+      id: number;
+      name: string;
+    } | null = yield call(getStoriesUser, tokens);
+
+    if (!me) {
+      // set state to undefined
+    }
+  });
+
+  yield takeEvery(
+    ADD_NEW_STORIES_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider } = action.payload;
+
+      yield call(postNewStoriesUsers, tokens, users, provider);
+
+      // TODO: Refresh the list of story users
+      //       once that page is implemented
+    }
+  );
 }
 
 export default storiesSaga;
