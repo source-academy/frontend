@@ -156,7 +156,7 @@ const Sourcecast: React.FC = () => {
   const handleQueryParam = () => {
     const newUid = params.sourcecastId;
     if (newUid && newUid !== uid && sourcecastIndex) {
-      const cast = sourcecastIndex.find(data => data.uid === newUid);
+      const cast = sourcecastIndex.find((data: { uid: string }) => data.uid === newUid);
       if (cast) {
         handleSetSourcecastData(
           cast.title,

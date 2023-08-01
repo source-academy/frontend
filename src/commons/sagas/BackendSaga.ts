@@ -131,7 +131,7 @@ import {
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-function selectTokens() {
+export function selectTokens() {
   return select((state: OverallState) => ({
     accessToken: state.session.accessToken,
     refreshToken: state.session.refreshToken
@@ -211,7 +211,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     FETCH_USER_AND_COURSE,
     function* (action: ReturnType<typeof actions.fetchUserAndCourse>): any {
-      const tokens = yield selectTokens();
+      const tokens: Tokens = yield selectTokens();
 
       const {
         user,
