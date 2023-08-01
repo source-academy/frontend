@@ -1,3 +1,4 @@
+// import { request } from '@octokit/request';
 import { Octokit } from '@octokit/rest';
 import {
   GetResponseDataTypeFromEndpointMethod,
@@ -5,12 +6,14 @@ import {
 } from '@octokit/types';
 
 import { actions } from '../../commons/utils/ActionsHelper';
+// import Constants from '../../commons/utils/Constants';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import {
   showSuccessMessage,
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
+// import { GithubGetRepoRespData } from './GitHubTypes';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token

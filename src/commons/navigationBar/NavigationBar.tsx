@@ -177,6 +177,13 @@ const NavigationBar: React.FC = () => {
         icon: IconNames.MOUNTAIN,
         text: 'Achievements',
         disabled: !(isEnrolledInACourse && enableAchievements)
+      },
+      {
+        to: '/stories',
+        icon: IconNames.GIT_REPO,
+        text: 'Stories',
+        // TODO: Enable when stories are implemented
+        disabled: true && !isLoggedIn
       }
     ];
   }, [isLoggedIn, isEnrolledInACourse, courseId, enableSourcecast, enableAchievements]);
@@ -344,6 +351,13 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     to: '/sicpjs',
     icon: IconNames.BOOK,
     text: 'SICP JS'
+  },
+  {
+    to: '/stories',
+    icon: IconNames.GIT_REPO,
+    text: 'Stories',
+    // TODO: Enable when stories are implemented
+    disabled: true
   }
 ];
 
