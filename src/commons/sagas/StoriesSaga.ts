@@ -30,8 +30,9 @@ import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
+    const tokens: Tokens = yield selectTokens();
     const allStories: StoryListView[] = yield call(async () => {
-      const resp = await getStories();
+      const resp = await getStories(tokens);
       return resp ?? [];
     });
 
@@ -56,9 +57,10 @@ export function* storiesSaga(): SagaIterator {
   yield takeEvery(
     SET_CURRENT_STORY_ID,
     function* (action: ReturnType<typeof actions.setCurrentStoryId>) {
+      const tokens: Tokens = yield selectTokens();
       const storyId = action.payload;
       if (storyId) {
-        const story: StoryView = yield call(getStory, storyId);
+        const story: StoryView = yield call(getStory, tokens, storyId);
         yield put(actions.setCurrentStory(story));
       } else {
         const defaultStory: StoryData = {
@@ -72,6 +74,7 @@ export function* storiesSaga(): SagaIterator {
   );
 
   yield takeEvery(CREATE_STORY, function* (action: ReturnType<typeof actions.createStory>) {
+    const tokens: Tokens = yield selectTokens();
     const story = action.payload;
     // FIXME: User a separate storyUserId instead of the current user
     const userId: number | undefined = yield select((state: OverallState) => state.session.userId);
@@ -83,6 +86,7 @@ export function* storiesSaga(): SagaIterator {
 
     const createdStory: StoryView | null = yield call(
       postStory,
+      tokens,
       userId,
       story.title,
       story.content,
@@ -98,9 +102,11 @@ export function* storiesSaga(): SagaIterator {
   });
 
   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
+    const tokens: Tokens = yield selectTokens();
     const { story, id } = action.payload;
     const updatedStory: StoryView | null = yield call(
       updateStory,
+      tokens,
       id,
       story.title,
       story.content,
@@ -116,8 +122,9 @@ export function* storiesSaga(): SagaIterator {
   });
 
   yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
+    const tokens: Tokens = yield selectTokens();
     const storyId = action.payload;
-    yield call(deleteStory, storyId);
+    yield call(deleteStory, tokens, storyId);
 
     yield put(actions.getStoriesList());
   });
