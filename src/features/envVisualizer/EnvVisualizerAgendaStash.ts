@@ -15,6 +15,11 @@ export enum AgendaStashConfig {
   StashMaxTextHeight = 30,
   StashItemCornerRadius = AgendaItemCornerRadius,
 
+  ShowMoreButtonWidth = 80,
+  ShowMoreButtonHeight = 15,
+  ShowMoreButtonX = 40,
+  ShowMoreButtonY = 25,
+
   TooltipOpacity = 0.7,
   TooltipMargin = 5,
   TooltipPadding = 5,
