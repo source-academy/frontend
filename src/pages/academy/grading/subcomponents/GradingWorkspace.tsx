@@ -65,6 +65,13 @@ type GradingWorkspaceProps = {
 };
 
 const workspaceLocation: WorkspaceLocation = 'grading';
+const whitespaceRegex: RegExp = /\s/g;
+const unansweredPrependValue: string = `// This answer does not have significant changes from the given solution
+// template and has thus been flagged as unanswered.
+// If you think this is wrong, please ignore and grade accordingly.
+
+
+`;
 
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
@@ -171,15 +178,10 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       if (question.answer) {
         if (
           question.answer.trim() === question.solutionTemplate.trim() ||
-          question.answer.replace(/\s/g, '') === question.solutionTemplate.replace(/\s/g, '')
+          question.answer.replace(whitespaceRegex, '') ===
+            question.solutionTemplate.replace(whitespaceRegex, '')
         ) {
-          answer =
-            `// This answer does not have significant changes from the given solution
-          // template and has thus been flagged as unanswered.
-          // If you think this is wrong, please ignore and grade accordingly.
-          
-          
-          ` + question.answer;
+          answer = unansweredPrependValue + question.answer;
           showSimpleErrorDialog({
             contents: 'Question has not been answered.'
           });
@@ -257,18 +259,13 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       }
       if (
         editorValue.trim() === questionData.solutionTemplate?.trim() ||
-        editorValue.replace(/\s/g, '') === questionData.solutionTemplate?.replace(/\s/g, '')
+        editorValue.replace(whitespaceRegex, '') ===
+          questionData.solutionTemplate?.replace(whitespaceRegex, '')
       ) {
         showSimpleErrorDialog({
           contents: 'Question has not been answered.'
         });
-        editorValue =
-          `// This answer does not have significant changes from the given solution
-// template and has thus been flagged as unanswered.
-// If you think this is wrong, please ignore and grade accordingly.
-
-
-` + editorValue;
+        editorValue = unansweredPrependValue + editorValue;
       }
     }
 
