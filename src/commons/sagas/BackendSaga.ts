@@ -198,6 +198,9 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
     }
     /**
      * NOTE: Navigation logic is now handled in <Login /> component.
@@ -241,6 +244,9 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.setCourseRegistration(courseRegistration));
         yield put(actions.setCourseConfiguration(courseConfiguration));
         yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
       }
     }
   );
@@ -250,6 +256,9 @@ function* BackendSaga(): SagaIterator {
     const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
     if (config) {
       yield put(actions.setCourseConfiguration(config));
+
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
     }
   });
 
@@ -708,6 +717,10 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield put(actions.setCourseRegistration(courseRegistration));
+
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
     }
   );
