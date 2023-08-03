@@ -128,7 +128,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
       // Invalid role specified
       if (!Object.values(StoriesRole).includes(data[i][2] as StoriesRole)) {
         setInvalidCsvMsg(
-          `Invalid role (line ${i})! Please ensure that the third column of each entry contains one of the following: 'user, moderator, admin'`
+          `Invalid role (line ${i})! Please ensure that the third column of each entry contains one of the following: 'member, moderator, admin'`
         );
         return;
       }
@@ -203,7 +203,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                             <b>
                               <i>role</i>
                             </b>
-                            : the role of the user <i>(user | moderator | admin)</i>
+                            : the role of the user <i>(member | moderator | admin)</i>
                           </p>
 
                           <p>&nbsp;</p>
@@ -211,7 +211,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                             <u>Examples:</u>
                           </p>
                           <p>
-                            <i>(Luminus): &nbsp; Wei Kai,e1234567,user</i>
+                            <i>(Luminus): &nbsp; Wei Kai,e1234567,member</i>
                           </p>
                           <p>
                             <i>(Google): &nbsp; Timothy,learner@gmail.com,moderator</i>
