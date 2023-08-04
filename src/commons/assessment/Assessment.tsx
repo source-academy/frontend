@@ -70,19 +70,12 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const assessmentOverviewsUnfiltered = useTypedSelector(
     state => state.session.assessmentOverviews
   );
-  const teamFormationOverviewsUnfiltered = useTypedSelector(
-    state => state.session.teamFormationOverviews || []
-  );
 
   const courseId = useTypedSelector(state => state.session.courseId);
-  const courseRegId = useTypedSelector(state => state.session.courseRegId);
-
-  const teamFormationOverviews = teamFormationOverviewsUnfiltered?.filter(ao => courseRegId !== undefined && ao.studentIds.includes(courseRegId));
 
   const isStudent = useTypedSelector(state =>
     state.session.role ? state.session.role === Role.Student : true
   );
-
 
   const dispatch = useDispatch();
 
@@ -284,21 +277,17 @@ const Assessment: React.FC<AssessmentProps> = props => {
 
   const assessmentId: number | null = convertParamToInt(params.assessmentId);
   const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
-  const teamFormationOverview = assessmentId === null ? undefined : teamFormationOverviews.filter(ao => ao.assessmentId === assessmentId)[0];
 
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.
   if (assessmentId !== null && assessmentOverviews !== undefined) {
     const overview = assessmentOverviews.filter(a => a.id === assessmentId)[0];
-    
-    // const teamId = 1;
     if (!overview) {
       return <AssessmentNotFound />;
     }
     const assessmentWorkspaceProps: AssessmentWorkspaceProps = {
       assessmentId,
       questionId,
-      teamFormationOverview,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:
         !isStudent ||
@@ -318,7 +307,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
     /** Upcoming assessments, that are not released yet. */
     const isOverviewUpcoming = (overview: AssessmentOverview) =>
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
-// TODO: rework hasformed team
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
       (overview, index) => makeOverviewCard(overview, index, !isStudent, false)
     );

@@ -17,7 +17,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
@@ -97,7 +96,6 @@ import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
   questionId: number;
-  teamFormationOverview: TeamFormationOverview | undefined;
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
@@ -447,33 +445,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         }
       );
     } else {
-      const teamMembers = (props.teamFormationOverview === undefined || props.teamFormationOverview.studentIds === undefined)
-      ? undefined
-      : students?.filter(ao => props.teamFormationOverview?.studentIds.includes(ao.userId));
-       
       tabs.push(
         {
           label: `Briefing`,
           iconName: IconNames.BRIEFCASE,
           body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
           id: SideContentType.briefing
-        },
-        {
-          label: `Team`,
-          iconName: IconNames.PEOPLE,
-          body: <div> 
-                  {teamMembers === undefined ? "You are not assigned to any team" : (
-                    <div>
-                      Your teammates for this assessment:{" "}
-                      {teamMembers.map((user, index) => (
-                        <span key={index}>
-                          {index > 0 ? ", " : ""}
-                          {user.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
         },
         {
           label: `Autograder`,
