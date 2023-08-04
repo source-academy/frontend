@@ -255,10 +255,7 @@ export function* mockBackendSaga(): SagaIterator {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
       const students = yield call(() => mockFetchStudents(accessToken));
       if (students !== null) {
-        console.log('we are good');
         yield put(actions.updateStudents([...students]));
-      } else {
-        console.log('we are fucked');
       }
     }
   );

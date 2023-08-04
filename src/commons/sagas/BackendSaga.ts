@@ -477,7 +477,6 @@ function* BackendSaga(): SagaIterator {
     const { assessment, teams } = action.payload;
 
     const resp: Response | null = yield call(postTeams, assessment.id, teams, tokens);
-    console.log(resp);
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
@@ -522,7 +521,6 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(UPDATE_TEAM, function* (action: ReturnType<typeof actions.updateTeam>): any {
     const tokens: Tokens = yield selectTokens();
     const { teamId, assessment, teams } = action.payload;
-    console.log(teamId);
     const resp: Response | null = yield call(putTeams, assessment.id, teamId, teams, tokens);
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
