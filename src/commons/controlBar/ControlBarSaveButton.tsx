@@ -13,17 +13,19 @@ type DispatchProps = {
 type StateProps = {
   key: string;
   hasUnsavedChanges?: boolean;
+  isDisabled?: boolean;
 };
 
 export const ControlButtonSaveButton: React.FC<ControlBarSaveButtonProps> = props => {
   const saveButtonOpts = props.hasUnsavedChanges ? { intent: Intent.WARNING, minimal: false } : {};
-
+  
   return (
     <ControlButton
       label="Save"
       icon={IconNames.FLOPPY_DISK}
       onClick={props.onClickSave}
       options={saveButtonOpts}
+      isDisabled={props.isDisabled}
     />
   );
 };

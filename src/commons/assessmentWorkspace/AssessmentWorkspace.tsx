@@ -621,10 +621,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
+    // Define the function to check if the Save button should be disabled
+    const shouldDisableSaveButton = (): boolean | undefined => {
+      if (assessmentOverview?.maxTeamSize === 0) {
+        return false;
+      }
+      return !teamFormationOverview;
+    };
+
     const saveButton =
       props.canSave && question.type === QuestionTypes.programming ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={hasUnsavedChanges}
+          isDisabled={shouldDisableSaveButton()}
           onClickSave={onClickSave}
           key="save"
         />
