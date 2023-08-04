@@ -18,8 +18,7 @@ import { uniqBy } from 'lodash';
 import React from 'react';
 import { useCSVReader } from 'react-papaparse';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
-
-import Constants from '../../../../commons/utils/Constants';
+import Constants from 'src/commons/utils/Constants';
 
 type Props = {
   handleAddNewUsersToCourse: (users: NameUsernameRole[], provider: string) => void;

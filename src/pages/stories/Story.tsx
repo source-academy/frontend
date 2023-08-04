@@ -17,8 +17,7 @@ import {
   setCurrentStory,
   setCurrentStoryId
 } from 'src/features/stories/StoriesActions';
-
-import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
+import UserBlogContent from 'src/features/stories/storiesComponents/UserBlogContent';
 
 type Props = {
   isViewOnly?: boolean;

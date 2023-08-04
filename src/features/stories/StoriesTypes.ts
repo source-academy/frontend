@@ -1,7 +1,6 @@
 import { Context } from 'js-slang';
+import { InterpreterOutput, StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
-
-import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
 export const ADD_STORY_ENV = 'ADD_STORY_ENV';
 export const CLEAR_STORY_ENV = 'CLEAR_STORY_ENV';

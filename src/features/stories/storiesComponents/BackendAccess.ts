@@ -1,13 +1,12 @@
+import { Tokens } from 'src/commons/application/types/SessionTypes';
 import Constants from 'src/commons/utils/Constants';
 import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
-
-import { Tokens } from '../../../commons/application/types/SessionTypes';
-import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
-import { StoryListView, StoryView } from '../StoriesTypes';
+import { StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
+import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 
 type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
