@@ -48,6 +48,10 @@ export type Grading = GradingQuestion[];
  */
 export type GradingQuestion = {
   question: AnsweredQuestion;
+  team?: Array<{
+    name: string;
+    id: number;
+  }>;
   student: {
     name: string;
     id: number;

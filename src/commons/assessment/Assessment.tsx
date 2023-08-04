@@ -70,10 +70,12 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const assessmentOverviewsUnfiltered = useTypedSelector(
     state => state.session.assessmentOverviews
   );
+
+  const courseId = useTypedSelector(state => state.session.courseId);
+
   const isStudent = useTypedSelector(state =>
     state.session.role ? state.session.role === Role.Student : true
   );
-  const courseId = useTypedSelector(state => state.session.courseId);
 
   const dispatch = useDispatch();
 
@@ -201,6 +203,15 @@ const Assessment: React.FC<AssessmentProps> = props => {
             <div className="listing-description">
               <Markdown content={overview.shortSummary} />
             </div>
+            {overview.maxTeamSize > 0 ? (
+              <div className="listing-team_information">
+                <H6> This is a team assessment. </H6>
+              </div>
+            ) : (
+              <div>
+                <H6> This is an individual assessment. </H6>
+              </div>
+            )}
             <div className="listing-footer">
               <div>
                 <Text className="listing-due-date">
@@ -297,7 +308,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
     /** Upcoming assessments, that are not released yet. */
     const isOverviewUpcoming = (overview: AssessmentOverview) =>
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
-
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
       (overview, index) => makeOverviewCard(overview, index, !isStudent, false)
     );

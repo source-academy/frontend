@@ -53,7 +53,7 @@ export const request = async (
 
   try {
     const resp = await fetch(`${Constants.backendUrl}/v2/${path}`, fetchOptions);
-    if (resp.ok) {
+    if (resp.ok || resp.status == 409) {
       return resp;
     }
 

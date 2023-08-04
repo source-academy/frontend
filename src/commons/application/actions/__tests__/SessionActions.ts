@@ -1,6 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
+import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
@@ -43,6 +44,7 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
   UPDATE_USER_ROLE
 } from '../../types/SessionTypes';
 import {
@@ -84,6 +86,7 @@ import {
   updateGradingOverviews,
   updateLatestViewedCourse,
   updateNotifications,
+  updateTeamFormationOverviews,
   updateUserRole
 } from '../SessionActions';
 
@@ -196,6 +199,7 @@ test('setUser generates correct action object', () => {
   const user = {
     userId: 123,
     name: 'test student',
+    username: 'test student',
     courses: [
       {
         courseId: 1,
@@ -531,6 +535,25 @@ test('updateGradingOverviews generates correct action object', () => {
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
     type: UPDATE_GRADING_OVERVIEWS,
+    payload: overviews
+  });
+});
+
+test('updateTeamFormationOverviews generates correct action object', () => {
+  const overviews: TeamFormationOverview[] = [
+    {
+      teamId: 0,
+      assessmentId: 0,
+      assessmentName: 'Mission 2',
+      assessmentType: 'Missions',
+      studentIds: [0],
+      studentNames: ['Mark Henry']
+    }
+  ];
+
+  const action = updateTeamFormationOverviews(overviews);
+  expect(action).toEqual({
+    type: UPDATE_TEAM_FORMATION_OVERVIEWS,
     payload: overviews
   });
 });

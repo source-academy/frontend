@@ -1,4 +1,5 @@
 import { call } from 'redux-saga/effects';
+import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
   AchievementGoal,
@@ -14,6 +15,7 @@ import {
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
@@ -50,6 +52,9 @@ import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const XLSX = require('xlsx');
 
 /**
  * POST /auth/login
@@ -405,7 +410,7 @@ export const getAssessmentOverviews = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const assessmentOverviews = await resp.json();
-  
+
   return assessmentOverviews.map((overview: any) => {
     overview.gradingStatus = computeGradingStatus(
       overview.isManuallyGraded,
@@ -622,12 +627,12 @@ export const getGradingOverviews = async (
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
         assessmentType: overview.assessment.type,
-        studentId: overview.student.id,
-        studentName: overview.student.name,
+        studentId: overview.participant.id ? overview.participant.id : -1,
+        studentName: overview.participant.name ? overview.participant.name : overview.participant.student_names.join(", "),
         submissionId: overview.id,
         submissionStatus: overview.status,
-        groupName: overview.student.groupName,
-        groupLeaderId: overview.student.groupLeaderId,
+        groupName: overview.participant.groupName,
+        groupLeaderId: overview.participant.groupLeaderId,
         // Grading Status
         gradingStatus: 'none',
         questionCount: overview.assessment.questionCount,
@@ -654,6 +659,186 @@ export const getGradingOverviews = async (
     );
 };
 
+/*
+ * GET /courses/{courseId}/admin/teams
+ */
+export const getTeamFormationOverviews = async (
+  tokens: Tokens
+): Promise<TeamFormationOverview[] | null> => {
+  const resp = await request(`${courseId()}/admin/teams`, 'GET', {
+    ...tokens
+  });
+  if (!resp) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const teamFormationOverviews = await resp.json();
+  return teamFormationOverviews
+    .map((overview: any) => {
+      const teamFormationOverview: TeamFormationOverview = {
+        teamId: overview.teamId,
+        assessmentId: overview.assessmentId,
+        assessmentName: overview.assessmentName,
+        assessmentType: overview.assessmentType,
+        studentIds: overview.studentIds,
+        studentNames: overview.studentNames
+      };
+      return teamFormationOverview;
+    })
+    .sort(
+      (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
+        subY.assessmentId - subX.assessmentId
+    );
+};
+
+/*
+ * GET /courses/{courseId}/team/{assessmentId}
+ */
+export const getTeamFormationOverview = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<TeamFormationOverview | null> => {
+  const resp = await request(`${courseId()}/team/${assessmentId}`, 'GET', {
+    ...tokens
+  });
+  if (!resp) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const team = await resp.json();
+  const teamFormationOverview: TeamFormationOverview = {
+    teamId: team.teamId,
+    assessmentId: team.assessmentId,
+    assessmentName: team.assessmentName,
+    assessmentType: team.assessmentType,
+    studentIds: team.studentIds,
+    studentNames: team.studentNames
+  };
+  return teamFormationOverview;
+};
+
+export const postTeams = async (
+  assessmentId: number,
+  teams: OptionType[][],
+  tokens: Tokens
+): Promise<Response | null> => {
+  const data = {
+    team: {
+      assessment_id: assessmentId,
+      student_ids: teams.map(team => team.map(option => option?.value))
+    }
+  };
+
+  const resp = await request(`${courseId()}/admin/teams`, 'POST', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+type CsvData = string[][];
+
+export const postUploadTeams = async (
+  assessmentId: number,
+  teams: File,
+  students: User[] | undefined,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const parsed_teams: OptionType[][] = [];
+
+  const teamsArrayBuffer = await readFileAsArrayBuffer(teams);
+  const workbook = XLSX.read(teamsArrayBuffer, { type: 'array' });
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  const csvData: CsvData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+  for (let i = 0; i < csvData.length; i++) {
+    const studentNames = csvData[i];
+    const team: OptionType[] = [];
+    studentNames.forEach((username: string) => {
+      const student = students?.find((s: any) => s.username.trim() === username.trim());
+      if (student) {
+        team.push({
+          label: student.name,
+          value: student
+        });
+      }
+    });
+    parsed_teams.push(team);
+  }
+
+  const data = {
+    team: {
+      assessment_id: assessmentId,
+      student_ids: parsed_teams.map(team => team.map(option => option?.value))
+    }
+  };
+
+  const resp = await request(`${courseId()}/admin/teams`, 'POST', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+const readFileAsArrayBuffer = async (file: File): Promise<ArrayBuffer> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = event => {
+      if (event.target) {
+        const result = event.target.result as ArrayBuffer;
+        resolve(result);
+      } else {
+        reject(new Error('Error reading file'));
+      }
+    };
+    reader.onerror = event => {
+      reject(new Error('Error reading file'));
+    };
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+export const putTeams = async (
+  assessmentId: number,
+  teamId: number,
+  teams: OptionType[][],
+  tokens: Tokens
+): Promise<Response | null> => {
+  const data = {
+    teamId: teamId,
+    assessmentId: assessmentId,
+    student_ids: teams.map(team => team.map(option => option?.value))
+  };
+
+  const resp = await request(`${courseId()}/admin/teams/${teamId}`, 'PUT', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Response | null> => {
+  const data = {
+    teamId: teamId
+  };
+
+  const resp = await request(`${courseId()}/admin/teams/${teamId}`, 'DELETE', {
+    body: data,
+    ...tokens
+  });
+  return resp;
+};
+
+export const getStudents = async (tokens: Tokens): Promise<User[] | null> => {
+  const resp = await request(`${courseId()}/admin/users/teamformation`, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
 /**
  * GET /courses/{courseId}/admin/grading/{submissionId}
  */
@@ -668,7 +853,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
 
   const gradingResult = await resp.json();
   const grading: Grading = gradingResult.map((gradingQuestion: any) => {
-    const { student, question, grade } = gradingQuestion;
+    const { student, question, grade, team } = gradingQuestion;
     const result = {
       question: {
         answer: question.answer,
@@ -686,6 +871,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
         maxXp: question.maxXp
       },
       student,
+      team,
       grade: {
         xp: grade.xp,
         xpAdjustment: grade.xpAdjustment,
@@ -885,7 +1071,7 @@ export const deleteSourcecastEntry = async (
  */
 export const updateAssessment = async (
   id: number,
-  body: { openAt?: string; closeAt?: string; isPublished?: boolean, maxTeamSize?: number },
+  body: { openAt?: string; closeAt?: string; isPublished?: boolean; maxTeamSize?: number },
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {

@@ -1,6 +1,8 @@
+import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -17,8 +19,11 @@ import { Role } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
+  BULK_UPLOAD_TEAM,
   CourseRegistration,
+  CREATE_TEAM,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_TEAM,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
@@ -34,6 +39,9 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEW,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
@@ -77,6 +85,10 @@ import {
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_NOTIFICATIONS,
+  UPDATE_STUDENTS,
+  UPDATE_TEAM,
+  UPDATE_TEAM_FORMATION_OVERVIEW,
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
   UPDATE_TIME_OPTIONS,
   UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
@@ -112,6 +124,13 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  */
 export const fetchGradingOverviews = (filterToGroup = true) =>
   action(FETCH_GRADING_OVERVIEWS, filterToGroup);
+
+export const fetchTeamFormationOverview = () => action(FETCH_TEAM_FORMATION_OVERVIEW);
+
+export const fetchTeamFormationOverviews = (filterToGroup = true) =>
+  action(FETCH_TEAM_FORMATION_OVERVIEWS, filterToGroup);
+
+export const fetchStudents = () => action(FETCH_STUDENTS);
 
 export const login = (providerId: string) => action(LOGIN, providerId);
 
@@ -214,6 +233,31 @@ export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESS
 
 export const updateGradingOverviews = (overviews: GradingOverview[]) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);
+
+export const getTeam = (assessmentId: number) =>
+  action(FETCH_TEAM_FORMATION_OVERVIEW, { assessmentId });
+
+export const createTeam = (assessment: AssessmentOverview, teams: OptionType[][]) =>
+  action(CREATE_TEAM, { assessment, teams });
+
+export const updateTeam = (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) =>
+  action(UPDATE_TEAM, { teamId, assessment, teams });
+
+export const deleteTeam = (teamId: number) => action(DELETE_TEAM, { teamId });
+
+export const bulkUploadTeam = (
+  assessment: AssessmentOverview,
+  file: File,
+  students: User[] | undefined
+) => action(BULK_UPLOAD_TEAM, { assessment, file, students });
+
+export const updateTeamFormationOverviews = (overviews: TeamFormationOverview[]) =>
+  action(UPDATE_TEAM_FORMATION_OVERVIEWS, overviews);
+
+export const updateTeamFormationOverview = (overview: TeamFormationOverview) =>
+  action(UPDATE_TEAM_FORMATION_OVERVIEW, overview);
+
+export const updateStudents = (students: User[]) => action(UPDATE_STUDENTS, students);
 
 /**
  * An extra id parameter is included here because of

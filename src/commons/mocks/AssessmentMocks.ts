@@ -133,7 +133,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'mission-1',
     xp: 1,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 1
+    maxTeamSize: 4
   },
   {
     type: 'Missions',
@@ -167,7 +167,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'sidequest-2.1',
     xp: 3,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 1
+    maxTeamSize: 2
   },
   {
     type: 'Paths',
@@ -184,7 +184,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: null,
     xp: 0,
     gradingStatus: GradingStatuses.excluded,
-    maxTeamSize: 1
+    maxTeamSize: 2
   },
   {
     type: 'Others',
