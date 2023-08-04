@@ -627,12 +627,12 @@ export const getGradingOverviews = async (
         assessmentId: overview.assessment.id,
         assessmentName: overview.assessment.title,
         assessmentType: overview.assessment.type,
-        studentId: overview.student.id,
-        studentName: overview.student.name,
+        studentId: overview.participant.id ? overview.participant.id : -1,
+        studentName: overview.participant.name ? overview.participant.name : overview.participant.student_names.join(", "),
         submissionId: overview.id,
         submissionStatus: overview.status,
-        groupName: overview.student.groupName,
-        groupLeaderId: overview.student.groupLeaderId,
+        groupName: overview.participant.groupName,
+        groupLeaderId: overview.participant.groupLeaderId,
         // Grading Status
         gradingStatus: 'none',
         questionCount: overview.assessment.questionCount,
@@ -853,7 +853,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
 
   const gradingResult = await resp.json();
   const grading: Grading = gradingResult.map((gradingQuestion: any) => {
-    const { student, question, grade } = gradingQuestion;
+    const { student, question, grade, team } = gradingQuestion;
     const result = {
       question: {
         answer: question.answer,
@@ -871,6 +871,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
         maxXp: question.maxXp
       },
       student,
+      team,
       grade: {
         xp: grade.xp,
         xpAdjustment: grade.xpAdjustment,

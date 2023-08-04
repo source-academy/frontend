@@ -46,7 +46,7 @@ type OwnProps = {
   initialXp: number;
   xpAdjustment: number;
   maxXp: number;
-  studentName: string;
+  studentName: string | undefined;
   comments: string;
   graderName?: string;
   gradedAt?: string;
