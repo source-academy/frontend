@@ -50,6 +50,7 @@ import {
   FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
   FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEW,
   FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
@@ -111,6 +112,7 @@ import {
   getNotifications,
   getSourcecastIndex,
   getStudents,
+  getTeamFormationOverview,
   getTeamFormationOverviews,
   getTotalXp,
   getUser,
@@ -417,6 +419,20 @@ function* BackendSaga(): SagaIterator {
       }
     }
   );
+
+  yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEW, function* (action: ReturnType<typeof actions.getTeam>) {
+    const tokens: Tokens = yield selectTokens();
+    const { assessmentId } = action.payload;
+
+    const teamFormationOverview: TeamFormationOverview | null = yield call(
+      getTeamFormationOverview,
+      assessmentId,
+      tokens
+    );
+    if (teamFormationOverview) {
+      yield put(actions.updateTeamFormationOverview(teamFormationOverview));
+    }
+  });
 
   yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEWS, function* () {
     const tokens: Tokens = yield selectTokens();

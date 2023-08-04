@@ -690,6 +690,31 @@ export const getTeamFormationOverviews = async (
     );
 };
 
+/*
+ * GET /courses/{courseId}/team/{assessmentId}
+ */
+export const getTeamFormationOverview = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<TeamFormationOverview | null> => {
+  const resp = await request(`${courseId()}/team/${assessmentId}`, 'GET', {
+    ...tokens
+  });
+  if (!resp) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const team = await resp.json();
+  const teamFormationOverview: TeamFormationOverview = {
+    teamId: team.teamId,
+    assessmentId: team.assessmentId,
+    assessmentName: team.assessmentName,
+    assessmentType: team.assessmentType,
+    studentIds: team.studentIds,
+    studentNames: team.studentNames
+  };
+  return teamFormationOverview;
+};
+
 export const postTeams = async (
   assessmentId: number,
   teams: OptionType[][],
