@@ -2,28 +2,16 @@ import '@tremor/react/dist/esm/tremor.css';
 
 import { Button as BpButton, Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import {
-  Card,
-  Flex,
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Text,
-  TextInput,
-  Title
-} from '@tremor/react';
+import { Card, Flex, TextInput, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { deleteStory, getStoriesList } from 'src/features/stories/StoriesActions';
+import { deleteStory, getStoriesList, saveStory } from 'src/features/stories/StoriesActions';
 
+import StoriesTable from './StoriesTable';
 import StoryActions from './StoryActions';
 
 const columns = [
@@ -32,8 +20,6 @@ const columns = [
   { id: 'content', header: 'Content' },
   { id: 'actions', header: 'Actions' }
 ];
-
-const MAX_EXCERPT_LENGTH = 35;
 
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -58,6 +44,62 @@ const Stories: React.FC = () => {
 
   const storyList = useTypedSelector(state => state.stories.storyList);
 
+  const handleTogglePinStory = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const story = storyList.find(story => story.id === id)!;
+      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      const newStory = {
+        ...story,
+        isPinned: !story.isPinned,
+        // Pinning a story appends to the end of the pinned list
+        pinOrder: story.isPinned ? null : pinnedLength
+      };
+      dispatch(saveStory(newStory, id));
+    },
+    [dispatch, storyList]
+  );
+
+  const handleMovePinUp = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      if (oldIndex === 0) {
+        return;
+      }
+
+      const toMoveUp = storyList[oldIndex];
+      const toMoveDown = storyList[oldIndex - 1];
+
+      const storiesToUpdate = [
+        { ...toMoveUp, pinOrder: oldIndex - 1 },
+        { ...toMoveDown, pinOrder: oldIndex }
+      ];
+      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+    },
+    [dispatch, storyList]
+  );
+
+  const handleMovePinDown = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      if (oldIndex === pinnedLength - 1) {
+        return;
+      }
+      const toMoveDown = storyList[oldIndex];
+      const toMoveUp = storyList[oldIndex + 1];
+
+      const storiesToUpdate = [
+        { ...toMoveDown, pinOrder: oldIndex + 1 },
+        { ...toMoveUp, pinOrder: oldIndex }
+      ];
+      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+    },
+    [dispatch, storyList]
+  );
+
   return (
     <ContentDisplay
       loadContentDispatch={() => dispatch(getStoriesList())}
@@ -78,54 +120,28 @@ const Stories: React.FC = () => {
             />
           </Flex>
 
-          <Table marginTop="mt-10">
-            <TableHead>
-              <TableRow>
-                {columns.map(({ id, header }) => (
-                  <TableHeaderCell key={id}>{header}</TableHeaderCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {storyList
-                .filter(
-                  story =>
-                    // Always show pinned stories
-                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
-                )
-                .map(({ id, authorName, isPinned, title, content }) => (
-                  <TableRow key={id}>
-                    <TableCell>{authorName}</TableCell>
-                    <TableCell>
-                      <Flex justifyContent="justify-start">
-                        {isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
-                        <Text>{title}</Text>
-                      </Flex>
-                    </TableCell>
-                    <TableCell>
-                      <Text>
-                        {content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
-                          ? content.replaceAll(/\s+/g, ' ')
-                          : content.split(/\s+/).reduce((acc, cur) => {
-                              return acc.length + cur.length <= MAX_EXCERPT_LENGTH
-                                ? acc + ' ' + cur
-                                : acc;
-                            }, '') + '…'}
-                      </Text>
-                    </TableCell>
-                    <TableCell>
-                      <StoryActions
-                        storyId={id}
-                        handleDeleteStory={handleDeleteStory}
-                        canView
-                        canEdit
-                        canDelete
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
+          <StoriesTable
+            headers={columns}
+            stories={storyList.filter(
+              story =>
+                // Always show pinned stories
+                story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+            )}
+            storyActions={story => (
+              <StoryActions
+                storyId={story.id}
+                handleDeleteStory={handleDeleteStory}
+                handleTogglePin={handleTogglePinStory}
+                handleMovePinUp={handleMovePinUp}
+                handleMovePinDown={handleMovePinDown}
+                canView
+                canEdit
+                canDelete
+                canPin
+                isPinned={story.isPinned}
+              />
+            )}
+          />
         </Card>
       }
     />

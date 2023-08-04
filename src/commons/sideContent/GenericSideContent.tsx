@@ -1,8 +1,9 @@
 import { TabId } from '@blueprintjs/core';
 import React from 'react';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { DebuggerContext, WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
+import { OverallState } from '../application/ApplicationTypes';
+import { useTypedSelector } from '../utils/Hooks';
+import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs } from './SideContentHelper';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
@@ -47,7 +48,7 @@ type StateProps = {
     afterDynamicTabs: SideContentTab[];
   };
   workspaceLocation?: WorkspaceLocation;
-  isStories?: boolean;
+  getDebuggerContext?: (state: OverallState) => DebuggerContext | undefined;
 };
 
 const GenericSideContent = (props: GenericSideContentProps) => {
@@ -57,10 +58,10 @@ const GenericSideContent = (props: GenericSideContentProps) => {
   );
 
   // Fetch debuggerContext from store
-  const debuggerContext = useTypedSelector(state =>
-    props.isStories
-      ? props.workspaceLocation && state.stories.envs[props.workspaceLocation].debuggerContext
-      : props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
+  const debuggerContext = useTypedSelector(
+    props.getDebuggerContext ??
+      (state =>
+        props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext)
   );
 
   React.useEffect(() => {

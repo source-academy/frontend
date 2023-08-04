@@ -616,13 +616,15 @@ export function getAgendaItemComponent(
 }
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
-  if (isFn(stashItem) || isArray(stashItem)) {
+  if (isFn(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
     for (const level of Layout.compactLevels) {
       for (const frame of level.frames) {
-        if (isFn(stashItem)) {
+        if (isFn(stashItem) || isGlobalFn(stashItem)) {
           const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
-            if (isFn(binding.data)) {
+            if (isFn(stashItem) && isFn(binding.data)) {
               return binding.data.id === stashItem.id;
+            } else if (isGlobalFn(stashItem) && isGlobalFn(binding.data)) {
+              return binding.data?.toString() === stashItem.toString();
             }
             return false;
           })?.value as FnValue | GlobalFnValue;
@@ -658,16 +660,22 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
       case InstrType.UNARY_OP:
       case InstrType.POP:
       case InstrType.BRANCH:
-        return Layout.stash.size() - stashIndex <= 1;
+        return Layout.stashComponent.stashItemComponents.length - stashIndex <= 1;
       case InstrType.BINARY_OP:
       case InstrType.ARRAY_ACCESS:
-        return Layout.stash.size() - stashIndex <= 2;
+        return Layout.stashComponent.stashItemComponents.length - stashIndex <= 2;
       case InstrType.ARRAY_ASSIGNMENT:
-        return Layout.stash.size() - stashIndex <= 3;
+        return Layout.stashComponent.stashItemComponents.length - stashIndex <= 3;
       case InstrType.APPLICATION:
-        return Layout.stash.size() - stashIndex <= (agendaItem as AppInstr).numOfArgs + 1;
+        return (
+          Layout.stashComponent.stashItemComponents.length - stashIndex <=
+          (agendaItem as AppInstr).numOfArgs + 1
+        );
       case InstrType.ARRAY_LITERAL:
-        return Layout.stash.size() - stashIndex <= (agendaItem as ArrLitInstr).arity;
+        return (
+          Layout.stashComponent.stashItemComponents.length - stashIndex <=
+          (agendaItem as ArrLitInstr).arity
+        );
     }
   }
   return false;

@@ -44,7 +44,7 @@ function parseCommands(key: string, commandsString: string): string | undefined 
 const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.children);
-  const [outputIndex, setOutputIndex] = useState<number>(Infinity);
+  const [outputIndex, setOutputIndex] = useState(Infinity);
   const [sideContentHidden, setSideContentHidden] = useState<boolean>(true);
   const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
 
@@ -197,7 +197,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     },
     workspaceLocation: 'stories',
     storyEnv: env,
-    isStories: true
+    getDebuggerContext: state => state.stories.envs[env].debuggerContext
   };
 
   const execEvaluate = () => {
@@ -216,11 +216,16 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   // to handle environment reset
   useEffect(() => {
     if (output.length === 0) {
+      console.log('setting to infinity');
       setOutputIndex(Infinity);
     }
+    setOutputIndex(output.length);
   }, [output]);
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);
+
+  console.log(outputIndex);
+  console.log(output);
 
   return (
     <div className={Classes.DARK}>
