@@ -18,6 +18,7 @@ import {
   EVAL_STORY_SUCCESS,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
+  SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
   StoriesState,
@@ -207,6 +208,12 @@ export const StoriesReducer: Reducer<StoriesState> = (
       return {
         ...state,
         currentStory: action.payload
+      };
+    case SET_CURRENT_STORIES_USER:
+      return {
+        ...state,
+        // TODO: Use action.payload.name
+        userId: action.payload.id
       };
     default:
       return state;
