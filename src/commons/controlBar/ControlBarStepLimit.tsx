@@ -12,6 +12,7 @@ type DispatchProps = {
 
 type StateProps = {
   stepLimit?: number;
+  stepSize: number;
   key: string;
 };
 
@@ -32,7 +33,7 @@ export const ControlBarStepLimit: React.FC<ControlBarStepLimitProps> = props => 
         min={500}
         max={5000}
         value={props.stepLimit}
-        stepSize={2}
+        stepSize={props.stepSize}
         onBlur={onBlurAutoScale}
         onValueChange={props.handleChangeStepLimit}
       />

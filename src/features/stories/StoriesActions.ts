@@ -9,14 +9,17 @@ import {
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
-  FETCH_STORY,
   GET_STORIES_LIST,
+  GET_STORIES_USER,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
+  SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
+  SET_CURRENT_STORY_ID,
+  StoryData,
   StoryListView,
-  StoryView,
+  StoryParams,
   TOGGLE_STORIES_USING_SUBST,
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
@@ -34,7 +37,7 @@ export const evalStoryError = (errors: SourceError[], env: string) =>
 export const evalStorySuccess = (value: Value, env: string) =>
   action(EVAL_STORY_SUCCESS, { type: 'result', value, env });
 
-export const handleStoriesConsoleLog = (env: String, ...logString: string[]) =>
+export const handleStoriesConsoleLog = (env: string, ...logString: string[]) =>
   action(HANDLE_STORIES_CONSOLE_LOG, { logString, env });
 
 export const notifyStoriesEvaluated = (
@@ -59,8 +62,12 @@ export const toggleStoriesUsingSubst = (usingSubst: boolean, env: String) =>
 export const getStoriesList = () => action(GET_STORIES_LIST);
 export const updateStoriesList = (storyList: StoryListView[]) =>
   action(UPDATE_STORIES_LIST, storyList);
-export const fetchStory = (id: number) => action(FETCH_STORY, id);
-export const setCurrentStory = (story: StoryView | null) => action(SET_CURRENT_STORY, story);
-export const createStory = (story: StoryView) => action(CREATE_STORY, story); // TODO: Unused as of now
-export const saveStory = (story: StoryView) => action(SAVE_STORY, story); // TODO: Unused as of now
+export const setCurrentStory = (story: StoryData | null) => action(SET_CURRENT_STORY, story);
+export const setCurrentStoryId = (id: number | null) => action(SET_CURRENT_STORY_ID, id);
+export const createStory = (story: StoryParams) => action(CREATE_STORY, story);
+export const saveStory = (story: StoryParams, id: number) => action(SAVE_STORY, { story, id });
 export const deleteStory = (id: number) => action(DELETE_STORY, id);
+// Auth-related actions
+export const getStoriesUser = () => action(GET_STORIES_USER);
+export const setCurrentStoriesUser = (id: number | undefined, name: string | undefined) =>
+  action(SET_CURRENT_STORIES_USER, { id, name });

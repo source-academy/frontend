@@ -10,12 +10,13 @@ import { useParams } from 'react-router';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { scrollSync } from 'src/commons/utils/StoriesHelper';
 import {
-  showSuccessMessage,
-  showWarningMessage
-} from 'src/commons/utils/notifications/NotificationsHelper';
-import { fetchStory, setCurrentStory } from 'src/features/stories/StoriesActions';
-import { updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
+  createStory,
+  saveStory,
+  setCurrentStory,
+  setCurrentStoryId
+} from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
@@ -26,57 +27,45 @@ type Props = {
 const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
-  const [editorScrollTop, setEditorScrollTop] = useState(0);
-  const [editorScrollHeight, setEditorScrollHeight] = useState(1);
 
-  const onScroll = (e: IEditorProps) => {
-    setEditorScrollTop(e.session.getScrollTop());
-    setEditorScrollHeight(e.renderer.layerConfig.maxHeight);
-  };
-
+  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
+  const { id: idToSet } = useParams<{ id: string }>();
   useEffect(() => {
-    const userblogContainer = document.getElementById('userblogContainer');
-    const previewScrollHeight = Math.max(userblogContainer?.scrollHeight ?? 1, 1);
-    const previewVisibleHeight = Math.max(userblogContainer?.offsetHeight ?? 1, 1);
-    const relativeHeight =
-      (editorScrollTop / (editorScrollHeight - previewVisibleHeight)) *
-      (previewScrollHeight - previewVisibleHeight);
-    userblogContainer?.scrollTo(0, relativeHeight);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorScrollTop]);
+    // Clear screen on first load
+    dispatch(setCurrentStory(null));
+    // Either a new story (idToSet is null) or an existing story
+    // If existing story, setting it will automatically fetch the new story
+    dispatch(setCurrentStoryId(idToSet ? parseInt(idToSet) : null));
+  }, [dispatch, idToSet]);
 
-  const story = useTypedSelector(store => store.stories.currentStory);
-  const storyTitle = story?.title ?? '';
-  const content = story?.content ?? '';
-
-  const { id: storyId } = useParams<{ id: string }>();
-  useEffect(() => {
-    if (!storyId) {
-      dispatch(setCurrentStory(null));
-      return;
-    }
-    const id = parseInt(storyId);
-    dispatch(fetchStory(id));
-  }, [dispatch, storyId]);
-
+  // Loading state, show empty screen
   if (!story) {
     return <></>;
   }
+
+  const onEditorScroll = (e: IEditorProps) => {
+    const userblogContainer = document.getElementById('userblogContainer');
+    if (userblogContainer) {
+      scrollSync(e, userblogContainer);
+    }
+  };
 
   const onEditorValueChange = (val: string) => {
     setIsDirty(true);
     dispatch(setCurrentStory({ ...story, content: val }));
   };
 
+  const { title, content } = story;
+
   const controlBarProps: ControlBarProps = {
     editorButtons: [
       isViewOnly ? (
-        <>{storyTitle}</>
+        <>{title}</>
       ) : (
         <TextInput
           maxWidth="max-w-xl"
           placeholder="Enter story title"
-          value={storyTitle}
+          value={title}
           onChange={e => {
             const newTitle = e.target.value;
             dispatch(setCurrentStory({ ...story, title: newTitle }));
@@ -87,21 +76,15 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
       isViewOnly ? null : (
         <ControlButtonSaveButton
           key="save_story"
-          // TODO: implement save
           onClickSave={() => {
-            // TODO: Remove if in favour of early return above
-            //       once state refactoring is complete.
-            if (!story) {
-              return;
+            if (storyId) {
+              // Update story
+              dispatch(saveStory(story, storyId));
+            } else {
+              // Create story
+              dispatch(createStory(story));
             }
-            updateStory(story.id, storyTitle, content)
-              .then(() => {
-                showSuccessMessage('Story saved');
-                setIsDirty(false);
-              })
-              .catch(() => {
-                showWarningMessage('Failed to save story');
-              });
+            // TODO: Set isDirty to false
           }}
           hasUnsavedChanges={isDirty}
         />
@@ -112,13 +95,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
-      <div
-        style={{
-          width: '100vw',
-          height: '100%',
-          display: 'flex'
-        }}
-      >
+      <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
         {!isViewOnly && (
           <AceEditor
             className="repl-react-ace react-ace"
@@ -127,14 +104,12 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
             theme="source"
             value={content}
             onChange={onEditorValueChange}
-            onScroll={onScroll}
+            onScroll={onEditorScroll}
             fontSize={17}
             highlightActiveLine={false}
             showPrintMargin={false}
             wrapEnabled={true}
-            setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
-            }}
+            setOptions={{ fontFamily: "'Inconsolata', 'Consolas', monospace" }}
           />
         )}
         <div className="newUserblog" id="userblogContainer">
