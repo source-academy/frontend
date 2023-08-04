@@ -1,22 +1,22 @@
 @use 'sass:math';
 
-@import '~normalize.css/normalize.css';
-@import '~@blueprintjs/core/lib/css/blueprint.css';
-@import '~@blueprintjs/datetime/lib/css/blueprint-datetime.css';
-@import '~@blueprintjs/popover2/lib/css/blueprint-popover2.css';
-@import '~flexboxgrid/dist/flexboxgrid.css';
-@import '~flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css';
+@import 'normalize.css/normalize.css';
+@import '@blueprintjs/core/lib/css/blueprint.css';
+@import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
+@import '@blueprintjs/popover2/lib/css/blueprint-popover2.css';
+@import 'flexboxgrid/dist/flexboxgrid.css';
+@import 'flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css';
 
 // CSS styles for react-mde Markdown editor
 // (currently this editor is only used for grading comments)
 // react-mde-preview.css is excluded to avoid conflict with blueprintjs
 // styles in the preview tab of the editor, providing a more accurate
 // depiction of what the actual comment will look like
-@import '~react-mde/lib/styles/css/react-mde-toolbar.css';
-@import '~react-mde/lib/styles/css/react-mde-editor.css';
-@import '~react-mde/lib/styles/css/react-mde.css';
+@import 'react-mde/lib/styles/css/react-mde-toolbar.css';
+@import 'react-mde/lib/styles/css/react-mde-editor.css';
+@import 'react-mde/lib/styles/css/react-mde.css';
 
-@import '../../node_modules/@blueprintjs/core/lib/scss/variables';
+@import '@blueprintjs/core/lib/scss/variables';
 @import 'global';
 @import 'blueprint';
 
