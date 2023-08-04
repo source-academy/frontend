@@ -26,7 +26,7 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
+import { fetchAssessment, getTeam, submitAnswer } from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -110,7 +110,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
-  const students = useTypedSelector(state => state.session.students);
+  const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
+  const teamFormationOverview = useTypedSelector(state => state.session.teamFormationOverview);
+  const assessmentOverview = assessmentOverviews?.find(assessmentOverview => {
+    return assessmentOverview.id === assessment?.id;
+  });
 
   const [selectedTab, setSelectedTab] = useState(
     assessment?.questions[props.questionId].grader !== undefined
@@ -138,6 +142,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const dispatch = useDispatch();
   const {
+    handleTeamOverviewFetch,
     handleTestcaseEval,
     handleClearContext,
     handleChangeExecTime,
@@ -153,6 +158,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleUpdateHasUnsavedChanges
   } = useMemo(() => {
     return {
+      handleTeamOverviewFetch: (assessmentId: number) => dispatch(getTeam(assessmentId)),
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
         dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
@@ -180,6 +186,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   useEffect(() => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorValueChange(0, '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    handleTeamOverviewFetch(props.assessmentId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -394,6 +405,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   ) => {
     const question = assessment!.questions[questionId];
     const isGraded = question.grader !== undefined;
+    const isTeamAssessment =
+      assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 0 : false;
     const isContestVoting = question?.type === QuestionTypes.voting;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -408,6 +421,30 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         id: SideContentType.questionOverview
       }
     ];
+
+    if (isTeamAssessment) {
+      tabs.push({
+        label: `Team`,
+        iconName: IconNames.PEOPLE,
+        body: (
+          <div>
+            {teamFormationOverview === undefined ? (
+              'You are not assigned to any team!'
+            ) : (
+              <div>
+                Your teammates for this assessment:{' '}
+                {teamFormationOverview.studentNames.map((name: string, index: number) => (
+                  <span key={index}>
+                    {index > 0 ? ', ' : ''}
+                    {name}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      });
+    }
 
     if (isContestVoting) {
       tabs.push(
