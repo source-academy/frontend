@@ -407,6 +407,11 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
+      const role: Role = yield select((state: OverallState) => state.session.role!);
+      if (role === Role.Student) {
+        return; 
+      }
+
       const filterToGroup = action.payload;
 
       const gradingOverviews: GradingOverview[] | null = yield call(
@@ -437,6 +442,11 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEWS, function* () {
     const tokens: Tokens = yield selectTokens();
 
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return; 
+    }
+
     const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
       getTeamFormationOverviews,
       tokens
@@ -452,6 +462,10 @@ function* BackendSaga(): SagaIterator {
     // if (!resp || !resp.ok) {
     //   return yield handleResponseError(resp);
     // }
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return; 
+    }
     const students: User[] | null = yield call(getStudents, tokens);
     if (students) {
       yield put(actions.updateStudents(students));
@@ -1205,6 +1219,12 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     UPDATE_ASSESSMENT_OVERVIEWS,
     function* (action: ReturnType<typeof actions.updateAssessmentOverviews>): any {
+      
+      const role: Role = yield select((state: OverallState) => state.session.role!);
+      if (role === Role.Student) {
+        return; 
+      }
+      
       const assessmentOverviews: AssessmentOverview[] = action.payload;
       for (let i = 0; i < assessmentOverviews.length; i++) {
         const assessmentOverview = assessmentOverviews[i];
