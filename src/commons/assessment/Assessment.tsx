@@ -203,14 +203,15 @@ const Assessment: React.FC<AssessmentProps> = props => {
             <div className="listing-description">
               <Markdown content={overview.shortSummary} />
             </div>
-            {overview.maxTeamSize > 1 
-              ? (<div className="listing-team_information">
-                  <H6> This is a team assessment. </H6>
-                </div>) 
-              : (<div>
-                  <H6> This is an individual assessment. </H6>
-              </div>)
-            }
+            {overview.maxTeamSize > 0 ? (
+              <div className="listing-team_information">
+                <H6> This is a team assessment. </H6>
+              </div>
+            ) : (
+              <div>
+                <H6> This is an individual assessment. </H6>
+              </div>
+            )}
             <div className="listing-footer">
               <div>
                 <Text className="listing-due-date">
