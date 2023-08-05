@@ -277,7 +277,9 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   ) : null}
                 </div>
               </div>
-              <button onClick={() => setSideContentHidden(!sideContentHidden)}>Show/Hide</button>
+              <button onClick={() => setSideContentHidden(!sideContentHidden)}>
+                {sideContentHidden ? 'Show Side Content' : 'Hide Side Content'}
+              </button>
               <div
                 style={{
                   display: sideContentHidden ? 'none' : undefined
