@@ -217,15 +217,11 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   // to handle environment reset
   useEffect(() => {
     if (output.length === 0) {
-      console.log('setting to infinity');
       setOutputIndex(Infinity);
     }
   }, [output]);
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);
-
-  console.log(outputIndex);
-  console.log(output);
 
   return (
     <div className={Classes.DARK}>
