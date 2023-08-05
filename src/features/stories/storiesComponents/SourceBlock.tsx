@@ -220,7 +220,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       console.log('setting to infinity');
       setOutputIndex(Infinity);
     }
-    setOutputIndex(output.length);
   }, [output]);
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);
