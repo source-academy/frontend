@@ -102,6 +102,7 @@ export const mockGrading: Grading = [
       answer: `function remainder(n, d) {
   return (n - d) < 0 ? n : remainder(n - d, d);
 }`,
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       content: `
 Hello and welcome to this assessment! This is the *0th question*.
 
@@ -217,6 +218,7 @@ _italics_
       postpend: '',
       testcases: [],
       answer: "This student's answer to the 1st question",
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
       library: mockLibrary,
@@ -308,6 +310,7 @@ New message from **Avenger**!
       postpend: '',
       testcases: [],
       answer: 3,
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',

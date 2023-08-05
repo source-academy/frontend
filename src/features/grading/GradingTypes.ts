@@ -81,6 +81,7 @@ export type AnsweredQuestion = Question & Answer;
 
 type Answer = {
   autogradingResults: AutogradingResult[];
+  lastModifiedAt: string;
   prepend: string;
   postpend: string;
   testcases: Testcase[];

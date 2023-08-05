@@ -857,6 +857,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
     const result = {
       question: {
         answer: question.answer,
+        lastModifiedAt: question.lastModifiedAt,
         autogradingResults: question.autogradingResults || [],
         choices: question.choices,
         content: question.content,
