@@ -198,7 +198,8 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     },
     workspaceLocation: 'stories',
     storyEnv: env,
-    getDebuggerContext: state => state.stories.envs[env].debuggerContext
+    getDebuggerContext: state => state.stories.envs[env].debuggerContext,
+    isHidden: sideContentHidden
   };
 
   const execEvaluate = () => {
@@ -278,11 +279,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
               <button onClick={() => setSideContentHidden(!sideContentHidden)}>
                 {sideContentHidden ? 'Show Side Content' : 'Hide Side Content'}
               </button>
-              <div
-                style={{
-                  display: sideContentHidden ? 'none' : undefined
-                }}
-              >
+              <div>
                 <StoriesSideContent {...sideContentProps} />
               </div>
             </div>
