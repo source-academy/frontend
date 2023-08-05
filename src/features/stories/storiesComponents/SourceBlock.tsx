@@ -251,9 +251,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   height="1px"
                   width="100%"
                   value={code}
-                  onChange={code => {
-                    setCode(code);
-                  }}
+                  onChange={code => setCode(code)}
                   commands={[
                     {
                       name: 'evaluate',
