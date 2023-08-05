@@ -1,9 +1,11 @@
 import { Card, Classes } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import ControlButton from 'src/commons/ControlButton';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -232,7 +234,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
               handleEditorEval={execEvaluate}
               isEntrypointFileDefined
             />
-            <button onClick={execResetEnv}>Reset Env</button>
+            <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>
           <p>{env === DEFAULT_ENV ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
           <div>
