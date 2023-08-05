@@ -22,7 +22,7 @@ import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideConten
 import { DEFAULT_ENV } from './UserBlogContent';
 
 type SourceBlockProps = {
-  children: string;
+  content: string;
   commands: string; // env is in commands
 };
 
@@ -46,7 +46,7 @@ function parseCommands(key: string, commandsString: string): string | undefined 
 
 const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
-  const [code, setCode] = useState<string>(props.children);
+  const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
   const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
 

@@ -159,7 +159,7 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
           code({ node, inline, className, children, ...props }) {
             const match = /language-source(.*)/.exec(className || '');
             return !inline && match ? (
-              <SourceBlock commands={match[1]}>{String(children)}</SourceBlock>
+              <SourceBlock commands={match[1]} content={String(children)} />
             ) : (
               <code className={className} {...props}>
                 {children}
