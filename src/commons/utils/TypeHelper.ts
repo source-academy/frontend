@@ -8,6 +8,8 @@ export type KeysOfType<O, T> = {
   [K in keyof O]: O[K] extends T ? K : never;
 }[keyof O];
 
+export type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
+
 /**
  * Prevents invalid keys from being passed in to an object of the specified type argument.
  * All valid keys are made optional (but still properly typed as optional/non-optional)
