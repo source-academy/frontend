@@ -92,28 +92,10 @@ const cracoConfig = (module.exports = {
         // Will give something like
         // '[/\\\\]node_modules[/\\\\]
         //  (?!
-        //  (   @ion-phaser[/\\\\]react[/\\\\]    )|
-        //  (   js-slang[/\\\\]                   )|
-        //  (   array-move[/\\\\]                 )|
-        //  (   konva[/\\\\.*]                    )|
-        //  (   react-konva[/\\\\.*]              )|
-        //  (   react-debounce-render[/\\\\.*]    )|
-        //  (   react-markdown[/\\\\.*]           )|
-        //  (   vfile.*[/\\\\.*]                  )|
-        //  (   unist-util.*[/\\\\.*]             )|
-        //  (   unified[/\\\\.*]                  )|
-        //  (   bail[/\\\\.*]                     )|
-        //  (   is-plain-obj[/\\\\.*]             )|
-        //  (   trough[/\\\\.*]                   )|
-        //  (   remark.*[/\\\\.*]                 )|
-        //  (   mdast.*[/\\\\.*]                  )|
-        //  (   micromark.*[/\\\\.*]              )|
-        //  (   decode.*[/\\\\.*]                 )|
-        //  (   character-entities[/\\\\.*]       )|
-        //  (   trim-lines[/\\\\.*]               )|
-        //  (   property-information[/\\\\.*]     )|
-        //  (   hast-util-whitespace[/\\\\.*]     )|
-        //  (   space-separated-tokens[/\\\\.*]   )|
+        //  (   @ion-phaser[/\\\\]react[/\\\\.*]    )|
+        //  (   js-slang[/\\\\.*]                   )|
+        //  (   array-move[/\\\\.*]                 )|
+        //      ...
         //  (   comma-separated-tokens[/\\\\.*]   )
         //  ).*.(js|jsx|ts|tsx)$'
         ignoreModulePaths(
