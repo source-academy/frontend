@@ -135,7 +135,7 @@ function parseHeaders(content: string): { headersYaml: string; content: string }
 }
 
 const UserBlogContent: React.FC<UserBlogProps> = props => {
-  const [content, setContent] = useState<string>('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     if (props.fileContent !== null) {
