@@ -21,7 +21,7 @@ import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
 import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideContent';
 import { DEFAULT_ENV } from './UserBlogContent';
 
-type SourceBlockProps = {
+export type SourceBlockProps = {
   content: string;
   commands: string; // env is in commands
 };
