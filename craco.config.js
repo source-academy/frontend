@@ -89,7 +89,7 @@ const cracoConfig = (module.exports = {
   jest: {
     configure: jestConfig => {
       jestConfig.transformIgnorePatterns = [
-                // Will give something like
+        // Will give something like
         // '[/\\\\]node_modules[/\\\\]
         //  (?!
         //  (   @ion-phaser[/\\\\]react[/\\\\]    )|
