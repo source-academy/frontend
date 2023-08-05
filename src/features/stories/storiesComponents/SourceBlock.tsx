@@ -46,7 +46,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.children);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-  const [sideContentHidden, setSideContentHidden] = useState<boolean>(true);
   const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
 
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
@@ -198,8 +197,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     },
     workspaceLocation: 'stories',
     storyEnv: env,
-    getDebuggerContext: state => state.stories.envs[env].debuggerContext,
-    isHidden: sideContentHidden
+    getDebuggerContext: state => state.stories.envs[env].debuggerContext
   };
 
   const execEvaluate = () => {
@@ -276,9 +274,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   ) : null}
                 </div>
               </div>
-              <button onClick={() => setSideContentHidden(!sideContentHidden)}>
-                {sideContentHidden ? 'Show Side Content' : 'Hide Side Content'}
-              </button>
               <div>
                 <StoriesSideContent {...sideContentProps} />
               </div>
