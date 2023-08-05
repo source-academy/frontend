@@ -236,7 +236,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
             <button onClick={execResetEnv}>Reset Env</button>
           </div>
           <p>{env === DEFAULT_ENV ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
-          <div className="row workspace-parent" style={{ maxWidth: '800px' }}>
+          <div>
             <div className="right-parent">
               <Card>
                 <AceEditor
