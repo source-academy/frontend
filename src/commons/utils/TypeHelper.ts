@@ -38,6 +38,13 @@ export type LastN<
   ? Counter
   : LastN<RemoveLast<T>, N, [[never, ...T][T['length']], ...Counter]>;
 
+/** Creates a new tuple type with the type at index I of T replaced with S. */
+export type ReplaceTypeAtIndex<T extends any[], I extends number, S> = [
+  ...FirstN<T, I>,
+  S,
+  ...RemoveFirst<RemoveFirstN<T, I>>
+];
+
 /**
  * Prevents invalid keys from being passed in to an object of the specified type argument.
  * All valid keys are made optional (but still properly typed as optional/non-optional)
