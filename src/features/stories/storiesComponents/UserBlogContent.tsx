@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
 import ReactMarkdown from 'react-markdown';
 import Constants from 'src/commons/utils/Constants';
+import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
 import { addStoryEnv, clearStoryEnv } from 'src/features/stories/StoriesActions';
 
 import { store } from '../../../pages/createStore';
@@ -172,4 +173,4 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
   );
 };
 
-export default debounceRender(UserBlogContent, 500);
+export default React.memo(debounceRender(UserBlogContent, 500), propsAreEqual);
