@@ -1,8 +1,11 @@
 import { Card, Classes } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import ControlButton from 'src/commons/ControlButton';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -45,7 +48,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.children);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-  const [sideContentHidden, setSideContentHidden] = useState<boolean>(true);
   const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
 
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
@@ -216,27 +218,26 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   // to handle environment reset
   useEffect(() => {
     if (output.length === 0) {
-      console.log('setting to infinity');
       setOutputIndex(Infinity);
     }
-    setOutputIndex(output.length);
   }, [output]);
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);
-
-  console.log(outputIndex);
-  console.log(output);
 
   return (
     <div className={Classes.DARK}>
       <div className="workspace">
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <button onClick={execEvaluate}>Run</button>
-            <button onClick={execResetEnv}>Reset Env</button>
+            <ControlBarRunButton
+              key="runButton"
+              handleEditorEval={execEvaluate}
+              isEntrypointFileDefined
+            />
+            <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>
           <p>{env === DEFAULT_ENV ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
-          <div className="row workspace-parent" style={{ maxWidth: '800px' }}>
+          <div>
             <div className="right-parent">
               <Card>
                 <AceEditor
@@ -246,9 +247,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   height="1px"
                   width="100%"
                   value={code}
-                  onChange={code => {
-                    setCode(code);
-                  }}
+                  onChange={code => setCode(code)}
                   commands={[
                     {
                       name: 'evaluate',
@@ -277,12 +276,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   ) : null}
                 </div>
               </div>
-              <button onClick={() => setSideContentHidden(!sideContentHidden)}>Show/Hide</button>
-              <div
-                style={{
-                  display: sideContentHidden ? 'none' : undefined
-                }}
-              >
+              <div>
                 <StoriesSideContent {...sideContentProps} />
               </div>
             </div>
