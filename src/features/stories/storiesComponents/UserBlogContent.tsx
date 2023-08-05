@@ -2,13 +2,12 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import yaml from 'js-yaml';
 import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
-import ReactMarkdown from 'react-markdown';
 import Constants from 'src/commons/utils/Constants';
 import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
+import { renderStoryMarkdown } from 'src/commons/utils/StoriesHelper';
 import { addStoryEnv, clearStoryEnv } from 'src/features/stories/StoriesActions';
 
 import { store } from '../../../pages/createStore';
-import SourceBlock from './SourceBlock';
 
 type UserBlogProps = {
   fileContent: string | null;
@@ -153,22 +152,7 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
     <div />
   ) : (
     <div className="userblogContent">
-      <ReactMarkdown
-        className="content"
-        children={content}
-        components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-source(.*)/.exec(className || '');
-            return !inline && match ? (
-              <SourceBlock commands={match[1]} content={String(children)} />
-            ) : (
-              <code className={className} {...props}>
-                {children}
-              </code>
-            );
-          }
-        }}
-      />
+      <div className="content">{renderStoryMarkdown(content)}</div>
     </div>
   );
 };
