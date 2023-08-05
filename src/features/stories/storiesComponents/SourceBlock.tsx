@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -232,7 +233,11 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       <div className="workspace">
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <button onClick={execEvaluate}>Run</button>
+            <ControlBarRunButton
+              key="runButton"
+              handleEditorEval={execEvaluate}
+              isEntrypointFileDefined
+            />
             <button onClick={execResetEnv}>Reset Env</button>
           </div>
           <p>{env === DEFAULT_ENV ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
