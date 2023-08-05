@@ -1,4 +1,14 @@
+import { h } from 'hastscript';
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import { defaultHandlers, toHast } from 'mdast-util-to-hast';
+import { Options as MdastToHastConverterOptions } from 'mdast-util-to-hast/lib';
+import React from 'react';
 import { IEditorProps } from 'react-ace';
+import rehypeReact from 'rehype-react';
+import SourceBlock, { SourceBlockProps } from 'src/features/stories/storiesComponents/SourceBlock';
+import { unified } from 'unified';
+
+import { ReplaceTypeAtIndex } from './TypeHelper';
 
 export const defaultStoryContent = `---
 config:
@@ -130,4 +140,57 @@ export const scrollSync = (editor: IEditorProps, preview: HTMLElement) => {
   const relativeHeight =
     (editorScrollTop / (editorScrollHeight - previewVisibleH)) * (previewScrollH - previewVisibleH);
   preview.scrollTo(0, relativeHeight);
+};
+
+// By default, the `node` parameter in `handleCustomComponents`
+// below is typed as `any` if we use the default typings.
+// Thus, we create `HandlerType` to have type safety for the
+// `node` parameter based on the actual mdast node type.
+type HandlerOption = NonNullable<MdastToHastConverterOptions['handlers']>;
+type HandlerType = {
+  [key in keyof typeof defaultHandlers]?: (
+    ...args: ReplaceTypeAtIndex<
+      Parameters<HandlerOption[key]>,
+      1,
+      Parameters<(typeof defaultHandlers)[key]>[1]
+    >
+  ) => ReturnType<HandlerOption[key]>;
+};
+
+const handleCustomComponents: HandlerType = {
+  code: (state, node) => {
+    const rawLang = node.lang ?? '';
+    const isExecutable = rawLang.startsWith('{') && rawLang.endsWith('}');
+    if (!isExecutable) {
+      return defaultHandlers.code(state, node);
+    }
+    // TODO: Support languages other than source
+    // const lang = rawLang.substring(1, rawLang.length - 1);
+    const props: SourceBlockProps = {
+      content: node.value,
+      commands: node.meta ?? ''
+    };
+    // Disable typecheck as "source-block" is not a standard HTML tag
+    const element = h('source-block', props) as any;
+    return element;
+  }
+};
+
+export const renderStoryMarkdown = (markdown: string): React.ReactNode => {
+  const mdast = fromMarkdown(markdown);
+  const hast = toHast(mdast, { handlers: handleCustomComponents }) ?? h();
+  return (
+    unified()
+      .use(rehypeReact, {
+        createElement: React.createElement,
+        Fragment: React.Fragment,
+        components: {
+          'source-block': SourceBlock
+          // Disable typecheck as "source-block" is not a standard HTML tag
+        } as any
+      })
+      // We use `any` due to incompatible type definitions (although it
+      // actually works). Either way, this is never exposed, and so is okay.
+      .stringify(hast as any)
+  );
 };
