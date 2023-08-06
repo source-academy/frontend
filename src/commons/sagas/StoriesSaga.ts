@@ -4,6 +4,7 @@ import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTyp
 import {
   deleteStory,
   getStories,
+  getStoriesUser,
   getStory,
   postNewStoriesUsers,
   postStory,
@@ -13,6 +14,7 @@ import {
   CREATE_STORY,
   DELETE_STORY,
   GET_STORIES_LIST,
+  GET_STORIES_USER,
   SAVE_STORY,
   SET_CURRENT_STORY_ID,
   StoryData,
@@ -30,35 +32,24 @@ import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
+    const tokens: Tokens = yield selectTokens();
     const allStories: StoryListView[] = yield call(async () => {
-      const resp = await getStories();
+      const resp = await getStories(tokens);
       return resp ?? [];
     });
 
     yield put(actions.updateStoriesList(allStories));
   });
 
-  yield takeEvery(
-    ADD_NEW_STORIES_USERS_TO_COURSE,
-    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { users, provider } = action.payload;
-
-      yield call(postNewStoriesUsers, tokens, users, provider);
-
-      // TODO: Refresh the list of story users
-      //       once that page is implemented
-    }
-  );
-
   // takeEvery used to ensure that setting to null (clearing the story) is always
   // handled even if a refresh is triggered later.
   yield takeEvery(
     SET_CURRENT_STORY_ID,
     function* (action: ReturnType<typeof actions.setCurrentStoryId>) {
+      const tokens: Tokens = yield selectTokens();
       const storyId = action.payload;
       if (storyId) {
-        const story: StoryView = yield call(getStory, storyId);
+        const story: StoryView = yield call(getStory, tokens, storyId);
         yield put(actions.setCurrentStory(story));
       } else {
         const defaultStory: StoryData = {
@@ -72,9 +63,9 @@ export function* storiesSaga(): SagaIterator {
   );
 
   yield takeEvery(CREATE_STORY, function* (action: ReturnType<typeof actions.createStory>) {
+    const tokens: Tokens = yield selectTokens();
     const story = action.payload;
-    // FIXME: User a separate storyUserId instead of the current user
-    const userId: number | undefined = yield select((state: OverallState) => state.session.userId);
+    const userId: number | undefined = yield select((state: OverallState) => state.stories.userId);
 
     if (userId === undefined) {
       showWarningMessage('Failed to create story: Invalid user');
@@ -83,6 +74,7 @@ export function* storiesSaga(): SagaIterator {
 
     const createdStory: StoryView | null = yield call(
       postStory,
+      tokens,
       userId,
       story.title,
       story.content,
@@ -98,9 +90,11 @@ export function* storiesSaga(): SagaIterator {
   });
 
   yield takeEvery(SAVE_STORY, function* (action: ReturnType<typeof actions.saveStory>) {
+    const tokens: Tokens = yield selectTokens();
     const { story, id } = action.payload;
     const updatedStory: StoryView | null = yield call(
       updateStory,
+      tokens,
       id,
       story.title,
       story.content,
@@ -116,11 +110,39 @@ export function* storiesSaga(): SagaIterator {
   });
 
   yield takeEvery(DELETE_STORY, function* (action: ReturnType<typeof actions.deleteStory>) {
+    const tokens: Tokens = yield selectTokens();
     const storyId = action.payload;
-    yield call(deleteStory, storyId);
+    yield call(deleteStory, tokens, storyId);
 
     yield put(actions.getStoriesList());
   });
+
+  yield takeEvery(GET_STORIES_USER, function* () {
+    const tokens: Tokens = yield selectTokens();
+    const me: {
+      id: number;
+      name: string;
+    } | null = yield call(getStoriesUser, tokens);
+
+    if (!me) {
+      yield put(actions.setCurrentStoriesUser(undefined, undefined));
+      return;
+    }
+    yield put(actions.setCurrentStoriesUser(me.id, me.name));
+  });
+
+  yield takeEvery(
+    ADD_NEW_STORIES_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider } = action.payload;
+
+      yield call(postNewStoriesUsers, tokens, users, provider);
+
+      // TODO: Refresh the list of story users
+      //       once that page is implemented
+    }
+  );
 }
 
 export default storiesSaga;

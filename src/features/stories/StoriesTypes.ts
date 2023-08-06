@@ -1,7 +1,7 @@
 import { Context } from 'js-slang';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
-import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
+import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
 export const ADD_STORY_ENV = 'ADD_STORY_ENV';
 export const CLEAR_STORY_ENV = 'CLEAR_STORY_ENV';
@@ -19,6 +19,9 @@ export const SET_CURRENT_STORY = 'SET_CURRENT_STORY';
 export const CREATE_STORY = 'CREATE_STORY';
 export const SAVE_STORY = 'SAVE_STORY';
 export const DELETE_STORY = 'DELETE_STORY';
+// Auth-related actions
+export const GET_STORIES_USER = 'GET_STORIES_USER';
+export const SET_CURRENT_STORIES_USER = 'SET_CURRENT_STORIES_USER';
 
 export type StoryMetadata = {
   authorId: number;
@@ -55,9 +58,15 @@ export type StoriesEnvState = {
   readonly debuggerContext: DebuggerContext;
 };
 
+type StoriesAuthState = {
+  readonly userId?: number;
+  readonly groupId?: number;
+  readonly role?: StoriesRole;
+};
+
 export type StoriesState = {
   readonly storyList: StoryListView[];
   readonly currentStoryId: number | null;
   readonly currentStory: StoryData | null;
   readonly envs: { [key: string]: StoriesEnvState };
-};
+} & StoriesAuthState;

@@ -391,8 +391,8 @@ export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: Workspa
 export const addHtmlConsoleError = (
   errorMsg: string,
   workspaceLocation: WorkspaceLocation,
-  isStoriesBlock: boolean = false
-) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, isStoriesBlock });
+  storyEnv?: string
+) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, storyEnv });
 
 export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
