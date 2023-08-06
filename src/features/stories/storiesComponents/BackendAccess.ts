@@ -1,14 +1,15 @@
-import { Tokens } from 'src/commons/application/types/SessionTypes';
 import Constants from 'src/commons/utils/Constants';
 import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
-import { StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
-import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+import { RemoveLast } from 'src/commons/utils/TypeHelper';
 
-type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
+import { Tokens } from '../../../commons/application/types/SessionTypes';
+import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+import { StoryListView, StoryView } from '../StoriesTypes';
+
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
 const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperParams) => {
   const resp = await request('', method, opts, `${Constants.storiesBackendUrl}${path}`);

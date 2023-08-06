@@ -112,14 +112,14 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     ADD_HTML_CONSOLE_ERROR,
     function* (action: ReturnType<typeof actions.addHtmlConsoleError>) {
-      if (!action.payload.isStoriesBlock) {
+      // TODO: Do not use if-else logic
+      if (!action.payload.storyEnv) {
         yield put(
           actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
         );
       } else {
-        // FIXME: Use story env
         yield put(
-          actions.handleStoriesConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
+          actions.handleStoriesConsoleLog(action.payload.storyEnv, action.payload.errorMsg)
         );
       }
     }
