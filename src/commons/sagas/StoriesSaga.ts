@@ -125,8 +125,10 @@ export function* storiesSaga(): SagaIterator {
     } | null = yield call(getStoriesUser, tokens);
 
     if (!me) {
-      // set state to undefined
+      yield put(actions.setCurrentStoriesUser(undefined, undefined));
+      return;
     }
+    yield put(actions.setCurrentStoriesUser(me.id, me.name));
   });
 
   yield takeEvery(
