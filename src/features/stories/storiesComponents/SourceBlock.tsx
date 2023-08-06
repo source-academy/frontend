@@ -1,6 +1,6 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
@@ -21,8 +21,8 @@ import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
 import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideContent';
 import { DEFAULT_ENV } from './UserBlogContent';
 
-type SourceBlockProps = {
-  children: string;
+export type SourceBlockProps = {
+  content: string;
   commands: string; // env is in commands
 };
 
@@ -46,7 +46,7 @@ function parseCommands(key: string, commandsString: string): string | undefined 
 
 const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
-  const [code, setCode] = useState<string>(props.children);
+  const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
   const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
 
@@ -214,13 +214,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const execResetEnv = () => {
     dispatch(clearStoryEnv(env));
   };
-
-  // to handle environment reset
-  useEffect(() => {
-    if (output.length === 0) {
-      setOutputIndex(Infinity);
-    }
-  }, [output]);
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);
 
