@@ -1,3 +1,4 @@
+import { Tokens } from 'src/commons/application/types/SessionTypes';
 import Constants from 'src/commons/utils/Constants';
 import {
   showSuccessMessage,
@@ -5,10 +6,8 @@ import {
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 import { RemoveLast } from 'src/commons/utils/TypeHelper';
-
-import { Tokens } from '../../../commons/application/types/SessionTypes';
-import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
-import { StoryListView, StoryView } from '../StoriesTypes';
+import { StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
+import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
 const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperParams) => {

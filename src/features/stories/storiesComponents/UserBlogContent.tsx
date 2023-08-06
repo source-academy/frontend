@@ -6,8 +6,7 @@ import Constants from 'src/commons/utils/Constants';
 import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
 import { renderStoryMarkdown } from 'src/commons/utils/StoriesHelper';
 import { addStoryEnv, clearStoryEnv } from 'src/features/stories/StoriesActions';
-
-import { store } from '../../../pages/createStore';
+import { store } from 'src/pages/createStore';
 
 type UserBlogProps = {
   fileContent: string | null;

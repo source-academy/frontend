@@ -3,15 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import ControlButton from 'src/commons/ControlButton';
-
 import GenericSideContent, {
   generateIconId,
   GenericSideContentProps
-} from '../../../commons/sideContent/GenericSideContent';
-import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
-import { propsAreEqual } from '../../../commons/utils/MemoizeHelper';
-import { assertType } from '../../../commons/utils/TypeHelper';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+} from 'src/commons/sideContent/GenericSideContent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
+import { assertType } from 'src/commons/utils/TypeHelper';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 export type StoriesSideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
 
