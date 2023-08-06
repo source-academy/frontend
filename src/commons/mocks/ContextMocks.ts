@@ -36,7 +36,6 @@ export function mockRuntimeContext(): Context {
     ],
     agenda: null,
     stash: null,
-    envSteps: -1,
     envStepsTotal: 0,
     breakpointSteps: []
   };

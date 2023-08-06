@@ -1,18 +1,60 @@
 import Constants from 'src/commons/utils/Constants';
-import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
+import { RemoveLast } from 'src/commons/utils/TypeHelper';
 
+import { Tokens } from '../../../commons/application/types/SessionTypes';
+import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { StoryListView, StoryView } from '../StoriesTypes';
 
-type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
 const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperParams) => {
   const resp = await request('', method, opts, `${Constants.storiesBackendUrl}${path}`);
   return resp;
 };
 
-export const getStories = async (): Promise<StoryListView[] | null> => {
-  const resp = await requestStoryBackend('/stories', 'GET', {});
+export const getStoriesUser = async (
+  tokens: Tokens
+): Promise<{
+  id: number;
+  name: string;
+  // TODO: Return role once permissions framework is implemented
+} | null> => {
+  const resp = await requestStoryBackend('/user', 'GET', { ...tokens });
+  if (!resp) {
+    return null;
+  }
+  const me = await resp.json();
+  return me;
+};
+
+export const postNewStoriesUsers = async (
+  tokens: Tokens,
+  users: NameUsernameRole[],
+  provider: string
+): Promise<Response | null> => {
+  const resp = await requestStoryBackend('/users/batch', 'POST', {
+    // TODO: backend create params does not support roles yet, i.e.
+    //       the role in NameUsernameRole is currently still unused
+    body: { users: users.map(user => ({ ...user, provider })) },
+    ...tokens
+  });
+
+  if (!resp) {
+    showWarningMessage('Failed to add users');
+    return null;
+  }
+
+  showSuccessMessage('Users added!');
+  return resp;
+  // TODO: Return response JSON directly.
+};
+
+export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null> => {
+  const resp = await requestStoryBackend('/stories', 'GET', { ...tokens });
   if (!resp) {
     return null;
   }
@@ -20,8 +62,8 @@ export const getStories = async (): Promise<StoryListView[] | null> => {
   return stories;
 };
 
-export const getStory = async (storyId: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', {});
+export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', { ...tokens });
   if (!resp) {
     return null;
   }
@@ -30,60 +72,48 @@ export const getStory = async (storyId: number): Promise<StoryView | null> => {
 };
 
 export const postStory = async (
+  tokens: Tokens,
   authorId: number,
   title: string,
   content: string,
-  pinOrder?: number
+  pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend('/stories', 'POST', {
-    body: { authorId, title, content, pinOrder }
+    body: { authorId, title, content, pinOrder },
+    ...tokens
   });
   if (!resp) {
+    showWarningMessage('Failed to create story');
     return null;
   }
+  showSuccessMessage('Story created');
   const story = await resp.json();
   return story;
 };
 
 export const updateStory = async (
+  tokens: Tokens,
   id: number,
   title: string,
   content: string,
-  pinOrder?: number
-): Promise<Response | null> => {
-  try {
-    const resp = await fetch(`${Constants.storiesBackendUrl}/stories/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        pinOrder: pinOrder
-      })
-    });
-    if (!resp.ok) {
-      showWarningMessage(
-        `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-          resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-        }`
-      );
-      return null;
-    }
-    return resp;
-  } catch (e) {
-    showWarningMessage('Error while communicating with backend; check your network?');
-
+  pinOrder: number | null
+): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${id}`, 'PUT', {
+    body: { title, content, pinOrder },
+    ...tokens
+  });
+  if (!resp) {
+    showWarningMessage('Failed to save story');
     return null;
   }
+  showSuccessMessage('Story saved');
+  const updatedStory = await resp.json();
+  return updatedStory;
 };
 
 // Returns the deleted story, or null if errors occur
-export const deleteStory = async (id: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', {});
+export const deleteStory = async (tokens: Tokens, id: number): Promise<StoryView | null> => {
+  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', { ...tokens });
   if (!resp) {
     return null;
   }

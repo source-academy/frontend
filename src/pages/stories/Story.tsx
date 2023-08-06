@@ -10,13 +10,13 @@ import { useParams } from 'react-router';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  showSuccessMessage,
-  showWarningMessage
-} from 'src/commons/utils/notifications/NotificationsHelper';
 import { scrollSync } from 'src/commons/utils/StoriesHelper';
-import { setCurrentStory, setCurrentStoryId } from 'src/features/stories/StoriesActions';
-import { updateStory } from 'src/features/stories/storiesComponents/BackendAccess';
+import {
+  createStory,
+  saveStory,
+  setCurrentStory,
+  setCurrentStoryId
+} from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
@@ -28,17 +28,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
 
-  const onScroll = (e: IEditorProps) => {
-    const userblogContainer = document.getElementById('userblogContainer');
-    if (userblogContainer) {
-      scrollSync(e, userblogContainer);
-    }
-  };
-
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
-  const storyTitle = story?.title ?? '';
-  const content = story?.content ?? '';
-
   const { id: idToSet } = useParams<{ id: string }>();
   useEffect(() => {
     // Clear screen on first load
@@ -53,20 +43,29 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     return <></>;
   }
 
+  const onEditorScroll = (e: IEditorProps) => {
+    const userblogContainer = document.getElementById('userblogContainer');
+    if (userblogContainer) {
+      scrollSync(e, userblogContainer);
+    }
+  };
+
   const onEditorValueChange = (val: string) => {
     setIsDirty(true);
     dispatch(setCurrentStory({ ...story, content: val }));
   };
 
+  const { title, content } = story;
+
   const controlBarProps: ControlBarProps = {
     editorButtons: [
       isViewOnly ? (
-        <>{storyTitle}</>
+        <>{title}</>
       ) : (
         <TextInput
           maxWidth="max-w-xl"
           placeholder="Enter story title"
-          value={storyTitle}
+          value={title}
           onChange={e => {
             const newTitle = e.target.value;
             dispatch(setCurrentStory({ ...story, title: newTitle }));
@@ -78,18 +77,14 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
         <ControlButtonSaveButton
           key="save_story"
           onClickSave={() => {
-            if (!storyId) {
-              // TODO: Create story
-              return;
+            if (storyId) {
+              // Update story
+              dispatch(saveStory(story, storyId));
+            } else {
+              // Create story
+              dispatch(createStory(story));
             }
-            updateStory(storyId, storyTitle, content)
-              .then(() => {
-                showSuccessMessage('Story saved');
-                setIsDirty(false);
-              })
-              .catch(() => {
-                showWarningMessage('Failed to save story');
-              });
+            // TODO: Set isDirty to false
           }}
           hasUnsavedChanges={isDirty}
         />
@@ -109,7 +104,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
             theme="source"
             value={content}
             onChange={onEditorValueChange}
-            onScroll={onScroll}
+            onScroll={onEditorScroll}
             fontSize={17}
             highlightActiveLine={false}
             showPrintMargin={false}
