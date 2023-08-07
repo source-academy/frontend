@@ -198,7 +198,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       afterDynamicTabs: []
     },
     workspaceLocation: 'stories',
-    storyEnv: env,
     getDebuggerContext: state => state.stories.envs[env].debuggerContext
   };
 
