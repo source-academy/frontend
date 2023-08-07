@@ -35,8 +35,8 @@ export type SourceBlockProps = {
  * @returns string of args if key is found and args exists, '' if key is found without args, undefined if key is not found
  */
 function parseMetadata(key: string, metadata: string): string | undefined {
-  for (const command of metadata.split('-')) {
-    const keyArgs = command.split(':');
+  for (const keyValuePair of metadata.split('-')) {
+    const keyArgs = keyValuePair.split(':');
     if (keyArgs[0] === key) {
       return keyArgs.length > 1 ? keyArgs[1] : '';
     }
