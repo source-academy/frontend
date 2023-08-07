@@ -3,6 +3,11 @@
     background-color: $cadet-color-2;
     padding: 6px 10px;
   }
+
+  &:has(> .#{$ns}-card) {
+    border-radius: 6px;
+    overflow: hidden;
+  }
 }
 
 .newUserblog {
