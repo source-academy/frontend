@@ -117,7 +117,7 @@ env:
     variant: default
 \`\`\`
 
-to create two different environments. Then, we add \`source env:iterFib\` and \`source env:recuFib\` to the parameters of the source blocks to set them to their respective environments!
+to create two different environments. Then, we add \`env:iterFib\` and \`env:recuFib\` to the metadata of the source blocks to set them to their respective environments!
 
 ## Module Support
 
