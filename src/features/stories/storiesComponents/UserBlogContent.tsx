@@ -70,18 +70,18 @@ function handleHeaders(headers: string): void {
   }
 }
 
-function parseYamlHeaders(content: string): { headersYaml: string; content: string } {
+function getYamlHeader(content: string): { header: string; content: string } {
   const startsWithHeaders = content.substring(0, YAML_HEADER.length) !== YAML_HEADER;
   if (!startsWithHeaders) {
-    return { headersYaml: '', content };
+    return { header: '', content };
   }
   const endHeaderIndex = content.indexOf(YAML_HEADER, YAML_HEADER.length);
   if (endHeaderIndex === -1) {
-    return { headersYaml: '', content };
+    return { header: '', content };
   }
 
   return {
-    headersYaml: content.substring(YAML_HEADER.length, endHeaderIndex),
+    header: content.substring(YAML_HEADER.length, endHeaderIndex),
     content: content.substring(endHeaderIndex + YAML_HEADER.length)
   };
 }
@@ -90,10 +90,10 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    const { headersYaml, content } = parseYamlHeaders(props.fileContent);
+    const { header, content } = getYamlHeader(props.fileContent);
     setContent(content);
     store.dispatch(clearStoryEnv());
-    handleHeaders(headersYaml);
+    handleHeaders(header);
   }, [props.fileContent]);
 
   return content ? (
