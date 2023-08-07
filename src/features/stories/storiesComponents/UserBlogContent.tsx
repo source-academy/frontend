@@ -59,7 +59,7 @@ function handleHeaders(headers: string): void {
     );
   } else {
     try {
-      const headerObject = yaml.load(headers) as any;
+      const headerObject = yaml.load(headers) as Record<string, any>;
       for (const key in headerObject) {
         if (key === CONFIG_STRING) {
           // handle DEFAULT by changing default env stuff
