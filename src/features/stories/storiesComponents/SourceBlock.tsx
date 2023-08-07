@@ -1,7 +1,7 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter } from 'js-slang/dist/types';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
@@ -68,6 +68,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const variant = useTypedSelector(
     store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
+
+  useEffect(() => {
+    setCode(props.content);
+  }, [props.content]);
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
 
