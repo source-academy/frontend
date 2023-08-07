@@ -27,15 +27,15 @@ export type SourceBlockProps = {
 };
 
 /**
- * Parses the commandsString and provides arguments if it exists
- * commandsString should be in the format of -key1-key2-key3:argifexists-key4
- * If multiple same key in the commandsString, it will take the first arg
+ * Parses the metadata and provides arguments if it exists
+ * metadata should be in the format of -key1-key2-key3:argifexists-key4
+ * If multiple same key in the metadata, it will take the first arg
  * @param key key to look out for
- * @param commandsString commandsString
+ * @param metadata metadata
  * @returns string of args if key is found and args exists, '' if key is found without args, undefined if key is not found
  */
-function parseCommands(key: string, commandsString: string): string | undefined {
-  for (const command of commandsString.split('-')) {
+function parseMetadata(key: string, metadata: string): string | undefined {
+  for (const command of metadata.split('-')) {
     const keyArgs = command.split(':');
     if (keyArgs[0] === key) {
       return keyArgs.length > 1 ? keyArgs[1] : '';
@@ -53,7 +53,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
   // setting env
-  const commandsEnv = parseCommands('env', props.commands);
+  const commandsEnv = parseMetadata('env', props.commands);
   let env = DEFAULT_ENV;
   if (commandsEnv !== undefined) {
     env = envList.includes(commandsEnv) ? commandsEnv : DEFAULT_ENV;
