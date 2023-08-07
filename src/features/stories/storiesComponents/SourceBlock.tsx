@@ -1,5 +1,6 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { Chapter } from 'js-slang/dist/types';
 import React, { useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
@@ -78,11 +79,12 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       prevTabId: SideContentType,
       event: React.MouseEvent<HTMLElement>
     ) => {
+      // TODO: Migrate relevant updated logic from Playground component
       if (newTabId === prevTabId) {
         return;
       }
 
-      if (chapter <= 2 && newTabId === SideContentType.substVisualizer) {
+      if (chapter <= Chapter.SOURCE_2 && newTabId === SideContentType.substVisualizer) {
         toggleStoriesUsingSubst(true, env);
       }
 
