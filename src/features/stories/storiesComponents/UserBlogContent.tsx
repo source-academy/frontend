@@ -19,18 +19,17 @@ const YAML_HEADER = '---';
 const CONFIG_STRING = 'config';
 const ENV_STRING = 'env';
 
-function handleEnvironment(envConfig: any): void {
-  for (const key in envConfig) {
-    const parsedChapter = envConfig[key].chapter;
-    const parsedVariant = envConfig[key].variant;
+function handleEnvironment(envConfig: Record<string, any>): void {
+  for (const [key, value] of Object.entries(envConfig)) {
+    const { chapter, variant } = value;
 
     const envChapter = Object.values(Chapter)
       .filter(x => !isNaN(Number(x)))
-      .includes(parsedChapter)
-      ? parsedChapter
+      .includes(chapter)
+      ? chapter
       : Constants.defaultSourceChapter;
-    const envVariant = Object.values(Variant).includes(parsedVariant)
-      ? parsedVariant
+    const envVariant = Object.values(Variant).includes(variant)
+      ? variant
       : Constants.defaultSourceVariant;
 
     store.dispatch(addStoryEnv(key, envChapter, envVariant));
@@ -50,36 +49,7 @@ function handleHeaders(headers: string): void {
       switch (key) {
         case CONFIG_STRING:
           const { chapter, variant } = value;
-
-          const envChapter = Object.values(Chapter)
-            .filter(x => !isNaN(Number(x)))
-            .includes(chapter)
-            ? chapter
-            : Constants.defaultSourceChapter;
-          const envVariant = Object.values(Variant).includes(variant)
-            ? variant
-            : Constants.defaultSourceVariant;
-
-          store.dispatch(addStoryEnv(DEFAULT_ENV, envChapter, envVariant));
-          /*
-          if (chapterKey in Chapter && variantKey in Variant) {
-            store.dispatch(
-              addStoryEnv(
-                DEFAULT_ENV,
-                Chapter[chapterKey as keyof typeof Chapter],
-                Variant[variantKey]
-              )
-            );
-          } else {
-            store.dispatch(
-              addStoryEnv(
-                DEFAULT_ENV,
-                Constants.defaultSourceChapter,
-                Constants.defaultSourceVariant
-              )
-            );
-          }
-          */
+          handleEnvironment({ [DEFAULT_ENV]: { chapter, variant } });
           break;
         case ENV_STRING:
           handleEnvironment(value);
