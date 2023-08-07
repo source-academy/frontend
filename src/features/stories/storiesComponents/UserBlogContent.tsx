@@ -57,16 +57,18 @@ function handleHeaders(headers: string): void {
     store.dispatch(
       addStoryEnv(DEFAULT_ENV, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
     );
-  } else {
-    try {
-      const headerObject = yaml.load(headers) as Record<string, any>;
-      for (const key in headerObject) {
-        if (key === CONFIG_STRING) {
+    return;
+  }
+  try {
+    const headerObject = yaml.load(headers) as Record<string, any>;
+    for (const [key, value] of Object.entries(headerObject)) {
+      switch (key) {
+        case CONFIG_STRING:
           // handle DEFAULT by changing default env stuff
           //const chapterKey = headerObject[key].chapter;
           //const variantKey = headerObject[key].variant;
-          const parsedChapter = headerObject[CONFIG_STRING].chapter;
-          const parsedVariant = headerObject[CONFIG_STRING].variant;
+          const parsedChapter = value.chapter;
+          const parsedVariant = value.variant;
 
           const envChapter = Object.values(Chapter)
             .filter(x => !isNaN(Number(x)))
@@ -97,17 +99,22 @@ function handleHeaders(headers: string): void {
             );
           }
           */
-        } else if (key === ENV_STRING) {
-          handleEnvironment(headerObject[key]);
-        }
+          break;
+        case ENV_STRING:
+          handleEnvironment(value);
+          break;
+        default:
+          // Simply ignore the invalid key
+          break;
       }
-    } catch (err) {
-      if (err instanceof yaml.YAMLException) {
-        // default headers
-        store.dispatch(
-          addStoryEnv(DEFAULT_ENV, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
-        );
-      }
+    }
+  } catch (err) {
+    console.warn(err);
+    if (err instanceof yaml.YAMLException) {
+      // default headers
+      store.dispatch(
+        addStoryEnv(DEFAULT_ENV, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
+      );
     }
   }
 }
