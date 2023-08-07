@@ -104,7 +104,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     []
   );
 
-  const chapterVariantDisplay = chapter ? styliseSublanguage(chapter, variant) : '';
+  const envDisplayLabel =
+    env === DEFAULT_ENV
+      ? styliseSublanguage(chapter, variant)
+      : env + ' | ' + styliseSublanguage(chapter, variant);
 
   // TODO: Add data visualiser and env visualiser tabs
 
@@ -220,15 +223,17 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     <div className={Classes.DARK}>
       <div className="workspace">
         <Card>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <ControlBarRunButton
               key="runButton"
               handleEditorEval={execEvaluate}
               isEntrypointFileDefined
             />
+            <span style={{ display: 'inline-block', fontSize: '0.9rem', textAlign: 'center' }}>
+              {envDisplayLabel}
+            </span>
             <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>
-          <p>{env === DEFAULT_ENV ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
           <div>
             <div className="right-parent">
               <Card>
