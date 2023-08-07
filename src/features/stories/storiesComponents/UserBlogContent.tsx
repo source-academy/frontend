@@ -71,24 +71,18 @@ function handleHeaders(headers: string): void {
 }
 
 function parseYamlHeaders(content: string): { headersYaml: string; content: string } {
-  // check if file contains headers
-  if (content.substring(0, YAML_HEADER.length) !== YAML_HEADER) {
-    return {
-      headersYaml: '',
-      content: content
-    };
+  const startsWithHeaders = content.substring(0, YAML_HEADER.length) !== YAML_HEADER;
+  if (!startsWithHeaders) {
+    return { headersYaml: '', content };
   }
-  const headerEnd = content.indexOf(YAML_HEADER, YAML_HEADER.length);
-  if (headerEnd === -1) {
-    return {
-      headersYaml: '',
-      content: content
-    };
+  const endHeaderIndex = content.indexOf(YAML_HEADER, YAML_HEADER.length);
+  if (endHeaderIndex === -1) {
+    return { headersYaml: '', content };
   }
-  const yamlString = content.substring(YAML_HEADER.length, headerEnd);
+
   return {
-    headersYaml: yamlString,
-    content: content.substring(headerEnd + YAML_HEADER.length)
+    headersYaml: content.substring(YAML_HEADER.length, endHeaderIndex),
+    content: content.substring(endHeaderIndex + YAML_HEADER.length)
   };
 }
 
