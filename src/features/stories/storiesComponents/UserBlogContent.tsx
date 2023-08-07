@@ -10,7 +10,7 @@ import { addStoryEnv, clearStoryEnv } from 'src/features/stories/StoriesActions'
 import { store } from '../../../pages/createStore';
 
 type UserBlogProps = {
-  fileContent: string | null;
+  fileContent: string;
 };
 
 export const DEFAULT_ENV = 'default';
@@ -138,22 +138,18 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    if (props.fileContent !== null) {
-      const { headersYaml, content } = parseHeaders(props.fileContent);
-      setContent(content);
-      store.dispatch(clearStoryEnv());
-      handleHeaders(headersYaml);
-    }
+    const { headersYaml, content } = parseHeaders(props.fileContent);
+    setContent(content);
+    store.dispatch(clearStoryEnv());
+    handleHeaders(headersYaml);
   }, [props.fileContent]);
 
-  return props.fileContent === null ? (
-    <p>Story not found</p>
-  ) : content === '' ? (
-    <div />
-  ) : (
+  return content ? (
     <div className="userblogContent">
       <div className="content">{renderStoryMarkdown(content)}</div>
     </div>
+  ) : (
+    <div />
   );
 };
 
