@@ -65,7 +65,6 @@ type GradingWorkspaceProps = {
 };
 
 const workspaceLocation: WorkspaceLocation = 'grading';
-const whitespaceRegex: RegExp = /\s/g;
 const unansweredPrependValue: string = `// This answer does not have significant changes from the given solution
 // template and has thus been flagged as unanswered.
 // If you think this is wrong, please ignore and grade accordingly.
@@ -176,11 +175,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
 
     if (question.type === QuestionTypes.programming) {
       if (question.answer) {
-        if (
-          question.answer.trim() === question.solutionTemplate.trim() ||
-          question.answer.replace(whitespaceRegex, '') ===
-            question.solutionTemplate.replace(whitespaceRegex, '')
-        ) {
+        if (question.answer.trim() === question.solutionTemplate.trim()) {
           answer = unansweredPrependValue + question.answer;
           showSimpleErrorDialog({
             contents: 'Question has not been answered.'
@@ -257,11 +252,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       if (!editorValue) {
         editorValue = questionData.solutionTemplate!;
       }
-      if (
-        editorValue.trim() === questionData.solutionTemplate?.trim() ||
-        editorValue.replace(whitespaceRegex, '') ===
-          questionData.solutionTemplate?.replace(whitespaceRegex, '')
-      ) {
+      if (editorValue.trim() === questionData.solutionTemplate?.trim()) {
         showSimpleErrorDialog({
           contents: 'Question has not been answered.'
         });
