@@ -71,7 +71,7 @@ function handleHeaders(headers: string): void {
   }
 }
 
-function getYamlHeader(content: string): { header: string; content: string } {
+export function getYamlHeader(content: string): { header: string; content: string } {
   const startsWithHeaders = content.substring(0, YAML_HEADER.length) === YAML_HEADER;
   if (!startsWithHeaders) {
     return { header: '', content };
