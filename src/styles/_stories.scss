@@ -1,7 +1,7 @@
 .workspace {
   .#{$ns}-card {
     background-color: $cadet-color-2;
-    padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+    padding: 6px 10px;
   }
 }
 
@@ -20,16 +20,22 @@
       font-size: 1rem;
       line-height: 1.5;
 
-      code:not(pre code) {
+      & > * {
+        margin: 0;
+      }
+      & > * + * {
+        margin-top: 1rem;
+      }
+
+      :not(pre) code {
         border: 1px solid #cacaca;
         background-color: #fafafb;
         color: #393939;
-        margin: 0px;
         white-space: nowrap;
         -webkit-border-radius: 3px;
         -moz-border-radius: 3px;
         border-radius: 3px;
-        padding: 1px;
+        padding: 1px 4px;
       }
 
       code {
@@ -50,7 +56,6 @@
         background-clip: padding-box;
         background-color: #fafafb;
         color: #393939;
-        margin: 0px;
       }
 
       pre code {
