@@ -1,4 +1,4 @@
-import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
+import { Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
@@ -80,28 +80,26 @@ const StoriesSideContent: React.FC<StoriesSideContentProps> = ({
       {...otherProps}
       renderFunction={(dynamicTabs, changeTabsCallback) => (
         <div className="side-content">
-          <Card>
-            <div className="side-content-tabs">
-              <Tabs
-                id="side-content-tabs"
-                onChange={(newTabId: SideContentType, prevTabId: SideContentType, e) => {
-                  setIsHidden(false);
-                  changeTabsCallback(newTabId, prevTabId, e);
-                }}
-                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-                selectedTabId={selectedTabId}
-              >
-                {dynamicTabs.map(tab => renderTab(tab, isHidden, otherProps.workspaceLocation))}
-                {dynamicTabs.length ? (
-                  <ControlButton
-                    label={isHidden ? 'Show' : 'Hide'}
-                    onClick={() => setIsHidden(!isHidden)}
-                    icon={isHidden ? IconNames.EYE_OPEN : IconNames.EYE_OFF}
-                  />
-                ) : undefined}
-              </Tabs>
-            </div>
-          </Card>
+          <div className="side-content-tabs">
+            <Tabs
+              id="side-content-tabs"
+              onChange={(newTabId: SideContentType, prevTabId: SideContentType, e) => {
+                setIsHidden(false);
+                changeTabsCallback(newTabId, prevTabId, e);
+              }}
+              renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+              selectedTabId={selectedTabId}
+            >
+              {dynamicTabs.map(tab => renderTab(tab, isHidden, otherProps.workspaceLocation))}
+              {dynamicTabs.length ? (
+                <ControlButton
+                  label={isHidden ? 'Show' : 'Hide'}
+                  onClick={() => setIsHidden(!isHidden)}
+                  icon={isHidden ? IconNames.EYE_OPEN : IconNames.EYE_OFF}
+                />
+              ) : undefined}
+            </Tabs>
+          </div>
         </div>
       )}
     />
