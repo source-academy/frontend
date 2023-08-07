@@ -21,21 +21,6 @@ const ENV_STRING = 'env';
 
 function handleEnvironment(envConfig: any): void {
   for (const key in envConfig) {
-    /*
-    const chapterKey = envConfig[key].chapter;
-    const variantKey = envConfig[key].variant;
-
-    if (chapterKey in Chapter && variantKey in Variant) {
-      store.dispatch(
-        addStoryEnv(key, Chapter[chapterKey as keyof typeof Chapter], Variant[variantKey])
-      );
-    } else {
-      store.dispatch(
-        addStoryEnv(key, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
-      );
-    }
-    */
-
     const parsedChapter = envConfig[key].chapter;
     const parsedVariant = envConfig[key].variant;
 
@@ -64,19 +49,15 @@ function handleHeaders(headers: string): void {
     for (const [key, value] of Object.entries(headerObject)) {
       switch (key) {
         case CONFIG_STRING:
-          // handle DEFAULT by changing default env stuff
-          //const chapterKey = headerObject[key].chapter;
-          //const variantKey = headerObject[key].variant;
-          const parsedChapter = value.chapter;
-          const parsedVariant = value.variant;
+          const { chapter, variant } = value;
 
           const envChapter = Object.values(Chapter)
             .filter(x => !isNaN(Number(x)))
-            .includes(parsedChapter)
-            ? parsedChapter
+            .includes(chapter)
+            ? chapter
             : Constants.defaultSourceChapter;
-          const envVariant = Object.values(Variant).includes(parsedVariant)
-            ? parsedVariant
+          const envVariant = Object.values(Variant).includes(variant)
+            ? variant
             : Constants.defaultSourceVariant;
 
           store.dispatch(addStoryEnv(DEFAULT_ENV, envChapter, envVariant));
