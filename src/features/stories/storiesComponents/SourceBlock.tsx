@@ -261,12 +261,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   }}
                 />
               </Card>
-              <div className="Repl">
-                <div className="repl-output-parent">
-                  {output.length > outputIndex ? (
+              <div className="Repl" style={{ margin: 0 }}>
+                {output.length > outputIndex ? (
+                  <div className="repl-output-parent">
+                    <p style={{ marginBlock: 6 }}>Output:</p>
                     <Output output={output[outputIndex]} usingSubst={usingSubst || false} />
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </div>
               <div>
                 <StoriesSideContent {...sideContentProps} />
