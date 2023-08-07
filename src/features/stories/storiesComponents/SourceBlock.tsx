@@ -104,7 +104,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     []
   );
 
-  const chapterVariantDisplay = chapter ? styliseSublanguage(chapter, variant) : '';
+  const envDisplayLabel =
+    env === DEFAULT_ENV
+      ? styliseSublanguage(chapter, variant)
+      : env + ' | ' + styliseSublanguage(chapter, variant);
 
   // TODO: Add data visualiser and env visualiser tabs
 
@@ -198,7 +201,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       afterDynamicTabs: []
     },
     workspaceLocation: 'stories',
-    storyEnv: env,
     getDebuggerContext: state => state.stories.envs[env].debuggerContext
   };
 
@@ -221,15 +223,17 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     <div className={Classes.DARK}>
       <div className="workspace">
         <Card>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <ControlBarRunButton
               key="runButton"
               handleEditorEval={execEvaluate}
               isEntrypointFileDefined
             />
+            <span style={{ display: 'inline-block', fontSize: '0.9rem', textAlign: 'center' }}>
+              {envDisplayLabel}
+            </span>
             <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>
-          <p>{env === DEFAULT_ENV ? chapterVariantDisplay : env + ' | ' + chapterVariantDisplay}</p>
           <div>
             <div className="right-parent">
               <Card>
@@ -262,12 +266,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   }}
                 />
               </Card>
-              <div className="Repl">
-                <div className="repl-output-parent">
-                  {output.length > outputIndex ? (
+              <div className="Repl" style={{ margin: 0 }}>
+                {output.length > outputIndex ? (
+                  <div className="repl-output-parent">
+                    <p style={{ marginBlock: 6 }}>Output:</p>
                     <Output output={output[outputIndex]} usingSubst={usingSubst || false} />
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </div>
               <div>
                 <StoriesSideContent {...sideContentProps} />
