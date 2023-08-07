@@ -82,25 +82,15 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
         return;
       }
 
-      /**
-       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-       */
-      if (
-        !(
-          prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun
-        )
-      ) {
-        if (chapter <= 2 && newTabId === SideContentType.substVisualizer) {
-          toggleStoriesUsingSubst(true, env);
-        }
-
-        if (prevTabId === SideContentType.substVisualizer) {
-          toggleStoriesUsingSubst(false, env);
-        }
-
-        setSelectedTab(newTabId);
+      if (chapter <= 2 && newTabId === SideContentType.substVisualizer) {
+        toggleStoriesUsingSubst(true, env);
       }
+
+      if (prevTabId === SideContentType.substVisualizer) {
+        toggleStoriesUsingSubst(false, env);
+      }
+
+      setSelectedTab(newTabId);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
