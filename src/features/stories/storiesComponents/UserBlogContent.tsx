@@ -23,6 +23,7 @@ function handleEnvironment(envConfig: Record<string, any>): void {
   for (const [key, value] of Object.entries(envConfig)) {
     const { chapter, variant } = value;
 
+    // TODO: Replace with language config object
     const envChapter = Object.values(Chapter)
       .filter(x => !isNaN(Number(x)))
       .includes(chapter)
