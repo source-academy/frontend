@@ -112,7 +112,7 @@ function handleHeaders(headers: string): void {
   }
 }
 
-function parseHeaders(content: string): { headersYaml: string; content: string } {
+function parseYamlHeaders(content: string): { headersYaml: string; content: string } {
   // check if file contains headers
   if (content.substring(0, YAML_HEADER.length) !== YAML_HEADER) {
     return {
@@ -138,7 +138,7 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    const { headersYaml, content } = parseHeaders(props.fileContent);
+    const { headersYaml, content } = parseYamlHeaders(props.fileContent);
     setContent(content);
     store.dispatch(clearStoryEnv());
     handleHeaders(headersYaml);
