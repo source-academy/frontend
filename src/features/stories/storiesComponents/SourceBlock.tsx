@@ -153,7 +153,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     //   tabs.push(envVisualizerTab);
     // }
 
-    if (chapter <= 2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE)) {
+    if (
+      chapter <= Chapter.SOURCE_2 &&
+      (variant === Variant.DEFAULT || variant === Variant.NATIVE)
+    ) {
       // Enable Subst Visualizer only for default Source 1 & 2
       tabs.push(makeSubstVisualizerTabFrom(output));
     }
