@@ -27,6 +27,6 @@
     "noEmit": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "rating.ts"],
   "exclude": ["src/setupTests.ts"]
 }
