@@ -33,7 +33,10 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
-import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../utils/notifications/NotificationsHelper';
 import {
   beginClearContext,
   changeExternalLibrary,
@@ -276,7 +279,8 @@ describe('EVAL_REPL', () => {
           originalMaxExecTime: 1000,
           stepLimit: 1000,
           useSubst: false,
-          throwInfiniteLoops: true
+          throwInfiniteLoops: true,
+          envSteps: -1
         })
         .dispatch({
           type: EVAL_REPL,
@@ -836,7 +840,8 @@ describe('evalCode', () => {
       originalMaxExecTime: 1000,
       stepLimit: 1000,
       useSubst: false,
-      throwInfiniteLoops: true
+      throwInfiniteLoops: true,
+      envSteps: -1
     };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
@@ -865,7 +870,8 @@ describe('evalCode', () => {
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
-          throwInfiniteLoops: true
+          throwInfiniteLoops: true,
+          envSteps: -1
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
@@ -890,7 +896,8 @@ describe('evalCode', () => {
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
-          throwInfiniteLoops: true
+          throwInfiniteLoops: true,
+          envSteps: -1
         })
         .put(endDebuggerPause(workspaceLocation))
         .put(evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
@@ -913,7 +920,8 @@ describe('evalCode', () => {
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
-          throwInfiniteLoops: true
+          throwInfiniteLoops: true,
+          envSteps: -1
         })
         .put.like({ action: { type: EVAL_INTERPRETER_ERROR } })
         .silentRun();
@@ -947,7 +955,8 @@ describe('evalCode', () => {
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
-          throwInfiniteLoops: true
+          throwInfiniteLoops: true,
+          envSteps: -1
         })
         .put(evalInterpreterError(context.errors, workspaceLocation))
         .silentRun();

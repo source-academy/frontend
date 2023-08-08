@@ -1,5 +1,4 @@
-import { shallow } from 'enzyme';
-import { WorkspaceSettings, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Editor, { EditorProps } from '../Editor';
 import { Position } from '../EditorTypes';
@@ -20,11 +19,7 @@ test('Editor renders correctly', () => {
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
     handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
   };
-  const app = (
-    <WorkspaceSettingsContext.Provider value={[{} as WorkspaceSettings, jest.fn()]}>
-      <Editor {...props} />
-    </WorkspaceSettingsContext.Provider>
-  );
-  const tree = shallow(app);
-  expect(tree.debug()).toMatchSnapshot();
+  const Element: React.FC = () => <Editor {...props} />;
+  const tree = shallowRender(<Element />);
+  expect(tree).toMatchSnapshot();
 });

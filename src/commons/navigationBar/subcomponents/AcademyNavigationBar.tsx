@@ -1,142 +1,45 @@
-import { Alignment, Classes, Icon, Navbar, NavbarGroup } from '@blueprintjs/core';
+import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
 import * as React from 'react';
-import { NavLink } from 'react-router-dom';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
-import NotificationBadge from '../../notificationBadge/NotificationBadge';
-import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
+import { createDesktopNavlink, NavbarEntryInfo, renderNavlinksFromInfo } from '../NavigationBar';
 
 type OwnProps = {
   assessmentTypes?: AssessmentType[];
 };
 
-const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => {
+const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTypes }) => {
   const { role, courseId } = useTypedSelector(state => state.session);
+  const isEnrolledInACourse = !!role;
+
+  const academyNavbarRightInfo = React.useMemo<NavbarEntryInfo[]>(
+    () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
+    [isEnrolledInACourse, courseId, role]
+  );
+
+  if (courseId === undefined || !isEnrolledInACourse) {
+    return null;
+  }
 
   return (
     <Navbar className="NavigationBar secondary-navbar">
       <NavbarGroup align={Alignment.LEFT}>
-        {props.assessmentTypes?.map((assessmentType, idx) => (
-          <NavLink
-            to={`/courses/${courseId}/${assessmentTypeLink(assessmentType)}`}
-            className={({ isActive }) =>
-              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                [Classes.ACTIVE]: isActive
-              })
-            }
-            key={idx}
-          >
-            <Icon icon={icons[idx]} />
-            <div className="navbar-button-text hidden-xs hidden-sm">{assessmentType}</div>
-            <NotificationBadge
-              notificationFilter={filterNotificationsByType(assessmentType)}
-              disableHover={true}
-            />
-          </NavLink>
-        ))}
+        {renderNavlinksFromInfo(
+          assessmentTypesToNavlinkInfo({
+            assessmentTypes,
+            courseId,
+            isEnrolledInACourse
+          }),
+          createDesktopNavlink
+        )}
       </NavbarGroup>
-      {role === Role.Admin || role === Role.Staff ? (
-        <NavbarGroup align={Alignment.RIGHT}>
-          <NavLink
-            to={`/courses/${courseId}/groundcontrol`}
-            className={({ isActive }) =>
-              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                [Classes.ACTIVE]: isActive
-              })
-            }
-          >
-            <Icon icon={IconNames.SATELLITE} />
-            <div className="navbar-button-text hidden-xs hidden-sm">Ground Control</div>
-          </NavLink>
-
-          <NavLink
-            to={`/courses/${courseId}/dashboard`}
-            className={({ isActive }) =>
-              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                [Classes.ACTIVE]: isActive
-              })
-            }
-          >
-            <Icon icon={IconNames.GLOBE} />
-            <div className="navbar-button-text hidden-xs hidden-sm">Dashboard</div>
-          </NavLink>
-
-          <NavLink
-            to={`/courses/${courseId}/sourcereel`}
-            className={({ isActive }) =>
-              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                [Classes.ACTIVE]: isActive
-              })
-            }
-          >
-            <Icon icon={IconNames.MOBILE_VIDEO} />
-            <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Sourcereel</div>
-          </NavLink>
-
-          {role === Role.Admin && (
-            <NavLink
-              to={`/courses/${courseId}/xpcalculation`}
-              className={({ isActive }) =>
-                classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                  [Classes.ACTIVE]: isActive
-                })
-              }
-            >
-              <Icon icon={IconNames.CALCULATOR} />
-              <div className="navbar-button-text hidden-xs hidden-sm">XP Calculation</div>
-            </NavLink>
-          )}
-
-          <NavLink
-            to={`/courses/${courseId}/grading`}
-            className={({ isActive }) =>
-              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                [Classes.ACTIVE]: isActive
-              })
-            }
-          >
-            <Icon icon={IconNames.ENDORSED} />
-            <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Grading</div>
-            <NotificationBadge
-              notificationFilter={filterNotificationsByType('Grading')}
-              disableHover={true}
-            />
-          </NavLink>
-
-          <NavLink
-            to={`/courses/${courseId}/storysimulator`}
-            className={({ isActive }) =>
-              classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                [Classes.ACTIVE]: isActive
-              })
-            }
-          >
-            <Icon icon={IconNames.CROWN} />
-            <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Story Simulator</div>
-          </NavLink>
-
-          {role === Role.Admin && (
-            <NavLink
-              to={`/courses/${courseId}/adminpanel`}
-              className={({ isActive }) =>
-                classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-                  [Classes.ACTIVE]: isActive
-                })
-              }
-            >
-              <Icon icon={IconNames.SETTINGS} />
-              <div className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg">
-                Admin Panel
-              </div>
-            </NavLink>
-          )}
-        </NavbarGroup>
-      ) : null}
+      <NavbarGroup align={Alignment.RIGHT}>
+        {renderNavlinksFromInfo(academyNavbarRightInfo, createDesktopNavlink)}
+      </NavbarGroup>
     </Navbar>
   );
 };
@@ -150,6 +53,107 @@ export const icons: IconName[] = [
   IconNames.GRAPH,
   IconNames.LAB_TEST,
   IconNames.CALCULATOR
+];
+
+export const assessmentTypesToNavlinkInfo = ({
+  assessmentTypes = [],
+  courseId,
+  isEnrolledInACourse
+}: {
+  assessmentTypes?: string[];
+  courseId?: number;
+  isEnrolledInACourse: boolean;
+}): NavbarEntryInfo[] =>
+  assessmentTypes.map((assessmentType, idx) => ({
+    to: `/courses/${courseId}/${assessmentTypeLink(assessmentType)}`,
+    icon: icons[idx],
+    text: assessmentType,
+    disabled: !isEnrolledInACourse,
+    hasNotifications: true,
+    hiddenInBreakpoints: ['xs', 'sm']
+  }));
+
+const getStaffNavlinkInfo = ({
+  courseId,
+  role
+}: {
+  courseId?: number;
+  role?: Role;
+}): NavbarEntryInfo[] => {
+  const isStaffOrAdmin = role === Role.Admin || role === Role.Staff;
+  const isAdmin = role === Role.Admin;
+
+  return [
+    {
+      to: `/courses/${courseId}/groundcontrol`,
+      icon: IconNames.SATELLITE,
+      text: 'Ground Control',
+      disabled: !isStaffOrAdmin,
+      hiddenInBreakpoints: ['xs', 'sm']
+    },
+    {
+      to: `/courses/${courseId}/dashboard`,
+      icon: IconNames.GLOBE,
+      text: 'Dashboard',
+      disabled: !isStaffOrAdmin,
+      hiddenInBreakpoints: ['xs', 'sm']
+    },
+    {
+      to: `/courses/${courseId}/sourcereel`,
+      icon: IconNames.MOBILE_VIDEO,
+      text: 'Sourcereel',
+      disabled: !isStaffOrAdmin,
+      hiddenInBreakpoints: ['xs', 'sm', 'md']
+    },
+    {
+      to: `/courses/${courseId}/grading`,
+      icon: IconNames.ENDORSED,
+      text: 'Grading',
+      disabled: !isStaffOrAdmin,
+      hasNotifications: true,
+      hiddenInBreakpoints: ['xs', 'sm', 'md']
+    },
+    {
+      to: `/courses/${courseId}/storysimulator`,
+      icon: IconNames.CROWN,
+      text: 'Story Simulator',
+      disabled: !isStaffOrAdmin,
+      hiddenInBreakpoints: ['xs', 'sm', 'md']
+    },
+    {
+      to: `/courses/${courseId}/xpcalculation`,
+      icon: IconNames.CALCULATOR,
+      text: 'XP Calculation',
+      disabled: !isAdmin,
+      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
+    },
+    {
+      to: `/courses/${courseId}/adminpanel`,
+      icon: IconNames.SETTINGS,
+      text: 'Admin Panel',
+      disabled: !isAdmin,
+      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
+    }
+  ];
+};
+
+export const getAcademyNavbarRightInfo = ({
+  isEnrolledInACourse,
+  courseId,
+  role
+}: {
+  isEnrolledInACourse: boolean;
+  courseId?: number;
+  role?: Role;
+}): NavbarEntryInfo[] => [
+  ...getStaffNavlinkInfo({ courseId, role }),
+  {
+    to: `/courses/${courseId}/notipreference`,
+    icon: IconNames.NOTIFICATIONS,
+    text: 'Notifications',
+    disabled: !isEnrolledInACourse,
+    hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
+  }
 ];
 
 export default AcademyNavigationBar;

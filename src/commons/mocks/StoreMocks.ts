@@ -11,6 +11,7 @@ import {
   defaultPlayground,
   defaultRouter,
   defaultSession,
+  defaultStories,
   defaultWorkspaceManager,
   OverallState
 } from '../application/ApplicationTypes';
@@ -26,6 +27,7 @@ export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<O
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,
     session: defaultSession,
+    stories: defaultStories,
     fileSystem: defaultFileSystem
   };
   return createStore(_.merge(state, overrides));

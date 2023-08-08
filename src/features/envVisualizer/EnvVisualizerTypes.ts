@@ -61,6 +61,9 @@ export type FnTypes = {
   /** string representation of the function */
   functionName: string;
 
+  /** unique id of the function */
+  id: string;
+
   node: any;
 };
 

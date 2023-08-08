@@ -21,7 +21,7 @@ import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcompo
 import { sourceLanguages } from '../application/ApplicationTypes';
 import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
 import Markdown from '../Markdown';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type DialogProps = {
   isOpen: boolean;
@@ -174,10 +174,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
           )}
         </FormGroup>
 
-        <FormGroup
-          helperText="defaultPrompt"
-          labelFor="defaultPrompt"
-        >
+        <FormGroup helperText="defaultPrompt" labelFor="defaultPrompt">
           <Text tagName="span">Default Prompt&nbsp;</Text>
           <Text tagName="span" className="optional-text">
             (optional)

@@ -11,11 +11,11 @@
 
 var $tone_matrix; // canvas container for tone matrix
 
-var color_white = "#ffffff"; // color of the highlighted square
-var color_white_2 = "#666666"; // color of the adjacent squares
-var color_white_3 = "#444444"; // color of the squares that are two units from the highlighted square
-var color_on = "#cccccc";
-var color_off = "#333333";
+var color_white = '#ffffff'; // color of the highlighted square
+var color_white_2 = '#666666'; // color of the adjacent squares
+var color_white_3 = '#444444'; // color of the squares that are two units from the highlighted square
+var color_on = '#cccccc';
+var color_off = '#333333';
 
 // the side length of the squares in the matrix
 var square_side_length = 18;
@@ -77,7 +77,7 @@ function get_column(column) {
   var result = new Array(16);
   for (var i = 15; i >= 0; i--) {
     result[i] = matrix[i][column];
-  };
+  }
   return vector_to_list(result);
 }
 
@@ -95,13 +95,10 @@ function set_color(row, column, color) {
     return;
   }
 
-  var ctx = $tone_matrix.getContext("2d");
+  var ctx = $tone_matrix.getContext('2d');
   ctx.fillStyle = color;
 
-  ctx.fillRect(column_to_x(column),
-    row_to_y(row),
-    square_side_length,
-    square_side_length);
+  ctx.fillRect(column_to_x(column), row_to_y(row), square_side_length, square_side_length);
 }
 
 // highlight a given square
@@ -172,8 +169,8 @@ function redraw_matrix() {
       } else {
         set_color(i, j, color_off);
       }
-    };
-  };
+    }
+  }
 }
 
 var ToneMatrix = {};
@@ -187,7 +184,7 @@ function initialise_matrix($container) {
     matrix = new Array(16);
 
     // the visualisation of the matrix itself
-    var ctx = $tone_matrix.getContext("2d");
+    var ctx = $tone_matrix.getContext('2d');
 
     // draw the initial matrix
     for (var i = 15; i >= 0; i--) {
@@ -195,43 +192,47 @@ function initialise_matrix($container) {
       for (var j = 15; j >= 0; j--) {
         set_color(i, j, color_off);
         matrix[i][j] = false;
-      };
-    };
+      }
+    }
 
     bind_events_to_rect($tone_matrix);
   }
-  $tone_matrix.hidden = false
-  $container.appendChild($tone_matrix)
+  $tone_matrix.hidden = false;
+  $container.appendChild($tone_matrix);
 }
 ToneMatrix.initialise_matrix = initialise_matrix;
 
 // bind the click events to the matrix
 function bind_events_to_rect(c) {
-  c.addEventListener('click', function (event) {
-    // calculate the x, y coordinates of the click event
-    var rect = c.getBoundingClientRect();
-    var offset_top = rect.top + document.documentElement.scrollTop;
-    var offset_left = rect.left + document.documentElement.scrollLeft;
-    var x = event.pageX - offset_left;
-    var y = event.pageY - offset_top;
+  c.addEventListener(
+    'click',
+    function (event) {
+      // calculate the x, y coordinates of the click event
+      var rect = c.getBoundingClientRect();
+      var offset_top = rect.top + document.documentElement.scrollTop;
+      var offset_left = rect.left + document.documentElement.scrollLeft;
+      var x = event.pageX - offset_left;
+      var y = event.pageY - offset_top;
 
-    // obtain the row and column numbers of the square clicked
-    var row_column = x_y_to_row_column(x, y);
-    var row = row_column[0];
-    var column = row_column[1];
+      // obtain the row and column numbers of the square clicked
+      var row_column = x_y_to_row_column(x, y);
+      var row = row_column[0];
+      var column = row_column[1];
 
-    if (row < 0 || row > 15 || column < 0 || column > 15) {
-      return;
-    }
+      if (row < 0 || row > 15 || column < 0 || column > 15) {
+        return;
+      }
 
-    if (matrix[row][column] == undefined || !matrix[row][column]) {
-      matrix[row][column] = true;
-      set_color(row, column, color_on);
-    } else {
-      matrix[row][column] = false;
-      set_color(row, column, color_off);
-    }
-  }, false);
+      if (matrix[row][column] == undefined || !matrix[row][column]) {
+        matrix[row][column] = true;
+        set_color(row, column, color_on);
+      } else {
+        matrix[row][column] = false;
+        set_color(row, column, color_off);
+      }
+    },
+    false
+  );
 }
 
 function random_animate() {
@@ -241,7 +242,7 @@ function random_animate() {
     if (!is_on(row, column)) {
       set_color(row, column, color_white_3);
     }
-  };
+  }
 
   for (var i = 10; i >= 0; i--) {
     var row = Math.floor(Math.random() * 16);
@@ -249,7 +250,7 @@ function random_animate() {
     if (!is_on(row, column)) {
       set_color(row, column, color_off);
     }
-  };
+  }
 }
 
 function animate_column(n) {
@@ -267,7 +268,7 @@ function animate_column(n) {
       set_adjacent_color_1(j, n, color_white_2);
       set_adjacent_color_2(j, n, color_white_3);
     }
-  };
+  }
 }
 
 function unanimate_column(n) {
@@ -283,12 +284,12 @@ function unanimate_column(n) {
       set_adjacent_color_1(j, n, color_off);
       set_adjacent_color_2(j, n, color_off);
     }
-  };
+  }
 }
 
 // generate a randomised matrix
 function randomise_matrix() {
-  var ctx = $tone_matrix.getContext("2d");
+  var ctx = $tone_matrix.getContext('2d');
   var on; // the square in the matrix is on or off
 
   clear_matrix();
@@ -303,30 +304,30 @@ function randomise_matrix() {
         set_color(i, j, color_off);
         matrix[i][j] = false;
       }
-    };
-  };
+    }
+  }
 }
 ToneMatrix.randomise_matrix = randomise_matrix;
 
 function bindMatrixButtons() {
   document.getElementById('clear-matrix').addEventListener('click', function () {
     clear_matrix();
-    document.getElementById("play-matrix").setAttribute("value", "Play");
-  })
-};
+    document.getElementById('play-matrix').setAttribute('value', 'Play');
+  });
+}
 ToneMatrix.bindMatrixButtons = bindMatrixButtons;
 
 // ********** THE FOLLOWING FUNCTIONS ARE EXPOSED TO STUDENTS **********
 // return the current state of the matrix, represented by a list of lists of bits
 function get_matrix() {
   if (!matrix) {
-    throw new Error("Please activate the tone matrix first by clicking on the tab!")
+    throw new Error('Please activate the tone matrix first by clicking on the tab!');
   }
   var matrix_list = matrix.slice(0);
   var result = [];
   for (var i = 0; i <= 15; i++) {
     result[i] = vector_to_list(matrix_list[15 - i]);
-  };
+  }
 
   return vector_to_list(result);
 }
@@ -334,7 +335,7 @@ function get_matrix() {
 // reset the matrix to the initial state
 function clear_matrix() {
   matrix = new Array(16);
-  var ctx = $tone_matrix.getContext("2d");
+  var ctx = $tone_matrix.getContext('2d');
 
   // draw the initial matrix
   for (var i = 15; i >= 0; i--) {
@@ -342,8 +343,8 @@ function clear_matrix() {
     for (var j = 15; j >= 0; j--) {
       set_color(i, j, color_off);
       matrix[i][j] = false;
-    };
-  };
+    }
+  }
 }
 
 ToneMatrix.clear_matrix = clear_matrix;
@@ -362,7 +363,7 @@ function set_timeout(f, t) {
 function clear_all_timeout() {
   for (var i = timeout_objects.length - 1; i >= 0; i--) {
     clearTimeout(timeout_objects[i]);
-  };
+  }
 
   timeout_objects = new Array();
 }

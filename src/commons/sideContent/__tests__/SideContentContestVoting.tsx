@@ -1,4 +1,5 @@
-import { mount } from 'enzyme';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import SideContentContestVotingContainer from '../SideContentContestVotingContainer';
 
@@ -27,54 +28,48 @@ const mockProps = {
   contestEntries: mockContestEntries
 };
 
-const contestVotingContainerRender = mount(<SideContentContestVotingContainer {...mockProps} />);
+const element = <SideContentContestVotingContainer {...mockProps} />;
 
 // Basic snapshot testing to catch unexpected changes
 test('SideContentContestVotingContainer matches snapshot', () => {
-  expect(contestVotingContainerRender.debug()).toMatchSnapshot();
+  expect(renderTreeJson(element)).toMatchSnapshot();
 });
 
 test('Tiers and entry bank are properly rendered and displayed', () => {
-  const mockTiers = contestVotingContainerRender.find('div').filterWhere(x => x.hasClass('tier'));
-  const mockSTier = mockTiers.get(0);
-  const mockATier = mockTiers.get(1);
-  const mockBTier = mockTiers.get(2);
-  const mockCTier = mockTiers.get(3);
-  const mockDTier = mockTiers.get(4);
-  const mockBank = mockTiers.get(5);
-  expect(mockSTier.props.id).toBe('tier-s');
-  expect(mockATier.props.id).toBe('tier-a');
-  expect(mockBTier.props.id).toBe('tier-b');
-  expect(mockCTier.props.id).toBe('tier-c');
-  expect(mockDTier.props.id).toBe('tier-d');
-  expect(mockBank.props.id).toBe('bank');
+  render(element);
+
+  const mockTiers = screen.getAllByTestId('tier');
+  const [mockSTier, mockATier, mockBTier, mockCTier, mockDTier, mockBank] = mockTiers;
+
+  expect(mockSTier.id).toBe('tier-s');
+  expect(mockATier.id).toBe('tier-a');
+  expect(mockBTier.id).toBe('tier-b');
+  expect(mockCTier.id).toBe('tier-c');
+  expect(mockDTier.id).toBe('tier-d');
+  expect(mockBank.id).toBe('bank');
 });
 
 test('Entries are only saved when all entries are assigned a tier', () => {
-  const contestCards = contestVotingContainerRender
-    .find('div')
-    .filterWhere(x => x.hasClass('item'));
+  render(element);
 
-  const mockSWrapper = contestVotingContainerRender
-    .find('div')
-    .filterWhere(x => x.hasClass('tier'))
-    .at(0);
-  const mockSContainer = mockSWrapper.findWhere(x => x.hasClass('item-container'));
+  const contestCards = screen.getAllByTestId('voting-item');
+  const mockSContainer = screen.getAllByTestId('voting-item-container')[0];
+  expect(contestCards).toHaveLength(3);
 
   // simulate incomplete assignment of tiers
-  contestCards.at(0).simulate('dragStart', { dataTransfer: { effectAllowed: 'none' } });
-  mockSContainer.simulate('drop');
-  contestCards.at(0).simulate('dragEnd');
+  fireEvent.dragStart(contestCards[0], { dataTransfer: { effectAllowed: 'none' } });
+  fireEvent.drop(mockSContainer);
+  fireEvent.dragEnd(contestCards[0]);
   expect(mockedHandleSave).toHaveBeenCalledTimes(0);
 
-  contestCards.at(1).simulate('dragStart', { dataTransfer: { effectAllowed: 'none' } });
-  mockSContainer.simulate('drop');
-  contestCards.at(1).simulate('dragEnd');
+  fireEvent.dragStart(contestCards[1], { dataTransfer: { effectAllowed: 'none' } });
+  fireEvent.drop(mockSContainer);
+  fireEvent.dragEnd(contestCards[1]);
   expect(mockedHandleSave).toHaveBeenCalledTimes(0);
 
   // simulate complete assignment of tiers
-  contestCards.at(2).simulate('dragStart', { dataTransfer: { effectAllowed: 'none' } });
-  mockSContainer.simulate('drop');
-  contestCards.at(2).simulate('dragEnd');
+  fireEvent.dragStart(contestCards[2], { dataTransfer: { effectAllowed: 'none' } });
+  fireEvent.drop(mockSContainer);
+  fireEvent.dragEnd(contestCards[2]);
   expect(mockedHandleSave).toHaveBeenCalledTimes(1);
 });
