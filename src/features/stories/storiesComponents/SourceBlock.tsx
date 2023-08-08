@@ -1,6 +1,6 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
@@ -15,7 +15,7 @@ import {
   evalStory,
   toggleStoriesUsingSubst
 } from 'src/features/stories/StoriesActions';
-import { dataVisualizerTab } from 'src/pages/playground/PlaygroundTabs';
+import { dataVisualizerTab, makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
@@ -117,21 +117,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   //   id: SideContentType.envVisualizer
   // };
 
-  // const processStepperOutput = (output: InterpreterOutput[]) => {
-  //   const editorOutput = output[0];
-  //   if (
-  //     editorOutput &&
-  //     editorOutput.type === 'result' &&
-  //     editorOutput.value instanceof Array &&
-  //     editorOutput.value[0] === Object(editorOutput.value[0]) &&
-  //     isStepperOutput(editorOutput.value[0])
-  //   ) {
-  //     return editorOutput.value;
-  //   } else {
-  //     return [];
-  //   }
-  // };
-
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
 
@@ -171,15 +156,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     //   tabs.push(envVisualizerTab);
     // }
 
-    // if (chapter <= 2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE)) {
-    //   // Enable Subst Visualizer only for default Source 1 & 2
-    //   tabs.push({
-    //     label: 'Stepper',
-    //     iconName: IconNames.FLOW_REVIEW,
-    //     body: <SideContentSubstVisualizer content={processStepperOutput(output)} />,
-    //     id: SideContentType.substVisualizer
-    //   });
-    // }
+    if (chapter <= 2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE)) {
+      // Enable Subst Visualizer only for default Source 1 & 2
+      tabs.push(makeSubstVisualizerTabFrom(output));
+    }
 
     return tabs;
     // eslint-disable-next-line react-hooks/exhaustive-deps
