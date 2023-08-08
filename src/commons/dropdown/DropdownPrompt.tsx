@@ -11,7 +11,7 @@ type DialogProps = {
   onClose: () => void;
 };
 
-const DropdownPrompt: React.SFC<DialogProps> = props => {
+const DropdownPrompt: React.FC<DialogProps> = props => {
   const defaultPrompt = useTypedSelector(store => store.session.defaultPrompt);
 
   return (
