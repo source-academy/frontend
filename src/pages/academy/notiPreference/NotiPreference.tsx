@@ -5,8 +5,11 @@ import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
+  deleteTimeOptions,
   fetchConfigurableNotificationConfigs,
-  updateNotificationPreferences
+  updateNotificationConfigs,
+  updateNotificationPreferences,
+  updateTimeOptions
 } from 'src/commons/application/actions/SessionActions';
 import {
   NotificationConfiguration,
@@ -17,13 +20,17 @@ import ContentDisplay from 'src/commons/ContentDisplay';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './subcomponents/BooleanCell';
-import SelectCell from './subcomponents/SelectCell';
+//import SelectCell from './subcomponents/SelectCell';
+import TimeOptionCell from './subcomponents/TimeOptionCell';
 
 const NotiPreference: React.FC = () => {
+  const session = useTypedSelector(state => state.session);
+  const notificationConfig = React.useRef<NotificationConfiguration[] | undefined>(
+    session.notificationConfigs
+  );
   const gridApi = React.useRef<GridApi>();
 
   const dispatch = useDispatch();
-  const session = useTypedSelector(state => state.session);
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
 
@@ -54,6 +61,22 @@ const NotiPreference: React.FC = () => {
       }
     });
   }, [session]);
+
+  //新加的
+  const [timeOptionsToDelete, setTimeOptionsToDelete] = useState<TimeOption[]>([]);
+  const addTimeOptionsToDelete = (deletedElement: TimeOption) => {
+    // If it is not a newly created row that is yet to be persisted in the backend
+    if (deletedElement.id !== -1) {
+      const temp = [...timeOptionsToDelete];
+      temp.push(deletedElement);
+      setTimeOptionsToDelete(temp);
+    }
+  };
+
+  const notificationTypeId: ValueFormatterFunc<NotificationConfiguration> = params => {
+    const id = params.data!.notificationType?.id || 0;
+    return String(id);
+  };
 
   const setIsEnabled = (index: number, value: boolean) => {
     const temp = [...(configurableNotificationConfigs.current ?? [])];
@@ -96,10 +119,10 @@ const NotiPreference: React.FC = () => {
         ? `${Math.round((option.minutes / 60) * 100) / 100} hour(s)`
         : `${option.minutes} minute(s)`;
 
-    let result = "";
+    let result = '';
     for (const timeOption of timeOptions) {
       result += getUserFriendlyText(timeOption);
-      result += " "
+      result += ' ';
     }
 
     return result;
@@ -114,7 +137,7 @@ const NotiPreference: React.FC = () => {
     },
     {
       headerName: 'Notification Type',
-      field: 'notificationType.name',
+      field: 'notificationType.name'
     },
     {
       headerName: 'Recipients',
@@ -126,13 +149,43 @@ const NotiPreference: React.FC = () => {
       field: 'timeOptions',
       valueFormatter: defaultTimeFormatter
     },
+    /*
+    {
+          headerName: 'Default Reminder Time(hours)',
+          field: 'timeOptions',
+          cellRendererFramework: TimeOptionCell,
+          cellRendererParams: {
+            setStateHandler: setTimeOptions,
+            setDelete: addTimeOptionsToDelete,
+            field: 'timeOptions',
+            typeId: notificationTypeId
+          }
+        },
+    
+    */
+
+    /*
+    之前的
+    {
+          headerName: 'Reminder',
+          field: 'timeOptions',
+          cellRendererFramework: SelectCell,
+          cellRendererParams: {
+            setStateHandler: setTimeOption,
+            field: 'timeOptions'
+          }
+        },
+    */
+
     {
       headerName: 'Reminder',
       field: 'timeOptions',
-      cellRendererFramework: SelectCell,
+      cellRendererFramework: TimeOptionCell,
       cellRendererParams: {
         setStateHandler: setTimeOption,
-        field: 'timeOptions'
+        setDelete: addTimeOptionsToDelete,
+        field: 'timeOptions',
+        typeId: notificationTypeId
       }
     },
     {
@@ -158,7 +211,7 @@ const NotiPreference: React.FC = () => {
   };
 
   const submitHandler = () => {
-    if (!hasChanges) return;
+    //if (!hasChanges) return;
 
     const preferences: NotificationPreference[] =
       configurableNotificationConfigs.current?.map(config => {
@@ -169,7 +222,28 @@ const NotiPreference: React.FC = () => {
       }) ?? [];
     dispatch(updateNotificationPreferences(preferences, session.courseRegId!));
 
-    setHasChanges(false);
+    const allTimeOptions: TimeOption[] = [];
+    notificationConfig.current?.forEach(curr => {
+      const timeOptions = curr.timeOptions.map(timeOption => {
+        return {
+          ...timeOption,
+          notificationConfigId: curr.id
+        };
+      });
+      allTimeOptions.push(...timeOptions);
+    });
+
+    if (allTimeOptions.length > 0) {
+      dispatch(updateTimeOptions(allTimeOptions));
+    }
+
+    if (timeOptionsToDelete.length > 0) {
+      dispatch(deleteTimeOptions(timeOptionsToDelete.map(timeOption => timeOption.id)));
+      setTimeOptionsToDelete([]);
+    }
+    dispatch(updateNotificationConfigs(notificationConfig.current ?? []));
+
+    //setHasChanges(false);
   };
 
   const data = (

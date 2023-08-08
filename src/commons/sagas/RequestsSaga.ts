@@ -622,7 +622,7 @@ export const getAssessment = async (
     q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {
         entry[1] = (window as any).eval(entry[1]);
-      } catch (e) { }
+      } catch (e) {}
       return entry;
     });
 
@@ -1076,7 +1076,8 @@ export const putAssessmentConfigs = async (
   overrideCourseId?: number
 ): Promise<Response | null> => {
   const resp = await request(
-    `${overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
+    `${
+      overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
     }/admin/config/assessment_configs`,
     'PUT',
     {
@@ -1163,18 +1164,21 @@ export const removeAssessmentConfig = async (
   return resp;
 };
 
-
 export const removeTimeOptions = async (
   tokens: Tokens,
   timeOptionIds: number[]
 ): Promise<Response | null> => {
-  const resp = await request(`courses/${courseIdWithoutPrefix()}/admin/notifications/options`, 'DELETE', {
-    ...tokens,
-    body: timeOptionIds,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/admin/notifications/options`,
+    'DELETE',
+    {
+      ...tokens,
+      body: timeOptionIds,
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
 
   return resp;
 };
@@ -1198,10 +1202,14 @@ export const getNotificationConfigs = async (
   tokens: Tokens
 ): Promise<NotificationConfiguration[] | null> => {
   //const resp = await request(`notifications/config/${courseIdWithoutPrefix()}`, 'GET', {
-  const resp = await request(`courses/${courseIdWithoutPrefix()}/admin/notifications/config`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/admin/notifications/config`,
+    'GET',
+    {
+      ...tokens,
+      shouldRefresh: true
+    }
+  );
   if (!resp || !resp.ok) {
     return null;
   }
@@ -1214,10 +1222,14 @@ export const getConfigurableNotificationConfigs = async (
   courseRegId: number
 ): Promise<NotificationConfiguration[] | null> => {
   //const resp = await request(`notifications/config/user/${courseRegId}`, 'GET', {
-  const resp = await request(`courses/${courseIdWithoutPrefix()}/notifications/config/user/${courseRegId}`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/notifications/config/user/${courseRegId}`,
+    'GET',
+    {
+      ...tokens,
+      shouldRefresh: true
+    }
+  );
   if (!resp || !resp.ok) {
     return null;
   }
@@ -1247,21 +1259,24 @@ export const postNotificationPreference = async (
   return resp;
 };
 
-
 export const putNotificationPreferences = async (
   tokens: Tokens,
   notiPrefs: NotificationPreference[],
   courseRegId: number
 ): Promise<Response | null> => {
-  const resp = await request(`courses/${courseIdWithoutPrefix()}/notifications/preferences`, 'PUT', {
-    ...tokens,
-    body: notiPrefs.map(pref => {
-      return { ...pref, courseRegId: courseRegId };
-    }),
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/notifications/preferences`,
+    'PUT',
+    {
+      ...tokens,
+      body: notiPrefs.map(pref => {
+        return { ...pref, courseRegId: courseRegId };
+      }),
+      noHeaderAccept: true,
+      shouldAutoLogout: false,
+      shouldRefresh: true
+    }
+  );
 
   return resp;
 };
@@ -1520,10 +1535,11 @@ export const request = async (
       showWarningMessage(
         opts.errorMessage
           ? opts.errorMessage
-          : `Error while communicating with backend: ${resp.status} ${resp.statusText}${resp.status === 401 || resp.status === 403
-            ? '; try logging in again, after manually saving any work.'
-            : ''
-          }`
+          : `Error while communicating with backend: ${resp.status} ${resp.statusText}${
+              resp.status === 401 || resp.status === 403
+                ? '; try logging in again, after manually saving any work.'
+                : ''
+            }`
       );
       return null;
     }
@@ -1576,8 +1592,8 @@ const computeGradingStatus = (
     ? numGraded === 0
       ? 'none'
       : numGraded === numQuestions
-        ? 'graded'
-        : 'grading'
+      ? 'graded'
+      : 'grading'
     : 'excluded';
 
 const courseId: () => string = () => {

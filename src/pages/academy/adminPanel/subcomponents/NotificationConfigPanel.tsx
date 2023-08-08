@@ -18,7 +18,6 @@ import BooleanCell from './assessmentConfigPanel/BooleanCell';
 //import SelectCell from './notificationConfigPanel/SelectCell';
 import TimeOptionCell from './notificationConfigPanel/TimeOptionCell';
 
-
 const NotificationConfigPanel = () => {
   const gridApi = React.useRef<GridApi>();
 
@@ -95,12 +94,10 @@ const NotificationConfigPanel = () => {
     return params.data!.notificationType.forStaff ? 'Staff' : 'Student';
   };
 
-
   const notificationTypeId: ValueFormatterFunc<NotificationConfiguration> = params => {
     const id = params.data!.notificationType?.id || 0;
     return String(id);
   };
-
 
   const columnDefs = [
     {
@@ -111,7 +108,7 @@ const NotificationConfigPanel = () => {
     },
     {
       headerName: 'Notification Type',
-      field: 'notificationType.name',
+      field: 'notificationType.name'
     },
     {
       headerName: 'Recipients',
@@ -139,7 +136,6 @@ const NotificationConfigPanel = () => {
         typeId: notificationTypeId
       }
     },
-
 
     /*
     {

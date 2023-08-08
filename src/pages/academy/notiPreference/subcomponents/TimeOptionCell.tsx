@@ -46,7 +46,7 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
       const newTimeOption: TimeOption = {
         id: -1,
         minutes: parseFloat(value as string) * 60,
-        isDefault: true
+        isDefault: false
       };
 
       setValues([...values, value]);
@@ -58,11 +58,12 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
 
   return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
   /*
-if (props.typeId === '1' || props.typeId === '2') {
-  return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
-} else {
-  return <span>NA</span>;
-}
-*/
+    if (props.typeId === '1' || props.typeId === '2') {
+      return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
+    } else {
+      return <span>NA</span>;
+    }
+    */
 };
+
 export default TimeOptionCell;
