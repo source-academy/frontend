@@ -95,11 +95,11 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       }
 
       if (chapter <= Chapter.SOURCE_2 && newTabId === SideContentType.substVisualizer) {
-        toggleStoriesUsingSubst(true, env);
+        dispatch(toggleStoriesUsingSubst(true, env));
       }
 
       if (prevTabId === SideContentType.substVisualizer) {
-        toggleStoriesUsingSubst(false, env);
+        dispatch(toggleStoriesUsingSubst(false, env));
       }
 
       setSelectedTab(newTabId);
