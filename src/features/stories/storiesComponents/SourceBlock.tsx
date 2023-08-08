@@ -1,6 +1,7 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useRef, useState } from 'react';
+import { Chapter } from 'js-slang/dist/types';
+import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
@@ -27,16 +28,16 @@ export type SourceBlockProps = {
 };
 
 /**
- * Parses the commandsString and provides arguments if it exists
- * commandsString should be in the format of -key1-key2-key3:argifexists-key4
- * If multiple same key in the commandsString, it will take the first arg
+ * Parses the metadata and provides arguments if it exists
+ * metadata should be in the format of -key1-key2-key3:argifexists-key4
+ * If multiple same key in the metadata, it will take the first arg
  * @param key key to look out for
- * @param commandsString commandsString
+ * @param metadata metadata
  * @returns string of args if key is found and args exists, '' if key is found without args, undefined if key is not found
  */
-function parseCommands(key: string, commandsString: string): string | undefined {
-  for (const command of commandsString.split('-')) {
-    const keyArgs = command.split(':');
+function parseMetadata(key: string, metadata: string): string | undefined {
+  for (const keyValuePair of metadata.split('-')) {
+    const keyArgs = keyValuePair.split(':');
     if (keyArgs[0] === key) {
       return keyArgs.length > 1 ? keyArgs[1] : '';
     }
@@ -53,11 +54,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
   // setting env
-  const commandsEnv = parseCommands('env', props.commands);
-  let env = DEFAULT_ENV;
-  if (commandsEnv !== undefined) {
-    env = envList.includes(commandsEnv) ? commandsEnv : DEFAULT_ENV;
-  }
+  const commandsEnv = parseMetadata('env', props.commands);
+  const env =
+    commandsEnv === undefined
+      ? DEFAULT_ENV
+      : envList.includes(commandsEnv)
+      ? commandsEnv
+      : DEFAULT_ENV;
 
   const chapter = useTypedSelector(
     store => store.stories.envs[env]?.context.chapter || Constants.defaultSourceChapter
@@ -65,6 +68,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const variant = useTypedSelector(
     store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
+
+  useEffect(() => {
+    setCode(props.content);
+  }, [props.content]);
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
 
@@ -76,29 +83,20 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       prevTabId: SideContentType,
       event: React.MouseEvent<HTMLElement>
     ) => {
+      // TODO: Migrate relevant updated logic from Playground component
       if (newTabId === prevTabId) {
         return;
       }
 
-      /**
-       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-       */
-      if (
-        !(
-          prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun
-        )
-      ) {
-        if (chapter <= 2 && newTabId === SideContentType.substVisualizer) {
-          toggleStoriesUsingSubst(true, env);
-        }
-
-        if (prevTabId === SideContentType.substVisualizer) {
-          toggleStoriesUsingSubst(false, env);
-        }
-
-        setSelectedTab(newTabId);
+      if (chapter <= Chapter.SOURCE_2 && newTabId === SideContentType.substVisualizer) {
+        toggleStoriesUsingSubst(true, env);
       }
+
+      if (prevTabId === SideContentType.substVisualizer) {
+        toggleStoriesUsingSubst(false, env);
+      }
+
+      setSelectedTab(newTabId);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
