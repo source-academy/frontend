@@ -15,6 +15,7 @@ import {
   evalStory,
   toggleStoriesUsingSubst
 } from 'src/features/stories/StoriesActions';
+import { dataVisualizerTab } from 'src/pages/playground/PlaygroundTabs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
@@ -107,14 +108,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       ? styliseSublanguage(chapter, variant)
       : env + ' | ' + styliseSublanguage(chapter, variant);
 
-  // TODO: Add data visualiser and env visualiser tabs
-
-  // const dataVisualizerTab: SideContentTab = {
-  //   label: 'Data Visualizer',
-  //   iconName: IconNames.EYE_OPEN,
-  //   body: <SideContentDataVisualizer />,
-  //   id: SideContentType.dataVisualizer
-  // };
+  // TODO: Add env visualiser tabs and shift to language config
 
   // const envVisualizerTab: SideContentTab = {
   //   label: 'Env Visualizer',
@@ -168,10 +162,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     //   return [...tabs, dataVisualizerTab];
     // }
 
-    // if (chapter >= 2) {
-    //   // Enable Data Visualizer for Source Chapter 2 and above
-    //   tabs.push(dataVisualizerTab);
-    // }
+    if (chapter >= Chapter.SOURCE_2) {
+      // Enable Data Visualizer for Source Chapter 2 and above
+      tabs.push(dataVisualizerTab);
+    }
     // if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
     //   // Enable Env Visualizer for Source Chapter 3 and above
     //   tabs.push(envVisualizerTab);
