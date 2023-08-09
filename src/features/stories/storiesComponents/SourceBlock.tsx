@@ -1,19 +1,26 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useRef, useState } from 'react';
+import { Chapter, Variant } from 'js-slang/dist/types';
+import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
-import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
+import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
 import ControlButton from 'src/commons/ControlButton';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { addHtmlConsoleError } from 'src/commons/workspace/WorkspaceActions';
 import {
   clearStoryEnv,
   evalStory,
   toggleStoriesUsingSubst
 } from 'src/features/stories/StoriesActions';
+import {
+  dataVisualizerTab,
+  makeHtmlDisplayTabFrom,
+  makeSubstVisualizerTabFrom
+} from 'src/pages/playground/PlaygroundTabs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
@@ -27,16 +34,16 @@ export type SourceBlockProps = {
 };
 
 /**
- * Parses the commandsString and provides arguments if it exists
- * commandsString should be in the format of -key1-key2-key3:argifexists-key4
- * If multiple same key in the commandsString, it will take the first arg
+ * Parses the metadata and provides arguments if it exists
+ * metadata should be in the format of -key1-key2-key3:argifexists-key4
+ * If multiple same key in the metadata, it will take the first arg
  * @param key key to look out for
- * @param commandsString commandsString
+ * @param metadata metadata
  * @returns string of args if key is found and args exists, '' if key is found without args, undefined if key is not found
  */
-function parseCommands(key: string, commandsString: string): string | undefined {
-  for (const command of commandsString.split('-')) {
-    const keyArgs = command.split(':');
+function parseMetadata(key: string, metadata: string): string | undefined {
+  for (const keyValuePair of metadata.split('-')) {
+    const keyArgs = keyValuePair.split(':');
     if (keyArgs[0] === key) {
       return keyArgs.length > 1 ? keyArgs[1] : '';
     }
@@ -53,11 +60,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
   // setting env
-  const commandsEnv = parseCommands('env', props.commands);
-  let env = DEFAULT_ENV;
-  if (commandsEnv !== undefined) {
-    env = envList.includes(commandsEnv) ? commandsEnv : DEFAULT_ENV;
-  }
+  const commandsEnv = parseMetadata('env', props.commands);
+  const env =
+    commandsEnv === undefined
+      ? DEFAULT_ENV
+      : envList.includes(commandsEnv)
+      ? commandsEnv
+      : DEFAULT_ENV;
 
   const chapter = useTypedSelector(
     store => store.stories.envs[env]?.context.chapter || Constants.defaultSourceChapter
@@ -65,6 +74,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const variant = useTypedSelector(
     store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
+
+  useEffect(() => {
+    setCode(props.content);
+  }, [props.content]);
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
 
@@ -76,29 +89,20 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       prevTabId: SideContentType,
       event: React.MouseEvent<HTMLElement>
     ) => {
+      // TODO: Migrate relevant updated logic from Playground component
       if (newTabId === prevTabId) {
         return;
       }
 
-      /**
-       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-       */
-      if (
-        !(
-          prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun
-        )
-      ) {
-        if (chapter <= 2 && newTabId === SideContentType.substVisualizer) {
-          toggleStoriesUsingSubst(true, env);
-        }
-
-        if (prevTabId === SideContentType.substVisualizer) {
-          toggleStoriesUsingSubst(false, env);
-        }
-
-        setSelectedTab(newTabId);
+      if (chapter <= Chapter.SOURCE_2 && newTabId === SideContentType.substVisualizer) {
+        dispatch(toggleStoriesUsingSubst(true, env));
       }
+
+      if (prevTabId === SideContentType.substVisualizer) {
+        dispatch(toggleStoriesUsingSubst(false, env));
+      }
+
+      setSelectedTab(newTabId);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -109,14 +113,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       ? styliseSublanguage(chapter, variant)
       : env + ' | ' + styliseSublanguage(chapter, variant);
 
-  // TODO: Add data visualiser and env visualiser tabs
-
-  // const dataVisualizerTab: SideContentTab = {
-  //   label: 'Data Visualizer',
-  //   iconName: IconNames.EYE_OPEN,
-  //   body: <SideContentDataVisualizer />,
-  //   id: SideContentType.dataVisualizer
-  // };
+  // TODO: Add env visualiser tabs and shift to language config
 
   // const envVisualizerTab: SideContentTab = {
   //   label: 'Env Visualizer',
@@ -125,69 +122,44 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   //   id: SideContentType.envVisualizer
   // };
 
-  // const processStepperOutput = (output: InterpreterOutput[]) => {
-  //   const editorOutput = output[0];
-  //   if (
-  //     editorOutput &&
-  //     editorOutput.type === 'result' &&
-  //     editorOutput.value instanceof Array &&
-  //     editorOutput.value[0] === Object(editorOutput.value[0]) &&
-  //     isStepperOutput(editorOutput.value[0])
-  //   ) {
-  //     return editorOutput.value;
-  //   } else {
-  //     return [];
-  //   }
-  // };
-
   const tabs = React.useMemo(() => {
     const tabs: SideContentTab[] = [];
 
     // TODO: Restore logic post refactor
 
-    // // For HTML Chapter, HTML Display tab is added only after code is run
-    // if (chapter === Chapter.HTML) {
-    //   if (output.length > outputIndex && output[outputIndex].type === 'result') {
-    //     tabs.push({
-    //       label: 'HTML Display',
-    //       iconName: IconNames.MODAL,
-    //       body: (
-    //         <SideContentHtmlDisplay
-    //           content={(output[outputIndex] as ResultOutput).value}
-    //           handleAddHtmlConsoleError={errorMsg =>
-    //             dispatch(addHtmlConsoleError(errorMsg, 'stories', true))
-    //           }
-    //         />
-    //       ),
-    //       id: SideContentType.htmlDisplay
-    //     });
-    //   }
-    //   return tabs;
-    // }
+    // For HTML Chapter, HTML Display tab is added only after code is run
+    if (chapter === Chapter.HTML) {
+      if (output.length > outputIndex && output[outputIndex].type === 'result') {
+        tabs.push(
+          makeHtmlDisplayTabFrom(output[outputIndex] as ResultOutput, errorMsg =>
+            dispatch(addHtmlConsoleError(errorMsg, 'stories', env))
+          )
+        );
+      }
+      return tabs;
+    }
 
     // // (TEMP) Remove tabs for fullJS until support is integrated
     // if (chapter === Chapter.FULL_JS) {
     //   return [...tabs, dataVisualizerTab];
     // }
 
-    // if (chapter >= 2) {
-    //   // Enable Data Visualizer for Source Chapter 2 and above
-    //   tabs.push(dataVisualizerTab);
-    // }
+    if (chapter >= Chapter.SOURCE_2) {
+      // Enable Data Visualizer for Source Chapter 2 and above
+      tabs.push(dataVisualizerTab);
+    }
     // if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
     //   // Enable Env Visualizer for Source Chapter 3 and above
     //   tabs.push(envVisualizerTab);
     // }
 
-    // if (chapter <= 2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE)) {
-    //   // Enable Subst Visualizer only for default Source 1 & 2
-    //   tabs.push({
-    //     label: 'Stepper',
-    //     iconName: IconNames.FLOW_REVIEW,
-    //     body: <SideContentSubstVisualizer content={processStepperOutput(output)} />,
-    //     id: SideContentType.substVisualizer
-    //   });
-    // }
+    if (
+      chapter <= Chapter.SOURCE_2 &&
+      (variant === Variant.DEFAULT || variant === Variant.NATIVE)
+    ) {
+      // Enable Subst Visualizer only for default Source 1 & 2
+      tabs.push(makeSubstVisualizerTabFrom(output));
+    }
 
     return tabs;
     // eslint-disable-next-line react-hooks/exhaustive-deps
