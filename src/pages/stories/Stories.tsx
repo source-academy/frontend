@@ -139,9 +139,9 @@ const Stories: React.FC = () => {
               )}
             storyActions={story => {
               const hasWritePermissions =
+                storiesUserId === story.authorId ||
                 storiesRole === StoriesRole.Moderator ||
-                storiesRole === StoriesRole.Admin ||
-                storiesUserId === story.authorId;
+                storiesRole === StoriesRole.Admin;
               return (
                 <StoryActions
                   storyId={story.id}
