@@ -1,7 +1,7 @@
 import { h } from 'hastscript';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { defaultHandlers, toHast } from 'mdast-util-to-hast';
-import { Options as MdastToHastConverterOptions } from 'mdast-util-to-hast/lib';
+import { MdastNodes, Options as MdastToHastConverterOptions } from 'mdast-util-to-hast/lib';
 import React from 'react';
 import { IEditorProps } from 'react-ace';
 import rehypeReact from 'rehype-react';
@@ -147,13 +147,11 @@ export const scrollSync = (editor: IEditorProps, preview: HTMLElement) => {
 // Thus, we create `HandlerType` to have type safety for the
 // `node` parameter based on the actual mdast node type.
 type HandlerOption = NonNullable<MdastToHastConverterOptions['handlers']>;
+type AllowedMdElements = Exclude<keyof typeof defaultHandlers, 'toml'>;
+type MdastNodeType<key extends AllowedMdElements> = Extract<MdastNodes, { type: key }>;
 type HandlerType = {
-  [key in keyof typeof defaultHandlers]?: (
-    ...args: ReplaceTypeAtIndex<
-      Parameters<HandlerOption[key]>,
-      1,
-      Parameters<(typeof defaultHandlers)[key]>[1]
-    >
+  [key in AllowedMdElements]?: (
+    ...args: ReplaceTypeAtIndex<Parameters<HandlerOption[key]>, 1, MdastNodeType<key>>
   ) => ReturnType<HandlerOption[key]>;
 };
 
