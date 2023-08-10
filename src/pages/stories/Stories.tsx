@@ -27,6 +27,8 @@ const Stories: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const isLoggedIn = useTypedSelector(state => !!state.stories.userId);
+
   const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
   const handleDeleteStory = useCallback(
     async (id: number) => {
@@ -109,9 +111,11 @@ const Stories: React.FC = () => {
           <Flex justifyContent="justify-between">
             <Flex justifyContent="justify-start" spaceX="space-x-6">
               <Title>All Stories</Title>
-              <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
-                Add Story
-              </BpButton>
+              {isLoggedIn && (
+                <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
+                  Add Story
+                </BpButton>
+              )}
             </Flex>
             <TextInput
               maxWidth="max-w-xl"
