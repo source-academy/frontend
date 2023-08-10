@@ -6,6 +6,7 @@ import { Card, Flex, TextInput, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -27,7 +28,8 @@ const Stories: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isLoggedIn = useTypedSelector(state => !!state.stories.userId);
+  const { userId: storiesUserId, role: storiesRole } = useTypedSelector(state => state.stories);
+  const isLoggedIn = !!storiesUserId;
 
   const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
   const handleDeleteStory = useCallback(
@@ -135,20 +137,26 @@ const Stories: React.FC = () => {
                   // Always show pinned stories
                   story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
               )}
-            storyActions={story => (
-              <StoryActions
-                storyId={story.id}
-                handleDeleteStory={handleDeleteStory}
-                handleTogglePin={handleTogglePinStory}
-                handleMovePinUp={handleMovePinUp}
-                handleMovePinDown={handleMovePinDown}
-                canView
-                canEdit
-                canDelete
-                canPin
-                isPinned={story.isPinned}
-              />
-            )}
+            storyActions={story => {
+              const hasWritePermissions =
+                storiesRole === StoriesRole.Moderator ||
+                storiesRole === StoriesRole.Admin ||
+                storiesUserId === story.authorId;
+              return (
+                <StoryActions
+                  storyId={story.id}
+                  handleDeleteStory={handleDeleteStory}
+                  handleTogglePin={handleTogglePinStory}
+                  handleMovePinUp={handleMovePinUp}
+                  handleMovePinDown={handleMovePinDown}
+                  canView // everyone has view permissions, even anonymous users
+                  canEdit={hasWritePermissions}
+                  canDelete={hasWritePermissions}
+                  canPin={hasWritePermissions}
+                  isPinned={story.isPinned}
+                />
+              );
+            }}
           />
         </Card>
       }
