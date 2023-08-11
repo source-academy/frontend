@@ -106,9 +106,10 @@ export const StoriesReducer: Reducer<StoriesState> = (
         }
       };
     case EVAL_STORY_SUCCESS:
+      const execType = state.envs[env].context.executionMethod;
       const newOutputEntry: Partial<ResultOutput> = {
         type: action.payload.type as 'result' | undefined,
-        value: stringify(action.payload.value)
+        value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
       };
       lastOutput = state.envs[env].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
@@ -177,7 +178,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
               lastDebuggerResult: action.payload.lastDebuggerResult,
               code: action.payload.code,
               context: action.payload.context,
-              workspaceLocation: 'stories' // TODO: Check again
+              workspaceLocation: 'stories'
             }
           }
         }
