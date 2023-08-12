@@ -57,27 +57,27 @@ type TabPanelProps = {
 };
 
 const TabPanel: React.FC<TabPanelProps> = ({ selectedTabId, onChange, tabs }) => (
-  <Tabs selectedTabId={selectedTabId} onChange={(newTabId) => onChange(newTabId as CourseHelpTextEditorTab | DefaultLlmPromptTab)} className="module-help-text-tabs">
+  <Tabs
+    selectedTabId={selectedTabId}
+    onChange={newTabId => onChange(newTabId as CourseHelpTextEditorTab | DefaultLlmPromptTab)}
+    className="module-help-text-tabs"
+  >
     {tabs.map(tab => (
       <Tab id={tab.id.toString()} title={tab.title} key={tab.id.toString()} />
     ))}
-    {tabs.map(tab =>
-      selectedTabId === tab.id && tab.panel
-    )}
+    {tabs.map(tab => selectedTabId === tab.id && tab.panel)}
   </Tabs>
 );
 
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
-  const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
-    React.useState<CourseHelpTextEditorTab | DefaultLlmPromptTab>(
-      CourseHelpTextEditorTab.WRITE
-    );
+  const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] = React.useState<
+    CourseHelpTextEditorTab | DefaultLlmPromptTab
+  >(CourseHelpTextEditorTab.WRITE);
 
-  const [defaultLlmPromptSelectedTab, setDefaultLlmPromptSelectedTab] =
-    React.useState<CourseHelpTextEditorTab | DefaultLlmPromptTab>(
-      DefaultLlmPromptTab.WRITE
-    );
+  const [defaultLlmPromptSelectedTab, setDefaultLlmPromptSelectedTab] = React.useState<
+    CourseHelpTextEditorTab | DefaultLlmPromptTab
+  >(DefaultLlmPromptTab.WRITE);
 
   const {
     courseName,
@@ -154,7 +154,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
               tabs={[
                 {
                   id: CourseHelpTextEditorTab.WRITE,
-                  title: "Write",
+                  title: 'Write',
                   panel: (
                     <TextArea
                       id="moduleHelpText"
@@ -172,7 +172,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
                 },
                 {
                   id: CourseHelpTextEditorTab.PREVIEW,
-                  title: "Preview",
+                  title: 'Preview',
                   panel: (
                     <div className="input-markdown">
                       <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
@@ -195,7 +195,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
               tabs={[
                 {
                   id: DefaultLlmPromptTab.WRITE,
-                  title: "Write",
+                  title: 'Write',
                   panel: (
                     <TextArea
                       id="defaultLlmPrompt"
@@ -213,7 +213,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
                 },
                 {
                   id: DefaultLlmPromptTab.PREVIEW,
-                  title: "Preview",
+                  title: 'Preview',
                   panel: (
                     <div className="input-markdown">
                       <Markdown content={defaultLlmPrompt || ''} openLinksInNewWindow />
