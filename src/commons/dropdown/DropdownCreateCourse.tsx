@@ -41,7 +41,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
-    defaultPrompt: ''
+    defaultLlmPrompt: ''
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
@@ -174,8 +174,8 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
           )}
         </FormGroup>
 
-        <FormGroup helperText="defaultPrompt" labelFor="defaultPrompt">
-          <Text tagName="span">Default Prompt&nbsp;</Text>
+        <FormGroup helperText="defaultLlmPrompt" labelFor="defaultLlmPrompt">
+          <Text tagName="span">Default LLM Prompt&nbsp;</Text>
           <Text tagName="span" className="optional-text">
             (optional)
           </Text>
@@ -189,21 +189,21 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
           </Tabs>
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && (
             <TextArea
-              id="defaultPrompt"
+              id="defaultLlmPrompt"
               className="input-textarea"
               fill={true}
-              value={courseConfig.defaultPrompt}
+              value={courseConfig.defaultLlmPrompt}
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  defaultPrompt: e.target.value
+                  defaultLlmPrompt: e.target.value
                 })
               }
             />
           )}
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
             <div className="input-markdown">
-              <Markdown content={courseConfig.defaultPrompt || ''} openLinksInNewWindow />
+              <Markdown content={courseConfig.defaultLlmPrompt || ''} openLinksInNewWindow />
             </div>
           )}
         </FormGroup>

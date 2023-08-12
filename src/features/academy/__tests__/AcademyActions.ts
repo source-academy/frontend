@@ -34,7 +34,7 @@ test('createCourse generates correct action object', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text',
-    defaultPrompt: 'default prompt'
+    defaultLlmPrompt: 'default LLM prompt'
   };
 
   const action = createCourse(courseConfig);
