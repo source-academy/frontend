@@ -107,7 +107,7 @@ export type SessionState = {
   readonly sourceChapter?: number;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
-  readonly defaultPrompt?: string;
+  readonly defaultLlmPrompt?: string;
   readonly assetsPrefix?: string;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
@@ -123,7 +123,6 @@ export type SessionState = {
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
-  readonly gradingOverviewsTest?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
   readonly notifications: Notification[];
   readonly googleUser?: string;
@@ -174,7 +173,7 @@ export type CourseConfiguration = {
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
-  defaultPrompt: string;
+  defaultLlmPrompt: string;
   assetsPrefix: string;
 };
 

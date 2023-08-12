@@ -12,7 +12,7 @@ type DialogProps = {
 };
 
 const DropdownPrompt: React.FC<DialogProps> = props => {
-  const defaultPrompt = useTypedSelector(store => store.session.defaultPrompt);
+  const defaultLlmPrompt = useTypedSelector(store => store.session.defaultLlmPrompt);
 
   return (
     <Dialog
@@ -24,8 +24,8 @@ const DropdownPrompt: React.FC<DialogProps> = props => {
       title="Help"
     >
       <div className={Classes.DIALOG_BODY}>
-        {defaultPrompt ? (
-          <Markdown content={defaultPrompt} openLinksInNewWindow />
+        {defaultLlmPrompt ? (
+          <Markdown content={defaultLlmPrompt} openLinksInNewWindow />
         ) : (
           <>
             <p>
