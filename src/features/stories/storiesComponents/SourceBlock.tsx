@@ -81,8 +81,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
 
-  const usingSubst = useTypedSelector(store => store.stories.envs[env]?.usingSubst || false);
-
   const onChangeTabs = React.useCallback(
     (
       newTabId: SideContentType,
@@ -113,6 +111,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   //   id: SideContentType.envVisualizer
   // };
 
+  const usingSubst = selectedTab === SideContentType.substVisualizer;
   const outputTab: SideContentTab = {
     label: 'Normal Output',
     iconName: IconNames.PLAY,
@@ -121,7 +120,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
         <div className="Repl" style={{ margin: 0 }}>
           <div className="repl-output-parent">
             <p className={Classes.RUNNING_TEXT}>Output:</p>
-            <Output output={output[outputIndex]} usingSubst={usingSubst || false} />
+            <Output output={output[outputIndex]} usingSubst={usingSubst} />
           </div>
         </div>
       ) : (
