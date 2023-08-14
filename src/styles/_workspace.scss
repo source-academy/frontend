@@ -368,6 +368,10 @@ $code-color-error: #ff4444;
     }
   }
 
+  .#{$ns}-tab-indicator-wrapper {
+    margin-top: 8px;
+  }
+
   .side-content-tabs {
     flex: 1 1 auto;
     height: 100%;

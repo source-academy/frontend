@@ -6702,7 +6702,7 @@ gpu-mock.js@^1.3.0:
   resolved "https://registry.yarnpkg.com/gpu-mock.js/-/gpu-mock.js-1.3.1.tgz#f7deaa09da3f672762eda944ecf948fd2c4b1490"
   integrity sha512-+lbp8rQ0p1nTa6Gk6HoLiw4yM6JTpql82U+nCF3sZbX4FJWP9PzzF1018dW8K+pbmqRmhLHbn6Bjc6i6tgUpbA==
 
-gpu.js@^2.10.4:
+gpu.js@^2.16.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/gpu.js/-/gpu.js-2.16.0.tgz#35531f8ee79292b71a454455e7bf0aaf6693182a"
   integrity sha512-ZKmWdRXi3F/9nim5ew2IPXZaMlSyqtMtVC8Itobjl+qYUgUqcBHxu8WKqK0AqIyjBVBl7A5ORo4Db2hzgrPd4A==
@@ -8190,10 +8190,10 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.31:
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.31.tgz#5dc79a3e0a4d0770fbddcafd5e0d278a4d8f6e00"
-  integrity sha512-nk8g6pEIC5fOO3LRa22tE6NK8Rseoefk5J9lQG+NV2HKPY0aw4ll45rA+CugtocaLARFw6lp9jK6ynsqM2XL5w==
+js-slang@^1.0.33:
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.33.tgz#d5eafda47c02a9486db6a2d512fbb38816940598"
+  integrity sha512-b3W/WyNUT1stLd8a+sBwf9FU/r6q/KS6MBONtOMRDqnug0EqcprS40hj6Rhq+hr7y1GfOGYTMam8MQC1Tk/rBw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -8204,7 +8204,7 @@ js-slang@^1.0.31:
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
     astring "^1.4.3"
-    gpu.js "^2.10.4"
+    gpu.js "^2.16.0"
     js-base64 "^3.7.5"
     lodash "^4.17.20"
     node-getopt "^0.3.2"
