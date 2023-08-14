@@ -90,6 +90,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       event: React.MouseEvent<HTMLElement>
     ) => {
       // TODO: Migrate relevant updated logic from Playground component
+      // TODO: Use language config for source chapter.
       dispatch(toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env));
 
       setSelectedTab(newTabId);
