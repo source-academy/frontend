@@ -55,7 +55,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
+  const [selectedTab, setSelectedTab] = useState(SideContentType.storiesRun);
 
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
@@ -81,8 +81,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
 
-  const usingSubst = useTypedSelector(store => store.stories.envs[env]?.usingSubst || false);
-
   const onChangeTabs = React.useCallback(
     (
       newTabId: SideContentType,
@@ -90,17 +88,8 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       event: React.MouseEvent<HTMLElement>
     ) => {
       // TODO: Migrate relevant updated logic from Playground component
-      if (newTabId === prevTabId) {
-        return;
-      }
-
-      if (chapter <= Chapter.SOURCE_2 && newTabId === SideContentType.substVisualizer) {
-        dispatch(toggleStoriesUsingSubst(true, env));
-      }
-
-      if (prevTabId === SideContentType.substVisualizer) {
-        dispatch(toggleStoriesUsingSubst(false, env));
-      }
+      // TODO: Use language config for source chapter.
+      dispatch(toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env));
 
       setSelectedTab(newTabId);
     },
@@ -122,8 +111,26 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   //   id: SideContentType.envVisualizer
   // };
 
+  const usingSubst = selectedTab === SideContentType.substVisualizer;
+  const outputTab: SideContentTab = {
+    label: 'Normal Output',
+    iconName: IconNames.PLAY,
+    body:
+      output.length > outputIndex ? (
+        <div className="Repl" style={{ margin: 0 }}>
+          <div className="repl-output-parent">
+            <p className={Classes.RUNNING_TEXT}>Output:</p>
+            <Output output={output[outputIndex]} usingSubst={usingSubst} />
+          </div>
+        </div>
+      ) : (
+        <p className={Classes.RUNNING_TEXT}>Click "Run" in the top left to run some code!</p>
+      ),
+    id: SideContentType.storiesRun
+  };
+
   const tabs = React.useMemo(() => {
-    const tabs: SideContentTab[] = [];
+    const tabs: SideContentTab[] = [outputTab];
 
     // TODO: Restore logic post refactor
 
@@ -158,7 +165,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       (variant === Variant.DEFAULT || variant === Variant.NATIVE)
     ) {
       // Enable Subst Visualizer only for default Source 1 & 2
-      tabs.push(makeSubstVisualizerTabFrom(output));
+      tabs.push(makeSubstVisualizerTabFrom(output.slice(outputIndex)));
     }
 
     return tabs;
@@ -177,6 +184,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   };
 
   const execEvaluate = () => {
+    // We call onChangeTabs with the current tab when the run
+    // button is clicked. This is a hotfix for incorrect execution
+    // method because of the fact that execution logic is handled
+    // by the environment setting, but the currently showing tab
+    // is handled by the component setting.
+    onChangeTabs(selectedTab, selectedTab, {} as any);
+
     dispatch(evalStory(env, code));
     setOutputIndex(output.length);
   };
@@ -238,14 +252,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   }}
                 />
               </Card>
-              <div className="Repl" style={{ margin: 0 }}>
-                {output.length > outputIndex ? (
-                  <div className="repl-output-parent">
-                    <p style={{ marginBlock: 6 }}>Output:</p>
-                    <Output output={output[outputIndex]} usingSubst={usingSubst || false} />
-                  </div>
-                ) : null}
-              </div>
               <div>
                 <StoriesSideContent {...sideContentProps} />
               </div>
