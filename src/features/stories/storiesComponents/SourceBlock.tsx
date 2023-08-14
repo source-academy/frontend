@@ -55,7 +55,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
+  const [selectedTab, setSelectedTab] = useState(SideContentType.mobileEditorRun);
 
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
