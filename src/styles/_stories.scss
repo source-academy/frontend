@@ -8,6 +8,33 @@
     border-radius: 6px;
     overflow: hidden;
   }
+
+  .stories-side-content {
+    height: 100%;
+    overflow-y: auto;
+
+    .#{$ns}-card {
+      margin-top: 10px;
+
+      .#{$ns}-tabs {
+        width: 100%;
+
+        .#{$ns}-tab-list {
+          align-self: flex-start;
+
+          > *:not(:last-child) {
+            margin-right: 10px;
+          }
+        }
+
+        > .side-content-tab {
+          .side-content-text {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
 }
 
 .newUserblog {
