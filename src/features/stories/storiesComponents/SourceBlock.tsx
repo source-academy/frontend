@@ -191,6 +191,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   };
 
   const execEvaluate = () => {
+    // We call onChangeTabs with the current tab when the run
+    // button is clicked. This is a hotfix for incorrect execution
+    // method because of the fact that execution logic is handled
+    // by the environment setting, but the currently showing tab
+    // is handled by the component setting.
+    onChangeTabs(selectedTab, selectedTab, {} as any);
+
     dispatch(evalStory(env, code));
     setOutputIndex(output.length);
   };
