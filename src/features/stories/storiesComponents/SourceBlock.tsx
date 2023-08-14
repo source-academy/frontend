@@ -90,13 +90,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       event: React.MouseEvent<HTMLElement>
     ) => {
       // TODO: Migrate relevant updated logic from Playground component
-      if (chapter <= Chapter.SOURCE_2 && newTabId === SideContentType.substVisualizer) {
-        dispatch(toggleStoriesUsingSubst(true, env));
-      }
-
-      if (prevTabId === SideContentType.substVisualizer) {
-        dispatch(toggleStoriesUsingSubst(false, env));
-      }
+      dispatch(toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env));
 
       setSelectedTab(newTabId);
     },
