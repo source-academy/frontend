@@ -55,7 +55,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.mobileEditorRun);
+  const [selectedTab, setSelectedTab] = useState(SideContentType.storiesRun);
 
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
@@ -126,8 +126,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       ) : (
         <p className={Classes.RUNNING_TEXT}>Click "Run" in the top left to run some code!</p>
       ),
-    // FIXME: Abuse of mobileRunTab id
-    id: SideContentType.mobileEditorRun
+    id: SideContentType.storiesRun
   };
 
   const tabs = React.useMemo(() => {
