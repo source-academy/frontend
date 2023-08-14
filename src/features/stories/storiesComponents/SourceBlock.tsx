@@ -118,8 +118,26 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   //   id: SideContentType.envVisualizer
   // };
 
+  const outputTab: SideContentTab = {
+    label: 'Normal Output',
+    iconName: IconNames.PLAY,
+    body:
+      output.length > outputIndex ? (
+        <div className="Repl" style={{ margin: 0 }}>
+          <div className="repl-output-parent">
+            <p className={Classes.RUNNING_TEXT}>Output:</p>
+            <Output output={output[outputIndex]} usingSubst={usingSubst || false} />
+          </div>
+        </div>
+      ) : (
+        <p className={Classes.RUNNING_TEXT}>Click "Run" in the top left to run some code!</p>
+      ),
+    // FIXME: Abuse of mobileRunTab id
+    id: SideContentType.mobileEditorRun
+  };
+
   const tabs = React.useMemo(() => {
-    const tabs: SideContentTab[] = [];
+    const tabs: SideContentTab[] = [outputTab];
 
     // TODO: Restore logic post refactor
 
@@ -234,14 +252,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   }}
                 />
               </Card>
-              <div className="Repl" style={{ margin: 0 }}>
-                {output.length > outputIndex ? (
-                  <div className="repl-output-parent">
-                    <p style={{ marginBlock: 6 }}>Output:</p>
-                    <Output output={output[outputIndex]} usingSubst={usingSubst || false} />
-                  </div>
-                ) : null}
-              </div>
               <div>
                 <StoriesSideContent {...sideContentProps} />
               </div>
