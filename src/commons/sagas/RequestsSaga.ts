@@ -596,6 +596,28 @@ export const postAnswer = async (
 };
 
 /**
+ * POST /courses/{courseId}/assessments/question/{questionId}/answer
+ */
+export const checkAnswerLastModifiedAt = async (
+  id: number,
+  lastModifiedAt: string,
+  tokens: Tokens
+): Promise<boolean | null> => {
+  const resp = await request(`${courseId()}/assessments/question/${id}/answerLastModified`, 'POST', {
+    ...tokens,
+    body: {
+      lastModifiedAt: lastModifiedAt
+    },
+    noHeaderAccept: true
+  });
+  if (!resp) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const answerIsModified = await resp.json();
+  return answerIsModified.lastModified;
+};
+
+/**
  * POST /courses/{courseId}/assessments/{assessmentId}/submit
  */
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {

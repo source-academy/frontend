@@ -16,6 +16,7 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
@@ -26,7 +27,12 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { fetchAssessment, getTeam, submitAnswer } from '../application/actions/SessionActions';
+import {
+  checkAnswerLastModifiedAt,
+  fetchAssessment,
+  getTeam,
+  submitAnswer
+} from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -105,6 +111,7 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const { isMobileBreakpoint } = useResponsive();
@@ -155,6 +162,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleEditorUpdateBreakpoints,
     handleReplEval,
     handleSave,
+    handleCheckLastModifiedAt,
     handleUpdateHasUnsavedChanges
   } = useMemo(() => {
     return {
@@ -176,6 +184,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleCheckLastModifiedAt: (id: number, lastModifiedAt: string, saveAnswer: Function) =>
+        dispatch(checkAnswerLastModifiedAt(id, lastModifiedAt, saveAnswer)),
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
         dispatch(submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
@@ -582,8 +592,47 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
     const onClickReturn = () => navigate(listingPath);
 
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    const onClickSave = () => handleSave(question.id, editorTabs[0].value);
+    const onClickSave = () => {
+      if (isSaving) return;
+      setIsSaving(true);
+      checkLastModified();
+      setTimeout(() => {
+        setIsSaving(false);
+      }, 3000);
+    };
+
+    const checkLastModified = () => {
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      if (isTeamAssessment && question.type === QuestionTypes.programming) {
+        handleCheckLastModifiedAt(question.id, question.lastModifiedAt, saveClick);
+      }
+    };
+
+    const saveClick = async (modified: boolean) => {
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      if (isTeamAssessment && question.type === QuestionTypes.programming) {
+        if (modified) {
+          const confirm = await showSimpleConfirmDialog({
+            contents: (
+              <>
+                <p>Save answer?</p>
+                <p>Note: The changes made by your teammate will be lost.</p>
+              </>
+            ),
+            positiveIntent: 'danger',
+            positiveLabel: 'Save'
+          });
+
+          if (!confirm) {
+            return;
+          }
+        }
+      }
+      handleSave(question.id, editorTabs[0].value);
+      setTimeout(() => {
+        handleAssessmentFetch(props.assessmentId);
+      }, 1000);
+    };
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -637,7 +686,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     // Define the function to check if the Save button should be disabled
     const shouldDisableSaveButton = (): boolean | undefined => {
-      if (assessmentOverview?.maxTeamSize === 0) {
+      const isIndividualAssessment: boolean = assessmentOverview?.maxTeamSize === 0;
+      if (isIndividualAssessment) {
         return false;
       }
       return !teamFormationOverview;

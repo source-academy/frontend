@@ -20,6 +20,7 @@ import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
   BULK_UPLOAD_TEAM,
+  CHECK_ANSWER_LAST_MODIFIED_AT,
   CourseRegistration,
   CREATE_TEAM,
   DELETE_ASSESSMENT_CONFIG,
@@ -186,6 +187,17 @@ export const submitAnswer = (id: number, answer: string | number | ContestEntry[
   action(SUBMIT_ANSWER, {
     id,
     answer
+  });
+
+export const checkAnswerLastModifiedAt = (
+  id: number,
+  lastModifiedAt: string,
+  saveAnswer: Function
+) =>
+  action(CHECK_ANSWER_LAST_MODIFIED_AT, {
+    id,
+    lastModifiedAt,
+    saveAnswer
   });
 
 export const submitAssessment = (id: number) => action(SUBMIT_ASSESSMENT, id);

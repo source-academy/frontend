@@ -30,6 +30,7 @@ import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
   BULK_UPLOAD_TEAM,
+  CHECK_ANSWER_LAST_MODIFIED_AT,
   CourseConfiguration,
   CourseRegistration,
   CREATE_TEAM,
@@ -95,6 +96,7 @@ import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/Au
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
+  checkAnswerLastModifiedAt,
   deleteAssessment,
   deleteSourcecastEntry,
   deleteTeam,
@@ -375,6 +377,24 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(
+    CHECK_ANSWER_LAST_MODIFIED_AT,
+    function* (action: ReturnType<typeof actions.checkAnswerLastModifiedAt>): any {
+      const tokens: Tokens = yield selectTokens();
+      const questionId = action.payload.id;
+      const lastModifiedAt = action.payload.lastModifiedAt;
+      const saveAnswer = action.payload.saveAnswer;
+
+      const resp: boolean | null = yield call(
+        checkAnswerLastModifiedAt,
+        questionId,
+        lastModifiedAt,
+        tokens
+      );
+      saveAnswer(resp);
+    }
+  );
+
+  yield takeEvery(
     SUBMIT_ASSESSMENT,
     function* (action: ReturnType<typeof actions.submitAssessment>): any {
       const tokens: Tokens = yield selectTokens();
@@ -409,7 +429,7 @@ function* BackendSaga(): SagaIterator {
 
       const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
-        return; 
+        return;
       }
 
       const filterToGroup = action.payload;
@@ -425,26 +445,29 @@ function* BackendSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEW, function* (action: ReturnType<typeof actions.getTeam>) {
-    const tokens: Tokens = yield selectTokens();
-    const { assessmentId } = action.payload;
+  yield takeEvery(
+    FETCH_TEAM_FORMATION_OVERVIEW,
+    function* (action: ReturnType<typeof actions.getTeam>) {
+      const tokens: Tokens = yield selectTokens();
+      const { assessmentId } = action.payload;
 
-    const teamFormationOverview: TeamFormationOverview | null = yield call(
-      getTeamFormationOverview,
-      assessmentId,
-      tokens
-    );
-    if (teamFormationOverview) {
-      yield put(actions.updateTeamFormationOverview(teamFormationOverview));
+      const teamFormationOverview: TeamFormationOverview | null = yield call(
+        getTeamFormationOverview,
+        assessmentId,
+        tokens
+      );
+      if (teamFormationOverview) {
+        yield put(actions.updateTeamFormationOverview(teamFormationOverview));
+      }
     }
-  });
+  );
 
   yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEWS, function* () {
     const tokens: Tokens = yield selectTokens();
 
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
-      return; 
+      return;
     }
 
     const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
@@ -464,7 +487,7 @@ function* BackendSaga(): SagaIterator {
     // }
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
-      return; 
+      return;
     }
     const students: User[] | null = yield call(getStudents, tokens);
     if (students) {
@@ -502,7 +525,13 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { assessment, file, students } = action.payload;
 
-      const resp: Response | null = yield call(postUploadTeams, assessment.id, file, students, tokens);
+      const resp: Response | null = yield call(
+        postUploadTeams,
+        assessment.id,
+        file,
+        students,
+        tokens
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -1217,12 +1246,11 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(
     UPDATE_ASSESSMENT_OVERVIEWS,
     function* (action: ReturnType<typeof actions.updateAssessmentOverviews>): any {
-      
       const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
-        return; 
+        return;
       }
-      
+
       const assessmentOverviews: AssessmentOverview[] = action.payload;
       for (let i = 0; i < assessmentOverviews.length; i++) {
         const assessmentOverview = assessmentOverviews[i];

@@ -14,9 +14,10 @@ import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
 export const BULK_UPLOAD_TEAM = 'BULK_UPLOAD_TEAM';
+export const CHECK_ANSWER_LAST_MODIFIED_AT = 'CHECK_ANSWER_LAST_MODIFIED_AT';
 export const CREATE_TEAM = 'CREATE_TEAM';
 export const DELETE_TEAM = 'DELETE_TEAM';
-export const UPDATE_TEAM = 'UPDATE_TEAM'
+export const UPDATE_TEAM = 'UPDATE_TEAM';
 export const FETCH_AUTH = 'FETCH_AUTH';
 export const FETCH_USER_AND_COURSE = 'FETCH_USER_AND_COURSE';
 export const FETCH_COURSE_CONFIG = 'FETCH_COURSE_CONFIG';

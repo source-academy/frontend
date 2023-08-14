@@ -100,6 +100,7 @@ export type AssessmentConfiguration = {
 
 export interface IProgrammingQuestion extends BaseQuestion {
   answer: string | null;
+  lastModifiedAt: string;
   autogradingResults: AutogradingResult[];
   graderTemplate?: string;
   prepend: string;
@@ -250,6 +251,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
   return {
     autogradingResults: [],
     answer: '// [Marking Scheme]\n// 1 mark for correct answer',
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: 'Enter content here',
     id: 0,
     library: emptyLibrary(),
