@@ -56,13 +56,15 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
     }
   };
 
-  //return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
+  return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
+  /*
 
   if (props.typeId === '1' || props.typeId === '2') {
     return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
   } else {
     return <span>NA</span>;
   }
+  */
 
 };
 export default TimeOptionCell;

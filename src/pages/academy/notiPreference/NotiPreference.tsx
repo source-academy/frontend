@@ -67,6 +67,12 @@ const NotiPreference: React.FC = () => {
     });
   }, [session]);
 
+  React.useEffect(() => {
+    notificationConfig.current = cloneDeep(
+      session.notificationConfigs
+    ) as NotificationConfiguration[];
+  }, [session]);
+
   //新加的
   const [timeOptionsToDelete, setTimeOptionsToDelete] = useState<TimeOption[]>([]);
   const addTimeOptionsToDelete = (deletedElement: TimeOption) => {
