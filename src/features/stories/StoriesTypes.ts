@@ -60,6 +60,7 @@ export type StoriesEnvState = {
 
 type StoriesAuthState = {
   readonly userId?: number;
+  readonly userName?: string;
   readonly groupId?: number;
   readonly role?: StoriesRole;
 };

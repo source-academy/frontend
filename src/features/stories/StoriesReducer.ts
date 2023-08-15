@@ -213,7 +213,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
     case SET_CURRENT_STORIES_USER:
       return {
         ...state,
-        // TODO: Use action.payload.name
+        userName: action.payload.name,
         userId: action.payload.id
       };
     default:
