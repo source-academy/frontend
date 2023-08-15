@@ -20,7 +20,6 @@ import ContentDisplay from 'src/commons/ContentDisplay';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './subcomponents/BooleanCell';
-//import SelectCell from './subcomponents/SelectCell';
 import TimeOptionCell from './subcomponents/TimeOptionCell';
 
 const NotiPreference: React.FC = () => {
@@ -33,6 +32,12 @@ const NotiPreference: React.FC = () => {
   const dispatch = useDispatch();
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [hasChangesNotificationConfig, setHasChangesNotificationConfig] = useState(false);
+
+  const setNotificationConfig = (val: NotificationConfiguration[]) => {
+    notificationConfig.current = val;
+    setHasChangesNotificationConfig(true);
+  };
 
   const configurableNotificationConfigs = React.useRef<NotificationConfiguration[] | undefined>(
     session.configurableNotificationConfigs
@@ -72,6 +77,17 @@ const NotiPreference: React.FC = () => {
       setTimeOptionsToDelete(temp);
     }
   };
+  const setTimeOptions = (index: number, value: TimeOption[]) => {
+    const temp = [...(notificationConfig.current ?? [])];
+
+    temp[index] = {
+      ...temp[index],
+      timeOptions: value
+    };
+    setNotificationConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('timeOptions', value);
+    setHasChangesNotificationConfig(true);
+  };
 
   const notificationTypeId: ValueFormatterFunc<NotificationConfiguration> = params => {
     const id = params.data!.notificationType?.id || 0;
@@ -90,17 +106,6 @@ const NotiPreference: React.FC = () => {
     setHasChanges(true);
   };
 
-  const setTimeOption = (index: number, value: TimeOption) => {
-    const temp = [...(configurableNotificationConfigs.current ?? [])];
-
-    temp[index]['notificationPreference'].timeOptionId = value.id;
-
-    configurableNotificationConfigs.current = temp;
-    gridApi.current
-      ?.getDisplayedRowAtIndex(index)
-      ?.setDataValue('timeOptions', temp[index]['timeOptions']);
-    setHasChanges(true);
-  };
 
   const assessmentTypeFormatter: ValueFormatterFunc<NotificationConfiguration> = params => {
     return params.data!.assessmentConfig?.type || '-';
@@ -121,8 +126,10 @@ const NotiPreference: React.FC = () => {
 
     let result = '';
     for (const timeOption of timeOptions) {
-      result += getUserFriendlyText(timeOption);
-      result += ' ';
+      if (timeOption.isDefault) {
+        result += getUserFriendlyText(timeOption);
+        result += ' ';
+      }
     }
 
     return result;
@@ -149,40 +156,12 @@ const NotiPreference: React.FC = () => {
       field: 'timeOptions',
       valueFormatter: defaultTimeFormatter
     },
-    /*
-    {
-          headerName: 'Default Reminder Time(hours)',
-          field: 'timeOptions',
-          cellRendererFramework: TimeOptionCell,
-          cellRendererParams: {
-            setStateHandler: setTimeOptions,
-            setDelete: addTimeOptionsToDelete,
-            field: 'timeOptions',
-            typeId: notificationTypeId
-          }
-        },
-    
-    */
-
-    /*
-    之前的
-    {
-          headerName: 'Reminder',
-          field: 'timeOptions',
-          cellRendererFramework: SelectCell,
-          cellRendererParams: {
-            setStateHandler: setTimeOption,
-            field: 'timeOptions'
-          }
-        },
-    */
-
     {
       headerName: 'Reminder',
       field: 'timeOptions',
       cellRendererFramework: TimeOptionCell,
       cellRendererParams: {
-        setStateHandler: setTimeOption,
+        setStateHandler: setTimeOptions,
         setDelete: addTimeOptionsToDelete,
         field: 'timeOptions',
         typeId: notificationTypeId
@@ -211,39 +190,41 @@ const NotiPreference: React.FC = () => {
   };
 
   const submitHandler = () => {
-    //if (!hasChanges) return;
+    if (hasChanges) {
+      const preferences: NotificationPreference[] =
+        configurableNotificationConfigs.current?.map(config => {
+          return {
+            ...config.notificationPreference,
+            notificationConfigId: config.id
+          };
+        }) ?? [];
+      dispatch(updateNotificationPreferences(preferences, session.courseRegId!));
+      setHasChanges(false);
+    }
 
-    const preferences: NotificationPreference[] =
-      configurableNotificationConfigs.current?.map(config => {
-        return {
-          ...config.notificationPreference,
-          notificationConfigId: config.id
-        };
-      }) ?? [];
-    dispatch(updateNotificationPreferences(preferences, session.courseRegId!));
-
-    const allTimeOptions: TimeOption[] = [];
-    notificationConfig.current?.forEach(curr => {
-      const timeOptions = curr.timeOptions.map(timeOption => {
-        return {
-          ...timeOption,
-          notificationConfigId: curr.id
-        };
+    if (hasChangesNotificationConfig) {
+      setHasChangesNotificationConfig(false);
+      const allTimeOptions: TimeOption[] = [];
+      notificationConfig.current?.forEach(curr => {
+        const timeOptions = curr.timeOptions.map(timeOption => {
+          return {
+            ...timeOption,
+            notificationConfigId: curr.id
+          };
+        });
+        allTimeOptions.push(...timeOptions);
       });
-      allTimeOptions.push(...timeOptions);
-    });
 
-    if (allTimeOptions.length > 0) {
-      dispatch(updateTimeOptions(allTimeOptions));
+      if (allTimeOptions.length > 0) {
+        dispatch(updateTimeOptions(allTimeOptions));
+      }
+
+      if (timeOptionsToDelete.length > 0) {
+        dispatch(deleteTimeOptions(timeOptionsToDelete.map(timeOption => timeOption.id)));
+        setTimeOptionsToDelete([]);
+      }
+      dispatch(updateNotificationConfigs(notificationConfig.current ?? []));
     }
-
-    if (timeOptionsToDelete.length > 0) {
-      dispatch(deleteTimeOptions(timeOptionsToDelete.map(timeOption => timeOption.id)));
-      setTimeOptionsToDelete([]);
-    }
-    dispatch(updateNotificationConfigs(notificationConfig.current ?? []));
-
-    //setHasChanges(false);
   };
 
   const data = (
@@ -267,8 +248,8 @@ const NotiPreference: React.FC = () => {
       <Button
         text="Save"
         style={{ marginTop: '15px' }}
-        disabled={!hasChanges}
-        intent={hasChanges ? Intent.WARNING : Intent.NONE}
+        disabled={!(hasChanges || hasChangesNotificationConfig)}
+        intent={(hasChanges || hasChangesNotificationConfig) ? Intent.WARNING : Intent.NONE}
         onClick={submitHandler}
       />
     </div>
