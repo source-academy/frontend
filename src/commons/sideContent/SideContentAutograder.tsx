@@ -8,6 +8,7 @@ import ControlButton from '../ControlButton';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
 import SideContentTestcaseCard from './SideContentTestcaseCard';
+import StarRating from './StarRating';
 
 export type SideContentAutograderProps = DispatchProps & StateProps & OwnProps;
 
@@ -31,6 +32,7 @@ type OwnProps = {
 const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps> = props => {
   const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
   const [showsResults, setResultsShown] = React.useState<boolean>(true);
+  const [userRating, setUserRating] = React.useState<number | null>(null);
 
   const { testcases, autogradingResults, handleTestcaseEval, workspaceLocation } = props;
 
@@ -96,6 +98,10 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
       <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
         {testcaseCards}
       </Collapse>
+      <div className="star-rating-section">
+        <div className="star-rating-label">Rate the Quality of the Answer:</div>
+        <StarRating value={userRating || 0} onChange={setUserRating} />
+      </div>
       {collapseButton('Autograder Results', showsResults, toggleResults)}
       <Collapse isOpen={showsResults} keepChildrenMounted={true}>
         {resultCards}
