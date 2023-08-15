@@ -5,16 +5,32 @@ import {
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 import { RemoveLast } from 'src/commons/utils/TypeHelper';
+import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { StoryListView, StoryView } from '../StoriesTypes';
+
+// Helpers
 
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
 const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperParams) => {
   const resp = await request('', method, opts, `${Constants.storiesBackendUrl}${path}`);
   return resp;
 };
+
+const getStoriesGroupId: () => string = () => {
+  const id = store.getState().stories.groupId;
+  if (id) {
+    return `${id}`;
+  } else {
+    // TODO: Rewrite this logic
+    showWarningMessage('Stories not available!', 1000);
+    throw new Error('Stories not available');
+  }
+};
+
+// API-related functions
 
 export const getStoriesUser = async (
   tokens: Tokens
