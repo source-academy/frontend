@@ -1,3 +1,4 @@
+import { courseIdWithoutPrefix } from 'src/commons/sagas/RequestsSaga';
 import Constants from 'src/commons/utils/Constants';
 import {
   showSuccessMessage,
@@ -39,7 +40,9 @@ export const getStoriesUser = async (
   name: string;
   // TODO: Return role once permissions framework is implemented
 } | null> => {
-  const resp = await requestStoryBackend('/user', 'GET', { ...tokens });
+  const resp = await requestStoryBackend(`/user?course=${courseIdWithoutPrefix()}`, 'GET', {
+    ...tokens
+  });
   if (!resp) {
     return null;
   }
