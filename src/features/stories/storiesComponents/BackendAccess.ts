@@ -1,3 +1,4 @@
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { courseIdWithoutPrefix } from 'src/commons/sagas/RequestsSaga';
 import Constants from 'src/commons/utils/Constants';
 import {
@@ -38,7 +39,9 @@ export const getStoriesUser = async (
 ): Promise<{
   id: number;
   name: string;
-  // TODO: Return role once permissions framework is implemented
+  groupId: number;
+  groupName: string;
+  role: StoriesRole;
 } | null> => {
   const resp = await requestStoryBackend(`/user?course=${courseIdWithoutPrefix()}`, 'GET', {
     ...tokens
