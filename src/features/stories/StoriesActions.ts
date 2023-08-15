@@ -1,4 +1,5 @@
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
 
 import {
@@ -14,6 +15,7 @@ import {
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
+  SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
@@ -71,3 +73,8 @@ export const deleteStory = (id: number) => action(DELETE_STORY, id);
 export const getStoriesUser = () => action(GET_STORIES_USER);
 export const setCurrentStoriesUser = (id: number | undefined, name: string | undefined) =>
   action(SET_CURRENT_STORIES_USER, { id, name });
+export const setCurrentStoriesGroup = (
+  id: number | undefined,
+  name: string | undefined,
+  role: StoriesRole | undefined
+) => action(SET_CURRENT_STORIES_GROUP, { id, name, role });
