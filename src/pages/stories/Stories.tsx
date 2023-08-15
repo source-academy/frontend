@@ -1,6 +1,6 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Button as BpButton, Icon as BpIcon } from '@blueprintjs/core';
+import { Button as BpButton, Icon as BpIcon, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Card, Flex, TextInput, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
@@ -29,6 +29,7 @@ const Stories: React.FC = () => {
   const dispatch = useDispatch();
 
   const { userId: storiesUserId, role: storiesRole } = useTypedSelector(state => state.stories);
+  const isStoriesDisabled = useTypedSelector(state => !state.stories.groupId);
   const isLoggedIn = !!storiesUserId;
 
   const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
@@ -105,7 +106,17 @@ const Stories: React.FC = () => {
     [dispatch, storyList]
   );
 
-  return (
+  return isStoriesDisabled ? (
+    <ContentDisplay
+      display={
+        <NonIdealState
+          icon={IconNames.ERROR}
+          title="Disabled"
+          description="Stories has been disabled for this course."
+        />
+      }
+    />
+  ) : (
     <ContentDisplay
       loadContentDispatch={() => dispatch(getStoriesList())}
       display={
