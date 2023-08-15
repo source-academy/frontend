@@ -18,6 +18,7 @@ import {
   EVAL_STORY_SUCCESS,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
+  SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
@@ -213,8 +214,15 @@ export const StoriesReducer: Reducer<StoriesState> = (
     case SET_CURRENT_STORIES_USER:
       return {
         ...state,
-        // TODO: Use action.payload.name
+        userName: action.payload.name,
         userId: action.payload.id
+      };
+    case SET_CURRENT_STORIES_GROUP:
+      return {
+        ...state,
+        groupId: action.payload.id,
+        groupName: action.payload.name,
+        role: action.payload.role
       };
     default:
       return state;

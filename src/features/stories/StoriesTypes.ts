@@ -21,7 +21,9 @@ export const SAVE_STORY = 'SAVE_STORY';
 export const DELETE_STORY = 'DELETE_STORY';
 // Auth-related actions
 export const GET_STORIES_USER = 'GET_STORIES_USER';
+// TODO: Investigate possibility of combining the two actions
 export const SET_CURRENT_STORIES_USER = 'SET_CURRENT_STORIES_USER';
+export const SET_CURRENT_STORIES_GROUP = 'SET_CURRENT_STORIES_GROUP';
 
 export type StoryMetadata = {
   authorId: number;
@@ -60,7 +62,9 @@ export type StoriesEnvState = {
 
 type StoriesAuthState = {
   readonly userId?: number;
+  readonly userName?: string;
   readonly groupId?: number;
+  readonly groupName?: string;
   readonly role?: StoriesRole;
 };
 
