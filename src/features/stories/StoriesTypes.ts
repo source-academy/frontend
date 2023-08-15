@@ -60,7 +60,7 @@ export type StoriesEnvState = {
   readonly debuggerContext: DebuggerContext;
 };
 
-type StoriesAuthState = {
+export type StoriesAuthState = {
   readonly userId?: number;
   readonly userName?: string;
   readonly groupId?: number;

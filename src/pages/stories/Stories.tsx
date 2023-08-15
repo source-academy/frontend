@@ -149,10 +149,9 @@ const Stories: React.FC = () => {
                   story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
               )}
             storyActions={story => {
+              const isAuthor = storiesUserId === story.authorId;
               const hasWritePermissions =
-                storiesUserId === story.authorId ||
-                storiesRole === StoriesRole.Moderator ||
-                storiesRole === StoriesRole.Admin;
+                storiesRole === StoriesRole.Moderator || storiesRole === StoriesRole.Admin;
               return (
                 <StoryActions
                   storyId={story.id}
@@ -161,8 +160,8 @@ const Stories: React.FC = () => {
                   handleMovePinUp={handleMovePinUp}
                   handleMovePinDown={handleMovePinDown}
                   canView // everyone has view permissions, even anonymous users
-                  canEdit={hasWritePermissions}
-                  canDelete={hasWritePermissions}
+                  canEdit={isAuthor || hasWritePermissions}
+                  canDelete={isAuthor || hasWritePermissions}
                   canPin={hasWritePermissions}
                   isPinned={story.isPinned}
                 />

@@ -1,5 +1,6 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
+import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
 
 import {
   createDefaultStoriesEnv,
@@ -224,6 +225,8 @@ export const StoriesReducer: Reducer<StoriesState> = (
         groupName: action.payload.name,
         role: action.payload.role
       };
+    case LOG_OUT:
+      return defaultStories;
     default:
       return state;
   }
