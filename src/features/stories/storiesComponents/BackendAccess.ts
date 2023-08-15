@@ -52,7 +52,7 @@ export const postNewStoriesUsers = async (
   users: NameUsernameRole[],
   provider: string
 ): Promise<Response | null> => {
-  const resp = await requestStoryBackend('/users/batch', 'POST', {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId}/users/batch`, 'POST', {
     // TODO: backend create params does not support roles yet, i.e.
     //       the role in NameUsernameRole is currently still unused
     body: { users: users.map(user => ({ ...user, provider })) },
@@ -70,7 +70,9 @@ export const postNewStoriesUsers = async (
 };
 
 export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null> => {
-  const resp = await requestStoryBackend('/stories', 'GET', { ...tokens });
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId}/stories`, 'GET', {
+    ...tokens
+  });
   if (!resp) {
     return null;
   }
@@ -79,7 +81,9 @@ export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null
 };
 
 export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', { ...tokens });
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId}/stories/${storyId}`, 'GET', {
+    ...tokens
+  });
   if (!resp) {
     return null;
   }
@@ -94,7 +98,7 @@ export const postStory = async (
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend('/stories', 'POST', {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId}/stories`, 'POST', {
     body: { authorId, title, content, pinOrder },
     ...tokens
   });
@@ -114,7 +118,7 @@ export const updateStory = async (
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${id}`, 'PUT', {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId}/stories/${id}`, 'PUT', {
     body: { title, content, pinOrder },
     ...tokens
   });
@@ -129,7 +133,9 @@ export const updateStory = async (
 
 // Returns the deleted story, or null if errors occur
 export const deleteStory = async (tokens: Tokens, id: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', { ...tokens });
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId}/stories/${id}`, 'DELETE', {
+    ...tokens
+  });
   if (!resp) {
     return null;
   }
