@@ -1379,7 +1379,7 @@ const courseId: () => string = () => {
   }
 };
 
-const courseIdWithoutPrefix: () => string = () => {
+export const courseIdWithoutPrefix: () => string = () => {
   const id = store.getState().session.courseId;
   if (id) {
     return `${id}`;
