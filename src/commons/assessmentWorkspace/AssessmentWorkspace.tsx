@@ -363,11 +363,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleEditorUpdateBreakpoints(0, []);
     handleUpdateCurrentAssessmentId(assessmentId, questionId);
     handleResetWorkspace({
-      autogradingResults: options.autogradingResults,
+      autogradingResults: options.autogradingResults ?? [],
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
-      programPrependValue: options.programPrependValue,
-      programPostpendValue: options.programPostpendValue,
+      programPrependValue: options.programPrependValue ?? '',
+      programPostpendValue: options.programPostpendValue ?? '',
       editorTestcases: options.editorTestcases ?? []
     });
     handleChangeExecTime(
