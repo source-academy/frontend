@@ -67,6 +67,7 @@ import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
+import { assertType } from '../utils/TypeHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import {
   beginClearContext,
@@ -362,7 +363,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorUpdateBreakpoints(0, []);
     handleUpdateCurrentAssessmentId(assessmentId, questionId);
-    handleResetWorkspace({
+    const resetWorkspaceOptions = assertType<WorkspaceState>()({
       autogradingResults: options.autogradingResults ?? [],
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
@@ -370,6 +371,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       programPostpendValue: options.programPostpendValue ?? '',
       editorTestcases: options.editorTestcases ?? []
     });
+    handleResetWorkspace(resetWorkspaceOptions);
     handleChangeExecTime(
       question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime
     );
