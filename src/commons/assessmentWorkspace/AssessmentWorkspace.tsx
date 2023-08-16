@@ -355,7 +355,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         options.programPostpendValue = votingQuestionData.postpend;
         break;
       case QuestionTypes.mcq:
-        // Do nothing
+        // set autograding Result to empty for mcq questions
+        options.autogradingResults = []
         break;
     }
 
