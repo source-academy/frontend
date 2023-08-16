@@ -356,7 +356,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         break;
       case QuestionTypes.mcq:
         // set autograding Result to empty for mcq questions
-        options.autogradingResults = []
+        options.autogradingResults = [];
         break;
     }
 
