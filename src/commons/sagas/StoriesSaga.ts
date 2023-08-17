@@ -22,7 +22,7 @@ import {
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
-import { OverallState } from '../application/ApplicationTypes';
+import { OverallState, StoriesRole } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
@@ -122,13 +122,18 @@ export function* storiesSaga(): SagaIterator {
     const me: {
       id: number;
       name: string;
+      groupId: number;
+      groupName: string;
+      role: StoriesRole;
     } | null = yield call(getStoriesUser, tokens);
 
     if (!me) {
       yield put(actions.setCurrentStoriesUser(undefined, undefined));
+      yield put(actions.setCurrentStoriesGroup(undefined, undefined, undefined));
       return;
     }
     yield put(actions.setCurrentStoriesUser(me.id, me.name));
+    yield put(actions.setCurrentStoriesGroup(me.groupId, me.groupName, me.role));
   });
 
   yield takeEvery(

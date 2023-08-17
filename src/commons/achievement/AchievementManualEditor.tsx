@@ -64,7 +64,9 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
                 : -1 // user2.name is null, user1 < user2
           );
 
-  useEffect(getUsers, [getUsers]);
+  useEffect(() => {
+    getUsers();
+  }, [getUsers]);
 
   const inferencer = useContext(AchievementContext);
   const manualAchievements: AchievementGoal[] = inferencer
