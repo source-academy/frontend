@@ -1,8 +1,6 @@
 import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
-import ControlButton from 'src/commons/ControlButton';
 
 import GenericSideContent, {
   generateIconId,
@@ -18,7 +16,6 @@ export type StoriesSideContentProps = Omit<GenericSideContentProps, 'renderFunct
 type StateProps = {
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
-  storyEnv: string;
 };
 
 /**
@@ -29,11 +26,7 @@ const generateClassName = (id: string | undefined) =>
     ? 'side-content-tooltip side-content-tab-alert'
     : 'side-content-tooltip';
 
-const renderTab = (
-  tab: SideContentTab,
-  isHidden: boolean,
-  workspaceLocation?: WorkspaceLocation
-) => {
+const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
   const iconSize = 20;
   const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
   const tabTitle = (
@@ -65,41 +58,29 @@ const renderTab = (
     : tab.body;
   const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
 
-  return <Tab key={tabId} {...tabProps} panel={isHidden ? undefined : tabPanel} />;
+  return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
 // TODO: Reduce code duplication with the main SideContent component
 const StoriesSideContent: React.FC<StoriesSideContentProps> = ({
   selectedTabId,
   renderActiveTabPanelOnly,
-  // isHidden,
   ...otherProps
 }) => {
-  const [isHidden, setIsHidden] = React.useState(true);
   return (
     <GenericSideContent
       {...otherProps}
       renderFunction={(dynamicTabs, changeTabsCallback) => (
-        <div className="side-content">
+        <div className="stories-side-content">
           <Card>
             <div className="side-content-tabs">
               <Tabs
                 id="side-content-tabs"
-                onChange={(newTabId: SideContentType, prevTabId: SideContentType, e) => {
-                  setIsHidden(false);
-                  changeTabsCallback(newTabId, prevTabId, e);
-                }}
+                onChange={changeTabsCallback}
                 renderActiveTabPanelOnly={renderActiveTabPanelOnly}
                 selectedTabId={selectedTabId}
               >
-                {dynamicTabs.map(tab => renderTab(tab, isHidden, otherProps.workspaceLocation))}
-                {dynamicTabs.length ? (
-                  <ControlButton
-                    label={isHidden ? 'Show' : 'Hide'}
-                    onClick={() => setIsHidden(!isHidden)}
-                    icon={isHidden ? IconNames.EYE_OPEN : IconNames.EYE_OFF}
-                  />
-                ) : undefined}
+                {dynamicTabs.map(tab => renderTab(tab, otherProps.workspaceLocation))}
               </Tabs>
             </div>
           </Card>
