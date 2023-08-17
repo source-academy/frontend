@@ -1,5 +1,5 @@
 import { ProgressBar } from '@blueprintjs/core';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { xpPerLevel } from '../../../features/achievement/AchievementConstants';
 import Constants from '../../utils/Constants';
@@ -9,9 +9,7 @@ type AchievementLevelProps = {
   studentXp: number;
 };
 
-function AchievementLevel(props: AchievementLevelProps) {
-  const { studentXp } = props;
-
+const AchievementLevel: React.FC<AchievementLevelProps> = ({ studentXp }) => {
   const [showMilestone, setShowMilestone] = useState<boolean>(false);
   const displayMilestone = () => setShowMilestone(true);
   const hideMilestone = () => setShowMilestone(false);
@@ -43,6 +41,6 @@ function AchievementLevel(props: AchievementLevelProps) {
       )}
     </div>
   );
-}
+};
 
 export default AchievementLevel;
