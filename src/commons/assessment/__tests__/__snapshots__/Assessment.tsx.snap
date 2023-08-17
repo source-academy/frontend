@@ -231,6 +231,15 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     />
                   </div>
                   <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp4-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
                     className="listing-footer"
                   >
                     <div>
@@ -255,7 +264,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             />
                           </svg>
                         </span>
-                        Opens: 18th June, 13:24
+                        Opens: 18th June, 05:24
                       </div>
                     </div>
                     <div
@@ -416,6 +425,15 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     />
                   </div>
                   <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp4-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
                     className="listing-footer"
                   >
                     <div>
@@ -440,7 +458,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             />
                           </svg>
                         </span>
-                        Opened: 18th July, 13:24
+                        Opened: 18th July, 05:24
                       </div>
                       <div
                         className="listing-due-date"
@@ -463,7 +481,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             />
                           </svg>
                         </span>
-                        Due: 18th June, 13:24
+                        Due: 18th June, 05:24
                       </div>
                     </div>
                     <div
@@ -627,6 +645,15 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     />
                   </div>
                   <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp4-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
                     className="listing-footer"
                   >
                     <div>
@@ -651,7 +678,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             />
                           </svg>
                         </span>
-                        Opened: 18th June, 13:24
+                        Opened: 18th June, 05:24
                       </div>
                       <div
                         className="listing-due-date"
@@ -674,7 +701,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             />
                           </svg>
                         </span>
-                        Due: 18th June, 13:24
+                        Due: 18th June, 05:24
                       </div>
                     </div>
                     <div
@@ -1018,6 +1045,15 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     />
                   </div>
                   <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp4-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
                     className="listing-footer"
                   >
                     <div>
@@ -1042,7 +1078,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             />
                           </svg>
                         </span>
-                        Opens: 18th June, 13:24
+                        Opens: 18th June, 05:24
                       </div>
                     </div>
                     <div
@@ -1251,6 +1287,15 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     />
                   </div>
                   <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp4-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
                     className="listing-footer"
                   >
                     <div>
@@ -1275,7 +1320,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             />
                           </svg>
                         </span>
-                        Opened: 18th July, 13:24
+                        Opened: 18th July, 05:24
                       </div>
                       <div
                         className="listing-due-date"
@@ -1298,7 +1343,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             />
                           </svg>
                         </span>
-                        Due: 18th June, 13:24
+                        Due: 18th June, 05:24
                       </div>
                     </div>
                     <div
@@ -1462,6 +1507,15 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     />
                   </div>
                   <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp4-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
                     className="listing-footer"
                   >
                     <div>
@@ -1486,7 +1540,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             />
                           </svg>
                         </span>
-                        Opened: 18th June, 13:24
+                        Opened: 18th June, 05:24
                       </div>
                       <div
                         className="listing-due-date"
@@ -1509,7 +1563,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             />
                           </svg>
                         </span>
-                        Due: 18th June, 13:24
+                        Due: 18th June, 05:24
                       </div>
                     </div>
                     <div
