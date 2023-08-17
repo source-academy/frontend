@@ -30,7 +30,7 @@ import {
 import {
   checkAnswerLastModifiedAt,
   fetchAssessment,
-  getTeam,
+  fetchTeamFormationOverview,
   submitAnswer
 } from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
@@ -166,7 +166,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleUpdateHasUnsavedChanges
   } = useMemo(() => {
     return {
-      handleTeamOverviewFetch: (assessmentId: number) => dispatch(getTeam(assessmentId)),
+      handleTeamOverviewFetch: (assessmentId: number) => dispatch(fetchTeamFormationOverview(assessmentId)),
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
         dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),

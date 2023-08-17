@@ -126,8 +126,6 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
 export const fetchGradingOverviews = (filterToGroup = true) =>
   action(FETCH_GRADING_OVERVIEWS, filterToGroup);
 
-export const fetchTeamFormationOverview = () => action(FETCH_TEAM_FORMATION_OVERVIEW);
-
 export const fetchTeamFormationOverviews = (filterToGroup = true) =>
   action(FETCH_TEAM_FORMATION_OVERVIEWS, filterToGroup);
 
@@ -246,7 +244,7 @@ export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESS
 export const updateGradingOverviews = (overviews: GradingOverview[]) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);
 
-export const getTeam = (assessmentId: number) =>
+export const fetchTeamFormationOverview = (assessmentId: number) =>
   action(FETCH_TEAM_FORMATION_OVERVIEW, { assessmentId });
 
 export const createTeam = (assessment: AssessmentOverview, teams: OptionType[][]) =>

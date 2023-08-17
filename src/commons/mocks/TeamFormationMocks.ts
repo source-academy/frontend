@@ -10,7 +10,7 @@ const XLSX = require('xlsx');
 export const mockTeamFormationOverviews: TeamFormationOverview[] = [
   {
     teamId: 1,
-    assessmentId: 2,
+    assessmentId: 1,
     assessmentName: 'An Odessey to Runes',
     assessmentType: 'Missions',
     studentIds: [106, 107, 108, 109],

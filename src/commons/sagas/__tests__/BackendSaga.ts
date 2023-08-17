@@ -21,7 +21,9 @@ import {
   updateAssessment,
   updateAssessmentOverviews,
   updateLatestViewedCourse,
-  updateNotifications
+  updateNotifications,
+  updateStudents,
+  updateTeamFormationOverviews
 } from '../../application/actions/SessionActions';
 import {
   GameState,
@@ -42,6 +44,8 @@ import {
   FETCH_AUTH,
   FETCH_COURSE_CONFIG,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_USER_AND_COURSE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
@@ -58,6 +62,8 @@ import {
   UPDATE_COURSE_CONFIG,
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_STUDENTS,
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
@@ -76,7 +82,8 @@ import {
   mockAssessments
 } from '../../mocks/AssessmentMocks';
 import { mockGradingSummary } from '../../mocks/GradingMocks';
-import { mockNotifications } from '../../mocks/UserMocks';
+import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
+import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
@@ -99,6 +106,8 @@ import {
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
   getNotifications,
+  getStudents,
+  getTeamFormationOverviews,
   getUser,
   getUserCourseRegistrations,
   postAcknowledgeNotifications,
@@ -125,6 +134,8 @@ const mockAssessment: Assessment = mockAssessments[0];
 const mockMapAssessments = new Map<number, Assessment>(mockAssessments.map(a => [a.id, a]));
 
 const mockAssessmentQuestion = mockAssessmentQuestions[0];
+
+const mockTeamFormationOverview = mockTeamFormationOverviews[0];
 
 const mockTokens = { accessToken: 'access', refreshToken: 'refresherOrb' };
 
@@ -265,6 +276,8 @@ const mockStates = {
   session: {
     assessmentOverviews: mockAssessmentOverviews,
     assessments: mockMapAssessments,
+    teamFormationOverviews: mockTeamFormationOverviews,
+    teamFormationOverview: mockTeamFormationOverview,
     notifications: mockNotifications,
     ...mockTokens,
     ...mockUser,
@@ -555,6 +568,52 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS action', () => {
       .not.put.actionType(UPDATE_ASSESSMENT_OVERVIEWS)
       .hasFinalState({ session: mockTokens })
       .dispatch({ type: FETCH_ASSESSMENT_OVERVIEWS })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_TEAM_FORMATION_OVERVIEWS action', () => {
+  test('when team formation overviews are obtained', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([[call(getTeamFormationOverviews, mockTokens), mockTeamFormationOverviews]])
+      .put(updateTeamFormationOverviews(mockTeamFormationOverviews))
+      .hasFinalState({ session: mockTokens })
+      .dispatch({ type: FETCH_TEAM_FORMATION_OVERVIEWS })
+      .silentRun();
+  });
+
+  test('when team formation overviews is null', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([[call(getTeamFormationOverviews, mockTokens), null]])
+      .call(getTeamFormationOverviews, mockTokens)
+      .not.put.actionType(UPDATE_TEAM_FORMATION_OVERVIEWS)
+      .hasFinalState({ session: mockTokens })
+      .dispatch({ type: FETCH_TEAM_FORMATION_OVERVIEWS })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_STUDENTS action', () => {
+  test('when students are obtained', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([[call(getStudents, mockTokens), mockStudents]])
+      .put(updateStudents(mockStudents))
+      .hasFinalState({ session: mockTokens })
+      .dispatch({ type: FETCH_STUDENTS })
+      .silentRun();
+  });
+
+  test('when students is null', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([[call(getStudents, mockTokens), null]])
+      .call(getStudents, mockTokens)
+      .not.put.actionType(UPDATE_STUDENTS)
+      .hasFinalState({ session: mockTokens })
+      .dispatch({ type: FETCH_STUDENTS })
       .silentRun();
   });
 });

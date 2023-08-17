@@ -447,7 +447,7 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(
     FETCH_TEAM_FORMATION_OVERVIEW,
-    function* (action: ReturnType<typeof actions.getTeam>) {
+    function* (action: ReturnType<typeof actions.fetchTeamFormationOverview>) {
       const tokens: Tokens = yield selectTokens();
       const { assessmentId } = action.payload;
 
