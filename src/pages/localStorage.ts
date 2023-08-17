@@ -1,5 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
+import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
 import { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
@@ -28,6 +29,7 @@ export type SavedState = {
   playgroundSourceVariant: Variant;
   playgroundLanguage: SALanguage;
   playgroundExternalLibrary: ExternalLibraryName;
+  stories: Partial<StoriesAuthState>;
 };
 
 export const loadStoredState = (): SavedState | undefined => {
@@ -83,7 +85,12 @@ export const saveState = (state: OverallState) => {
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
       playgroundLanguage: state.playground.languageConfig,
-      playgroundExternalLibrary: state.workspaces.playground.externalLibrary
+      playgroundExternalLibrary: state.workspaces.playground.externalLibrary,
+      stories: {
+        userId: state.stories.userId,
+        groupId: state.stories.groupId,
+        role: state.stories.role
+      }
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
     localStorage.setItem('storedState', serialized);

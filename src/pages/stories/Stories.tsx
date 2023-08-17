@@ -1,11 +1,12 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Button as BpButton, Icon as BpIcon } from '@blueprintjs/core';
+import { Button as BpButton, Icon as BpIcon, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Card, Flex, TextInput, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -26,6 +27,10 @@ const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { userId: storiesUserId, role: storiesRole } = useTypedSelector(state => state.stories);
+  const isStoriesDisabled = useTypedSelector(state => !state.stories.groupId);
+  const isLoggedIn = !!storiesUserId;
 
   const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
   const handleDeleteStory = useCallback(
@@ -101,7 +106,17 @@ const Stories: React.FC = () => {
     [dispatch, storyList]
   );
 
-  return (
+  return isStoriesDisabled ? (
+    <ContentDisplay
+      display={
+        <NonIdealState
+          icon={IconNames.ERROR}
+          title="Disabled"
+          description="Stories has been disabled for this course."
+        />
+      }
+    />
+  ) : (
     <ContentDisplay
       loadContentDispatch={() => dispatch(getStoriesList())}
       display={
@@ -109,9 +124,11 @@ const Stories: React.FC = () => {
           <Flex justifyContent="justify-between">
             <Flex justifyContent="justify-start" spaceX="space-x-6">
               <Title>All Stories</Title>
-              <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
-                Add Story
-              </BpButton>
+              {isLoggedIn && (
+                <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
+                  Add Story
+                </BpButton>
+              )}
             </Flex>
             <TextInput
               maxWidth="max-w-xl"
@@ -131,20 +148,25 @@ const Stories: React.FC = () => {
                   // Always show pinned stories
                   story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
               )}
-            storyActions={story => (
-              <StoryActions
-                storyId={story.id}
-                handleDeleteStory={handleDeleteStory}
-                handleTogglePin={handleTogglePinStory}
-                handleMovePinUp={handleMovePinUp}
-                handleMovePinDown={handleMovePinDown}
-                canView
-                canEdit
-                canDelete
-                canPin
-                isPinned={story.isPinned}
-              />
-            )}
+            storyActions={story => {
+              const isAuthor = storiesUserId === story.authorId;
+              const hasWritePermissions =
+                storiesRole === StoriesRole.Moderator || storiesRole === StoriesRole.Admin;
+              return (
+                <StoryActions
+                  storyId={story.id}
+                  handleDeleteStory={handleDeleteStory}
+                  handleTogglePin={handleTogglePinStory}
+                  handleMovePinUp={handleMovePinUp}
+                  handleMovePinDown={handleMovePinDown}
+                  canView // everyone has view permissions, even anonymous users
+                  canEdit={isAuthor || hasWritePermissions}
+                  canDelete={isAuthor || hasWritePermissions}
+                  canPin={hasWritePermissions}
+                  isPinned={story.isPinned}
+                />
+              );
+            }}
           />
         </Card>
       }
