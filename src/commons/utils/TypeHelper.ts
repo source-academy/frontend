@@ -64,6 +64,13 @@ export const assertType =
     } & {
       // Keys of S should be optional to allow extension
       [key in keyof S]?: S[key];
+    } & {
+      // But if the key is defined in T, despite being a partial
+      // type, the value of T[key] must not be undefined
+      // unless undefined is allowed in S. Similar behavior to
+      // `--exactOptionalPropertyTypes` flag in tsconfig.json,
+      // but this allows us to only enforce it when we want to.
+      [key in keyof T]: key extends keyof S ? S[key] : never;
     } = any
   >(
     obj: T
