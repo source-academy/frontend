@@ -1,4 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { mockStudents } from 'src/commons/mocks/UserMocks';
 
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
@@ -18,6 +19,8 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_USER_AND_COURSE,
   LOGIN,
   REAUTOGRADE_ANSWER,
@@ -44,8 +47,11 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
+  UPDATE_STUDENTS,
+  UPDATE_TEAM_FORMATION_OVERVIEW,
   UPDATE_TEAM_FORMATION_OVERVIEWS,
-  UPDATE_USER_ROLE
+  UPDATE_USER_ROLE,
+  User
 } from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
@@ -60,6 +66,8 @@ import {
   fetchGrading,
   fetchGradingOverviews,
   fetchNotifications,
+  fetchStudents,
+  fetchTeamFormationOverviews,
   fetchUserAndCourse,
   login,
   reautogradeAnswer,
@@ -86,6 +94,8 @@ import {
   updateGradingOverviews,
   updateLatestViewedCourse,
   updateNotifications,
+  updateStudents,
+  updateTeamFormationOverview,
   updateTeamFormationOverviews,
   updateUserRole
 } from '../SessionActions';
@@ -163,6 +173,30 @@ test('fetchGradingOverviews generates correct action object', () => {
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
     payload: filterToGroup
+  });
+});
+
+test('fetchTeamFormationOverviews generates correct default action object', () => {
+  const action = fetchTeamFormationOverviews();
+  expect(action).toEqual({
+    type: FETCH_TEAM_FORMATION_OVERVIEWS,
+    payload: true
+  });
+});
+
+test('fetchTeamFormationOverviews generates correct action object', () => {
+  const filterToGroup = false;
+  const action = fetchTeamFormationOverviews(filterToGroup);
+  expect(action).toEqual({
+    type: FETCH_TEAM_FORMATION_OVERVIEWS,
+    payload: filterToGroup
+  });
+});
+
+test('fetchStudents generates correct action object', () => {
+  const action = fetchStudents();
+  expect(action).toEqual({
+    type: FETCH_STUDENTS
   });
 });
 
@@ -536,6 +570,33 @@ test('updateGradingOverviews generates correct action object', () => {
   expect(action).toEqual({
     type: UPDATE_GRADING_OVERVIEWS,
     payload: overviews
+  });
+});
+
+test('updateStudents generates correct action object', () => {
+  const students: User[] = mockStudents;
+
+  const action = updateStudents(students);
+  expect(action).toEqual({
+    type: UPDATE_STUDENTS,
+    payload: students
+  });
+});
+
+test('updateTeamFormationOverview generates correct action object', () => {
+  const overview: TeamFormationOverview = {
+    teamId: 0,
+    assessmentId: 1,
+    assessmentName: 'Mission 1',
+    assessmentType: 'Missions',
+    studentIds: [0],
+    studentNames: ['Mark Henry']
+  };
+
+  const action = updateTeamFormationOverview(overview);
+  expect(action).toEqual({
+    type: UPDATE_TEAM_FORMATION_OVERVIEW,
+    payload: overview
   });
 });
 
