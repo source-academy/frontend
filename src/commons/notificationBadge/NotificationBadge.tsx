@@ -85,8 +85,10 @@ const makeNotificationMessage = (type: NotificationType) => {
       return 'This submission is new.';
     case NotificationTypes.unsubmitted:
       return 'This assessment has been unsubmitted.';
+    case NotificationTypes.unpublished_grading:
+      return 'Grades have been hidden for this assessment.';
     case NotificationTypes.graded:
-      return 'This assessment has been manually graded.';
+      return 'Grades have been published for this assessment.';
     case NotificationTypes.new_message:
       return 'There are new messages.';
     default:

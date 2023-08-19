@@ -487,7 +487,8 @@ const gradingOverviewTest1: GradingOverview[] = [
     groupName: 'group',
     gradingStatus: 'excluded',
     questionCount: 0,
-    gradedCount: 6
+    gradedCount: 6,
+    isGradingPublished: true
   }
 ];
 
@@ -508,7 +509,8 @@ const gradingOverviewTest2: GradingOverview[] = [
     groupName: 'another group',
     gradingStatus: 'excluded',
     questionCount: 6,
-    gradedCount: 0
+    gradedCount: 0,
+    isGradingPublished: false
   }
 ];
 

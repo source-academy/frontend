@@ -523,7 +523,8 @@ test('updateGradingOverviews generates correct action object', () => {
       groupName: 'group',
       gradingStatus: 'excluded',
       questionCount: 6,
-      gradedCount: 0
+      gradedCount: 0,
+      isGradingPublished: true
     }
   ];
 

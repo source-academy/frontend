@@ -16,7 +16,8 @@ const BADGE_COLORS = {
   attempted: 'red',
 
   // grading status
-  graded: 'green',
+  published: 'green',
+  graded: 'cyan',
   grading: 'yellow',
   none: 'red'
 };
@@ -58,8 +59,10 @@ const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
   const badgeIcon = () => (
     <Icon
       icon={
-        status === 'graded'
+        status === 'published'
           ? IconNames.TICK
+          : status === 'graded'
+          ? IconNames.TIME
           : status === 'grading'
           ? IconNames.TIME
           : status === 'none'

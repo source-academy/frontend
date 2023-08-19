@@ -20,6 +20,7 @@ export type AssessmentWorkspaceParams = {
 
 export enum GradingStatuses {
   excluded = 'excluded',
+  published = 'published',
   graded = 'graded',
   grading = 'grading',
   none = 'none'

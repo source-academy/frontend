@@ -410,7 +410,8 @@ export const getAssessmentOverviews = async (
       overview.isManuallyGraded,
       overview.status,
       overview.gradedCount,
-      overview.questionCount
+      overview.questionCount,
+      overview.isGradingPublished
     );
     delete overview.gradedCount;
     delete overview.questionCount;
@@ -476,7 +477,8 @@ export const getUserAssessmentOverviews = async (
       overview.isManuallyGraded,
       overview.status,
       overview.gradedCount,
-      overview.questionCount
+      overview.questionCount,
+      overview.isGradingPublished
     );
     delete overview.gradedCount;
     delete overview.questionCount;
@@ -631,6 +633,7 @@ export const getGradingOverviews = async (
         gradingStatus: 'none',
         questionCount: overview.assessment.questionCount,
         gradedCount: overview.gradedCount,
+        isGradingPublished: overview.isGradingPublished,
         // XP
         initialXp: overview.xp,
         xpAdjustment: overview.xpAdjustment,
@@ -642,7 +645,8 @@ export const getGradingOverviews = async (
         overview.assessment.isManuallyGraded,
         gradingOverview.submissionStatus,
         gradingOverview.gradedCount,
-        gradingOverview.questionCount
+        gradingOverview.questionCount,
+        gradingOverview.isGradingPublished
       );
       return gradingOverview;
     })
@@ -770,6 +774,40 @@ export const postUnsubmit = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/unsubmit`, 'POST', {
+    ...tokens,
+    noHeaderAccept: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/grading/{submissionId}/unpublish_grades
+ */
+export const postUnpublishGrades = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/grading/${submissionId}/unpublish_grades`,
+    'POST',
+    {
+      ...tokens,
+      noHeaderAccept: true
+    }
+  );
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/grading/{submissionId}/publish_grades
+ */
+export const postPublishGrades = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}/publish_grades`, 'POST', {
     ...tokens,
     noHeaderAccept: true
   });
@@ -1356,16 +1394,19 @@ const computeGradingStatus = (
   isManuallyGraded: boolean,
   submissionStatus: any,
   numGraded: number,
-  numQuestions: number
+  numQuestions: number,
+  isGradingPublished: boolean
 ): GradingStatus =>
   // isGraded refers to whether the assessment type is graded or not, as specified in
   // the respective assessment configuration
   isManuallyGraded && submissionStatus === 'submitted'
     ? numGraded === 0
       ? 'none'
-      : numGraded === numQuestions
-      ? 'graded'
-      : 'grading'
+      : numGraded < numQuestions
+      ? 'grading'
+      : isGradingPublished
+      ? 'published'
+      : 'graded'
     : 'excluded';
 
 const courseId: () => string = () => {

@@ -90,14 +90,30 @@ const columns = [
       );
     }
   }),
-  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
-    header: 'Actions',
-    enableColumnFilter: false,
-    cell: info => {
-      const { submissionId } = info.getValue();
-      return <GradingActions submissionId={submissionId} />;
+  columnHelper.accessor(
+    ({ submissionId, isGradingPublished, gradingStatus, submissionStatus }) => ({
+      submissionId,
+      isGradingPublished,
+      gradingStatus,
+      submissionStatus
+    }),
+    {
+      header: 'Actions',
+      enableColumnFilter: false,
+      cell: info => {
+        const { submissionId, isGradingPublished, gradingStatus, submissionStatus } =
+          info.getValue();
+        return (
+          <GradingActions
+            submissionId={submissionId}
+            isGradingPublished={isGradingPublished}
+            gradingStatus={gradingStatus}
+            submissionStatus={submissionStatus}
+          />
+        );
+      }
     }
-  })
+  )
 ];
 
 type GradingSubmissionTableProps = {
