@@ -170,6 +170,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ group, 
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
           placeholder="Search for any value here..."
+          value={globalFilter ?? ''}
           onChange={e => setGlobalFilter(e.target.value)}
         />
       </Flex>
