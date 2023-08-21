@@ -481,10 +481,6 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(FETCH_STUDENTS, function* (): any {
     const tokens: Tokens = yield selectTokens();
-    // const resp: Response | null = yield call(getStudents, tokens);
-    // if (!resp || !resp.ok) {
-    //   return yield handleResponseError(resp);
-    // }
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
       return;
