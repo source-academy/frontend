@@ -1,6 +1,8 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
+import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
@@ -15,6 +17,11 @@ const Grading: React.FC = () => {
     submissionId: string;
     questionId: string;
   }>();
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(fetchGradingOverviews(false));
+  }, [dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
