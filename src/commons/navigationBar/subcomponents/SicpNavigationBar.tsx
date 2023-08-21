@@ -278,11 +278,7 @@ const SicpNavigationBar: React.FC = () => {
   };
 
   const userSearch = (
-    <div
-      className="userSearch"
-      style={{ position: 'absolute', top: '10%', left: '15%', width: '20%', height: '600%' }}
-      key="userSearch"
-    >
+    <div className="userSearch" style={{ position: 'relative' }} key="userSearch">
       <div className="userSearch-inner">
         <div style={{ display: 'inline-flex' }}>
           <InputGroup
@@ -300,7 +296,14 @@ const SicpNavigationBar: React.FC = () => {
       {searchAutocompleteResults.length !== 0 && (
         <div
           className="userSearchDropdown"
-          style={{ backgroundColor: 'white', outline: 'dashed', height: '100%', overflow: 'auto' }}
+          style={{
+            position: 'absolute',
+            backgroundColor: 'white',
+            outline: 'dashed',
+            width: '100%',
+            height: '600%',
+            overflow: 'auto'
+          }}
         >
           {searchAutocompleteResults.map((result, index) => (
             <div
@@ -327,11 +330,7 @@ const SicpNavigationBar: React.FC = () => {
   );
 
   const indexSearch = (
-    <div
-      className="indexSearch"
-      style={{ position: 'absolute', top: '10%', left: '36%', width: '20%', height: '600%' }}
-      key="indexSearch"
-    >
+    <div className="indexSearch" style={{ position: 'relative' }} key="indexSearch">
       <div className="indexSearch-inner">
         <div style={{ display: 'inline-flex' }}>
           <InputGroup
@@ -349,7 +348,14 @@ const SicpNavigationBar: React.FC = () => {
       {indexAutocompleteResults.length !== 0 && (
         <div
           className="userSearchDropdown"
-          style={{ backgroundColor: 'white', outline: 'dashed', height: '100%', overflow: 'auto' }}
+          style={{
+            position: 'absolute',
+            backgroundColor: 'white',
+            outline: 'dashed',
+            width: '100%',
+            height: '600%',
+            overflow: 'auto'
+          }}
         >
           {indexAutocompleteResults.map(result => (
             <div
@@ -372,6 +378,16 @@ const SicpNavigationBar: React.FC = () => {
           ))}
         </div>
       )}
+    </div>
+  );
+
+  const searchWrapper = (
+    <div
+      className="searchWrapper"
+      style={{ display: 'flex', width: '100%', justifyContent: 'center' }}
+      key="searchWrapper"
+    >
+      {[userSearch, indexSearch]}
     </div>
   );
 
@@ -415,8 +431,9 @@ const SicpNavigationBar: React.FC = () => {
   return (
     <>
       <Navbar className="SicpNavigationBar secondary-navbar">
-        <NavbarGroup align={Alignment.LEFT}>{[tocButton, userSearch, indexSearch]}</NavbarGroup>
+        <NavbarGroup align={Alignment.LEFT}>{tocButton}</NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>{[prevButton, nextButton]}</NavbarGroup>
+        <NavbarGroup align={Alignment.CENTER}>{searchWrapper}</NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
         <SicpToc handleCloseToc={handleCloseToc} />
