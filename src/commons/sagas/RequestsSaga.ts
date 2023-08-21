@@ -737,6 +737,9 @@ export const getTeamFormationOverview = async (
   return teamFormationOverview;
 };
 
+/*
+ * POST /courses/{courseId}/admin/teams
+ */
 export const postTeams = async (
   assessmentId: number,
   teams: OptionType[][],
@@ -758,6 +761,9 @@ export const postTeams = async (
 
 type CsvData = string[][];
 
+/*
+ * POST /courses/{courseId}/admin/teams
+ */
 export const postUploadTeams = async (
   assessmentId: number,
   teams: File,
@@ -819,6 +825,9 @@ const readFileAsArrayBuffer = async (file: File): Promise<ArrayBuffer> => {
   });
 };
 
+/*
+ * PUT /courses/{courseId}/admin/teams/{teamId}
+ */
 export const putTeams = async (
   assessmentId: number,
   teamId: number,
@@ -838,6 +847,9 @@ export const putTeams = async (
   return resp;
 };
 
+/*
+ * DELETE /courses/{courseId}/admin/teams/{teamId}
+ */
 export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Response | null> => {
   const data = {
     teamId: teamId
@@ -850,6 +862,9 @@ export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Respon
   return resp;
 };
 
+/*
+ * GET /courses/{courseId}/admin/users/teamformation
+ */
 export const getStudents = async (tokens: Tokens): Promise<User[] | null> => {
   const resp = await request(`${courseId()}/admin/users/teamformation`, 'GET', {
     ...tokens

@@ -2,7 +2,7 @@ import { AssessmentType } from '../../commons/assessment/AssessmentTypes';
 
 /**
  * Information on a Team, for a particular student submission
- * for a particular assessment. Used for display in the UI.
+ * for a particular assessment. Used for display in the Team Formation Table.
  */
 export type TeamFormationOverview = {
   teamId: number;
