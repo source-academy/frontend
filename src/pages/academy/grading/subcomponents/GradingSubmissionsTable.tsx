@@ -76,14 +76,16 @@ const columns = [
       </Filterable>
     )
   }),
-  columnHelper.accessor(({ currentXp, maxXp }) => ({ currentXp, maxXp }), {
-    header: 'XP',
+  columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
+    header: 'Raw XP (+Bonus)',
     enableColumnFilter: false,
     cell: info => {
-      const { currentXp, maxXp } = info.getValue();
+      const { currentXp, xpBonus, maxXp } = info.getValue();
       return (
         <Flex justifyContent="justify-start" spaceX="space-x-2">
-          <Text>{currentXp}</Text>
+          <Text>
+            {currentXp} (+{xpBonus})
+          </Text>
           <Text>/</Text>
           <Text>{maxXp}</Text>
         </Flex>
