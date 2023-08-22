@@ -239,7 +239,7 @@ codeSamplesAgendaStash.forEach((codeSample, idx) => {
     const stashItemsToTest: StashItemComponent[] = Layout.stashComponent.stashItemComponents;
     agendaItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
-      if (item.value == 'ENVIRONMENT') expect(item.arrow).toBeDefined();
+      if (item.value === 'ENVIRONMENT') expect(item.arrow).toBeDefined();
     });
     if (truncate) expect(agendaItemsToTest.length).toBeLessThanOrEqual(10);
     stashItemsToTest.forEach(item => {
