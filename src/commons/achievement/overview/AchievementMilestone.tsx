@@ -21,13 +21,6 @@ const AchievementMilestone: React.FC<AchievementMilestoneProps> = ({ studentXp }
         </div>
         <p className="description">Complete CS1101S CA Component</p>
       </div>
-      <div className="details">
-        <div className="level-badge">
-          <span className="level-icon" />
-          <p>{Constants.caFulfillmentLevel}+</p>
-        </div>
-        <p className="description">Counts towards CS1010R</p>
-      </div>
       <div className="footer">
         <p>Full CA level of {Constants.caFulfillmentLevel} is subjected to change.</p>
       </div>
