@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Constants from '../../utils/Constants';
 
 type AchievementMilestoneProps = {
@@ -5,9 +7,7 @@ type AchievementMilestoneProps = {
 };
 
 // 36k XP = Level 37
-function AchievementMilestone(props: AchievementMilestoneProps) {
-  const { studentXp } = props;
-
+const AchievementMilestone: React.FC<AchievementMilestoneProps> = ({ studentXp }) => {
   return (
     <div className="milestone">
       <h3>Your Total XP</h3>
@@ -26,6 +26,6 @@ function AchievementMilestone(props: AchievementMilestoneProps) {
       </div>
     </div>
   );
-}
+};
 
 export default AchievementMilestone;
