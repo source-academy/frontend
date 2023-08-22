@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useContext, useReducer, useState } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/AchievementDashboard';
@@ -12,9 +12,10 @@ type AchievementPreviewProps = {
   publishChanges: () => void;
 };
 
-function AchievementPreview(props: AchievementPreviewProps) {
-  const { awaitPublish, publishChanges } = props;
-
+const AchievementPreview: React.FC<AchievementPreviewProps> = ({
+  awaitPublish,
+  publishChanges
+}) => {
   const inferencer = useContext(AchievementContext);
 
   // Show AchievementView when viewMode is true, otherwise show AchievementTask
@@ -58,6 +59,6 @@ function AchievementPreview(props: AchievementPreviewProps) {
       )}
     </div>
   );
-}
+};
 
 export default AchievementPreview;

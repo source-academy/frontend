@@ -1,6 +1,6 @@
 import { Button, Checkbox, MenuItem, NumericInput } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import {
   AchievementGoal,
@@ -40,7 +40,7 @@ export function updateGoalProcessed() {
   showSuccessMessage('Goal updated');
 }
 
-function AchievementManualEditor(props: AchievementManualEditorProps) {
+const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props => {
   const { userState, hiddenState, studio, getUsers, updateGoalProgress } = props;
   const users =
     studio === 'Staff'
@@ -144,6 +144,6 @@ function AchievementManualEditor(props: AchievementManualEditorProps) {
       />
     </div>
   );
-}
+};
 
 export default AchievementManualEditor;

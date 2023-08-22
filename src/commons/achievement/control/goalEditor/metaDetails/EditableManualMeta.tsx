@@ -1,6 +1,7 @@
 import { NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 import { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
 
 type EditableManualMetaProps = {
@@ -8,8 +9,7 @@ type EditableManualMetaProps = {
   manualMeta: ManualMeta;
 };
 
-function EditableManualMeta(props: EditableManualMetaProps) {
-  const { changeMeta, manualMeta } = props;
+const EditableManualMeta: React.FC<EditableManualMetaProps> = ({ changeMeta, manualMeta }) => {
   const { targetCount } = manualMeta;
 
   const changeTargetCount = (targetCount: number) =>
@@ -27,6 +27,6 @@ function EditableManualMeta(props: EditableManualMetaProps) {
       />
     </Tooltip2>
   );
-}
+};
 
 export default EditableManualMeta;
