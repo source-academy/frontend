@@ -1,15 +1,14 @@
 import { IconNames } from '@blueprintjs/icons';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
-import SideContentRemoteExecution from 'src/commons/sideContent/remoteExecution/SideContentRemoteExecution';
-import SideContentEnvVisualizer from 'src/commons/sideContent/SideContentEnvVisualizer';
-import SideContentSubstVisualizer from 'src/commons/sideContent/SideContentSubstVisualizer';
+import { InterpreterOutput, ResultOutput } from 'src/commons/application/ApplicationTypes';
+import Markdown from 'src/commons/Markdown';
+import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
+import SideContentDataVisualizer from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import SideContentEnvVisualizer from 'src/commons/sideContent/content/SideContentEnvVisualizer';
+import SideContentHtmlDisplay from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-
-import { InterpreterOutput, ResultOutput } from '../../commons/application/ApplicationTypes';
-import Markdown from '../../commons/Markdown';
-import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
-import SideContentHtmlDisplay from '../../commons/sideContent/SideContentHtmlDisplay';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 
 export const mobileOnlyTabIds: readonly SideContentType[] = [
   SideContentType.mobileEditor,

@@ -10,47 +10,25 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
-import {
-  saveSourcecastData,
-  setCodeDeltasToApply,
-  setCurrentPlayerTime,
-  setInputToApply,
-  setSourcecastData,
-  setSourcecastDuration,
-  setSourcecastStatus
-} from 'src/features/sourceRecorder/SourceRecorderActions';
-import {
-  deleteSourcecastEntry,
-  recordInit,
-  recordInput,
-  resetInputs,
-  timerPause,
-  timerReset,
-  timerResume,
-  timerStart,
-  timerStop
-} from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
-
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { ControlBarAutorunButtons } from 'src/commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
 import {
   convertEditorTabStateToProps,
   SourcecastEditorContainerProps
-} from '../../../commons/editor/EditorContainer';
-import { Position } from '../../../commons/editor/EditorTypes';
-import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
-import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
+} from 'src/commons/editor/EditorContainer';
+import { Position } from 'src/commons/editor/EditorTypes';
+import SideContentDataVisualizer from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import SideContentEnvVisualizer from 'src/commons/sideContent/content/SideContentEnvVisualizer';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
-} from '../../../commons/sourceRecorder/SourceRecorderControlBar';
-import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
-import { useTypedSelector } from '../../../commons/utils/Hooks';
-import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
+} from 'src/commons/sourceRecorder/SourceRecorderControlBar';
+import SourcecastTable from 'src/commons/sourceRecorder/SourceRecorderTable';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -69,8 +47,18 @@ import {
   updateActiveEditorTabIndex,
   updateEditorValue,
   updateReplValue
-} from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
+import {
+  saveSourcecastData,
+  setCodeDeltasToApply,
+  setCurrentPlayerTime,
+  setInputToApply,
+  setSourcecastData,
+  setSourcecastDuration,
+  setSourcecastStatus
+} from 'src/features/sourceRecorder/SourceRecorderActions';
 import {
   CodeDelta,
   Input,
@@ -78,7 +66,19 @@ import {
   PlaybackData,
   PlaybackStatus,
   RecordingStatus
-} from '../../../features/sourceRecorder/SourceRecorderTypes';
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
+import {
+  deleteSourcecastEntry,
+  recordInit,
+  recordInput,
+  resetInputs,
+  timerPause,
+  timerReset,
+  timerResume,
+  timerStart,
+  timerStop
+} from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
+
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
 const workspaceLocation: WorkspaceLocation = 'sourcereel';

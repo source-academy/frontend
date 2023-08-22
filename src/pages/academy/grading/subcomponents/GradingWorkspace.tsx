@@ -6,9 +6,32 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { defaultWorkspaceManager } from 'src/commons/application/ApplicationTypes';
+import {
+  AutogradingResult,
+  IMCQQuestion,
+  Library,
+  Question,
+  QuestionTypes,
+  Testcase
+} from 'src/commons/assessment/AssessmentTypes';
+import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from 'src/commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from 'src/commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from 'src/commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { convertEditorTabStateToProps } from 'src/commons/editor/EditorContainer';
+import { Position } from 'src/commons/editor/EditorTypes';
+import Markdown from 'src/commons/Markdown';
+import SideContentAutograder from 'src/commons/sideContent/content/SideContentAutograder';
+import SideContentToneMatrix from 'src/commons/sideContent/content/SideContentToneMatrix';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -31,32 +54,9 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { AnsweredQuestion } from 'src/features/grading/GradingTypes';
 
-import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
-import {
-  AutogradingResult,
-  IMCQQuestion,
-  Library,
-  Question,
-  QuestionTypes,
-  Testcase
-} from '../../../../commons/assessment/AssessmentTypes';
-import { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
-import { ControlBarClearButton } from '../../../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
-import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
-import { Position } from '../../../../commons/editor/EditorTypes';
-import Markdown from '../../../../commons/Markdown';
-import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
-import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
-import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
-import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
 type GradingWorkspaceProps = {

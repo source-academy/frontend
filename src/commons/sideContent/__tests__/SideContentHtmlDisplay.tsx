@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
-import SideContentHtmlDisplay from '../SideContentHtmlDisplay';
+import SideContentHtmlDisplay from '../content/SideContentHtmlDisplay';
 
 test('HTML Display renders correctly', () => {
   const mockProps = {
