@@ -1,4 +1,4 @@
-import * as path from 'path/posix';
+import * as path from 'path';
 
 /**
  * Returns the shortest file paths that is uniquely identifiable among
