@@ -48,6 +48,7 @@ const cracoConfig = (module.exports = {
         'os': require.resolve('os-browserify/browser'),
         'stream': require.resolve('stream-browserify'),
         'timers': require.resolve('timers-browserify'),
+        'path/posix': require.resolve('path'),
         'url': require.resolve('url/')
       };
 
