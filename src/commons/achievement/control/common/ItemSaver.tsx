@@ -1,6 +1,7 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 import {
   showSuccessMessage,
   showWarningMessage
@@ -11,9 +12,7 @@ type ItemSaverProps = {
   saveChanges: () => void;
 };
 
-function ItemSaver(props: ItemSaverProps) {
-  const { discardChanges, saveChanges } = props;
-
+const ItemSaver: React.FC<ItemSaverProps> = ({ discardChanges, saveChanges }) => {
   const handleSaveChanges = () => {
     saveChanges();
     showSuccessMessage('Saved changes locally');
@@ -35,6 +34,6 @@ function ItemSaver(props: ItemSaverProps) {
       </Tooltip2>
     </>
   );
-}
+};
 
 export default ItemSaver;
