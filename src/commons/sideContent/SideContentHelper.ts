@@ -1,8 +1,11 @@
+import { TabId } from '@blueprintjs/core';
 import React from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
+import { Action, bindActionCreators, Dispatch } from 'redux';
 
-import type { DebuggerContext } from '../workspace/WorkspaceTypes';
+import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { beginAlertSideContent } from './SideContentActions';
 import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 // const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
@@ -42,3 +45,27 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
       id: SideContentType.module
     }));
 };
+
+export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
+export const getTabId = (tab: SideContentTab) =>
+  tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+export const generateTabAlert = (shouldAlert: boolean) =>
+  `side-content-tooltip${shouldAlert && ' side-content-tab-alert'}`;
+
+export type AlertSideContentDispatchProps = {
+  alertSideContent: () => void;
+};
+
+export const addAlertSideContentToProps = <TDispatchProps>(
+  dispatch: Dispatch<Action<unknown>>,
+  dispatchProps: TDispatchProps,
+  id: SideContentType,
+  workspaceLocation: WorkspaceLocation
+): TDispatchProps & { alertSideContent: () => void } =>
+  bindActionCreators(
+    {
+      ...dispatchProps,
+      alertSideContent: () => beginAlertSideContent(id, workspaceLocation)
+    },
+    dispatch
+  );

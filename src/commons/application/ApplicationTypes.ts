@@ -392,7 +392,11 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  debuggerContext: {} as DebuggerContext
+  debuggerContext: {} as DebuggerContext,
+  sideContent: {
+    alerts: [],
+    dynamicTabs: []
+  }
 });
 
 const defaultFileName = 'program.js';
@@ -539,7 +543,11 @@ export const createDefaultStoriesEnv = (
   stepLimit: 1000,
   globals: [],
   usingSubst: false,
-  debuggerContext: {} as DebuggerContext
+  debuggerContext: {} as DebuggerContext,
+  sideContent: {
+    dynamicTabs: [],
+    alerts: []
+  }
 });
 
 export const defaultFileSystem: FileSystemState = {

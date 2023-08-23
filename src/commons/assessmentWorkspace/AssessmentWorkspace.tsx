@@ -129,7 +129,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContentHeight,
+    sideContent: { height: sideContentHeight },
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);

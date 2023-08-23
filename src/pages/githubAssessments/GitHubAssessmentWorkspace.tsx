@@ -186,7 +186,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     isRunning,
     output,
     replValue,
-    sideContentHeight
+    sideContent: { height: sideContentHeight }
   } = useTypedSelector(state => state.workspaces.githubAssessment);
 
   /**

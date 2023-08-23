@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react';
+import { connect, MapDispatchToProps } from 'react-redux';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-type SideContentHtmlDisplayProps = {
+import { addAlertSideContentToProps, AlertSideContentDispatchProps } from '../SideContentHelper';
+import { SideContentType } from '../SideContentTypes';
+
+type OwnProps = {
   content: string;
+  workspaceLocation: WorkspaceLocation;
   handleAddHtmlConsoleError: (errorMsg: string) => void;
 };
 
+type DispatchProps = AlertSideContentDispatchProps;
+
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
-const SideContentHtmlDisplay: React.FC<SideContentHtmlDisplayProps> = props => {
-  const { content, handleAddHtmlConsoleError } = props;
+const SideContentHtmlDisplay: React.FC<OwnProps & DispatchProps> = props => {
+  const { content, handleAddHtmlConsoleError, alertSideContent } = props;
 
   useEffect(() => {
     const handleEvent = (event: MessageEvent) => {
@@ -24,6 +32,11 @@ const SideContentHtmlDisplay: React.FC<SideContentHtmlDisplayProps> = props => {
 
     return () => window.removeEventListener('message', handleEvent);
   });
+
+  useEffect(() => {
+    alertSideContent();
+  }, []);
+
   return (
     <iframe
       className="sa-html-display"
@@ -35,4 +48,8 @@ const SideContentHtmlDisplay: React.FC<SideContentHtmlDisplayProps> = props => {
   );
 };
 
-export default SideContentHtmlDisplay;
+const mapDispatchToProps: MapDispatchToProps<AlertSideContentDispatchProps, OwnProps> = (
+  dispatch,
+  { workspaceLocation }
+) => addAlertSideContentToProps(dispatch, {}, SideContentType.htmlDisplay, workspaceLocation);
+export default connect(null, mapDispatchToProps)(SideContentHtmlDisplay);

@@ -16,12 +16,14 @@ export const mobileOnlyTabIds: readonly SideContentType[] = [
 ];
 export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
-export const dataVisualizerTab: SideContentTab = {
+export const makeDataVisualizerTabFrom = (
+  workspaceLocation: WorkspaceLocation
+): SideContentTab => ({
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
+  body: <SideContentDataVisualizer workspaceLocation={workspaceLocation} />,
   id: SideContentType.dataVisualizer
-};
+});
 
 export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
   label: 'Env Visualizer',
@@ -32,11 +34,18 @@ export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): 
 
 export const makeHtmlDisplayTabFrom = (
   output: ResultOutput,
-  handleError: (errorMsg: string) => void
+  handleError: (errorMsg: string) => void,
+  workspaceLocation: WorkspaceLocation
 ): SideContentTab => ({
   label: 'HTML Display',
   iconName: IconNames.MODAL,
-  body: <SideContentHtmlDisplay content={output.value} handleAddHtmlConsoleError={handleError} />,
+  body: (
+    <SideContentHtmlDisplay
+      workspaceLocation={workspaceLocation}
+      content={output.value}
+      handleAddHtmlConsoleError={handleError}
+    />
+  ),
   id: SideContentType.htmlDisplay
 });
 

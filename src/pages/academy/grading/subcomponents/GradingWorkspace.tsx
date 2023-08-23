@@ -87,7 +87,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContentHeight,
+    sideContent: { height: sideContentHeight },
     currentSubmission: storedSubmissionId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);

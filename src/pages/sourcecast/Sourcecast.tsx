@@ -94,7 +94,7 @@ const Sourcecast: React.FC = () => {
     playbackData,
     playbackStatus,
     replValue,
-    sideContentHeight,
+    sideContent: { height: sideContentHeight },
     sourcecastIndex,
     context: { chapter: sourceChapter, variant: sourceVariant },
     uid,
@@ -262,7 +262,7 @@ const Sourcecast: React.FC = () => {
   const dataVisualizerTab: SideContentTab = {
     label: 'Data Visualizer',
     iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer />,
+    body: <SideContentDataVisualizer workspaceLocation="sourcecast" />,
     id: SideContentType.dataVisualizer
   };
 

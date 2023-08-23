@@ -82,3 +82,7 @@ export type ModuleSideContent = {
   body: (props: any) => JSX.Element;
   toSpawn?: (context: DebuggerContext) => boolean;
 };
+
+export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
+export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
+export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';

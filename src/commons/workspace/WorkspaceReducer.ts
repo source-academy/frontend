@@ -28,7 +28,12 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
-import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
+import { getDynamicTabs, getTabId } from '../sideContent/SideContentHelper';
+import {
+  END_ALERT_SIDE_CONTENT,
+  NOTIFY_PROGRAM_EVALUATED,
+  VISIT_SIDE_CONTENT
+} from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
@@ -1066,18 +1071,51 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           breakpointSteps: action.payload.breakpointSteps
         }
       };
-    case NOTIFY_PROGRAM_EVALUATED:
+    case NOTIFY_PROGRAM_EVALUATED: {
+      const debuggerContext = {
+        ...state[workspaceLocation].debuggerContext,
+        result: action.payload.result,
+        lastDebuggerResult: action.payload.lastDebuggerResult,
+        code: action.payload.code,
+        context: action.payload.context,
+        workspaceLocation: action.payload.workspaceLocation
+      };
+
+      const dynamicTabs = getDynamicTabs(debuggerContext);
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          debuggerContext: {
-            ...state[workspaceLocation].debuggerContext,
-            result: action.payload.result,
-            lastDebuggerResult: action.payload.lastDebuggerResult,
-            code: action.payload.code,
-            context: action.payload.context,
-            workspaceLocation: action.payload.workspaceLocation
+          debuggerContext,
+          sideContent: {
+            ...state[workspaceLocation].sideContent,
+            alerts: dynamicTabs.map(getTabId),
+            dynamicTabs
+          }
+        }
+      };
+    }
+    case END_ALERT_SIDE_CONTENT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sideContent: {
+            ...state[workspaceLocation].sideContent,
+            alerts: [...state[workspaceLocation].sideContent.alerts, action.payload.id]
+          }
+        }
+      };
+    case VISIT_SIDE_CONTENT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sideContent: {
+            ...state[workspaceLocation].sideContent,
+            alerts: state[workspaceLocation].sideContent.alerts.filter(
+              id => id !== action.payload.id
+            )
           }
         }
       };

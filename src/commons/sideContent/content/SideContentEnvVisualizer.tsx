@@ -13,7 +13,6 @@ import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
@@ -23,6 +22,8 @@ import Constants, { Links } from '../../utils/Constants';
 import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../../workspace/WorkspaceActions';
 import { evalEditor } from '../../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import { addAlertSideContentToProps, AlertSideContentDispatchProps } from '../SideContentHelper';
+import { SideContentType } from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -50,13 +51,13 @@ type OwnProps = {
 
 type DispatchProps = {
   handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
-  handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
+  handleEditorEval: () => void;
   setEditorHighlightedLines: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
     newHighlightedLines: HighlightedLines[]
   ) => void;
-};
+} & AlertSideContentDispatchProps;
 
 const envVizKeyMap = {
   FIRST_STEP: 'a',
@@ -77,7 +78,10 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       stepLimitExceeded: false
     };
     EnvVisualizer.init(
-      visualization => this.setState({ visualization }),
+      visualization => {
+        this.setState({ visualization });
+        if (visualization) props.alertSideContent();
+      },
       this.state.width,
       this.state.height,
       (segments: [number, number][]) => {
@@ -383,7 +387,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     } else {
       this.setState({ lastStep: false });
     }
-    this.props.handleEditorEval(this.props.workspaceLocation);
+    this.props.handleEditorEval();
   };
 
   private sliderShift = (newValue: number) => {
@@ -465,10 +469,14 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   };
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators(
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (
+  dispatch,
+  { workspaceLocation }
+) =>
+  addAlertSideContentToProps(
+    dispatch,
     {
-      handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
+      handleEditorEval: () => evalEditor(workspaceLocation),
       handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
         updateEnvSteps(steps, workspaceLocation),
       setEditorHighlightedLines: (
@@ -477,7 +485,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         newHighlightedLines: HighlightedLines[]
       ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
     },
-    dispatch
+    SideContentType.envVisualizer,
+    workspaceLocation
   );
 
 const SideContentEnvVisualizerContainer = connect(

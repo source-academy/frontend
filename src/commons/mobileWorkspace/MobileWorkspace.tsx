@@ -268,9 +268,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         beforeDynamicTabs: [
           ...sideBarTabs,
           mobileEditorTab,
-          ...props.mobileSideContentProps.tabs.beforeDynamicTabs
+          ...(props.mobileSideContentProps.tabs?.beforeDynamicTabs ?? [])
         ],
-        afterDynamicTabs: [...props.mobileSideContentProps.tabs.afterDynamicTabs, mobileRunTab]
+        afterDynamicTabs: [
+          ...(props.mobileSideContentProps.tabs?.afterDynamicTabs ?? []),
+          mobileRunTab
+        ]
       }
     };
   }, [

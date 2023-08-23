@@ -113,7 +113,7 @@ const Sourcereel: React.FC = () => {
     playbackData,
     recordingStatus,
     replValue,
-    sideContentHeight,
+    sideContent: { height: sideContentHeight },
     timeElapsedBeforePause,
     timeResumed
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -314,7 +314,7 @@ const Sourcereel: React.FC = () => {
   const dataVisualizerTab: SideContentTab = {
     label: 'Data Visualizer',
     iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer />,
+    body: <SideContentDataVisualizer workspaceLocation="sourcereel" />,
     id: SideContentType.dataVisualizer
   };
 

@@ -128,8 +128,8 @@ import {
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
-  dataVisualizerTab,
   desktopOnlyTabIds,
+  makeDataVisualizerTabFrom,
   makeEnvVisualizerTabFrom,
   makeHtmlDisplayTabFrom,
   makeIntroductionTabFrom,
@@ -255,7 +255,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isDebugging,
     output,
     replValue,
-    sideContentHeight,
+    sideContent: { height: sideContentHeight },
     sharedbConnected,
     usingSubst,
     usingEnv,
@@ -755,8 +755,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
       // For HTML Chapter, HTML Display tab is added only after code is run
       if (output.length > 0 && output[0].type === 'result') {
         tabs.push(
-          makeHtmlDisplayTabFrom(output[0] as ResultOutput, errorMsg =>
-            dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
+          makeHtmlDisplayTabFrom(
+            output[0] as ResultOutput,
+            errorMsg => dispatch(addHtmlConsoleError(errorMsg, workspaceLocation)),
+            workspaceLocation
           )
         );
       }
@@ -766,7 +768,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
       if (shouldShowDataVisualizer) {
-        tabs.push(dataVisualizerTab);
+        tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
       if (shouldShowEnvVisualizer) {
         tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
