@@ -475,6 +475,7 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
 const gradingOverviewTest1: GradingOverview[] = [
   {
     assessmentId: 1,
+    assessmentNumber: 'M1A',
     assessmentName: 'test assessment',
     assessmentType: 'Contests',
     initialXp: 0,
@@ -497,6 +498,7 @@ const gradingOverviewTest1: GradingOverview[] = [
 const gradingOverviewTest2: GradingOverview[] = [
   {
     assessmentId: 2,
+    assessmentNumber: 'P2',
     assessmentName: 'another assessment',
     assessmentType: 'Quests',
     initialXp: 20,

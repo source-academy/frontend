@@ -14,6 +14,7 @@ import { Notification } from '../../commons/notificationBadge/NotificationBadgeT
  */
 export type GradingOverview = {
   assessmentId: number;
+  assessmentNumber: string;
   assessmentName: string;
   assessmentType: AssessmentType;
   initialXp: number;

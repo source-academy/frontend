@@ -509,6 +509,7 @@ test('updateGradingOverviews generates correct action object', () => {
   const overviews: GradingOverview[] = [
     {
       assessmentId: 1,
+      assessmentNumber: 'M1A',
       assessmentName: 'test assessment',
       assessmentType: 'Contests',
       initialXp: 0,
