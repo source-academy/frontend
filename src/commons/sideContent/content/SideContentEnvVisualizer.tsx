@@ -46,7 +46,9 @@ type StateProps = {
   needEnvUpdate: boolean;
 };
 
-type OwnProps = { workspaceLocation: Exclude<WorkspaceLocation, 'stories'> } | { workspaceLocation: 'stories', storiesEnv: string }
+type OwnProps =
+  | { workspaceLocation: Exclude<WorkspaceLocation, 'stories'> }
+  | { workspaceLocation: 'stories'; storiesEnv: string };
 
 type DispatchProps = {
   handleEnvStepUpdate: (steps: number) => void;
@@ -78,7 +80,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     EnvVisualizer.init(
       visualization => {
         this.setState({ visualization });
-        if (visualization) this.props.alertSideContent(SideContentType.envVisualizer)
+        if (visualization) this.props.alertSideContent(SideContentType.envVisualizer);
       },
       this.state.width,
       this.state.height,
@@ -467,21 +469,13 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   };
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (
-  dispatch,
-  props
-) =>
-  addAlertSideContentToProps(dispatch, props,
-    {
-      handleEditorEval: () => evalEditor(props.workspaceLocation),
-      handleEnvStepUpdate: (steps: number) =>
-        updateEnvSteps(steps, props.workspaceLocation),
-      setEditorHighlightedLines: (
-        editorTabIndex: number,
-        newHighlightedLines: HighlightedLines[]
-      ) => setEditorHighlightedLinesAgenda(props.workspaceLocation, editorTabIndex, newHighlightedLines)
-    },
-  );
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
+  addAlertSideContentToProps(dispatch, props, {
+    handleEditorEval: () => evalEditor(props.workspaceLocation),
+    handleEnvStepUpdate: (steps: number) => updateEnvSteps(steps, props.workspaceLocation),
+    setEditorHighlightedLines: (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) =>
+      setEditorHighlightedLinesAgenda(props.workspaceLocation, editorTabIndex, newHighlightedLines)
+  });
 
 export const SideContentEnvVisualizerContainer = connect(
   mapStateToProps,
@@ -495,4 +489,4 @@ const makeEnvVisualizerTabFrom = (location: OwnProps): SideContentTab => ({
   id: SideContentType.envVisualizer
 });
 
-export default makeEnvVisualizerTabFrom
+export default makeEnvVisualizerTabFrom;

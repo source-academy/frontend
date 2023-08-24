@@ -310,8 +310,8 @@ const Sourcereel: React.FC = () => {
     });
   };
 
-  const dataVisualizerTab = makeDataVisualizerTabFrom({ workspaceLocation })
-  const envVisualizerTab = makeEnvVisualizerTabFrom({ workspaceLocation }) 
+  const dataVisualizerTab = makeDataVisualizerTabFrom({ workspaceLocation });
+  const envVisualizerTab = makeEnvVisualizerTabFrom({ workspaceLocation });
 
   const workspaceHandlers = useMemo(() => {
     return {

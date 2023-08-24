@@ -15,7 +15,7 @@ export type SideContentProps = {
     beforeDynamicTabs: SideContentTab[];
     afterDynamicTabs: SideContentTab[];
   };
-  onChange: ChangeTabsCallback
+  onChange: ChangeTabsCallback;
 } & SideContentLocation;
 
 const renderTab = (
@@ -61,7 +61,12 @@ const renderTab = (
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const SideContent = ({ renderActiveTabPanelOnly, selectedTabId, editorWidth, ...props }: SideContentProps) => (
+const SideContent = ({
+  renderActiveTabPanelOnly,
+  selectedTabId,
+  editorWidth,
+  ...props
+}: SideContentProps) => (
   <SideContentProvider {...props}>
     {(allTabs, tabAlerts, changeTabsCallback, height) => (
       <div className="side-content">
@@ -75,7 +80,8 @@ const SideContent = ({ renderActiveTabPanelOnly, selectedTabId, editorWidth, ...
             >
               {allTabs.map(tab => {
                 const tabId = getTabId(tab);
-                return renderTab(tab,
+                return renderTab(
+                  tab,
                   tabAlerts.includes(tabId),
                   props.workspaceLocation,
                   editorWidth,

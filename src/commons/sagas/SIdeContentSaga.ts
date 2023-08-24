@@ -14,6 +14,9 @@ export function* SideContentSaga(): SagaIterator {
     function* ({
       payload: { id, workspaceLocation }
     }: ReturnType<typeof actions.beginAlertSideContent>) {
+      // When a program finishes evaluation, we clear all alerts,
+      // So we must wait until after to process any kind of alerts
+      // that were raised by non-module side content
       yield take(NOTIFY_PROGRAM_EVALUATED);
       yield put(actions.endAlertSideContent(id, workspaceLocation));
     }

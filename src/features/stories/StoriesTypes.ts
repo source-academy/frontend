@@ -63,7 +63,7 @@ export type StoriesEnvState = {
   readonly globals: Array<[string, any]>;
   readonly usingSubst: boolean;
   readonly debuggerContext: DebuggerContext;
-  readonly sideContent: SideContentInfo
+  readonly sideContent: SideContentInfo;
 };
 
 export type StoriesAuthState = {

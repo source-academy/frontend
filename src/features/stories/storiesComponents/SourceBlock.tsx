@@ -19,9 +19,7 @@ import {
   evalStory,
   toggleStoriesUsingSubst
 } from 'src/features/stories/StoriesActions';
-import {
-  makeSubstVisualizerTabFrom
-} from 'src/pages/playground/PlaygroundTabs';
+import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';

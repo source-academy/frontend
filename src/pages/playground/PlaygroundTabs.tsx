@@ -12,8 +12,6 @@ export const mobileOnlyTabIds: readonly SideContentType[] = [
 ];
 export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
-
-
 export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   label: 'Introduction',
   iconName: IconNames.HOME,

@@ -140,7 +140,7 @@ export type WorkspaceState = {
   readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
-  readonly sideContent: SideContentInfo
+  readonly sideContent: SideContentInfo;
 };
 
 type ReplHistory = {

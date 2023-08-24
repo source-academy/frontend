@@ -58,14 +58,22 @@ export const getTabId = (tab: SideContentTab) =>
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert && ' side-content-tab-alert'}`;
 
-export const addAlertSideContentToProps = <TDispatchProps extends ActionCreatorsMapObject<any>>(dispatch: Dispatch<Action<unknown>>, loc: SideContentLocation, dispatchProps: TDispatchProps) => ({
+/**
+ * A wrapper around `mapDispatchToProps` to automatically provide a SideContent's props
+ * with the `alertSideContent` prop
+ */
+export const addAlertSideContentToProps = <TDispatchProps extends ActionCreatorsMapObject<any>>(
+  dispatch: Dispatch<Action<unknown>>,
+  loc: SideContentLocation,
+  dispatchProps: TDispatchProps
+) => ({
   ...bindActionCreators(dispatchProps, dispatch),
   alertSideContent: (newId: SideContentType) => {
     if (loc.workspaceLocation === 'stories') {
       // If in stories workspace, dispatch different event
-      dispatch(beginStoriesAlertSideContent(newId, loc.storiesEnv))
+      dispatch(beginStoriesAlertSideContent(newId, loc.storiesEnv));
     } else if (loc.workspaceLocation) {
       dispatch(beginAlertSideContent(newId, loc.workspaceLocation));
     }
   }
-})
+});

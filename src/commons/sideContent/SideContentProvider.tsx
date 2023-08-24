@@ -1,7 +1,5 @@
 import { useDispatch } from 'react-redux';
-import {
-  storiesVisitSideContent
-} from 'src/features/stories/StoriesActions';
+import { storiesVisitSideContent } from 'src/features/stories/StoriesActions';
 
 import { useTypedSelector } from '../utils/Hooks';
 import { visitSideContent } from './SideContentActions';
@@ -35,16 +33,16 @@ export default function SideContentProvider({
   const dispatch = useDispatch();
 
   const { dynamicTabs, alerts, height } = useTypedSelector(state => {
-  if (!props.workspaceLocation) {
-    return {
-      dynamicTabs: [],
-      alerts: []
-    };
-  }
-  return props.workspaceLocation !== 'stories'
-    ? state.workspaces[props.workspaceLocation].sideContent
-    : state.stories.envs[props.storiesEnv].sideContent;
-})
+    if (!props.workspaceLocation) {
+      return {
+        dynamicTabs: [],
+        alerts: []
+      };
+    }
+    return props.workspaceLocation !== 'stories'
+      ? state.workspaces[props.workspaceLocation].sideContent
+      : state.stories.envs[props.storiesEnv].sideContent;
+  });
 
   const allTabs = tabs
     ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs]
@@ -60,5 +58,5 @@ export default function SideContentProvider({
     }
   };
 
-  return children(allTabs, alerts, changeTabsCallback, height)
+  return children(allTabs, alerts, changeTabsCallback, height);
 }

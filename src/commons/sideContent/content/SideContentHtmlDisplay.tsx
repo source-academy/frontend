@@ -4,14 +4,19 @@ import { connect, MapDispatchToProps } from 'react-redux';
 import { ResultOutput } from 'src/commons/application/ApplicationTypes';
 
 import { addAlertSideContentToProps } from '../SideContentHelper';
-import { SideContentDispatchProps, SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  SideContentDispatchProps,
+  SideContentLocation,
+  SideContentTab,
+  SideContentType
+} from '../SideContentTypes';
 
 type OwnProps = {
   content: string;
   handleAddHtmlConsoleError: (errorMsg: string) => void;
 } & SideContentLocation;
 
-type DispatchProps = SideContentDispatchProps
+type DispatchProps = SideContentDispatchProps;
 
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
@@ -33,7 +38,9 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
     return () => window.removeEventListener('message', handleEvent);
   });
 
-  useEffect(() => { alertSideContent(SideContentType.htmlDisplay) })
+  useEffect(() => {
+    alertSideContent(SideContentType.htmlDisplay);
+  });
 
   return (
     <iframe
@@ -46,8 +53,9 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
   );
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) => addAlertSideContentToProps(dispatch, props, {})
-export const SideContentHtmlDisplay = connect(null, mapDispatchToProps)(SideContentHtmlDisplayBase)
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
+  addAlertSideContentToProps(dispatch, props, {});
+export const SideContentHtmlDisplay = connect(null, mapDispatchToProps)(SideContentHtmlDisplayBase);
 
 const makeHtmlDisplayTabFrom = (
   output: ResultOutput,
@@ -65,5 +73,4 @@ const makeHtmlDisplayTabFrom = (
   ),
   id: SideContentType.htmlDisplay
 });
-export default makeHtmlDisplayTabFrom
-
+export default makeHtmlDisplayTabFrom;

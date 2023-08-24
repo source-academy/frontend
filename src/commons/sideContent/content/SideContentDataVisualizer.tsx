@@ -9,16 +9,21 @@ import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../../utils/Constants';
 import { addAlertSideContentToProps } from '../SideContentHelper';
-import { SideContentDispatchProps, SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  SideContentDispatchProps,
+  SideContentLocation,
+  SideContentTab,
+  SideContentType
+} from '../SideContentTypes';
 
 type State = {
   steps: Step[];
   currentStep: number;
 };
 
-type OwnProps = SideContentLocation
+type OwnProps = SideContentLocation;
 
-type DispatchProps = SideContentDispatchProps
+type DispatchProps = SideContentDispatchProps;
 
 const dataVisualizerKeyMap = {
   PREVIOUS_STEP: 'left',
@@ -37,7 +42,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
     DataVisualizer.init(steps => {
       if (this.state.steps.length > 0) {
         //  Blink icon
-        this.props.alertSideContent(SideContentType.dataVisualizer)
+        this.props.alertSideContent(SideContentType.dataVisualizer);
       }
       this.setState({ steps, currentStep: 0 });
     });
@@ -186,16 +191,18 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
   };
 }
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) => addAlertSideContentToProps(dispatch, props, {})
-export const SideContentDataVisualizer = connect(null, mapDispatchToProps)(SideContentDataVisualizerBase)
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
+  addAlertSideContentToProps(dispatch, props, {});
+export const SideContentDataVisualizer = connect(
+  null,
+  mapDispatchToProps
+)(SideContentDataVisualizerBase);
 
-const makeDataVisualizerTabFrom = (
-  location: SideContentLocation
-): SideContentTab => ({
+const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer {...location} />,
   id: SideContentType.dataVisualizer
 });
 
-export default makeDataVisualizerTabFrom
+export default makeDataVisualizerTabFrom;
