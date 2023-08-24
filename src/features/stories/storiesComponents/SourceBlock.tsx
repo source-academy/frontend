@@ -7,6 +7,9 @@ import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
 import ControlButton from 'src/commons/ControlButton';
+import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import SideContent, { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -17,15 +20,12 @@ import {
   toggleStoriesUsingSubst
 } from 'src/features/stories/StoriesActions';
 import {
-  dataVisualizerTab,
-  makeHtmlDisplayTabFrom,
   makeSubstVisualizerTabFrom
 } from 'src/pages/playground/PlaygroundTabs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideContent';
 import { DEFAULT_ENV } from './UserBlogContent';
 
 export type SourceBlockProps = {
@@ -138,8 +138,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     if (chapter === Chapter.HTML) {
       if (output.length > outputIndex && output[outputIndex].type === 'result') {
         tabs.push(
-          makeHtmlDisplayTabFrom(output[outputIndex] as ResultOutput, errorMsg =>
-            dispatch(addHtmlConsoleError(errorMsg, 'stories', env))
+          makeHtmlDisplayTabFrom(
+            output[outputIndex] as ResultOutput,
+            errorMsg => dispatch(addHtmlConsoleError(errorMsg, 'stories', env)),
+            { workspaceLocation: 'stories', storiesEnv: env }
           )
         );
       }
@@ -153,7 +155,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
     if (chapter >= Chapter.SOURCE_2) {
       // Enable Data Visualizer for Source Chapter 2 and above
-      tabs.push(dataVisualizerTab);
+      tabs.push(makeDataVisualizerTabFrom({ workspaceLocation: 'stories', storiesEnv: env }));
     }
     // if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
     //   // Enable Env Visualizer for Source Chapter 3 and above
@@ -172,15 +174,16 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter, variant, output, dispatch, env]);
 
-  const sideContentProps: StoriesSideContentProps = {
+  const sideContentProps: SideContentProps = {
     selectedTabId: selectedTab,
     onChange: onChangeTabs,
     tabs: {
       beforeDynamicTabs: tabs,
       afterDynamicTabs: []
     },
-    workspaceLocation: 'stories',
-    getDebuggerContext: state => state.stories.envs[env].debuggerContext
+    storiesEnv: env,
+    workspaceLocation: 'stories'
+    // getDebuggerContext: state => state.stories.envs[env].debuggerContext
   };
 
   const execEvaluate = () => {
@@ -253,7 +256,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                 />
               </Card>
               <div>
-                <StoriesSideContent {...sideContentProps} />
+                <SideContent {...sideContentProps} />
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { Context } from 'js-slang';
+import { SideContentInfo } from 'src/commons/sideContent/SideContentTypes';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
@@ -24,6 +25,10 @@ export const GET_STORIES_USER = 'GET_STORIES_USER';
 // TODO: Investigate possibility of combining the two actions
 export const SET_CURRENT_STORIES_USER = 'SET_CURRENT_STORIES_USER';
 export const SET_CURRENT_STORIES_GROUP = 'SET_CURRENT_STORIES_GROUP';
+
+export const STORIES_VISIT_SIDE_CONTENT = 'STORIES_VISIT_SIDE_CONTENT';
+export const BEGIN_STORIES_ALERT_SIDE_CONTENT = 'BEGIN_STORIES_ALERT_SIDE_CONTENT';
+export const END_STORIES_ALERT_SIDE_CONTENT = 'END_STORIES_ALERT_SIDE_CONTENT';
 
 export type StoryMetadata = {
   authorId: number;
@@ -58,6 +63,7 @@ export type StoriesEnvState = {
   readonly globals: Array<[string, any]>;
   readonly usingSubst: boolean;
   readonly debuggerContext: DebuggerContext;
+  readonly sideContent: SideContentInfo
 };
 
 export type StoriesAuthState = {

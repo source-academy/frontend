@@ -55,8 +55,8 @@ import {
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
-import SideContentDataVisualizer from '../../commons/sideContent/content/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../commons/sideContent/content/SideContentEnvVisualizer';
+import makeDataVisualizerTabFrom from '../../commons/sideContent/content/SideContentDataVisualizer';
+import makeEnvVisualizerTabFrom from '../../commons/sideContent/content/SideContentEnvVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -94,7 +94,6 @@ const Sourcecast: React.FC = () => {
     playbackData,
     playbackStatus,
     replValue,
-    sideContent: { height: sideContentHeight },
     sourcecastIndex,
     context: { chapter: sourceChapter, variant: sourceVariant },
     uid,
@@ -259,19 +258,9 @@ const Sourcecast: React.FC = () => {
     <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
   );
 
-  const dataVisualizerTab: SideContentTab = {
-    label: 'Data Visualizer',
-    iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer workspaceLocation="sourcecast" />,
-    id: SideContentType.dataVisualizer
-  };
+  const dataVisualizerTab: SideContentTab = makeDataVisualizerTabFrom({ workspaceLocation })
 
-  const envVisualizerTab: SideContentTab = {
-    label: 'Env Visualizer',
-    iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-    id: SideContentType.envVisualizer
-  };
+  const envVisualizerTab: SideContentTab = makeEnvVisualizerTabFrom({ workspaceLocation }) 
 
   const tabs: SideContentTab[] = [
     {
@@ -371,7 +360,6 @@ const Sourcecast: React.FC = () => {
     handleSideContentHeightChange: handleSideContentHeightChange,
     replProps,
     sideBarProps,
-    sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
@@ -379,8 +367,7 @@ const Sourcecast: React.FC = () => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation,
-      sideContentHeight
+      workspaceLocation
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {

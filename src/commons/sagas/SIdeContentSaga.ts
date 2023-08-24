@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { put, take } from 'redux-saga/effects';
 
 import * as actions from '../sideContent/SideContentActions';
@@ -16,7 +16,6 @@ export function* SideContentSaga(): SagaIterator {
     }: ReturnType<typeof actions.beginAlertSideContent>) {
       yield take(NOTIFY_PROGRAM_EVALUATED);
       yield put(actions.endAlertSideContent(id, workspaceLocation));
-      // yield call(console.log, `Alerting ${id}`)
     }
   );
 }

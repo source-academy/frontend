@@ -7,6 +7,7 @@ import {
   Divider,
   Slider
 } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
@@ -22,8 +23,8 @@ import Constants, { Links } from '../../utils/Constants';
 import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../../workspace/WorkspaceActions';
 import { evalEditor } from '../../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
-import { addAlertSideContentToProps, AlertSideContentDispatchProps } from '../SideContentHelper';
-import { SideContentType } from '../SideContentTypes';
+import { addAlertSideContentToProps } from '../SideContentHelper';
+import { SideContentDispatchProps, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -45,19 +46,16 @@ type StateProps = {
   needEnvUpdate: boolean;
 };
 
-type OwnProps = {
-  workspaceLocation: WorkspaceLocation;
-};
+type OwnProps = { workspaceLocation: Exclude<WorkspaceLocation, 'stories'> } | { workspaceLocation: 'stories', storiesEnv: string }
 
 type DispatchProps = {
-  handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
+  handleEnvStepUpdate: (steps: number) => void;
   handleEditorEval: () => void;
   setEditorHighlightedLines: (
-    workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
     newHighlightedLines: HighlightedLines[]
   ) => void;
-} & AlertSideContentDispatchProps;
+} & SideContentDispatchProps;
 
 const envVizKeyMap = {
   FIRST_STEP: 'a',
@@ -80,14 +78,14 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     EnvVisualizer.init(
       visualization => {
         this.setState({ visualization });
-        if (visualization) props.alertSideContent();
+        if (visualization) this.props.alertSideContent(SideContentType.envVisualizer)
       },
       this.state.width,
       this.state.height,
       (segments: [number, number][]) => {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         // This comment is copied over from workspace saga
-        props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
+        props.setEditorHighlightedLines(0, segments);
       },
       isAgendaEmpty => {
         this.setState({ stepLimitExceeded: !isAgendaEmpty && this.state.lastStep });
@@ -391,7 +389,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
   };
 
   private sliderShift = (newValue: number) => {
-    this.props.handleEnvStepUpdate(newValue, this.props.workspaceLocation);
+    this.props.handleEnvStepUpdate(newValue);
     this.setState((state: State) => {
       return { value: newValue };
     });
@@ -471,27 +469,30 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (
   dispatch,
-  { workspaceLocation }
+  props
 ) =>
-  addAlertSideContentToProps(
-    dispatch,
+  addAlertSideContentToProps(dispatch, props,
     {
-      handleEditorEval: () => evalEditor(workspaceLocation),
-      handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
-        updateEnvSteps(steps, workspaceLocation),
+      handleEditorEval: () => evalEditor(props.workspaceLocation),
+      handleEnvStepUpdate: (steps: number) =>
+        updateEnvSteps(steps, props.workspaceLocation),
       setEditorHighlightedLines: (
-        workspaceLocation: WorkspaceLocation,
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[]
-      ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
+      ) => setEditorHighlightedLinesAgenda(props.workspaceLocation, editorTabIndex, newHighlightedLines)
     },
-    SideContentType.envVisualizer,
-    workspaceLocation
   );
 
-const SideContentEnvVisualizerContainer = connect(
+export const SideContentEnvVisualizerContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(SideContentEnvVisualizer);
 
-export default SideContentEnvVisualizerContainer;
+const makeEnvVisualizerTabFrom = (location: OwnProps): SideContentTab => ({
+  label: 'Env Visualizer',
+  iconName: IconNames.GLOBE,
+  body: <SideContentEnvVisualizerContainer {...location} />,
+  id: SideContentType.envVisualizer
+});
+
+export default makeEnvVisualizerTabFrom

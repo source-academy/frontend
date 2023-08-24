@@ -87,7 +87,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContent: { height: sideContentHeight },
     currentSubmission: storedSubmissionId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
@@ -364,7 +363,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation
+      workspaceLocation
     };
 
     return sideContentProps;
@@ -483,7 +482,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
       handleBrowseHistoryDown: handleBrowseHistoryDown,

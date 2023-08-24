@@ -1,12 +1,15 @@
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { action } from 'typesafe-actions';
 
 import {
   ADD_STORY_ENV,
+  BEGIN_STORIES_ALERT_SIDE_CONTENT,
   CLEAR_STORY_ENV,
   CREATE_STORY,
   DELETE_STORY,
+  END_STORIES_ALERT_SIDE_CONTENT,
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
@@ -19,6 +22,7 @@ import {
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
+  STORIES_VISIT_SIDE_CONTENT,
   StoryData,
   StoryListView,
   StoryParams,
@@ -78,3 +82,12 @@ export const setCurrentStoriesGroup = (
   name: string | undefined,
   role: StoriesRole | undefined
 ) => action(SET_CURRENT_STORIES_GROUP, { id, name, role });
+
+export const storiesVisitSideContent = (id: SideContentType, env: string) =>
+  action(STORIES_VISIT_SIDE_CONTENT, { id, env });
+
+export const beginStoriesAlertSideContent = (id: SideContentType, env: string) =>
+  action(BEGIN_STORIES_ALERT_SIDE_CONTENT, { id, env });
+
+export const endStoriesAlertSideContent = (id: SideContentType, env: string) =>
+  action(END_STORIES_ALERT_SIDE_CONTENT, { id, env });

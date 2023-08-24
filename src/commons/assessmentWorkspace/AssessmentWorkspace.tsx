@@ -129,7 +129,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContent: { height: sideContentHeight },
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -518,7 +517,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         afterDynamicTabs: []
       },
       onChange: onChangeTabs,
-      workspaceLocation: workspaceLocation
+      workspaceLocation
     };
   };
 
@@ -815,7 +814,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: replProps
   };

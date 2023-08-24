@@ -15,6 +15,7 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
@@ -83,7 +84,6 @@ import SideContentMarkdownEditor from '../../commons/sideContent/content/githubA
 import SideContentMissionEditor from '../../commons/sideContent/content/githubAssessments/SideContentMissionEditor';
 import SideContentTaskEditor from '../../commons/sideContent/content/githubAssessments/SideContentTaskEditor';
 import SideContentTestcaseEditor from '../../commons/sideContent/content/githubAssessments/SideContentTestcaseEditor';
-import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
@@ -185,8 +185,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     hasUnsavedChanges,
     isRunning,
     output,
-    replValue,
-    sideContent: { height: sideContentHeight }
+    replValue
   } = useTypedSelector(state => state.workspaces.githubAssessment);
 
   /**
@@ -821,7 +820,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     [currentTaskNumber, taskList, setTaskListWrapper]
   );
 
-  const sideContentProps: () => SideContentProps = () => {
+  const sideContentProps = (): SideContentProps => {
     const tabs: SideContentTab[] = [
       {
         label: 'Task',
@@ -1116,6 +1115,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const sideBarProps = {
     tabs: []
   };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
     editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
@@ -1124,7 +1124,6 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(),
     replProps: replProps
   };

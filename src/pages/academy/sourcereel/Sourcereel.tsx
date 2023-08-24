@@ -20,9 +20,9 @@ import {
   SourcecastEditorContainerProps
 } from 'src/commons/editor/EditorContainer';
 import { Position } from 'src/commons/editor/EditorTypes';
-import SideContentDataVisualizer from 'src/commons/sideContent/content/SideContentDataVisualizer';
-import SideContentEnvVisualizer from 'src/commons/sideContent/content/SideContentEnvVisualizer';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import makeEnvVisualizerTabFrom from 'src/commons/sideContent/content/SideContentEnvVisualizer';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from 'src/commons/sourceRecorder/SourceRecorderControlBar';
@@ -113,7 +113,6 @@ const Sourcereel: React.FC = () => {
     playbackData,
     recordingStatus,
     replValue,
-    sideContent: { height: sideContentHeight },
     timeElapsedBeforePause,
     timeResumed
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -311,19 +310,8 @@ const Sourcereel: React.FC = () => {
     });
   };
 
-  const dataVisualizerTab: SideContentTab = {
-    label: 'Data Visualizer',
-    iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer workspaceLocation="sourcereel" />,
-    id: SideContentType.dataVisualizer
-  };
-
-  const envVisualizerTab: SideContentTab = {
-    label: 'Env Visualizer',
-    iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-    id: SideContentType.envVisualizer
-  };
+  const dataVisualizerTab = makeDataVisualizerTabFrom({ workspaceLocation })
+  const envVisualizerTab = makeEnvVisualizerTabFrom({ workspaceLocation }) 
 
   const workspaceHandlers = useMemo(() => {
     return {
@@ -363,6 +351,7 @@ const Sourcereel: React.FC = () => {
       handleTimerStop: () => dispatch(timerStop(workspaceLocation))
     };
   }, [dispatch]);
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelectButton]
@@ -385,7 +374,6 @@ const Sourcereel: React.FC = () => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: {
       onChange: activeTabChangeHandler,
       selectedTabId: selectedTab,
@@ -447,7 +435,7 @@ const Sourcereel: React.FC = () => {
         ],
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation
+      workspaceLocation
     }
   };
 

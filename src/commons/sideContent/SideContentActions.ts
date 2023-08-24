@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions';
 
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   BEGIN_ALERT_SIDE_CONTENT,
   END_ALERT_SIDE_CONTENT,

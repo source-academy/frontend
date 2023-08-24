@@ -1,6 +1,6 @@
 import { IconName } from '@blueprintjs/core';
 
-import { DebuggerContext } from '../workspace/WorkspaceTypes';
+import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 
@@ -86,3 +86,31 @@ export type ModuleSideContent = {
 export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
 export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
 export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
+
+export type SideContentLocation =
+  | {
+      workspaceLocation?: Exclude<WorkspaceLocation, 'stories'>;
+    }
+  | {
+      workspaceLocation: 'stories';
+      storiesEnv: string;
+    };
+
+export type SideContentInfo = {
+  height?: number;
+  dynamicTabs: SideContentTab[];
+  alerts: string[];
+};
+
+export type ChangeTabsCallback = (
+  newId: SideContentType,
+  oldId: SideContentType,
+  event: React.MouseEvent<HTMLElement>
+) => void;
+
+export type SideContentDispatchProps = {
+  /**
+   * Call this function to cause the icon of the tab with the provided ID to flash
+   */
+  alertSideContent: (newId: SideContentType) => void;
+};

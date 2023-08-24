@@ -105,7 +105,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContent: { height: sideContentHeight },
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -563,7 +562,9 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     }
 
     return {
-      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] }
+      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
+      onChange: () => {},
+      workspaceLocation
     };
   };
 
@@ -699,7 +700,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
       handleBrowseHistoryDown: handleBrowseHistoryDown,

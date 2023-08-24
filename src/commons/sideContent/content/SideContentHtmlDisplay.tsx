@@ -1,21 +1,21 @@
+import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect } from 'react';
 import { connect, MapDispatchToProps } from 'react-redux';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { ResultOutput } from 'src/commons/application/ApplicationTypes';
 
-import { addAlertSideContentToProps, AlertSideContentDispatchProps } from '../SideContentHelper';
-import { SideContentType } from '../SideContentTypes';
+import { addAlertSideContentToProps } from '../SideContentHelper';
+import { SideContentDispatchProps, SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type OwnProps = {
   content: string;
-  workspaceLocation: WorkspaceLocation;
   handleAddHtmlConsoleError: (errorMsg: string) => void;
-};
+} & SideContentLocation;
 
-type DispatchProps = AlertSideContentDispatchProps;
+type DispatchProps = SideContentDispatchProps
 
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
-const SideContentHtmlDisplay: React.FC<OwnProps & DispatchProps> = props => {
+const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => {
   const { content, handleAddHtmlConsoleError, alertSideContent } = props;
 
   useEffect(() => {
@@ -33,9 +33,7 @@ const SideContentHtmlDisplay: React.FC<OwnProps & DispatchProps> = props => {
     return () => window.removeEventListener('message', handleEvent);
   });
 
-  useEffect(() => {
-    alertSideContent();
-  }, []);
+  useEffect(() => { alertSideContent(SideContentType.htmlDisplay) })
 
   return (
     <iframe
@@ -48,8 +46,24 @@ const SideContentHtmlDisplay: React.FC<OwnProps & DispatchProps> = props => {
   );
 };
 
-const mapDispatchToProps: MapDispatchToProps<AlertSideContentDispatchProps, OwnProps> = (
-  dispatch,
-  { workspaceLocation }
-) => addAlertSideContentToProps(dispatch, {}, SideContentType.htmlDisplay, workspaceLocation);
-export default connect(null, mapDispatchToProps)(SideContentHtmlDisplay);
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) => addAlertSideContentToProps(dispatch, props, {})
+export const SideContentHtmlDisplay = connect(null, mapDispatchToProps)(SideContentHtmlDisplayBase)
+
+const makeHtmlDisplayTabFrom = (
+  output: ResultOutput,
+  handleError: (errorMsg: string) => void,
+  workspaceLocation: SideContentLocation
+): SideContentTab => ({
+  label: 'HTML Display',
+  iconName: IconNames.MODAL,
+  body: (
+    <SideContentHtmlDisplay
+      {...workspaceLocation}
+      content={output.value}
+      handleAddHtmlConsoleError={handleError}
+    />
+  ),
+  id: SideContentType.htmlDisplay
+});
+export default makeHtmlDisplayTabFrom
+

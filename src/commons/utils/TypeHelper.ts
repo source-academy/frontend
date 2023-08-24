@@ -1,5 +1,3 @@
-import { WorkspaceLocation } from "../workspace/WorkspaceTypes";
-
 export type MaybePromise<T, U = T> = T extends Promise<infer V> ? V : U;
 
 export type PromiseResolveType<T> = MaybePromise<T, never>;
@@ -83,5 +81,3 @@ export const assertType =
     obj;
 
 export type Replace<T, V extends Partial<Record<keyof T, any>>> = Omit<T, keyof V> & V;
-
-export type SideContentLocation = Omit<WorkspaceLocation, 'stories'> | { loc: 'stories', env: string }

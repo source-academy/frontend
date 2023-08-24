@@ -28,7 +28,6 @@ type StateProps = {
   sideBarProps: {
     tabs: SideBarTab[];
   };
-  sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
 };

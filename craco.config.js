@@ -132,6 +132,11 @@ const cracoConfig = (module.exports = {
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';
       return jestConfig;
     }
+  },
+  babel: {
+    presets: [
+      ['@babel/preset-typescript', { allowDeclareFields: true }]
+    ]
   }
 });
 

@@ -1,14 +1,10 @@
 import { IconNames } from '@blueprintjs/icons';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
-import { InterpreterOutput, ResultOutput } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
-import SideContentDataVisualizer from 'src/commons/sideContent/content/SideContentDataVisualizer';
-import SideContentEnvVisualizer from 'src/commons/sideContent/content/SideContentEnvVisualizer';
-import SideContentHtmlDisplay from 'src/commons/sideContent/content/SideContentHtmlDisplay';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 export const mobileOnlyTabIds: readonly SideContentType[] = [
   SideContentType.mobileEditor,
@@ -16,38 +12,7 @@ export const mobileOnlyTabIds: readonly SideContentType[] = [
 ];
 export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
-export const makeDataVisualizerTabFrom = (
-  workspaceLocation: WorkspaceLocation
-): SideContentTab => ({
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer workspaceLocation={workspaceLocation} />,
-  id: SideContentType.dataVisualizer
-});
 
-export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
-  label: 'Env Visualizer',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-  id: SideContentType.envVisualizer
-});
-
-export const makeHtmlDisplayTabFrom = (
-  output: ResultOutput,
-  handleError: (errorMsg: string) => void,
-  workspaceLocation: WorkspaceLocation
-): SideContentTab => ({
-  label: 'HTML Display',
-  iconName: IconNames.MODAL,
-  body: (
-    <SideContentHtmlDisplay
-      workspaceLocation={workspaceLocation}
-      content={output.value}
-      handleAddHtmlConsoleError={handleError}
-    />
-  ),
-  id: SideContentType.htmlDisplay
-});
 
 export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   label: 'Introduction',

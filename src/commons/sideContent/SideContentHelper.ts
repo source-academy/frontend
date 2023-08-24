@@ -2,11 +2,17 @@ import { TabId } from '@blueprintjs/core';
 import React from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
-import { Action, bindActionCreators, Dispatch } from 'redux';
+import { Action, ActionCreatorsMapObject, bindActionCreators, Dispatch } from 'redux';
+import { beginStoriesAlertSideContent } from 'src/features/stories/StoriesActions';
 
-import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { beginAlertSideContent } from './SideContentActions';
-import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
+import {
+  ModuleSideContent,
+  SideContentLocation,
+  SideContentTab,
+  SideContentType
+} from './SideContentTypes';
 
 // const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
 //   WorkspaceLocation,
@@ -52,20 +58,14 @@ export const getTabId = (tab: SideContentTab) =>
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert && ' side-content-tab-alert'}`;
 
-export type AlertSideContentDispatchProps = {
-  alertSideContent: () => void;
-};
-
-export const addAlertSideContentToProps = <TDispatchProps>(
-  dispatch: Dispatch<Action<unknown>>,
-  dispatchProps: TDispatchProps,
-  id: SideContentType,
-  workspaceLocation: WorkspaceLocation
-): TDispatchProps & { alertSideContent: () => void } =>
-  bindActionCreators(
-    {
-      ...dispatchProps,
-      alertSideContent: () => beginAlertSideContent(id, workspaceLocation)
-    },
-    dispatch
-  );
+export const addAlertSideContentToProps = <TDispatchProps extends ActionCreatorsMapObject<any>>(dispatch: Dispatch<Action<unknown>>, loc: SideContentLocation, dispatchProps: TDispatchProps) => ({
+  ...bindActionCreators(dispatchProps, dispatch),
+  alertSideContent: (newId: SideContentType) => {
+    if (loc.workspaceLocation === 'stories') {
+      // If in stories workspace, dispatch different event
+      dispatch(beginStoriesAlertSideContent(newId, loc.storiesEnv))
+    } else if (loc.workspaceLocation) {
+      dispatch(beginAlertSideContent(newId, loc.workspaceLocation));
+    }
+  }
+})

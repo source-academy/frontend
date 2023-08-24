@@ -26,6 +26,9 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import makeEnvVisualizerTabFrom from 'src/commons/sideContent/content/SideContentEnvVisualizer';
+import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -129,9 +132,6 @@ import {
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
-  makeDataVisualizerTabFrom,
-  makeEnvVisualizerTabFrom,
-  makeHtmlDisplayTabFrom,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSubstVisualizerTabFrom,
@@ -255,7 +255,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isDebugging,
     output,
     replValue,
-    sideContent: { height: sideContentHeight },
     sharedbConnected,
     usingSubst,
     usingEnv,
@@ -758,7 +757,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           makeHtmlDisplayTabFrom(
             output[0] as ResultOutput,
             errorMsg => dispatch(addHtmlConsoleError(errorMsg, workspaceLocation)),
-            workspaceLocation
+            { workspaceLocation }
           )
         );
       }
@@ -768,10 +767,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
       if (shouldShowDataVisualizer) {
-        tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
+        tabs.push(makeDataVisualizerTabFrom({ workspaceLocation }));
       }
       if (shouldShowEnvVisualizer) {
-        tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
+        tabs.push(makeEnvVisualizerTabFrom({ workspaceLocation }));
       }
       if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(output));
@@ -1017,7 +1016,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ),
     replProps: replProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
@@ -1025,8 +1023,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation,
-      sideContentHeight: sideContentHeight
+      workspaceLocation
     },
     sideContentIsResizeable:
       selectedTab !== SideContentType.substVisualizer &&
