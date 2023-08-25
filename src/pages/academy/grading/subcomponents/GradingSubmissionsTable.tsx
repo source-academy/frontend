@@ -107,25 +107,15 @@ const columns = [
 ];
 
 type GradingSubmissionTableProps = {
-  group: string | null;
   submissions: GradingOverview[];
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ group, submissions }) => {
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
   const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
-  const defaultFilters = [];
-  if (group && !tableFilters.columnFilters.find(filter => filter.id === 'groupName')) {
-    defaultFilters.push({
-      id: 'groupName',
-      value: group
-    });
-  }
-
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters,
-    ...defaultFilters
+    ...tableFilters.columnFilters
   ]);
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 

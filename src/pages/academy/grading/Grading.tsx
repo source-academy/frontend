@@ -33,15 +33,15 @@ const Grading: React.FC = () => {
   }>();
 
   const isAdmin = role === Role.Admin;
-  const [showAllGroups, setShowAllGroups] = useState(isAdmin);
+  const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
   const handleShowAllGroups = (value: boolean) => {
     // Admins will always see all groups regardless
     setShowAllGroups(isAdmin || value);
   };
-  const groupOptions = [{ value: true, label: 'all groups' }];
-  if (!isAdmin) {
-    groupOptions.unshift({ value: false, label: 'my groups' });
-  }
+  const groupOptions = [
+    { value: false, label: 'my groups' },
+    { value: true, label: 'all groups' }
+  ];
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -128,7 +128,6 @@ const Grading: React.FC = () => {
                   />
                 </Flex>
                 <GradingSubmissionsTable
-                  group={group}
                   submissions={submissions.filter(
                     s => showAllSubmissions || isSubmissionUngraded(s)
                   )}
