@@ -9,7 +9,7 @@ import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { exportGradingCSV } from 'src/features/grading/GradingUtils';
 
@@ -20,7 +20,13 @@ import GradingSummary from './subcomponents/GradingSummary';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
-  const { courseId, gradingOverviews, role } = useSession();
+  const {
+    courseId,
+    gradingOverviews,
+    role,
+    group,
+    assessmentOverviews: assessments = []
+  } = useSession();
   const params = useParams<{
     submissionId: string;
     questionId: string;
@@ -31,14 +37,7 @@ const Grading: React.FC = () => {
     dispatch(fetchGradingOverviews(role !== Role.Admin));
   }, [dispatch, role]);
 
-  const group = useTypedSelector(state => state.session.group);
-  const assessments = useTypedSelector(state => state.session.assessmentOverviews) || [];
-
   const [showGraded, setShowGraded] = useState(false);
-
-  const handleShowGradedChange = (shouldShowGraded: boolean) => {
-    setShowGraded(shouldShowGraded);
-  };
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -104,7 +103,7 @@ const Grading: React.FC = () => {
                     </Button>
                   </Flex>
 
-                  <Toggle color="gray" defaultValue={false} handleSelect={handleShowGradedChange}>
+                  <Toggle color="gray" defaultValue={false} handleSelect={v => setShowGraded(v)}>
                     <ToggleItem value={false} text="Ungraded" />
                     <ToggleItem value={true} text="All" />
                   </Toggle>
