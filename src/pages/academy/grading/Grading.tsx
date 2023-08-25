@@ -38,10 +38,10 @@ const Grading: React.FC = () => {
     // Admins will always see all groups regardless
     setShowAllGroups(isAdmin || value);
   };
-  const groupOptions = [{ value: true, label: 'all groups' }];
-  if (!isAdmin) {
-    groupOptions.unshift({ value: false, label: 'my groups' });
-  }
+  const groupOptions = [
+    { value: false, label: 'my groups' },
+    { value: true, label: 'all groups' }
+  ];
 
   const dispatch = useDispatch();
   useEffect(() => {
