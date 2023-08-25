@@ -509,6 +509,7 @@ test('updateGradingOverviews generates correct action object', () => {
   const overviews: GradingOverview[] = [
     {
       assessmentId: 1,
+      assessmentNumber: 'M1A',
       assessmentName: 'test assessment',
       assessmentType: 'Contests',
       initialXp: 0,
@@ -518,6 +519,7 @@ test('updateGradingOverviews generates correct action object', () => {
       maxXp: 500,
       studentId: 100,
       studentName: 'test student',
+      studentUsername: 'E0123456',
       submissionId: 1,
       submissionStatus: 'attempting',
       groupName: 'group',
@@ -541,6 +543,7 @@ test('updateGrading generates correct action object', () => {
       question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
       student: {
         name: 'test student',
+        username: 'E0123456',
         id: 234
       },
       grade: {

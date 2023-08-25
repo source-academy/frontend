@@ -14,6 +14,7 @@ import { Notification } from '../../commons/notificationBadge/NotificationBadgeT
  */
 export type GradingOverview = {
   assessmentId: number;
+  assessmentNumber: string;
   assessmentName: string;
   assessmentType: AssessmentType;
   initialXp: number;
@@ -23,6 +24,7 @@ export type GradingOverview = {
   maxXp: number;
   studentId: number;
   studentName: string;
+  studentUsername: string;
   submissionId: number;
   submissionStatus: string;
   groupName: string;
@@ -50,6 +52,7 @@ export type GradingQuestion = {
   question: AnsweredQuestion;
   student: {
     name: string;
+    username: string;
     id: number;
   };
   grade: {

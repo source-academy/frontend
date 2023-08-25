@@ -56,6 +56,10 @@ const columns = [
     header: 'Student',
     cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
+  columnHelper.accessor('studentUsername', {
+    header: 'Username',
+    cell: info => <Filterable column={info.column} value={info.getValue()} />
+  }),
   columnHelper.accessor('groupName', {
     header: 'Group',
     cell: info => <Filterable column={info.column} value={info.getValue()} />
