@@ -1,16 +1,22 @@
-import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import React, { useEffect } from 'react';
+import '@tremor/react/dist/esm/tremor.css';
+
+import { Icon as BpIcon, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { Button, Card, Col, ColGrid, Flex, Title, Toggle, ToggleItem } from '@tremor/react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { useSession } from 'src/commons/utils/Hooks';
+import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { exportGradingCSV } from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
-import GradingDashboard from './subcomponents/GradingDashboard';
+import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
+import GradingSummary from './subcomponents/GradingSummary';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
@@ -24,6 +30,15 @@ const Grading: React.FC = () => {
   useEffect(() => {
     dispatch(fetchGradingOverviews(role !== Role.Admin));
   }, [dispatch, role]);
+
+  const group = useTypedSelector(state => state.session.group);
+  const assessments = useTypedSelector(state => state.session.assessmentOverviews) || [];
+
+  const [showGraded, setShowGraded] = useState(false);
+
+  const handleShowGradedChange = (shouldShowGraded: boolean) => {
+    setShowGraded(shouldShowGraded);
+  };
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -56,20 +71,54 @@ const Grading: React.FC = () => {
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
 
+  const ungraded = submissions.filter(
+    submission =>
+      !(
+        submission.submissionStatus === 'submitted' &&
+        submission.gradingStatus === GradingStatuses.graded
+      )
+  );
+  const submissionsData = showGraded ? submissions : ungraded;
+
   return (
     <ContentDisplay
       display={
         gradingOverviews === undefined ? (
           loadingDisplay
         ) : (
-          // FIXME: I think the GradingDashboard component
-          // is an unnecessary abstraction and should be removed?
-          // Having it only adds complexity and coupling as the logic
-          // needs to be passed back and forth
-          <GradingDashboard
-            submissions={submissions}
-            handleCsvExport={() => exportGradingCSV(gradingOverviews)}
-          />
+          <ColGrid numColsLg={8} gapX="gap-x-4" gapY="gap-y-2">
+            <Col numColSpanLg={6}>
+              <Card>
+                <Flex justifyContent="justify-between">
+                  <Flex justifyContent="justify-start" spaceX="space-x-6">
+                    <Title>Submissions</Title>
+                    <Button
+                      variant="light"
+                      size="xs"
+                      icon={() => (
+                        <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />
+                      )}
+                      onClick={() => exportGradingCSV(gradingOverviews)}
+                    >
+                      Export to CSV
+                    </Button>
+                  </Flex>
+
+                  <Toggle color="gray" defaultValue={false} handleSelect={handleShowGradedChange}>
+                    <ToggleItem value={false} text="Ungraded" />
+                    <ToggleItem value={true} text="All" />
+                  </Toggle>
+                </Flex>
+                <GradingSubmissionsTable group={group} submissions={submissionsData} />
+              </Card>
+            </Col>
+
+            <Col numColSpanLg={2}>
+              <Card hFull>
+                <GradingSummary group={group} submissions={submissions} assessments={assessments} />
+              </Card>
+            </Col>
+          </ColGrid>
         )
       }
       fullWidth={true}
