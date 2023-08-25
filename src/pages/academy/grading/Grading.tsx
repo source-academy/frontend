@@ -122,6 +122,10 @@ const Grading: React.FC = () => {
         gradingOverviews === undefined ? (
           loadingDisplay
         ) : (
+          // FIXME: I think the GradingDashboard component
+          // is an unnecessary abstraction and should be removed?
+          // Having it only adds complexity and coupling as the logic
+          // needs to be passed back and forth
           <GradingDashboard submissions={data} handleCsvExport={exportCSV} />
         )
       }
