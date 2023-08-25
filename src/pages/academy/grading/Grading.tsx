@@ -1,13 +1,14 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Icon as BpIcon, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Button, Card, Col, ColGrid, Flex, Title, Toggle, ToggleItem } from '@tremor/react';
+import { Button, Card, Col, ColGrid, Flex, Text, Title } from '@tremor/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/GradingUtils';
@@ -31,12 +32,27 @@ const Grading: React.FC = () => {
     questionId: string;
   }>();
 
+  const isAdmin = role === Role.Admin;
+  const [showAllGroups, setShowAllGroups] = useState(isAdmin);
+  const handleShowAllGroups = (value: boolean) => {
+    // Admins will always see all groups regardless
+    setShowAllGroups(isAdmin || value);
+  };
+  const groupOptions = [{ value: true, label: 'all groups' }];
+  if (!isAdmin) {
+    groupOptions.unshift({ value: false, label: 'my groups' });
+  }
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchGradingOverviews(role !== Role.Admin));
-  }, [dispatch, role]);
+    dispatch(fetchGradingOverviews(!showAllGroups));
+  }, [dispatch, role, showAllGroups]);
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const showOptions = [
+    { value: false, label: 'ungraded' },
+    { value: true, label: 'all' }
+  ];
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -92,11 +108,24 @@ const Grading: React.FC = () => {
                       Export to CSV
                     </Button>
                   </Flex>
-
-                  <Toggle color="gray" defaultValue={false} handleSelect={setShowAllSubmissions}>
-                    <ToggleItem value={false} text="Ungraded" />
-                    <ToggleItem value={true} text="All" />
-                  </Toggle>
+                </Flex>
+                <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
+                  <Text>Viewing</Text>
+                  <SimpleDropdown
+                    options={showOptions}
+                    defaultValue={showAllSubmissions}
+                    onClick={setShowAllSubmissions}
+                    popoverProps={{ position: Position.BOTTOM }}
+                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                  />
+                  <Text>submissions from</Text>
+                  <SimpleDropdown
+                    options={groupOptions}
+                    defaultValue={showAllGroups}
+                    onClick={handleShowAllGroups}
+                    popoverProps={{ position: Position.BOTTOM }}
+                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                  />
                 </Flex>
                 <GradingSubmissionsTable
                   group={group}
