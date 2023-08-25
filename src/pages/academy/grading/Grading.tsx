@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -12,7 +12,7 @@ import GradingDashboard from './subcomponents/GradingDashboard';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
-  const { courseId, gradingOverviews } = useTypedSelector(state => state.session);
+  const { courseId, gradingOverviews } = useSession();
   const params = useParams<{
     submissionId: string;
     questionId: string;
