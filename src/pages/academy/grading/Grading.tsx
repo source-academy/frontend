@@ -51,7 +51,7 @@ const Grading: React.FC = () => {
     />
   );
 
-  const data =
+  const submissions =
     gradingOverviews?.map(e =>
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
@@ -67,7 +67,7 @@ const Grading: React.FC = () => {
           // Having it only adds complexity and coupling as the logic
           // needs to be passed back and forth
           <GradingDashboard
-            submissions={data}
+            submissions={submissions}
             handleCsvExport={() => exportGradingCSV(gradingOverviews)}
           />
         )
