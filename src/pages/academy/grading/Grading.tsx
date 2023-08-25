@@ -8,10 +8,9 @@ import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import { exportGradingCSV } from 'src/features/grading/GradingUtils';
+import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
@@ -70,13 +69,7 @@ const Grading: React.FC = () => {
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
 
-  const ungraded = submissions.filter(
-    submission =>
-      !(
-        submission.submissionStatus === 'submitted' &&
-        submission.gradingStatus === GradingStatuses.graded
-      )
-  );
+  const ungraded = submissions.filter(isSubmissionUngraded);
   const submissionsData = showGraded ? submissions : ungraded;
 
   return (

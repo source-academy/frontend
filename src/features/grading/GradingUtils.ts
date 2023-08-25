@@ -1,4 +1,10 @@
+import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
+
 import { GradingOverview } from './GradingTypes';
+
+export const isSubmissionUngraded = (s: GradingOverview): boolean => {
+  return s.submissionStatus !== 'submitted' || s.gradingStatus !== GradingStatuses.graded;
+};
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
   if (!gradingOverviews) return;
