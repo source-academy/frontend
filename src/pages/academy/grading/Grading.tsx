@@ -33,7 +33,7 @@ const Grading: React.FC = () => {
   }>();
 
   const isAdmin = role === Role.Admin;
-  const [showAllGroups, setShowAllGroups] = useState(isAdmin);
+  const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
   const handleShowAllGroups = (value: boolean) => {
     // Admins will always see all groups regardless
     setShowAllGroups(isAdmin || value);
