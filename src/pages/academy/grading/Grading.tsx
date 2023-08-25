@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
@@ -12,7 +13,7 @@ import GradingDashboard from './subcomponents/GradingDashboard';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
-  const { courseId, gradingOverviews } = useSession();
+  const { courseId, gradingOverviews, role } = useSession();
   const params = useParams<{
     submissionId: string;
     questionId: string;
@@ -20,8 +21,8 @@ const Grading: React.FC = () => {
 
   const dispatch = useDispatch();
   React.useEffect(() => {
-    dispatch(fetchGradingOverviews(false));
-  }, [dispatch]);
+    dispatch(fetchGradingOverviews(role === Role.Admin));
+  }, [dispatch, role]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
