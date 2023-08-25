@@ -36,7 +36,7 @@ const Grading: React.FC = () => {
     dispatch(fetchGradingOverviews(role !== Role.Admin));
   }, [dispatch, role]);
 
-  const [showGraded, setShowGraded] = useState(false);
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -69,9 +69,6 @@ const Grading: React.FC = () => {
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
 
-  const ungraded = submissions.filter(isSubmissionUngraded);
-  const submissionsData = showGraded ? submissions : ungraded;
-
   return (
     <ContentDisplay
       display={
@@ -96,12 +93,17 @@ const Grading: React.FC = () => {
                     </Button>
                   </Flex>
 
-                  <Toggle color="gray" defaultValue={false} handleSelect={v => setShowGraded(v)}>
+                  <Toggle color="gray" defaultValue={false} handleSelect={setShowAllSubmissions}>
                     <ToggleItem value={false} text="Ungraded" />
                     <ToggleItem value={true} text="All" />
                   </Toggle>
                 </Flex>
-                <GradingSubmissionsTable group={group} submissions={submissionsData} />
+                <GradingSubmissionsTable
+                  group={group}
+                  submissions={submissions.filter(
+                    s => showAllSubmissions || isSubmissionUngraded(s)
+                  )}
+                />
               </Card>
             </Col>
 
