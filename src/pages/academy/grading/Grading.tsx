@@ -1,11 +1,12 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import { exportGradingCSV } from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
@@ -20,8 +21,8 @@ const Grading: React.FC = () => {
   }>();
 
   const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch(fetchGradingOverviews(role === Role.Admin));
+  useEffect(() => {
+    dispatch(fetchGradingOverviews(role !== Role.Admin));
   }, [dispatch, role]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
@@ -55,67 +56,6 @@ const Grading: React.FC = () => {
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
 
-  const exportCSV = () => {
-    if (!gradingOverviews) return;
-
-    const win = document.defaultView || window;
-    if (!win) {
-      console.warn('There is no `window` associated with the current `document`');
-      return;
-    }
-
-    const content = new Blob(
-      [
-        '"Assessment Number","Assessment Name","Student Name","Student Username","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
-        ...gradingOverviews.map(
-          e =>
-            [
-              e.assessmentNumber,
-              e.assessmentName,
-              e.studentName,
-              e.studentUsername,
-              e.groupName,
-              e.submissionStatus,
-              e.gradingStatus,
-              e.questionCount,
-              e.gradedCount,
-              e.initialXp,
-              e.xpAdjustment,
-              e.currentXp,
-              e.maxXp,
-              e.xpBonus
-            ]
-              .map(field => `"${field}"`) // wrap each field in double quotes in case it contains a comma
-              .join(',') + '\n'
-        )
-      ],
-      { type: 'text/csv' }
-    );
-    const fileName = `SA submissions (${new Date().toISOString()}).csv`;
-
-    // code from https://github.com/ag-grid/ag-grid/blob/latest/grid-community-modules/csv-export/src/csvExport/downloader.ts
-    const element = document.createElement('a');
-    const url = win.URL.createObjectURL(content);
-    element.setAttribute('href', url);
-    element.setAttribute('download', fileName);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.dispatchEvent(
-      new MouseEvent('click', {
-        bubbles: false,
-        cancelable: true,
-        view: win
-      })
-    );
-
-    document.body.removeChild(element);
-
-    win.setTimeout(() => {
-      win.URL.revokeObjectURL(url);
-    }, 0);
-  };
-
   return (
     <ContentDisplay
       display={
@@ -126,7 +66,10 @@ const Grading: React.FC = () => {
           // is an unnecessary abstraction and should be removed?
           // Having it only adds complexity and coupling as the logic
           // needs to be passed back and forth
-          <GradingDashboard submissions={data} handleCsvExport={exportCSV} />
+          <GradingDashboard
+            submissions={data}
+            handleCsvExport={() => exportGradingCSV(gradingOverviews)}
+          />
         )
       }
       fullWidth={true}
