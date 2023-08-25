@@ -128,7 +128,6 @@ const Grading: React.FC = () => {
                   />
                 </Flex>
                 <GradingSubmissionsTable
-                  group={group}
                   submissions={submissions.filter(
                     s => showAllSubmissions || isSubmissionUngraded(s)
                   )}
