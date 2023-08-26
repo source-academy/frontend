@@ -619,9 +619,11 @@ export const getGradingOverviews = async (
     .map((overview: any) => {
       const gradingOverview: GradingOverview = {
         assessmentId: overview.assessment.id,
+        assessmentNumber: overview.assessment.assessmentNumber,
         assessmentName: overview.assessment.title,
         assessmentType: overview.assessment.type,
         studentId: overview.student.id,
+        studentUsername: overview.student.username,
         studentName: overview.student.name,
         submissionId: overview.id,
         submissionStatus: overview.status,
