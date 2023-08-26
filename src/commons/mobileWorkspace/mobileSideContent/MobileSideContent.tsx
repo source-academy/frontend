@@ -7,20 +7,26 @@ import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
 
 import { ControlBarProps } from '../../controlBar/ControlBar';
-import { SideContentTab } from '../../sideContent/SideContentTypes';
+import {
+  ChangeTabsCallback,
+  SideContentLocation,
+  SideContentTab,
+  SideContentType
+} from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import MobileControlBar from './MobileControlBar';
 
-export type MobileSideContentProps = SideContentProps &
-  Required<Pick<SideContentProps, 'onChange'>> &
-  MobileControlBarProps;
+export type MobileSideContentProps = Omit<SideContentProps, 'workspaceLocation' | 'onChange'> & {
+  onChange: ChangeTabsCallback;
+} & MobileControlBarProps &
+  SideContentLocation;
 
 type MobileControlBarProps = {
   mobileControlBarProps: ControlBarProps;
 };
 
-const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: WorkspaceLocation) => {
+const renderTab = (tab: SideContentTab, isIOS: boolean) => {
   const iconSize = 20;
   const tabId = tab.id === undefined ? tab.label : tab.id;
   const tabTitle: JSX.Element = (
@@ -51,9 +57,10 @@ const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: Work
 };
 
 const MobileSideContent: React.FC<MobileSideContentProps> = ({
-  selectedTabId,
   renderActiveTabPanelOnly,
   mobileControlBarProps,
+  onChange,
+  selectedTabId,
   ...props
 }) => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
@@ -62,7 +69,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
    * renderedPanels is not memoized since a change in selectedTabId (when changing tabs)
    * would force React.useMemo to recompute the nullary function anyway
    */
-  const renderedPanels = (dynamicTabs: SideContentTab[]) => {
+  const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentType) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
       if (!tab.body) return;
@@ -93,18 +100,18 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
 
   return (
     <SideContentProvider {...props}>
-      {(allTabs, _alerts, changeTabsCallback) => (
+      {({ tabs: allTabs, changeTabsCallback, selectedTab }) => (
         <>
-          {renderedPanels(allTabs)}
+          {renderedPanels(allTabs, selectedTab)}
           <div className="mobile-tabs-container">
             <Tabs
               id="mobile-side-content"
               onChange={changeTabsCallback}
               renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-              selectedTabId={selectedTabId}
+              selectedTabId={selectedTab}
               className={classNames(Classes.DARK, 'mobile-side-content')}
             >
-              {allTabs.map(tab => renderTab(tab, isIOS, props.workspaceLocation))}
+              {allTabs.map(tab => renderTab(tab, isIOS))}
 
               {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
               {(props.workspaceLocation === 'playground' || props.workspaceLocation === 'sicp') && (
