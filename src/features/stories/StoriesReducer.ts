@@ -182,6 +182,11 @@ export const StoriesReducer: Reducer<StoriesState> = (
       };
 
       const dynamicTabs = getDynamicTabs(debuggerContext);
+      const { sideContent } = state.envs[env];
+      const allAlerts = dynamicTabs.map(getTabId);
+      const alerts = sideContent.selectedTab
+        ? allAlerts.filter(id => id !== sideContent.selectedTab)
+        : allAlerts;
       return {
         ...state,
         envs: {
@@ -190,7 +195,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
             ...state.envs[env],
             debuggerContext,
             sideContent: {
-              alerts: dynamicTabs.map(getTabId),
+              alerts,
               dynamicTabs
             }
           }
@@ -205,12 +210,14 @@ export const StoriesReducer: Reducer<StoriesState> = (
             ...state.envs[env],
             sideContent: {
               ...state.envs[env].sideContent,
-              alerts: state.envs[env].sideContent.alerts.filter(id => id !== action.payload.id)
+              alerts: state.envs[env].sideContent.alerts.filter(id => id !== action.payload.id),
+              selectedTab: action.payload.id
             }
           }
         }
       };
     case END_STORIES_ALERT_SIDE_CONTENT:
+      if (action.payload.id === state.envs[env].sideContent.selectedTab) return state;
       return {
         ...state,
         envs: {
