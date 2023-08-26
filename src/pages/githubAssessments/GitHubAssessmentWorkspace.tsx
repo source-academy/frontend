@@ -16,6 +16,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
@@ -174,7 +175,8 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const assessmentOverview = location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
+  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation }, SideContentType.questionOverview);
+  // const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
   const { isMobileBreakpoint } = useResponsive();
 
   const {

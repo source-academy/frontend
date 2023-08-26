@@ -29,6 +29,7 @@ import {
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeEnvVisualizerTabFrom from 'src/commons/sideContent/content/SideContentEnvVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -310,9 +311,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const [lastEdit, setLastEdit] = useState(new Date());
   const [isGreen, setIsGreen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(
+  const [selectedTab, setSelectedTab] = useSideContent(
+    { workspaceLocation },
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
   );
+  // const [selectedTab, setSelectedTab] = useState(
+  //   shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
+  // );
   const [hasBreakpoints, setHasBreakpoints] = useState(false);
   const [sessionId, setSessionId] = useState(() =>
     initSession('playground', {
@@ -393,7 +398,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const handlers = useMemo(
     () => ({

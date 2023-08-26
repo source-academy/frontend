@@ -2,7 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import {
@@ -12,6 +12,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { Position } from 'src/commons/editor/EditorTypes';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
@@ -150,7 +151,8 @@ const Sourcecast: React.FC = () => {
    * which contains the ag-grid table of available Sourcecasts. This is intentional
    * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
-  const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
+  // const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
+  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation }, SideContentType.introduction);
 
   const handleQueryParam = () => {
     const newUid = params.sourcecastId;

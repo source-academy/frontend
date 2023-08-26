@@ -2,7 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   beginDebuggerPause,
@@ -22,6 +22,7 @@ import {
 import { Position } from 'src/commons/editor/EditorTypes';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeEnvVisualizerTabFrom from 'src/commons/sideContent/content/SideContentEnvVisualizer';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -85,7 +86,8 @@ const workspaceLocation: WorkspaceLocation = 'sourcereel';
 const sourcecastLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcereel: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
+  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation }, SideContentType.sourcereel);
+  // const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
 
   const courseId = useTypedSelector(state => state.session.courseId);
   const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(

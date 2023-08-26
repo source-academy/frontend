@@ -63,6 +63,7 @@ import SideContentContestLeaderboard from '../sideContent/content/SideContentCon
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
+import { useSideContent } from '../sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
@@ -110,11 +111,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
-  const [selectedTab, setSelectedTab] = useState(
+  // const [selectedTab, setSelectedTab] = useState(
+  //   assessment?.questions[props.questionId].grader !== undefined
+  //     ? SideContentType.grading
+  //     : SideContentType.questionOverview
+  // );
+  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation },
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
-  );
+    )
 
   const navigate = useNavigate();
 

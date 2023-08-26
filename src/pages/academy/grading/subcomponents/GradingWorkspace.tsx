@@ -2,7 +2,7 @@ import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
@@ -28,6 +28,7 @@ import Markdown from 'src/commons/Markdown';
 import SideContentAutograder from 'src/commons/sideContent/content/SideContentAutograder';
 import SideContentToneMatrix from 'src/commons/sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -74,7 +75,8 @@ const unansweredPrependValue: string = `// This answer does not have significant
 
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
+  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation }, SideContentType.grading);
+  // const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
