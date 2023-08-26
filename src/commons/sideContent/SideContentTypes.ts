@@ -3,6 +3,9 @@ import { IconName } from '@blueprintjs/core';
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
+export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
+export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
+export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -83,10 +86,6 @@ export type ModuleSideContent = {
   toSpawn?: (context: DebuggerContext) => boolean;
 };
 
-export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
-export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
-export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
-
 export type SideContentLocation =
   | {
       workspaceLocation?: Exclude<WorkspaceLocation, 'stories'>;
@@ -96,10 +95,11 @@ export type SideContentLocation =
       storiesEnv: string;
     };
 
-export type SideContentInfo = {
+export type SideContentState = {
   height?: number;
   dynamicTabs: SideContentTab[];
   alerts: string[];
+  selectedTab?: SideContentType;
 };
 
 export type ChangeTabsCallback = (

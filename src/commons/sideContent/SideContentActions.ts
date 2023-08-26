@@ -12,5 +12,8 @@ export const beginAlertSideContent = (id: SideContentType, workspaceLocation: Wo
   action(BEGIN_ALERT_SIDE_CONTENT, { id, workspaceLocation });
 export const endAlertSideContent = (id: SideContentType, workspaceLocation: WorkspaceLocation) =>
   action(END_ALERT_SIDE_CONTENT, { id, workspaceLocation });
-export const visitSideContent = (id: SideContentType, workspaceLocation: WorkspaceLocation) =>
-  action(VISIT_SIDE_CONTENT, { id, workspaceLocation });
+export const visitSideContent = (
+  newId: SideContentType,
+  prevId: SideContentType | undefined,
+  workspaceLocation: WorkspaceLocation
+) => action(VISIT_SIDE_CONTENT, { newId, prevId, workspaceLocation });

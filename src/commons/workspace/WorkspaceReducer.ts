@@ -1082,6 +1082,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       };
 
       const dynamicTabs = getDynamicTabs(debuggerContext);
+      const {
+        sideContent: { selectedTab }
+      } = state[workspaceLocation];
+      const allAlerts = dynamicTabs.map(getTabId);
+      const alerts = selectedTab ? allAlerts.filter(id => id !== selectedTab) : allAlerts;
+
       return {
         ...state,
         [workspaceLocation]: {
@@ -1089,13 +1095,15 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           debuggerContext,
           sideContent: {
             ...state[workspaceLocation].sideContent,
-            alerts: dynamicTabs.map(getTabId),
+            alerts,
             dynamicTabs
           }
         }
       };
     }
-    case END_ALERT_SIDE_CONTENT:
+    case END_ALERT_SIDE_CONTENT: {
+      if (action.payload.id === state[workspaceLocation].sideContent.selectedTab) return state;
+
       return {
         ...state,
         [workspaceLocation]: {
@@ -1106,6 +1114,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
+    }
     case VISIT_SIDE_CONTENT:
       return {
         ...state,
@@ -1114,8 +1123,9 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           sideContent: {
             ...state[workspaceLocation].sideContent,
             alerts: state[workspaceLocation].sideContent.alerts.filter(
-              id => id !== action.payload.id
-            )
+              id => id !== action.payload.newId
+            ),
+            selectedTab: action.payload.newId
           }
         }
       };

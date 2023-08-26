@@ -1,62 +1,63 @@
-import { useDispatch } from 'react-redux';
-import { storiesVisitSideContent } from 'src/features/stories/StoriesActions';
-
-import { useTypedSelector } from '../utils/Hooks';
-import { visitSideContent } from './SideContentActions';
-import type { ChangeTabsCallback, SideContentLocation, SideContentTab } from './SideContentTypes';
+import { useSideContentInternal } from './SideContentHelper';
+import type {
+  ChangeTabsCallback,
+  SideContentLocation,
+  SideContentTab,
+  SideContentType
+} from './SideContentTypes';
 
 type SideContentProviderProps = {
   tabs?: {
     beforeDynamicTabs: SideContentTab[];
     afterDynamicTabs: SideContentTab[];
   };
+  children: (args: {
+    tabs: SideContentTab[];
+    alerts: string[];
+    changeTabsCallback: ChangeTabsCallback;
+    height?: number;
+    selectedTab?: SideContentType;
+  }) => JSX.Element;
+
+  /**
+   * Providing this prop changes the side content provider to uncontrolled mode. The user is
+   * then responsible for managing tab changing
+   */
   onChange?: ChangeTabsCallback;
-  children: (
-    tabs: SideContentTab[],
-    alerts: string[],
-    callback: ChangeTabsCallback,
-    height?: number
-  ) => JSX.Element;
+  selectedTab?: SideContentType;
+  defaultTab?: SideContentType;
 } & SideContentLocation;
 
-/**
- * Wrapper that manages how SideContent events are handled.\
- * When a tab is visited, `visitSideContent` is dispatched for regular workspaces, but `storiesVisitSideContent` is dispatched for the stories workspace
- * Similarly, 'alertSideContent` and `storiesAlertSideContent` are dispatched when the alert context's `alertSideContent` function is called
- */
 export default function SideContentProvider({
   tabs,
+  defaultTab,
   children,
-  onChange,
   ...props
 }: SideContentProviderProps) {
-  const dispatch = useDispatch();
-
-  const { dynamicTabs, alerts, height } = useTypedSelector(state => {
-    if (!props.workspaceLocation) {
-      return {
-        dynamicTabs: [],
-        alerts: []
-      };
-    }
-    return props.workspaceLocation !== 'stories'
-      ? state.workspaces[props.workspaceLocation].sideContent
-      : state.stories.envs[props.storiesEnv].sideContent;
-  });
+  const { alerts, height, dynamicTabs, setSelectedTab, selectedTab } = useSideContentInternal(
+    props,
+    defaultTab
+  );
 
   const allTabs = tabs
     ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs]
     : dynamicTabs;
 
   const changeTabsCallback: ChangeTabsCallback = (newId, oldId, event) => {
-    if (onChange) onChange(newId, oldId, event);
-    if (props.workspaceLocation === 'stories') {
-      // If in stories workspace, dispatch different event
-      dispatch(storiesVisitSideContent(newId, props.storiesEnv));
-    } else if (props.workspaceLocation) {
-      dispatch(visitSideContent(newId, props.workspaceLocation));
+    if (props.onChange) {
+      // Controlled mode
+      props.onChange(newId, oldId, event);
+    } else {
+      // Uncontrolled mode
+      setSelectedTab(newId);
     }
   };
 
-  return children(allTabs, alerts, changeTabsCallback, height);
+  return children({
+    tabs: allTabs,
+    alerts,
+    changeTabsCallback,
+    selectedTab: props.selectedTab ? props.selectedTab : selectedTab,
+    height
+  });
 }

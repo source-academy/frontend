@@ -1,12 +1,17 @@
 import { TabId } from '@blueprintjs/core';
-import React from 'react';
+import React, { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
+import { useDispatch } from 'react-redux';
 import { Action, ActionCreatorsMapObject, bindActionCreators, Dispatch } from 'redux';
-import { beginStoriesAlertSideContent } from 'src/features/stories/StoriesActions';
+import {
+  beginStoriesAlertSideContent,
+  storiesVisitSideContent
+} from 'src/features/stories/StoriesActions';
 
+import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
-import { beginAlertSideContent } from './SideContentActions';
+import { beginAlertSideContent, visitSideContent } from './SideContentActions';
 import {
   ModuleSideContent,
   SideContentLocation,
@@ -56,7 +61,7 @@ export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 export const getTabId = (tab: SideContentTab) =>
   tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
 export const generateTabAlert = (shouldAlert: boolean) =>
-  `side-content-tooltip${shouldAlert && ' side-content-tab-alert'}`;
+  `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
 /**
  * A wrapper around `mapDispatchToProps` to automatically provide a SideContent's props
@@ -77,3 +82,47 @@ export const addAlertSideContentToProps = <TDispatchProps extends ActionCreators
     }
   }
 });
+
+// type SideContentHook = {
+//   setSelectedTab: (newId: SideContentType) => void;
+// } & Replace<SideContentState, { selectedTab: SideContentType }>;
+
+export function useSideContentInternal(loc: SideContentLocation, defaultTab?: SideContentType) {
+  const dispatch = useDispatch();
+  const { selectedTab, ...sideContent } = useTypedSelector(state => {
+    if (loc.workspaceLocation === 'stories') {
+      return state.stories.envs[loc.storiesEnv].sideContent;
+    } else if (loc.workspaceLocation) {
+      return state.workspaces[loc.workspaceLocation].sideContent;
+    } else {
+      return {
+        dynamicTabs: [],
+        alerts: []
+      };
+    }
+  });
+
+  const setSelectedTab = useCallback(
+    (newId: SideContentType) => {
+      if (loc.workspaceLocation === 'stories') {
+        dispatch(storiesVisitSideContent(newId, loc.storiesEnv));
+      } else if (loc.workspaceLocation) {
+        dispatch(visitSideContent(newId, selectedTab, loc.workspaceLocation));
+      }
+    },
+    // Not necessary to add dispatch, it's from a hook
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [loc]
+  );
+
+  return {
+    ...sideContent,
+    setSelectedTab,
+    selectedTab: selectedTab ?? defaultTab
+  };
+}
+
+export const useSideContent = (loc: SideContentLocation, defaultTab: SideContentType) => {
+  const { selectedTab, setSelectedTab } = useSideContentInternal(loc, defaultTab);
+  return [selectedTab!, setSelectedTab] as [SideContentType, (newId: SideContentType) => void];
+};
