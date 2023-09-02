@@ -411,10 +411,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     // hopelessly incomplete
     editor.on(
       'gutterclick' as any,
-      makeHandleGutterClick(
-        (...args) => handleEditorUpdateBreakpointsRef.current(...args),
-        props.editorTabIndex
-      ) as any
+      makeHandleGutterClick(handleEditorUpdateBreakpointsRef.current, props.editorTabIndex)
     );
 
     // Change all info annotations to error annotations
@@ -485,8 +482,16 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       if (!reactAceRef.current) {
         return;
       }
-      handleEditorValueChange(props.editorTabIndex, newCode);
+
       shiftBreakpointsWithCode(reactAceRef.current.editor, delta);
+
+      // Write editor state for the active editor tab to the store.
+      handleEditorValueChange(props.editorTabIndex, newCode);
+      handleEditorUpdateBreakpointsRef.current(
+        props.editorTabIndex,
+        reactAceRef.current.editor.session.getBreakpoints()
+      );
+
       if (handleUpdateHasUnsavedChanges) {
         handleUpdateHasUnsavedChanges(true);
       }
