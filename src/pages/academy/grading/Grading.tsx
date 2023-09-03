@@ -34,10 +34,6 @@ const Grading: React.FC = () => {
 
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
-  const handleShowAllGroups = (value: boolean) => {
-    // Admins will always see all groups regardless
-    setShowAllGroups(isAdmin || value);
-  };
   const groupOptions = [
     { value: false, label: 'my groups' },
     { value: true, label: 'all groups' }
@@ -122,7 +118,7 @@ const Grading: React.FC = () => {
                   <SimpleDropdown
                     options={groupOptions}
                     defaultValue={showAllGroups}
-                    onClick={handleShowAllGroups}
+                    onClick={setShowAllGroups}
                     popoverProps={{ position: Position.BOTTOM }}
                     buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
                   />
