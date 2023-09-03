@@ -24,6 +24,8 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
+import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
@@ -96,9 +98,16 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     ADD_HTML_CONSOLE_ERROR,
     function* (action: ReturnType<typeof actions.addHtmlConsoleError>) {
-      yield put(
-        actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
-      );
+      // TODO: Do not use if-else logic
+      if (!action.payload.storyEnv) {
+        yield put(
+          actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
+        );
+      } else {
+        yield put(
+          actions.handleStoriesConsoleLog(action.payload.storyEnv, action.payload.errorMsg)
+        );
+      }
     }
   );
 
@@ -303,6 +312,20 @@ export default function* WorkspaceSaga(): SagaIterator {
       [codeFilePath]: code
     };
     yield call(evalCode, codeFiles, codeFilePath, context, execTime, workspaceLocation, EVAL_REPL);
+  });
+
+  yield takeEvery(EVAL_STORY, function* (action: ReturnType<typeof actions.evalStory>) {
+    const env = action.payload.env;
+    const code = action.payload.code;
+    const execTime: number = yield select(
+      (state: OverallState) => state.stories.envs[env].execTime
+    );
+    context = yield select((state: OverallState) => state.stories.envs[env].context);
+    const codeFilePath = '/code.js';
+    const codeFiles = {
+      [codeFilePath]: code
+    };
+    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY, env);
   });
 
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
@@ -630,9 +653,15 @@ function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: str
 }
 
 export function* dumpDisplayBuffer(
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  isStoriesBlock: boolean = false,
+  storyEnv?: string
 ): Generator<StrictEffect, void, any> {
-  yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
+  if (!isStoriesBlock) {
+    yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
+  } else {
+    yield put(actions.handleStoriesConsoleLog(storyEnv!, ...DisplayBufferService.dump()));
+  }
 }
 
 /**
@@ -1008,10 +1037,12 @@ export function* evalCode(
   context: Context,
   execTime: number,
   workspaceLocation: WorkspaceLocation,
-  actionType: string
+  actionType: string,
+  storyEnv?: string
 ): SagaIterator {
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
+  const isStoriesBlock = actionType === EVAL_STORY || workspaceLocation === 'stories';
 
   // Logic for execution of substitution model visualizer
   const correctWorkspace = workspaceLocation === 'playground' || workspaceLocation === 'sicp';
@@ -1021,10 +1052,13 @@ export function* evalCode(
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
             .usingSubst
       )
+    : isStoriesBlock
+    ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
     : false;
-  const stepLimit: number = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
-  );
+  const stepLimit: number = isStoriesBlock
+    ? yield select((state: OverallState) => state.stories.envs[storyEnv!].stepLimit)
+    : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
   const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
@@ -1050,7 +1084,10 @@ export function* evalCode(
             .updateEnv
       )
     : false;
-  const envSteps: number = correctWorkspace
+  // When envSteps is -1, the entire code is run from the start.
+  const envSteps: number = needUpdateEnv
+    ? -1
+    : correctWorkspace
     ? yield select(
         (state: OverallState) =>
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
@@ -1061,8 +1098,6 @@ export function* evalCode(
   if (envActiveAndCorrectChapter) {
     context.executionMethod = 'ec-evaluator';
   }
-  // When envSteps is -1, the entire code is run from the start.
-  context.runtime.envSteps = needUpdateEnv ? -1 : envSteps;
 
   const entrypointCode = files[entrypointFilePath];
 
@@ -1074,14 +1109,16 @@ export function* evalCode(
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
-            useSubst: substActiveAndCorrectChapter
+            useSubst: substActiveAndCorrectChapter,
+            envSteps: envSteps
           });
     } else if (variant === Variant.LAZY) {
       return call(runFilesInContext, files, entrypointFilePath, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
         stepLimit: stepLimit,
-        useSubst: substActiveAndCorrectChapter
+        useSubst: substActiveAndCorrectChapter,
+        envSteps: envSteps
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
@@ -1136,7 +1173,8 @@ export function* evalCode(
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
             throwInfiniteLoops: true,
-            useSubst: substActiveAndCorrectChapter
+            useSubst: substActiveAndCorrectChapter,
+            envSteps: envSteps
           }),
 
     /**
@@ -1170,7 +1208,11 @@ export function* evalCode(
   if (actionType === EVAL_EDITOR) {
     lastDebuggerResult = result;
   }
-  yield call(updateInspector, workspaceLocation);
+
+  // do not highlight for stories
+  if (!isStoriesBlock) {
+    yield call(updateInspector, workspaceLocation);
+  }
 
   if (
     result.status !== 'suspended' &&
@@ -1178,9 +1220,13 @@ export function* evalCode(
     result.status !== 'suspended-non-det' &&
     result.status !== 'suspended-ec-eval'
   ) {
-    yield* dumpDisplayBuffer(workspaceLocation);
-    yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-
+    yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
+    if (!isStoriesBlock) {
+      yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+    } else {
+      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      yield put(actions.evalStoryError(context.errors, storyEnv!));
+    }
     // we need to parse again, but preserve the errors in context
     const oldErrors = context.errors;
     context.errors = [];
@@ -1191,7 +1237,7 @@ export function* evalCode(
     // for achievement event tracking
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
 
-    if (typeErrors && typeErrors.length > 0) {
+    if (typeErrors && typeErrors.length > 0 && !isStoriesBlock) {
       events.push(EventType.ERROR);
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
@@ -1210,11 +1256,16 @@ export function* evalCode(
     lastNonDetResult = result;
   }
 
-  yield* dumpDisplayBuffer(workspaceLocation);
+  yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
-    yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+    if (!isStoriesBlock) {
+      yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+    } else {
+      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      yield put(actions.evalStorySuccess(result.value, storyEnv!));
+    }
   }
 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
@@ -1226,6 +1277,12 @@ export function* evalCode(
       notifyProgramEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
     );
   }
+  if (isStoriesBlock) {
+    yield put(
+      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+      notifyStoriesEvaluated(result, lastDebuggerResult, entrypointCode, context, storyEnv!)
+    );
+  }
 
   // The first time the code is executed using the explicit control evaluator,
   // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
@@ -1233,6 +1290,11 @@ export function* evalCode(
     yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
     yield put(actions.toggleUpdateEnv(false, workspaceLocation));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
+  }
+  // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
+  if (context.executionMethod === 'ec-evaluator' || context.executionMethod === 'interpreter') {
+    const introIcon = document.getElementById(SideContentType.introduction + '-icon');
+    introIcon && introIcon.classList.remove('side-content-tab-alert-error');
   }
 }
 

@@ -1,15 +1,14 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 type AchievementUuidCopierProps = {
   uuid: string;
 };
 
-function AchievmenetUuidCopier(props: AchievementUuidCopierProps) {
-  const { uuid } = props;
-
+const AchievmenetUuidCopier: React.FC<AchievementUuidCopierProps> = ({ uuid }) => {
   const hoverText = 'Click to copy achievement UUID';
   const copy = () => {
     navigator.clipboard.writeText(uuid);
@@ -21,6 +20,6 @@ function AchievmenetUuidCopier(props: AchievementUuidCopierProps) {
       <Button icon={IconNames.CLIPBOARD} onClick={copy} />
     </Tooltip2>
   );
-}
+};
 
 export default AchievmenetUuidCopier;

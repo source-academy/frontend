@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AchievementUser } from 'src/features/achievement/AchievementTypes';
 
@@ -11,8 +11,7 @@ type AchievementOverviewProps = {
   userState: [AchievementUser | undefined, any];
 };
 
-function AchievementOverview(props: AchievementOverviewProps) {
-  const { name, userState } = props;
+const AchievementOverview: React.FC<AchievementOverviewProps> = ({ name, userState }) => {
   const [selectedUser] = userState;
   const crid = selectedUser?.courseRegId;
   const userCrid = useTypedSelector(store => store.session.courseRegId);
@@ -35,6 +34,6 @@ function AchievementOverview(props: AchievementOverviewProps) {
       <h3>{name}</h3>
     </div>
   );
-}
+};
 
 export default AchievementOverview;

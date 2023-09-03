@@ -11,76 +11,6 @@ exports[`Navbar renders correctly 1`] = `
       <TableOfContentsButton
         handleOpenToc={[Function]}
       />
-      <div
-        className="userSearch"
-        style={
-          Object {
-            "height": "600%",
-            "left": "15%",
-            "position": "absolute",
-            "top": "10%",
-            "width": "20%",
-          }
-        }
-      >
-        <div
-          className="userSearch-inner"
-        >
-          <div
-            style={
-              Object {
-                "display": "inline-flex",
-              }
-            }
-          >
-            <Blueprint4.InputGroup
-              onChange={[Function]}
-              placeholder="Search"
-              value=""
-            />
-            <ControlButton
-              icon="search"
-              label="Text"
-              onClick={[Function]}
-            />
-          </div>
-        </div>
-      </div>
-      <div
-        className="indexSearch"
-        style={
-          Object {
-            "height": "600%",
-            "left": "36%",
-            "position": "absolute",
-            "top": "10%",
-            "width": "20%",
-          }
-        }
-      >
-        <div
-          className="indexSearch-inner"
-        >
-          <div
-            style={
-              Object {
-                "display": "inline-flex",
-              }
-            }
-          >
-            <Blueprint4.InputGroup
-              onChange={[Function]}
-              placeholder="Search"
-              value=""
-            />
-            <ControlButton
-              icon="search"
-              label="Index"
-              onClick={[Function]}
-            />
-          </div>
-        </div>
-      </div>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup
       align="right"
@@ -96,6 +26,83 @@ exports[`Navbar renders correctly 1`] = `
             }
           }
         />
+      </div>
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup
+      align="center"
+    >
+      <div
+        className="searchWrapper"
+        style={
+          Object {
+            "display": "flex",
+            "justifyContent": "center",
+            "width": "100%",
+          }
+        }
+      >
+        <div
+          className="userSearch"
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="userSearch-inner"
+          >
+            <div
+              style={
+                Object {
+                  "display": "inline-flex",
+                }
+              }
+            >
+              <Blueprint4.InputGroup
+                onChange={[Function]}
+                placeholder="Search"
+                value=""
+              />
+              <ControlButton
+                icon="search"
+                label="Text"
+                onClick={[Function]}
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="indexSearch"
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="indexSearch-inner"
+          >
+            <div
+              style={
+                Object {
+                  "display": "inline-flex",
+                }
+              }
+            >
+              <Blueprint4.InputGroup
+                onChange={[Function]}
+                placeholder="Search"
+                value=""
+              />
+              <ControlButton
+                icon="search"
+                label="Index"
+                onClick={[Function]}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>
