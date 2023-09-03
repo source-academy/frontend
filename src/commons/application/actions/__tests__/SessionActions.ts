@@ -511,6 +511,7 @@ test('updateGradingOverviews generates correct action object', () => {
       assessmentId: 1,
       assessmentName: 'test assessment',
       assessmentType: 'Contests',
+      questions: '',
       initialXp: 0,
       xpBonus: 100,
       xpAdjustment: 50,
