@@ -58,14 +58,17 @@ const Grading: React.FC = () => {
 
     const content = new Blob(
       [
-        '"Student Name","Group","Status","Question","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
+        '"Assessment Name","Student Name","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
         ...gradingOverviews.map(
           e =>
             [
+              e.assessmentName,
               e.studentName,
               e.groupName,
               e.submissionStatus,
-              e.questions,
+              e.gradingStatus,
+              e.questionCount,
+              e.gradedCount,
               e.initialXp,
               e.xpAdjustment,
               e.currentXp,

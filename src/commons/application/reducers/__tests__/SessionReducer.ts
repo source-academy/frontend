@@ -475,7 +475,6 @@ const gradingOverviewTest1: GradingOverview[] = [
   {
     assessmentId: 1,
     assessmentName: 'test assessment',
-    questions: '',
     assessmentType: 'Contests',
     initialXp: 0,
     xpBonus: 100,
@@ -497,7 +496,6 @@ const gradingOverviewTest2: GradingOverview[] = [
   {
     assessmentId: 2,
     assessmentName: 'another assessment',
-    questions: '',
     assessmentType: 'Quests',
     initialXp: 20,
     xpBonus: 250,

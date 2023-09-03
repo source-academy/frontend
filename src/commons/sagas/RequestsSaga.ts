@@ -623,7 +623,6 @@ export const getGradingOverviews = async (
         assessmentType: overview.assessment.type,
         studentId: overview.student.id,
         studentName: overview.student.name,
-        questions: overview.questions,
         submissionId: overview.id,
         submissionStatus: overview.status,
         groupName: overview.student.groupName,
