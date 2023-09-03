@@ -66,7 +66,7 @@ const envVizKeyMap = {
   LAST_STEP: 'e'
 };
 
-class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State> {
+class SideContentEnvVisualizerBase extends React.Component<EnvVisualizerProps, State> {
   constructor(props: EnvVisualizerProps) {
     super(props);
     this.state = {
@@ -477,15 +477,15 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
       setEditorHighlightedLinesAgenda(props.workspaceLocation, editorTabIndex, newHighlightedLines)
   });
 
-export const SideContentEnvVisualizerContainer = connect(
+export const SideContentEnvVisualizer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SideContentEnvVisualizer);
+)(SideContentEnvVisualizerBase);
 
 const makeEnvVisualizerTabFrom = (location: OwnProps): SideContentTab => ({
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizerContainer {...location} />,
+  body: <SideContentEnvVisualizer {...location} />,
   id: SideContentType.envVisualizer
 });
 

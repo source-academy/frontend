@@ -40,7 +40,7 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
 
   useEffect(() => {
     alertSideContent(SideContentType.htmlDisplay);
-  });
+  }, []);
 
   return (
     <iframe

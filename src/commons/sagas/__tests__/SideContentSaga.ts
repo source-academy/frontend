@@ -13,7 +13,7 @@ import { actions } from 'src/commons/utils/ActionsHelper';
 import { WorkspaceReducer } from 'src/commons/workspace/WorkspaceReducer';
 import { WorkspaceManagerState } from 'src/commons/workspace/WorkspaceTypes';
 
-import { SideContentSaga } from '../SIdeContentSaga';
+import SideContentSaga from '../SIdeContentSaga';
 
 jest.spyOn(sideContentHelper, 'getDynamicTabs');
 

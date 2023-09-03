@@ -8,7 +8,7 @@ import {
 } from '../sideContent/SideContentTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-export function* SideContentSaga(): SagaIterator {
+export default function* SideContentSaga(): SagaIterator {
   yield takeEvery(
     BEGIN_ALERT_SIDE_CONTENT,
     function* ({

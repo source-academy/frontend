@@ -8,6 +8,9 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 import classNames from 'classnames';
+import { SideContentDispatchProps, SideContentLocation, SideContentType } from '../SideContentTypes';
+import { addAlertSideContentToProps } from '../SideContentHelper';
+import { MapDispatchToProps, connect } from 'react-redux';
 
 const SubstDefaultText = () => {
   return (
@@ -61,17 +64,19 @@ const SubstCodeDisplay = (props: { content: string }) => {
   );
 };
 
-type SubstVisualizerProps = StateProps;
+type SubstVisualizerProps = OwnProps & DispatchProps;
 
-type StateProps = {
+type OwnProps = {
   content: IStepperPropContents[];
-};
+} & SideContentLocation;
 
 type State = {
   value: number;
 };
 
-class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, State> {
+type DispatchProps = SideContentDispatchProps
+
+class SideContentSubstVisualizerBase extends React.Component<SubstVisualizerProps, State> {
   constructor(props: SubstVisualizerProps) {
     super(props);
     this.state = {
@@ -83,11 +88,15 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     ModeSelector(2);
   }
 
-  componentDidUpdate(prevProps: StateProps, prevState: State) {
+  componentDidUpdate(prevProps: OwnProps, prevState: State) {
     if (prevProps.content !== this.props.content) {
       this.setState((state: State) => {
         return { value: 1 };
       });
+
+      if (this.props.content.length > 0) {
+        this.props.alertSideContent(SideContentType.substVisualizer)
+      }
     }
   }
 
@@ -351,4 +360,5 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
   };
 }
 
-export default SideContentSubstVisualizer;
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) => addAlertSideContentToProps(dispatch, props, {})
+export default connect(null, mapDispatchToProps)(SideContentSubstVisualizerBase)
