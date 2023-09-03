@@ -348,6 +348,22 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       // See AceHelper#selectMode for more information.
       props.session.setMode(editor.getSession().getMode());
       editor.setSession(props.session);
+      /* eslint-disable */
+
+      // Add changeCursor event listener onto the current session.
+      // In ReactAce, this event listener is only bound on component
+      // mounting/creation, and hence changing sessions will need rebinding.
+      // See react-ace/src/ace.tsx#263,#460 for more details. We also need to
+      // ensure that event listener is only bound once to prevent memory leaks.
+      // We also need to check non-documented property _eventRegistry to
+      // see if the changeCursor listener event has been added yet.
+
+      // @ts-ignore
+      if (editor.getSession().selection._eventRegistry.changeCursor.length < 2) {
+        editor.getSession().selection.on('changeCursor', reactAceRef.current!.onCursorChange);
+      }
+
+      /* eslint-enable */
       // Give focus to the editor tab only after switching from another tab.
       // This is necessary to prevent 'unstable_flushDiscreteUpdates' warnings.
       if (filePath !== undefined) {
