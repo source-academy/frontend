@@ -1,4 +1,6 @@
-export type PromiseResolveType<T> = T extends Promise<infer U> ? U : never;
+export type MaybePromise<T, U = T> = T extends Promise<infer V> ? V : U;
+
+export type PromiseResolveType<T> = MaybePromise<T, never>;
 
 export type AsyncReturnType<T extends (...args: any) => any> = PromiseResolveType<ReturnType<T>>;
 
@@ -64,6 +66,13 @@ export const assertType =
     } & {
       // Keys of S should be optional to allow extension
       [key in keyof S]?: S[key];
+    } & {
+      // But if the key is defined in T, despite being a partial
+      // type, the value of T[key] must not be undefined
+      // unless undefined is allowed in S. Similar behavior to
+      // `--exactOptionalPropertyTypes` flag in tsconfig.json,
+      // but this allows us to only enforce it when we want to.
+      [key in keyof T]: key extends keyof S ? S[key] : never;
     } = any
   >(
     obj: T

@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import { achievementTemplate } from './AchievementTemplate';
@@ -10,9 +10,7 @@ type AchievementAdderProps = {
   setNewUuid: (uuid: string) => void;
 };
 
-function AchievementAdder(props: AchievementAdderProps) {
-  const { allowNewUuid, setNewUuid } = props;
-
+const AchievementAdder: React.FC<AchievementAdderProps> = ({ allowNewUuid, setNewUuid }) => {
   const inferencer = useContext(AchievementContext);
 
   const addAchievement = () => setNewUuid(inferencer.insertAchievement(achievementTemplate));
@@ -26,6 +24,6 @@ function AchievementAdder(props: AchievementAdderProps) {
       text="Create Achievement"
     />
   );
-}
+};
 
 export default AchievementAdder;

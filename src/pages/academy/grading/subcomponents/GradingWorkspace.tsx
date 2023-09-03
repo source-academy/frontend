@@ -305,6 +305,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             xpAdjustment={grading![questionId].grade.xpAdjustment}
             maxXp={grading![questionId].question.maxXp}
             studentName={grading![questionId].student.name}
+            studentUsername={grading![questionId].student.username}
             comments={grading![questionId].grade.comments ?? ''}
             graderName={
               grading![questionId].grade.grader
