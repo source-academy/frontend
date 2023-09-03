@@ -1,7 +1,5 @@
-export {};
-
-import React from 'react';
 import { Icon } from '@blueprintjs/core';
+import React from 'react';
 
 interface StarRatingProps {
   value: number;
