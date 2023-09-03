@@ -20,7 +20,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 ### Installation of Source Academy (latest version [available in GitHub Pages](https://source-academy.github.io/))
 
-1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current or lower LTS version. (Known working version of node: v16.16.0) 
+1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current or lower LTS version. (Known working version of node: v16.16.0)
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.  
     - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
@@ -80,14 +80,6 @@ The following properties are used for the Playground Google Drive integration. Y
 1. `REACT_APP_GOOGLE_APP_ID`: The project ID of the Google API project.
 
 See [here](https://github.com/source-academy/frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
-
-#### Disable periods
-
-The frontend can be configured to disable itself (based on user's system time) during certain periods e.g. during e-exams. Note that this is not foolproof, but it can be combined with other strategies e.g. taking down the frontend entirely (but this is needed to counteract the service worker).
-
-1. `REACT_APP_DISABLEn_START`: The time from which to disable the frontend.
-1. `REACT_APP_DISABLEn_END`: The time until which to disable the frontend.
-1. `REACT_APP_DISABLEn_REASON`: Optional. A reason shown for the disablement.
 
 #### Other configuration
 
@@ -149,9 +141,11 @@ There are a few additional environment variables that are used when building and
 The frontend comes with an extensive test suite. To run the tests after you made your modifications, run
 `yarn test`. Regression tests are run automatically when you want to push changes to this repository.
 The regression tests are generated using `jest` and stored as snapshots in `src/\_\_tests\_\_`.  After modifying the frontend, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:
+
 ``` {.}
 $ yarn test --updateSnapshot
 ```
+
 and then typing `a` to update all snapshots.
 （if you run this on a macBook with ARM chip, you may run into errors; try to do this on a computer with x86 chip instead)
 
