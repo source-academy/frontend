@@ -1,15 +1,29 @@
 import { fireEvent, render } from '@testing-library/react';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
-import SideContentHtmlDisplayBase from '../content/SideContentHtmlDisplay';
+import {
+  SideContentHtmlDisplay,
+  SideContentHtmlDisplayProps
+} from '../content/SideContentHtmlDisplay';
+
+const Component = (props: SideContentHtmlDisplayProps) => {
+  const store = mockInitialStore();
+  return (
+    <Provider store={store}>
+      <SideContentHtmlDisplay {...props} />
+    </Provider>
+  );
+};
 
 test('HTML Display renders correctly', () => {
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),
     handleAddHtmlConsoleError: (errorMsg: string) => {}
   };
-  const htmlDisplay = renderTreeJson(<SideContentHtmlDisplayBase {...mockProps} />);
+  const htmlDisplay = renderTreeJson(<Component {...mockProps} />);
   expect(htmlDisplay).toMatchSnapshot();
 });
 
@@ -21,7 +35,7 @@ describe('HTML Display postMessage Listener', () => {
     handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError
   };
 
-  const element = <SideContentHtmlDisplayBase {...mockProps} />;
+  const element = <Component {...mockProps} />;
 
   test('Does not call handleAddHtmlConsoleError if error message format is invalid', async () => {
     render(element);

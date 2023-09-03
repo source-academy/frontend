@@ -564,7 +564,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="introduction-icon"
                               tabindex="0"
                             >
                               <span
@@ -604,7 +603,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="data_visualizer-icon"
                               tabindex="0"
                             >
                               <span
@@ -644,7 +642,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="env_visualizer-icon"
                               tabindex="0"
                             >
                               <span
@@ -684,7 +681,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="remote_execution-icon"
                               tabindex="0"
                             >
                               <span
@@ -2148,7 +2144,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="introduction-icon"
                               tabindex="0"
                             >
                               <span
@@ -2188,7 +2183,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="data_visualizer-icon"
                               tabindex="0"
                             >
                               <span
@@ -2228,7 +2222,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="subst_visualiser-icon"
                               tabindex="0"
                             >
                               <span
@@ -2268,7 +2261,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                           >
                             <div
                               class="side-content-tooltip"
-                              id="remote_execution-icon"
                               tabindex="0"
                             >
                               <span
