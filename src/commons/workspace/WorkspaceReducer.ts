@@ -32,6 +32,7 @@ import { getDynamicTabs, getTabId } from '../sideContent/SideContentHelper';
 import {
   END_ALERT_SIDE_CONTENT,
   NOTIFY_PROGRAM_EVALUATED,
+  RESET_SIDE_CONTENT,
   VISIT_SIDE_CONTENT
 } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
@@ -1129,6 +1130,18 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
+    case RESET_SIDE_CONTENT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sideContent: {
+            ...state[workspaceLocation].sideContent,
+            dynamicTabs: [],
+            alerts: []
+          }
+        }
+      }
     default:
       return state;
   }

@@ -4,6 +4,7 @@ import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   BEGIN_ALERT_SIDE_CONTENT,
   END_ALERT_SIDE_CONTENT,
+  RESET_SIDE_CONTENT,
   SideContentType,
   VISIT_SIDE_CONTENT
 } from './SideContentTypes';
@@ -17,3 +18,5 @@ export const visitSideContent = (
   prevId: SideContentType | undefined,
   workspaceLocation: WorkspaceLocation
 ) => action(VISIT_SIDE_CONTENT, { newId, prevId, workspaceLocation });
+
+export const resetSideContent = (workspaceLocation: WorkspaceLocation) => action(RESET_SIDE_CONTENT, { workspaceLocation })

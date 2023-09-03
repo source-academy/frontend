@@ -6,6 +6,7 @@ export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
 export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
 export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
+export const RESET_SIDE_CONTENT = 'RESET_SIDE_CONTENT';
 
 export enum SideContentType {
   autograder = 'autograder',
