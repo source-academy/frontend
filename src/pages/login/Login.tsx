@@ -13,7 +13,8 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
 import Constants from '../../commons/utils/Constants';
@@ -27,15 +28,31 @@ const providers = [...Constants.authProviders.entries()].map(([id, { name }]) =>
 const Login: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { isLoggedIn, courseId } = useSession();
+  const navigate = useNavigate();
   const { code, provider: providerId } = parseQuery(location.search);
 
-  const handleLogin = React.useCallback(providerId => dispatch(login(providerId)), [dispatch]);
+  const handleLogin = React.useCallback(
+    (providerId: string) => dispatch(login(providerId)),
+    [dispatch]
+  );
 
   React.useEffect(() => {
-    if (code) {
+    // If already logged in, navigate to relevant course page
+    if (isLoggedIn) {
+      if (courseId !== undefined) {
+        navigate(`/courses/${courseId}`);
+      } else {
+        navigate('/welcome');
+      }
+      return;
+    }
+
+    // Else fetch JWT tokens and user info from backend when auth provider code is present
+    if (code && !isLoggedIn) {
       dispatch(fetchAuth(code, providerId));
     }
-  }, [code, providerId, dispatch]);
+  }, [code, providerId, dispatch, courseId, navigate, isLoggedIn]);
 
   if (code) {
     return (

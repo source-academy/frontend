@@ -5,7 +5,10 @@ import { action } from 'typesafe-actions';
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../application/types/InterpreterTypes';
+import {
+  UPDATE_EDITOR_HIGHLIGHTED_LINES,
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+} from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
@@ -213,6 +216,17 @@ export const setEditorHighlightedLines = (
     newHighlightedLines
   });
 
+export const setEditorHighlightedLinesAgenda = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  newHighlightedLines: HighlightedLines[]
+) =>
+  action(UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA, {
+    workspaceLocation,
+    editorTabIndex,
+    newHighlightedLines
+  });
+
 export const moveCursor = (
   workspaceLocation: WorkspaceLocation,
   editorTabIndex: number,
@@ -374,8 +388,11 @@ export const notifyProgramEvaluated = (
 export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
 
-export const addHtmlConsoleError = (errorMsg: string, workspaceLocation: WorkspaceLocation) =>
-  action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation });
+export const addHtmlConsoleError = (
+  errorMsg: string,
+  workspaceLocation: WorkspaceLocation,
+  storyEnv?: string
+) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, storyEnv });
 
 export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });

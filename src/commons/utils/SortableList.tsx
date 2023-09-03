@@ -1,18 +1,31 @@
 import { Button } from '@blueprintjs/core';
 import { arrayMoveImmutable } from 'array-move';
 import React from 'react';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import {
+  SortableContainer,
+  SortableContainerProps,
+  SortableElement,
+  SortableElementProps
+} from 'react-sortable-hoc';
+
+type SortableItemProps = SortableElementProps & {
+  value: any;
+};
 
 const SortableItem = React.memo(
-  SortableElement(({ value }: any) => (
+  SortableElement<SortableItemProps>(({ value }: any) => (
     <div>
       <Button>{value}</Button>
     </div>
   ))
 );
 
+type SortableListProps = SortableContainerProps & {
+  items: string[];
+};
+
 export const SortableList = React.memo(
-  SortableContainer(({ items }: any) => {
+  SortableContainer<SortableListProps>(({ items }: any) => {
     return (
       <div>
         {items &&

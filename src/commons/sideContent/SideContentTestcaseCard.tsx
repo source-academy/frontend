@@ -61,16 +61,18 @@ const SideContentTestcaseCard: React.FunctionComponent<SideContentTestcaseCardPr
    * be rendered in the GitHubAssessmentWorkspace for students.
    */
   return (
-    <div className={classNames('AutograderCard', extraClasses)}>
+    <div className={classNames('AutograderCard', extraClasses)} data-testid="AutograderCard">
       <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE} onClick={handleRunTestcase}>
         {testcase.type === TestcaseTypes.opaque && props.workspaceLocation === 'assessment' ? (
           // Render a placeholder cell in place of the actual testcase data for opaque testcases
-          <Pre className="testcase-placeholder">Hidden testcase</Pre>
+          <Pre className="testcase-placeholder" data-testid="testcase-placeholder">
+            Hidden testcase
+          </Pre>
         ) : (
           <>
             <Pre className="testcase-program">{testcase.program}</Pre>
             <Pre className="testcase-expected">{testcase.answer}</Pre>
-            <Pre className="testcase-actual">
+            <Pre className="testcase-actual" data-testid="testcase-actual">
               {testcase.errors
                 ? parseError(testcase.errors)
                 : testcase.result !== undefined

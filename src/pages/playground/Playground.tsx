@@ -258,6 +258,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sideContentHeight,
     sharedbConnected,
     usingSubst,
+    usingEnv,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
@@ -402,8 +403,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [isGreen]
   );
 
-  const onEditorValueChange = useCallback(
-    (editorTabIndex, newEditorValue) => {
+  const onEditorValueChange = React.useCallback(
+    (editorTabIndex: number, newEditorValue: string) => {
       setLastEdit(new Date());
       handleEditorValueChange(editorTabIndex, newEditorValue);
     },
@@ -476,7 +477,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [sessionId]
   );
 
-  const memoizedHandlers = useMemo(() => {
+  const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
       handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
@@ -501,7 +502,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sourceChapter={languageConfig.chapter}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)}
-        {...memoizedHandlers}
+        {...autorunButtonHandlers}
       />
     );
   }, [
@@ -510,7 +511,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isEditorAutorun,
     isRunning,
     languageConfig.chapter,
-    memoizedHandlers,
+    autorunButtonHandlers,
     usingRemoteExecution
   ]);
 
@@ -651,16 +652,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => (
       <ControlBarStepLimit
         stepLimit={stepLimit}
-        handleChangeStepLimit={limit => dispatch(changeStepLimit(limit, workspaceLocation))}
+        stepSize={usingSubst ? 2 : 1}
+        handleChangeStepLimit={limit => {
+          dispatch(changeStepLimit(limit, workspaceLocation));
+          usingEnv && dispatch(toggleUpdateEnv(true, workspaceLocation));
+        }}
         handleOnBlurAutoScale={limit => {
-          limit % 2 === 0
+          limit % 2 === 0 || !usingSubst
             ? dispatch(changeStepLimit(limit, workspaceLocation))
             : dispatch(changeStepLimit(limit + 1, workspaceLocation));
+          usingEnv && dispatch(toggleUpdateEnv(true, workspaceLocation));
         }}
         key="step_limit"
       />
     ),
-    [dispatch, stepLimit, workspaceLocation]
+    [dispatch, stepLimit, usingSubst, usingEnv, workspaceLocation]
   );
 
   const getEditorValue = useCallback(
@@ -888,16 +894,22 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
 
-  const setActiveEditorTabIndex = useCallback(
-    (activeEditorTabIndex: number | null) =>
-      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-    [dispatch, workspaceLocation]
-  );
-  const removeEditorTabByIndex = useCallback(
-    (editorTabIndex: number) => dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-    [dispatch, workspaceLocation]
-  );
-
+  const editorContainerHandlers = useMemo(() => {
+    return {
+      handleDeclarationNavigate: (cursorPosition: Position) =>
+        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
+        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+      handleSendReplInputToOutput: (code: string) =>
+        dispatch(sendReplInputToOutput(code, workspaceLocation)),
+      handleSetSharedbConnected: (connected: boolean) =>
+        dispatch(setSharedbConnected(workspaceLocation, connected)),
+      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
+        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+      removeEditorTabByIndex: (editorTabIndex: number) =>
+        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+    };
+  }, [dispatch, workspaceLocation]);
   const editorContainerProps: NormalEditorContainerProps = {
     editorSessionId,
     isEditorAutorun,
@@ -905,28 +917,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     baseFilePath: WORKSPACE_BASE_PATHS[workspaceLocation],
     isFolderModeEnabled,
     activeEditorTabIndex,
-    setActiveEditorTabIndex,
-    removeEditorTabByIndex,
+    setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
+    removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate: useCallback(
-      (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-      [dispatch, workspaceLocation]
-    ),
-    handleEditorEval: memoizedHandlers.handleEditorEval,
-    handlePromptAutocomplete: useCallback(
-      (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
-      [dispatch, workspaceLocation]
-    ),
-    handleSendReplInputToOutput: useCallback(
-      (code: string) => dispatch(sendReplInputToOutput(code, workspaceLocation)),
-      [dispatch, workspaceLocation]
-    ),
-    handleSetSharedbConnected: useCallback(
-      (connected: boolean) => dispatch(setSharedbConnected(workspaceLocation, connected)),
-      [dispatch, workspaceLocation]
-    ),
+    handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
+    handleEditorEval: autorunButtonHandlers.handleEditorEval,
+    handlePromptAutocomplete: editorContainerHandlers.handlePromptAutocomplete,
+    handleSendReplInputToOutput: editorContainerHandlers.handleSendReplInputToOutput,
+    handleSetSharedbConnected: editorContainerHandlers.handleSetSharedbConnected,
     onChange: onChangeMethod,
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
@@ -938,23 +936,22 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
   };
 
+  const replHandlers = useMemo(() => {
+    return {
+      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleReplValueChange: (newValue: string) =>
+        dispatch(updateReplValue(newValue, workspaceLocation))
+    };
+  }, [dispatch, workspaceLocation]);
   const replProps = {
     output,
     replValue,
     handleReplEval,
     usingSubst,
-    handleBrowseHistoryDown: useCallback(
-      () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      [dispatch, workspaceLocation]
-    ),
-    handleBrowseHistoryUp: useCallback(
-      () => dispatch(browseReplHistoryUp(workspaceLocation)),
-      [dispatch, workspaceLocation]
-    ),
-    handleReplValueChange: useCallback(
-      (newValue: string) => dispatch(updateReplValue(newValue, workspaceLocation)),
-      [dispatch, workspaceLocation]
-    ),
+    handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
+    handleReplValueChange: replHandlers.handleReplValueChange,
     sourceChapter: languageConfig.chapter,
     sourceVariant: languageConfig.variant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
@@ -1006,7 +1003,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
-          : usingSubst
+          : usingSubst || usingEnv
           ? stepperStepLimit
           : executionTime
       ]
@@ -1026,10 +1023,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground',
+      workspaceLocation: workspaceLocation,
       sideContentHeight: sideContentHeight
     },
-    sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
+    sideContentIsResizeable:
+      selectedTab !== SideContentType.substVisualizer &&
+      selectedTab !== SideContentType.envVisualizer
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
@@ -1054,7 +1053,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: isSicpEditor ? 'sicp' : 'playground'
+      workspaceLocation: workspaceLocation
     }
   };
 

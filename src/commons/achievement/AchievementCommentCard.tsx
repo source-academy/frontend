@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
 const AchievementCommentCard = ({

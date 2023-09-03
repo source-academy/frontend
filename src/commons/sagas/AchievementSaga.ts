@@ -23,6 +23,7 @@ import AchievementInferencer from '../achievement/utils/AchievementInferencer';
 import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
 import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import {
@@ -190,6 +191,22 @@ export default function* AchievementSaga(): SagaIterator {
     const enableAchievements = yield select(
       (state: OverallState) => state.session.enableAchievements
     );
+    if (action.payload.find(e => e === EventType.ERROR)) {
+      // Flash the home icon if there is an error and the user is in the env viz or subst viz tab
+      const introIcon = document.getElementById(SideContentType.introduction + '-icon');
+      const envTab = document.getElementById(
+        'bp4-tab-panel_side-content-tabs_' + SideContentType.envVisualizer
+      );
+      const substTab = document.getElementById(
+        'bp4-tab-panel_side-content-tabs_' + SideContentType.substVisualizer
+      );
+      if (
+        (envTab && envTab.ariaHidden === 'false') ||
+        (substTab && substTab.ariaHidden === 'false')
+      ) {
+        introIcon && introIcon.classList.add('side-content-tab-alert-error');
+      }
+    }
     if (role && enableAchievements && !Constants.playgroundOnly) {
       loggedEvents.push(action.payload);
 

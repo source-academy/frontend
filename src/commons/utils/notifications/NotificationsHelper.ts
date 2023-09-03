@@ -1,8 +1,6 @@
-import { Intent, IToastProps, Position, Toaster } from '@blueprintjs/core';
+import { Intent, ToastProps } from '@blueprintjs/core';
 
-const notification = Toaster.create({
-  position: Position.TOP
-});
+import { notification } from './createNotification';
 
 export const showSuccessMessage = (
   message: string | JSX.Element,
@@ -46,6 +44,6 @@ export const showDangerMessage = (
     key
   );
 
-export const showMessage = (props: IToastProps, key?: string) => notification.show(props, key);
+export const showMessage = (props: ToastProps, key?: string) => notification.show(props, key);
 
 export const dismiss = (key: string) => notification.dismiss(key);

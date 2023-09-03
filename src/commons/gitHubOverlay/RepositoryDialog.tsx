@@ -10,7 +10,7 @@ import {
 import classNames from 'classnames';
 import React, { useState } from 'react';
 
-import { showWarningMessage } from '../utils/NotificationsHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 export type RepositoryDialogProps = {
   userRepos: any[];
