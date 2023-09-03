@@ -4,6 +4,7 @@ import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
 import {
   changeQueryString,
@@ -11,12 +12,15 @@ import {
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { OverallState } from '../application/ApplicationTypes';
+import { isSourceLanguage,OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
+import { visitSideContent } from '../sideContent/SideContentActions';
+import { SideContentType, VISIT_SIDE_CONTENT } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
+import { clearReplOutput, setEditorHighlightedLines, toggleUpdateEnv, toggleUsingEnv, toggleUsingSubst, updateEnvSteps, updateEnvStepsTotal } from '../workspace/WorkspaceActions';
+import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
@@ -55,6 +59,55 @@ export default function* PlaygroundSaga(): SagaIterator {
     }
     yield put(updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
   });
+
+  yield takeEvery(VISIT_SIDE_CONTENT, function* ({ payload: { newId, prevId, workspaceLocation }}: ReturnType<typeof visitSideContent>) {
+    if (workspaceLocation !== 'playground' || newId === prevId) return;
+
+    // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+    if (
+      prevId === SideContentType.substVisualizer &&
+      newId === SideContentType.mobileEditorRun
+    ) {
+      return;
+    }
+
+    const {
+      context: {
+        chapter: playgroundSourceChapter,
+      },
+      editorTabs
+    }: PlaygroundWorkspaceState = yield select((state: OverallState) => state.workspaces[workspaceLocation])
+
+    if (prevId === SideContentType.substVisualizer) {
+      if (newId === SideContentType.mobileEditorRun) return
+      const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x))
+
+      if (!hasBreakpoints) {
+        yield put(toggleUsingSubst(false, workspaceLocation))
+        yield put(clearReplOutput(workspaceLocation))
+      }
+    }
+
+    if (newId !== SideContentType.envVisualizer) {
+      yield put(toggleUsingEnv(false, workspaceLocation))
+      yield call([EnvVisualizer, EnvVisualizer.clearEnv]);
+      yield put(updateEnvSteps(-1, workspaceLocation));
+      yield put(updateEnvStepsTotal(0, workspaceLocation));
+      yield put(toggleUpdateEnv(true, workspaceLocation));
+      yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
+    }
+
+    if (
+      isSourceLanguage(playgroundSourceChapter) &&
+      (newId === SideContentType.substVisualizer || newId === SideContentType.envVisualizer)
+    ) {
+      if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+        yield put(toggleUsingSubst(true, workspaceLocation))
+      } else {
+        yield put(toggleUsingEnv(true, workspaceLocation))
+      }
+    }
+  })
 }
 
 function* updateQueryString() {

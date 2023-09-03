@@ -59,16 +59,12 @@ import {
   toggleEditorAutorun,
   toggleFolderMode,
   toggleUpdateEnv,
-  toggleUsingEnv,
   toggleUsingSubst,
   updateActiveEditorTabIndex,
   updateEditorValue,
-  updateEnvSteps,
-  updateEnvStepsTotal,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -282,7 +278,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleSetEditorBreakpoints,
     handleReplEval,
     handleReplOutputClear,
-    handleUsingEnv,
     handleUsingSubst
   } = useMemo(() => {
     return {
@@ -296,7 +291,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
       handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
-      handleUsingEnv: (usingEnv: boolean) => dispatch(toggleUsingEnv(usingEnv, workspaceLocation)),
       handleUsingSubst: (usingSubst: boolean) =>
         dispatch(toggleUsingSubst(usingSubst, workspaceLocation))
     };
@@ -415,64 +409,48 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleEditorValueChange]
   );
 
-  const handleEnvVisualiserReset = useCallback(() => {
-    handleUsingEnv(false);
-    EnvVisualizer.clearEnv();
-    dispatch(updateEnvSteps(-1, workspaceLocation));
-    dispatch(updateEnvStepsTotal(0, workspaceLocation));
-    dispatch(toggleUpdateEnv(true, workspaceLocation));
-    dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
-  }, [dispatch, workspaceLocation, handleUsingEnv]);
+  // const onChangeTabs = useCallback(
+  //   (
+  //     newTabId: SideContentType,
+  //     prevTabId: SideContentType,
+  //     event: React.MouseEvent<HTMLElement>
+  //   ) => {
+  //     if (newTabId === prevTabId) {
+  //       return;
+  //     }
 
-  const onChangeTabs = useCallback(
-    (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
-    ) => {
-      if (newTabId === prevTabId) {
-        return;
-      }
+  //     // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+  //     if (prevTabId === SideContentType.substVisualizer) {
+  //       if (newTabId === SideContentType.mobileEditorRun) return;
+  //       if (!hasBreakpoints) {
+  //         handleReplOutputClear();
+  //         handleUsingSubst(false);
+  //       }
+  //     }
 
-      // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-      if (
-        prevTabId === SideContentType.substVisualizer &&
-        newTabId === SideContentType.mobileEditorRun
-      ) {
-        return;
-      }
+  //     // if (newTabId !== SideContentType.envVisualizer) {
+  //     //   handleEnvVisualiserReset();
+  //     // }
 
-      if (newTabId !== SideContentType.envVisualizer) {
-        handleEnvVisualiserReset();
-      }
+  //     // if (
+  //     //   isSourceLanguage(playgroundSourceChapter) &&
+  //     //   (newTabId === SideContentType.substVisualizer || newTabId === SideContentType.envVisualizer)
+  //     // ) {
+  //     //   if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+  //     //     handleUsingSubst(true);
+  //     //   } else {
+  //     //     handleUsingEnv(true);
+  //     //   }
+  //     // }
 
-      if (
-        isSourceLanguage(playgroundSourceChapter) &&
-        (newTabId === SideContentType.substVisualizer || newTabId === SideContentType.envVisualizer)
-      ) {
-        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-          handleUsingSubst(true);
-        } else {
-          handleUsingEnv(true);
-        }
-      }
-
-      if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
-        handleReplOutputClear();
-        handleUsingSubst(false);
-      }
-
-      setSelectedTab(newTabId);
-    },
-    [
-      hasBreakpoints,
-      handleEnvVisualiserReset,
-      playgroundSourceChapter,
-      handleUsingSubst,
-      handleUsingEnv,
-      handleReplOutputClear
-    ]
-  );
+  //     // setSelectedTab(newTabId);
+  //   },
+  //   [
+  //     hasBreakpoints,
+  //     handleUsingSubst,
+  //     handleReplOutputClear
+  //   ]
+  // );
 
   const pushLog = useCallback(
     (newInput: Input) => {
@@ -1023,7 +1001,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sideBarProps: sideBarProps,
     sideContentProps: {
       selectedTabId: selectedTab,
-      onChange: onChangeTabs,
       tabs: {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
@@ -1052,7 +1029,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         ]
       },
       selectedTabId: selectedTab,
-      onChange: onChangeTabs,
+      onChange: setSelectedTab,
       tabs: {
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []
