@@ -33,8 +33,7 @@ test('createCourse generates correct action object', () => {
     enableSourcecast: true,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: 'Help Text',
-    defaultLlmPrompt: 'default LLM prompt'
+    moduleHelpText: 'Help Text'
   };
 
   const action = createCourse(courseConfig);

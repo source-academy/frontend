@@ -133,7 +133,6 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
-    defaultLlmPrompt: '',
     assetsPrefix: ''
   },
   {
@@ -146,7 +145,6 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     sourceChapter: Chapter.SOURCE_2,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text!',
-    defaultLlmPrompt: 'Default LLM Prompt',
     assetsPrefix: ''
   }
 ];

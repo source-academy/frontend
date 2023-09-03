@@ -40,8 +40,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
     enableSourcecast: true,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: '',
-    defaultLlmPrompt: ''
+    moduleHelpText: ''
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
@@ -170,40 +169,6 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
             <div className="input-markdown">
               <Markdown content={courseConfig.moduleHelpText || ''} openLinksInNewWindow />
-            </div>
-          )}
-        </FormGroup>
-
-        <FormGroup helperText="defaultLlmPrompt" labelFor="defaultLlmPrompt">
-          <Text tagName="span">Default LLM Prompt&nbsp;</Text>
-          <Text tagName="span" className="optional-text">
-            (optional)
-          </Text>
-          <Tabs
-            selectedTabId={courseHelpTextSelectedTab}
-            onChange={onChangeTabs}
-            className="module-help-text-tabs"
-          >
-            <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
-            <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
-          </Tabs>
-          {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && (
-            <TextArea
-              id="defaultLlmPrompt"
-              className="input-textarea"
-              fill={true}
-              value={courseConfig.defaultLlmPrompt}
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  defaultLlmPrompt: e.target.value
-                })
-              }
-            />
-          )}
-          {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
-            <div className="input-markdown">
-              <Markdown content={courseConfig.defaultLlmPrompt || ''} openLinksInNewWindow />
             </div>
           )}
         </FormGroup>

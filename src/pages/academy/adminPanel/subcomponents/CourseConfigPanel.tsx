@@ -27,57 +27,10 @@ export enum CourseHelpTextEditorTab {
   PREVIEW = 'PREVIEW'
 }
 
-export enum DefaultLlmPromptTab {
-  WRITE = 'WRITE',
-  PREVIEW = 'PREVIEW'
-}
-
-type ConfigInputProps = {
-  label: string;
-  value?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  helperText: string;
-  id: string;
-};
-
-const ConfigInput: React.FC<ConfigInputProps> = ({ label, value, onChange, helperText, id }) => (
-  <FormGroup helperText={helperText} inline={true} label={label} labelFor={id}>
-    <InputGroup id={id} value={value || ''} onChange={onChange} />
-  </FormGroup>
-);
-
-type TabPanelProps = {
-  selectedTabId: CourseHelpTextEditorTab | DefaultLlmPromptTab;
-  onChange: (newTabId: CourseHelpTextEditorTab | DefaultLlmPromptTab) => void;
-  tabs: {
-    id: CourseHelpTextEditorTab | DefaultLlmPromptTab;
-    title: string;
-    panel: React.ReactNode;
-  }[];
-};
-
-const TabPanel: React.FC<TabPanelProps> = ({ selectedTabId, onChange, tabs }) => (
-  <Tabs
-    selectedTabId={selectedTabId}
-    onChange={newTabId => onChange(newTabId as CourseHelpTextEditorTab | DefaultLlmPromptTab)}
-    className="module-help-text-tabs"
-  >
-    {tabs.map(tab => (
-      <Tab id={tab.id.toString()} title={tab.title} key={tab.id.toString()} />
-    ))}
-    {tabs.map(tab => selectedTabId === tab.id && tab.panel)}
-  </Tabs>
-);
-
 const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
-  const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] = React.useState<
-    CourseHelpTextEditorTab | DefaultLlmPromptTab
-  >(CourseHelpTextEditorTab.WRITE);
-
-  const [defaultLlmPromptSelectedTab, setDefaultLlmPromptSelectedTab] = React.useState<
-    CourseHelpTextEditorTab | DefaultLlmPromptTab
-  >(DefaultLlmPromptTab.WRITE);
+  const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
+    React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
   const {
     courseName,
@@ -86,28 +39,42 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
     enableGame,
     enableAchievements,
     enableSourcecast,
-    moduleHelpText,
-    defaultLlmPrompt
+    moduleHelpText
   } = props.courseConfiguration;
 
+  const writePanel = (
+    <TextArea
+      id="moduleHelpText"
+      className="input-textarea"
+      fill={true}
+      value={moduleHelpText || ''}
+      onChange={e =>
+        props.setCourseConfiguration({
+          ...props.courseConfiguration,
+          moduleHelpText: e.target.value
+        })
+      }
+    />
+  );
+
+  const previewPanel = (
+    <div className="input-markdown">
+      <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
+    </div>
+  );
+
   const onChangeTabs = React.useCallback(
-    (newTabId: CourseHelpTextEditorTab | DefaultLlmPromptTab) => {
-      if (newTabId === courseHelpTextSelectedTab) {
+    (
+      newTabId: CourseHelpTextEditorTab,
+      prevTabId: CourseHelpTextEditorTab,
+      event: React.MouseEvent<HTMLElement>
+    ) => {
+      if (newTabId === prevTabId) {
         return;
       }
       setCourseHelpTextSelectedTab(newTabId);
     },
-    [courseHelpTextSelectedTab]
-  );
-
-  const onChangeTab = React.useCallback(
-    (newTabId: CourseHelpTextEditorTab | DefaultLlmPromptTab) => {
-      if (newTabId === defaultLlmPromptSelectedTab) {
-        return;
-      }
-      setDefaultLlmPromptSelectedTab(newTabId);
-    },
-    [defaultLlmPromptSelectedTab]
+    [setCourseHelpTextSelectedTab]
   );
 
   return (
@@ -116,115 +83,57 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
       <H3>{courseShortName}</H3>
       <div className="inputs">
         <div className="text">
-          <ConfigInput
-            label="Course Name"
-            value={courseName}
-            onChange={e =>
-              props.setCourseConfiguration({
-                ...props.courseConfiguration,
-                courseName: e.target.value
-              })
-            }
+          <FormGroup
             helperText="Please enter the course name that will be used for course selection."
-            id="courseName"
-          />
-
-          <ConfigInput
-            label="Course Short Name"
-            value={courseShortName}
-            onChange={e =>
-              props.setCourseConfiguration({
-                ...props.courseConfiguration,
-                courseShortName: e.target.value
-              })
-            }
+            inline={true}
+            label="Course Name"
+            labelFor="courseName"
+          >
+            <InputGroup
+              id="courseName"
+              defaultValue={courseName}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  courseName: e.target.value
+                })
+              }
+            />
+          </FormGroup>
+          <FormGroup
             helperText="Please enter the course short name. This will be displayed on the top left."
-            id="courseShortName"
-          />
-
+            inline={true}
+            label="Course Short Name"
+            labelFor="courseShortName"
+          >
+            <InputGroup
+              id="courseShortName"
+              defaultValue={courseShortName}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  courseShortName: e.target.value
+                })
+              }
+            />
+          </FormGroup>
           <FormGroup
             helperText="Please enter the module help text that will be used in the course help dialog."
             inline={true}
             label="Module Help Text"
             labelFor="moduleHelpText"
           >
-            <TabPanel
+            <Tabs
               selectedTabId={courseHelpTextSelectedTab}
               onChange={onChangeTabs}
-              tabs={[
-                {
-                  id: CourseHelpTextEditorTab.WRITE,
-                  title: 'Write',
-                  panel: (
-                    <TextArea
-                      id="moduleHelpText"
-                      className="input-textarea"
-                      fill={true}
-                      value={moduleHelpText || ''}
-                      onChange={e =>
-                        props.setCourseConfiguration({
-                          ...props.courseConfiguration,
-                          moduleHelpText: e.target.value
-                        })
-                      }
-                    />
-                  )
-                },
-                {
-                  id: CourseHelpTextEditorTab.PREVIEW,
-                  title: 'Preview',
-                  panel: (
-                    <div className="input-markdown">
-                      <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
-                    </div>
-                  )
-                }
-              ]}
-            />
+              className="module-help-text-tabs"
+            >
+              <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
+              <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
+            </Tabs>
+            {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
+            {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
           </FormGroup>
-
-          <FormGroup
-            helperText="Please enter the default LLM prompt that will be used in this course"
-            inline={true}
-            label="Default LLM Prompt"
-            labelFor="defaultLlmPrompt"
-          >
-            <TabPanel
-              selectedTabId={defaultLlmPromptSelectedTab}
-              onChange={onChangeTab}
-              tabs={[
-                {
-                  id: DefaultLlmPromptTab.WRITE,
-                  title: 'Write',
-                  panel: (
-                    <TextArea
-                      id="defaultLlmPrompt"
-                      className="input-textarea"
-                      fill={true}
-                      value={defaultLlmPrompt || ''}
-                      onChange={e =>
-                        props.setCourseConfiguration({
-                          ...props.courseConfiguration,
-                          defaultLlmPrompt: e.target.value
-                        })
-                      }
-                    />
-                  )
-                },
-                {
-                  id: DefaultLlmPromptTab.PREVIEW,
-                  title: 'Preview',
-                  panel: (
-                    <div className="input-markdown">
-                      <Markdown content={defaultLlmPrompt || ''} openLinksInNewWindow />
-                    </div>
-                  )
-                }
-              ]}
-            />
-          </FormGroup>
-
-          {/* ... Other inputs */}
         </div>
         {!isMobileBreakpoint && <Divider />}
         <div className="booleans">

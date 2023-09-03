@@ -231,7 +231,6 @@ test('setCourseConfiguration generates correct action object', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
-    defaultLlmPrompt: 'defaul Llm Prompt',
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };
   const action = setCourseConfiguration(courseConfig);
@@ -511,7 +510,6 @@ test('updateGradingOverviews generates correct action object', () => {
     {
       assessmentId: 1,
       assessmentName: 'test assessment',
-      questions: '',
       assessmentType: 'Contests',
       initialXp: 0,
       xpBonus: 100,
@@ -614,7 +612,6 @@ test('updateCourseConfig generates correct action object', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
-    defaultLlmPrompt: 'default LLM Prompt',
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };
   const action = updateCourseConfig(courseConfig);
