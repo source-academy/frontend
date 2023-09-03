@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { createMemoryRouter,RouterProvider } from 'react-router';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createStore } from 'src/pages/createStore';
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from 'src/routes/routerConfig';
 
