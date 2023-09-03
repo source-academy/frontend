@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 
 /**
  * Returns the shortest file paths that is uniquely identifiable among

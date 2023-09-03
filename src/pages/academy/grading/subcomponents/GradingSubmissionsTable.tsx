@@ -56,6 +56,10 @@ const columns = [
     header: 'Student',
     cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
+  columnHelper.accessor('studentUsername', {
+    header: 'Username',
+    cell: info => <Filterable column={info.column} value={info.getValue()} />
+  }),
   columnHelper.accessor('groupName', {
     header: 'Group',
     cell: info => <Filterable column={info.column} value={info.getValue()} />
@@ -76,14 +80,16 @@ const columns = [
       </Filterable>
     )
   }),
-  columnHelper.accessor(({ currentXp, maxXp }) => ({ currentXp, maxXp }), {
-    header: 'XP',
+  columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
+    header: 'Raw XP (+Bonus)',
     enableColumnFilter: false,
     cell: info => {
-      const { currentXp, maxXp } = info.getValue();
+      const { currentXp, xpBonus, maxXp } = info.getValue();
       return (
         <Flex justifyContent="justify-start" spaceX="space-x-2">
-          <Text>{currentXp}</Text>
+          <Text>
+            {currentXp} (+{xpBonus})
+          </Text>
           <Text>/</Text>
           <Text>{maxXp}</Text>
         </Flex>
@@ -101,25 +107,15 @@ const columns = [
 ];
 
 type GradingSubmissionTableProps = {
-  group: string | null;
   submissions: GradingOverview[];
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ group, submissions }) => {
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
   const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
-  const defaultFilters = [];
-  if (group && !tableFilters.columnFilters.find(filter => filter.id === 'groupName')) {
-    defaultFilters.push({
-      id: 'groupName',
-      value: group
-    });
-  }
-
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters,
-    ...defaultFilters
+    ...tableFilters.columnFilters
   ]);
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 

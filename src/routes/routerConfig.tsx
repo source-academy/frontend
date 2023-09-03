@@ -91,22 +91,6 @@ const commonChildrenRoutes: RouteObject[] = [
     path: 'githubassessments/*',
     lazy: GitHubClassroom,
     loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
-  },
-  {
-    path: 'stories/new',
-    lazy: EditStory
-  },
-  {
-    path: 'stories/view/:id',
-    lazy: ViewStory
-  },
-  {
-    path: 'stories/edit/:id',
-    lazy: EditStory
-  },
-  {
-    path: 'stories',
-    lazy: Stories
   }
 ];
 
@@ -203,6 +187,22 @@ export const getFullAcademyRouterConfig = ({
         {
           path: 'mission-control/:assessmentId?/:questionId?',
           lazy: MissionControl
+        },
+        {
+          path: 'stories/new',
+          lazy: EditStory
+        },
+        {
+          path: 'stories/view/:id',
+          lazy: ViewStory
+        },
+        {
+          path: 'stories/edit/:id',
+          lazy: EditStory
+        },
+        {
+          path: 'stories',
+          lazy: Stories
         },
         ...commonChildrenRoutes,
         {
