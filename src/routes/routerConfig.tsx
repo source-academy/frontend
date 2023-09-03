@@ -23,7 +23,6 @@ const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?:
 };
 
 const Login = () => import('../pages/login/Login');
-const Disabled = () => import('../pages/disabled/Disabled');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
 const Sicp = () => import('../pages/sicp/Sicp');
@@ -42,37 +41,6 @@ const ViewStory = async () => {
   return { Component: ViewStoryComponent };
 };
 const Stories = () => import('../pages/stories/Stories');
-
-export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
-  const disabledReason = typeof reason === 'string' ? reason : undefined;
-  return [
-    {
-      path: '/*',
-      element: <Application />,
-      children: [
-        {
-          path: 'login',
-          lazy: Login,
-          loader: conditionalLoader(Constants.playgroundOnly, '/')
-        },
-        {
-          path: '',
-          lazy: Disabled,
-          loader: conditionalLoader(!Constants.playgroundOnly, 'login', disabledReason)
-        },
-        {
-          path: 'courses/*',
-          element: <Navigate to="/login" />
-        },
-        {
-          path: '*',
-          lazy: Disabled,
-          loader: () => disabledReason
-        }
-      ]
-    }
-  ];
-};
 
 const commonChildrenRoutes: RouteObject[] = [
   {
