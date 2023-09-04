@@ -46,6 +46,7 @@ const cracoConfig = (module.exports = {
         'http': require.resolve('stream-http'),
         'https': require.resolve('https-browserify'),
         'os': require.resolve('os-browserify/browser'),
+        'path/posix': require.resolve('path-browserify'),
         'stream': require.resolve('stream-browserify'),
         'timers': require.resolve('timers-browserify'),
         'url': require.resolve('url/')
