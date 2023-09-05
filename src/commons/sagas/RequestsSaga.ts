@@ -306,7 +306,9 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
  * GET /courses/{courseId}/admin/users
  */
 export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
-  const resp = await request(`${courseId()}/admin/users`, 'GET', {
+  const resp = await request(`${courseId()}/ad
+  
+  min/users`, 'GET', {
     ...tokens,
     shouldRefresh: true
   });

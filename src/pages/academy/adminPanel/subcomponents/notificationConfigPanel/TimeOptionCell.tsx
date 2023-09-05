@@ -51,7 +51,6 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
 
       setValues([...values, value]);
       console.log(props.rowIndex, value, values);
-      console.log([...timeOptions, newTimeOption]);
       props.setStateHandler(props.rowIndex, [...timeOptions, newTimeOption]);
     } else {
       // TODO: Toaster if posisble
