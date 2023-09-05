@@ -10,7 +10,7 @@ import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';
 import PlaygroundSaga from './PlaygroundSaga';
 import RemoteExecutionSaga from './RemoteExecutionSaga';
-import { SideContentSaga } from './SIdeContentSaga';
+import SideContentSaga from './SideContentSaga';
 import StoriesSaga from './StoriesSaga';
 import WorkspaceSaga from './WorkspaceSaga';
 
