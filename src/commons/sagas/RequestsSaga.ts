@@ -275,7 +275,7 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
   
   min/users`, 'GET', {
     ...tokens,
-    shouldRefresh: true
+    //shouldRefresh: true
   });
 
   if (!resp || !resp.ok) {
@@ -1079,8 +1079,8 @@ export const removeTimeOptions = async (
       ...tokens,
       body: timeOptionIds,
       noHeaderAccept: true,
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      //shouldAutoLogout: false,
+      //shouldRefresh: true
     }
   );
 
@@ -1109,7 +1109,7 @@ export const getNotificationConfigs = async (
     'GET',
     {
       ...tokens,
-      shouldRefresh: true
+      //shouldRefresh: true
     }
   );
   if (!resp || !resp.ok) {
@@ -1129,7 +1129,7 @@ export const getConfigurableNotificationConfigs = async (
     'GET',
     {
       ...tokens,
-      shouldRefresh: true
+      //shouldRefresh: true
     }
   );
   if (!resp || !resp.ok) {
@@ -1173,8 +1173,8 @@ export const putNotificationPreferences = async (
         return { ...pref, courseRegId: courseRegId };
       }),
       noHeaderAccept: true,
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      //shouldAutoLogout: false,
+      //shouldRefresh: true
     }
   );
 
