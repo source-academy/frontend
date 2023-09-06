@@ -26,7 +26,7 @@ import TimeOptionCell from './subcomponents/TimeOptionCell';
 const NotiPreference: React.FC = () => {
   const session = useTypedSelector(state => state.session);
   const notificationConfig = React.useRef<NotificationConfiguration[] | undefined>(
-    session.notificationConfigs //然后这里是从接口里面拿到的初始值
+    session.notificationConfigs
   );
   const gridApi = React.useRef<GridApi>();
 
