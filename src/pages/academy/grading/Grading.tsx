@@ -1,20 +1,54 @@
-import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import * as React from 'react';
+import '@tremor/react/dist/esm/tremor.css';
+
+import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { Button, Card, Col, ColGrid, Flex, Text, Title } from '@tremor/react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import SimpleDropdown from 'src/commons/SimpleDropdown';
+import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
-import GradingDashboard from './subcomponents/GradingDashboard';
+import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
+import GradingSummary from './subcomponents/GradingSummary';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
-  const { courseId, gradingOverviews } = useTypedSelector(state => state.session);
+  const {
+    courseId,
+    gradingOverviews,
+    role,
+    group,
+    assessmentOverviews: assessments = []
+  } = useSession();
   const params = useParams<{
     submissionId: string;
     questionId: string;
   }>();
+
+  const isAdmin = role === Role.Admin;
+  const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
+  const groupOptions = [
+    { value: false, label: 'my groups' },
+    { value: true, label: 'all groups' }
+  ];
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchGradingOverviews(!showAllGroups));
+  }, [dispatch, role, showAllGroups]);
+
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const showOptions = [
+    { value: false, label: 'ungraded' },
+    { value: true, label: 'all' }
+  ];
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -42,69 +76,10 @@ const Grading: React.FC = () => {
     />
   );
 
-  const data =
+  const submissions =
     gradingOverviews?.map(e =>
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
-
-  const exportCSV = () => {
-    if (!gradingOverviews) return;
-
-    const win = document.defaultView || window;
-    if (!win) {
-      console.warn('There is no `window` associated with the current `document`');
-      return;
-    }
-
-    const content = new Blob(
-      [
-        '"Assessment Name","Student Name","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
-        ...gradingOverviews.map(
-          e =>
-            [
-              e.assessmentName,
-              e.studentName,
-              e.groupName,
-              e.submissionStatus,
-              e.gradingStatus,
-              e.questionCount,
-              e.gradedCount,
-              e.initialXp,
-              e.xpAdjustment,
-              e.currentXp,
-              e.maxXp,
-              e.xpBonus
-            ]
-              .map(field => `"${field}"`) // wrap each field in double quotes in case it contains a comma
-              .join(',') + '\n'
-        )
-      ],
-      { type: 'text/csv' }
-    );
-    const fileName = `SA submissions (${new Date().toISOString()}).csv`;
-
-    // code from https://github.com/ag-grid/ag-grid/blob/latest/grid-community-modules/csv-export/src/csvExport/downloader.ts
-    const element = document.createElement('a');
-    const url = win.URL.createObjectURL(content);
-    element.setAttribute('href', url);
-    element.setAttribute('download', fileName);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.dispatchEvent(
-      new MouseEvent('click', {
-        bubbles: false,
-        cancelable: true,
-        view: win
-      })
-    );
-
-    document.body.removeChild(element);
-
-    win.setTimeout(() => {
-      win.URL.revokeObjectURL(url);
-    }, 0);
-  };
 
   return (
     <ContentDisplay
@@ -112,7 +87,56 @@ const Grading: React.FC = () => {
         gradingOverviews === undefined ? (
           loadingDisplay
         ) : (
-          <GradingDashboard submissions={data} handleCsvExport={exportCSV} />
+          <ColGrid numColsLg={8} gapX="gap-x-4" gapY="gap-y-2">
+            <Col numColSpanLg={6}>
+              <Card>
+                <Flex justifyContent="justify-between">
+                  <Flex justifyContent="justify-start" spaceX="space-x-6">
+                    <Title>Submissions</Title>
+                    <Button
+                      variant="light"
+                      size="xs"
+                      icon={() => (
+                        <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />
+                      )}
+                      onClick={() => exportGradingCSV(gradingOverviews)}
+                    >
+                      Export to CSV
+                    </Button>
+                  </Flex>
+                </Flex>
+                <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
+                  <Text>Viewing</Text>
+                  <SimpleDropdown
+                    options={showOptions}
+                    defaultValue={showAllSubmissions}
+                    onClick={setShowAllSubmissions}
+                    popoverProps={{ position: Position.BOTTOM }}
+                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                  />
+                  <Text>submissions from</Text>
+                  <SimpleDropdown
+                    options={groupOptions}
+                    defaultValue={showAllGroups}
+                    onClick={setShowAllGroups}
+                    popoverProps={{ position: Position.BOTTOM }}
+                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                  />
+                </Flex>
+                <GradingSubmissionsTable
+                  submissions={submissions.filter(
+                    s => showAllSubmissions || isSubmissionUngraded(s)
+                  )}
+                />
+              </Card>
+            </Col>
+
+            <Col numColSpanLg={2}>
+              <Card hFull>
+                <GradingSummary group={group} submissions={submissions} assessments={assessments} />
+              </Card>
+            </Col>
+          </ColGrid>
         )
       }
       fullWidth={true}

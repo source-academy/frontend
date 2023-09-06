@@ -22,7 +22,7 @@ import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import useTypeInference from './UseTypeInference';
 import { getModeString, selectMode } from '../utils/AceHelper';
-import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
+import { EditorBinding } from '../WorkspaceSettingsContext';
 import { IAceEditor } from 'react-ace/lib/types';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
@@ -53,6 +53,7 @@ type EditorStateProps = {
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
+  editorBinding?: EditorBinding;
 };
 
 export type EditorTabStateProps = {
@@ -65,7 +66,6 @@ export type EditorTabStateProps = {
 };
 
 type LocalStateProps = {
-  editorBinding: EditorBinding;
   session: Ace.EditSession;
 };
 
@@ -348,6 +348,22 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       // See AceHelper#selectMode for more information.
       props.session.setMode(editor.getSession().getMode());
       editor.setSession(props.session);
+      /* eslint-disable */
+
+      // Add changeCursor event listener onto the current session.
+      // In ReactAce, this event listener is only bound on component
+      // mounting/creation, and hence changing sessions will need rebinding.
+      // See react-ace/src/ace.tsx#263,#460 for more details. We also need to
+      // ensure that event listener is only bound once to prevent memory leaks.
+      // We also need to check non-documented property _eventRegistry to
+      // see if the changeCursor listener event has been added yet.
+
+      // @ts-ignore
+      if (editor.getSession().selection._eventRegistry.changeCursor.length < 2) {
+        editor.getSession().selection.on('changeCursor', reactAceRef.current!.onCursorChange);
+      }
+
+      /* eslint-enable */
       // Give focus to the editor tab only after switching from another tab.
       // This is necessary to prevent 'unstable_flushDiscreteUpdates' warnings.
       if (filePath !== undefined) {
@@ -411,10 +427,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     // hopelessly incomplete
     editor.on(
       'gutterclick' as any,
-      makeHandleGutterClick(
-        (...args) => handleEditorUpdateBreakpointsRef.current(...args),
-        props.editorTabIndex
-      ) as any
+      makeHandleGutterClick(handleEditorUpdateBreakpointsRef.current, props.editorTabIndex)
     );
 
     // Change all info annotations to error annotations
@@ -485,8 +498,16 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       if (!reactAceRef.current) {
         return;
       }
-      handleEditorValueChange(props.editorTabIndex, newCode);
+
       shiftBreakpointsWithCode(reactAceRef.current.editor, delta);
+
+      // Write editor state for the active editor tab to the store.
+      handleEditorValueChange(props.editorTabIndex, newCode);
+      handleEditorUpdateBreakpointsRef.current(
+        props.editorTabIndex,
+        reactAceRef.current.editor.session.getBreakpoints()
+      );
+
       if (handleUpdateHasUnsavedChanges) {
         handleUpdateHasUnsavedChanges(true);
       }
@@ -552,7 +573,6 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor];
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
-  const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
   const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});
 
   // Create new edit session.
@@ -571,7 +591,6 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
     <EditorBase
       {...props}
       session={props.filePath ? sessions[props.filePath] : defaultEditSession}
-      editorBinding={workspaceSettings.editorBinding}
       hooks={hooks}
     />
   );

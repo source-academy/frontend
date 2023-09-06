@@ -23,7 +23,6 @@ const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?:
 };
 
 const Login = () => import('../pages/login/Login');
-const Disabled = () => import('../pages/disabled/Disabled');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
 const Sicp = () => import('../pages/sicp/Sicp');
@@ -33,37 +32,15 @@ const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../pages/welcome/Welcome');
 const Academy = () => import('../pages/academy/Academy');
 const MissionControl = () => import('../pages/missionControl/MissionControl');
-
-export const getDisabledRouterConfig: (reason: string | boolean) => RouteObject[] = reason => {
-  const disabledReason = typeof reason === 'string' ? reason : undefined;
-  return [
-    {
-      path: '/*',
-      element: <Application />,
-      children: [
-        {
-          path: 'login',
-          lazy: Login,
-          loader: conditionalLoader(Constants.playgroundOnly, '/')
-        },
-        {
-          path: '',
-          lazy: Disabled,
-          loader: conditionalLoader(!Constants.playgroundOnly, 'login', disabledReason)
-        },
-        {
-          path: 'courses/*',
-          element: <Navigate to="/login" />
-        },
-        {
-          path: '*',
-          lazy: Disabled,
-          loader: () => disabledReason
-        }
-      ]
-    }
-  ];
+const EditStory = async () => {
+  const { EditStoryComponent } = await import('../pages/stories/Story');
+  return { Component: EditStoryComponent };
 };
+const ViewStory = async () => {
+  const { ViewStoryComponent } = await import('../pages/stories/Story');
+  return { Component: ViewStoryComponent };
+};
+const Stories = () => import('../pages/stories/Stories');
 
 const commonChildrenRoutes: RouteObject[] = [
   {
@@ -178,6 +155,22 @@ export const getFullAcademyRouterConfig = ({
         {
           path: 'mission-control/:assessmentId?/:questionId?',
           lazy: MissionControl
+        },
+        {
+          path: 'stories/new',
+          lazy: EditStory
+        },
+        {
+          path: 'stories/view/:id',
+          lazy: ViewStory
+        },
+        {
+          path: 'stories/edit/:id',
+          lazy: EditStory
+        },
+        {
+          path: 'stories',
+          lazy: Stories
         },
         ...commonChildrenRoutes,
         {

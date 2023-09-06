@@ -47,32 +47,9 @@ import {
   QuestionTypes
 } from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
-import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
-import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
-
-/**
- * @property accessToken - backend access token
- * @property errorMessage - message to showWarningMessage on failure
- * @property body - request body, for HTTP POST
- * @property noContentType - set to true when sending multipart data
- * @property noHeaderAccept - if Accept: application/json should be omitted
- * @property refreshToken - backend refresh token
- * @property shouldRefresh - if should attempt to refresh access token
- *
- * If shouldRefresh, accessToken and refreshToken are required.
- */
-type RequestOptions = {
-  accessToken?: string;
-  errorMessage?: string;
-  body?: object;
-  noContentType?: boolean;
-  noHeaderAccept?: boolean;
-  refreshToken?: string;
-  shouldAutoLogout?: boolean;
-  shouldRefresh?: boolean;
-};
+import { request } from '../utils/RequestHelper';
 
 /**
  * POST /auth/login
@@ -105,7 +82,7 @@ export const postAuth = async (
 /**
  * POST /auth/refresh
  */
-const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
+export const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
   const resp = await request('auth/refresh', 'POST', {
     body: { refresh_token: refreshToken }
   });
@@ -133,8 +110,7 @@ export const getUser = async (
   assessmentConfigurations: AssessmentConfiguration[] | null;
 }> => {
   const resp = await request('user', 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return {
@@ -159,8 +135,7 @@ export const getLatestCourseRegistrationAndConfiguration = async (
   assessmentConfigurations: AssessmentConfiguration[] | null;
 }> => {
   const resp = await request('user/latest_viewed_course', 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return {
@@ -183,9 +158,7 @@ export const putLatestViewedCourse = async (
   const resp = await request(`user/latest_viewed_course`, 'PUT', {
     ...tokens,
     body: { courseId: courseId },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -201,9 +174,7 @@ export const putCourseResearchAgreement = async (
   const resp = await request(`${courseId()}/user/research_agreement`, 'PUT', {
     ...tokens,
     body: { agreedToResearch },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -219,9 +190,7 @@ export const postCreateCourse = async (
   const resp = await request(`config/create`, 'POST', {
     ...tokens,
     body: { ...courseConfig },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -232,8 +201,7 @@ export const postCreateCourse = async (
  */
 export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfiguration | null> => {
   const resp = await request(`${courseId()}/config`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
 
   if (!resp || !resp.ok) {
@@ -250,8 +218,7 @@ export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfigurati
  */
 export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[] | null> => {
   const resp = await request(`${courseId()}/achievements`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
 
   if (!resp || !resp.ok) {
@@ -271,8 +238,7 @@ export const getGoals = async (
   studentCourseRegId: number
 ): Promise<AchievementGoal[] | null> => {
   const resp = await request(`${courseId()}/admin/users/${studentCourseRegId}/goals`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
 
   if (!resp || !resp.ok) {
@@ -289,8 +255,7 @@ export const getGoals = async (
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
   const resp = await request(`${courseId()}/self/goals`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
 
   if (!resp || !resp.ok) {
@@ -306,11 +271,16 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
  * GET /courses/{courseId}/admin/users
  */
 export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
+<<<<<<< HEAD
   const resp = await request(`${courseId()}/ad
   
   min/users`, 'GET', {
     ...tokens,
     shouldRefresh: true
+=======
+  const resp = await request(`${courseId()}/admin/users`, 'GET', {
+    ...tokens
+>>>>>>> upstream/master
   });
 
   if (!resp || !resp.ok) {
@@ -340,9 +310,7 @@ export async function bulkUpdateAchievements(
     accessToken: tokens.accessToken,
     body: { achievements: achievements.map(achievement => backendifyAchievementItem(achievement)) },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    refreshToken: tokens.refreshToken
   });
 
   return resp;
@@ -362,9 +330,7 @@ export async function bulkUpdateGoals(
       goals: goals.map(goal => backendifyGoalDefinition(goal))
     },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    refreshToken: tokens.refreshToken
   });
 
   return resp;
@@ -381,9 +347,7 @@ export const updateOwnGoalProgress = async (
   const resp = await request(`${courseId()}/self/goals/${progress.uuid}/progress`, 'POST', {
     ...tokens,
     body: { progress: progress },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -403,9 +367,7 @@ export const updateGoalProgress = async (
     {
       ...tokens,
       body: { progress: progress },
-      noHeaderAccept: true,
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      noHeaderAccept: true
     }
   );
 
@@ -419,9 +381,7 @@ export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<R
   const resp = await request(`${courseId()}/admin/achievements/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -434,9 +394,7 @@ export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response
   const resp = await request(`${courseId()}/admin/goals/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -449,8 +407,7 @@ export const getAssessmentOverviews = async (
   tokens: Tokens
 ): Promise<AssessmentOverview[] | null> => {
   const resp = await request(`${courseId()}/assessments`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -478,14 +435,12 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
   if (courseRegId !== undefined) {
     // If courseRegId is provided, get the total XP of a specific student
     resp = await request(`${courseId()}/admin/users/${courseRegId}/total_xp`, 'GET', {
-      ...tokens,
-      shouldRefresh: true
+      ...tokens
     });
   } else {
     // Otherwise, get the total XP of the current user
     resp = await request(`${courseId()}/user/total_xp`, 'GET', {
-      ...tokens,
-      shouldRefresh: true
+      ...tokens
     });
   }
 
@@ -501,8 +456,7 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
  */
 export const getAllUserXp = async (tokens: Tokens): Promise<number | null> => {
   const resp = await request(`${courseId()}/admin/users/total_xp`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -519,8 +473,7 @@ export const getUserAssessmentOverviews = async (
   tokens: Tokens
 ): Promise<AssessmentOverview[] | null> => {
   const resp = await request(`${courseId()}/admin/users/${courseRegId}/assessments`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -557,16 +510,13 @@ export const getAssessment = async (
       `${courseId()}/admin/users/${courseRegId}/assessments/${assessmentId}`,
       'GET',
       {
-        ...tokens,
-        shouldRefresh: true
+        ...tokens
       }
     );
   } else {
     // Otherwise, we are getting the assessment for the current user
     resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
-      ...tokens,
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      ...tokens
     });
   }
 
@@ -583,9 +533,7 @@ export const getAssessment = async (
       ...tokens,
       body: {
         password: input
-      },
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      }
     });
   }
 
@@ -624,7 +572,7 @@ export const getAssessment = async (
     q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {
         entry[1] = (window as any).eval(entry[1]);
-      } catch (e) {}
+      } catch (e) { }
       return entry;
     });
 
@@ -644,9 +592,7 @@ export const postAnswer = async (
   const resp = await request(`${courseId()}/assessments/question/${id}/answer`, 'POST', {
     ...tokens,
     body: typeof answer == 'object' ? { answer: answer } : { answer: `${answer}` },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
   return resp;
 };
@@ -657,9 +603,7 @@ export const postAnswer = async (
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/assessments/${id}/submit`, 'POST', {
     ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false, // 400 if some questions unattempted
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -673,8 +617,7 @@ export const getGradingOverviews = async (
   group: boolean
 ): Promise<GradingOverview[] | null> => {
   const resp = await request(`${courseId()}/admin/grading?group=${group}`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
@@ -684,9 +627,11 @@ export const getGradingOverviews = async (
     .map((overview: any) => {
       const gradingOverview: GradingOverview = {
         assessmentId: overview.assessment.id,
+        assessmentNumber: overview.assessment.assessmentNumber,
         assessmentName: overview.assessment.title,
         assessmentType: overview.assessment.type,
         studentId: overview.student.id,
+        studentUsername: overview.student.username,
         studentName: overview.student.name,
         submissionId: overview.id,
         submissionStatus: overview.status,
@@ -723,8 +668,7 @@ export const getGradingOverviews = async (
  */
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
 
   if (!resp) {
@@ -787,9 +731,7 @@ export const postGrading = async (
         comments
       }
     },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -804,9 +746,7 @@ export const postReautogradeSubmission = async (
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/autograde`, 'POST', {
     ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -825,9 +765,7 @@ export const postReautogradeAnswer = async (
     'POST',
     {
       ...tokens,
-      noHeaderAccept: true,
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      noHeaderAccept: true
     }
   );
 
@@ -843,9 +781,7 @@ export const postUnsubmit = async (
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/unsubmit`, 'POST', {
     ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -856,8 +792,7 @@ export const postUnsubmit = async (
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
   const resp: Response | null = await request(`${courseId()}/notifications`, 'GET', {
-    ...tokens,
-    shouldAutoLogout: false
+    ...tokens
   });
 
   let notifications: Notification[] = [];
@@ -891,8 +826,7 @@ export const postAcknowledgeNotifications = async (
 ): Promise<Response | null> => {
   const resp: Response | null = await request(`${courseId()}/notifications/acknowledge`, 'POST', {
     ...tokens,
-    body: { notificationIds: ids },
-    shouldAutoLogout: false
+    body: { notificationIds: ids }
   });
 
   return resp;
@@ -903,9 +837,7 @@ export const postAcknowledgeNotifications = async (
  */
 export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData[] | null> => {
   const resp = await request(`${courseId()}/sourcecast`, 'GET', {
-    ...tokens,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return null;
@@ -936,9 +868,7 @@ export const postSourcecast = async (
     ...tokens,
     body: formData,
     noContentType: true,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -953,9 +883,7 @@ export const deleteSourcecastEntry = async (
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/sourcecast/${id}`, 'DELETE', {
     ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -972,9 +900,7 @@ export const updateAssessment = async (
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {
     ...tokens,
     body: body,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -986,9 +912,7 @@ export const updateAssessment = async (
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'DELETE', {
     ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1011,9 +935,7 @@ export const uploadAssessment = async (
     ...tokens,
     body: formData,
     noContentType: true,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1024,8 +946,7 @@ export const uploadAssessment = async (
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
   const resp = await request(`${courseId()}/admin/grading/summary`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1044,9 +965,7 @@ export const putCourseConfig = async (
   const resp = await request(`${courseId()}/admin/config`, 'PUT', {
     ...tokens,
     body: courseConfig,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1059,8 +978,7 @@ export const getAssessmentConfigs = async (
   tokens: Tokens
 ): Promise<AssessmentConfiguration[] | null> => {
   const resp = await request(`${courseId()}/admin/config/assessment_configs`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1078,16 +996,13 @@ export const putAssessmentConfigs = async (
   overrideCourseId?: number
 ): Promise<Response | null> => {
   const resp = await request(
-    `${
-      overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
+    `${overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
     }/admin/config/assessment_configs`,
     'PUT',
     {
       ...tokens,
       body: { assessmentConfigs },
-      noHeaderAccept: true,
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      noHeaderAccept: true
     }
   );
 
@@ -1102,9 +1017,7 @@ export const putNotificationConfigs = async (
   return await request(`courses/${courseIdWithoutPrefix()}/admin/notifications/config`, 'PUT', {
     ...tokens,
     body: notificationConfigs,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 };
 
@@ -1117,9 +1030,7 @@ export const putTimeOption = async (
     body: {
       isDefault: timeOption.isDefault
     },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1137,9 +1048,7 @@ export const postTimeOption = async (
       minutes: timeOption.minutes,
       notification_config_id: notificationConfigId
     },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1157,9 +1066,7 @@ export const removeAssessmentConfig = async (
     'DELETE',
     {
       ...tokens,
-      noHeaderAccept: true,
-      shouldAutoLogout: false,
-      shouldRefresh: true
+      noHeaderAccept: true
     }
   );
 
@@ -1192,9 +1099,7 @@ export const putTimeOptions = async (
   const resp = await request(`courses/${courseIdWithoutPrefix()}/notifications/options`, 'PUT', {
     ...tokens,
     body: timeOptions,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1253,9 +1158,7 @@ export const postNotificationPreference = async (
       notification_config_id: notificationConfigId,
       course_reg_id: courseRegId
     },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1290,8 +1193,7 @@ export const getUserCourseRegistrations = async (
   tokens: Tokens
 ): Promise<AdminPanelCourseRegistration[] | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'GET', {
-    ...tokens,
-    shouldRefresh: true
+    ...tokens
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1311,9 +1213,7 @@ export const putNewUsers = async (
   const resp = await request(`${courseId()}/admin/users`, 'PUT', {
     ...tokens,
     body: { users, provider },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1330,9 +1230,7 @@ export const putUserRole = async (
   const resp = await request(`${courseId()}/admin/users/${courseRegId}/role`, 'PUT', {
     ...tokens,
     body: { role },
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1347,9 +1245,7 @@ export const removeUserCourseRegistration = async (
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users/${courseRegId}`, 'DELETE', {
     ...tokens,
-    noHeaderAccept: true,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    noHeaderAccept: true
   });
 
   return resp;
@@ -1361,8 +1257,7 @@ export const removeUserCourseRegistration = async (
 export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
   const resp = await request(`devices`, 'GET', {
     accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true
+    refreshToken: tokens.refreshToken
   });
 
   return resp && resp.ok ? resp.json() : null;
@@ -1377,9 +1272,7 @@ export async function getDeviceWSEndpoint(
 ): Promise<WebSocketEndpointInformation | null> {
   const resp = await request(`devices/${device.id}/ws_endpoint`, 'GET', {
     accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
-    shouldAutoLogout: false
+    refreshToken: tokens.refreshToken
   });
 
   return resp && resp.ok ? resp.json() : null;
@@ -1393,8 +1286,6 @@ export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens
   const resp = await request(`devices`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
-    shouldAutoLogout: false,
     body: device
   });
 
@@ -1421,8 +1312,6 @@ export async function editDevice(
   const resp = await request(`devices/${device.id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true,
-    shouldAutoLogout: false,
     body: { title: device.title }
   });
 
@@ -1445,8 +1334,7 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
   tokens = fillTokens(tokens);
   const resp = await request(`devices/${device.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true
+    refreshToken: tokens.refreshToken
   });
 
   if (!resp) {
@@ -1473,90 +1361,6 @@ function getTokensFromStore(): Tokens | undefined {
   const { accessToken, refreshToken } = store.getState().session;
   return accessToken && refreshToken ? { accessToken, refreshToken } : undefined;
 }
-
-/**
- * @returns {(Response|null)} Response if successful, otherwise null.
- *
- * @see @type{RequestOptions} for options to this function.
- *
- * If opts.shouldRefresh, an initial response status of < 200 or > 299 will
- * cause this function to call postRefresh to attempt to setToken with fresh
- * tokens.
- *
- * If fetch throws an error, or final response has status code < 200 or > 299,
- * this function will cause the user to logout.
- */
-export const request = async (
-  path: string,
-  method: string,
-  opts: RequestOptions
-): Promise<Response | null> => {
-  const headers = new Headers();
-  if (!opts.noHeaderAccept) {
-    headers.append('Accept', 'application/json');
-  }
-  if (opts.accessToken) {
-    headers.append('Authorization', `Bearer ${opts.accessToken}`);
-  }
-
-  const fetchOpts: any = { method, headers };
-  if (opts.body) {
-    if (opts.noContentType) {
-      // Content Type is not needed for sending multipart data
-      fetchOpts.body = opts.body;
-    } else {
-      headers.append('Content-Type', 'application/json');
-      fetchOpts.body = JSON.stringify(opts.body);
-    }
-  }
-
-  try {
-    const resp = await fetch(`${Constants.backendUrl}/v2/${path}`, fetchOpts);
-
-    // response.ok is (200 <= response.status <= 299)
-    // response.status of > 299 does not raise error; so deal with in in the try clause
-    if (opts.shouldRefresh && resp && resp.status === 401) {
-      const newTokens = await postRefresh(opts.refreshToken!);
-      store.dispatch(actions.setTokens(newTokens!));
-      const newOpts = {
-        ...opts,
-        accessToken: newTokens!.accessToken,
-        shouldRefresh: false
-      };
-      return request(path, method, newOpts);
-    }
-
-    if (resp && !resp.ok && opts.shouldAutoLogout === false) {
-      // this clause is mostly for SUBMIT_ANSWER; show an error message instead
-      // and ask student to manually logout, so that they have a chance to save
-      // their answers
-      return resp;
-    }
-
-    if (!resp.ok) {
-      showWarningMessage(
-        opts.errorMessage
-          ? opts.errorMessage
-          : `Error while communicating with backend: ${resp.status} ${resp.statusText}${
-              resp.status === 401 || resp.status === 403
-                ? '; try logging in again, after manually saving any work.'
-                : ''
-            }`
-      );
-      return null;
-    }
-
-    return resp;
-  } catch (e) {
-    showWarningMessage(
-      opts.errorMessage
-        ? opts.errorMessage
-        : 'Error while communicating with backend; check your network?'
-    );
-
-    return null;
-  }
-};
 
 /**
  * Handles display of warning notifications for failed HTTP requests, i.e. those with no response
@@ -1594,8 +1398,8 @@ const computeGradingStatus = (
     ? numGraded === 0
       ? 'none'
       : numGraded === numQuestions
-      ? 'graded'
-      : 'grading'
+        ? 'graded'
+        : 'grading'
     : 'excluded';
 
 const courseId: () => string = () => {
@@ -1609,7 +1413,7 @@ const courseId: () => string = () => {
   }
 };
 
-const courseIdWithoutPrefix: () => string = () => {
+export const courseIdWithoutPrefix: () => string = () => {
   const id = store.getState().session.courseId;
   if (id) {
     return `${id}`;

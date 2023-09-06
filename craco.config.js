@@ -46,6 +46,7 @@ const cracoConfig = (module.exports = {
         'http': require.resolve('stream-http'),
         'https': require.resolve('https-browserify'),
         'os': require.resolve('os-browserify/browser'),
+        'path/posix': require.resolve('path-browserify'),
         'stream': require.resolve('stream-browserify'),
         'timers': require.resolve('timers-browserify'),
         'url': require.resolve('url/')
@@ -55,7 +56,10 @@ const cracoConfig = (module.exports = {
       webpackConfig.module.rules.push({
         test: /\.mjs$/,
         include: /node_modules/,
-        type: 'javascript/auto'
+        type: 'javascript/auto',
+        resolve: {
+          fullySpecified: false
+        },
       });
 
       // Ignore warnings for dependencies that do not ship with a source map.
@@ -86,7 +90,44 @@ const cracoConfig = (module.exports = {
   jest: {
     configure: jestConfig => {
       jestConfig.transformIgnorePatterns = [
-        '[/\\\\]node_modules[/\\\\](?!(@ion-phaser[/\\\\]react[/\\\\])|(js-slang[/\\\\])|(array-move[/\\\\])|(konva[/\\\\.*])|(react-konva[/\\\\.*])).*\\.(js|jsx|ts|tsx)$',
+        // Will give something like
+        // '[/\\\\]node_modules[/\\\\]
+        //  (?!
+        //  (   @ion-phaser[/\\\\]react[/\\\\.*]    )|
+        //  (   js-slang[/\\\\.*]                   )|
+        //  (   array-move[/\\\\.*]                 )|
+        //      ...
+        //  (   comma-separated-tokens[/\\\\.*]   )
+        //  ).*.(js|jsx|ts|tsx)$'
+        ignoreModulePaths(
+          '@ion-phaser/react',
+          'js-slang',
+          'array-move',
+          'konva',
+          'react-konva',
+          'react-debounce-render',
+          'hastscript',
+          'hast-to-hyperscript',
+          'hast-util-.+',
+          'mdast-util-.+',
+          'micromark',
+          'micromark-.+',
+          'vfile',
+          'vfile-message',
+          'unist-util-.+',
+          'web-namespaces',
+          'rehype-react',
+          'unified',
+          'bail',
+          'is-plain-obj',
+          'trough',
+          'decode-named-character-reference',
+          'character-entities',
+          'trim-lines',
+          'property-information',
+          'space-separated-tokens',
+          'comma-separated-tokens'
+        ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';
@@ -94,3 +135,15 @@ const cracoConfig = (module.exports = {
     }
   }
 });
+
+const ignoreModulePaths = (...paths) => {
+  const moduleRoot = replaceSlashes('/node_modules/');
+  const modulePaths = paths
+    .map(replaceSlashes)
+    .map(path => `(${path}[/\\\\.*])`)
+    .join('|');
+  return moduleRoot + '(?!' + modulePaths + ').*.(js|jsx|ts|tsx)$';
+};
+const replaceSlashes = target => {
+  return target.replaceAll('/', '[/\\\\]');
+};
