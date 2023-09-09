@@ -271,16 +271,9 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
  * GET /courses/{courseId}/admin/users
  */
 export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
-  const resp = await request(
-    `${courseId()}/ad
-  
-  min/users`,
-    'GET',
-    {
-      ...tokens
-      //shouldRefresh: true
-    }
-  );
+  const resp = await request(`${courseId()}/admin/users`, 'GET', {
+    ...tokens
+  });
 
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -1009,7 +1002,7 @@ export const putAssessmentConfigs = async (
   return resp;
 };
 
-//Notification related request
+// Notification related request
 export const putNotificationConfigs = async (
   tokens: Tokens,
   notificationConfigs: NotificationConfiguration[]
@@ -1084,8 +1077,6 @@ export const removeTimeOptions = async (
       ...tokens,
       body: timeOptionIds,
       noHeaderAccept: true
-      //shouldAutoLogout: false,
-      //shouldRefresh: true
     }
   );
 
@@ -1108,13 +1099,11 @@ export const putTimeOptions = async (
 export const getNotificationConfigs = async (
   tokens: Tokens
 ): Promise<NotificationConfiguration[] | null> => {
-  //const resp = await request(`notifications/config/${courseIdWithoutPrefix()}`, 'GET', {
   const resp = await request(
     `courses/${courseIdWithoutPrefix()}/admin/notifications/config`,
     'GET',
     {
       ...tokens
-      //shouldRefresh: true
     }
   );
   if (!resp || !resp.ok) {
@@ -1128,13 +1117,11 @@ export const getConfigurableNotificationConfigs = async (
   tokens: Tokens,
   courseRegId: number
 ): Promise<NotificationConfiguration[] | null> => {
-  //const resp = await request(`notifications/config/user/${courseRegId}`, 'GET', {
   const resp = await request(
     `courses/${courseIdWithoutPrefix()}/notifications/config/user/${courseRegId}`,
     'GET',
     {
       ...tokens
-      //shouldRefresh: true
     }
   );
   if (!resp || !resp.ok) {
@@ -1178,8 +1165,6 @@ export const putNotificationPreferences = async (
         return { ...pref, courseRegId: courseRegId };
       }),
       noHeaderAccept: true
-      //shouldAutoLogout: false,
-      //shouldRefresh: true
     }
   );
 
