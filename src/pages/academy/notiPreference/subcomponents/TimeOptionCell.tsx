@@ -14,6 +14,7 @@ type OwnProps = {
   setDelete: (timeOption: TimeOption) => void;
   typeId: string;
 };
+
 const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
   const timeOptions: TimeOption[] = props.data[props.field];
   const [values, setValues] = useState<React.ReactNode[]>(
@@ -55,13 +56,6 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
   };
 
   return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
-  /*
-    if (props.typeId === '1' || props.typeId === '2') {
-      return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
-    } else {
-      return <span>NA</span>;
-    }
-    */
 };
 
 export default TimeOptionCell;
