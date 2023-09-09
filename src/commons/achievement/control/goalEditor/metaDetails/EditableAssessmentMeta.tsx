@@ -1,5 +1,6 @@
 import { NumericInput } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import React from 'react';
 import { AssessmentMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 type EditableAssessmentMetaProps = {
@@ -7,7 +8,7 @@ type EditableAssessmentMetaProps = {
   changeMeta: (meta: GoalMeta) => void;
 };
 
-function EditableAssessmentMeta(props: EditableAssessmentMetaProps) {
+const EditableAssessmentMeta: React.FC<EditableAssessmentMetaProps> = props => {
   const { assessmentMeta, changeMeta } = props;
   const { assessmentNumber, requiredCompletionFrac } = assessmentMeta;
 
@@ -42,6 +43,6 @@ function EditableAssessmentMeta(props: EditableAssessmentMetaProps) {
       </Tooltip2>
     </>
   );
-}
+};
 
 export default EditableAssessmentMeta;

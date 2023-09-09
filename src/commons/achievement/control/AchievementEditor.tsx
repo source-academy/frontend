@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import AchievementAdder from './achievementEditor/AchievementAdder';
@@ -10,9 +10,7 @@ type AchievementEditorProps = {
 
 let editableCards: JSX.Element[] = [];
 
-function AchievementEditor(props: AchievementEditorProps) {
-  const { requestPublish } = props;
-
+const AchievementEditor: React.FC<AchievementEditorProps> = ({ requestPublish }) => {
   const inferencer = useContext(AchievementContext);
 
   /**
@@ -71,6 +69,6 @@ function AchievementEditor(props: AchievementEditorProps) {
       <ul className="achievement-container">{editableCards}</ul>
     </div>
   );
-}
+};
 
 export default AchievementEditor;

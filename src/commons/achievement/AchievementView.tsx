@@ -1,6 +1,6 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import {
@@ -10,8 +10,7 @@ import {
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
 import { FETCH_ASSESSMENT, FETCH_ASSESSMENT_ADMIN } from '../application/types/SessionTypes';
-import { FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
-import { Assessment } from '../assessment/AssessmentTypes';
+import { Assessment, FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
@@ -24,7 +23,7 @@ type AchievementViewProps = {
   userState?: [AchievementUser | undefined, any];
 };
 
-function AchievementView({ focusUuid, userState }: AchievementViewProps) {
+const AchievementView: React.FC<AchievementViewProps> = ({ focusUuid, userState }) => {
   const assessmentId = !Number.isNaN(+focusUuid) && +focusUuid !== 0 ? +focusUuid : undefined;
   let courseRegId: number | undefined;
 
@@ -116,6 +115,6 @@ function AchievementView({ focusUuid, userState }: AchievementViewProps) {
       )}
     </div>
   );
-}
+};
 
 export default AchievementView;
