@@ -15,7 +15,6 @@ import { NotificationConfiguration, TimeOption } from 'src/commons/application/t
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './assessmentConfigPanel/BooleanCell';
-//import SelectCell from './notificationConfigPanel/SelectCell';
 import TimeOptionCell from './notificationConfigPanel/TimeOptionCell';
 
 const NotificationConfigPanel = () => {
