@@ -51,31 +51,28 @@ const NotiPreference: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-
-    const originData = cloneDeep(
-      session.notificationConfigs
-    ) as NotificationConfiguration[];
+    const originData = cloneDeep(session.notificationConfigs) as NotificationConfiguration[];
 
     if (session.configurableNotificationConfigs) {
       originData.forEach(config => {
         console.log(config.notificationPreference);
-        const preferencesItem = session.configurableNotificationConfigs?.find(i => i.id === config.id)
-        config.notificationPreference = preferencesItem?.notificationPreference ? preferencesItem!.notificationPreference :
-          {
-            id: -1,
-            isEnabled: true,
-            timeOptionId: null
-          }
+        const preferencesItem = session.configurableNotificationConfigs?.find(
+          i => i.id === config.id
+        );
+        config.notificationPreference = preferencesItem?.notificationPreference
+          ? preferencesItem!.notificationPreference
+          : {
+              id: -1,
+              isEnabled: true,
+              timeOptionId: null
+            };
       });
     }
 
-    notificationConfig.current = originData
-
+    notificationConfig.current = originData;
   }, [session]);
 
-
   const [timeOptionsToDelete, setTimeOptionsToDelete] = useState<TimeOption[]>([]);
-
 
   const addTimeOptionsToDelete = (deletedElement: TimeOption) => {
     // If it is not a newly created row that is yet to be persisted in the backend
@@ -211,7 +208,6 @@ const NotiPreference: React.FC = () => {
     if (hasChangesNotificationConfig) {
       const allTimeOptions: TimeOption[] = [];
       notificationConfig.current?.forEach(curr => {
-
         const timeOptions = curr.timeOptions.map(timeOption => {
           return {
             ...timeOption,
@@ -234,8 +230,6 @@ const NotiPreference: React.FC = () => {
 
       dispatch(updateNotificationConfigs(notificationConfig.current ?? []));
       setHasChangesNotificationConfig(false);
-
-
     }
   };
 
@@ -261,17 +255,13 @@ const NotiPreference: React.FC = () => {
         text="Save"
         style={{ marginTop: '15px' }}
         disabled={!(hasChanges || hasChangesNotificationConfig)}
-        intent={(hasChanges || hasChangesNotificationConfig) ? Intent.WARNING : Intent.NONE}
+        intent={hasChanges || hasChangesNotificationConfig ? Intent.WARNING : Intent.NONE}
         onClick={submitHandler}
       />
     </div>
   );
 
-
-
-  return <ContentDisplay loadContentDispatch={() => { }} display={data} fullWidth={false} />;
-
-
+  return <ContentDisplay loadContentDispatch={() => {}} display={data} fullWidth={false} />;
 };
 
 export default NotiPreference;

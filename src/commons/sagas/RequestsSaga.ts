@@ -271,12 +271,16 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
  * GET /courses/{courseId}/admin/users
  */
 export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
-  const resp = await request(`${courseId()}/ad
+  const resp = await request(
+    `${courseId()}/ad
   
-  min/users`, 'GET', {
-    ...tokens,
-    //shouldRefresh: true
-  });
+  min/users`,
+    'GET',
+    {
+      ...tokens
+      //shouldRefresh: true
+    }
+  );
 
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -567,7 +571,7 @@ export const getAssessment = async (
     q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {
         entry[1] = (window as any).eval(entry[1]);
-      } catch (e) { }
+      } catch (e) {}
       return entry;
     });
 
@@ -991,7 +995,8 @@ export const putAssessmentConfigs = async (
   overrideCourseId?: number
 ): Promise<Response | null> => {
   const resp = await request(
-    `${overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
+    `${
+      overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
     }/admin/config/assessment_configs`,
     'PUT',
     {
@@ -1078,7 +1083,7 @@ export const removeTimeOptions = async (
     {
       ...tokens,
       body: timeOptionIds,
-      noHeaderAccept: true,
+      noHeaderAccept: true
       //shouldAutoLogout: false,
       //shouldRefresh: true
     }
@@ -1108,7 +1113,7 @@ export const getNotificationConfigs = async (
     `courses/${courseIdWithoutPrefix()}/admin/notifications/config`,
     'GET',
     {
-      ...tokens,
+      ...tokens
       //shouldRefresh: true
     }
   );
@@ -1128,7 +1133,7 @@ export const getConfigurableNotificationConfigs = async (
     `courses/${courseIdWithoutPrefix()}/notifications/config/user/${courseRegId}`,
     'GET',
     {
-      ...tokens,
+      ...tokens
       //shouldRefresh: true
     }
   );
@@ -1172,7 +1177,7 @@ export const putNotificationPreferences = async (
       body: notiPrefs.map(pref => {
         return { ...pref, courseRegId: courseRegId };
       }),
-      noHeaderAccept: true,
+      noHeaderAccept: true
       //shouldAutoLogout: false,
       //shouldRefresh: true
     }
@@ -1393,8 +1398,8 @@ const computeGradingStatus = (
     ? numGraded === 0
       ? 'none'
       : numGraded === numQuestions
-        ? 'graded'
-        : 'grading'
+      ? 'graded'
+      : 'grading'
     : 'excluded';
 
 const courseId: () => string = () => {

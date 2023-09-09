@@ -15,7 +15,6 @@ type OwnProps = {
   typeId: string;
 };
 const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
-
   const timeOptions: TimeOption[] = props.data[props.field];
   const [values, setValues] = useState<React.ReactNode[]>(
     timeOptions.map((timeOption: TimeOption) => (timeOption.minutes / 60).toFixed(2).toString())
@@ -48,7 +47,7 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
         isDefault: false
       };
 
-      setValues([...values, ...value as string[]]);
+      setValues([...values, ...(value as string[])]);
       props.setStateHandler(props.rowIndex, [...timeOptions, newTimeOption]);
     } else {
       // TODO: Toaster if posisble
