@@ -1,5 +1,11 @@
+import * as bp3core from '@blueprintjs/core';
+import * as bp3icons from '@blueprintjs/icons';
+import * as bp3popover from '@blueprintjs/popover2';
+import * as jsslang from 'js-slang';
+import * as jsslangDist from 'js-slang/dist';
 import React from 'react';
 import JSXRuntime from 'react/jsx-runtime';
+import * as ace from 'react-ace';
 import ReactDOM from 'react-dom';
 
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
@@ -10,18 +16,25 @@ import { ModuleSideContent, SideContentTab, SideContentType } from './SideConten
 //   string[]
 // >();
 
-const requireProvider = (x: string) => {
+const getRequireProvider = (context: jsslang.Context) => (x: string) => {
   const exports = {
     react: React,
+    'react/jsx-runtime': JSXRuntime,
+    'react-ace': ace,
     'react-dom': ReactDOM,
-    'react/jsx-runtime': JSXRuntime
+    '@blueprintjs/core': bp3core,
+    '@blueprintjs/icons': bp3icons,
+    '@blueprintjs/popover2': bp3popover,
+    'js-slang': jsslang,
+    'js-slang/dist': jsslangDist,
+    'js-slang/context': context,
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
   return exports[x];
 };
 
-type RawTab = (provider: typeof requireProvider) => ModuleSideContent;
+type RawTab = (provider: ReturnType<typeof getRequireProvider>) => ModuleSideContent;
 
 /**
  * Returns an array of SideContentTabs to be spawned
@@ -34,7 +47,7 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])
-    .map((rawTab: RawTab) => rawTab(requireProvider))
+    .map((rawTab: RawTab) => rawTab(getRequireProvider(debuggerContext.context)))
     .filter(({ toSpawn }) => !toSpawn || toSpawn(debuggerContext))
     .map(tab => ({
       ...tab,
