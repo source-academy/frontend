@@ -1099,7 +1099,9 @@ export function* evalCode(
     context.executionMethod = 'ec-evaluator';
   }
 
-  const isFolderModeEnabled: boolean = yield select((state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled)
+  const isFolderModeEnabled: boolean = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
+  );
 
   const entrypointCode = files[entrypointFilePath];
 
@@ -1170,16 +1172,24 @@ export function* evalCode(
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
-        : call(runFilesInContext, isFolderModeEnabled ? files : {
-          [entrypointFilePath]: files[entrypointFilePath]
-        }, entrypointFilePath, context, {
-            scheduler: 'preemptive',
-            originalMaxExecTime: execTime,
-            stepLimit: stepLimit,
-            throwInfiniteLoops: true,
-            useSubst: substActiveAndCorrectChapter,
-            envSteps: envSteps,
-          }),
+        : call(
+            runFilesInContext,
+            isFolderModeEnabled
+              ? files
+              : {
+                  [entrypointFilePath]: files[entrypointFilePath]
+                },
+            entrypointFilePath,
+            context,
+            {
+              scheduler: 'preemptive',
+              originalMaxExecTime: execTime,
+              stepLimit: stepLimit,
+              throwInfiniteLoops: true,
+              useSubst: substActiveAndCorrectChapter,
+              envSteps: envSteps
+            }
+          ),
 
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,

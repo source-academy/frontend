@@ -26,7 +26,7 @@ const requireProvider = (x: string) => {
     '@blueprintjs/icons': bp3icons,
     '@blueprintjs/popover2': bp3popover,
     'js-slang': jsslang,
-    'js-slang/dist': jsslangDist,
+    'js-slang/dist': jsslangDist
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
