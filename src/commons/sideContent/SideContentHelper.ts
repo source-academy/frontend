@@ -16,7 +16,7 @@ import { ModuleSideContent, SideContentTab, SideContentType } from './SideConten
 //   string[]
 // >();
 
-const getRequireProvider = (context: jsslang.Context) => (x: string) => {
+const requireProvider = (x: string) => {
   const exports = {
     react: React,
     'react/jsx-runtime': JSXRuntime,
@@ -27,14 +27,13 @@ const getRequireProvider = (context: jsslang.Context) => (x: string) => {
     '@blueprintjs/popover2': bp3popover,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
-    'js-slang/context': context,
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
   return exports[x];
 };
 
-type RawTab = (provider: ReturnType<typeof getRequireProvider>) => ModuleSideContent;
+type RawTab = (provider: ReturnType<typeof requireProvider>) => ModuleSideContent;
 
 /**
  * Returns an array of SideContentTabs to be spawned
@@ -47,7 +46,7 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])
-    .map((rawTab: RawTab) => rawTab(getRequireProvider(debuggerContext.context)))
+    .map((rawTab: RawTab) => rawTab(requireProvider))
     .filter(({ toSpawn }) => !toSpawn || toSpawn(debuggerContext))
     .map(tab => ({
       ...tab,
