@@ -3,11 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 
-import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
+import ControlButton from '../../ControlButton';
+import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
-import SideContentTestcaseCard from './SideContentTestcaseCard';
+import SideContentTestcaseCard from  './SideContentTestcaseCard';
 
 export type SideContentAutograderProps = DispatchProps & StateProps & OwnProps;
 

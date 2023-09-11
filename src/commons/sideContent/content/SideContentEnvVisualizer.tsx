@@ -17,12 +17,12 @@ import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
-import { OverallState } from '../application/ApplicationTypes';
-import { HighlightedLines } from '../editor/EditorTypes';
-import Constants, { Links } from '../utils/Constants';
-import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../workspace/WorkspaceActions';
-import { evalEditor } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { OverallState } from '../../application/ApplicationTypes';
+import { HighlightedLines } from '../../editor/EditorTypes';
+import Constants, { Links } from '../../utils/Constants';
+import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../../workspace/WorkspaceActions';
+import { evalEditor } from '../../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
 type State = {
   visualization: React.ReactNode;

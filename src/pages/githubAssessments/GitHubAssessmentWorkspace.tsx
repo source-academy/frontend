@@ -79,10 +79,10 @@ import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSide
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
-import SideContentMarkdownEditor from '../../commons/sideContent/githubAssessments/SideContentMarkdownEditor';
-import SideContentMissionEditor from '../../commons/sideContent/githubAssessments/SideContentMissionEditor';
-import SideContentTaskEditor from '../../commons/sideContent/githubAssessments/SideContentTaskEditor';
-import SideContentTestcaseEditor from '../../commons/sideContent/githubAssessments/SideContentTestcaseEditor';
+import SideContentMarkdownEditor from '../../commons/sideContent/content/githubAssessments/SideContentMarkdownEditor';
+import SideContentMissionEditor from '../../commons/sideContent/content/githubAssessments/SideContentMissionEditor';
+import SideContentTaskEditor from '../../commons/sideContent/content/githubAssessments/SideContentTaskEditor';
+import SideContentTestcaseEditor from '../../commons/sideContent/content/githubAssessments/SideContentTestcaseEditor';
 import { SideContentProps } from '../../commons/sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
