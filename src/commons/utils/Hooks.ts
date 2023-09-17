@@ -1,5 +1,4 @@
-import moment from 'moment';
-import React, { RefObject, useEffect, useRef, useState } from 'react';
+import React, { RefObject } from 'react';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
@@ -132,46 +131,3 @@ export const useSession = () => {
     isLoggedIn
   };
 };
-
-/**
- * Used in determining the disabled state of any type of Source Academy deployment (e.g. during exams)
- */
-export const useDisabled = () => {
-  const intervalId = useRef<number | undefined>(undefined);
-  const [disabledReason, setDisabledReason] = useState(computeDisabledState());
-  const role = useTypedSelector(state => state.session.role);
-
-  useEffect(() => {
-    if (Constants.disablePeriods.length > 0) {
-      intervalId.current = window.setInterval(() => {
-        const disabled = computeDisabledState();
-        if (disabledReason !== disabled) {
-          setDisabledReason(disabled);
-        }
-      }, 5000);
-    }
-
-    return () => {
-      if (intervalId.current) {
-        window.clearInterval(intervalId.current);
-      }
-    };
-  }, [disabledReason]);
-
-  const isDisabledEffective = !['staff', 'admin'].includes(role!) && disabledReason;
-
-  return {
-    disabledReason,
-    isDisabledEffective
-  };
-};
-
-function computeDisabledState() {
-  const now = moment();
-  for (const { start, end, reason } of Constants.disablePeriods) {
-    if (start.isBefore(now) && end.isAfter(now)) {
-      return reason || true;
-    }
-  }
-  return false;
-}

@@ -59,6 +59,7 @@ export default class RoomPreview extends Phaser.Scene {
   private verifCont: Phaser.GameObjects.Container | undefined;
 
   private context?: Context;
+  private sceneLoaded = false;
 
   constructor() {
     super('RoomPreview');
@@ -131,6 +132,7 @@ export default class RoomPreview extends Phaser.Scene {
         this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
         this.getLayerManager().clearAllLayers();
         this.sound.stopAll();
+        this.sceneLoaded = false;
         this.scene.restart();
       },
       onHover: () => roomRefreshHover.setVisible(true),
@@ -155,6 +157,7 @@ export default class RoomPreview extends Phaser.Scene {
     this.getLayerManager().addToLayer(Layer.UI, roomRefreshHover);
 
     this.getToolbarManager().renderToolbarContainer();
+    this.sceneLoaded = true;
   }
 
   public update() {
@@ -166,7 +169,9 @@ export default class RoomPreview extends Phaser.Scene {
      * Hence, we replace the scope instead of appending
      * new one each time.
      */
-    this.eval(`update();`);
+    if (this.sceneLoaded) {
+      this.eval(`update();`);
+    }
   }
 
   public createContext() {

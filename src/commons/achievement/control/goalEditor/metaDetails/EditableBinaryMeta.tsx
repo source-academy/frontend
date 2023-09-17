@@ -2,6 +2,7 @@ import { Button, EditableText, MenuItem, NumericInput } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
+import React from 'react';
 import { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 import { AND, BooleanExpression, OR } from 'src/features/achievement/ExpressionTypes';
 
@@ -43,8 +44,7 @@ const conditionSplitter = (condition: BooleanExpression): string[] => {
   }
 };
 
-function EditableBinaryMeta(props: EditableBinaryMetaProps) {
-  const { binaryMeta, changeMeta } = props;
+const EditableBinaryMeta: React.FC<EditableBinaryMetaProps> = ({ binaryMeta, changeMeta }) => {
   const { condition, targetCount } = binaryMeta;
 
   const joiners: string[] = [];
@@ -165,6 +165,6 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
       <Button minimal={true} outlined={true} text="Add Condition" onClick={addCondition} />
     </>
   );
-}
+};
 
 export default EditableBinaryMeta;

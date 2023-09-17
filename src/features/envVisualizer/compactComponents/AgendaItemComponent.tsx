@@ -24,13 +24,13 @@ import { Frame } from './Frame';
 export class AgendaItemComponent extends Visible implements IHoverable {
   /** text to display */
   readonly text: string;
-  /** text to display on hover */
-  readonly tooltip: string;
   readonly tooltipRef: RefObject<any>;
   readonly arrow?: ArrowFromAgendaItemComponent;
 
   constructor(
     readonly value: any,
+    /** text to display on hover */
+    readonly tooltip: string,
     /** The height of the stack so far */
     stackHeight: number,
     /** callback function to highlight editor lines on hover */
@@ -46,7 +46,6 @@ export class AgendaItemComponent extends Visible implements IHoverable {
       AgendaStashConfig.AgendaMaxTextWidth,
       AgendaStashConfig.AgendaMaxTextHeight
     );
-    this.tooltip = this.value;
     this.tooltipRef = React.createRef();
     this.highlightOnHover = highlightOnHover;
     this.unhighlightOnHover = unhighlightOnHover;

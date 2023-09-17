@@ -2,14 +2,10 @@ import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
-import Constants from 'src/commons/utils/Constants';
-import { useDisabled, useSession } from 'src/commons/utils/Hooks';
-import {
-  getDisabledRouterConfig,
-  getFullAcademyRouterConfig,
-  playgroundOnlyRouterConfig
-} from 'src/routes/routerConfig';
 
+import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
+import Constants from '../utils/Constants';
+import { useSession } from '../utils/Hooks';
 import { updateReactRouter } from './actions/CommonsActions';
 
 /**
@@ -23,12 +19,9 @@ import { updateReactRouter } from './actions/CommonsActions';
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, role, name, courseId } = useSession();
-  const { disabledReason, isDisabledEffective } = useDisabled();
 
   const router = useMemo(() => {
-    const routerConfig = isDisabledEffective
-      ? getDisabledRouterConfig(disabledReason)
-      : Constants.playgroundOnly
+    const routerConfig = Constants.playgroundOnly
       ? playgroundOnlyRouterConfig
       : getFullAcademyRouterConfig({
           name,
@@ -41,7 +34,7 @@ const ApplicationWrapper: React.FC = () => {
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [disabledReason, isDisabledEffective, isLoggedIn, role, name, courseId, dispatch]);
+  }, [isLoggedIn, role, name, courseId, dispatch]);
 
   return <RouterProvider router={router} />;
 };

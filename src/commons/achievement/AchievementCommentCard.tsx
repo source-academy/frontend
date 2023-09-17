@@ -1,17 +1,14 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
-const AchievementCommentCard = ({
-  assessment,
-  showToQuestion
-}: {
+const AchievementCommentCard: React.FC<{
   assessment: Assessment;
   showToQuestion: boolean;
-}) => {
+}> = ({ assessment, showToQuestion }) => {
   const navigate = useNavigate();
   const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(

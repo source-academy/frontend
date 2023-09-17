@@ -1,21 +1,17 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_ADMIN
-} from 'src/commons/application/types/SessionTypes';
-import { FETCH_ASSESSMENT_OVERVIEWS } from 'src/commons/assessment/AssessmentTypes';
-import { Assessment } from 'src/commons/assessment/AssessmentTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+
 import {
   AchievementContext,
   getAbilityBackground,
   getAbilityGlow
-} from 'src/features/achievement/AchievementConstants';
-import { AchievementStatus, AchievementUser } from 'src/features/achievement/AchievementTypes';
-
+} from '../../features/achievement/AchievementConstants';
+import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
+import { FETCH_ASSESSMENT, FETCH_ASSESSMENT_ADMIN } from '../application/types/SessionTypes';
+import { Assessment, FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
+import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
@@ -27,7 +23,7 @@ type AchievementViewProps = {
   userState?: [AchievementUser | undefined, any];
 };
 
-function AchievementView({ focusUuid, userState }: AchievementViewProps) {
+const AchievementView: React.FC<AchievementViewProps> = ({ focusUuid, userState }) => {
   const assessmentId = !Number.isNaN(+focusUuid) && +focusUuid !== 0 ? +focusUuid : undefined;
   let courseRegId: number | undefined;
 
@@ -119,6 +115,6 @@ function AchievementView({ focusUuid, userState }: AchievementViewProps) {
       )}
     </div>
   );
-}
+};
 
 export default AchievementView;

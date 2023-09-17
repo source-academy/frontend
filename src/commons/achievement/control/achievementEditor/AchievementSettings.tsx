@@ -1,7 +1,7 @@
 import { Button, Checkbox, Dialog, EditableText } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 import EditableGoalUuids from './achievementSettings/EditableGoalUuids';
@@ -17,7 +17,7 @@ type AchievementSettingsProps = {
   editableAchievement: AchievementItem;
 };
 
-function AchievementSettings(props: AchievementSettingsProps) {
+const AchievementSettings: React.FC<AchievementSettingsProps> = props => {
   const {
     changeCardBackground,
     changeGoalUuids,
@@ -69,6 +69,6 @@ function AchievementSettings(props: AchievementSettingsProps) {
       </Dialog>
     </>
   );
-}
+};
 
 export default AchievementSettings;

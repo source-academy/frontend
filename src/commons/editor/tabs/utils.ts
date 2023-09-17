@@ -1,4 +1,4 @@
-import path from 'path';
+import { posix as pathlib } from 'path';
 
 /**
  * Returns the shortest file paths that is uniquely identifiable among
@@ -32,7 +32,7 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
       ...segments,
       // It is necessary to remove empty segments to deal with the very first '/' in
       // file paths.
-      [filePath]: filePath.split(path.sep).filter(segment => segment !== '')
+      [filePath]: filePath.split(pathlib.sep).filter(segment => segment !== '')
     }),
     {}
   );

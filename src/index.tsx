@@ -1,5 +1,6 @@
 import 'src/styles/index.scss';
 
+import { Button } from '@blueprintjs/core';
 import * as Sentry from '@sentry/browser';
 import { setModulesStaticURL } from 'js-slang/dist/modules/moduleLoader';
 import { createRoot } from 'react-dom/client';
@@ -47,9 +48,21 @@ createInBrowserFileSystem(store)
   });
 
 registerServiceWorker({
-  onUpdate: () => {
+  onUpdate: registration => {
     showWarningMessage(
-      'A new version of Source Academy is available. Please refresh the browser.',
+      <div>
+        <span>A new version of Source Academy is available.&nbsp;</span>
+        <Button
+          onClick={() => {
+            if (registration && registration.waiting) {
+              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+            window.location.reload();
+          }}
+        >
+          Refresh now
+        </Button>
+      </div>,
       0
     );
   }

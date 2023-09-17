@@ -1,4 +1,5 @@
-import { Tokens } from 'src/commons/application/types/SessionTypes';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { courseIdWithoutPrefix } from 'src/commons/sagas/RequestsSaga';
 import Constants from 'src/commons/utils/Constants';
 import {
   showSuccessMessage,
@@ -6,8 +7,13 @@ import {
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 import { RemoveLast } from 'src/commons/utils/TypeHelper';
-import { StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
-import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+import { store } from 'src/pages/createStore';
+
+import { Tokens } from '../../../commons/application/types/SessionTypes';
+import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
+import { StoryListView, StoryView } from '../StoriesTypes';
+
+// Helpers
 
 type StoryRequestHelperParams = RemoveLast<Parameters<typeof request>>;
 const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperParams) => {
@@ -15,14 +21,31 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
   return resp;
 };
 
+const getStoriesGroupId: () => string = () => {
+  const id = store.getState().stories.groupId;
+  if (id) {
+    return `${id}`;
+  } else {
+    // TODO: Rewrite this logic
+    showWarningMessage('Stories not available!', 1000);
+    throw new Error('Stories not available');
+  }
+};
+
+// API-related functions
+
 export const getStoriesUser = async (
   tokens: Tokens
 ): Promise<{
   id: number;
   name: string;
-  // TODO: Return role once permissions framework is implemented
+  groupId: number;
+  groupName: string;
+  role: StoriesRole;
 } | null> => {
-  const resp = await requestStoryBackend('/user', 'GET', { ...tokens });
+  const resp = await requestStoryBackend(`/user?course=${courseIdWithoutPrefix()}`, 'GET', {
+    ...tokens
+  });
   if (!resp) {
     return null;
   }
@@ -35,7 +58,7 @@ export const postNewStoriesUsers = async (
   users: NameUsernameRole[],
   provider: string
 ): Promise<Response | null> => {
-  const resp = await requestStoryBackend('/users/batch', 'POST', {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/users/batch`, 'POST', {
     // TODO: backend create params does not support roles yet, i.e.
     //       the role in NameUsernameRole is currently still unused
     body: { users: users.map(user => ({ ...user, provider })) },
@@ -53,7 +76,9 @@ export const postNewStoriesUsers = async (
 };
 
 export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null> => {
-  const resp = await requestStoryBackend('/stories', 'GET', { ...tokens });
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories`, 'GET', {
+    ...tokens
+  });
   if (!resp) {
     return null;
   }
@@ -62,7 +87,11 @@ export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null
 };
 
 export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${storyId}`, 'GET', { ...tokens });
+  const resp = await requestStoryBackend(
+    `/groups/${getStoriesGroupId()}/stories/${storyId}`,
+    'GET',
+    { ...tokens }
+  );
   if (!resp) {
     return null;
   }
@@ -77,7 +106,7 @@ export const postStory = async (
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend('/stories', 'POST', {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories`, 'POST', {
     body: { authorId, title, content, pinOrder },
     ...tokens
   });
@@ -97,7 +126,7 @@ export const updateStory = async (
   content: string,
   pinOrder: number | null
 ): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${id}`, 'PUT', {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories/${id}`, 'PUT', {
     body: { title, content, pinOrder },
     ...tokens
   });
@@ -112,7 +141,9 @@ export const updateStory = async (
 
 // Returns the deleted story, or null if errors occur
 export const deleteStory = async (tokens: Tokens, id: number): Promise<StoryView | null> => {
-  const resp = await requestStoryBackend(`/stories/${id}`, 'DELETE', { ...tokens });
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories/${id}`, 'DELETE', {
+    ...tokens
+  });
   if (!resp) {
     return null;
   }

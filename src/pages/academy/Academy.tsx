@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
 import {
-  fetchGradingOverviews,
   fetchNotifications,
   updateLatestViewedCourse
 } from 'src/commons/application/actions/SessionActions';
@@ -33,7 +32,6 @@ const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(fetchNotifications());
-    dispatch(fetchGradingOverviews(false));
   }, [dispatch]);
 
   const agreedToResearch = useTypedSelector(state => state.session.agreedToResearch);

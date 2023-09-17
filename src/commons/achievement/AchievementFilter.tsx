@@ -1,6 +1,8 @@
 import { Icon, IconName } from '@blueprintjs/core';
-import { getFilterColor } from 'src/features/achievement/AchievementConstants';
-import { FilterStatus } from 'src/features/achievement/AchievementTypes';
+import React from 'react';
+
+import { getFilterColor } from '../../features/achievement/AchievementConstants';
+import { FilterStatus } from '../../features/achievement/AchievementTypes';
 
 type AchievementFilterProps = {
   filterState: [FilterStatus, any];
@@ -8,9 +10,7 @@ type AchievementFilterProps = {
   ownStatus: FilterStatus;
 };
 
-function AchievementFilter(props: AchievementFilterProps) {
-  const { filterState, icon, ownStatus } = props;
-
+const AchievementFilter: React.FC<AchievementFilterProps> = ({ filterState, icon, ownStatus }) => {
   const [globalStatus, setGlobalStatus] = filterState;
 
   return (
@@ -23,6 +23,6 @@ function AchievementFilter(props: AchievementFilterProps) {
       <p>{ownStatus}</p>
     </div>
   );
-}
+};
 
 export default AchievementFilter;

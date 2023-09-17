@@ -2,9 +2,11 @@ import { Button, MenuItem, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import EditableDate from 'src/commons/achievement/control/goalEditor/EditableDate';
-import EditableTime from 'src/commons/achievement/control/goalEditor/EditableTime';
+import React from 'react';
 import { EventMeta, EventType, GoalMeta } from 'src/features/achievement/AchievementTypes';
+
+import EditableDate from '../EditableDate';
+import EditableTime from '../EditableTime';
 
 type EditableEventMetaProps = {
   changeMeta: (meta: GoalMeta) => void;
@@ -16,8 +18,7 @@ const eventRenderer: ItemRenderer<EventType> = (eventName, { handleClick }) => (
   <MenuItem key={eventName} onClick={handleClick} text={eventName} />
 );
 
-function EditableEventMeta(props: EditableEventMetaProps) {
-  const { changeMeta, eventMeta } = props;
+const EditableEventMeta: React.FC<EditableEventMetaProps> = ({ changeMeta, eventMeta }) => {
   const { eventNames, targetCount, release, deadline, observeFrom, observeTo } = eventMeta;
 
   const changeTargetCount = (targetCount: number) =>
@@ -94,6 +95,6 @@ function EditableEventMeta(props: EditableEventMetaProps) {
       <EditableTime type="Observe To" time={observeTo} changeTime={changeObserveTo} />
     </>
   );
-}
+};
 
 export default EditableEventMeta;

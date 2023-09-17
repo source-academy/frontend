@@ -2,12 +2,15 @@ import { EditableText, NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { cloneDeep } from 'lodash';
-import { useContext, useMemo, useReducer, useState } from 'react';
-import ItemDeleter from 'src/commons/achievement/control/common/ItemDeleter';
-import ItemSaver from 'src/commons/achievement/control/common/ItemSaver';
-import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
+import React, { useContext, useMemo, useReducer, useState } from 'react';
 
+import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
+import {
+  AchievementItem,
+  AchievementView
+} from '../../../../features/achievement/AchievementTypes';
+import ItemDeleter from '../common/ItemDeleter';
+import ItemSaver from '../common/ItemSaver';
 import AchievementSettings from './AchievementSettings';
 import AchievementUuidCopier from './AchievementUuidCopier';
 import {
@@ -133,7 +136,7 @@ const reducer = (state: State, action: Action) => {
   }
 };
 
-function EditableCard(props: EditableCardProps) {
+const EditableCard: React.FC<EditableCardProps> = props => {
   const { uuid, isNewAchievement, releaseUuid, removeCard, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
@@ -249,6 +252,6 @@ function EditableCard(props: EditableCardProps) {
       </div>
     </li>
   );
-}
+};
 
 export default EditableCard;

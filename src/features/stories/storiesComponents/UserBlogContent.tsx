@@ -9,7 +9,7 @@ import { addStoryEnv, clearStoryEnv } from 'src/features/stories/StoriesActions'
 import { store } from 'src/pages/createStore';
 
 type UserBlogProps = {
-  fileContent: string | null;
+  fileContent: string;
 };
 
 export const DEFAULT_ENV = 'default';
@@ -18,33 +18,18 @@ const YAML_HEADER = '---';
 const CONFIG_STRING = 'config';
 const ENV_STRING = 'env';
 
-function handleEnvironment(envConfig: any): void {
-  for (const key in envConfig) {
-    /*
-    const chapterKey = envConfig[key].chapter;
-    const variantKey = envConfig[key].variant;
+function handleEnvironment(envConfig: Record<string, any>): void {
+  for (const [key, value] of Object.entries(envConfig)) {
+    const { chapter, variant } = value;
 
-    if (chapterKey in Chapter && variantKey in Variant) {
-      store.dispatch(
-        addStoryEnv(key, Chapter[chapterKey as keyof typeof Chapter], Variant[variantKey])
-      );
-    } else {
-      store.dispatch(
-        addStoryEnv(key, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
-      );
-    }
-    */
-
-    const parsedChapter = envConfig[key].chapter;
-    const parsedVariant = envConfig[key].variant;
-
+    // TODO: Replace with language config object
     const envChapter = Object.values(Chapter)
       .filter(x => !isNaN(Number(x)))
-      .includes(parsedChapter)
-      ? parsedChapter
+      .includes(chapter)
+      ? chapter
       : Constants.defaultSourceChapter;
-    const envVariant = Object.values(Variant).includes(parsedVariant)
-      ? parsedVariant
+    const envVariant = Object.values(Variant).includes(variant)
+      ? variant
       : Constants.defaultSourceVariant;
 
     store.dispatch(addStoryEnv(key, envChapter, envVariant));
@@ -56,80 +41,48 @@ function handleHeaders(headers: string): void {
     store.dispatch(
       addStoryEnv(DEFAULT_ENV, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
     );
-  } else {
-    try {
-      const headerObject = yaml.load(headers) as any;
-      for (const key in headerObject) {
-        if (key === CONFIG_STRING) {
-          // handle DEFAULT by changing default env stuff
-          //const chapterKey = headerObject[key].chapter;
-          //const variantKey = headerObject[key].variant;
-          const parsedChapter = headerObject[CONFIG_STRING].chapter;
-          const parsedVariant = headerObject[CONFIG_STRING].variant;
-
-          const envChapter = Object.values(Chapter)
-            .filter(x => !isNaN(Number(x)))
-            .includes(parsedChapter)
-            ? parsedChapter
-            : Constants.defaultSourceChapter;
-          const envVariant = Object.values(Variant).includes(parsedVariant)
-            ? parsedVariant
-            : Constants.defaultSourceVariant;
-
-          store.dispatch(addStoryEnv(DEFAULT_ENV, envChapter, envVariant));
-          /*
-          if (chapterKey in Chapter && variantKey in Variant) {
-            store.dispatch(
-              addStoryEnv(
-                DEFAULT_ENV,
-                Chapter[chapterKey as keyof typeof Chapter],
-                Variant[variantKey]
-              )
-            );
-          } else {
-            store.dispatch(
-              addStoryEnv(
-                DEFAULT_ENV,
-                Constants.defaultSourceChapter,
-                Constants.defaultSourceVariant
-              )
-            );
-          }
-          */
-        } else if (key === ENV_STRING) {
-          handleEnvironment(headerObject[key]);
-        }
+    return;
+  }
+  try {
+    const headerObject = yaml.load(headers) as Record<string, any>;
+    for (const [key, value] of Object.entries(headerObject)) {
+      switch (key) {
+        case CONFIG_STRING:
+          const { chapter, variant } = value;
+          handleEnvironment({ [DEFAULT_ENV]: { chapter, variant } });
+          break;
+        case ENV_STRING:
+          handleEnvironment(value);
+          break;
+        default:
+          // Simply ignore the invalid key
+          break;
       }
-    } catch (err) {
-      if (err instanceof yaml.YAMLException) {
-        // default headers
-        store.dispatch(
-          addStoryEnv(DEFAULT_ENV, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
-        );
-      }
+    }
+  } catch (err) {
+    console.warn(err);
+    if (err instanceof yaml.YAMLException) {
+      // default headers
+      store.dispatch(
+        addStoryEnv(DEFAULT_ENV, Constants.defaultSourceChapter, Constants.defaultSourceVariant)
+      );
     }
   }
 }
 
-function parseHeaders(content: string): { headersYaml: string; content: string } {
-  // check if file contains headers
-  if (content.substring(0, YAML_HEADER.length) !== YAML_HEADER) {
-    return {
-      headersYaml: '',
-      content: content
-    };
+export function getYamlHeader(content: string): { header: string; content: string } {
+  const startsWithHeaders = content.substring(0, YAML_HEADER.length) === YAML_HEADER;
+  if (!startsWithHeaders) {
+    return { header: '', content };
   }
-  const headerEnd = content.indexOf(YAML_HEADER, YAML_HEADER.length);
-  if (headerEnd === -1) {
-    return {
-      headersYaml: '',
-      content: content
-    };
+  const endHeaderIndex = content.indexOf(YAML_HEADER, YAML_HEADER.length);
+  if (endHeaderIndex === -1) {
+    return { header: '', content };
   }
-  const yamlString = content.substring(YAML_HEADER.length, headerEnd);
+
   return {
-    headersYaml: yamlString,
-    content: content.substring(headerEnd + YAML_HEADER.length)
+    header: content.substring(YAML_HEADER.length, endHeaderIndex),
+    content: content.substring(endHeaderIndex + YAML_HEADER.length)
   };
 }
 
@@ -137,22 +90,18 @@ const UserBlogContent: React.FC<UserBlogProps> = props => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    if (props.fileContent !== null) {
-      const { headersYaml, content } = parseHeaders(props.fileContent);
-      setContent(content);
-      store.dispatch(clearStoryEnv());
-      handleHeaders(headersYaml);
-    }
+    const { header, content } = getYamlHeader(props.fileContent);
+    setContent(content);
+    store.dispatch(clearStoryEnv());
+    handleHeaders(header);
   }, [props.fileContent]);
 
-  return props.fileContent === null ? (
-    <p>Story not found</p>
-  ) : content === '' ? (
-    <div />
-  ) : (
+  return content ? (
     <div className="userblogContent">
       <div className="content">{renderStoryMarkdown(content)}</div>
     </div>
+  ) : (
+    <div />
   );
 };
 
