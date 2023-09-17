@@ -440,7 +440,7 @@ export function getAgendaItemComponent(
       case InstrType.RESET:
         return new AgendaItemComponent(
           'return',
-          'Skip agenda items until the marker instruction is reached',
+          'Skip agenda items until marker instruction is reached',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -467,7 +467,7 @@ export function getAgendaItemComponent(
       case InstrType.ASSIGNMENT:
         const assmtInstr = agendaItem as AssmtInstr;
         return new AgendaItemComponent(
-          `assign ${assmtInstr.symbol}`,
+          `asgn ${assmtInstr.symbol}`,
           `Assign value on top of stash to ${assmtInstr.symbol}`,
           stackHeight,
           highlightOnHover,
@@ -478,7 +478,7 @@ export function getAgendaItemComponent(
         const unOpInstr = agendaItem as UnOpInstr;
         return new AgendaItemComponent(
           unOpInstr.symbol,
-          `Perform ${unOpInstr.symbol} on the top stash value`,
+          `Perform ${unOpInstr.symbol} on top stash value`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -488,7 +488,7 @@ export function getAgendaItemComponent(
         const binOpInstr = agendaItem as BinOpInstr;
         return new AgendaItemComponent(
           binOpInstr.symbol,
-          `Perform ${binOpInstr.symbol} on the top 2 stash values`,
+          `Perform ${binOpInstr.symbol} on top 2 stash values`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -540,9 +540,11 @@ export function getAgendaItemComponent(
           )
         );
       case InstrType.ARRAY_LITERAL:
+        const arrayLiteralInstr = agendaItem as ArrLitInstr;
+	const arity = arrayLiteralInstr.arity;
         return new AgendaItemComponent(
-          'array literal',
-          'Create array using values on stash',
+          `arr lit ${arity}`,
+          `Create array using ${arity} value${arity === 1 ? '' : 's'} on stash`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -550,7 +552,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_ACCESS:
         return new AgendaItemComponent(
-          'array access',
+          'arr acc',
           'Access array at given index',
           stackHeight,
           highlightOnHover,
@@ -559,7 +561,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_ASSIGNMENT:
         return new AgendaItemComponent(
-          'array assign',
+          'arr asgn',
           'Assign new value to array at given index',
           stackHeight,
           highlightOnHover,
@@ -568,7 +570,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_LENGTH:
         return new AgendaItemComponent(
-          'array length',
+          'arr len',
           'Obtain array length',
           stackHeight,
           highlightOnHover,
@@ -577,8 +579,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.CONTINUE_MARKER:
         return new AgendaItemComponent(
-          'continue marker',
-          'Marks the end of the loop body',
+          'cont mark',
+          'Mark end of loop body',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -595,8 +597,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.BREAK_MARKER:
         return new AgendaItemComponent(
-          'break marker',
-          'Marks end of all loop-associated statements and instructions',
+          'brk mark',
+          'Mark end of all loop-associated statements and instructions',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -604,8 +606,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.MARKER:
         return new AgendaItemComponent(
-          'marker',
-          'Marker for return instruction',
+          'mark',
+          'Mark return address',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
