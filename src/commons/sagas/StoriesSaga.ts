@@ -1,5 +1,10 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { OverallState, StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { Tokens } from 'src/commons/application/types/SessionTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import { defaultStoryContent } from 'src/commons/utils/StoriesHelper';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import {
   deleteStory,
@@ -22,11 +27,6 @@ import {
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
-import { OverallState, StoriesRole } from '../application/ApplicationTypes';
-import { Tokens } from '../application/types/SessionTypes';
-import { actions } from '../utils/ActionsHelper';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 

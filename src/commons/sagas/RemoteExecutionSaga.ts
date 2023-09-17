@@ -5,6 +5,11 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { BEGIN_INTERRUPT_EXECUTION } from 'src/commons/application/types/InterpreterTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import { MaybePromise } from 'src/commons/utils/TypeHelper';
 import {
   Ev3DevicePeripherals,
   Ev3MotorData,
@@ -24,11 +29,6 @@ import {
 } from 'src/features/remoteExecution/RemoteExecutionTypes';
 import { store } from 'src/pages/createStore';
 
-import { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { BEGIN_INTERRUPT_EXECUTION } from '../application/types/InterpreterTypes';
-import { actions } from '../utils/ActionsHelper';
-import { MaybePromise } from '../utils/TypeHelper';
 import { fetchDevices, getDeviceWSEndpoint } from './RequestsSaga';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
