@@ -10,9 +10,9 @@ import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
+import SSImageAssets from 'src/features/storySimulator/assets/ImageAssets';
+import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import SSImageAssets from '../../assets/ImageAssets';
-import { StorySimState } from '../../StorySimulatorTypes';
 import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 
 /**

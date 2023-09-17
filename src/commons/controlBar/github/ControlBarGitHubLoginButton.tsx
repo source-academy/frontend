@@ -1,9 +1,8 @@
 import { ButtonGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+import ControlButton from 'src/commons/ControlButton';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
-
-import ControlButton from '../../ControlButton';
 
 export type ControlBarGitHubLoginButtonProps = {
   onClickLogIn: () => void;

@@ -1,9 +1,8 @@
 import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
-
-import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import ControlButton from '../ControlButton';
+import ControlButton from 'src/commons/ControlButton';
+import { SourcecastData } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 type SourceRecorderDeleteCellProps = DispatchProps & StateProps;
 

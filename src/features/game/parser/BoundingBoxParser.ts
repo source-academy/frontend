@@ -1,6 +1,7 @@
-import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import StringUtils from '../utils/StringUtils';
+import { BBoxProperty } from 'src/features/game/boundingBoxes/GameBoundingBoxTypes';
+import { GameItemType, LocationId } from 'src/features/game/location/GameMapTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import ActionParser from './ActionParser';
 import Parser from './Parser';
 

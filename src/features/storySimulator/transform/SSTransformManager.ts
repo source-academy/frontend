@@ -1,9 +1,9 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
+import { CursorMode } from 'src/features/storySimulator/cursorMode/SSCursorModeTypes';
+import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
-import { CursorMode } from '../cursorMode/SSCursorModeTypes';
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import TransformConstants from './SSTransformManagerConstants';
 
 /**

@@ -1,5 +1,6 @@
-import { ItemId } from '../commons/CommonTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+
 import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
 import { ActionCondition } from './GameActionTypes';

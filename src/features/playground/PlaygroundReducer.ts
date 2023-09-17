@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
+import { defaultPlayground } from 'src/commons/application/ApplicationTypes';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
-import { defaultPlayground } from '../../commons/application/ApplicationTypes';
-import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   CHANGE_QUERY_STRING,
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,

@@ -1,12 +1,12 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
+import { ArrayUnit } from 'src/features/envVisualizer/components/ArrayUnit';
+import { Frame } from 'src/features/envVisualizer/components/Frame';
+import { Text } from 'src/features/envVisualizer/components/Text';
+import { FnValue } from 'src/features/envVisualizer/components/values/FnValue';
+import { GlobalFnValue } from 'src/features/envVisualizer/components/values/GlobalFnValue';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
 
-import { ArrayUnit } from '../ArrayUnit';
-import { Frame } from '../Frame';
-import { Text } from '../Text';
-import { FnValue } from '../values/FnValue';
-import { GlobalFnValue } from '../values/GlobalFnValue';
-import { Visible } from '../Visible';
 import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
 import { ArrowFromFn } from './ArrowFromFn';
 import { ArrowFromFrame } from './ArrowFromFrame';

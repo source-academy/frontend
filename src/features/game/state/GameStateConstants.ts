@@ -1,5 +1,5 @@
-import FontAssets from '../assets/FontAssets';
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import FontAssets from 'src/features/game/assets/FontAssets';
+import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
 export const emptyUserState = {
   collectibles: [],

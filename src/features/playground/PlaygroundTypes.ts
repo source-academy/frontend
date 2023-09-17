@@ -1,7 +1,6 @@
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
-
-import { GitHubSaveInfo } from '../github/GitHubTypes';
-import { PersistenceFile } from '../persistence/PersistenceTypes';
+import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
 export const GENERATE_LZ_STRING = 'GENERATE_LZ_STRING';

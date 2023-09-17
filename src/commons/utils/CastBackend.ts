@@ -1,5 +1,5 @@
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { Library } from '../assessment/AssessmentTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Library } from 'src/commons/assessment/AssessmentTypes';
 
 /**
  * Casts a library returned by an API call to a

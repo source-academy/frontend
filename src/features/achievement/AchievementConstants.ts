@@ -1,7 +1,7 @@
 import React from 'react';
+import AchievementInferencer from 'src/commons/achievement/utils/AchievementInferencer';
+import { Links } from 'src/commons/utils/Constants';
 
-import AchievementInferencer from '../../commons/achievement/utils/AchievementInferencer';
-import { Links } from '../../commons/utils/Constants';
 import { FilterStatus } from './AchievementTypes';
 
 export const AchievementContext = React.createContext(new AchievementInferencer([], []));

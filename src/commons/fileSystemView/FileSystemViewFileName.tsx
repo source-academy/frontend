@@ -2,13 +2,12 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-
-import { showSimpleErrorDialog } from '../utils/DialogHelper';
+import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import {
   renameEditorTabForFile,
   renameEditorTabsForDirectory
-} from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceActions';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 export type FileSystemViewFileNameProps = {
   workspaceLocation: WorkspaceLocation;

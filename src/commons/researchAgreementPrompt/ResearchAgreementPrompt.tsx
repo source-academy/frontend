@@ -1,8 +1,7 @@
 import { Button, Classes, Dialog, H4, Intent } from '@blueprintjs/core';
 import { useDispatch } from 'react-redux';
-
-import { updateCourseResearchAgreement } from '../application/actions/SessionActions';
-import Constants from '../utils/Constants';
+import { updateCourseResearchAgreement } from 'src/commons/application/actions/SessionActions';
+import Constants from 'src/commons/utils/Constants';
 
 const ResearchAgreementPrompt: React.FC = () => {
   const dispatch = useDispatch();

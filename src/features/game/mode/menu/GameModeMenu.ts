@@ -1,16 +1,16 @@
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { IGameUI } from 'src/features/game/commons/CommonTypes';
+import { fadeAndDestroy } from 'src/features/game/effects/FadeEffect';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GameItemType } from 'src/features/game/location/GameMapTypes';
+import { GameMode, gameModeToPhase } from 'src/features/game/mode/GameModeTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { sleep } from 'src/features/game/utils/GameUtils';
+import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 
-import ImageAssets from '../../assets/ImageAssets';
-import SoundAssets from '../../assets/SoundAssets';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { IGameUI } from '../../commons/CommonTypes';
-import { fadeAndDestroy } from '../../effects/FadeEffect';
-import { Layer } from '../../layer/GameLayerTypes';
-import { GameItemType } from '../../location/GameMapTypes';
-import { createButton } from '../../utils/ButtonUtils';
-import { sleep } from '../../utils/GameUtils';
-import { calcTableFormatPos } from '../../utils/StyleUtils';
-import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import MenuModeConstants, { modeButtonStyle } from './GameModeMenuConstants';
 
 /**

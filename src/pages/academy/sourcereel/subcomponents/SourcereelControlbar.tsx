@@ -1,14 +1,13 @@
 import { Card, Classes, Dialog, H1, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import Recorder from 'yareco';
-
-import ControlButton from '../../../../commons/ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 import {
   Input,
   PlaybackData,
   RecordingStatus
-} from '../../../../features/sourceRecorder/SourceRecorderTypes';
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
+import Recorder from 'yareco';
 
 type SourcereelControlbarProps = DispatchProps & StateProps;
 

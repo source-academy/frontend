@@ -7,8 +7,8 @@ import React from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import * as ace from 'react-ace';
 import ReactDOM from 'react-dom';
+import type { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
-import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 // const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<

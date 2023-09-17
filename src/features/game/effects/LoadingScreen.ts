@@ -1,4 +1,5 @@
-import { screenCenter } from '../commons/CommonConstants';
+import { screenCenter } from 'src/features/game/commons/CommonConstants';
+
 import { blackScreen } from './FadeEffect';
 
 const barWidth = 320;

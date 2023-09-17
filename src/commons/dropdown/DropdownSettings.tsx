@@ -2,8 +2,7 @@ import { Classes, Dialog, FormGroup, HTMLSelect, Icon, PopoverPosition } from '@
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { useContext, useMemo } from 'react';
-
-import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
+import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 
 type DialogProps = {
   isOpen: boolean;

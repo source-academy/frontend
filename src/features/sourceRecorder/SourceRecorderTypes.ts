@@ -1,9 +1,8 @@
 import { Ace } from 'ace-builds/ace';
 import { Chapter } from 'js-slang/dist/types';
-
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Position } from '../../commons/editor/EditorTypes';
-import { SideContentType } from '../../commons/sideContent/SideContentTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Position } from 'src/commons/editor/EditorTypes';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 
 export const SAVE_SOURCECAST_DATA = 'SAVE_SOURCECAST_DATA';
 export const SET_CURRENT_PLAYER_TIME = 'SET_CURRENT_PLAYER_TIME';

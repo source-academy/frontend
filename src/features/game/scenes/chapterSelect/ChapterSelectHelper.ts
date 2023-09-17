@@ -1,11 +1,12 @@
-import ImageAssets from '../../assets/ImageAssets';
-import { GameChapter } from '../../chapter/GameChapterTypes';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import CommonTextHover from '../../commons/CommonTextHover';
-import SourceAcademyGame from '../../SourceAcademyGame';
-import { createButton } from '../../utils/ButtonUtils';
-import { createBitmapText } from '../../utils/TextUtils';
-import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import CommonTextHover from 'src/features/game/commons/CommonTextHover';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+import { callGameManagerOnTxtLoad } from 'src/features/game/utils/TxtLoaderUtils';
+
 import ChapterSelect from './ChapterSelect';
 import chapConstants, { chapterIndexStyle, chapterTitleStyle } from './ChapterSelectConstants';
 

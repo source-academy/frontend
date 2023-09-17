@@ -1,6 +1,6 @@
-import { IGameActionable } from '../action/GameActionTypes';
-import { AssetKey, ItemId } from '../commons/CommonTypes';
-import { GameMode } from '../mode/GameModeTypes';
+import { IGameActionable } from 'src/features/game/action/GameActionTypes';
+import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
 
 /**
  * @typedef {string} LocationId - id that identifies a location

@@ -2,12 +2,12 @@ import { screenCenter } from 'src/features/game/commons/CommonConstants';
 import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
+import { loadImage } from 'src/features/game/utils/LoaderUtils';
 import StringUtils from 'src/features/game/utils/StringUtils';
+import { getIdFromShortPath } from 'src/features/storySimulator/logger/SSLogManagerHelper';
+import { ICheckpointLoggable } from 'src/features/storySimulator/logger/SSLogManagerTypes';
+import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
-import { loadImage } from '../../game/utils/LoaderUtils';
-import { getIdFromShortPath } from '../logger/SSLogManagerHelper';
-import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { SSObjectDetail } from './SSObjectManagerTypes';
 
 /**

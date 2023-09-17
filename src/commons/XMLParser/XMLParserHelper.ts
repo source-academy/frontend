@@ -1,7 +1,5 @@
 import { Chapter } from 'js-slang/dist/types';
-import { Builder } from 'xml2js';
-
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -17,7 +15,9 @@ import {
   Question,
   Testcase,
   TestcaseTypes
-} from '../assessment/AssessmentTypes';
+} from 'src/commons/assessment/AssessmentTypes';
+import { Builder } from 'xml2js';
+
 import {
   EDITING_ID,
   XmlParseStrCProblem,

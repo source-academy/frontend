@@ -1,12 +1,11 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
-
 import {
   IMCQQuestion,
   Question,
   QuestionTypes,
   Testcase
-} from '../../commons/assessment/AssessmentTypes';
-import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
+} from 'src/commons/assessment/AssessmentTypes';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 /**
  * Returns a nullary function that defers the navigation of the browser window, until the

@@ -6,9 +6,8 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
 import MediaQuery from 'react-responsive';
-
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { getModeString, selectMode } from '../utils/AceHelper';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { getModeString, selectMode } from 'src/commons/utils/AceHelper';
 // source mode and chapter imported in Editor.tsx
 
 export type ReplInputProps = DispatchProps & StateProps & OwnProps;

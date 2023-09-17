@@ -1,8 +1,9 @@
-import { Layer } from '../layer/GameLayerTypes';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
-import { sleep } from '../utils/GameUtils';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { sleep } from 'src/features/game/utils/GameUtils';
+
 import { GameActionType } from './GameActionTypes';
 
 /**

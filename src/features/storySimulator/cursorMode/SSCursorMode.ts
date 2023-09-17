@@ -2,8 +2,8 @@ import { Constants } from 'src/features/game/commons/CommonConstants';
 import CommonTextHover from 'src/features/game/commons/CommonTextHover';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
+import SSImageAssets from 'src/features/storySimulator/assets/ImageAssets';
 
-import SSImageAssets from '../assets/ImageAssets';
 import SSCursorModeConstants from './SSCursorModeConstants';
 import { CursorMode } from './SSCursorModeTypes';
 

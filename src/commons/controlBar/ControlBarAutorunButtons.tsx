@@ -1,9 +1,9 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
+import ControlButton from 'src/commons/ControlButton';
+import { useResponsive } from 'src/commons/utils/Hooks';
 
-import ControlButton from '../ControlButton';
-import { useResponsive } from '../utils/Hooks';
 import { ControlBarRunButton } from './ControlBarRunButton';
 
 type ControlBarAutorunButtonProps = DispatchProps & StateProps;

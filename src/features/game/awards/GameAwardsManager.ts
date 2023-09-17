@@ -1,12 +1,13 @@
-import ImageAssets from '../assets/ImageAssets';
-import { Constants } from '../commons/CommonConstants';
-import { IBaseScene } from '../commons/CommonTypes';
-import { DashboardPageManager } from '../dashboard/GameDashboardTypes';
-import { createButton } from '../utils/ButtonUtils';
-import { limitNumber } from '../utils/GameUtils';
-import { resizeUnderflow } from '../utils/SpriteUtils';
-import { calcListFormatPos } from '../utils/StyleUtils';
-import { createBitmapText } from '../utils/TextUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { Constants } from 'src/features/game/commons/CommonConstants';
+import { IBaseScene } from 'src/features/game/commons/CommonTypes';
+import { DashboardPageManager } from 'src/features/game/dashboard/GameDashboardTypes';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { limitNumber } from 'src/features/game/utils/GameUtils';
+import { resizeUnderflow } from 'src/features/game/utils/SpriteUtils';
+import { calcListFormatPos } from 'src/features/game/utils/StyleUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+
 import AwardsConstants, {
   awardDescStyle,
   awardKeyStyle,

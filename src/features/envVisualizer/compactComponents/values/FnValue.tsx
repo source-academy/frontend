@@ -8,20 +8,28 @@ import {
   Tag as KonvaTag,
   Text as KonvaText
 } from 'react-konva';
-
-import EnvVisualizer from '../../EnvVisualizer';
-import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { CompactReferenceType, EnvTreeNode, FnTypes, IHoverable } from '../../EnvVisualizerTypes';
+import { ArrowFromFn } from 'src/features/envVisualizer/compactComponents/arrows/ArrowFromFn';
+import { Binding } from 'src/features/envVisualizer/compactComponents/Binding';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import {
+  CompactConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import {
+  CompactReferenceType,
+  EnvTreeNode,
+  FnTypes,
+  IHoverable
+} from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   defaultSAColor,
   getBodyText,
   getNonEmptyEnv,
   getParamsText,
   getTextWidth
-} from '../../EnvVisualizerUtils';
-import { ArrowFromFn } from '../arrows/ArrowFromFn';
-import { Binding } from '../Binding';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
 import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that

@@ -1,13 +1,14 @@
-import { Config } from '../../EnvVisualizerConfig';
-import { StepsArray } from '../../EnvVisualizerTypes';
-import { ArrowLane } from '../ArrowLane';
-import { Frame } from '../Frame';
-import { Grid } from '../Grid';
-import { Text } from '../Text';
-import { ArrayValue } from '../values/ArrayValue';
-import { FnValue } from '../values/FnValue';
-import { GlobalFnValue } from '../values/GlobalFnValue';
-import { Value } from '../values/Value';
+import { ArrowLane } from 'src/features/envVisualizer/components/ArrowLane';
+import { Frame } from 'src/features/envVisualizer/components/Frame';
+import { Grid } from 'src/features/envVisualizer/components/Grid';
+import { Text } from 'src/features/envVisualizer/components/Text';
+import { ArrayValue } from 'src/features/envVisualizer/components/values/ArrayValue';
+import { FnValue } from 'src/features/envVisualizer/components/values/FnValue';
+import { GlobalFnValue } from 'src/features/envVisualizer/components/values/GlobalFnValue';
+import { Value } from 'src/features/envVisualizer/components/values/Value';
+import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { StepsArray } from 'src/features/envVisualizer/EnvVisualizerTypes';
+
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */

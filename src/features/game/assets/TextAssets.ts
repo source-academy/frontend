@@ -1,4 +1,4 @@
-import { toS3Path } from '../utils/GameUtils';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
 
 export const toTxtPath = (path: string) => toS3Path(`/stories/${path}`, true);
 

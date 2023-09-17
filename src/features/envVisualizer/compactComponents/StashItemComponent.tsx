@@ -1,13 +1,15 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
-
-import { FnValue } from '../components/values/FnValue';
-import { GlobalFnValue } from '../components/values/GlobalFnValue';
-import { Visible } from '../components/Visible';
-import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
-import { Layout } from '../EnvVisualizerLayout';
-import { IHoverable } from '../EnvVisualizerTypes';
+import { FnValue } from 'src/features/envVisualizer/components/values/FnValue';
+import { GlobalFnValue } from 'src/features/envVisualizer/components/values/GlobalFnValue';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import {
+  AgendaStashConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerAgendaStash';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   getTextWidth,
   isArray,
@@ -19,7 +21,8 @@ import {
   setUnhoveredStyle,
   stackItemSAColor,
   truncateText
-} from '../EnvVisualizerUtils';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
 

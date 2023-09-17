@@ -1,10 +1,10 @@
 import React from 'react';
 import { Group, Line, Rect, Text } from 'react-konva';
+import { Config } from 'src/features/dataVisualizer/Config';
+import DataVisualizer from 'src/features/dataVisualizer/dataVisualizer';
+import { isEmptyList, isList, toText } from 'src/features/dataVisualizer/dataVisualizerUtils';
+import { DataTreeNode, TreeNode } from 'src/features/dataVisualizer/tree/TreeNode';
 
-import { Config } from '../Config';
-import DataVisualizer from '../dataVisualizer';
-import { isEmptyList, isList, toText } from '../dataVisualizerUtils';
-import { DataTreeNode, TreeNode } from '../tree/TreeNode';
 import { NullDrawable } from './Drawable';
 
 type ArrayProps = {

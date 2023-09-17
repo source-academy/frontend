@@ -1,8 +1,9 @@
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
-import GameMap from '../location/GameMap';
-import GameObjective from '../objective/GameObjective';
-import GameTask from '../task/GameTask';
-import StringUtils from '../utils/StringUtils';
+import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
+import GameMap from 'src/features/game/location/GameMap';
+import GameObjective from 'src/features/game/objective/GameObjective';
+import GameTask from 'src/features/game/task/GameTask';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import ActionParser from './ActionParser';
 import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';

@@ -1,9 +1,9 @@
 import { KonvaEventObject } from 'konva/lib/Node';
+import { ArrowLane } from 'src/features/envVisualizer/components/ArrowLane';
+import { Frame } from 'src/features/envVisualizer/components/Frame';
+import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { StepsArray } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
-import { Config } from '../../EnvVisualizerConfig';
-import { StepsArray } from '../../EnvVisualizerTypes';
-import { ArrowLane } from '../ArrowLane';
-import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */

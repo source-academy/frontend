@@ -1,7 +1,6 @@
 import React from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
-
-import Repl, { ReplProps } from '../repl/Repl';
+import Repl, { ReplProps } from 'src/commons/repl/Repl';
 
 type DraggableReplProps = {
   position: { x: number; y: number };

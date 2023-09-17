@@ -1,15 +1,15 @@
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import CommonBackButton from 'src/features/game/commons/CommonBackButton';
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
+import { loadImage } from 'src/features/game/utils/LoaderUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
-import ImageAssets from '../../assets/ImageAssets';
-import CommonBackButton from '../../commons/CommonBackButton';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
-import GameLayerManager from '../../layer/GameLayerManager';
-import { Layer } from '../../layer/GameLayerTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
-import { createButton } from '../../utils/ButtonUtils';
-import { loadImage } from '../../utils/LoaderUtils';
-import { createBitmapText } from '../../utils/TextUtils';
 import chapConstants, { pageNumberStyle } from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
 

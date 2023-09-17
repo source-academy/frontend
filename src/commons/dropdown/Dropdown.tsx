@@ -3,11 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { logOut } from 'src/commons/application/actions/CommonsActions';
+import ControlButton from 'src/commons/ControlButton';
+import Profile from 'src/commons/profile/Profile';
+import { useSession } from 'src/commons/utils/Hooks';
 
-import { logOut } from '../application/actions/CommonsActions';
-import ControlButton from '../ControlButton';
-import Profile from '../profile/Profile';
-import { useSession } from '../utils/Hooks';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';

@@ -1,8 +1,7 @@
 import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
-
-import { ContestEntry } from '../assessment/AssessmentTypes';
+import { ContestEntry } from 'src/commons/assessment/AssessmentTypes';
 
 type SideContentLeaderboardCardProps = DispatchProps & StateProps;
 

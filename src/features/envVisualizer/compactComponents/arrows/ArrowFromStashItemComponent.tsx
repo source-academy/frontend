@@ -1,10 +1,11 @@
-import { FnValue } from '../../components/values/FnValue';
-import { GlobalFnValue } from '../../components/values/GlobalFnValue';
-import { CompactConfig } from '../../EnvVisualizerCompactConfig';
-import { StepsArray } from '../../EnvVisualizerTypes';
-import { Frame } from '../Frame';
-import { StashItemComponent } from '../StashItemComponent';
-import { ArrayValue } from '../values/ArrayValue';
+import { Frame } from 'src/features/envVisualizer/compactComponents/Frame';
+import { StashItemComponent } from 'src/features/envVisualizer/compactComponents/StashItemComponent';
+import { ArrayValue } from 'src/features/envVisualizer/compactComponents/values/ArrayValue';
+import { FnValue } from 'src/features/envVisualizer/components/values/FnValue';
+import { GlobalFnValue } from 'src/features/envVisualizer/components/values/GlobalFnValue';
+import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { StepsArray } from 'src/features/envVisualizer/EnvVisualizerTypes';
+
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */

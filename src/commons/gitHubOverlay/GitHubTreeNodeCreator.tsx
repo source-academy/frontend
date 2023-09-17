@@ -1,7 +1,7 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import * as GitHubUtils from 'src/features/github/GitHubUtils';
 
-import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 
 /**

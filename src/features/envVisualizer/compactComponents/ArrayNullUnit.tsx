@@ -1,11 +1,13 @@
 import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
-
-import { Visible } from '../components/Visible';
-import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { CompactReferenceType, ReferenceType } from '../EnvVisualizerTypes';
-import { defaultSAColor } from '../EnvVisualizerUtils';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import {
+  CompactConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { CompactReferenceType, ReferenceType } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { defaultSAColor } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit extends Visible {

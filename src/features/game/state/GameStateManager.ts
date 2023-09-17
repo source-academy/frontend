@@ -1,17 +1,18 @@
-import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
-import GameMap from '../location/GameMap';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
-import GameObjective from '../objective/GameObjective';
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import { convertMapToArray } from '../save/GameSaveHelper';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
-import GameTask from '../task/GameTask';
-import { TaskDetail } from '../task/GameTaskTypes';
-import { mandatory } from '../utils/GameUtils';
+import { BBoxProperty } from 'src/features/game/boundingBoxes/GameBoundingBoxTypes';
+import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
+import { GamePosition, ItemId } from 'src/features/game/commons/CommonTypes';
+import GameMap from 'src/features/game/location/GameMap';
+import { GameItemType, LocationId } from 'src/features/game/location/GameMapTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import GameObjective from 'src/features/game/objective/GameObjective';
+import { ObjectProperty } from 'src/features/game/objects/GameObjectTypes';
+import { convertMapToArray } from 'src/features/game/save/GameSaveHelper';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import GameTask from 'src/features/game/task/GameTask';
+import { TaskDetail } from 'src/features/game/task/GameTaskTypes';
+import { mandatory } from 'src/features/game/utils/GameUtils';
+
 import { StateObserver } from './GameStateTypes';
 
 /**

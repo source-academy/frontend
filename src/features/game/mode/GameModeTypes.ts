@@ -1,4 +1,4 @@
-import { GamePhaseType } from '../phase/GamePhaseTypes';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
 
 export enum GameMode {
   Move = 'Move',

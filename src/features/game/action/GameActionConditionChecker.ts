@@ -1,5 +1,6 @@
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { GameStateStorage } from '../state/GameStateTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { GameStateStorage } from 'src/features/game/state/GameStateTypes';
+
 import { ActionCondition } from './GameActionTypes';
 
 /**

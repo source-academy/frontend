@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import Constants from 'src/commons/utils/Constants';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { courseId } from 'src/features/game/utils/GameUtils';
 
-import SourceAcademyGame from '../SourceAcademyGame';
-import { courseId } from '../utils/GameUtils';
 import { createEmptySaveState } from './GameSaveHelper';
 import { FullSaveState } from './GameSaveTypes';
 

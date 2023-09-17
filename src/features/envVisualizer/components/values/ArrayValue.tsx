@@ -1,17 +1,17 @@
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
+import { ArrayEmptyUnit } from 'src/features/envVisualizer/components/ArrayEmptyUnit';
+import { ArrayLevel } from 'src/features/envVisualizer/components/ArrayLevel';
+import { ArrayUnit } from 'src/features/envVisualizer/components/ArrayUnit';
+import { ArrowFromText } from 'src/features/envVisualizer/components/arrows/ArrowFromText';
+import { GenericArrow } from 'src/features/envVisualizer/components/arrows/GenericArrow';
+import { Binding } from 'src/features/envVisualizer/components/Binding';
+import { Text } from 'src/features/envVisualizer/components/Text';
+import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data, ReferenceType } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { setUnhoveredStyle } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { Config } from '../../EnvVisualizerConfig';
-import { Layout } from '../../EnvVisualizerLayout';
-import { Data, ReferenceType } from '../../EnvVisualizerTypes';
-import { setUnhoveredStyle } from '../../EnvVisualizerUtils';
-import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
-import { ArrayLevel } from '../ArrayLevel';
-import { ArrayUnit } from '../ArrayUnit';
-import { ArrowFromText } from '../arrows/ArrowFromText';
-import { GenericArrow } from '../arrows/GenericArrow';
-import { Binding } from '../Binding';
-import { Text } from '../Text';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,

@@ -1,17 +1,17 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import {
   fetchAssessmentOverviews,
   fetchCourseConfig
-} from '../../../commons/application/actions/SessionActions';
-import { OverallState } from '../../../commons/application/ApplicationTypes';
+} from 'src/commons/application/actions/SessionActions';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import {
   changeDateAssessment,
   deleteAssessment,
   publishAssessment,
   uploadAssessment
-} from '../../../features/groundControl/GroundControlActions';
+} from 'src/features/groundControl/GroundControlActions';
+
 import GroundControl, { DispatchProps, StateProps } from './GroundControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

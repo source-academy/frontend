@@ -1,8 +1,7 @@
 import { Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
-
-import ControlButton from '../ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 
 type ControlBarSaveButtonProps = DispatchProps & StateProps;
 

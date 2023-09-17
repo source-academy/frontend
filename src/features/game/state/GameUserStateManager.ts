@@ -1,11 +1,11 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
+import { promptWithChoices } from 'src/features/game/effects/Prompt';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
+import StringUtils from 'src/features/game/utils/StringUtils';
 
-import { ItemId } from '../commons/CommonTypes';
-import { promptWithChoices } from '../effects/Prompt';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
-import StringUtils from '../utils/StringUtils';
 import { UserStateType } from './GameStateTypes';
 
 /**

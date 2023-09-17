@@ -1,6 +1,5 @@
+import { Constants } from 'src/features/game/commons/CommonConstants';
 import { store } from 'src/pages/createStore';
-
-import { Constants } from '../commons/CommonConstants';
 
 /**
  * When called with await in an async function,

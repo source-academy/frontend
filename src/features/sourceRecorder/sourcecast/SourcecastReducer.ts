@@ -1,4 +1,4 @@
-import { SourceActionType } from '../../../commons/utils/ActionsHelper';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import {
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
@@ -7,7 +7,8 @@ import {
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS
-} from '../SourceRecorderTypes';
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
+
 import { SourcecastWorkspaceState, UPDATE_SOURCECAST_INDEX } from './SourcecastTypes';
 
 export const SourcecastReducer = (

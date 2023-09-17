@@ -1,4 +1,5 @@
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { Tokens } from 'src/commons/application/types/SessionTypes';
 import { courseIdWithoutPrefix } from 'src/commons/sagas/RequestsSaga';
 import Constants from 'src/commons/utils/Constants';
 import {
@@ -7,11 +8,9 @@ import {
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
 import { RemoveLast } from 'src/commons/utils/TypeHelper';
+import { StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
+import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { store } from 'src/pages/createStore';
-
-import { Tokens } from '../../../commons/application/types/SessionTypes';
-import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
-import { StoryListView, StoryView } from '../StoriesTypes';
 
 // Helpers
 

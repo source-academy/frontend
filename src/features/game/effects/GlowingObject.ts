@@ -1,6 +1,7 @@
-import { AssetType } from '../assets/AssetsTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { resize } from '../utils/SpriteUtils';
+import { AssetType } from 'src/features/game/assets/AssetsTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { resize } from 'src/features/game/utils/SpriteUtils';
+
 import { blink } from './FadeEffect';
 
 /**

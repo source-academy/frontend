@@ -3,11 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import AceEditor from 'react-ace';
+import { Testcase } from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
+import SideContentTestcaseCard from 'src/commons/sideContent/SideContentTestcaseCard';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 
-import { Testcase } from '../../assessment/AssessmentTypes';
-import ControlButton from '../../ControlButton';
-import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
-import SideContentTestcaseCard from '../SideContentTestcaseCard';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
 
 export type SideContentTestcaseEditorProps = DispatchProps & StateProps;

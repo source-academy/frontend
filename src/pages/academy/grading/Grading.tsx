@@ -8,13 +8,13 @@ import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import ContentDisplay from 'src/commons/ContentDisplay';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
+import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/GradingUtils';
 
-import ContentDisplay from '../../../commons/ContentDisplay';
-import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
 import GradingSummary from './subcomponents/GradingSummary';
 import GradingWorkspace from './subcomponents/GradingWorkspace';

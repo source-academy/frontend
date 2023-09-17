@@ -1,7 +1,6 @@
 import React from 'react';
 import { Circle, Group } from 'react-konva';
-
-import { Config } from '../Config';
+import { Config } from 'src/features/dataVisualizer/Config';
 
 type FunctionProps = {
   x: number;

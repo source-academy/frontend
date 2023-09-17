@@ -1,8 +1,8 @@
-import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
-import { IBaseScene } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import { sleep } from '../utils/GameUtils';
-import { HexColor } from '../utils/StyleUtils';
+import { Constants, screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { IBaseScene } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { sleep } from 'src/features/game/utils/GameUtils';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
 
 /**
  * Generates a tween configuration for making objects fade out of scene.

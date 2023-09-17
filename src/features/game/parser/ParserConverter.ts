@@ -1,9 +1,9 @@
-import { GameActionType } from '../action/GameActionTypes';
-import { GamePosition, GameSize } from '../commons/CommonTypes';
-import { GameItemType } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
-import { GameStateStorage, UserStateType } from '../state/GameStateTypes';
-import { mandatory } from '../utils/GameUtils';
+import { GameActionType } from 'src/features/game/action/GameActionTypes';
+import { GamePosition, GameSize } from 'src/features/game/commons/CommonTypes';
+import { GameItemType } from 'src/features/game/location/GameMapTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import { GameStateStorage, UserStateType } from 'src/features/game/state/GameStateTypes';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 const stringToSizeMap = {
   small: GameSize.Small,

@@ -12,17 +12,16 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
-
-import ControlButton from '../../../../commons/ControlButton';
-import Markdown from '../../../../commons/Markdown';
-import { Prompt } from '../../../../commons/ReactRouterPrompt';
-import { getPrettyDate } from '../../../../commons/utils/DateHelper';
-import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
+import ControlButton from 'src/commons/ControlButton';
+import Markdown from 'src/commons/Markdown';
+import { Prompt } from 'src/commons/ReactRouterPrompt';
+import { getPrettyDate } from 'src/commons/utils/DateHelper';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import {
   showSuccessMessage,
   showWarningMessage
-} from '../../../../commons/utils/notifications/NotificationsHelper';
-import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
+} from 'src/commons/utils/notifications/NotificationsHelper';
+import { convertParamToInt } from 'src/commons/utils/ParamParseHelper';
 
 type GradingEditorProps = DispatchProps & OwnProps;
 

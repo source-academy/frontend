@@ -1,6 +1,7 @@
-import TextAssets, { MockTextAssets, toTxtPath } from '../assets/TextAssets';
-import Parser from '../parser/Parser';
-import SourceAcademyGame from '../SourceAcademyGame';
+import TextAssets, { MockTextAssets, toTxtPath } from 'src/features/game/assets/TextAssets';
+import Parser from 'src/features/game/parser/Parser';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+
 import { loadText } from './LoaderUtils';
 
 /**

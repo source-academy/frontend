@@ -10,10 +10,9 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import * as React from 'react';
+import { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
+import Markdown from 'src/commons/Markdown';
 import { useResponsive } from 'src/commons/utils/Hooks';
-
-import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
-import Markdown from '../../../../commons/Markdown';
 
 export type CourseConfigPanelProps = OwnProps;
 

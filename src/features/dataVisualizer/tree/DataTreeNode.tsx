@@ -1,4 +1,5 @@
-import { Data } from '../dataVisualizerTypes';
+import { Data } from 'src/features/dataVisualizer/dataVisualizerTypes';
+
 import { TreeNode } from './BaseTreeNode';
 
 /**

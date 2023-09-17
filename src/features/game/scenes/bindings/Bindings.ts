@@ -1,12 +1,13 @@
-import ImageAssets from '../../assets/ImageAssets';
-import CommonBackButton from '../../commons/CommonBackButton';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import GameInputManager from '../../input/GameInputManager';
-import GameLayerManager from '../../layer/GameLayerManager';
-import { Layer } from '../../layer/GameLayerTypes';
-import { mandatory } from '../../utils/GameUtils';
-import { calcListFormatPos } from '../../utils/StyleUtils';
-import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import CommonBackButton from 'src/features/game/commons/CommonBackButton';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import GameInputManager from 'src/features/game/input/GameInputManager';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { mandatory } from 'src/features/game/utils/GameUtils';
+import { calcListFormatPos } from 'src/features/game/utils/StyleUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+
 import { BindingConstants, keyDescStyle, keyStyle } from './BindingsConstants';
 
 /**

@@ -4,19 +4,22 @@ import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
-
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { retrieveFilesInWorkspaceAsRecord } from 'src/commons/fileSystem/utils';
+import Constants from 'src/commons/utils/Constants';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
+import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
 import {
   changeQueryString,
   shortenURL,
   updateShortURL
-} from '../../features/playground/PlaygroundActions';
-import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
-import Constants from '../utils/Constants';
-import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
+} from 'src/features/playground/PlaygroundActions';
+import { GENERATE_LZ_STRING, SHORTEN_URL } from 'src/features/playground/PlaygroundTypes';
+
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {

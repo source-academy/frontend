@@ -1,12 +1,12 @@
 import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { getAssessment, getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import GameModeSequence from 'src/features/game/mode/sequence/GameModeSequence';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
-import ImageAssets from '../../assets/ImageAssets';
-import GameModeSequence from '../../mode/sequence/GameModeSequence';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
-import { HexColor } from '../../utils/StyleUtils';
-import { createBitmapText } from '../../utils/TextUtils';
 import RoomPreview from './RoomPreview';
 import { RoomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewConstants';
 

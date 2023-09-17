@@ -1,21 +1,20 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-import { parseString } from 'xml2js';
-
 import {
   Assessment,
   AssessmentOverview,
   assessmentTemplate,
   overviewTemplate
-} from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
+} from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
 import {
   makeEntireAssessment,
   retrieveLocalAssessment,
   storeLocalAssessment,
   storeLocalAssessmentOverview
-} from '../XMLParser/XMLParserHelper';
+} from 'src/commons/XMLParser/XMLParserHelper';
+import { parseString } from 'xml2js';
 
 type MissionCreatorProps = DispatchProps & OwnProps;
 

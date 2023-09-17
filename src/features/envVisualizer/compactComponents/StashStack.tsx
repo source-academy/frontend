@@ -3,13 +3,13 @@ import { Value } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { AgendaStashConfig } from 'src/features/envVisualizer/EnvVisualizerAgendaStash';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { getStashItemComponent } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
-import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
-import { Layout } from '../EnvVisualizerLayout';
-import { IHoverable } from '../EnvVisualizerTypes';
-import { getStashItemComponent } from '../EnvVisualizerUtils';
 import { StashItemComponent } from './StashItemComponent';
 
 export class StashStack extends Visible implements IHoverable {

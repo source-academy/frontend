@@ -4,7 +4,7 @@ import {
   GoalDefinition,
   GoalMeta,
   GoalType
-} from '../../../features/achievement/AchievementTypes';
+} from 'src/features/achievement/AchievementTypes';
 
 export const backendifyGoalDefinition = (goal: GoalDefinition) => ({
   targetCount: goal.meta.type === GoalType.ASSESSMENT ? 1 : goal.meta.targetCount,

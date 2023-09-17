@@ -1,4 +1,4 @@
-import { ItemId } from '../commons/CommonTypes';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
 
 export enum GameStateStorage {
   UserState = 'UserState',

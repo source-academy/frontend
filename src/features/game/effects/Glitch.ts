@@ -1,6 +1,6 @@
-import FontAssets from '../assets/FontAssets';
-import { BitmapFontStyle, ILayeredScene, TextConfig } from '../commons/CommonTypes';
-import { createBitmapText } from '../utils/TextUtils';
+import FontAssets from 'src/features/game/assets/FontAssets';
+import { BitmapFontStyle, ILayeredScene, TextConfig } from 'src/features/game/commons/CommonTypes';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
 const defaultGlitchStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,

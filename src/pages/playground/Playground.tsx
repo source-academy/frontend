@@ -23,15 +23,50 @@ import {
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
 import {
+  getDefaultFilePath,
+  getLanguageConfig,
+  isSourceLanguage,
+  OverallState,
+  ResultOutput,
+  SALanguage
+} from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { ControlBarAutorunButtons } from 'src/commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
+import { ControlBarGoogleDriveButtons } from 'src/commons/controlBar/ControlBarGoogleDriveButtons';
+import { ControlBarSessionButtons } from 'src/commons/controlBar/ControlBarSessionButton';
+import { ControlBarShareButton } from 'src/commons/controlBar/ControlBarShareButton';
+import { ControlBarStepLimit } from 'src/commons/controlBar/ControlBarStepLimit';
+import { ControlBarToggleFolderModeButton } from 'src/commons/controlBar/ControlBarToggleFolderModeButton';
+import { ControlBarGitHubButtons } from 'src/commons/controlBar/github/ControlBarGitHubButtons';
+import {
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
+} from 'src/commons/editor/EditorContainer';
+import { Position } from 'src/commons/editor/EditorTypes';
+import { overwriteFilesInWorkspace } from 'src/commons/fileSystem/utils';
+import FileSystemView from 'src/commons/fileSystemView/FileSystemView';
+import MobileWorkspace, { MobileWorkspaceProps } from 'src/commons/mobileWorkspace/MobileWorkspace';
+import { SideBarTab } from 'src/commons/sideBar/SideBar';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { Links } from 'src/commons/utils/Constants';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { generateLanguageIntroduction } from 'src/commons/utils/IntroductionHelper';
+import { convertParamToBoolean, convertParamToInt } from 'src/commons/utils/ParamParseHelper';
+import { IParsedQuery, parseQuery } from 'src/commons/utils/QueryHelper';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   addEditorTab,
   addHtmlConsoleError,
@@ -65,6 +100,7 @@ import {
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { initSession, log } from 'src/features/eventLogging';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -82,51 +118,9 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
+import { CodeDelta, Input, SelectionRange } from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
-import {
-  getDefaultFilePath,
-  getLanguageConfig,
-  isSourceLanguage,
-  OverallState,
-  ResultOutput,
-  SALanguage
-} from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
-import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
-import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
-import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
-import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
-import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
-import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
-import {
-  convertEditorTabStateToProps,
-  NormalEditorContainerProps
-} from '../../commons/editor/EditorContainer';
-import { Position } from '../../commons/editor/EditorTypes';
-import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
-import FileSystemView from '../../commons/fileSystemView/FileSystemView';
-import MobileWorkspace, {
-  MobileWorkspaceProps
-} from '../../commons/mobileWorkspace/MobileWorkspace';
-import { SideBarTab } from '../../commons/sideBar/SideBar';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import { Links } from '../../commons/utils/Constants';
-import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
-import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
-import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { initSession, log } from '../../features/eventLogging';
-import {
-  CodeDelta,
-  Input,
-  SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
-import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   dataVisualizerTab,
   desktopOnlyTabIds,

@@ -1,9 +1,9 @@
 import { IconName, Intent } from '@blueprintjs/core';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
+import { ConfirmDialog, ConfirmDialogProps } from 'src/commons/dialogs/ConfirmDialog';
+import { PromptDialog, PromptDialogProps } from 'src/commons/dialogs/PromptDialog';
 
-import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
-import { PromptDialog, PromptDialogProps } from '../dialogs/PromptDialog';
 import { PropsType } from './TypeHelper';
 
 // The below is based off the Blueprint Toaster:

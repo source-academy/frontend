@@ -1,5 +1,6 @@
-import { TaskDetail } from '../task/GameTaskTypes';
-import StringUtils from '../utils/StringUtils';
+import { TaskDetail } from 'src/features/game/task/GameTaskTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import Parser from './Parser';
 
 /**

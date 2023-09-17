@@ -2,10 +2,10 @@ import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
+import { AutogradingResult, Testcase } from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
+import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
 import SideContentTestcaseCard from './SideContentTestcaseCard';
 

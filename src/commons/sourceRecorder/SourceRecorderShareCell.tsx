@@ -2,9 +2,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
-
-import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import ControlButton from '../ControlButton';
+import ControlButton from 'src/commons/ControlButton';
+import { SourcecastData } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 type SourceRecorderShareCellProps = StateProps;
 

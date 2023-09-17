@@ -1,7 +1,8 @@
-import { AssetType } from '../assets/AssetsTypes';
-import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
-import { GameSoundType } from '../sound/GameSoundTypes';
-import StringUtils from '../utils/StringUtils';
+import { AssetType } from 'src/features/game/assets/AssetsTypes';
+import { GameItemType, GameLocation, LocationId } from 'src/features/game/location/GameMapTypes';
+import { GameSoundType } from 'src/features/game/sound/GameSoundTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import ActionParser from './ActionParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import CharacterParser from './CharacterParser';

@@ -4,13 +4,12 @@ import { AgendaItem, Instr } from 'js-slang/dist/ec-evaluator/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';
-
-import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
-import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
-import { CompactConfig } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { IHoverable } from '../EnvVisualizerTypes';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { AgendaStashConfig } from 'src/features/envVisualizer/EnvVisualizerAgendaStash';
+import { CompactConfig } from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   defaultSAColor,
   getAgendaItemComponent,
@@ -18,7 +17,8 @@ import {
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle
-} from '../EnvVisualizerUtils';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
 import { AgendaItemComponent } from './AgendaItemComponent';
 
 export class AgendaStack extends Visible implements IHoverable {

@@ -1,10 +1,10 @@
 import { Button } from '@blueprintjs/core';
 import _ from 'lodash';
+import { Tokens } from 'src/commons/application/types/SessionTypes';
+import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { assessmentFullPathRegex } from 'src/features/academy/AcademyTypes';
 import { store } from 'src/pages/createStore';
 
-import { Tokens } from '../application/types/SessionTypes';
-import { postRefresh } from '../sagas/RequestsSaga';
 import { MockResponse } from './__tests__/RequestHelper';
 import { actions } from './ActionsHelper';
 import Constants from './Constants';

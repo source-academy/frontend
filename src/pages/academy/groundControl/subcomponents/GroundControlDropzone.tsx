@@ -4,9 +4,8 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
-
-import ControlButton from '../../../../commons/ControlButton';
-import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
+import ControlButton from 'src/commons/ControlButton';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 export type DropzoneProps = DispatchProps & StateProps;
 

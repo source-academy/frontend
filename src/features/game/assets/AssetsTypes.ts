@@ -1,5 +1,5 @@
-import { AssetKey, AssetPath } from '../commons/CommonTypes';
-import { GameSoundType } from '../sound/GameSoundTypes';
+import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
+import { GameSoundType } from 'src/features/game/sound/GameSoundTypes';
 
 export type AssetMap<T> = {
   [name: string]: T;

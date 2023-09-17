@@ -1,10 +1,10 @@
 import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { ReferenceType } from 'src/features/envVisualizer/EnvVisualizerTypes';
 
-import EnvVisualizer from '../EnvVisualizer';
-import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { ReferenceType } from '../EnvVisualizerTypes';
 import { Visible } from './Visible';
 
 /** this classes encapsulates a null value in Source pairs or arrays */

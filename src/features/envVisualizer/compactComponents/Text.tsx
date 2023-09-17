@@ -1,12 +1,18 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
-
-import { Visible } from '../components/Visible';
-import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Data, IHoverable } from '../EnvVisualizerTypes';
-import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../EnvVisualizerUtils';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import {
+  CompactConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import {
+  getTextWidth,
+  setHoveredCursor,
+  setUnhoveredCursor
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
 
 export interface TextOptions {
   maxWidth: number;

@@ -1,7 +1,7 @@
 import { Group } from 'react-konva';
+import { Config } from 'src/features/dataVisualizer/Config';
+import { ArrayDrawable, ArrowDrawable } from 'src/features/dataVisualizer/drawable/Drawable';
 
-import { Config } from '../Config';
-import { ArrayDrawable, ArrowDrawable } from '../drawable/Drawable';
 import { DrawableTreeNode } from './DrawableTreeNode';
 
 /**

@@ -1,11 +1,11 @@
 import { connect, MapDispatchToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
 import {
   reautogradeAnswer,
   submitGrading,
   submitGradingAndContinue
-} from '../../../../commons/application/actions/SessionActions';
+} from 'src/commons/application/actions/SessionActions';
+
 import GradingEditor, { DispatchProps } from './GradingEditor';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

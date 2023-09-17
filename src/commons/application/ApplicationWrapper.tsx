@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
+import Constants from 'src/commons/utils/Constants';
+import { useSession } from 'src/commons/utils/Hooks';
+import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from 'src/routes/routerConfig';
 
-import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
-import Constants from '../utils/Constants';
-import { useSession } from '../utils/Hooks';
 import { updateReactRouter } from './actions/CommonsActions';
 
 /**

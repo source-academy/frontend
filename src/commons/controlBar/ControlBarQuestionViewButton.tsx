@@ -1,6 +1,5 @@
 import React from 'react';
-
-import ControlButton from '../ControlButton';
+import ControlButton from 'src/commons/ControlButton';
 
 /**
  * @prop questionProgress a tuple of (current question number, question length) where

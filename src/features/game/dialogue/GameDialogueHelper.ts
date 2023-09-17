@@ -1,6 +1,7 @@
-import ImageAssets from '../assets/ImageAssets';
-import { screenCenter } from '../commons/CommonConstants';
-import Typewriter from '../effects/Typewriter';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { screenCenter } from 'src/features/game/commons/CommonConstants';
+import Typewriter from 'src/features/game/effects/Typewriter';
+
 import dialogueConstants from './GameDialogueConstants';
 
 /**

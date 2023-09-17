@@ -2,9 +2,8 @@ import { screenCenter } from 'src/features/game/commons/CommonConstants';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
-
-import { loadImage } from '../../game/utils/LoaderUtils';
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
+import { loadImage } from 'src/features/game/utils/LoaderUtils';
+import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
 /**
  * This manager manages the background for Story Simulator's Object Placement scene

@@ -3,10 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
+import CodeSnippet from 'src/pages/sicp/subcomponents/CodeSnippet';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 import SicpLatex from 'src/pages/sicp/subcomponents/SicpLatex';
-
-import CodeSnippet from '../../../pages/sicp/subcomponents/CodeSnippet';
 
 // Custom error class for errors when parsing JSON files.
 export class ParseJsonError extends Error {}

@@ -1,6 +1,5 @@
 import { Chapter } from 'js-slang/dist/types';
-
-import { Testcase } from '../assessment/AssessmentTypes';
+import { Testcase } from 'src/commons/assessment/AssessmentTypes';
 
 /**
  * Represents a single task for a mission hosted in a GitHub repository.

@@ -1,7 +1,6 @@
 import { Chapter } from 'js-slang/dist/types';
-
-import { IMCQQuestion } from '../../commons/assessment/AssessmentTypes';
-import { MissionMetadata, TaskData } from '../../commons/githubAssessments/GitHubMissionTypes';
+import { IMCQQuestion } from 'src/commons/assessment/AssessmentTypes';
+import { MissionMetadata, TaskData } from 'src/commons/githubAssessments/GitHubMissionTypes';
 
 export const defaultMissionBriefing = `### Assignment Briefing (Click to Edit!)
 Welcome to Assignment Creator! This is where the Briefing for each assignment will appear.

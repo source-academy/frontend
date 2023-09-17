@@ -5,9 +5,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
 import ControlButton from 'src/commons/ControlButton';
+import { Output } from 'src/commons/repl/Repl';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { getModeString, selectMode } from 'src/commons/utils/AceHelper';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { addHtmlConsoleError } from 'src/commons/workspace/WorkspaceActions';
@@ -22,9 +25,6 @@ import {
   makeSubstVisualizerTabFrom
 } from 'src/pages/playground/PlaygroundTabs';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { Output } from '../../../commons/repl/Repl';
-import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
 import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideContent';
 import { DEFAULT_ENV } from './UserBlogContent';
 

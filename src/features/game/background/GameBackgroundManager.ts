@@ -1,10 +1,10 @@
-import { ImageAsset } from '../assets/AssetsTypes';
-import { screenSize } from '../commons/CommonConstants';
-import { AssetKey } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import { LocationId } from '../location/GameMapTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { resizeOverflow } from '../utils/SpriteUtils';
+import { ImageAsset } from 'src/features/game/assets/AssetsTypes';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { AssetKey } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { LocationId } from 'src/features/game/location/GameMapTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { resizeOverflow } from 'src/features/game/utils/SpriteUtils';
 
 /**
  * Manager for game's background.

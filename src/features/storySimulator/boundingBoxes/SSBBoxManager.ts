@@ -4,10 +4,10 @@ import { mandatory } from 'src/features/game/utils/GameUtils';
 import { resize } from 'src/features/game/utils/SpriteUtils';
 import StringUtils from 'src/features/game/utils/StringUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
+import { CursorMode } from 'src/features/storySimulator/cursorMode/SSCursorModeTypes';
+import { ICheckpointLoggable } from 'src/features/storySimulator/logger/SSLogManagerTypes';
+import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
-import { CursorMode } from '../cursorMode/SSCursorModeTypes';
-import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 
 /**

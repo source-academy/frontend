@@ -1,9 +1,8 @@
 import { Classes, Dialog, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
-
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
-import ControlButton from '../../../../commons/ControlButton';
+import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import ControlButton from 'src/commons/ControlButton';
 
 export type PublishCellProps = DispatchProps & StateProps;
 

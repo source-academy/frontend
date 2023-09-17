@@ -12,11 +12,11 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { useMemo } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router';
+import defaultCoverImage from 'src/assets/default_cover_image.jpg';
+import ContentDisplay from 'src/commons/ContentDisplay';
+import Markdown from 'src/commons/Markdown';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
-import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import ContentDisplay from '../../commons/ContentDisplay';
-import Markdown from '../../commons/Markdown';
 import { GHAssessmentOverview } from './GitHubClassroom';
 
 type GitHubAssessmentListingProps = {

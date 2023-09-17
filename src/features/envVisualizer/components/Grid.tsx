@@ -1,10 +1,10 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
+import { Config, ShapeDefaultProps } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { EnvTreeNode } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { getNextChildren } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import { Config, ShapeDefaultProps } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { EnvTreeNode } from '../EnvVisualizerTypes';
-import { getNextChildren } from '../EnvVisualizerUtils';
 import { ArrayLevel } from './ArrayLevel';
 import { ArrayUnit } from './ArrayUnit';
 import { ArrowLane } from './ArrowLane';

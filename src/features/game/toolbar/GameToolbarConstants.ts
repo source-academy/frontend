@@ -1,7 +1,7 @@
-import ImageAssets from '../assets/ImageAssets';
-import { screenSize } from '../commons/CommonConstants';
-import { AssetKey, IBaseScene } from '../commons/CommonTypes';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { AssetKey, IBaseScene } from 'src/features/game/commons/CommonTypes';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
 
 export type ToolbarButtonConfig = {
   assetKey: AssetKey;

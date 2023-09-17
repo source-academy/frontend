@@ -7,16 +7,15 @@ import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
-
+import { EditorTabStateProps } from 'src/commons/editor/Editor';
+import { Position } from 'src/commons/editor/EditorTypes';
+import { EditorBinding } from 'src/commons/WorkspaceSettingsContext';
 import {
   CodeDelta,
   Input,
   KeyboardCommand,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
-import { EditorTabStateProps } from '../editor/Editor';
-import { Position } from '../editor/EditorTypes';
-import { EditorBinding } from '../WorkspaceSettingsContext';
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor

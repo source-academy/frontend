@@ -1,16 +1,15 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/types';
-
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
+import { GameState, Role, Story } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview
-} from '../../assessment/AssessmentTypes';
-import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
-import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { GameState, Role, Story } from '../ApplicationTypes';
+} from 'src/commons/assessment/AssessmentTypes';
+import { MissionRepoData } from 'src/commons/githubAssessments/GitHubMissionTypes';
+import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
+import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
+import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 export const FETCH_AUTH = 'FETCH_AUTH';
 export const FETCH_USER_AND_COURSE = 'FETCH_USER_AND_COURSE';

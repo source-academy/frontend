@@ -1,13 +1,13 @@
-import FontAssets from '../../assets/FontAssets';
-import ImageAssets from '../../assets/ImageAssets';
-import SoundAssets from '../../assets/SoundAssets';
-import TextAssets from '../../assets/TextAssets';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
-import AwardParser from '../../parser/AwardParser';
-import RoomPreviewParser from '../../parser/RoomPreviewParser';
-import SourceAcademyGame from '../../SourceAcademyGame';
-import { toS3Path } from '../../utils/GameUtils';
-import { loadImage } from '../../utils/LoaderUtils';
+import FontAssets from 'src/features/game/assets/FontAssets';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import TextAssets from 'src/features/game/assets/TextAssets';
+import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
+import AwardParser from 'src/features/game/parser/AwardParser';
+import RoomPreviewParser from 'src/features/game/parser/RoomPreviewParser';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
+import { loadImage } from 'src/features/game/utils/LoaderUtils';
 
 /**
  * User entry point into the game.

@@ -1,11 +1,13 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
-
-import { Visible } from '../components/Visible';
-import EnvVisualizer from '../EnvVisualizer';
-import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
+import { Visible } from 'src/features/envVisualizer/components/Visible';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import {
+  CompactConfig,
+  ShapeDefaultProps
+} from 'src/features/envVisualizer/EnvVisualizerCompactConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Env, EnvTreeNode, IHoverable } from 'src/features/envVisualizer/EnvVisualizerTypes';
 import {
   currentItemSAColor,
   getNonEmptyEnv,
@@ -13,7 +15,8 @@ import {
   isDummyKey,
   isPrimitiveData,
   isUnassigned
-} from '../EnvVisualizerUtils';
+} from 'src/features/envVisualizer/EnvVisualizerUtils';
+
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
 import { Level } from './Level';

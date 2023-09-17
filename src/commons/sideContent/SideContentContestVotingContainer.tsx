@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { ContestEntry } from 'src/commons/assessment/AssessmentTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
-import { ContestEntry } from '../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';
 
 export type SideContentContestVotingContainerProps = DispatchProps & StateProps;

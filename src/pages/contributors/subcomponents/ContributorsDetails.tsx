@@ -1,7 +1,6 @@
 import { Card, Elevation, H3, H5 } from '@blueprintjs/core';
 import React from 'react';
-
-import { Links } from '../../../commons/utils/Constants';
+import { Links } from 'src/commons/utils/Constants';
 
 const dot = <span className="dot">&bull;</span>;
 

@@ -1,4 +1,5 @@
-import GameActionConditionChecker from '../action/GameActionConditionChecker';
+import GameActionConditionChecker from 'src/features/game/action/GameActionConditionChecker';
+
 import { DialogueLine, DialogueObject, PartName } from './GameDialogueTypes';
 
 /**

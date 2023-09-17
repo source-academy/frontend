@@ -1,7 +1,8 @@
-import { AnimType, AssetType } from '../assets/AssetsTypes';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { createEmptyLocation } from '../location/GameMapHelper';
-import StringUtils from '../utils/StringUtils';
+import { AnimType, AssetType } from 'src/features/game/assets/AssetsTypes';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { createEmptyLocation } from 'src/features/game/location/GameMapHelper';
+import StringUtils from 'src/features/game/utils/StringUtils';
+
 import Parser from './Parser';
 
 /**

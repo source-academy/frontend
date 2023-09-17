@@ -1,8 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import { OverallState } from '../../../commons/application/ApplicationTypes';
+import AchievementInferencer from 'src/commons/achievement/utils/AchievementInferencer';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import {
   bulkUpdateAchievements,
   bulkUpdateGoals,
@@ -10,7 +9,8 @@ import {
   getOwnGoals,
   removeAchievement,
   removeGoal
-} from '../../../features/achievement/AchievementActions';
+} from 'src/features/achievement/AchievementActions';
+
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

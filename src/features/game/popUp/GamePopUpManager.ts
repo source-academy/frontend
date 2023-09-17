@@ -1,12 +1,13 @@
-import ImageAssets from '../assets/ImageAssets';
-import SoundAssets from '../assets/SoundAssets';
-import { Constants } from '../commons/CommonConstants';
-import { GamePosition, GameSize, ItemId } from '../commons/CommonTypes';
-import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
-import { Layer } from '../layer/GameLayerTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { sleep } from '../utils/GameUtils';
-import { resizeUnderflow } from '../utils/SpriteUtils';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { Constants } from 'src/features/game/commons/CommonConstants';
+import { GamePosition, GameSize, ItemId } from 'src/features/game/commons/CommonTypes';
+import { scrollEntry, scrollExit } from 'src/features/game/effects/ScrollEffect';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { sleep } from 'src/features/game/utils/GameUtils';
+import { resizeUnderflow } from 'src/features/game/utils/SpriteUtils';
+
 import PopUpConstants from './GamePopUpConstants';
 
 /**

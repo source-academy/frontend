@@ -1,18 +1,18 @@
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import CommonBackButton from 'src/features/game/commons/CommonBackButton';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { IGameUI, ItemId } from 'src/features/game/commons/CommonTypes';
+import { fadeAndDestroy } from 'src/features/game/effects/FadeEffect';
+import { entryTweenProps, exitTweenProps } from 'src/features/game/effects/FlyEffect';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GameItemType } from 'src/features/game/location/GameMapTypes';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { mandatory, sleep } from 'src/features/game/utils/GameUtils';
+import { calcTableFormatPos, Direction } from 'src/features/game/utils/StyleUtils';
 
-import ImageAssets from '../../assets/ImageAssets';
-import SoundAssets from '../../assets/SoundAssets';
-import CommonBackButton from '../../commons/CommonBackButton';
-import { screenSize } from '../../commons/CommonConstants';
-import { IGameUI, ItemId } from '../../commons/CommonTypes';
-import { fadeAndDestroy } from '../../effects/FadeEffect';
-import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
-import { Layer } from '../../layer/GameLayerTypes';
-import { GameItemType } from '../../location/GameMapTypes';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { createButton } from '../../utils/ButtonUtils';
-import { mandatory, sleep } from '../../utils/GameUtils';
-import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import TalkModeConstants, { talkButtonStyle } from './GameModeTalkConstants';
 
 /**

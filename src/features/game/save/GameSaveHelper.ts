@@ -1,6 +1,7 @@
-import { GamePhaseType } from '../phase/GamePhaseTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
+import { GamePhaseType } from 'src/features/game/phase/GamePhaseTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+
 import { FullSaveState, GameSaveState } from './GameSaveTypes';
 
 /**

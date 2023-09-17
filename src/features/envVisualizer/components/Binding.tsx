@@ -1,10 +1,10 @@
 import React from 'react';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
+import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
+import { Data } from 'src/features/envVisualizer/EnvVisualizerTypes';
+import { isDummyKey, isMainReference } from 'src/features/envVisualizer/EnvVisualizerUtils';
 
-import EnvVisualizer from '../EnvVisualizer';
-import { Config } from '../EnvVisualizerConfig';
-import { Layout } from '../EnvVisualizerLayout';
-import { Data } from '../EnvVisualizerTypes';
-import { isDummyKey, isMainReference } from '../EnvVisualizerUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';

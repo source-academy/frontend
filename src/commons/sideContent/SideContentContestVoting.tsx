@@ -3,8 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-import { ContestEntry } from '../assessment/AssessmentTypes';
+import { ContestEntry } from 'src/commons/assessment/AssessmentTypes';
 
 export type SideContentContestVotingProps = DispatchProps & StateProps;
 

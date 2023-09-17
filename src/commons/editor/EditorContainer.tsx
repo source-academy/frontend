@@ -6,12 +6,12 @@ import 'ace-builds/webpack-resolver';
 
 import _ from 'lodash';
 import React from 'react';
-
 import SourcecastEditor, {
   SourceRecorderEditorProps
-} from '../sourceRecorder/SourceRecorderEditor';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
-import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
+} from 'src/commons/sourceRecorder/SourceRecorderEditor';
+import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
+import { WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
+
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
 

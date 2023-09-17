@@ -1,11 +1,11 @@
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { GamePosition, ItemId } from 'src/features/game/commons/CommonTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GameItemType, LocationId } from 'src/features/game/location/GameMapTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import { StateObserver } from 'src/features/game/state/GameStateTypes';
+import { resize } from 'src/features/game/utils/SpriteUtils';
 
-import { screenSize } from '../commons/CommonConstants';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { StateObserver } from '../state/GameStateTypes';
-import { resize } from '../utils/SpriteUtils';
 import CharConstants from './GameCharacterConstants';
 
 /**

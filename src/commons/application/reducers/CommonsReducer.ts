@@ -1,8 +1,7 @@
 import { Reducer } from 'redux';
+import { defaultRouter } from 'src/commons/application/ApplicationTypes';
+import { RouterState, UPDATE_REACT_ROUTER } from 'src/commons/application/types/CommonsTypes';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
-
-import { defaultRouter } from '../ApplicationTypes';
-import { RouterState, UPDATE_REACT_ROUTER } from '../types/CommonsTypes';
 
 export const RouterReducer: Reducer<RouterState> = (
   state = defaultRouter,

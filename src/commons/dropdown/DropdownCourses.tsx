@@ -2,9 +2,8 @@ import { Classes, Dialog, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { useNavigate } from 'react-router';
-
-import { Role } from '../application/ApplicationTypes';
-import { UserCourse } from '../application/types/SessionTypes';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import { UserCourse } from 'src/commons/application/types/SessionTypes';
 
 type DialogProps = {
   isOpen: boolean;

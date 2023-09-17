@@ -23,21 +23,16 @@ import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
-import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
-
-import { EventType } from '../../features/achievement/AchievementTypes';
-import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
-import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
   isSourceLanguage,
   OverallState,
   styliseSublanguage
-} from '../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
+} from 'src/commons/application/ApplicationTypes';
+import {
+  externalLibraries,
+  ExternalLibraryName
+} from 'src/commons/application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -45,13 +40,21 @@ import {
   DEBUG_RESUME,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
   UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
-} from '../application/types/InterpreterTypes';
-import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
-import { Documentation } from '../documentation/Documentation';
-import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/utils';
-import { SideContentType } from '../sideContent/SideContentTypes';
-import { actions } from '../utils/ActionsHelper';
-import DisplayBufferService from '../utils/DisplayBufferService';
+} from 'src/commons/application/types/InterpreterTypes';
+import {
+  Library,
+  Testcase,
+  TestcaseType,
+  TestcaseTypes
+} from 'src/commons/assessment/AssessmentTypes';
+import { Documentation } from 'src/commons/documentation/Documentation';
+import {
+  retrieveFilesInWorkspaceAsRecord,
+  writeFileRecursively
+} from 'src/commons/fileSystem/utils';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import DisplayBufferService from 'src/commons/utils/DisplayBufferService';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
@@ -63,11 +66,14 @@ import {
   highlightLineForAgenda,
   makeElevatedContext,
   visualizeEnv
-} from '../utils/JsSlangHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
-import { showFullJSDisclaimer, showFullTSDisclaimer } from '../utils/WarningDialogHelper';
-import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
+} from 'src/commons/utils/JsSlangHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
+import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from 'src/commons/utils/SourcerorHelper';
+import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
+import { notifyProgramEvaluated } from 'src/commons/workspace/WorkspaceActions';
 import {
   ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
@@ -89,7 +95,15 @@ import {
   TOGGLE_FOLDER_MODE,
   UPDATE_EDITOR_VALUE,
   WorkspaceLocation
-} from '../workspace/WorkspaceTypes';
+} from 'src/commons/workspace/WorkspaceTypes';
+import { EventType } from 'src/features/achievement/AchievementTypes';
+import DataVisualizer from 'src/features/dataVisualizer/dataVisualizer';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
+import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
+import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
+import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
+
 import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from './SafeEffects';
 
 export default function* WorkspaceSaga(): SagaIterator {
