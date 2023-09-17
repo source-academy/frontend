@@ -541,7 +541,7 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_LITERAL:
         const arrayLiteralInstr = agendaItem as ArrLitInstr;
-	const arity = arrayLiteralInstr.arity;
+        const arity = arrayLiteralInstr.arity;
         return new AgendaItemComponent(
           `arr lit ${arity}`,
           `Create array using ${arity} value${arity === 1 ? '' : 's'} on stash`,
