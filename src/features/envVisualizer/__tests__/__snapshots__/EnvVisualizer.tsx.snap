@@ -1518,7 +1518,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="INSTRUCTI…"
+      text="x = x + 1;"
       width={120}
     />
   </Label>
@@ -1541,7 +1541,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="INSTRUCTION"
+      text="x = x + 1;"
     />
   </Label>
 </React.Fragment>
@@ -1569,7 +1569,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="x = x + 1;"
+      text="pop"
       width={120}
     />
   </Label>
@@ -1592,7 +1592,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="x = x + 1;"
+      text="Pop most recently pushed value from stash"
     />
   </Label>
 </React.Fragment>
@@ -1620,7 +1620,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="pop"
+      text="array ass…"
       width={120}
     />
   </Label>
@@ -1643,7 +1643,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Pop most recently pushed value from stash"
+      text="Assign new value to array at given index"
     />
   </Label>
 </React.Fragment>
@@ -1656,57 +1656,6 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
     onMouseLeave={[Function]}
     x={20}
     y={495}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999999"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="array ass…"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={500}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Assign new value to array at given index"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={530}
   >
     <Tag
       cornerRadius={5}
@@ -1729,7 +1678,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
   <Label
     visible={false}
     x={145}
-    y={535}
+    y={500}
   >
     <Tag
       fill="black"
@@ -1751,7 +1700,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -1826,7 +1775,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 17`] = `
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
