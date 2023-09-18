@@ -1,4 +1,4 @@
-import { combineReducers, createSlice, Draft, PayloadAction, SliceCaseReducers } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, combineReducers, createAction, createSlice, SliceCaseReducers,ValidateSliceCaseReducers } from "@reduxjs/toolkit";
 import { Context } from "js-slang/dist/types";
 import { InterpreterOutput } from "src/commons/application/ApplicationTypes";
 import Constants from "src/commons/utils/Constants";
@@ -7,7 +7,7 @@ import { DebuggerContext, EditorTabState } from "src/commons/workspace/Workspace
 
 import { defaultRepl,replActions,replReducer,ReplState } from "../ReplRedux";
 import { defaultSideContent, sideContentActions, sideContentReducer, SideContentState } from "../SideContentRedux";
-import { EditorState, getDefaultEditorState, getEditorSlice } from "./EditorRedux";
+import { EditorState, getDefaultEditorState, getEditorReducer } from "./EditorRedux";
 
 export type WorkspaceState = {
   readonly context: Context;
@@ -58,40 +58,54 @@ export const getDefaultWorkspaceState = (initialTabs: EditorTabState[] = []): Wo
   sideContent: defaultSideContent,
 })
 
-const workspaceReducers = {
-  debugReset(state: Draft<WorkspaceState>) {
-    state.isDebugging = false;
-    state.isRunning = false;
-  },
-  debugResume(state: Draft<WorkspaceState>) {
-    state.isDebugging = false;
-    state.isRunning = true;
-  },
-  endClearContext(state: Draft<WorkspaceState>) {
-    // TODO Investigate
-  },
-  endDebugPause(state: Draft<WorkspaceState>) {
-    state.isDebugging = true;
-    state.isRunning = false;
-  },
-  endInterruptExecution(state: Draft<WorkspaceState>) {
-    // same as debug reset
-    state.isDebugging = false;
-    state.isRunning = false;
-  },
-  evalEditor(state: Draft<WorkspaceState>) {
-    state.isDebugging = false;
-    state.isRunning = true;
-  },
-  evalRepl(state: Draft<WorkspaceState>) {
-    state.isRunning = true;
-  },
-  setFolderMode(state: Draft<WorkspaceState>, { payload }: PayloadAction<boolean>) {
-    state.isFolderModeEnabled = payload;
-  },
+export const workspaceActions = {
+  beginClearContext: createAction('workspace/beginClearContext'),
+  beginDebugPause: createAction('workspace/beginDebugPause'),
+  beginInterruptExecution: createAction('workspace/beginInterruptExecution'),
+  debugReset: createAction('workspace/debugReset'),
+  debugResume: createAction('workspace/debugResume'),
+  endClearContext: createAction('workspace/endClearContext'),
+  endDebugPause: createAction('workspace/endDebugPause'),
+  endInterruptExecution: createAction('workspace/endInterruptExecution'),
+  evalEditor: createAction('workspace/evalEditor'),
+  evalRepl: createAction('workspace/evalRepl'),
+  setFolderMode: createAction('workspace/setFolderMode', (value: boolean) => ({ payload: value })),
 } as const
 
-type BaseWorkspaceReducers = typeof workspaceReducers
+// const workspaceReducers = {
+//   debugReset(state: Draft<WorkspaceState>) {
+//     state.isDebugging = false;
+//     state.isRunning = false;
+//   },
+//   debugResume(state: Draft<WorkspaceState>) {
+//     state.isDebugging = false;
+//     state.isRunning = true;
+//   },
+//   endClearContext(state: Draft<WorkspaceState>) {
+//     // TODO Investigate
+//   },
+//   endDebugPause(state: Draft<WorkspaceState>) {
+//     state.isDebugging = true;
+//     state.isRunning = false;
+//   },
+//   endInterruptExecution(state: Draft<WorkspaceState>) {
+//     // same as debug reset
+//     state.isDebugging = false;
+//     state.isRunning = false;
+//   },
+//   evalEditor(state: Draft<WorkspaceState>) {
+//     state.isDebugging = false;
+//     state.isRunning = true;
+//   },
+//   evalRepl(state: Draft<WorkspaceState>) {
+//     state.isRunning = true;
+//   },
+//   setFolderMode(state: Draft<WorkspaceState>, { payload }: PayloadAction<boolean>) {
+//     state.isFolderModeEnabled = payload;
+//   },
+// } as const
+
+// type BaseWorkspaceReducers = typeof workspaceReducers
 
 export const createWorkspaceSlice = <
   TState extends WorkspaceState,
@@ -100,9 +114,10 @@ export const createWorkspaceSlice = <
 >(
   name: TName,
   initialState: TState,
-  reducers: TReducers,
+  reducers: ValidateSliceCaseReducers<TState, TReducers>,
+  extraReducers?: (builder: ActionReducerMapBuilder<TState>) => void
 ) => {
-  const { actions: editorActions, reducer: editorReducer } = getEditorSlice(initialState.editorState.editorTabs)
+  const editorReducer = getEditorReducer(initialState.editorState.editorTabs)
 
   const subReducer = combineReducers({
     editorState: editorReducer,
@@ -110,14 +125,48 @@ export const createWorkspaceSlice = <
     repl: replReducer
   })
 
-  const { actions, reducer } = createSlice<TState, TReducers & BaseWorkspaceReducers, TName>({
+  return createSlice<TState, TReducers, TName>({
     name,
-    initialState: initialState,
-    reducers: {
-      ...workspaceReducers,
-      ...reducers,
-    } as any,
+    initialState,
+    reducers,
     extraReducers: builder => {
+      builder.addCase(workspaceActions.debugReset,(state) => {
+        state.isDebugging = false;
+        state.isRunning = false;
+      })
+      builder.addCase(workspaceActions.debugResume,(state) => {
+        state.isDebugging = false;
+        state.isRunning = true;
+      })
+
+      builder.addCase(workspaceActions.endClearContext,(state) => {
+        // TODO Investigate
+      })
+
+      builder.addCase(workspaceActions.endDebugPause,(state) => {
+        state.isDebugging = true;
+        state.isRunning = false;
+      })
+
+      builder.addCase(workspaceActions.endInterruptExecution,(state) => {
+        // same as debug reset
+        state.isDebugging = false;
+        state.isRunning = false;
+      })  
+
+      builder.addCase(workspaceActions.evalEditor,(state) => {
+        state.isDebugging = false;
+        state.isRunning = true;
+      })
+      
+      builder.addCase(workspaceActions.evalRepl,(state) => {
+        state.isRunning = true;
+      })
+      
+      builder.addCase(workspaceActions.setFolderMode,(state, { payload }) => {
+        state.isFolderModeEnabled = payload;
+      })
+
       builder.addCase(replActions.evalInterpreterError, state => {
         state.isDebugging = false;
         state.isRunning = false;
@@ -131,16 +180,17 @@ export const createWorkspaceSlice = <
         state.debuggerContext = payload;
       });
 
+      if (extraReducers) extraReducers(builder)
+
       builder.addDefaultCase((state, action) => {
         subReducer(state, action)
       })
     }
   });
-
-  return { reducer, actions: {
-    ...editorActions,
-    ...sideContentActions,
-    ...replActions,
-    ...actions,
-  }}
+  // return { reducer, actions: {
+  //   ...editorActions,
+  //   ...sideContentActions,
+  //   ...replActions,
+  //   ...actions,
+  // }}
 }

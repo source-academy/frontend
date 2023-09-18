@@ -1,31 +1,38 @@
-import { ActionCreatorWithPreparedPayload, PayloadAction, PayloadActionCreator } from "@reduxjs/toolkit";
-import { SourceActionType } from "src/commons/utils/ActionsHelper";
-import { StoriesState } from "src/features/stories/StoriesTypes";
+import { Action, ActionCreatorWithPreparedPayload, combineReducers, createAction, createReducer, PayloadAction, PayloadActionCreator } from "@reduxjs/toolkit";
 
-import { SideContentLocation } from "../SideContentRedux";
-import { getDefaultStoriesEnv } from "../StoriesRedux";
+import { replActions } from "../ReplRedux";
+import { sideContentActions, SideContentLocation } from "../SideContentRedux";
+import { defaultStories, getDefaultStoriesEnv, storiesReducer, StoriesState } from "../StoriesRedux";
+import { editorActions } from "./EditorRedux";
+import { defaultGradingState, gradingReducer, GradingWorkspaceState } from "./GradingRedux";
 import { basePlaygroundReducer } from "./playground/PlaygroundBase";
-import { playgroundReducer,PlaygroundState } from "./playground/PlaygroundRedux";
-import { createWorkspaceSlice, getDefaultWorkspaceState } from "./WorkspaceRedux";
-
-const { actions } = createWorkspaceSlice('sicp', getDefaultWorkspaceState([]), {
-  testAction(state) {}
-})
+import { defaultPlayground, playgroundReducer, PlaygroundState } from "./playground/PlaygroundRedux";
+import { workspaceActions } from "./WorkspaceRedux";
 
 type WorkspaceManagerState = {
+  grading: GradingWorkspaceState,
   playground: PlaygroundState
   stories: StoriesState
 }
 
-type AllWorkspaceActions = {
-  [K in keyof typeof actions]: ActionCreatorWithPreparedPayload<
-    [location: SideContentLocation, ...Parameters<typeof actions[K]>],
-    { payload: ReturnType<typeof actions[K]>['payload'], location: SideContentLocation },
-    (typeof actions)[K]['type']
+const commonWorkspaceActionsInternal = {
+  ...editorActions,
+  ...replActions,
+  ...sideContentActions,
+  ...workspaceActions,
+}
+
+type CommonWorkspaceActions = {
+  [K in keyof typeof commonWorkspaceActionsInternal]: ActionCreatorWithPreparedPayload<
+    [location: SideContentLocation, ...Parameters<typeof commonWorkspaceActionsInternal[K]>],
+    { payload: ReturnType<typeof commonWorkspaceActionsInternal[K]>['payload'], location: SideContentLocation },
+    (typeof commonWorkspaceActionsInternal)[K]['type']
   >
 }
 
-export const allWorkspaceActions = Object.entries(actions).reduce((res, [name, creator]) => ({
+type CommonWorkspaceAction<T> = PayloadAction<{ payload: T, location: SideContentLocation }>
+
+const commonWorkspaceActions = Object.entries(commonWorkspaceActionsInternal).reduce((res, [name, creator]) => ({
   ...res,
   [name]: (location: SideContentLocation, ...args: any) => {
     // @ts-ignore
@@ -38,12 +45,50 @@ export const allWorkspaceActions = Object.entries(actions).reduce((res, [name, c
       }
     }
   }
-}), {} as AllWorkspaceActions)
+}), {} as CommonWorkspaceActions)
 
-const allWorkspaceReducers = {
-  playground: playgroundReducer,
+const commonWorkspaceActionTypes = Object.keys(commonWorkspaceActions)
+
+export const allWorkspaceActions = {
+  ...commonWorkspaceActions,
+  logOut: createAction('workspaces/logOut')
 }
 
+const allWorkspaceReducers = {
+  grading: gradingReducer,
+  playground: playgroundReducer,
+  stories: storiesReducer,
+}
+
+const workspaceManagerReducer = combineReducers<WorkspaceManagerState>(allWorkspaceReducers)
+
+const defaultWorkspaceManager: WorkspaceManagerState = {
+  grading: defaultGradingState,
+  playground: defaultPlayground,
+  stories: defaultStories,
+}
+
+const isCommonWorkspaceAction = (action: Action): action is CommonWorkspaceAction<any> => commonWorkspaceActionTypes.includes[action.type]
+
+export const allWorkspacesReducer = createReducer(defaultWorkspaceManager, builder => {
+  builder.addMatcher(isCommonWorkspaceAction, (state, { payload: { payload, location }, ...action }) => {
+    const newAction = {
+      ...action,
+      payload,
+    }
+
+    if (location.startsWith('stories')) {
+      const [, storyEnv] = location.split('.')
+      const storyReducer = basePlaygroundReducer(getDefaultStoriesEnv(storyEnv))
+      state.stories.envs[storyEnv] = storyReducer(state.stories[storyEnv], action)
+    } else {
+      state[location] = allWorkspaceReducers[location](state[location], newAction)
+    }
+  })
+  builder.addDefaultCase((state, action) => workspaceManagerReducer(state as WorkspaceManagerState, action))
+})
+
+/*
 export function allWorkspacesReducer(state: WorkspaceManagerState, action: SourceActionType) {
   let workspaceLocation: SideContentLocation
   if ((action as any).location) {
@@ -82,3 +127,4 @@ export function allWorkspacesReducer(state: WorkspaceManagerState, action: Sourc
     }
   }
 }
+*/

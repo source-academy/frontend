@@ -36,7 +36,7 @@ export const defaultPlayground: PlaygroundState = {
   languageConfig: defaultLanguageConfig
 }
 
-export const { actions: playgroundWorkspaceActions, reducer: playgroundReducer } = createPlaygroundSlice('playground', defaultPlayground, {
+const { actions: playgroundWorkspaceActions, reducer } = createPlaygroundSlice('playground', defaultPlayground, {
   changeQueryString(state, { payload }: PayloadAction<string>) {
     state.queryString = payload
   },
@@ -53,6 +53,8 @@ export const { actions: playgroundWorkspaceActions, reducer: playgroundReducer }
     state.shortURL = payload
   }
 })
+
+export { reducer as playgroundReducer }
 
 export const playgroundActions = {
   ...playgroundWorkspaceActions,
@@ -142,7 +144,6 @@ function* updateQueryString() {
   });
   yield put(playgroundWorkspaceActions.changeQueryString(newQueryString));
 }
-
 
 /**
  * Gets short url from microservice
