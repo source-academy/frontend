@@ -116,7 +116,7 @@ const getStaffNavlinkInfo = ({
     {
       to: `/courses/${courseId}/storysimulator`,
       icon: IconNames.CROWN,
-      text: 'Story Simulator',
+      text: 'Game Simulator',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
