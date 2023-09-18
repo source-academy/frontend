@@ -42,3 +42,5 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
       id: SideContentType.module
     }));
 };
+
+export const getTabId = (tab: SideContentTab) => tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id
