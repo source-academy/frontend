@@ -3,7 +3,10 @@ import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { GradingOverview } from './GradingTypes';
 
 export const isSubmissionUngraded = (s: GradingOverview): boolean => {
-  return s.submissionStatus !== 'submitted' || s.gradingStatus !== GradingStatuses.graded;
+  const isNotSubmitted = s.submissionStatus !== 'submitted';
+  const isNotGraded =
+    s.gradingStatus !== GradingStatuses.graded && s.gradingStatus !== GradingStatuses.excluded;
+  return isNotSubmitted && isNotGraded;
 };
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
