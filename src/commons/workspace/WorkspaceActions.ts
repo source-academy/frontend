@@ -385,7 +385,7 @@ export const notifyProgramEvaluated = (
     workspaceLocation
   });
 
-export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
+export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: 'playground' | 'sicp') =>
   action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
 
 export const addHtmlConsoleError = (
@@ -394,10 +394,10 @@ export const addHtmlConsoleError = (
   storyEnv?: string
 ) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, storyEnv });
 
-export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: 'playground' | 'sicp') =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
 
-export const toggleUpdateEnv = (updateEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+export const toggleUpdateEnv = (updateEnv: boolean, workspaceLocation: 'playground' | 'sicp') =>
   action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
 
 export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>

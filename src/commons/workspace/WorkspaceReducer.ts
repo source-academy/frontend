@@ -571,42 +571,36 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           isEditorAutorun: !state[workspaceLocation].isEditorAutorun
         }
       };
-    case TOGGLE_USING_SUBST:
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            usingSubst: action.payload.usingSubst
-          }
-        };
-      } else {
-        return state;
-      }
-    case TOGGLE_USING_ENV:
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            usingEnv: action.payload.usingEnv
-          }
-        };
-      } else {
-        return state;
-      }
-    case TOGGLE_UPDATE_ENV:
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            updateEnv: action.payload.updateEnv
-          }
-        };
-      } else {
-        return state;
-      }
+    case TOGGLE_USING_SUBST: {
+      const { workspaceLocation } = action.payload;
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          usingSubst: action.payload.usingSubst
+        }
+      };
+    }
+    case TOGGLE_USING_ENV: {
+      const { workspaceLocation } = action.payload;
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          usingEnv: action.payload.usingEnv
+        }
+      };
+    }
+    case TOGGLE_UPDATE_ENV: {
+      const { workspaceLocation } = action.payload;
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          updateEnv: action.payload.updateEnv
+        }
+      };
+    }
     case UPDATE_SUBMISSIONS_TABLE_FILTERS:
       return {
         ...state,
