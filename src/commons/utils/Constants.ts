@@ -1,5 +1,4 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
-import moment, { Moment } from 'moment';
 
 function isTrue(value?: string, defaultTo?: boolean): boolean {
   return typeof value === 'undefined' && typeof defaultTo !== 'undefined'
@@ -62,25 +61,6 @@ for (let i = 1; ; ++i) {
   authProviders.set(id, { name, endpoint, isDefault: i === 1 });
 }
 
-const disablePeriods: Array<{ start: Moment; end: Moment; reason?: string }> = [];
-
-if (!isTest) {
-  for (let i = 1; ; ++i) {
-    const startStr = process.env[`REACT_APP_DISABLE${i}_START`];
-    const endStr = process.env[`REACT_APP_DISABLE${i}_END`];
-    if (!startStr || !endStr) {
-      break;
-    }
-    const reason = process.env[`REACT_APP_DISABLE${i}_REASON`];
-    const start = moment(startStr);
-    const end = moment(endStr);
-    if (end.isBefore(start) || moment().isAfter(end)) {
-      continue;
-    }
-    disablePeriods.push({ start, end, reason });
-  }
-}
-
 export enum Links {
   githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
@@ -128,7 +108,6 @@ const Constants = {
   githubClientId,
   githubOAuthProxyUrl,
   sharedbBackendUrl,
-  disablePeriods,
   cadetLoggerInterval,
   sicpBackendUrl,
   workspaceSettingsLocalStorageKey,

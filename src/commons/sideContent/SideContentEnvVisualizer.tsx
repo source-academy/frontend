@@ -197,7 +197,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <ButtonGroup>
-              <Tooltip2 content="Agenda and Stash" compact>
+              <Tooltip2 content="Control and Stash" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization && EnvVisualizer.getCompactLayout()) {

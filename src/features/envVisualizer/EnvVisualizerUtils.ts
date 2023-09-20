@@ -439,8 +439,8 @@ export function getAgendaItemComponent(
     switch (agendaItem.instrType) {
       case InstrType.RESET:
         return new AgendaItemComponent(
-          'RESET',
-          'Agenda items until the MARKER Instruction will be skipped',
+          'return',
+          'Skip agenda items until marker instruction is reached',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -448,8 +448,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.WHILE:
         return new AgendaItemComponent(
-          'WHILE',
-          'Execute the loop body if condition holds true',
+          'while',
+          'Keep executing while loop body if predicate holds',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -457,8 +457,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.FOR:
         return new AgendaItemComponent(
-          'FOR',
-          'Execute the loop body if condition holds true',
+          'for',
+          'Keep executing for loop body if predicate holds',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -467,8 +467,8 @@ export function getAgendaItemComponent(
       case InstrType.ASSIGNMENT:
         const assmtInstr = agendaItem as AssmtInstr;
         return new AgendaItemComponent(
-          `ASSIGN ${assmtInstr.symbol}`,
-          `Assign the value on the top of the Stash to ${assmtInstr.symbol}`,
+          `asgn ${assmtInstr.symbol}`,
+          `Assign value on top of stash to ${assmtInstr.symbol}`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -478,7 +478,7 @@ export function getAgendaItemComponent(
         const unOpInstr = agendaItem as UnOpInstr;
         return new AgendaItemComponent(
           unOpInstr.symbol,
-          `Peform ${unOpInstr.symbol} on the top Stash value`,
+          `Perform ${unOpInstr.symbol} on top stash value`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -488,7 +488,7 @@ export function getAgendaItemComponent(
         const binOpInstr = agendaItem as BinOpInstr;
         return new AgendaItemComponent(
           binOpInstr.symbol,
-          `Peform ${binOpInstr.symbol} on the top 2 Stash values`,
+          `Perform ${binOpInstr.symbol} on top 2 stash values`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -496,17 +496,18 @@ export function getAgendaItemComponent(
         );
       case InstrType.POP:
         return new AgendaItemComponent(
-          'POP',
-          'Pop the top value of the Stash',
+          'pop',
+          'Pop most recently pushed value from stash',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
           topItem
         );
       case InstrType.APPLICATION:
+        const appInstr = agendaItem as AppInstr;
         return new AgendaItemComponent(
-          'APPLICATION',
-          'Execute the function body',
+          `call ${appInstr.numOfArgs}`,
+          `Call function with ${appInstr.numOfArgs} argument${appInstr.numOfArgs === 1 ? '' : 's'}`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -514,8 +515,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.BRANCH:
         return new AgendaItemComponent(
-          'BRANCH',
-          'Check the boolean value of the condition and execute the corresponding body',
+          'branch',
+          'Pop boolean value from stash and execute corresponding branch',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -524,8 +525,8 @@ export function getAgendaItemComponent(
       case InstrType.ENVIRONMENT:
         const envInstr = agendaItem as EnvInstr;
         return new AgendaItemComponent(
-          'ENVIRONMENT',
-          'Set the current environment to the one indicated',
+          'env',
+          'Set current environment to this environment',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -538,19 +539,12 @@ export function getAgendaItemComponent(
             undefined
           )
         );
-      case InstrType.PUSH_UNDEFINED_IF_NEEDED:
-        return new AgendaItemComponent(
-          'PUSH UNDEFINED IF NEEDED',
-          'Push undefined onto the Stash if it is empty',
-          stackHeight,
-          highlightOnHover,
-          unhighlightOnHover,
-          topItem
-        );
       case InstrType.ARRAY_LITERAL:
+        const arrayLiteralInstr = agendaItem as ArrLitInstr;
+        const arity = arrayLiteralInstr.arity;
         return new AgendaItemComponent(
-          'ARRAY LITERAL',
-          'Create an array using the values on the Stash',
+          `arr lit ${arity}`,
+          `Create array using ${arity} value${arity === 1 ? '' : 's'} on stash`,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -558,8 +552,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_ACCESS:
         return new AgendaItemComponent(
-          'ARRAY ACCESS',
-          'Read the value of the array at the index on the Stash',
+          'arr acc',
+          'Access array at given index',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -567,8 +561,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_ASSIGNMENT:
         return new AgendaItemComponent(
-          'ARRAY ASSIGNMENT',
-          'Assign the value of the Stash to the array index on the Stash',
+          'arr asgn',
+          'Assign new value to array at given index',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -576,8 +570,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.ARRAY_LENGTH:
         return new AgendaItemComponent(
-          'ARRAY LENGTH',
-          'ARRAY_LENGTH',
+          'arr len',
+          'Obtain array length',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -585,8 +579,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.CONTINUE_MARKER:
         return new AgendaItemComponent(
-          'CONTINUE MARKER',
-          'Marks the end of the loop body',
+          'cont mark',
+          'Mark end of loop body',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -594,8 +588,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.BREAK:
         return new AgendaItemComponent(
-          'BREAK',
-          'Agenda items until the BREAK MARKER Instruction will be skipped',
+          'break',
+          'Control items until break marker will be skipped',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -603,8 +597,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.BREAK_MARKER:
         return new AgendaItemComponent(
-          'BREAK MARKER',
-          'Marks the end of all loop-associated statements and instructions',
+          'brk mark',
+          'Mark end of all loop-associated statements and instructions',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -612,8 +606,8 @@ export function getAgendaItemComponent(
         );
       case InstrType.MARKER:
         return new AgendaItemComponent(
-          'MARKER',
-          'Marks the end of the function body',
+          'mark',
+          'Mark return address',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,

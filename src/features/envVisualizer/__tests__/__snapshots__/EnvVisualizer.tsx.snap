@@ -45,7 +45,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Peform * on the top 2 Stash values"
+      text="Perform * on top 2 stash values"
     />
   </Label>
 </React.Fragment>
@@ -73,7 +73,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -96,7 +96,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
@@ -173,7 +173,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Peform * on the top 2 Stash values"
+      text="Perform * on top 2 stash values"
     />
   </Label>
 </React.Fragment>
@@ -201,7 +201,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -224,7 +224,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
@@ -301,7 +301,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Peform * on the top 2 Stash values"
+      text="Perform * on top 2 stash values"
     />
   </Label>
 </React.Fragment>
@@ -329,7 +329,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -352,7 +352,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
@@ -429,7 +429,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Peform * on the top 2 Stash values"
+      text="Perform * on top 2 stash values"
     />
   </Label>
 </React.Fragment>
@@ -457,7 +457,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -480,7 +480,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
@@ -557,7 +557,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Peform * on the top 2 Stash values"
+      text="Perform * on top 2 stash values"
     />
   </Label>
 </React.Fragment>
@@ -585,7 +585,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -608,7 +608,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
@@ -956,7 +956,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="APPLICATI…"
+      text="call 0"
       width={120}
     />
   </Label>
@@ -979,7 +979,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Execute the function body"
+      text="Call function with 0 arguments"
     />
   </Label>
 </React.Fragment>
@@ -1007,7 +1007,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="ARRAY ACC…"
+      text="arr acc"
       width={120}
     />
   </Label>
@@ -1030,7 +1030,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Read the value of the array at the index on the Stash"
+      text="Access array at given index"
     />
   </Label>
 </React.Fragment>
@@ -1109,7 +1109,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -1132,7 +1132,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
@@ -1186,7 +1186,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="MARKER"
+      text="mark"
       width={120}
     />
   </Label>
@@ -1209,7 +1209,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Marks the end of the function body"
+      text="Mark return address"
     />
   </Label>
 </React.Fragment>
@@ -1237,7 +1237,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -1260,7 +1260,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
@@ -1365,7 +1365,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="POP"
+      text="pop"
       width={120}
     />
   </Label>
@@ -1388,7 +1388,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Pop the top value of the Stash"
+      text="Pop most recently pushed value from stash"
     />
   </Label>
 </React.Fragment>
@@ -1416,7 +1416,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="WHILE"
+      text="while"
       width={120}
     />
   </Label>
@@ -1439,7 +1439,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Execute the loop body if condition holds true"
+      text="Keep executing while loop body if predicate holds"
     />
   </Label>
 </React.Fragment>
@@ -1518,7 +1518,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="PUSH UNDE…"
+      text="x = x + 1;"
       width={120}
     />
   </Label>
@@ -1541,7 +1541,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Push undefined onto the Stash if it is empty"
+      text="x = x + 1;"
     />
   </Label>
 </React.Fragment>
@@ -1569,7 +1569,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="x = x + 1;"
+      text="pop"
       width={120}
     />
   </Label>
@@ -1592,7 +1592,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="x = x + 1;"
+      text="Pop most recently pushed value from stash"
     />
   </Label>
 </React.Fragment>
@@ -1620,7 +1620,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       height={35}
       padding={10}
       preventDefault={false}
-      text="POP"
+      text="arr asgn"
       width={120}
     />
   </Label>
@@ -1643,7 +1643,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Pop the top value of the Stash"
+      text="Assign new value to array at given index"
     />
   </Label>
 </React.Fragment>
@@ -1656,57 +1656,6 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
     onMouseLeave={[Function]}
     x={20}
     y={495}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999999"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="ARRAY ASS…"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={500}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Assign the value of the Stash to the array index on the Stash"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={530}
   >
     <Tag
       cornerRadius={5}
@@ -1729,7 +1678,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
   <Label
     visible={false}
     x={145}
-    y={535}
+    y={500}
   >
     <Tag
       fill="black"
@@ -1751,7 +1700,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -1772,7 +1721,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={10}
       preventDefault={false}
-      text="PAIR/ARRAY"
+      text="pair/array"
     />
   </Label>
   <Label
@@ -1794,7 +1743,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="PAIR/ARRAY"
+      text="pair/array"
     />
   </Label>
   <Group
@@ -1826,7 +1775,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 17`] = `
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -1948,7 +1897,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: global environments are t
       height={35}
       padding={10}
       preventDefault={false}
-      text="ENVIRONME…"
+      text="env"
       width={120}
     />
   </Label>
@@ -1971,7 +1920,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: global environments are t
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set the current environment to the one indicated"
+      text="Set current environment to this environment"
     />
   </Label>
   <Group
