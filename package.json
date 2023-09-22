@@ -83,7 +83,7 @@
     "redux": "^4.2.1",
     "redux-mock-store": "^1.5.4",
     "redux-saga": "^1.2.3",
-    "rehype-react": "^7.2.0",
+    "rehype-react": "^8.0.0",
     "showdown": "^2.1.0",
     "sourceror": "^0.8.5",
     "typesafe-actions": "^5.1.0",
