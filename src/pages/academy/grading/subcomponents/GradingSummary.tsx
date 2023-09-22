@@ -10,8 +10,9 @@ import {
   Text,
   Title
 } from '@tremor/react';
-import { AssessmentOverview, GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
+import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
+import { isSubmissionUngraded } from 'src/features/grading/GradingUtils';
 
 import { AssessmentTypeBadge } from './GradingBadges';
 
@@ -32,9 +33,7 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
   const groupSubmissions = submissions.filter(
     ({ groupName }) => group === null || groupName === group
   );
-  const ungraded = groupSubmissions.filter(
-    ({ gradingStatus }) => gradingStatus !== GradingStatuses.graded
-  );
+  const ungraded = groupSubmissions.filter(isSubmissionUngraded);
   const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))].reduce(
     (acc: AssessmentSummary[], assessmentId) => {
       const assessment = assessments.find(assessment => assessment.id === assessmentId);
