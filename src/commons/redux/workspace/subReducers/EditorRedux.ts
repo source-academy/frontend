@@ -1,6 +1,8 @@
-import { createAction, createReducer } from "@reduxjs/toolkit"
+import { createReducer } from "@reduxjs/toolkit"
 import { HighlightedLines, Position } from "src/commons/editor/EditorTypes"
 import { EditorTabState } from "src/commons/workspace/WorkspaceTypes"
+
+import { createActions } from "../../utils"
 
 export type EditorState = {
   readonly activeEditorTabIndex: number | null
@@ -19,23 +21,27 @@ export const getDefaultEditorState = (defaultTabs: EditorTabState[] = []): Edito
   isEditorReadonly: false
 })
 
-export const editorActions = {
-  addEditorTab: createAction('editorBase/addEditorTab', (filePath: string, editorValue: string) => ({ payload: { filePath, editorValue }})),
-  moveCursor: createAction('editorBase/moveCursor', (editorTabIndex: number, newCursorPosition: Position) => ({ payload: { editorTabIndex, newCursorPosition }})),
-  removeEditorTab: createAction('editorBase/removeEditorTab', (editorTabIndex: number) => ({ payload: editorTabIndex })),
-  setEditorSessionId: createAction('editorBase/setEditorSessionId', (payload: string) => ({ payload })),
-  setIsEditorAutorun: createAction('editorBase/setIsEditorAutorun', (payload: boolean) => ({ payload })),
-  setIsEditorReadonly: createAction('editorBase/setIsEditorReadonly', (payload: boolean) => ({ payload })),
-  shiftEditorTab: createAction('editorAction/shiftEditorTab', (previousIndex: number, newIndex: number) => ({ payload: { previousIndex, newIndex }})),
-  updateActiveEditorTab: createAction('editorBase/updateActiveEditorTab', (payload: Partial<EditorTabState> | undefined) => ({ payload })),
-  updateActiveEditorTabIndex: createAction('editorBase/updateActiveEditorTabIndex', (payload: number | null) => ({ payload })),
-  updateEditorBreakpoints: createAction('editorBase/updateEditorBreakpoints', (editorTabIndex: number, newBreakpoints: string[]) => ({ payload: { editorTabIndex, newBreakpoints }})),
-  updateEditorHighlightedLines: createAction('editorBase/updateEditorHighlightedLines', (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => ({ payload: { editorTabIndex, newHighlightedLines }})),
-  updateEditorHighlightedLinesAgenda: createAction('editorBase/updateEditorHighlightedLinesAgenda', (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => ({ payload: { editorTabIndex, newHighlightedLines }})),
-  updateEditorValue: createAction('editorBase/updateEditorValue', (editorTabIndex: number, newEditorValue: string) => ({ payload: { editorTabIndex, newEditorValue }})),
-} as const
+export const editorActions = createActions('editorBase', {
+  addEditorTab: (filePath: string, editorValue: string) => ({ filePath, editorValue }),
+  moveCursor: (editorTabIndex: number, newCursorPosition: Position) => ({ editorTabIndex, newCursorPosition }),
+  removeEditorTab: (editorTabIndex: number) => editorTabIndex,
+  removeEditorTabForFile: (removedFilePath: string) => removedFilePath,
+  removeEditorTabsForDirectory: (removedDirectoryPath: string) => removedDirectoryPath,
+  renameEditorTabForFile: (oldPath: string, newPath: string) => ({ oldPath, newPath }),
+  renameEditorTabsForDirectory: (oldPath: string, newPath: string) => ({ oldPath, newPath }),
+  setEditorSessionId: (editorSessionId: string) => editorSessionId,
+  setIsEditorAutorun: (isEditorAutorun: boolean) => isEditorAutorun,
+  setIsEditorReadonly: (isEditorReadonly: boolean) => isEditorReadonly,
+  shiftEditorTab: (previousIndex: number, newIndex: number) => ({ previousIndex, newIndex }),
+  updateActiveEditorTab: (editorOptions: Partial<EditorTabState> | undefined) => editorOptions,
+  updateActiveEditorTabIndex: (activeEditorTabIndex: number | null) => activeEditorTabIndex,
+  updateEditorBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => ({ editorTabIndex, newBreakpoints }),
+  updateEditorHighlightedLines: (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => ({ editorTabIndex, newHighlightedLines }),
+  updateEditorHighlightedLinesAgenda: (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => ({ editorTabIndex, newHighlightedLines }),
+  updateEditorValue: (editorTabIndex: number, newEditorValue: string) => ({ editorTabIndex, newEditorValue }),
+})
 
-export const getEditorReducer = (defaultTabs: EditorTabState[] = [] ) => createReducer(
+export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => createReducer(
   getDefaultEditorState(defaultTabs),
   builder => {
     builder.addCase(editorActions.addEditorTab, (state, { payload }) => {
@@ -92,6 +98,82 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = [] ) => createR
 
       state.activeEditorTabIndex = newActiveEditorTabIndex
       state.editorTabs.splice(editorTabIndex, 1)
+    })
+
+    builder.addCase(editorActions.removeEditorTabForFile, (state, { payload: removedFilePath }) => {
+      const editorTabs = state.editorTabs;
+      const editorTabIndexToRemove = editorTabs.findIndex(
+        (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
+      );
+      if (editorTabIndexToRemove === -1) return
+
+      const newEditorTabs = editorTabs.filter(
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
+      );
+
+      const activeEditorTabIndex = state.activeEditorTabIndex;
+      state.activeEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+        activeEditorTabIndex,
+        editorTabIndexToRemove,
+        newEditorTabs.length
+      );
+      state.editorTabs = newEditorTabs
+    })
+
+    builder.addCase(editorActions.removeEditorTabsForDirectory, (state, { payload: removedDirectoryPath }) => {
+      const editorTabs = state.editorTabs;
+      const editorTabIndicesToRemove = editorTabs
+        .map((editorTab: EditorTabState, index: number) => {
+          if (editorTab.filePath?.startsWith(removedDirectoryPath)) {
+            return index;
+          }
+          return null;
+        })
+        .filter((index: number | null): index is number => index !== null);
+      if (editorTabIndicesToRemove.length === 0) return
+
+      let newActiveEditorTabIndex = state.activeEditorTabIndex;
+      const newEditorTabs = [...editorTabs];
+      for (let i = editorTabIndicesToRemove.length - 1; i >= 0; i--) {
+        const editorTabIndexToRemove = editorTabIndicesToRemove[i];
+        newEditorTabs.splice(editorTabIndexToRemove, 1);
+        newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
+          newActiveEditorTabIndex,
+          editorTabIndexToRemove,
+          newEditorTabs.length
+        );
+      }
+
+      state.activeEditorTabIndex = newActiveEditorTabIndex
+      state.editorTabs = newEditorTabs
+    })
+
+    builder.addCase(editorActions.renameEditorTabForFile, (state, { payload: { oldPath, newPath } }) => {
+      const editorTabs = state.editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
+        editorTab.filePath === oldPath
+          ? {
+              ...editorTab,
+              filePath: newPath
+            }
+          : editorTab
+      );
+
+      state.editorTabs = newEditorTabs
+    })
+
+    builder.addCase(editorActions.renameEditorTabsForDirectory, (state, { payload: { oldPath, newPath }}) => {
+      const editorTabs = state.editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
+        editorTab.filePath?.startsWith(oldPath)
+          ? {
+              ...editorTab,
+              filePath: editorTab.filePath?.replace(oldPath, newPath)
+            }
+          : editorTab
+      );
+
+      state.editorTabs = newEditorTabs
     })
 
     builder.addCase(editorActions.setEditorSessionId, (state, { payload }) => {

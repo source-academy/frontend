@@ -7,7 +7,6 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { ReplInput } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
@@ -21,7 +20,7 @@ type StateProps = {
   usingSubst?: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
-  externalLibrary: ExternalLibraryName;
+  // externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
 };
 

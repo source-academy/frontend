@@ -1,10 +1,13 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
+import { Context } from 'js-slang'
 
-import { getDynamicTabs, getTabId } from '../sideContent/SideContentHelper'
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes'
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes'
+import { getDynamicTabs, getTabId } from '../../../sideContent/SideContentHelper'
+import { SideContentTab, SideContentType } from '../../../sideContent/SideContentTypes'
+import { DebuggerContext, WorkspaceLocation } from '../../../workspace/WorkspaceTypes'
 
-export type SideContentLocation = Exclude<WorkspaceLocation, 'stories'> | `stories.${string}`
+export type NonStoryWorkspaceLocation = Exclude<WorkspaceLocation, 'stories'>
+export type StoryWorkspaceLocation = `stories.${string}`
+export type SideContentLocation = NonStoryWorkspaceLocation | StoryWorkspaceLocation
 
 export type SideContentState = {
   dynamicTabs: SideContentTab[]
@@ -22,7 +25,17 @@ export const sideContentActions = {
   beginAlertSideContent: createAction('sideContent/beginAlertSideContent', (newId: SideContentType) => ({ payload: newId })),
   changeSideContentHeight: createAction('sideContent/changeSideContentHeight', (payload: number) => ({ payload })),
   endAlertSideContentHeight: createAction('sideContent/endAlertSideContentHeight', (payload: SideContentType) => ({ payload })),
-  notifyProgramEvaluated: createAction('sideContent/notifyProgramEvaluated', (payload: DebuggerContext) => ({ payload })),
+  notifyProgramEvaluated: createAction('sideContent/notifyProgramEvaluated', (
+    result: any, 
+    lastDebuggerResult: any,
+    code: string,
+    context: Context,
+  ): { payload: DebuggerContext } => ({ payload: {
+    result,
+    lastDebuggerResult,
+    code,
+    context
+  } })),
   visitSideContent: createAction('sideContent/visitSideContent', (payload: SideContentType) => ({ payload })),
 }
 

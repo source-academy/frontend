@@ -2,8 +2,8 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import { SourceError, Value } from "js-slang/dist/types";
 import { stringify } from "js-slang/dist/utils/stringify";
 
-import { CodeOutput, InterpreterOutput } from "../application/ApplicationTypes"
-import Constants from "../utils/Constants";
+import { CodeOutput, InterpreterOutput } from "../../../application/ApplicationTypes"
+import Constants from "../../../utils/Constants";
 
 export type ReplState = {
   readonly output: InterpreterOutput[]
@@ -34,7 +34,10 @@ export const replActions = {
   evalInterpreterError: createAction('repl/evalInterpreterError', (payload: SourceError[]) => ({ payload })),
   evalInterpreterSuccess: createAction('repl/evalInterpreterSuccess', (payload: Value) => ({ payload })),
   handleConsoleLog: createAction('repl/handleConsoleLog', (payload: string[]) => ({ payload })),
-  sendReplInputToOutput: createAction('repl/sendReplInputToOutput', (payload: CodeOutput) => ({ payload })),
+  sendReplInputToOutput: createAction('repl/sendReplInputToOutput', (output: string): { payload: CodeOutput } => ({ payload: {
+    type: 'code',
+    value: output
+  }})),
   updateReplValue: createAction('repl/updateReplValue', (payload: string) => ({ payload })),
 } as const
 

@@ -1,19 +1,18 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-
 import { Chapter } from "js-slang/dist/types";
 import { Input, PlaybackData, RecordingStatus } from "src/features/sourceRecorder/SourceRecorderTypes";
 
-import { ExternalLibraryName } from "../application/types/ExternalTypes";
-import { createWorkspaceSlice, getDefaultWorkspaceState,WorkspaceState } from "./workspace/WorkspaceRedux";
+import { ExternalLibraryName } from "../../application/types/ExternalTypes";
+import { createWorkspaceSlice, getDefaultWorkspaceState,WorkspaceState } from "./WorkspaceRedux";
 
-export type SourcereelState = {
+export type SourcereelWorkspaceState = {
   readonly playbackData: PlaybackData;
   readonly recordingStatus: RecordingStatus;
   readonly timeElapsedBeforePause: number;
   readonly timeResumed: number;
 } & WorkspaceState
 
-export const defaultSourcereel: SourcereelState = {
+export const defaultSourcereel: SourcereelWorkspaceState = {
   ...getDefaultWorkspaceState(),
   playbackData: {
     init: {
@@ -51,6 +50,7 @@ export const { actions: sourcereelActions, reducer: sourcereelReducer } = create
     state.timeResumed = 0
   },
   timerResume: {
+    prepare: (timeNow: number, timeBefore: number) => ({ payload: { timeNow, timeBefore }}),
     reducer(state, { payload: { timeNow, timeBefore } }: PayloadAction<Record<'timeNow' | 'timeBefore', number>>) {
       state.recordingStatus = RecordingStatus.recording
       state.timeElapsedBeforePause = timeBefore >= 0 ? timeBefore : state.timeElapsedBeforePause

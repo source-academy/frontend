@@ -2,10 +2,10 @@ import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import { Chapter, Variant } from "js-slang/dist/types";
 import { StoryData, StoryListView } from "src/features/stories/StoriesTypes";
 
-import { StoriesRole } from "../application/ApplicationTypes";
-import Constants from "../utils/Constants";
-import { createContext } from "../utils/JsSlangHelper";
-import { getDefaultPlaygroundState,PlaygroundWorkspaceState } from "./workspace/playground/PlaygroundBase";
+import { StoriesRole } from "../../application/ApplicationTypes";
+import Constants from "../../utils/Constants";
+import { createContext } from "../../utils/JsSlangHelper";
+import { getDefaultPlaygroundState,PlaygroundWorkspaceState } from "./playground/PlaygroundBase";
 
 export type StoriesAuthState = {
   readonly userId?: number;

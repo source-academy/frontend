@@ -1,9 +1,12 @@
+import { configureStore } from '@reduxjs/toolkit';
 import { throttle } from 'lodash';
-import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { defaultPlayground } from 'src/commons/redux/workspace/playground/PlaygroundRedux';
 
 import { defaultState } from '../commons/application/ApplicationTypes';
 import createRootReducer from '../commons/application/reducers/RootReducer';
+import { apiMiddleware } from '../commons/redux/BackendSlice';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
@@ -12,20 +15,19 @@ export const store = createStore();
 
 export function createStore() {
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = [sagaMiddleware];
-
-  const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        serialize: true,
-        maxAge: 300
-      }) || compose
-    : compose;
 
   const initialStore = loadStore(loadStoredState()) || defaultState;
 
-  const enhancers = composeEnhancers(applyMiddleware(...middleware));
+  const createdStore = configureStore({
+    reducer: createRootReducer(),
+    preloadedState: initialStore as any,
+    middleware: [
+      sagaMiddleware,
+      apiMiddleware,
+      // backendApi.middleware,
+    ],
+  });
 
-  const createdStore = _createStore(createRootReducer(), initialStore as any, enhancers);
   sagaMiddleware.run(MainSaga);
 
   createdStore.subscribe(
@@ -61,16 +63,17 @@ function loadStore(loadedStore: SavedState | undefined) {
           : defaultState.workspaces.playground.isFolderModeEnabled,
         activeEditorTabIndex: loadedStore.playgroundActiveEditorTabIndex
           ? loadedStore.playgroundActiveEditorTabIndex.value
-          : defaultState.workspaces.playground.activeEditorTabIndex,
+          : defaultPlayground.editorState.activeEditorTabIndex,
         editorTabs: loadedStore.playgroundEditorTabs
           ? loadedStore.playgroundEditorTabs
-          : defaultState.workspaces.playground.editorTabs,
+          : defaultPlayground.editorState.editorTabs,
         isEditorAutorun: loadedStore.playgroundIsEditorAutorun
           ? loadedStore.playgroundIsEditorAutorun
           : defaultState.workspaces.playground.isEditorAutorun,
-        externalLibrary: loadedStore.playgroundExternalLibrary
-          ? loadedStore.playgroundExternalLibrary
-          : defaultState.workspaces.playground.externalLibrary,
+        externalLibrary: ExternalLibraryName.NONE,
+        // externalLibrary: loadedStore.playgroundExternalLibrary
+        //   ? loadedStore.playgroundExternalLibrary
+        //   : defaultState.workspaces.playground.externalLibrary,
         context: {
           ...defaultState.workspaces.playground.context,
           chapter: loadedStore.playgroundSourceChapter

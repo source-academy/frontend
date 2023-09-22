@@ -26,7 +26,7 @@ type StateProps = {
   replValue: string;
   sourceChapter: Chapter;
   sourceVariant: Variant;
-  externalLibrary: ExternalLibraryName;
+  // externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
 };
 
@@ -86,7 +86,7 @@ export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
   });
 
   // see the comment above this same call in Editor.tsx
-  selectMode(props.sourceChapter, props.sourceVariant, props.externalLibrary);
+  selectMode(props.sourceChapter, props.sourceVariant, ExternalLibraryName.NONE);
 
   const replButtons = () => props.replButtons;
 
@@ -94,7 +94,7 @@ export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
     <>
       <AceEditor
         className="repl-react-ace react-ace"
-        mode={getModeString(props.sourceChapter, props.sourceVariant, props.externalLibrary)}
+        mode={getModeString(props.sourceChapter, props.sourceVariant, ExternalLibraryName.NONE)}
         theme="source"
         height="1px"
         width="100%"

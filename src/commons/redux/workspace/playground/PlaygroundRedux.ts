@@ -3,18 +3,18 @@ import { FSModule } from "browserfs/dist/node/core/FS";
 import { Chapter, Variant } from "js-slang/dist/types";
 import { compressToEncodedURIComponent } from "lz-string";
 import * as qs from 'query-string';
-import { SagaIterator } from "redux-saga";
 import { call, delay, put, race, select } from "redux-saga/effects";
 import { defaultEditorValue, defaultLanguageConfig, getDefaultFilePath, OverallState, SALanguage } from "src/commons/application/ApplicationTypes";
 import { ExternalLibraryName } from "src/commons/application/types/ExternalTypes";
 import { retrieveFilesInWorkspaceAsRecord } from "src/commons/fileSystem/utils";
-import { safeTakeEvery as takeEvery } from "src/commons/sagas/SafeEffects";
 import Constants from "src/commons/utils/Constants";
 import { showSuccessMessage, showWarningMessage } from "src/commons/utils/notifications/NotificationsHelper";
 import { EditorTabState } from "src/commons/workspace/WorkspaceTypes";
 import { GitHubSaveInfo } from "src/features/github/GitHubTypes";
 import { PersistenceFile } from "src/features/persistence/PersistenceTypes";
 
+import { combineSagaHandlers } from "../../utils";
+import { EditorState } from "../subReducers/EditorRedux";
 import { createPlaygroundSlice, getDefaultPlaygroundState, PlaygroundWorkspaceState } from "./PlaygroundBase";
 
 export type PlaygroundState = PlaygroundWorkspaceState & {
@@ -33,7 +33,8 @@ export const defaultPlayground: PlaygroundState = {
     value: defaultEditorValue
   }]),
   githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig
+  languageConfig: defaultLanguageConfig,
+  sharedbConnected: false
 }
 
 const { actions: playgroundWorkspaceActions, reducer } = createPlaygroundSlice('playground', defaultPlayground, {
@@ -56,16 +57,19 @@ const { actions: playgroundWorkspaceActions, reducer } = createPlaygroundSlice('
 
 export { reducer as playgroundReducer }
 
-export const playgroundActions = {
-  ...playgroundWorkspaceActions,
+const playgroundSagaActions = {
   generateLzString: createAction('playground/generateLzString'),
   shortenUrl: createAction('playground/shortenURL', (url: string) => ({ payload: url }))
 }
 
-export function* playgroundSaga(): SagaIterator {
-  yield takeEvery(playgroundActions.generateLzString, updateQueryString)
+export const playgroundActions = {
+  ...playgroundWorkspaceActions,
+  ...playgroundSagaActions
+}
 
-  yield takeEvery(playgroundActions.shortenUrl, function* ({ payload: keyword }): SagaIterator {
+export const PlaygroundSaga = combineSagaHandlers(playgroundSagaActions, {
+  generateLzString: updateQueryString,
+  shortenUrl: function* ({ payload: keyword }) {
     const queryString = yield select((state: OverallState) => state.playground.queryString);
     const errorMsg = 'ERROR';
 
@@ -96,8 +100,8 @@ export function* playgroundSaga(): SagaIterator {
       yield call(showSuccessMessage, resp.message);
     }
     yield put(playgroundWorkspaceActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
-  })
-}
+  }
+})
 
 function* updateQueryString() {
   const isFolderModeEnabled: boolean = yield select(
@@ -111,24 +115,24 @@ function* updateQueryString() {
     'playground',
     fileSystem
   );
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
+
+  const { editorTabs, activeEditorTabIndex }: EditorState = yield select(
+    (state: OverallState) => state.workspaces.playground.editorState
+  )
+
   const editorTabFilePaths = editorTabs
     .map((editorTab: EditorTabState) => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
+
   const chapter: Chapter = yield select(
     (state: OverallState) => state.workspaces.playground.context.chapter
   );
   const variant: Variant = yield select(
     (state: OverallState) => state.workspaces.playground.context.variant
   );
-  const external: ExternalLibraryName = yield select(
-    (state: OverallState) => state.workspaces.playground.externalLibrary
-  );
+  // const external: ExternalLibraryName = yield select(
+  //   (state: OverallState) => state.workspaces.playground.externalLibrary
+  // );
   const execTime: number = yield select(
     (state: OverallState) => state.workspaces.playground.execTime
   );
@@ -139,7 +143,7 @@ function* updateQueryString() {
     tabIdx: activeEditorTabIndex,
     chap: chapter,
     variant,
-    ext: external,
+    ext: ExternalLibraryName.NONE,
     exec: execTime
   });
   yield put(playgroundWorkspaceActions.changeQueryString(newQueryString));

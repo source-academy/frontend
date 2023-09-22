@@ -1,7 +1,8 @@
-import { ActionReducerMapBuilder, createAction, createReducer, SliceCaseReducers, ValidateSliceCaseReducers  } from "@reduxjs/toolkit"
+import { ActionReducerMapBuilder, createReducer, SliceCaseReducers, ValidateSliceCaseReducers  } from "@reduxjs/toolkit"
 import { EditorTabState } from "src/commons/workspace/WorkspaceTypes"
 
-import { createWorkspaceSlice, getDefaultWorkspaceState,WorkspaceState } from "../WorkspaceRedux"
+import { createActions } from "../../utils"
+import { createWorkspaceSlice, getDefaultWorkspaceState, WorkspaceState } from "../WorkspaceRedux"
 
 type PlaygroundAttr = {
   readonly breakpointSteps: number[]
@@ -12,6 +13,7 @@ type PlaygroundAttr = {
   readonly usingEnv: boolean
 
   readonly usingSubst: boolean
+  readonly sharedbConnected: boolean
 }
 
 export type PlaygroundWorkspaceState = PlaygroundAttr & WorkspaceState
@@ -25,41 +27,21 @@ export const getDefaultPlaygroundState = (initialTabs: EditorTabState[] = []): P
   updateEnv: true,
   usingEnv: false,
   usingSubst: false,
+  sharedbConnected: false
 })
 
-const playgroundBaseActions = {
-  changeStepLimit: createAction('playgroundBase/changeStepLimit', (payload: number) => ({ payload })),
-  toggleUpdateEnv: createAction('playgroundBase/toggleUpdateEnv', (payload: boolean) => ({ payload })),
-  toggleUsingEnv: createAction('playgroundBase/toggleUsingEnv', (payload: boolean) => ({ payload })),
-  toggleUsingSubst: createAction('playgroundBase/toggleUsingSubst', (payload: boolean) => ({ payload })),
-  updateBreakpointSteps: createAction('playgroundBase/updateBreakpointSteps', (payload: number[]) => ({ payload })),
-  updateEnvSteps: createAction('playgroundBase/updateEnvSteps', (payload: number) => ({ payload })),
-  updateEnvStepsTotal: createAction('playgroundBase/updateEnvStepsTotal', (payload: number) => ({ payload }))
-} as const
+export type PlaygroundWorkspaces = 'playground' | 'sicp' | `stories.${string}`
 
-// const basePlaygroundReducers = {
-//   changeStepLimit(state: Draft<PlaygroundWorkspaceState>, { payload }: PayloadAction<number>) {
-//     state.stepLimit = payload
-//   },
-//   toggleUpdateEnv(state: Draft<PlaygroundWorkspaceState>, { payload }: PayloadAction<boolean>) {
-//     state.updateEnv = payload
-//   },
-//   toggleUsingEnv(state: Draft<PlaygroundWorkspaceState>, { payload }: PayloadAction<boolean>) {
-//     state.usingEnv = payload
-//   },
-//   toggleUsingSubst(state: Draft<PlaygroundWorkspaceState>, { payload }: PayloadAction<boolean>) {
-//     state.usingSubst = payload
-//   },
-//   updateBreakpointSteps(state: Draft<PlaygroundWorkspaceState>, { payload }: PayloadAction<number[]>) {
-//     state.breakpointSteps = payload
-//   },
-//   updateEnvSteps(state: Draft<PlaygroundWorkspaceState>, { payload }: PayloadAction<number>) {
-//     state.envSteps = payload
-//   },
-//   updateEnvStepsTotal(state: Draft<PlaygroundWorkspaceState>, { payload }: PayloadAction<number>) {
-//     state.envStepsTotal = payload
-//   }
-// } as const
+export const playgroundBaseActions = createActions('playgroundBase', {
+  changeStepLimit: (stepLimit: number) => stepLimit,
+  toggleUpdateEnv: (toggleUpdateEnv: boolean) =>  toggleUpdateEnv,
+  toggleUsingEnv: (toggleUsingEnv: boolean) =>  toggleUsingEnv,
+  toggleUsingSubst: (toggleUsingSubst: boolean) =>  toggleUsingSubst,
+  updateBreakpointSteps: (breakpointSteps: number[]) => breakpointSteps,
+  updateEnvSteps: (envSteps: number) => envSteps,
+  updateEnvStepsTotal: (envStepsTotal: number) =>  envStepsTotal,
+  updateSharedbConnected: (newValue: boolean) => newValue,
+})
 
 const reducerBuilder = (builder: ActionReducerMapBuilder<PlaygroundWorkspaceState>) => {
   builder.addCase(playgroundBaseActions.changeStepLimit, (state, { payload }) => {
@@ -87,6 +69,10 @@ const reducerBuilder = (builder: ActionReducerMapBuilder<PlaygroundWorkspaceStat
   })
   builder.addCase(playgroundBaseActions.updateEnvStepsTotal, (state, { payload }) => {
     state.envStepsTotal = payload
+  })
+
+  builder.addCase(playgroundBaseActions.updateSharedbConnected, (state, { payload }) => {
+    state.sharedbConnected = payload
   })
 }
 
@@ -116,23 +102,3 @@ export const createPlaygroundSlice = <
     if (extraReducers) extraReducers(builder)
   }
 )
-
-// export const createPlaygroundSlice = <
-//   TState extends PlaygroundWorkspaceState,
-//   TReducers extends SliceCaseReducers<TState>,
-//   TName extends string = string
-// >(
-//   name: TName,
-//   initialState: TState,
-//   reducers: ValidateSliceCaseReducers<TState, TReducers>,  
-//   extraReducers?: (builder: ActionReducerMapBuilder<TState>) => void,
-// ) => createWorkspaceSlice<TState, TReducers, TName>(
-//   name,
-//   initialState,
-//   reducers,
-//   builder => {
-
-
-//     if (extraReducers) extraReducers(builder)
-//   }
-// )
