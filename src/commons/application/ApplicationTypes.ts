@@ -5,17 +5,17 @@ import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+// import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
+import { defaultWorkspaceManager as newDefaultWorkspaceManager, WorkspaceManagerState } from '../redux/workspace/AllWorkspacesRedux';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
   DebuggerContext,
   WorkspaceLocation,
-  WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
 import { RouterState } from './types/CommonsTypes';
@@ -399,103 +399,103 @@ const defaultFileName = 'program.js';
 export const getDefaultFilePath = (workspaceLocation: WorkspaceLocation) =>
   `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${defaultFileName}`;
 
-export const defaultWorkspaceManager: WorkspaceManagerState = {
-  assessment: {
-    ...createDefaultWorkspace('assessment'),
-    currentAssessment: undefined,
-    currentQuestion: undefined,
-    hasUnsavedChanges: false
-  },
-  grading: {
-    ...createDefaultWorkspace('grading'),
-    submissionsTableFilters: {
-      columnFilters: [],
-      globalFilter: null
-    },
-    currentSubmission: undefined,
-    currentQuestion: undefined,
-    hasUnsavedChanges: false
-  },
-  playground: {
-    ...createDefaultWorkspace('playground'),
-    usingSubst: false,
-    usingEnv: false,
-    updateEnv: true,
-    envSteps: -1,
-    envStepsTotal: 0,
-    breakpointSteps: [],
-    activeEditorTabIndex: 0,
-    editorTabs: [
-      {
-        filePath: getDefaultFilePath('playground'),
-        value: defaultEditorValue,
-        highlightedLines: [],
-        breakpoints: []
-      }
-    ]
-  },
-  sourcecast: {
-    ...createDefaultWorkspace('sourcecast'),
-    audioUrl: '',
-    codeDeltasToApply: null,
-    currentPlayerTime: 0,
-    description: null,
-    inputToApply: null,
-    playbackData: {
-      init: {
-        editorValue: '',
-        chapter: Chapter.SOURCE_1,
-        externalLibrary: ExternalLibraryName.NONE
-      },
-      inputs: []
-    },
-    playbackDuration: 0,
-    playbackStatus: PlaybackStatus.paused,
-    sourcecastIndex: null,
-    title: null,
-    uid: null
-  },
-  sourcereel: {
-    ...createDefaultWorkspace('sourcereel'),
-    playbackData: {
-      init: {
-        editorValue: '',
-        chapter: Chapter.SOURCE_1,
-        externalLibrary: ExternalLibraryName.NONE
-      },
-      inputs: []
-    },
-    recordingStatus: RecordingStatus.notStarted,
-    timeElapsedBeforePause: 0,
-    timeResumed: 0
-  },
-  sicp: {
-    ...createDefaultWorkspace('sicp'),
-    usingSubst: false,
-    usingEnv: false,
-    updateEnv: true,
-    envSteps: -1,
-    envStepsTotal: 0,
-    breakpointSteps: [],
-    activeEditorTabIndex: 0,
-    editorTabs: [
-      {
-        filePath: getDefaultFilePath('sicp'),
-        value: defaultEditorValue,
-        highlightedLines: [],
-        breakpoints: []
-      }
-    ]
-  },
-  githubAssessment: {
-    ...createDefaultWorkspace('githubAssessment'),
-    hasUnsavedChanges: false
-  },
-  stories: {
-    ...createDefaultWorkspace('stories')
-    // TODO: Perhaps we can add default values?
-  }
-};
+// export const defaultWorkspaceManager: WorkspaceManagerState2 = {
+//   assessment: {
+//     ...createDefaultWorkspace('assessment'),
+//     currentAssessment: undefined,
+//     currentQuestion: undefined,
+//     hasUnsavedChanges: false
+//   },
+//   grading: {
+//     ...createDefaultWorkspace('grading'),
+//     submissionsTableFilters: {
+//       columnFilters: [],
+//       globalFilter: null
+//     },
+//     currentSubmission: undefined,
+//     currentQuestion: undefined,
+//     hasUnsavedChanges: false
+//   },
+//   playground: {
+//     ...createDefaultWorkspace('playground'),
+//     usingSubst: false,
+//     usingEnv: false,
+//     updateEnv: true,
+//     envSteps: -1,
+//     envStepsTotal: 0,
+//     breakpointSteps: [],
+//     activeEditorTabIndex: 0,
+//     editorTabs: [
+//       {
+//         filePath: getDefaultFilePath('playground'),
+//         value: defaultEditorValue,
+//         highlightedLines: [],
+//         breakpoints: []
+//       }
+//     ]
+//   },
+//   sourcecast: {
+//     ...createDefaultWorkspace('sourcecast'),
+//     audioUrl: '',
+//     codeDeltasToApply: null,
+//     currentPlayerTime: 0,
+//     description: null,
+//     inputToApply: null,
+//     playbackData: {
+//       init: {
+//         editorValue: '',
+//         chapter: Chapter.SOURCE_1,
+//         externalLibrary: ExternalLibraryName.NONE
+//       },
+//       inputs: []
+//     },
+//     playbackDuration: 0,
+//     playbackStatus: PlaybackStatus.paused,
+//     sourcecastIndex: null,
+//     title: null,
+//     uid: null
+//   },
+//   sourcereel: {
+//     ...createDefaultWorkspace('sourcereel'),
+//     playbackData: {
+//       init: {
+//         editorValue: '',
+//         chapter: Chapter.SOURCE_1,
+//         externalLibrary: ExternalLibraryName.NONE
+//       },
+//       inputs: []
+//     },
+//     recordingStatus: RecordingStatus.notStarted,
+//     timeElapsedBeforePause: 0,
+//     timeResumed: 0
+//   },
+//   sicp: {
+//     ...createDefaultWorkspace('sicp'),
+//     usingSubst: false,
+//     usingEnv: false,
+//     updateEnv: true,
+//     envSteps: -1,
+//     envStepsTotal: 0,
+//     breakpointSteps: [],
+//     activeEditorTabIndex: 0,
+//     editorTabs: [
+//       {
+//         filePath: getDefaultFilePath('sicp'),
+//         value: defaultEditorValue,
+//         highlightedLines: [],
+//         breakpoints: []
+//       }
+//     ]
+//   },
+//   githubAssessment: {
+//     ...createDefaultWorkspace('githubAssessment'),
+//     hasUnsavedChanges: false
+//   },
+//   stories: {
+//     ...createDefaultWorkspace('stories')
+//     // TODO: Perhaps we can add default values?
+//   }
+// };
 
 export const defaultSession: SessionState = {
   courses: [],
@@ -555,6 +555,6 @@ export const defaultState: OverallState = {
   playground: defaultPlayground,
   session: defaultSession,
   stories: defaultStories,
-  workspaces: defaultWorkspaceManager,
+  workspaces: newDefaultWorkspaceManager,
   fileSystem: defaultFileSystem
 };

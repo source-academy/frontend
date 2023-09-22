@@ -27,7 +27,7 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
-import { defaultWorkspaceManager } from '../application/ApplicationTypes';
+// import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
   AutogradingResult,
@@ -58,6 +58,7 @@ import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
+import { defaultAssessment } from '../redux/workspace/assessment/AssessmentRedux';
 import { useEditorState, useRepl, useSideContent, useWorkspace } from '../redux/workspace/Hooks';
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
@@ -373,7 +374,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     });
     handleResetWorkspace(resetWorkspaceOptions);
     handleChangeExecTime(
-      question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime
+      question.library.execTimeMs ?? defaultAssessment.execTime
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
