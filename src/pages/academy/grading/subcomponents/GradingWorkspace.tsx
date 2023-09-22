@@ -2,10 +2,11 @@ import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
+import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
 import SideContentToneMatrix from 'src/commons/sideContent/content/SideContentToneMatrix';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -74,23 +75,22 @@ const unansweredPrependValue: string = `// This answer does not have significant
 
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
+  const { selectedTab, setSelectedTab, height: sideContentHeight } = useSideContent(workspaceLocation, SideContentType.grading)
+  const { editorTabs, activeEditorTabIndex } = useEditorState(workspaceLocation)
+  const { replValue } = useRepl(workspaceLocation)
+  // const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
   const {
     autogradingResults,
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    editorTabs,
     editorTestcases,
     isRunning,
     output,
-    replValue,
-    sideContentHeight,
     currentSubmission: storedSubmissionId,
     currentQuestion: storedQuestionId
-  } = useTypedSelector(state => state.workspaces[workspaceLocation]);
+  } = useWorkspace(workspaceLocation)
 
   const dispatch = useDispatch();
   const {
@@ -495,7 +495,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       replValue: replValue,
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
-      externalLibrary: question?.library?.external?.name || 'NONE',
+      // externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons()
     }
   };

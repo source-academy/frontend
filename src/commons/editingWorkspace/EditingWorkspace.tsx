@@ -46,6 +46,7 @@ import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspace
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
+import { useEditorState, useRepl, useSideContent } from '../redux/workspace/Hooks';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
@@ -98,14 +99,17 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
   const navigate = useNavigate();
 
+  const { activeEditorTabIndex, editorTabs } = useEditorState(workspaceLocation)
+  const { replValue } = useRepl(workspaceLocation)
+  const { height: sideContentHeight } = useSideContent(
+    workspaceLocation,
+    SideContentType.introduction
+  )
+
   const {
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    editorTabs,
     isRunning,
     output,
-    replValue,
-    sideContentHeight,
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -710,7 +714,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       replValue: replValue,
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: Variant.DEFAULT,
-      externalLibrary: question?.library?.external?.name || 'NONE',
+      // externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons()
     }
   };

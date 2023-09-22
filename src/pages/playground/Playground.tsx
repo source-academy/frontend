@@ -8,7 +8,7 @@ import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { useDispatch, useStore } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { AnyAction, Dispatch } from 'redux';
 import {
@@ -26,6 +26,7 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -87,7 +88,6 @@ import {
   getDefaultFilePath,
   getLanguageConfig,
   isSourceLanguage,
-  OverallState,
   ResultOutput,
   SALanguage
 } from '../../commons/application/ApplicationTypes';
@@ -240,29 +240,34 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
   const location = useLocation();
   const navigate = useNavigate();
-  const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
+  const {
+    activeEditorTabIndex,
+    editorSessionId,
+    editorTabs,
+  } = useEditorState(workspaceLocation)
+
+  const {
+    replValue
+  } = useRepl(workspaceLocation)
+
   // Selectors and handlers migrated over from deprecated withRouter implementation
   const {
-    editorTabs,
-    editorSessionId,
     execTime,
     stepLimit,
     isEditorAutorun,
     isRunning,
     isDebugging,
     output,
-    replValue,
-    sideContentHeight,
     sharedbConnected,
     usingSubst,
     usingEnv,
     isFolderModeEnabled,
-    activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
-  } = useTypedSelector(state => state.workspaces[workspaceLocation]);
+  } = useWorkspace(workspaceLocation)
+
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
   const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
     state => state.playground
@@ -311,9 +316,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const [lastEdit, setLastEdit] = useState(new Date());
   const [isGreen, setIsGreen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(
+  const {
+    selectedTab,
+    setSelectedTab,
+    height: sideContentHeight
+  } = useSideContent(workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
-  );
+  )
+
   const [hasBreakpoints, setHasBreakpoints] = useState(false);
   const [sessionId, setSessionId] = useState(() =>
     initSession('playground', {
@@ -332,9 +342,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
-  const externalLibraryName = useTypedSelector(
-    state => state.workspaces.playground.externalLibrary
-  );
+  // const externalLibraryName = useTypedSelector(
+  //   state => state.workspaces.playground.externalLibrary
+  // );
 
   useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
@@ -394,7 +404,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const handlers = useMemo(
     () => ({
@@ -671,8 +681,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const getEditorValue = useCallback(
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
-    [store, workspaceLocation]
+    () => editorTabs[activeEditorTabIndex].value,
+    [editorTabs, activeEditorTabIndex]
   );
 
   const sessionButtons = useMemo(
@@ -930,7 +940,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: languageConfig.chapter,
-    externalLibraryName,
+    // externalLibraryName,
     sourceVariant: languageConfig.variant,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints

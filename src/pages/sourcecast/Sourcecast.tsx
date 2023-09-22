@@ -2,7 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import {
@@ -12,6 +12,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { Position } from 'src/commons/editor/EditorTypes';
+import { useEditorState, useRepl,useSideContent,useWorkspace } from 'src/commons/redux/workspace/Hooks';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
@@ -76,6 +77,13 @@ const Sourcecast: React.FC = () => {
   const { isMobileBreakpoint } = useResponsive();
   const params = useParams<{ sourcecastId: string }>();
 
+  const { 
+    editorTabs,
+    activeEditorTabIndex,
+  } = useEditorState(workspaceLocation)
+
+  const { replValue } = useRepl(workspaceLocation)
+
   // Handlers migrated over from deprecated withRouter implementation
   const {
     audioUrl,
@@ -83,7 +91,7 @@ const Sourcecast: React.FC = () => {
     codeDeltasToApply,
     title,
     description,
-    externalLibrary: externalLibraryName,
+    // externalLibrary: externalLibraryName,
     isEditorAutorun,
     isEditorReadonly,
     inputToApply,
@@ -93,15 +101,12 @@ const Sourcecast: React.FC = () => {
     playbackDuration,
     playbackData,
     playbackStatus,
-    replValue,
-    sideContentHeight,
     sourcecastIndex,
     context: { chapter: sourceChapter, variant: sourceVariant },
     uid,
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    editorTabs
-  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+  } = useWorkspace(workspaceLocation);
+
   const courseId = useTypedSelector(store => store.session.courseId);
 
   const dispatch = useDispatch();
@@ -151,7 +156,8 @@ const Sourcecast: React.FC = () => {
    * which contains the ag-grid table of available Sourcecasts. This is intentional
    * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
-  const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
+  const { selectedTab, setSelectedTab, height: sideContentHeight } = useSideContent(workspaceLocation, SideContentType.introduction)
+  // const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
 
   const handleQueryParam = () => {
     const newUid = params.sourcecastId;
@@ -211,7 +217,7 @@ const Sourcecast: React.FC = () => {
     ) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const autorunButtonHandlers = useMemo(() => {
     return {
@@ -355,7 +361,7 @@ const Sourcecast: React.FC = () => {
     handleReplValueChange: replHandlers.handleReplValueChange,
     sourceChapter: sourceChapter,
     sourceVariant: sourceVariant,
-    externalLibrary: externalLibraryName,
+    // externalLibrary: externalLibraryName,
     replButtons: [evalButton, clearButton]
   };
 
@@ -391,7 +397,7 @@ const Sourcecast: React.FC = () => {
       mobileControlBarProps: {
         editorButtons: [autorunButtons, chapterSelectButton]
       },
-      selectedTabId: selectedTab,
+      selectedTabId: selectedTab!,
       onChange: onChangeTabs,
       tabs: {
         beforeDynamicTabs: tabs,

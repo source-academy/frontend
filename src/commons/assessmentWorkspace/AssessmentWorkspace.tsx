@@ -58,6 +58,7 @@ import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
+import { useEditorState, useRepl, useSideContent, useWorkspace } from '../redux/workspace/Hooks';
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
@@ -110,29 +111,28 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
-  const [selectedTab, setSelectedTab] = useState(
+  const { selectedTab, setSelectedTab, height: sideContentHeight } = useSideContent(workspaceLocation,
     assessment?.questions[props.questionId].grader !== undefined
-      ? SideContentType.grading
-      : SideContentType.questionOverview
-  );
+    ? SideContentType.grading
+    : SideContentType.questionOverview
+  )
+  
+  const { activeEditorTabIndex, editorTabs } = useEditorState(workspaceLocation)
+  const { replValue } = useRepl(workspaceLocation)
 
   const navigate = useNavigate();
 
   const { courseId } = useTypedSelector(state => state.session);
   const {
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    editorTabs,
     autogradingResults,
     editorTestcases,
     hasUnsavedChanges,
     isRunning,
     output,
-    replValue,
-    sideContentHeight,
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
-  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+  } = useWorkspace(workspaceLocation)
 
   const dispatch = useDispatch();
   const {
@@ -233,7 +233,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, props, selectedTab, setSelectedTab]);
 
   /* ==================
      onChange handlers

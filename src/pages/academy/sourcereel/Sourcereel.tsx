@@ -2,7 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   beginDebuggerPause,
@@ -10,6 +10,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { useEditorState, useRepl, useSideContent } from 'src/commons/redux/workspace/Hooks';
 import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import {
   saveSourcecastData,
@@ -85,8 +86,6 @@ const workspaceLocation: WorkspaceLocation = 'sourcereel';
 const sourcecastLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcereel: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
-
   const courseId = useTypedSelector(state => state.session.courseId);
   const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(
     state => state.workspaces[workspaceLocation].context
@@ -100,11 +99,18 @@ const Sourcereel: React.FC = () => {
     playbackStatus,
     sourcecastIndex
   } = useTypedSelector(state => state.workspaces.sourcecast);
+
+  const { activeEditorTabIndex, editorTabs } = useEditorState(workspaceLocation)
+  const { selectedTab, setSelectedTab, height: sideContentHeight } = useSideContent(
+    workspaceLocation,
+    SideContentType.sourcereel
+  )
+
+  const { replValue } = useRepl(workspaceLocation)
+
   const {
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    editorTabs,
-    externalLibrary: externalLibraryName,
+    // externalLibrary: externalLibraryName,
     isDebugging,
     isEditorAutorun,
     isEditorReadonly,
@@ -112,8 +118,6 @@ const Sourcereel: React.FC = () => {
     output,
     playbackData,
     recordingStatus,
-    replValue,
-    sideContentHeight,
     timeElapsedBeforePause,
     timeResumed
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -178,7 +182,9 @@ const Sourcereel: React.FC = () => {
   const handleRecordInit = () => {
     const initData: PlaybackData['init'] = {
       chapter: sourceChapter,
-      externalLibrary: externalLibraryName,
+      // TODO investigate
+      externalLibrary: ExternalLibraryName.NONE,
+      // externalLibrary: externalLibraryName,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0].value
     };
@@ -379,7 +385,7 @@ const Sourcereel: React.FC = () => {
       handleReplValueChange: workspaceHandlers.handleReplValueChange,
       sourceChapter: sourceChapter,
       sourceVariant: sourceVariant,
-      externalLibrary: externalLibraryName,
+      // externalLibrary: externalLibraryName,
       replButtons: [evalButton, clearButton]
     },
     sideBarProps: {

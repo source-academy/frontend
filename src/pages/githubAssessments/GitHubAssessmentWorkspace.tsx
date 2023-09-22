@@ -15,7 +15,8 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
+import { useResponsive } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -174,20 +175,22 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const assessmentOverview = location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
   const { isMobileBreakpoint } = useResponsive();
+
+  const { activeEditorTabIndex, editorTabs } = useEditorState(workspaceLocation)
+  const { replValue } = useRepl(workspaceLocation)
+  const { selectedTab, setSelectedTab, height: sideContentHeight } = useSideContent(
+    workspaceLocation,
+    SideContentType.questionOverview
+  )
 
   const {
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    editorTabs,
     editorTestcases,
     hasUnsavedChanges,
     isRunning,
     output,
-    replValue,
-    sideContentHeight
-  } = useTypedSelector(state => state.workspaces.githubAssessment);
+  } = useWorkspace('githubAssessment');
 
   /**
    * Should be called to change the task number, rather than using setCurrentTaskNumber
