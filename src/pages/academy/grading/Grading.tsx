@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -135,7 +136,10 @@ const Grading: React.FC = () => {
               <Card hFull>
                 <GradingSummary
                   // Only include submissions from the same group in the summary
-                  submissions={submissions.filter(({ groupName }) => groupName === group)}
+                  submissions={submissions.filter(
+                    ({ groupName, gradingStatus }) =>
+                      groupName === group && gradingStatus !== GradingStatuses.excluded
+                  )}
                   assessments={assessments}
                 />
               </Card>

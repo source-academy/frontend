@@ -28,7 +28,6 @@ type AssessmentSummary = {
 };
 
 const GradingSummary: React.FC<GradingSummaryProps> = ({ submissions, assessments }) => {
-  submissions = submissions.filter(({ assessmentType }) => assessmentType !== 'Paths');
   const ungraded = submissions.filter(isSubmissionUngraded);
   const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))].reduce(
     (acc: AssessmentSummary[], assessmentId) => {
