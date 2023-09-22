@@ -388,7 +388,7 @@ export const notifyProgramEvaluated = (
 // Only playground and sicp supports subst visualizer
 export const toggleUsingSubst = (
   usingSubst: boolean,
-  workspaceLocation: Extract<WorkspaceLocation, 'playground' | 'sicp'> | WorkspaceLocation
+  workspaceLocation: Extract<WorkspaceLocation, 'playground' | 'sicp'>
 ) => action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
 
 export const addHtmlConsoleError = (
