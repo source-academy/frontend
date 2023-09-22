@@ -17,7 +17,6 @@ import { isSubmissionUngraded } from 'src/features/grading/GradingUtils';
 import { AssessmentTypeBadge } from './GradingBadges';
 
 type GradingSummaryProps = {
-  group: string | null;
   submissions: GradingOverview[];
   assessments: AssessmentOverview[];
 };
@@ -28,12 +27,9 @@ type AssessmentSummary = {
   title: string;
 };
 
-const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, assessments }) => {
+const GradingSummary: React.FC<GradingSummaryProps> = ({ submissions, assessments }) => {
   submissions = submissions.filter(({ assessmentType }) => assessmentType !== 'Paths');
-  const groupSubmissions = submissions.filter(
-    ({ groupName }) => group === null || groupName === group
-  );
-  const ungraded = groupSubmissions.filter(isSubmissionUngraded);
+  const ungraded = submissions.filter(isSubmissionUngraded);
   const ungradedAssessments = [...new Set(ungraded.map(({ assessmentId }) => assessmentId))].reduce(
     (acc: AssessmentSummary[], assessmentId) => {
       const assessment = assessments.find(assessment => assessment.id === assessmentId);
@@ -50,7 +46,7 @@ const GradingSummary: React.FC<GradingSummaryProps> = ({ group, submissions, ass
     []
   );
 
-  const numSubmissions = groupSubmissions.length;
+  const numSubmissions = submissions.length;
   const numGraded = numSubmissions - ungraded.length;
   const percentGraded = Math.round((numGraded / numSubmissions) * 100);
 

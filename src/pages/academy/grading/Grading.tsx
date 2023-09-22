@@ -133,7 +133,11 @@ const Grading: React.FC = () => {
 
             <Col numColSpanLg={2}>
               <Card hFull>
-                <GradingSummary group={group} submissions={submissions} assessments={assessments} />
+                <GradingSummary
+                  // Only include submissions from the same group in the summary
+                  submissions={submissions.filter(({ groupName }) => groupName === group)}
+                  assessments={assessments}
+                />
               </Card>
             </Col>
           </ColGrid>
