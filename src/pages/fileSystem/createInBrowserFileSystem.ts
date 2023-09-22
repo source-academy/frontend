@@ -7,6 +7,8 @@ import { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 import { writeFileRecursively } from '../../commons/fileSystem/utils';
 import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
+import { SideContentLocation } from 'src/commons/redux/workspace/subReducers/SideContentRedux';
+import { isNonStoryWorkspaceLocation } from 'src/commons/redux/workspace/WorkspaceRedux';
 
 /**
  * Maps workspaces to their file system base path.
@@ -23,6 +25,15 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   sourcereel: '',
   stories: '' // TODO: Investigate if stories workspace base path is needed
 };
+
+export const getWorkspaceBasePath = (location: SideContentLocation) => {
+  if (isNonStoryWorkspaceLocation(location)) {
+    return WORKSPACE_BASE_PATHS[location]
+  }
+
+  const [, storyEnv] = location.split('.')
+  return `${WORKSPACE_BASE_PATHS.stories}/${storyEnv}`
+}
 
 export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -59,7 +70,7 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
         const workspaceStates = store.getState().workspaces;
         const promises: Promise<void>[] = [];
         for (const [, workspaceState] of Object.entries(workspaceStates)) {
-          const editorTabs = workspaceState.editorTabs;
+          const editorTabs = workspaceState.editorState.editorTabs;
           promises.push(createFilesForEditorTabs(fileSystem, editorTabs));
         }
         Promise.all(promises)
