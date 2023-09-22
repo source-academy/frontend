@@ -573,33 +573,45 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       };
     case TOGGLE_USING_SUBST: {
       const { workspaceLocation } = action.payload;
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          usingSubst: action.payload.usingSubst
-        }
-      };
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingSubst: action.payload.usingSubst
+          }
+        };
+      } else {
+        return state;
+      }
     }
     case TOGGLE_USING_ENV: {
       const { workspaceLocation } = action.payload;
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          usingEnv: action.payload.usingEnv
-        }
-      };
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingEnv: action.payload.usingEnv
+          }
+        };
+      } else {
+        return state;
+      }
     }
     case TOGGLE_UPDATE_ENV: {
       const { workspaceLocation } = action.payload;
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          updateEnv: action.payload.updateEnv
-        }
-      };
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            updateEnv: action.payload.updateEnv
+          }
+        };
+      } else {
+        return state;
+      }
     }
     case UPDATE_SUBMISSIONS_TABLE_FILTERS:
       return {
