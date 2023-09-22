@@ -3,7 +3,6 @@ import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
 import { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
@@ -28,7 +27,6 @@ export type SavedState = {
   playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
   playgroundLanguage: SALanguage;
-  playgroundExternalLibrary: ExternalLibraryName;
   stories: Partial<StoriesAuthState>;
 };
 
@@ -77,14 +75,13 @@ export const saveState = (state: OverallState) => {
       achievements: state.achievement.achievements,
       playgroundIsFolderModeEnabled: state.workspaces.playground.isFolderModeEnabled,
       playgroundActiveEditorTabIndex: {
-        value: state.workspaces.playground.activeEditorTabIndex
+        value: state.workspaces.playground.editorState.activeEditorTabIndex
       },
-      playgroundEditorTabs: state.workspaces.playground.editorTabs,
+      playgroundEditorTabs: state.workspaces.playground.editorState.editorTabs,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
       playgroundLanguage: state.playground.languageConfig,
-      playgroundExternalLibrary: state.workspaces.playground.externalLibrary,
       stories: {
         userId: state.stories.userId,
         groupId: state.stories.groupId,
