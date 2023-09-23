@@ -44,10 +44,10 @@ export class StashItemComponent extends Visible implements IHoverable {
       return typeof val === 'string'
         ? `'${val}'`.trim()
         : isFn(val)
-        ? 'CLOSURE'
+        ? 'closure'
         : isArray(val)
         ? arrowTo
-          ? 'PAIR/ARRAY'
+          ? 'pair/array'
           : JSON.stringify(val)
         : String(value);
     };
