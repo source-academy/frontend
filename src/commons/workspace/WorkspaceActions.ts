@@ -68,6 +68,7 @@ import {
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
+  WorkspaceLocationsWithTools,
   WorkspaceState
 } from './WorkspaceTypes';
 
@@ -385,10 +386,9 @@ export const notifyProgramEvaluated = (
     workspaceLocation
   });
 
-// Only playground and sicp supports subst visualizer
 export const toggleUsingSubst = (
   usingSubst: boolean,
-  workspaceLocation: Extract<WorkspaceLocation, 'playground' | 'sicp'>
+  workspaceLocation: WorkspaceLocationsWithTools
 ) => action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
 
 export const addHtmlConsoleError = (
@@ -397,16 +397,12 @@ export const addHtmlConsoleError = (
   storyEnv?: string
 ) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, storyEnv });
 
-// Only playground and sicp supports CSE Machine
-export const toggleUsingEnv = (
-  usingEnv: boolean,
-  workspaceLocation: Extract<WorkspaceLocation, 'playground' | 'sicp'>
-) => action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
+export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) =>
+  action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
 
-// Only playground and sicp supports CSE Machine
 export const toggleUpdateEnv = (
   updateEnv: boolean,
-  workspaceLocation: Extract<WorkspaceLocation, 'playground' | 'sicp'>
+  workspaceLocation: WorkspaceLocationsWithTools
 ) => action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
 
 export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>
