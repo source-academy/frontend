@@ -1,8 +1,9 @@
+import { SideContentLocation } from "../redux/workspace/WorkspaceReduxTypes"
 import { useSideContent } from "./SideContentHelper"
-import { ChangeTabsCallback, SideContentLocation, SideContentTab, SideContentType } from "./SideContentTypes"
+import { ChangeTabsCallback, SideContentTab, SideContentType } from "./SideContentTypes"
 
 
-type SideContentProviderProps = {
+export type SideContentProviderProps = {
   location: SideContentLocation
   tabs?: {
     beforeDynamicTabs: SideContentTab[]

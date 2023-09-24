@@ -3,15 +3,30 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { configure, GlobalHotKeys } from 'react-hotkeys';
+import { connect,MapDispatchToProps } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actions } from 'src/commons/redux/ActionsHelper';
+import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import DataVisualizer from 'src/features/dataVisualizer/dataVisualizer';
 import { Step } from 'src/features/dataVisualizer/dataVisualizerTypes';
 
 import { Links } from '../../utils/Constants';
+import { SideContentType } from '../SideContentTypes';
 
 type State = {
   steps: Step[];
   currentStep: number;
 };
+
+type OwnProps = {
+  workspaceLocation: SideContentLocation
+}
+
+type DispatchProps = {
+  handleAlertSideContent: () => void
+}
+
+export type { OwnProps as SideContentDataVisualizerProps }
 
 const dataVisualizerKeyMap = {
   PREVIOUS_STEP: 'left',
@@ -23,15 +38,13 @@ const dataVisualizerKeyMap = {
  * data_data function in Source. It adds a listener to the DataVisualizer singleton
  * which updates the steps list via setState whenever new steps are added.
  */
-class SideContentDataVisualizer extends React.Component<{}, State> {
+class SideContentDataVisualizer extends React.Component<OwnProps & DispatchProps, State> {
   constructor(props: any) {
     super(props);
     this.state = { steps: [], currentStep: 0 };
     DataVisualizer.init(steps => {
       if (this.state.steps.length > 0) {
-        //  Blink icon
-        const icon = document.getElementById('data_visualizer-icon');
-        icon?.classList.add('side-content-tab-alert');
+        this.props.handleAlertSideContent()
       }
       this.setState({ steps, currentStep: 0 });
     });
@@ -180,4 +193,8 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
   };
 }
 
-export default SideContentDataVisualizer;
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, { workspaceLocation }) => bindActionCreators({
+  handleAlertSideContent: () => actions.beginAlertSideContent(workspaceLocation, SideContentType.dataVisualizer)
+}, dispatch)
+
+export default connect(null, mapDispatchToProps)(SideContentDataVisualizer)

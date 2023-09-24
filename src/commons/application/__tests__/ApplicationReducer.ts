@@ -1,6 +1,6 @@
-import { ApplicationReducer } from '../ApplicationReducer'; // EDITED
+import { applicationReducer } from '../../redux/ApplicationRedux'
 
-const initialState = ApplicationReducer(undefined!, { type: '*' });
+const initialState = applicationReducer(undefined!, { type: '*' });
 
 test('initial state should match a snapshot', () => {
   expect(initialState).toMatchSnapshot();

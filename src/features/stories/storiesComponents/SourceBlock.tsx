@@ -7,17 +7,18 @@ import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
 import ControlButton from 'src/commons/ControlButton';
+import { storiesActions } from 'src/commons/redux/stories/StoriesRedux';
+import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import SideContent from 'src/commons/sideContent/SideContent';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { addHtmlConsoleError } from 'src/commons/workspace/WorkspaceActions';
 import {
   clearStoryEnv,
-  evalStory,
-  toggleStoriesUsingSubst
 } from 'src/features/stories/StoriesActions';
 import {
-  dataVisualizerTab,
+  makeDataVisualizerTabFrom,
   makeHtmlDisplayTabFrom,
   makeSubstVisualizerTabFrom
 } from 'src/pages/playground/PlaygroundTabs';
@@ -25,7 +26,6 @@ import {
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideContent';
 import { DEFAULT_ENV } from './UserBlogContent';
 
 export type SourceBlockProps = {
@@ -55,9 +55,8 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.storiesRun);
 
-  const envList = useTypedSelector(store => Object.keys(store.stories.envs));
+  const envList: string[] = useTypedSelector(store => Object.keys(store.workspaces.stories.envs));
 
   // setting env
   const commandsEnv = parseMetadata('env', props.commands);
@@ -68,34 +67,21 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       ? commandsEnv
       : DEFAULT_ENV;
 
+
   const chapter = useTypedSelector(
-    store => store.stories.envs[env]?.context.chapter || Constants.defaultSourceChapter
+    store => store.workspaces.stories.envs[env]?.context.chapter || Constants.defaultSourceChapter
   );
   const variant = useTypedSelector(
-    store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
+    store => store.workspaces.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
 
   useEffect(() => {
     setCode(props.content);
   }, [props.content]);
 
-  const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
+  const output = useTypedSelector(store => store.workspaces.stories.envs[env]?.output || []);
 
-  const onChangeTabs = React.useCallback(
-    (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
-    ) => {
-      // TODO: Migrate relevant updated logic from Playground component
-      // TODO: Use language config for source chapter.
-      dispatch(toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env));
-
-      setSelectedTab(newTabId);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const { selectedTab } = useSideContent(`stories.${env}`)
 
   const envDisplayLabel =
     env === DEFAULT_ENV
@@ -139,7 +125,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       if (output.length > outputIndex && output[outputIndex].type === 'result') {
         tabs.push(
           makeHtmlDisplayTabFrom(output[outputIndex] as ResultOutput, errorMsg =>
-            dispatch(addHtmlConsoleError(errorMsg, 'stories', env))
+            dispatch(allWorkspaceActions.handleConsoleLog(`stories.${env}`, [errorMsg]))
           )
         );
       }
@@ -153,7 +139,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
     if (chapter >= Chapter.SOURCE_2) {
       // Enable Data Visualizer for Source Chapter 2 and above
-      tabs.push(dataVisualizerTab);
+      tabs.push(makeDataVisualizerTabFrom(`stories.${env}`));
     }
     // if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
     //   // Enable Env Visualizer for Source Chapter 3 and above
@@ -172,16 +158,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter, variant, output, dispatch, env]);
 
-  const sideContentProps: StoriesSideContentProps = {
-    selectedTabId: selectedTab,
-    onChange: onChangeTabs,
-    tabs: {
-      beforeDynamicTabs: tabs,
-      afterDynamicTabs: []
-    },
-    workspaceLocation: 'stories',
-    getDebuggerContext: state => state.stories.envs[env].debuggerContext
-  };
 
   const execEvaluate = () => {
     // We call onChangeTabs with the current tab when the run
@@ -189,9 +165,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // method because of the fact that execution logic is handled
     // by the environment setting, but the currently showing tab
     // is handled by the component setting.
-    onChangeTabs(selectedTab, selectedTab, {} as any);
+    // TODO Check: Is this still necessary?
+    // onChangeTabs(selectedTab, selectedTab, {} as any);
 
-    dispatch(evalStory(env, code));
+    dispatch(storiesActions.evalStory(env, code));
     setOutputIndex(output.length);
   };
 
@@ -253,7 +230,14 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                 />
               </Card>
               <div>
-                <StoriesSideContent {...sideContentProps} />
+                <SideContent
+                  defaultTab={SideContentType.storiesRun}
+                  tabs={{
+                    beforeDynamicTabs: tabs,
+                    afterDynamicTabs: []
+                  }}
+                  location={`stories.${env}`}
+                />
               </div>
             </div>
           </div>

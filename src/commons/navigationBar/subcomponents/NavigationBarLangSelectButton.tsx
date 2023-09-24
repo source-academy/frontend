@@ -11,9 +11,8 @@ import {
   SUPPORTED_LANGUAGES,
   SupportedLanguage
 } from 'src/commons/application/ApplicationTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { chapterSelect } from 'src/commons/workspace/WorkspaceActions';
-import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
+import { useWorkspace } from 'src/commons/redux/workspace/Hooks';
+import { actions } from 'src/commons/utils/ActionsHelper';
 
 // TODO: Hardcoded to use the first sublanguage for each language
 const defaultSublanguages: {
@@ -26,12 +25,15 @@ const defaultSublanguages: {
 
 const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const lang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
+  const {
+    languageConfig: { mainLanguage: lang }
+  } = useWorkspace('playground')
+
   const dispatch = useDispatch();
   const selectLang = (language: SupportedLanguage) => {
     const { chapter, variant } = defaultSublanguages[language];
-    dispatch(playgroundConfigLanguage(getLanguageConfig(chapter, variant)));
-    dispatch(chapterSelect(chapter, variant, 'playground'));
+    dispatch(actions.playgroundUpdateLanguageConfig(getLanguageConfig(chapter, variant)));
+    dispatch(actions.chapterSelect('playground', chapter, variant));
     setIsOpen(false);
   };
 

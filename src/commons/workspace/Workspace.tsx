@@ -7,16 +7,14 @@ import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import { Prompt } from '../ReactRouterPrompt';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import Repl, { ReplProps } from '../repl/Repl';
 import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
+import { useSideContent } from '../sideContent/SideContentHelper';
 import { useDimensions } from '../utils/Hooks';
 
-export type WorkspaceProps = DispatchProps & StateProps;
-
-type DispatchProps = {
-  handleSideContentHeightChange: (height: number) => void;
-};
+export type WorkspaceProps = StateProps;
 
 type StateProps = {
   // Either editorProps or mcqProps must be provided
@@ -28,9 +26,9 @@ type StateProps = {
   sideBarProps: {
     tabs: SideBarTab[];
   };
-  sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
+  workspaceLocation: SideContentLocation
 };
 
 const Workspace: React.FC<WorkspaceProps> = props => {
@@ -43,6 +41,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
   const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState<number>(200);
   const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(true);
+  const { setSideContentHeight } = useSideContent(props.workspaceLocation)
 
   const sideBarCollapsedWidth = 40;
 
@@ -102,7 +101,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
 
   const sideContentResizableProps = () => {
     const onResizeStop: ResizeCallback = (_a, _b, ref) =>
-      props.handleSideContentHeightChange(ref.clientHeight);
+      setSideContentHeight(ref.clientHeight);
     return {
       bounds: 'parent',
       className: 'resize-side-content',

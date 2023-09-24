@@ -2,11 +2,10 @@ import { configureStore } from '@reduxjs/toolkit';
 import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { defaultPlayground } from 'src/commons/redux/workspace/playground/PlaygroundRedux';
+import { defaultState } from 'src/commons/redux/AllTypes';
+import rootReducer from 'src/commons/redux/RootReducer';
+import { defaultPlayground } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 
-import { defaultState } from '../commons/application/ApplicationTypes';
-import createRootReducer from '../commons/application/reducers/RootReducer';
-import { apiMiddleware } from '../commons/redux/BackendSlice';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
@@ -19,11 +18,10 @@ export function createStore() {
   const initialStore = loadStore(loadStoredState()) || defaultState;
 
   const createdStore = configureStore({
-    reducer: createRootReducer(),
+    reducer: rootReducer,
     preloadedState: initialStore as any,
     middleware: [
       sagaMiddleware,
-      apiMiddleware,
       // backendApi.middleware,
     ],
   });
@@ -60,7 +58,7 @@ function loadStore(loadedStore: SavedState | undefined) {
         ...defaultState.workspaces.playground,
         isFolderModeEnabled: loadedStore.playgroundIsFolderModeEnabled
           ? loadedStore.playgroundIsFolderModeEnabled
-          : defaultState.workspaces.playground.isFolderModeEnabled,
+          : defaultState.workspaces.playground.editorState.isFolderModeEnabled,
         activeEditorTabIndex: loadedStore.playgroundActiveEditorTabIndex
           ? loadedStore.playgroundActiveEditorTabIndex.value
           : defaultPlayground.editorState.activeEditorTabIndex,
@@ -69,7 +67,7 @@ function loadStore(loadedStore: SavedState | undefined) {
           : defaultPlayground.editorState.editorTabs,
         isEditorAutorun: loadedStore.playgroundIsEditorAutorun
           ? loadedStore.playgroundIsEditorAutorun
-          : defaultState.workspaces.playground.isEditorAutorun,
+          : defaultState.workspaces.playground.editorState.isEditorAutorun,
         externalLibrary: ExternalLibraryName.NONE,
         // externalLibrary: loadedStore.playgroundExternalLibrary
         //   ? loadedStore.playgroundExternalLibrary
@@ -86,7 +84,7 @@ function loadStore(loadedStore: SavedState | undefined) {
       }
     },
     stories: {
-      ...defaultState.stories,
+      ...defaultState.workspaces.stories,
       ...loadedStore.stories
     }
   };

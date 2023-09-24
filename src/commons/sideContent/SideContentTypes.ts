@@ -1,8 +1,6 @@
 import { IconName } from '@blueprintjs/core';
 
-import { DebuggerContext } from '../workspace/WorkspaceTypes';
-
-export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
+import { DebuggerContext } from '../redux/workspace/WorkspaceReduxTypes';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -82,3 +80,7 @@ export type ModuleSideContent = {
   body: (props: any) => JSX.Element;
   toSpawn?: (context: DebuggerContext) => boolean;
 };
+
+export type ChangeTabsCallback = (newId: SideContentType, oldId: SideContentType, event: React.MouseEvent<HTMLElement>) => void
+
+

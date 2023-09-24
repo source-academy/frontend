@@ -4,12 +4,12 @@ import path from 'path';
 import React from 'react';
 
 import Delay from '../delay/Delay';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
 export type FileSystemViewListProps = {
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: SideContentLocation;
   fileSystem: FSModule;
   basePath: string;
   indentationLevel: number;

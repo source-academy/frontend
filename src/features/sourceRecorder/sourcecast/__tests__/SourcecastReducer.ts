@@ -1,7 +1,7 @@
 import { Chapter } from 'js-slang/dist/types';
+import { defaultSourcecast, sourcecastReducer } from 'src/commons/redux/workspace/sourceRecorder/SourcecastRedux';
 import { action as generateAction } from 'typesafe-actions';
 
-import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import {
   CodeDelta,
@@ -16,7 +16,6 @@ import {
   SET_SOURCECAST_PLAYBACK_STATUS,
   SourcecastData
 } from '../../SourceRecorderTypes';
-import { SourcecastReducer } from '../SourcecastReducer';
 import { UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
 
 describe('SAVE_SOURCECAST_DATA', () => {
@@ -58,9 +57,9 @@ describe('SAVE_SOURCECAST_DATA', () => {
     };
 
     const action = generateAction(SAVE_SOURCECAST_DATA, payload);
-    const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
+    const result = sourcecastReducer(defaultSourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcecast,
+      ...defaultSourcecast,
       ...payload
     });
   });
@@ -98,9 +97,9 @@ describe('SET_CODE_DELTAS_TO_APPLY', () => {
       deltas,
       workspaceLocation: undefined!
     });
-    const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
+    const result = sourcecastReducer(defaultSourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcecast,
+      ...defaultSourcecast,
       codeDeltasToApply: deltas
     });
   });
@@ -131,9 +130,9 @@ describe('SET_INPUT_TO_APPLY', () => {
       inputToApply,
       workspaceLocation: undefined!
     });
-    const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
+    const result = sourcecastReducer(defaultSourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcecast,
+      ...defaultSourcecast,
       inputToApply
     });
   });
@@ -178,9 +177,9 @@ describe('SET_SOURCECAST_DATA', () => {
 
     const action = generateAction(SET_SOURCECAST_DATA, payload);
 
-    const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
+    const result = sourcecastReducer(defaultSourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcecast,
+      ...defaultSourcecast,
       ...payload
     });
   });
@@ -194,9 +193,9 @@ describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
       workspaceLocation: undefined!
     });
 
-    const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
+    const result = sourcecastReducer(defaultSourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcecast,
+      ...defaultSourcecast,
       playbackDuration: duration
     });
   });
@@ -210,9 +209,9 @@ describe('SET_SOURCECAST_PLAYBACK_STATUS', () => {
       workspaceLocation: undefined!
     });
 
-    const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
+    const result = sourcecastReducer(defaultSourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcecast,
+      ...defaultSourcecast,
       playbackStatus
     });
   });
@@ -242,9 +241,9 @@ describe('UPDATE_SOURCECAST_INDEX', () => {
       workspaceLocation: undefined!
     });
 
-    const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
+    const result = sourcecastReducer(defaultSourcecast, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcecast,
+      ...defaultSourcecast,
       sourcecastIndex: sourcecastData
     });
   });

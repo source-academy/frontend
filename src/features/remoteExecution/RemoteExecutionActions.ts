@@ -1,6 +1,6 @@
+import { SideContentLocation } from 'src/commons/redux/workspace/subReducers/SideContentRedux';
 import { action } from 'typesafe-actions';
 
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   Device,
   DeviceSession,
@@ -21,7 +21,7 @@ export const remoteExecUpdateDevices = (devices: Device[]) =>
 export const remoteExecUpdateSession = (session?: DeviceSession) =>
   action(REMOTE_EXEC_UPDATE_SESSION, session);
 
-export const remoteExecConnect = (workspace: WorkspaceLocation, device: Device) =>
+export const remoteExecConnect = (workspace: SideContentLocation, device: Device) =>
   action(REMOTE_EXEC_CONNECT, { workspace, device });
 
 export const remoteExecDisconnect = () => action(REMOTE_EXEC_DISCONNECT);

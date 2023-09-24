@@ -4,74 +4,28 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
-import { useEditorState, useRepl, useSideContent } from 'src/commons/redux/workspace/Hooks';
-import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
-import {
-  saveSourcecastData,
-  setCodeDeltasToApply,
-  setCurrentPlayerTime,
-  setInputToApply,
-  setSourcecastData,
-  setSourcecastDuration,
-  setSourcecastStatus
-} from 'src/features/sourceRecorder/SourceRecorderActions';
-import {
-  deleteSourcecastEntry,
-  recordInit,
-  recordInput,
-  resetInputs,
-  timerPause,
-  timerReset,
-  timerResume,
-  timerStart,
-  timerStop
-} from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
-
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
+import { ControlBarAutorunButtons } from 'src/commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from 'src/commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
 import {
   convertEditorTabStateToProps,
   SourcecastEditorContainerProps
-} from '../../../commons/editor/EditorContainer';
-import { Position } from '../../../commons/editor/EditorTypes';
-import SideContentDataVisualizer from '../../../commons/sideContent/content/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../../commons/sideContent/content/SideContentEnvVisualizer';
-import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
+} from 'src/commons/editor/EditorContainer';
+import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
+import { sourcecastActions } from 'src/commons/redux/workspace/sourceRecorder/SourcecastRedux';
+import { sourcereelActions } from 'src/commons/redux/workspace/sourceRecorder/SourcereelRedux';
+import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import SideContentDataVisualizer from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import SideContentEnvVisualizer from 'src/commons/sideContent/content/SideContentEnvVisualizer';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
-} from '../../../commons/sourceRecorder/SourceRecorderControlBar';
-import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
-import { useTypedSelector } from '../../../commons/utils/Hooks';
-import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
-import {
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeSideContentHeight,
-  chapterSelect,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  externalLibrarySelect,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  setEditorBreakpoint,
-  setIsEditorReadonly,
-  toggleEditorAutorun,
-  updateActiveEditorTabIndex,
-  updateEditorValue,
-  updateReplValue
-} from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+} from 'src/commons/sourceRecorder/SourceRecorderControlBar';
+import SourcecastTable from 'src/commons/sourceRecorder/SourceRecorderTable';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
 import {
   CodeDelta,
   Input,
@@ -79,17 +33,16 @@ import {
   PlaybackData,
   PlaybackStatus,
   RecordingStatus
-} from '../../../features/sourceRecorder/SourceRecorderTypes';
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
+
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
-const workspaceLocation: WorkspaceLocation = 'sourcereel';
-const sourcecastLocation: WorkspaceLocation = 'sourcecast';
+const workspaceLocation: SideContentLocation = 'sourcereel';
+const sourcecastLocation: SideContentLocation = 'sourcecast';
 
 const Sourcereel: React.FC = () => {
   const courseId = useTypedSelector(state => state.session.courseId);
-  const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(
-    state => state.workspaces[workspaceLocation].context
-  );
+
   const {
     audioUrl,
     currentPlayerTime,
@@ -100,59 +53,65 @@ const Sourcereel: React.FC = () => {
     sourcecastIndex
   } = useTypedSelector(state => state.workspaces.sourcecast);
 
-  const { activeEditorTabIndex, editorTabs } = useEditorState(workspaceLocation)
-  const { selectedTab, setSelectedTab, height: sideContentHeight } = useSideContent(
+  const { 
+    activeEditorTabIndex, 
+    editorTabs,
+    isEditorAutorun,
+    isEditorReadonly,
+    isFolderModeEnabled,
+    setIsEditorReadonly: handleSetIsEditorReadonly,
+    toggleEditorAutorun: handleToggleEditorAutorun,
+    updateEditorValue: handleEditorValueChange,
+    updateActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
+    updateEditorBreakpoints: handleUpdateEditorBreakpoints,
+    removeEditorTab: handleRemoveEditorTabByIndex,
+  } = useEditorState(workspaceLocation)
+  const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     SideContentType.sourcereel
   )
 
-  const { replValue } = useRepl(workspaceLocation)
+  const dispatch = useDispatch();
 
   const {
-    isFolderModeEnabled,
-    // externalLibrary: externalLibraryName,
     isDebugging,
-    isEditorAutorun,
-    isEditorReadonly,
     isRunning,
     output,
     playbackData,
     recordingStatus,
     timeElapsedBeforePause,
-    timeResumed
-  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+    timeResumed,
+    context: { chapter: sourceChapter, variant: sourceVariant },
+    evalEditor: handleEditorEval,
+    beginDebugPause: handleDebuggerPause,
+    beginInterruptExecution: handleInterruptEval,
+    debugReset: handleDebuggerReset,
+    debugResume: handleDebuggerResume,
+    evalRepl: handleReplEval,
+    navDeclaration: handleDeclarationNavigate,
+    promptAutocomplete: handlePromptAutocomplete,
+  } = useWorkspace(workspaceLocation);
 
-  const dispatch = useDispatch();
+  const {
+    clearReplOutput
+  } = useRepl(workspaceLocation)
+
   const {
     handleChapterSelect,
-    handleEditorEval,
-    handleEditorValueChange,
-    handleExternalSelect,
     handleRecordInput,
-    handleReplEval,
     handleSetSourcecastStatus,
-    handleSetIsEditorReadonly
   } = useMemo(() => {
     return {
       handleChapterSelect: (chapter: Chapter) =>
-        dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      handleEditorValueChange: (newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        dispatch(externalLibrarySelect(externalLibraryName, workspaceLocation)),
-      handleRecordInput: (input: Input) => dispatch(recordInput(input, workspaceLocation)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+        dispatch(allWorkspaceActions.chapterSelect(workspaceLocation, chapter, Variant.DEFAULT)),
+      handleRecordInput: (input: Input) => dispatch(sourcereelActions.recordInput(input)),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
-        dispatch(setSourcecastStatus(playbackStatus, sourcecastLocation)),
-      handleSetIsEditorReadonly: (readonly: boolean) =>
-        dispatch(setIsEditorReadonly(workspaceLocation, readonly))
+        dispatch(sourcecastActions.setSourcecastPlaybackStatus(playbackStatus)),
     };
   }, [dispatch]);
 
   useEffect(() => {
-    fetchSourcecastIndex(sourcecastLocation);
+    sourcecastActions.fetchSourcecastIndex();
   }, []);
 
   useEffect(() => {
@@ -167,9 +126,9 @@ const Sourcereel: React.FC = () => {
       case 'chapterSelect':
         handleChapterSelect(inputToApply.data);
         break;
-      case 'externalLibrarySelect':
-        handleExternalSelect(inputToApply.data);
-        break;
+      // case 'externalLibrarySelect':
+      //   handleExternalSelect(inputToApply.data);
+      //   break;
       case 'forcePause':
         handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
         break;
@@ -183,12 +142,11 @@ const Sourcereel: React.FC = () => {
     const initData: PlaybackData['init'] = {
       chapter: sourceChapter,
       // TODO investigate
-      externalLibrary: ExternalLibraryName.NONE,
       // externalLibrary: externalLibraryName,
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0].value
     };
-    dispatch(recordInit(initData, workspaceLocation));
+    dispatch(sourcereelActions.recordInit(initData));
   };
 
   const handleRecordPause = () =>
@@ -209,23 +167,15 @@ const Sourcereel: React.FC = () => {
       data: KeyboardCommand.run
     });
   };
-  const autorunButtonHandlers = useMemo(() => {
-    return {
-      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
-      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
-      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation))
-    };
-  }, [dispatch]);
+
   const autorunButtons = (
     <ControlBarAutorunButtons
-      handleDebuggerPause={autorunButtonHandlers.handleDebuggerPause}
-      handleDebuggerResume={autorunButtonHandlers.handleDebuggerResume}
-      handleDebuggerReset={autorunButtonHandlers.handleDebuggerReset}
+      handleDebuggerPause={handleDebuggerPause}
+      handleDebuggerResume={handleDebuggerResume}
+      handleDebuggerReset={handleDebuggerReset}
       handleEditorEval={editorEvalHandler}
-      handleInterruptEval={autorunButtonHandlers.handleInterruptEval}
-      handleToggleEditorAutorun={autorunButtonHandlers.handleToggleEditorAutorun}
+      handleInterruptEval={handleInterruptEval}
+      handleToggleEditorAutorun={handleToggleEditorAutorun}
       isEntrypointFileDefined={activeEditorTabIndex !== null}
       isDebugging={isDebugging}
       isEditorAutorun={isEditorAutorun}
@@ -259,46 +209,34 @@ const Sourcereel: React.FC = () => {
   const clearButton = useMemo(
     () => (
       <ControlBarClearButton
-        handleReplOutputClear={() => dispatch(clearReplOutput(workspaceLocation))}
+        handleReplOutputClear={clearReplOutput}
         key="clear_repl"
       />
     ),
-    [dispatch]
+    [clearReplOutput]
   );
 
   const evalButton = (
     <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
   );
 
-  const editorContainerHandlers = useMemo(() => {
-    return {
-      setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-      removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints))
-    };
-  }, [dispatch]);
   const editorContainerProps: SourcecastEditorContainerProps = {
-    handleEditorEval: handleEditorEval,
-    handleEditorValueChange: handleEditorValueChange,
+    activeEditorTabIndex,
+    handleEditorEval,
     handleRecordInput: handleRecordInput,
     codeDeltasToApply: codeDeltasToApply,
     inputToApply: inputToApply,
-    isEditorAutorun: isEditorAutorun,
-    isEditorReadonly: isEditorReadonly,
-    editorVariant: sourcecastLocation,
+    isEditorAutorun,
+    isEditorReadonly,
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
-    removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
+    setActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
+    removeEditorTabByIndex: handleRemoveEditorTabByIndex,
+    // TODO check for hardcoding
+    handleEditorUpdateBreakpoints: (value) => handleUpdateEditorBreakpoints(0, value),
+    handleEditorValueChange: (value) => handleEditorValueChange(0, value),
+    editorVariant: sourcecastLocation,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
-    handleEditorUpdateBreakpoints: editorContainerHandlers.handleEditorUpdateBreakpoints,
+    handleDeclarationNavigate,
     editorSessionId: '',
     getTimerDuration: getTimerDuration,
     isPlaying: playbackStatus === PlaybackStatus.playing,
@@ -320,7 +258,7 @@ const Sourcereel: React.FC = () => {
   const dataVisualizerTab: SideContentTab = {
     label: 'Data Visualizer',
     iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer />,
+    body: <SideContentDataVisualizer workspaceLocation={workspaceLocation} />,
     id: SideContentType.dataVisualizer
   };
 
@@ -333,14 +271,10 @@ const Sourcereel: React.FC = () => {
 
   const workspaceHandlers = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
-      handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation)),
       handleDeleteSourcecastEntry: (id: number) =>
-        dispatch(deleteSourcecastEntry(id, sourcecastLocation)),
+        dispatch(sourcereelActions.deleteSourcecastEntry(id)),
       // SourcereelControlbar handlers
-      handleResetInputs: (inputs: Input[]) => dispatch(resetInputs(inputs, workspaceLocation)),
+      handleResetInputs: (inputs: Input[]) => dispatch(sourcereelActions.resetInputs(inputs)),
       handleSaveSourcecastData: (
         title: string,
         description: string,
@@ -349,7 +283,7 @@ const Sourcereel: React.FC = () => {
         playbackData: PlaybackData
       ) =>
         dispatch(
-          saveSourcecastData(title, description, uid, audio, playbackData, sourcecastLocation)
+          sourcecastActions.saveSourcecastData(title, description, uid, audio, playbackData)
         ),
       handleSetSourcecastData: (
         title: string,
@@ -359,14 +293,14 @@ const Sourcereel: React.FC = () => {
         playbackData: PlaybackData
       ) =>
         dispatch(
-          setSourcecastData(title, description, uid, audioUrl, playbackData, sourcecastLocation)
+          sourcecastActions.setSourcecastData(title, description, uid, audioUrl, playbackData)
         ),
-      handleTimerPause: () => dispatch(timerPause(workspaceLocation)),
-      handleTimerReset: () => dispatch(timerReset(workspaceLocation)),
+      handleTimerPause: () => dispatch(sourcereelActions.timerPause()),
+      handleTimerReset: () => dispatch(sourcereelActions.timerReset()),
       handleTimerResume: (timeBefore: number) =>
-        dispatch(timerResume(timeBefore, workspaceLocation)),
-      handleTimerStart: () => dispatch(timerStart(workspaceLocation)),
-      handleTimerStop: () => dispatch(timerStop(workspaceLocation))
+        dispatch(sourcereelActions.timerResume(timeBefore)),
+      handleTimerStart: () => dispatch(sourcereelActions.timerStart()),
+      handleTimerStop: () => dispatch(sourcereelActions.timerStop())
     };
   }, [dispatch]);
   const workspaceProps: WorkspaceProps = {
@@ -374,24 +308,18 @@ const Sourcereel: React.FC = () => {
       editorButtons: [autorunButtons, chapterSelectButton]
     },
     editorContainerProps: editorContainerProps,
-    handleSideContentHeightChange: heightChange =>
-      dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
     replProps: {
       output: output,
-      replValue: replValue,
-      handleBrowseHistoryDown: workspaceHandlers.handleBrowseHistoryDown,
-      handleBrowseHistoryUp: workspaceHandlers.handleBrowseHistoryUp,
       handleReplEval: handleReplEval,
-      handleReplValueChange: workspaceHandlers.handleReplValueChange,
       sourceChapter: sourceChapter,
       sourceVariant: sourceVariant,
       // externalLibrary: externalLibraryName,
-      replButtons: [evalButton, clearButton]
+      replButtons: [evalButton, clearButton],
+      location: workspaceLocation,
     },
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: {
       onChange: activeTabChangeHandler,
       selectedTabId: selectedTab,
@@ -453,28 +381,27 @@ const Sourcereel: React.FC = () => {
         ],
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation
-    }
+      location: workspaceLocation
+    },
+    workspaceLocation
   };
 
   const sourcecastControlbarHandlers = useMemo(() => {
     return {
       handleSetCurrentPlayerTime: (playerTime: number) =>
-        dispatch(setCurrentPlayerTime(playerTime, sourcecastLocation)),
+        dispatch(sourcecastActions.setCurrentPlayerTime(playerTime)),
       handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
-        dispatch(setCodeDeltasToApply(deltas, sourcecastLocation)),
+        dispatch(sourcecastActions.setCodeDeltasToApply(deltas)),
       handleSetInputToApply: (inputToApply: Input) =>
-        dispatch(setInputToApply(inputToApply, sourcecastLocation)),
+        dispatch(sourcecastActions.setInputToApply(inputToApply)),
       handleSetSourcecastDuration: (duration: number) =>
-        dispatch(setSourcecastDuration(duration, sourcecastLocation)),
-      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(sourcecastActions.setSourcecastPlaybackDuration(duration)),
     };
   }, [dispatch]);
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {
     handleChapterSelect: handleChapterSelect,
-    handleEditorValueChange: handleEditorValueChange,
-    handleExternalSelect: handleExternalSelect,
+    // TODO Check this
+    handleEditorValueChange: value => handleEditorValueChange(0, value),
     handleSetSourcecastStatus: handleSetSourcecastStatus,
     handleSetIsEditorReadonly: handleSetIsEditorReadonly,
     audioUrl: audioUrl,
@@ -485,7 +412,7 @@ const Sourcereel: React.FC = () => {
     handleSetCodeDeltasToApply: sourcecastControlbarHandlers.handleSetCodeDeltasToApply,
     handleSetInputToApply: sourcecastControlbarHandlers.handleSetInputToApply,
     handleSetSourcecastDuration: sourcecastControlbarHandlers.handleSetSourcecastDuration,
-    handlePromptAutocomplete: sourcecastControlbarHandlers.handlePromptAutocomplete,
+    handlePromptAutocomplete,
     duration: playbackDuration
   };
   return (

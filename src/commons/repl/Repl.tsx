@@ -7,6 +7,7 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { ReplInput } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
@@ -14,7 +15,7 @@ export type ReplProps = DispatchProps & StateProps & OwnProps;
 
 type StateProps = {
   output: InterpreterOutput[];
-  replValue: string;
+  // replValue: string;
   hidden?: boolean;
   inputHidden?: boolean;
   usingSubst?: boolean;
@@ -22,13 +23,11 @@ type StateProps = {
   sourceVariant: Variant;
   // externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
+  location: SideContentLocation
 };
 
 type DispatchProps = {
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
-  handleReplEval: () => void;
-  handleReplValueChange: (newCode: string) => void;
+  handleReplEval: () => void
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
 };

@@ -1,44 +1,32 @@
 import { Action, ActionCreatorWithPreparedPayload, combineReducers, createReducer, PayloadAction, PayloadActionCreator } from "@reduxjs/toolkit";
 import { LOG_OUT } from "src/commons/application/types/CommonsTypes";
 
+import { storiesReducer } from "../stories/StoriesRedux";
 import { assessmentActions } from "./assessment/AssessmentBase";
-import { assessmentReducer, AssessmentWorkspaceState, defaultAssessment } from "./assessment/AssessmentRedux";
-import { defaultGithubAssessment, githubAssessmentReducer, GitHubAssessmentWorkspaceState } from "./assessment/GithubAssesmentRedux";
-import { defaultGradingState, gradingReducer, GradingWorkspaceState } from "./assessment/GradingRedux";
+import { assessmentReducer } from "./assessment/AssessmentRedux";
+import { githubAssessmentReducer } from "./assessment/GithubAssesmentRedux";
+import { gradingReducer } from "./assessment/GradingRedux";
 import { basePlaygroundReducer, playgroundBaseActions } from "./playground/PlaygroundBase";
-import { defaultPlayground, playgroundReducer, PlaygroundState } from "./playground/PlaygroundRedux";
-import { defaultSicp, sicpReducer, SicpWorkspaceState } from "./SicpRedux";
-import { defaultSourcecast, sourcecastReducer, SourcecastWorkspaceState } from "./SourcecastRedux";
-import { defaultSourcereel, sourcereelReducer, SourcereelWorkspaceState } from "./SourcereelRedux";
-import { defaultStories, getDefaultStoriesEnv, storiesReducer, StoriesState } from "./StoriesRedux";
+import { playgroundReducer } from "./playground/PlaygroundRedux";
+import { sicpReducer } from "./SicpRedux";
+import { sourcecastReducer } from "./sourceRecorder/SourcecastRedux";
+import { sourcereelReducer } from "./sourceRecorder/SourcereelRedux";
 import { editorActions } from "./subReducers/EditorRedux";
 import { replActions } from "./subReducers/ReplRedux";
-import { NonStoryWorkspaceLocation, sideContentActions, SideContentLocation } from "./subReducers/SideContentRedux";
-import { isNonStoryWorkspaceLocation, workspaceActions } from "./WorkspaceRedux";
-
-export type WorkspaceManagerState = {
-  assessment: AssessmentWorkspaceState
-  githubAssessment: GitHubAssessmentWorkspaceState
-  grading: GradingWorkspaceState,
-  playground: PlaygroundState
-  stories: StoriesState
-  sicp: SicpWorkspaceState
-  sourcecast: SourcecastWorkspaceState
-  sourcereel: SourcereelWorkspaceState
-}
+import { sideContentActions } from "./subReducers/SideContentRedux";
+import { workspaceActions } from "./WorkspaceRedux";
+import { defaultWorkspaceManager, getDefaultStoriesEnv, isNonStoryWorkspaceLocation, NonStoryWorkspaceLocation, SideContentLocation, StoriesEnvState, StoryWorkspaceLocation, WorkspaceManagerState, WorkspaceState } from "./WorkspaceReduxTypes";
 
 const commonWorkspaceActionsInternal = {
-  ...assessmentActions,
   ...editorActions,
   ...replActions,
   ...sideContentActions,
-  ...playgroundBaseActions,
   ...workspaceActions,
 }
 
 type CommonWorkspaceActions = {
   [K in keyof typeof commonWorkspaceActionsInternal]: ActionCreatorWithPreparedPayload<
-    [location: SideContentLocation, ...Parameters<typeof commonWorkspaceActionsInternal[K]>],
+  [SideContentLocation, ...Parameters<typeof commonWorkspaceActionsInternal[K]>],
     { payload: ReturnType<typeof commonWorkspaceActionsInternal[K]>['payload'], location: SideContentLocation },
     (typeof commonWorkspaceActionsInternal)[K]['type']
   >
@@ -46,20 +34,36 @@ type CommonWorkspaceActions = {
 
 type CommonWorkspaceAction<T> = PayloadAction<{ payload: T, location: SideContentLocation }>
 
-export const allWorkspaceActions = Object.entries(commonWorkspaceActionsInternal).reduce((res, [name, creator]) => ({
-  ...res,
-  [name]: (location: SideContentLocation, ...args: any) => {
-    // @ts-ignore
-    const action = (creator as PayloadActionCreator<PayloadAction<any>>)(...args)
-    return {
-      ...action,
-      payload: {
-        payload: action.payload,
-        location
+export function getWorkspaceSelector(location: StoryWorkspaceLocation): (state: WorkspaceManagerState) => StoriesEnvState
+export function getWorkspaceSelector<T extends NonStoryWorkspaceLocation>(location: T): (state: WorkspaceManagerState) => WorkspaceManagerState[T]
+export function getWorkspaceSelector(location: SideContentLocation): (state: WorkspaceManagerState) => WorkspaceState
+export function getWorkspaceSelector<T extends SideContentLocation>(location: T) {
+  if (isNonStoryWorkspaceLocation(location)) {
+    return (state: WorkspaceManagerState) => state[location]
+  } else {
+    const [, storyEnv] = location.split('.')
+    return (state: WorkspaceManagerState) => state.stories.envs[storyEnv]
+  }
+}
+
+export const allWorkspaceActions = {
+    ...Object.entries(commonWorkspaceActionsInternal).reduce((res, [name, creator]) => ({
+    ...res,
+    [name]: (location: SideContentLocation, ...args: any) => {
+      // @ts-ignore
+      const action = (creator as PayloadActionCreator<PayloadAction<any>>)(...args)
+      return {
+        ...action,
+        payload: {
+          payload: action.payload,
+          location
+        }
       }
     }
-  }
-}), {} as CommonWorkspaceActions)
+  }), {} as CommonWorkspaceActions),
+  ...playgroundBaseActions,
+  ...assessmentActions,
+}
 
 const allWorkspaceReducers = {
   assessment: assessmentReducer,
@@ -71,6 +75,8 @@ const allWorkspaceReducers = {
   sourcereel: sourcereelReducer,
   stories: storiesReducer,
 }
+
+const workspaceManagerReducer = combineReducers<WorkspaceManagerState>(allWorkspaceReducers)
 
 export const getWorkspace = <
   T extends Record<NonStoryWorkspaceLocation, any> & { stories: { envs: Record<string, any> }},
@@ -85,19 +91,6 @@ export const getWorkspace = <
 
   const [, storyEnv] = location.split('.')
   return source.stories.envs[storyEnv]
-}
-
-const workspaceManagerReducer = combineReducers<WorkspaceManagerState>(allWorkspaceReducers)
-
-export const defaultWorkspaceManager: WorkspaceManagerState = {
-  assessment: defaultAssessment,
-  githubAssessment: defaultGithubAssessment,
-  grading: defaultGradingState,
-  playground: defaultPlayground,
-  sicp: defaultSicp,
-  sourcecast: defaultSourcecast,
-  sourcereel: defaultSourcereel,
-  stories: defaultStories,
 }
 
 export function getWorkspaceReducer<T extends NonStoryWorkspaceLocation>(location: T): (typeof allWorkspaceReducers)[T] {

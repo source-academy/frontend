@@ -1,26 +1,20 @@
-import { createAction,SliceCaseReducers, ValidateSliceCaseReducers } from "@reduxjs/toolkit";
-import { Value } from "js-slang/dist/types";
-import { AutogradingResult, Testcase } from "src/commons/assessment/AssessmentTypes";
-import { EditorTabState } from "src/commons/workspace/WorkspaceTypes";
+import { type SliceCaseReducers, type ValidateSliceCaseReducers } from "@reduxjs/toolkit";
+import type { Value } from "js-slang/dist/types";
 
-import { createWorkspaceSlice, getDefaultWorkspaceState,WorkspaceState } from "../WorkspaceRedux";
+import { addLocation, createActions } from "../../utils";
+import { createWorkspaceSlice } from "../WorkspaceRedux";
+import type { AssessmentLocations, AssessmentState } from "../WorkspaceReduxTypes";
 
-export type AssessmentState = WorkspaceState & {
-  readonly autogradingResults: AutogradingResult[]
-  readonly editorTestcases: Testcase[]
-}
-
-export const assessmentActions = {
-  evalTestCaseFailure: createAction('testcases/evalTestCaseFailure', (value: Value, index: number) => ({ payload: { value, index } })),
-  evalTestCaseSuccess: createAction('testcases/evalTestCaseSuccess', (value: Value, index: number) => ({ payload: { value, index } })),
-  resetTestcase: createAction('testcases/resetTestcase', (index: number) => ({ payload: index }))
-} as const
-
-export const getDefaultAssessmentState = (initialTabs: EditorTabState[] = []): AssessmentState => ({
-  ...getDefaultWorkspaceState(initialTabs),
-  autogradingResults: [],
-  editorTestcases: []
+const assessmentActionsInternal = createActions('assessmentBase', {
+  evalEditorAndTestcases: 0,
+  evalTestCase: (index: number) => index,
+  evalTestCaseFailure: (value: Value, index: number) => ({ value, index }),
+  evalTestCaseSuccess: (value: Value, index: number) => ({ value, index }),
+  resetTestcase: (index: number) => index,
+  updateCurrentAssessmentId: (assessmentId: number, questionId: number) => ({ assessmentId, questionId })
 })
+
+export const assessmentActions = addLocation<typeof assessmentActionsInternal, AssessmentLocations>(assessmentActionsInternal)
 
 export const createAssessmentSlice = <
   TState extends AssessmentState,
@@ -32,19 +26,24 @@ export const createAssessmentSlice = <
   reducers: ValidateSliceCaseReducers<TState, TReducers>
 ) => createWorkspaceSlice<TState, TReducers, TName>(
   name, initialState, reducers, builder => {
-    builder.addCase(assessmentActions.evalTestCaseFailure, (state, { payload }) => {
+    builder.addCase(assessmentActionsInternal.evalTestCaseFailure, (state, { payload }) => {
       state.editorTestcases[payload.index].errors = payload.value
       state.editorTestcases[payload.index].result = undefined
     })
 
-    builder.addCase(assessmentActions.evalTestCaseSuccess, (state, { payload }) => {
+    builder.addCase(assessmentActionsInternal.evalTestCaseSuccess, (state, { payload }) => {
       state.editorTestcases[payload.index].result = payload.value
       state.editorTestcases[payload.index].errors = undefined
     })
 
-    builder.addCase(assessmentActions.resetTestcase, (state, { payload }) => {
+    builder.addCase(assessmentActionsInternal.resetTestcase, (state, { payload }) => {
       state.editorTestcases[payload].result = undefined
       state.editorTestcases[payload].errors = undefined
+    })
+
+    builder.addCase(assessmentActionsInternal.updateCurrentAssessmentId, (state, { payload }) => {
+      state.currentAssessment = payload.assessmentId
+      state.currentQuestion = payload.questionId
     })
   }
 )

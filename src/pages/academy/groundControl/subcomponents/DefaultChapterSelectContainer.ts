@@ -1,10 +1,10 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
 import Constants from 'src/commons/utils/Constants';
 
-import { OverallState } from '../../../../commons/application/ApplicationTypes';
-import { changeSublanguage } from '../../../../commons/workspace/WorkspaceActions';
 import DefaultChapterSelect, { DispatchProps, StateProps } from './DefaultChapterSelect';
+import { OverallState } from 'src/commons/redux/AllTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   // Temporarily load the defaults when the course configuration fetch has yet to return
@@ -15,7 +15,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleUpdateSublanguage: changeSublanguage
+      handleUpdateSublanguage: allWorkspaceActions.changeSublanguage
     },
     dispatch
   );

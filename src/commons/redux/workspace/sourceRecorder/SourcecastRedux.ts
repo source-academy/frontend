@@ -1,47 +1,15 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { Chapter } from "js-slang/dist/types";
 import { CodeDelta, Input, PlaybackData, PlaybackStatus, SourcecastData } from "src/features/sourceRecorder/SourceRecorderTypes";
 
-import { ExternalLibraryName } from "../../application/types/ExternalTypes";
-import { createWorkspaceSlice, getDefaultWorkspaceState,WorkspaceState } from "./WorkspaceRedux";
+import { createActions } from "../../utils";
+import { createPlaygroundSlice } from "../playground/PlaygroundBase";
+import { defaultSourcecast } from "../WorkspaceReduxTypes";
 
-export type SourcecastWorkspaceState = WorkspaceState & {
-  readonly audioUrl: string;
-  readonly codeDeltasToApply: CodeDelta[] | null;
-  readonly currentPlayerTime: number;
-  readonly description: string | null;
-  readonly inputToApply: Input | null;
-  readonly playbackData: PlaybackData;
-  readonly playbackDuration: number;
-  readonly playbackStatus: PlaybackStatus;
-  readonly sourcecastIndex: SourcecastData[] | null;
-  readonly title: string | null;
-  readonly uid: string | null;
-}
+const sagaActions = createActions('sourcecast', {
+  fetchSourcecastIndex: 0,
+})
 
-export const defaultSourcecast: SourcecastWorkspaceState = {
-  ...getDefaultWorkspaceState(),
-  audioUrl: '',
-  codeDeltasToApply: null,
-  currentPlayerTime: 0,
-  description: null,
-  inputToApply: null,
-  playbackData: {
-    init: {
-      editorValue: '',
-      chapter: Chapter.SOURCE_1,
-      externalLibrary: ExternalLibraryName.NONE
-    },
-    inputs: []
-  },
-  playbackDuration: 0,
-  playbackStatus: PlaybackStatus.paused,
-  sourcecastIndex: null,
-  title: null,
-  uid: null
-}
-
-export const { actions: sourcecastActions, reducer: sourcecastReducer } = createWorkspaceSlice('sourcecast', defaultSourcecast, {
+const { actions: reducerActions, reducer: sourcecastReducer } = createPlaygroundSlice('sourcecast', defaultSourcecast, {
   saveSourcecastData: {
     prepare: (
       title: string,
@@ -120,3 +88,10 @@ export const { actions: sourcecastActions, reducer: sourcecastReducer } = create
     state.sourcecastIndex = payload
   }
 })
+
+export const sourcecastActions = {
+  ...sagaActions,
+  ...reducerActions,
+}
+
+export { sourcecastReducer }

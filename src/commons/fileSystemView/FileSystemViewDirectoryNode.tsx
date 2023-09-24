@@ -6,9 +6,9 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { rmdirRecursively } from '../fileSystem/utils';
+import { allWorkspaceActions } from '../redux/workspace/AllWorkspacesRedux';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
-import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -16,7 +16,7 @@ import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 
 export type FileSystemViewDirectoryNodeProps = {
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: SideContentLocation;
   fileSystem: FSModule;
   basePath: string;
   directoryName: string;
@@ -80,7 +80,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
         return;
       }
 
-      dispatch(removeEditorTabsForDirectory(workspaceLocation, fullPath));
+      dispatch(allWorkspaceActions.removeEditorTabsForDirectory(workspaceLocation, fullPath));
       rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
     });
   };

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ReactDOM from 'react-dom';
+import { useDispatch } from 'react-redux';
 
-import type { DebuggerContext } from '../workspace/WorkspaceTypes';
+import { allWorkspaceActions } from '../redux/workspace/AllWorkspacesRedux';
+import { useWorkspace } from '../redux/workspace/Hooks';
+import { DebuggerContext, SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 // const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
@@ -44,3 +47,23 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
 };
 
 export const getTabId = (tab: SideContentTab) => tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id
+export const generateIconId = (name: string) => `icon-${name}`
+
+export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
+  const { sideContent: { selectedTabId, ...sideContent } } = useWorkspace(location)
+  const dispatch = useDispatch()
+  const setSelectedTab = useCallback((newId: SideContentType) => {
+    dispatch(allWorkspaceActions.visitSideContent(location, newId))
+  }, [dispatch, location])
+
+  const setSideContentHeight = useCallback((height: number) => {
+    dispatch(allWorkspaceActions.changeSideContentHeight(location, height))
+  }, [dispatch, location])
+
+  return {
+    ...sideContent,
+    selectedTab: selectedTabId ?? defaultTab,
+    setSelectedTab,
+    setSideContentHeight,
+  }
+}

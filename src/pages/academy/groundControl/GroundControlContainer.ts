@@ -1,11 +1,11 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { OverallState } from 'src/commons/redux/AllTypes';
 
 import {
   fetchAssessmentOverviews,
   fetchCourseConfig
 } from '../../../commons/application/actions/SessionActions';
-import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   changeDateAssessment,
   deleteAssessment,

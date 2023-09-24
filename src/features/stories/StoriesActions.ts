@@ -1,5 +1,4 @@
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
-import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
 
 import {
@@ -19,6 +18,7 @@ import {
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
+  StoriesRole,
   StoryData,
   StoryListView,
   StoryParams,

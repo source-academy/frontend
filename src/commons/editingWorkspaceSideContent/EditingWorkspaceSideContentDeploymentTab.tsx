@@ -5,11 +5,6 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 
 import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
-import {
-  External,
-  externalLibraries,
-  ExternalLibraryName
-} from '../application/types/ExternalTypes';
 import { Assessment, emptyLibrary, Library } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
@@ -19,7 +14,7 @@ type DeploymentTabProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   updateAssessment: (assessment: Assessment) => void;
-  handleRefreshLibrary: (library: Library) => void;
+  // handleRefreshLibrary: (library: Library) => void;
 };
 
 type StateProps = {
@@ -56,19 +51,19 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
       </tr>
     ));
 
-    const resetLibrary = (
-      <ControlButton
-        label="Use this Library"
-        icon={IconNames.REFRESH}
-        onClick={() => props.handleRefreshLibrary(deployment)}
-      />
-    );
+    // const resetLibrary = (
+    //   <ControlButton
+    //     label="Use this Library"
+    //     icon={IconNames.REFRESH}
+    //     onClick={() => props.handleRefreshLibrary(deployment)}
+    //   />
+    // );
 
     const symbolsFragment = (
       <React.Fragment>
         External Library:
         <br />
-        {externalSelect(deployment.external.name, handleExternalSelect)}
+        {/* {externalSelect(deployment.external.name, handleExternalSelect)} */}
         <Divider />
         <div>Symbols:</div>
         <br />
@@ -94,8 +89,8 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
       <div>
         {/* {deploymentDisp}
         <br /> */}
-        <Divider />
-        {resetLibrary}
+        {/* <Divider />
+        {resetLibrary} */}
         <Divider />
         Interpreter:
         <br />
@@ -180,13 +175,12 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
     props.updateAssessment(assessment);
   };
 
-  const handleExternalSelect = (i: External, _e?: React.SyntheticEvent<HTMLElement>) => {
-    const assessment = props.assessment;
-    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    deployment.external.name = i.name;
-    deployment.external.symbols = JSON.parse(JSON.stringify(externalLibraries.get(i.name)!));
-    props.updateAssessment(assessment);
-  };
+  // const handleExternalSelect = (i: External, _e?: React.SyntheticEvent<HTMLElement>) => {
+  //   const assessment = props.assessment;
+  //   const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
+  //   deployment.external.symbols = JSON.parse(JSON.stringify(externalLibraries.get(i.name)!));
+  //   props.updateAssessment(assessment);
+  // };
 
   const handleSwitchDeployment = () => {
     const assessment = props.assessment;
@@ -267,35 +261,35 @@ const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifier
   <MenuItem active={false} key={chap.displayName} onClick={handleClick} text={chap.displayName} />
 );
 
-const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
-  name: entry[0] as ExternalLibraryName,
-  key: index,
-  symbols: entry[1]
-}));
+// const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
+//   name: entry[0] as ExternalLibraryName,
+//   key: index,
+//   symbols: entry[1]
+// }));
 
-const externalSelect = (
-  currentExternal: string,
-  handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void
-) => (
-  <ExternalSelectComponent
-    className={Classes.MINIMAL}
-    items={iExternals}
-    onItemSelect={handleSelect}
-    itemRenderer={externalRenderer}
-    filterable={false}
-  >
-    <Button
-      className={Classes.MINIMAL}
-      text={currentExternal}
-      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-    />
-  </ExternalSelectComponent>
-);
+// const externalSelect = (
+//   currentExternal: string,
+//   handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void
+// ) => (
+//   <ExternalSelectComponent
+//     className={Classes.MINIMAL}
+//     items={iExternals}
+//     onItemSelect={handleSelect}
+//     itemRenderer={externalRenderer}
+//     filterable={false}
+//   >
+//     <Button
+//       className={Classes.MINIMAL}
+//       text={currentExternal}
+//       rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+//     />
+//   </ExternalSelectComponent>
+// );
 
-const ExternalSelectComponent = Select.ofType<External>();
+// const ExternalSelectComponent = Select.ofType<External>();
 
-const externalRenderer: ItemRenderer<External> = (external, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />
-);
+// const externalRenderer: ItemRenderer<External> = (external, { handleClick, modifiers, query }) => (
+//   <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />
+// );
 
 export default DeploymentTab;

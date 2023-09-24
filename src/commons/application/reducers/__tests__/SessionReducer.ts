@@ -25,7 +25,7 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_NOTIFICATIONS
 } from '../../types/SessionTypes';
-import { SessionsReducer } from '../SessionsReducer';
+import { SessionsReducer } from '../../../redux/session/SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {
   const action = {

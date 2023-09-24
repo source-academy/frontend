@@ -2,8 +2,8 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import Stats from 'browserfs/dist/node/core/node_fs_stats';
 import path from 'path';
 
-import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { getWorkspaceBasePath } from '../../pages/fileSystem/createInBrowserFileSystem';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 
 type File = {
   path: string;
@@ -20,7 +20,7 @@ type File = {
  * @param fileSystem        The file system instance.
  */
 export const retrieveFilesInWorkspaceAsRecord = (
-  workspaceLocation: WorkspaceLocation,
+  workspaceLocation: SideContentLocation,
   fileSystem: FSModule
 ): Promise<Record<string, string>> => {
   const processFile = (filePath: string): Promise<File> => {
@@ -84,7 +84,7 @@ export const retrieveFilesInWorkspaceAsRecord = (
     });
   };
 
-  const files = processDirectory(WORKSPACE_BASE_PATHS[workspaceLocation]);
+  const files = processDirectory(getWorkspaceBasePath(workspaceLocation));
   // Convert from array to record.
   return files.then((files: File[]) => {
     return files.reduce((record: Record<string, string>, file: File) => {
@@ -104,19 +104,17 @@ export const retrieveFilesInWorkspaceAsRecord = (
  * @param files             A mapping from file paths to file contents.
  */
 export const overwriteFilesInWorkspace = (
-  workspaceLocation: WorkspaceLocation,
+  workspaceLocation: SideContentLocation,
   fileSystem: FSModule,
   files: Record<string, string>
-): Promise<void> => {
-  return rmFilesInDirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]).then(() => {
-    return new Promise(async (resolve, reject) => {
-      for (const [filePath, fileContents] of Object.entries(files)) {
-        await writeFileRecursively(fileSystem, filePath, fileContents).catch(err => reject(err));
-      }
-      resolve();
-    });
+): Promise<void> => rmFilesInDirRecursively(fileSystem, getWorkspaceBasePath(workspaceLocation)).then(() => {
+  return new Promise(async (resolve, reject) => {
+    for (const [filePath, fileContents] of Object.entries(files)) {
+      await writeFileRecursively(fileSystem, filePath, fileContents).catch(err => reject(err));
+    }
+    resolve();
   });
-};
+});
 
 /**
  * Removes the files & directories in a directory recursively, but leave

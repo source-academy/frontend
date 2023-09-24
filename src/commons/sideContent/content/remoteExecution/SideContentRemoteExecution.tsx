@@ -13,10 +13,13 @@ import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
+import { remoteExecutionActions } from 'src/commons/redux/RemoteExecRedux';
+import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
+import { remoteExecUpdateSession } from 'src/features/remoteExecution/RemoteExecutionActions';
 import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
 import {
   ev3PeripheralToComponentMap,
@@ -24,13 +27,11 @@ import {
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
-import { actions } from '../../../utils/ActionsHelper';
 import { useTypedSelector } from '../../../utils/Hooks';
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
 interface SideContentRemoteExecutionProps {
-  workspace: WorkspaceLocation;
+  workspace: SideContentLocation;
   secretParams?: string;
   callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
 }
@@ -85,7 +86,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
     // once the user navigates away from the workspace
     if (currentSession && currentSession.workspace !== props.workspace) {
       dispatch(
-        actions.remoteExecUpdateSession({
+        remoteExecUpdateSession({
           ...currentSession,
           workspace: props.workspace
         })
@@ -95,14 +96,14 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
 
   React.useEffect(() => {
     if (!devices && isLoggedIn) {
-      dispatch(actions.remoteExecFetchDevices());
+      dispatch(remoteExecutionActions.remoteExecFetchDevices());
     }
   }, [dispatch, devices, isLoggedIn]);
 
   React.useEffect(
     () => () => {
       // note the double () => - this function is a destructor
-      dispatch(actions.remoteExecDisconnect());
+      dispatch(remoteExecutionActions.remoteExecDisconnect());
     },
     [dispatch]
   );
@@ -127,9 +128,9 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
         return;
       }
       if (isConnected) {
-        dispatch(actions.remoteExecDisconnect());
+        dispatch(remoteExecutionActions.remoteExecDisconnect());
       }
-      dispatch(actions.remoteExecFetchDevices());
+      dispatch(remoteExecutionActions.remoteExecFetchDevices());
     },
     [dispatch, isConnected]
   );
@@ -153,7 +154,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
           <Menu className={classNames(Classes.ELEVATION_0)}>
             <MenuItem
               text="Browser"
-              onClick={() => dispatch(actions.remoteExecDisconnect())}
+              onClick={() => dispatch(remoteExecutionActions.remoteExecDisconnect())}
               icon={!currentDevice ? 'tick' : undefined}
               intent={!currentDevice ? 'success' : undefined}
             />
@@ -163,7 +164,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
               return (
                 <MenuItem
                   key={id}
-                  onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
+                  onClick={() => dispatch(remoteExecutionActions.remoteExecConnect(props.workspace, device))}
                   text={`${title} (${type})`}
                   icon={isSelected && 'tick'}
                   labelElement={

@@ -2,7 +2,7 @@ import React, { RefObject } from 'react';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
-import { OverallState } from '../application/ApplicationTypes';
+import { OverallState } from '../redux/AllTypes';
 import Constants from './Constants';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 

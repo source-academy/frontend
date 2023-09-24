@@ -5,15 +5,15 @@ import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import { allWorkspaceActions } from '../redux/workspace/AllWorkspacesRedux';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
-import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 
 export type FileSystemViewFileNodeProps = {
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: SideContentLocation;
   fileSystem: FSModule;
   basePath: string;
   fileName: string;
@@ -41,7 +41,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
         throw new Error('File contents are undefined.');
       }
 
-      dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
+      dispatch(allWorkspaceActions.addEditorTab(workspaceLocation, fullPath, fileContents));
     });
   };
 
@@ -71,7 +71,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
           console.error(err);
         }
 
-        dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
+        dispatch(allWorkspaceActions.removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });
     });

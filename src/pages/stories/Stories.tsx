@@ -6,12 +6,12 @@ import { Card, Flex, TextInput, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deleteStory, getStoriesList, saveStory } from 'src/features/stories/StoriesActions';
 import { getYamlHeader } from 'src/features/stories/storiesComponents/UserBlogContent';
+import { StoriesRole } from 'src/features/stories/StoriesTypes';
 
 import StoriesTable from './StoriesTable';
 import StoryActions from './StoryActions';
@@ -23,13 +23,15 @@ const columns = [
   { id: 'actions', header: 'Actions' }
 ];
 
+const useStoriesWorkspace = () => useTypedSelector(state => state.workspaces.stories)
+
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userId: storiesUserId, role: storiesRole } = useTypedSelector(state => state.stories);
-  const isStoriesDisabled = useTypedSelector(state => !state.stories.groupId);
+  const { userId: storiesUserId, role: storiesRole } = useStoriesWorkspace();
+  const isStoriesDisabled = useTypedSelector(state => !state.workspaces.stories.groupId);
   const isLoggedIn = !!storiesUserId;
 
   const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
@@ -48,7 +50,7 @@ const Stories: React.FC = () => {
     [dispatch]
   );
 
-  const storyList = useTypedSelector(state => state.stories.storyList);
+  const { storyList } = useStoriesWorkspace()
 
   const handleTogglePinStory = useCallback(
     (id: number) => {

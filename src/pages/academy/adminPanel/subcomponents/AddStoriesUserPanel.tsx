@@ -17,9 +17,8 @@ import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
 import React from 'react';
 import { useCSVReader } from 'react-papaparse';
-import { StoriesRole } from 'src/commons/application/ApplicationTypes';
-
-import Constants from '../../../../commons/utils/Constants';
+import Constants from 'src/commons/utils/Constants';
+import { StoriesRole } from 'src/features/stories/StoriesTypes';
 
 type Props = {
   handleAddNewUsersToCourse: (users: NameUsernameRole[], provider: string) => void;

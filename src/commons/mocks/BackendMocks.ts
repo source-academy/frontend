@@ -4,7 +4,6 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
-  OverallState,
   Role,
   SALanguage,
   styliseSublanguage,
@@ -41,10 +40,12 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
+import { OverallState } from '../redux/AllTypes';
+import { SessionState } from '../redux/session/SessionsReducer';
+import { selectSession } from '../redux/utils/Selectors';
 import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   mockAssessmentConfigurations,
   mockAssessmentOverviews,
@@ -68,7 +69,8 @@ export function* mockBackendSaga(): SagaIterator {
 
     yield put(actions.setTokens(tokens));
     yield mockGetUserAndCourse();
-    const courseId: number = yield select((state: OverallState) => state.session.courseId!);
+
+    const { courseId }: SessionState = yield selectSession()
     yield routerNavigate(`/courses/${courseId}`);
   });
 
@@ -92,7 +94,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.setCourseRegistration(courseRegistration));
     yield put(actions.setCourseConfiguration(courseConfiguration));
     yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-    yield put(actions.updateSublanguage(sublanguage));
+    yield put(actions.updateSublanguage('playground', sublanguage));
   };
 
   yield takeEvery(FETCH_USER_AND_COURSE, mockGetUserAndCourse);
@@ -116,11 +118,12 @@ export function* mockBackendSaga(): SagaIterator {
     const questionId = action.payload.id;
     const answer = action.payload.answer;
     // Now, update the answer for the question in the assessment in the store
-    const assessmentId = yield select(
-      (state: OverallState) => state.workspaces.assessment.currentAssessment!
-    );
+
     const assessment = yield select((state: OverallState) =>
-      state.session.assessments.get(assessmentId)
+      {
+        const assessmentId = state.workspaces.assessment.currentAssessment!
+        return state.session.assessments.get(assessmentId);
+      }
     );
     const newQuestions = assessment.questions.slice().map((question: Question) => {
       if (question.id === questionId) {
@@ -134,7 +137,7 @@ export function* mockBackendSaga(): SagaIterator {
     };
     yield put(actions.updateAssessment(newAssessment));
     yield call(showSuccessMessage, 'Saved!', 1000);
-    return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
+    return yield put(actions.updateHasUnsavedChanges('assessment', false));
   });
 
   yield takeEvery(
@@ -308,7 +311,7 @@ export function* mockBackendSaga(): SagaIterator {
       yield put(actions.setAssessmentConfigurations([...mockAssessmentConfigurations[idx]]));
       yield put(actions.setCourseRegistration({ ...mockCourseRegistrations[idx] }));
       yield put(
-        actions.updateSublanguage({
+        actions.updateSublanguage('playground', {
           chapter: courseConfiguration.sourceChapter,
           variant: courseConfiguration.sourceVariant,
           displayName: styliseSublanguage(

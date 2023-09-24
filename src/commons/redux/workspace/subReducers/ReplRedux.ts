@@ -1,45 +1,29 @@
-import { createAction, createReducer } from "@reduxjs/toolkit";
-import { SourceError, Value } from "js-slang/dist/types";
+import { createReducer } from "@reduxjs/toolkit";
+import type { SourceError, Value } from "js-slang/dist/types";
 import { stringify } from "js-slang/dist/utils/stringify";
 
-import { CodeOutput, InterpreterOutput } from "../../../application/ApplicationTypes"
+import type { CodeOutput } from "../../../application/ApplicationTypes"
 import Constants from "../../../utils/Constants";
+import { createActions } from "../../utils";
+import { defaultRepl } from "../WorkspaceReduxTypes";
 
-export type ReplState = {
-  readonly output: InterpreterOutput[]
-  readonly replHistory: {
-    readonly browseIndex: null | number; // [0, 49] if browsing, else null
-    readonly records: string[];
-    readonly originalValue: string;
-  }
-  readonly replValue: string
-}
-
-export const defaultRepl: ReplState = {
-  output: [],
-  replHistory: {
-    browseIndex: null,
-    records: [],
-    originalValue: ''
-  },
-  replValue: ''
-}
-
-export const replActions = {
-  browseReplHistoryDown: createAction('repl/browseReplHistoryDown'),
-  browseReplHistoryUp: createAction('repl/browseReplHistoryUp'),
-  clearReplInput: createAction('repl/clearReplInput'),
-  clearReplOutput: createAction('repl/clearReplOutput'),
-  clearReplOutputLast: createAction('rep;/clearReplOutputLast'),
-  evalInterpreterError: createAction('repl/evalInterpreterError', (payload: SourceError[]) => ({ payload })),
-  evalInterpreterSuccess: createAction('repl/evalInterpreterSuccess', (payload: Value) => ({ payload })),
-  handleConsoleLog: createAction('repl/handleConsoleLog', (payload: string[]) => ({ payload })),
-  sendReplInputToOutput: createAction('repl/sendReplInputToOutput', (output: string): { payload: CodeOutput } => ({ payload: {
+export const replActions = createActions('repl', {
+  browseReplHistoryDown: 0,
+  browseReplHistoryUp: 0,
+  clearReplInput: 0,
+  clearReplOutput: 0,
+  clearReplOutputLast: 0,
+  evalInterpreterError: (errors: SourceError[]) => errors,
+  evalInterpreterSuccess: (value: Value) => value,
+  handleConsoleLog: (logs: string[]) => logs,
+  sendReplInputToOutput: (output: string): CodeOutput => ({
     type: 'code',
     value: output
-  }})),
-  updateReplValue: createAction('repl/updateReplValue', (payload: string) => ({ payload })),
-} as const
+  }),
+  updateReplValue: (newValue: string) => newValue,
+})
+
+export const replActionNames = Object.keys(replActions) as Array<keyof typeof replActions>
 
 export const replReducer = createReducer(defaultRepl, builder => {
   builder.addCase(replActions.browseReplHistoryDown, (state) => {

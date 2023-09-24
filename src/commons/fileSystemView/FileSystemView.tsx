@@ -3,16 +3,16 @@ import { IconNames } from '@blueprintjs/icons';
 import path from 'path';
 import React from 'react';
 
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import { useTypedSelector } from '../utils/Hooks';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 
 export type FileSystemViewProps = {
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: SideContentLocation;
   basePath: string;
 };
 

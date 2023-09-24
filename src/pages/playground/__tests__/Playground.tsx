@@ -34,7 +34,7 @@ describe('Playground tests', () => {
   const getSourceChapterFromStore = (store: Store<OverallState>) =>
     store.getState().playground.languageConfig.chapter;
   const getEditorValueFromStore = (store: Store<OverallState>) =>
-    store.getState().workspaces.playground.editorTabs[0].value;
+    store.getState().workspaces.playground.editorState.editorTabs[0].value;
 
   beforeEach(() => {
     mockStore = createStore();

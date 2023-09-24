@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { updateAssessment } from '../application/actions/SessionActions';
+import { sessionReducerActions } from '../redux/session/SessionsReducer';
 import MissionCreator, { DispatchProps } from './MissionCreator';
 
 const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownProps;
@@ -9,7 +9,7 @@ const mapStateToProps: MapStateToProps<{}, any, {}> = (state, ownProps) => ownPr
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      newAssessment: updateAssessment
+      newAssessment: sessionReducerActions.updateAssessment
     },
     dispatch
   );

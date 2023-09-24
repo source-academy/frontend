@@ -2,20 +2,18 @@ import { BFSRequire, configure } from 'browserfs';
 import { ApiError } from 'browserfs/dist/node/core/api_error';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Store } from 'redux';
+import { OverallState } from 'src/commons/redux/AllTypes';
+import { EditorTabState, isNonStoryWorkspaceLocation, SideContentLocation, WorkspaceManagerState } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 
-import { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 import { writeFileRecursively } from '../../commons/fileSystem/utils';
-import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
-import { SideContentLocation } from 'src/commons/redux/workspace/subReducers/SideContentRedux';
-import { isNonStoryWorkspaceLocation } from 'src/commons/redux/workspace/WorkspaceRedux';
 
 /**
  * Maps workspaces to their file system base path.
  * An empty path indicates that the workspace is not
  * linked to the file system.
  */
-export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
+const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
   assessment: '',
   githubAssessment: '',
   grading: '',
@@ -67,12 +65,21 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
         // Create files for editor tabs if they do not exist. This can happen when
         // editor tabs are initialised from the Redux store defaults, as opposed to
         // being created by the user.
-        const workspaceStates = store.getState().workspaces;
+        const {
+          stories,
+          ...workspaceStates
+        } = store.getState().workspaces;
         const promises: Promise<void>[] = [];
-        for (const [, workspaceState] of Object.entries(workspaceStates)) {
+        for (const workspaceState of Object.values(workspaceStates)) {
           const editorTabs = workspaceState.editorState.editorTabs;
           promises.push(createFilesForEditorTabs(fileSystem, editorTabs));
         }
+
+        for (const storyEnvState of Object.values(stories.envs)) {
+          const editorTabs = storyEnvState.editorState.editorTabs;
+          promises.push(createFilesForEditorTabs(fileSystem, editorTabs));
+        }
+
         Promise.all(promises)
           .then(() => resolve())
           .catch(err => reject(err));

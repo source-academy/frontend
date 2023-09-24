@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import { sessionReducerActions } from 'src/commons/redux/session/SessionsReducer';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   addNewStoriesUsersToCourse,
@@ -19,7 +20,6 @@ import {
   fetchAssessmentConfigs,
   fetchCourseConfig,
   fetchNotificationConfigs,
-  setAssessmentConfigurations,
   updateAssessmentConfigs,
   updateCourseConfig,
   updateUserRole
@@ -153,7 +153,7 @@ const AdminPanel: React.FC = () => {
     }
     if (hasChangesAssessmentConfig) {
       // Reset the store first so that old props do not propagate down and cause a flicker
-      dispatch(setAssessmentConfigurations([]));
+      dispatch(sessionReducerActions.setAssessmentConfigurations([]));
 
       // assessmentConfig.current will exist after the first load
       dispatch(updateAssessmentConfigs(assessmentConfig.current!));

@@ -5,9 +5,10 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import { useWorkspace } from 'src/commons/redux/workspace/Hooks';
 import Constants from 'src/commons/utils/Constants';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
-import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
@@ -55,6 +56,10 @@ const Sicp: React.FC = () => {
       top: ref.offsetTop - relativeTop
     });
   };
+
+  const {
+    resetWorkspace,
+  } = useWorkspace('sicp')
 
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
@@ -130,8 +135,8 @@ const Sicp: React.FC = () => {
   const dispatch = useDispatch();
   const handleSnippetEditorOpen = (s: string) => {
     setActive(s);
-    dispatch(resetWorkspace('sicp'));
-    dispatch(toggleUsingSubst(false, 'sicp'));
+    resetWorkspace();
+    dispatch(allWorkspaceActions.toggleUsingSubst('sicp', false));
   };
   const handleNavigation = (sect: string) => {
     navigate('/sicpjs/' + sect);

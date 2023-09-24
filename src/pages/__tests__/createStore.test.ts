@@ -7,7 +7,6 @@ import {
   defaultStories,
   OverallState
 } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import Constants from '../../commons/utils/Constants';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
@@ -43,7 +42,6 @@ const mockChangedStoredState: SavedState = {
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
-  playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
   playgroundLanguage: defaultLanguageConfig,
   stories: defaultStories
 };
@@ -64,22 +62,25 @@ const mockChangedState: OverallState = {
     playground: {
       ...defaultState.workspaces.playground,
       isFolderModeEnabled: true,
-      activeEditorTabIndex: 1,
-      editorTabs: [
-        {
-          filePath: '/playground/a.js',
-          value: `import { square } from './b.js'; square(5);`,
-          breakpoints: [],
-          highlightedLines: []
-        },
-        {
-          filePath: '/playground/b.js',
-          value: 'export const square = x => x * x;',
-          breakpoints: [],
-          highlightedLines: []
-        }
-      ],
-      isEditorAutorun: true
+      editorState: {
+        ...defaultState.workspaces.playground.editorState,
+        activeEditorTabIndex: 1,
+        editorTabs: [
+          {
+            filePath: '/playground/a.js',
+            value: `import { square } from './b.js'; square(5);`,
+            breakpoints: [],
+            highlightedLines: []
+          },
+          {
+            filePath: '/playground/b.js',
+            value: 'export const square = x => x * x;',
+            breakpoints: [],
+            highlightedLines: []
+          }
+        ],
+        isEditorAutorun: true
+      },
     }
   }
 };

@@ -6,11 +6,30 @@ import { call } from "redux-saga/effects"
 import { safeTakeEvery } from "../sagas/SafeEffects"
 import Constants from "../utils/Constants"
 
+export enum ApplicationEnvironment {
+  Development = 'development',
+  Production = 'production',
+  Test = 'test'
+}
+
 export type ApplicationState = {
+  readonly environment: ApplicationEnvironment;
   readonly modulesBackend: string
 }
 
+const currentEnvironment = (): ApplicationEnvironment => {
+  switch (process.env.NODE_ENV) {
+    case 'development':
+      return ApplicationEnvironment.Development;
+    case 'production':
+      return ApplicationEnvironment.Production;
+    default:
+      return ApplicationEnvironment.Test;
+  }
+};
+
 export const defaultApplication: ApplicationState = {
+  environment: currentEnvironment(),
   modulesBackend: Constants.moduleBackendUrl
 }
 

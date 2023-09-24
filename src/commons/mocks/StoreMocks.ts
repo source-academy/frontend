@@ -2,19 +2,14 @@ import _ from 'lodash';
 import { DeepPartial, Store } from 'redux';
 import mockStore from 'redux-mock-store';
 
-import {
-  defaultAcademy,
-  defaultAchievement,
-  defaultApplication,
-  defaultDashboard,
-  defaultFileSystem,
-  defaultPlayground,
-  defaultRouter,
-  defaultSession,
-  defaultStories,
-  defaultWorkspaceManager,
-  OverallState
-} from '../application/ApplicationTypes';
+import { defaultFileSystem } from '../application/ApplicationTypes';
+import { defaultAcademy } from '../redux/academy/AcademyReducer';
+import { defaultAchievement } from '../redux/achievement/AchievementReducer';
+import { defaultDashboard,OverallState } from '../redux/AllTypes';
+import { defaultApplication } from '../redux/ApplicationRedux';
+import { defaultRouter } from '../redux/RouterReducer';
+import { defaultSession } from '../redux/session/SessionsReducer';
+import { defaultWorkspaceManager } from '../redux/workspace/WorkspaceReduxTypes';
 
 export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<OverallState> {
   const createStore = (mockStore as any)();
@@ -24,10 +19,8 @@ export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<O
     achievement: defaultAchievement,
     application: defaultApplication,
     dashboard: defaultDashboard,
-    playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,
     session: defaultSession,
-    stories: defaultStories,
     fileSystem: defaultFileSystem
   };
   return createStore(_.merge(state, overrides));

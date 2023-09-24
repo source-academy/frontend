@@ -1,7 +1,6 @@
 import { Chapter } from 'js-slang/dist/types';
 import { Builder } from 'xml2js';
 
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -118,7 +117,7 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
   } else {
     const deployment = deploymentArr[0];
     const external = deployment.IMPORT || deployment.EXTERNAL;
-    const nameVal = external ? external[0].$.name : 'NONE';
+    // const nameVal = external ? external[0].$.name : 'NONE';
     const symbolsVal = external ? external[0].SYMBOL || [] : [];
     const globalsVal = deployment.GLOBAL
       ? (deployment.GLOBAL.map(x => [x.IDENTIFIER[0], altEval(x.VALUE[0]), x.VALUE[0]]) as Array<
@@ -128,7 +127,7 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
     return {
       chapter: parseInt(deployment.$.interpreter, 10) as Chapter,
       external: {
-        name: nameVal as ExternalLibraryName,
+        // name: nameVal as ExternalLibraryName,
         symbols: symbolsVal
       },
       globals: globalsVal
@@ -262,7 +261,7 @@ const exportLibrary = (library: Library) => {
     },
     EXTERNAL: {
       $: {
-        name: library.external.name
+        // name: library.external.name
       }
     }
   };

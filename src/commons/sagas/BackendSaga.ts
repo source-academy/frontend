@@ -16,13 +16,10 @@ import {
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import {
-  SAVE_SOURCECAST_DATA,
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
-import { OverallState, Role } from '../application/ApplicationTypes';
+import { Role } from '../application/ApplicationTypes';
 import { RouterState } from '../application/types/CommonsTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
@@ -80,10 +77,12 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
+import { OverallState } from '../redux/AllTypes';
+import { SessionState } from '../redux/session/SessionsReducer';
+import { selectSession, selectTokens } from '../redux/utils/Selectors';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   deleteAssessment,
   deleteSourcecastEntry,
@@ -131,16 +130,10 @@ import {
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-export function selectTokens() {
-  return select((state: OverallState) => ({
-    accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
-  }));
-}
-
 function selectRouter() {
   return select((state: OverallState) => state.router);
 }
+
 export function* routerNavigate(path: string) {
   const router: RouterState = yield selectRouter();
   return router?.navigate(path);
@@ -367,7 +360,7 @@ function* BackendSaga(): SagaIterator {
     };
 
     yield put(actions.updateAssessment(newAssessment));
-    return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
+    return yield put(actions.updateHasUnsavedChanges('assessment', false));
   });
 
   yield takeEvery(
@@ -384,10 +377,9 @@ function* BackendSaga(): SagaIterator {
       yield call(showSuccessMessage, 'Submitted!', 2000);
 
       // Now, update the status of the assessment overview in the store
-      const overviews: AssessmentOverview[] = yield select(
-        (state: OverallState) => state.session.assessmentOverviews
-      );
-      const newOverviews = overviews.map(overview => {
+      const { assessmentOverviews: overviews }: SessionState = yield selectSession()
+
+      const newOverviews = overviews!.map(overview => {
         if (overview.id === assessmentId) {
           return { ...overview, status: AssessmentStatuses.submitted };
         }
@@ -460,7 +452,7 @@ function* BackendSaga(): SagaIterator {
       | ReturnType<typeof actions.submitGrading>
       | ReturnType<typeof actions.submitGradingAndContinue>
   ): any {
-    const role: Role = yield select((state: OverallState) => state.session.role!);
+    const { role }: SessionState = yield selectSession()
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can submit answers.');
     }
@@ -482,9 +474,8 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Submitted!', 1000);
 
     // Now, update the grade for the question in the Grading in the store
-    const grading: Grading = yield select((state: OverallState) =>
-      state.session.gradings.get(submissionId)
-    );
+    const grading: Grading = yield selectSession(session => session.gradings.get(submissionId))
+    
     const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
@@ -597,15 +588,14 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    DELETE_SOURCECAST_ENTRY,
-    function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
-      const role: Role = yield select((state: OverallState) => state.session.role!);
+    actions.deleteSourcecastEntry,
+    function* ({ payload: id }): any {
+      const { role }: SessionState = yield selectSession()
       if (role === Role.Student) {
         return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
       }
 
       const tokens: Tokens = yield selectTokens();
-      const { id } = action.payload;
 
       const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
       if (!resp || !resp.ok) {
@@ -614,7 +604,7 @@ function* BackendSaga(): SagaIterator {
 
       const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
       if (sourcecastIndex) {
-        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
+        yield put(actions.updateSourcecastIndex(sourcecastIndex));
       }
 
       yield call(showSuccessMessage, 'Deleted successfully!', 1000);
@@ -622,20 +612,20 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    FETCH_SOURCECAST_INDEX,
-    function* (action: ReturnType<typeof actions.fetchSourcecastIndex>) {
+    actions.fetchSourcecastIndex,
+    function* (action) {
       const tokens: Tokens = yield selectTokens();
 
       const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
       if (sourcecastIndex) {
-        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
+        yield put(actions.updateSourcecastIndex(sourcecastIndex));
       }
     }
   );
 
   yield takeEvery(
-    SAVE_SOURCECAST_DATA,
-    function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
+    actions.saveSourcecastData,
+    function* (action): any {
       const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
         state.session.role!,
         state.session.courseId
@@ -665,10 +655,9 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    CHANGE_SUBLANGUAGE,
-    function* (action: ReturnType<typeof actions.changeSublanguage>): any {
+    actions.changeSublanguage,
+    function* ({ payload: { payload: sublang } }: ReturnType<typeof actions.changeSublanguage>): any {
       const tokens: Tokens = yield selectTokens();
-      const { sublang } = action.payload;
 
       const resp: Response | null = yield call(putCourseConfig, tokens, {
         sourceChapter: sublang.chapter,

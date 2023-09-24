@@ -1,7 +1,5 @@
 import { Chapter, SourceError, Variant } from 'js-slang/dist/types';
 
-import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
-
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
 export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
 
@@ -152,12 +150,14 @@ export type Library = {
   chapter: Chapter;
   variant?: Variant;
   execTimeMs?: number;
-  external: ExternalLibrary;
   globals: Array<{
     0: string;
     1: any;
     2?: string; // For mission control
   }>;
+  external: {
+    symbols: string[]
+  }
   moduleParams?: any;
 };
 
@@ -207,7 +207,6 @@ export const emptyLibrary = (): Library => {
   return {
     chapter: -1,
     external: {
-      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []
@@ -218,7 +217,6 @@ export const normalLibrary = (): Library => {
   return {
     chapter: Chapter.SOURCE_1,
     external: {
-      name: 'NONE' as ExternalLibraryName,
       symbols: []
     },
     globals: []

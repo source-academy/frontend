@@ -3,15 +3,12 @@ import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
+import { allWorkspaceActions } from '../redux/workspace/AllWorkspacesRedux';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
-import {
-  renameEditorTabForFile,
-  renameEditorTabsForDirectory
-} from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export type FileSystemViewFileNameProps = {
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: SideContentLocation;
   fileSystem: FSModule;
   basePath: string;
   fileName: string;
@@ -72,9 +69,9 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           }
 
           if (isDirectory) {
-            dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
+            dispatch(allWorkspaceActions.renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
           } else {
-            dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
+            dispatch(allWorkspaceActions.renameEditorTabForFile(workspaceLocation, oldPath, newPath));
           }
           refreshDirectory();
         });

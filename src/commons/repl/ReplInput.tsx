@@ -8,25 +8,24 @@ import ReactAce from 'react-ace/lib/ace';
 import MediaQuery from 'react-responsive';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { useRepl } from '../redux/workspace/Hooks';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { getModeString, selectMode } from '../utils/AceHelper';
 // source mode and chapter imported in Editor.tsx
 
 export type ReplInputProps = DispatchProps & StateProps & OwnProps;
 
 type DispatchProps = {
-  handleBrowseHistoryDown: () => void;
-  handleBrowseHistoryUp: () => void;
-  handleReplValueChange: (newCode: string) => void;
-  handleReplEval: () => void;
+  location: SideContentLocation
+  handleReplEval: () => void
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
 };
 
 type StateProps = {
-  replValue: string;
+  // replValue: string;
   sourceChapter: Chapter;
   sourceVariant: Variant;
-  // externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
 };
 
@@ -40,8 +39,15 @@ export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
   const replInput = React.useRef<ReactAce>(null);
   const replInputBottom = React.useRef<HTMLDivElement>(null);
 
-  const execBrowseHistoryDown: () => void = props.handleBrowseHistoryDown;
-  const execBrowseHistoryUp: () => void = props.handleBrowseHistoryUp;
+  const {
+    replValue,
+    browseReplHistoryDown,
+    browseReplHistoryUp,
+    updateReplValue
+  } = useRepl(props.location)
+
+
+
   const execEvaluate = () => {
     props.handleReplEval();
     if (replInputBottom.current && !props.disableScrolling) {
@@ -98,8 +104,8 @@ export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
         theme="source"
         height="1px"
         width="100%"
-        value={props.replValue}
-        onChange={props.handleReplValueChange}
+        value={replValue}
+        onChange={updateReplValue}
         commands={[
           {
             name: 'browseHistoryDown',
@@ -107,7 +113,7 @@ export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
               win: 'Down',
               mac: 'Down'
             },
-            exec: execBrowseHistoryDown
+            exec: () => browseReplHistoryDown()
           },
           {
             name: 'browseHistoryUp',
@@ -115,7 +121,7 @@ export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
               win: 'Up',
               mac: 'Up'
             },
-            exec: execBrowseHistoryUp
+            exec: () => browseReplHistoryUp()
           },
           {
             name: 'evaluate',

@@ -28,7 +28,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
 
-  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
+  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.workspaces.stories);
   const { id: idToSet } = useParams<{ id: string }>();
   useEffect(() => {
     // Clear screen on first load

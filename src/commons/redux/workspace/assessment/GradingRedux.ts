@@ -1,27 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { SubmissionsTableFilters } from "src/commons/workspace/WorkspaceTypes";
 
-import { AssessmentState, createAssessmentSlice, getDefaultAssessmentState } from './AssessmentBase';
-
-export type GradingWorkspaceState = AssessmentState & {
-  readonly currentSubmission?: number;
-  readonly currentQuestion?: number;
-  readonly hasUnsavedChanges: boolean;
-  readonly submissionsTableFilters: SubmissionsTableFilters;
-}
-
-export const defaultGradingState: GradingWorkspaceState = ({
-  ...getDefaultAssessmentState(),
-  autogradingResults: [],
-  submissionsTableFilters: {
-    columnFilters: [],
-    globalFilter: null
-  },
-  currentSubmission: undefined,
-  currentQuestion: undefined,
-  editorTestcases: [],
-  hasUnsavedChanges: false
-})
+import { defaultGradingState, SubmissionsTableFilters } from '../WorkspaceReduxTypes';
+import { createAssessmentSlice } from './AssessmentBase';
 
 export const { actions: gradingActions, reducer: gradingReducer } = createAssessmentSlice('grading', defaultGradingState, {
   updateCurrentSubmissionId: {

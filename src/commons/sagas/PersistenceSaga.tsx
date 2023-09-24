@@ -1,7 +1,7 @@
 import { Intent } from '@blueprintjs/core';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
 import {
   PERSISTENCE_INITIALISE,
@@ -11,9 +11,10 @@ import {
   PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
-import { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { LOGOUT_GOOGLE } from '../application/types/SessionTypes';
+import { selectWorkspace } from '../redux/utils/Selectors';
+import { allWorkspaceActions } from '../redux/workspace/AllWorkspacesRedux';
+import { PlaygroundState } from '../redux/workspace/WorkspaceReduxTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
@@ -78,29 +79,32 @@ export function* persistenceSaga(): SagaIterator {
         fields: 'appProperties'
       });
       const contents = yield call([gapi.client.drive.files, 'get'], { fileId: id, alt: 'media' });
-      const activeEditorTabIndex: number | null = yield select(
-        (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-      );
+      const {
+        editorState: {
+          activeEditorTabIndex
+        }
+      }: PlaygroundState = yield selectWorkspace('playground')
+
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');
       }
-      yield put(actions.updateEditorValue('playground', activeEditorTabIndex, contents.body));
+      yield put(allWorkspaceActions.updateEditorValue('playground', activeEditorTabIndex, contents.body));
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
       if (meta && meta.appProperties) {
         yield put(
-          actions.chapterSelect(
+          allWorkspaceActions.chapterSelect(
+            'playground',
             parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
             meta.appProperties.variant || Variant.DEFAULT,
-            'playground'
           )
         );
-        yield put(
-          actions.externalLibrarySelect(
-            Object.values(ExternalLibraryName).find(v => v === meta.appProperties.external) ||
-              ExternalLibraryName.NONE,
-            'playground'
-          )
-        );
+        // yield put(
+        //   actions.externalLibrarySelect(
+        //     Object.values(ExternalLibraryName).find(v => v === meta.appProperties.external) ||
+        //       ExternalLibraryName.NONE,
+        //     'playground'
+        //   )
+        // );
       }
 
       yield call(showSuccessMessage, `Loaded ${name}.`, 1000);
@@ -119,15 +123,16 @@ export function* persistenceSaga(): SagaIterator {
     try {
       yield call(ensureInitialisedAndAuthorised);
 
-      const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
-        (state: OverallState) => [
-          state.workspaces.playground.activeEditorTabIndex,
-          state.workspaces.playground.editorTabs,
-          state.workspaces.playground.context.chapter,
-          state.workspaces.playground.context.variant,
-          state.workspaces.playground.externalLibrary
-        ]
-      );
+      const {
+        editorState: {
+          activeEditorTabIndex,
+          editorTabs,
+        },
+        context: {
+          chapter,
+          variant
+        }
+      }: PlaygroundState = yield selectWorkspace('playground')
 
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');
@@ -201,7 +206,6 @@ export function* persistenceSaga(): SagaIterator {
         const config: IPlaygroundConfig = {
           chapter,
           variant,
-          external
         };
 
         toastKey = yield call(showMessage, {
@@ -249,15 +253,16 @@ export function* persistenceSaga(): SagaIterator {
 
         yield call(ensureInitialisedAndAuthorised);
 
-        const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
-          (state: OverallState) => [
-            state.workspaces.playground.activeEditorTabIndex,
-            state.workspaces.playground.editorTabs,
-            state.workspaces.playground.context.chapter,
-            state.workspaces.playground.context.variant,
-            state.workspaces.playground.externalLibrary
-          ]
-        );
+        const {
+          editorState: {
+            activeEditorTabIndex,
+            editorTabs,
+          },
+          context: {
+            chapter,
+            variant
+          }
+        }: PlaygroundState = yield selectWorkspace('playground')
 
         if (activeEditorTabIndex === null) {
           throw new Error('No active editor tab found.');
@@ -267,8 +272,8 @@ export function* persistenceSaga(): SagaIterator {
         const config: IPlaygroundConfig = {
           chapter,
           variant,
-          external
         };
+
         yield call(updateFile, id, name, MIME_SOURCE, code, config);
         yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
         yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
@@ -287,9 +292,8 @@ export function* persistenceSaga(): SagaIterator {
 }
 
 interface IPlaygroundConfig {
-  chapter: string;
-  variant: string;
-  external: string;
+  chapter: Chapter;
+  variant: Variant;
 }
 
 // Reason for this: we don't want to initialise and load the gapi JS until

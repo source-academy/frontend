@@ -1,43 +1,10 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 
-import { AcademyState } from '../../features/academy/AcademyTypes';
-import { AchievementState } from '../../features/achievement/AchievementTypes';
-import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
-import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-// import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
-import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
-import { defaultWorkspaceManager as newDefaultWorkspaceManager, WorkspaceManagerState } from '../redux/workspace/AllWorkspacesRedux';
-import Constants from '../utils/Constants';
-import { createContext } from '../utils/JsSlangHelper';
-import {
-  DebuggerContext,
-  WorkspaceLocation,
-  WorkspaceState
-} from '../workspace/WorkspaceTypes';
-import { RouterState } from './types/CommonsTypes';
-import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
 
-export type OverallState = {
-  readonly router: RouterState;
-  readonly academy: AcademyState;
-  readonly achievement: AchievementState;
-  readonly application: ApplicationState;
-  readonly playground: PlaygroundState;
-  readonly session: SessionState;
-  readonly stories: StoriesState;
-  readonly workspaces: WorkspaceManagerState;
-  readonly dashboard: DashboardState;
-  readonly fileSystem: FileSystemState;
-};
-
-export type ApplicationState = {
-  readonly environment: ApplicationEnvironment;
-};
 
 export type Story = {
   story: string;
@@ -95,22 +62,10 @@ export type ErrorOutput = {
 
 export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
 
-export enum ApplicationEnvironment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test'
-}
 
 export enum Role {
   Student = 'student',
   Staff = 'staff',
-  Admin = 'admin'
-}
-
-// Must match https://github.com/source-academy/stories-backend/blob/main/internal/enums/groups/role.go
-export enum StoriesRole {
-  Standard = 'member',
-  Moderator = 'moderator',
   Admin = 'admin'
 }
 
@@ -288,116 +243,60 @@ export const getLanguageConfig = (
   return languageConfig;
 };
 
-const currentEnvironment = (): ApplicationEnvironment => {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return ApplicationEnvironment.Development;
-    case 'production':
-      return ApplicationEnvironment.Production;
-    default:
-      return ApplicationEnvironment.Test;
-  }
-};
 
-export const defaultRouter: RouterState = null;
+// /**
+//  * Create a default IWorkspaceState for 'resetting' a workspace.
+//  * Takes in parameters to set the js-slang library and chapter.
+//  *
+//  * @param workspaceLocation the location of the workspace, used for context
+//  */
+// export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
+//   autogradingResults: [],
+//   context: createContext<WorkspaceLocation>(
+//     Constants.defaultSourceChapter,
+//     [],
+//     workspaceLocation,
+//     Constants.defaultSourceVariant
+//   ),
+//   isFolderModeEnabled: false,
+//   activeEditorTabIndex: 0,
+//   editorTabs: [
+//     {
+//       filePath: ['playground', 'sicp'].includes(workspaceLocation)
+//         ? getDefaultFilePath(workspaceLocation)
+//         : undefined,
+//       value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
+//         ? defaultEditorValue
+//         : '',
+//       highlightedLines: [],
+//       breakpoints: []
+//     }
+//   ],
+//   programPrependValue: '',
+//   programPostpendValue: '',
+//   editorSessionId: '',
+//   isEditorReadonly: false,
+//   editorTestcases: [],
+//   externalLibrary: ExternalLibraryName.NONE,
+//   execTime: 1000,
+//   output: [],
+//   replHistory: {
+//     browseIndex: null,
+//     records: [],
+//     originalValue: ''
+//   },
+//   replValue: '',
+//   sharedbConnected: false,
+//   stepLimit: 1000,
+//   globals: [],
+//   isEditorAutorun: false,
+//   isRunning: false,
+//   isDebugging: false,
+//   enableDebugging: true,
+//   debuggerContext: {} as DebuggerContext
+// });
 
-export const defaultAcademy: AcademyState = {
-  gameCanvas: undefined
-};
 
-export const defaultApplication: ApplicationState = {
-  environment: currentEnvironment()
-};
-
-export const defaultDashboard: DashboardState = {
-  gradingSummary: {
-    cols: [],
-    rows: []
-  }
-};
-
-export const defaultAchievement: AchievementState = {
-  achievements: [],
-  goals: [],
-  users: [],
-  assessmentOverviews: []
-};
-
-const getDefaultLanguageConfig = (): SALanguage => {
-  const languageConfig = ALL_LANGUAGES.find(
-    sublang =>
-      sublang.chapter === Constants.defaultSourceChapter &&
-      sublang.variant === Constants.defaultSourceVariant
-  );
-  if (!languageConfig) {
-    throw new Error('Cannot find language config to match default chapter and variant');
-  }
-  return languageConfig;
-};
-export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
-
-export const defaultPlayground: PlaygroundState = {
-  githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig
-};
-
-export const defaultEditorValue = '// Type your program in here!';
-
-/**
- * Create a default IWorkspaceState for 'resetting' a workspace.
- * Takes in parameters to set the js-slang library and chapter.
- *
- * @param workspaceLocation the location of the workspace, used for context
- */
-export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
-  autogradingResults: [],
-  context: createContext<WorkspaceLocation>(
-    Constants.defaultSourceChapter,
-    [],
-    workspaceLocation,
-    Constants.defaultSourceVariant
-  ),
-  isFolderModeEnabled: false,
-  activeEditorTabIndex: 0,
-  editorTabs: [
-    {
-      filePath: ['playground', 'sicp'].includes(workspaceLocation)
-        ? getDefaultFilePath(workspaceLocation)
-        : undefined,
-      value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
-        ? defaultEditorValue
-        : '',
-      highlightedLines: [],
-      breakpoints: []
-    }
-  ],
-  programPrependValue: '',
-  programPostpendValue: '',
-  editorSessionId: '',
-  isEditorReadonly: false,
-  editorTestcases: [],
-  externalLibrary: ExternalLibraryName.NONE,
-  execTime: 1000,
-  output: [],
-  replHistory: {
-    browseIndex: null,
-    records: [],
-    originalValue: ''
-  },
-  replValue: '',
-  sharedbConnected: false,
-  stepLimit: 1000,
-  globals: [],
-  isEditorAutorun: false,
-  isRunning: false,
-  isDebugging: false,
-  enableDebugging: true,
-  debuggerContext: {} as DebuggerContext
-});
-
-const defaultFileName = 'program.js';
-export const getDefaultFilePath = (workspaceLocation: WorkspaceLocation) =>
-  `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${defaultFileName}`;
 
 // export const defaultWorkspaceManager: WorkspaceManagerState2 = {
 //   assessment: {
@@ -520,41 +419,21 @@ export const defaultSession: SessionState = {
   notifications: []
 };
 
-export const defaultStories: StoriesState = {
-  storyList: [],
-  currentStoryId: null,
-  currentStory: null,
-  envs: {}
-};
-
-export const createDefaultStoriesEnv = (
-  envName: string,
-  chapter: Chapter,
-  variant: Variant
-): StoriesEnvState => ({
-  context: createContext<String>(chapter, [], envName, variant),
-  execTime: 1000,
-  isRunning: false,
-  output: [],
-  stepLimit: 1000,
-  globals: [],
-  usingSubst: false,
-  debuggerContext: {} as DebuggerContext
-});
+// export const createDefaultStoriesEnv = (
+//   envName: string,
+//   chapter: Chapter,
+//   variant: Variant
+// ): StoriesEnvState => ({
+//   context: createContext<String>(chapter, [], envName, variant),
+//   execTime: 1000,
+//   isRunning: false,
+//   output: [],
+//   stepLimit: 1000,
+//   globals: [],
+//   usingSubst: false,
+//   debuggerContext: {} as DebuggerContext
+// });
 
 export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null
-};
-
-export const defaultState: OverallState = {
-  router: defaultRouter,
-  academy: defaultAcademy,
-  achievement: defaultAchievement,
-  application: defaultApplication,
-  dashboard: defaultDashboard,
-  playground: defaultPlayground,
-  session: defaultSession,
-  stories: defaultStories,
-  workspaces: newDefaultWorkspaceManager,
-  fileSystem: defaultFileSystem
 };

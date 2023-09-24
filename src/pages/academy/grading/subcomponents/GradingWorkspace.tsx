@@ -6,58 +6,35 @@ import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
-import SideContentToneMatrix from 'src/commons/sideContent/content/SideContentToneMatrix';
-import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  beginClearContext,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeExecTime,
-  changeSideContentHeight,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  evalTestcase,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  resetWorkspace,
-  runAllTestcases,
-  setEditorBreakpoint,
-  updateActiveEditorTabIndex,
-  updateCurrentSubmissionId,
-  updateEditorValue,
-  updateHasUnsavedChanges,
-  updateReplValue
-} from 'src/commons/workspace/WorkspaceActions';
-
-import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
-  Library,
   Question,
   QuestionTypes,
   Testcase
-} from '../../../../commons/assessment/AssessmentTypes';
-import { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
-import { ControlBarClearButton } from '../../../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
-import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
-import { Position } from '../../../../commons/editor/EditorTypes';
-import Markdown from '../../../../commons/Markdown';
-import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
-import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
-import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
-import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
+} from 'src/commons/assessment/AssessmentTypes';
+import { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { ControlBarClearButton } from 'src/commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from 'src/commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from 'src/commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from 'src/commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from 'src/commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { convertEditorTabStateToProps } from 'src/commons/editor/EditorContainer';
+import Markdown from 'src/commons/Markdown';
+import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import { gradingActions } from 'src/commons/redux/workspace/assessment/GradingRedux';
+import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
+import { defaultGradingState, SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import SideContentAutograder from 'src/commons/sideContent/content/SideContentAutograder';
+import SideContentToneMatrix from 'src/commons/sideContent/content/SideContentToneMatrix';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import Workspace, { WorkspaceProps } from 'src/commons/workspace/Workspace';
+import { AnsweredQuestion } from 'src/features/grading/GradingTypes';
+
 import GradingEditor from './GradingEditorContainer';
 
 type GradingWorkspaceProps = {
@@ -65,7 +42,7 @@ type GradingWorkspaceProps = {
   questionId: number;
 };
 
-const workspaceLocation: WorkspaceLocation = 'grading';
+const workspaceLocation: SideContentLocation = 'grading';
 const unansweredPrependValue: string = `// This answer does not have significant changes from the given solution
 // template and has thus been flagged as unanswered.
 // If you think this is wrong, please ignore and grade accordingly.
@@ -75,83 +52,59 @@ const unansweredPrependValue: string = `// This answer does not have significant
 
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
-  const { selectedTab, setSelectedTab, height: sideContentHeight } = useSideContent(workspaceLocation, SideContentType.grading)
-  const { editorTabs, activeEditorTabIndex } = useEditorState(workspaceLocation)
-  const { replValue } = useRepl(workspaceLocation)
+  const { selectedTab, setSelectedTab } = useSideContent(workspaceLocation, SideContentType.grading)
+  const { 
+    editorTabs, 
+    editorSessionId,
+    activeEditorTabIndex,
+    isEditorAutorun,
+    isFolderModeEnabled,
+    updateEditorValue: handleEditorValueChange,
+    updateEditorBreakpoints: handleEditorUpdateBreakpoints,
+    updateActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
+    removeEditorTab: handleRemoveEditorTabByIndex,
+ } = useEditorState(workspaceLocation)
   // const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
   const {
     autogradingResults,
-    isFolderModeEnabled,
     editorTestcases,
     isRunning,
     output,
+    context,
+    globals,
     currentSubmission: storedSubmissionId,
-    currentQuestion: storedQuestionId
+    currentQuestion: storedQuestionId,
+    beginClearContext: handleClearContext,
+    changeExecTime: handleChangeExecTime,
+    evalEditor: handleEditorEval,
+    evalRepl: handleReplEval,
+    navDeclaration: handleDeclarationNavigate,
+    promptAutocomplete: handlePromptAutocomplete,
+    resetWorkspace: handleResetWorkspace,
+    updateHasUnsavedChanges: handleUpdateHasUnsavedChanges
   } = useWorkspace(workspaceLocation)
+
+  const {
+    clearReplOutput: handleReplOutputClear
+  } = useRepl(workspaceLocation)
 
   const dispatch = useDispatch();
   const {
-    handleBrowseHistoryDown,
-    handleBrowseHistoryUp,
-    handleClearContext,
-    handleDeclarationNavigate,
-    handleEditorEval,
-    handleSetActiveEditorTabIndex,
-    handleRemoveEditorTabByIndex,
-    handleEditorValueChange,
-    handleEditorUpdateBreakpoints,
     handleGradingFetch,
-    handleReplEval,
-    handleReplOutputClear,
-    handleReplValueChange,
-    handleResetWorkspace,
-    handleChangeExecTime,
-    handleSideContentHeightChange,
     handleTestcaseEval,
     handleRunAllTestcases,
     handleUpdateCurrentSubmissionId,
-    handleUpdateHasUnsavedChanges,
-    handlePromptAutocomplete
   } = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
-      handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
-      handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
-      handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
-      handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleGradingFetch: (submissionId: number) => dispatch(fetchGrading(submissionId)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
-      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
-      handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation)),
-      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
-        dispatch(resetWorkspace(workspaceLocation, options)),
-      handleChangeExecTime: (execTimeMs: number) =>
-        dispatch(changeExecTime(execTimeMs, workspaceLocation)),
-      handleSideContentHeightChange: (heightChange: number) =>
-        dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
       handleTestcaseEval: (testcaseId: number) =>
-        dispatch(evalTestcase(workspaceLocation, testcaseId)),
-      handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
+        dispatch(allWorkspaceActions.evalTestCase(workspaceLocation, testcaseId)),
+      handleRunAllTestcases: () => dispatch(allWorkspaceActions.evalEditorAndTestcases(workspaceLocation)),
       handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) =>
-        dispatch(updateCurrentSubmissionId(submissionId, questionId)),
-      handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
-        dispatch(updateHasUnsavedChanges(workspaceLocation, unsavedChanges)),
-      handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(gradingActions.updateCurrentSubmissionId(submissionId, questionId)),
     };
   }, [dispatch]);
 
@@ -265,20 +218,22 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     handleUpdateCurrentSubmissionId(submissionId, questionId);
     handleResetWorkspace({
       autogradingResults,
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorTabs: [
-        {
-          value: editorValue,
-          highlightedLines: [],
-          breakpoints: []
-        }
-      ],
+      editorState: {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        editorTabs: [
+          {
+            value: editorValue,
+            highlightedLines: [],
+            breakpoints: []
+          }
+        ],
+      },
       programPrependValue,
       programPostpendValue,
       editorTestcases
     });
-    handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
-    handleClearContext(question.library, true);
+    handleChangeExecTime(question.library.execTimeMs ?? defaultGradingState.execTime);
+    handleClearContext(context.chapter, context.variant, globals, context.externalSymbols);
     handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -365,7 +320,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation
+      location: workspaceLocation
     };
 
     return sideContentProps;
@@ -459,24 +414,23 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
         ? {
             editorVariant: 'normal',
-            isFolderModeEnabled: isFolderModeEnabled,
-            activeEditorTabIndex: activeEditorTabIndex,
-            setActiveEditorTabIndex: handleSetActiveEditorTabIndex,
-            removeEditorTabByIndex: handleRemoveEditorTabByIndex,
             editorTabs: editorTabs.map(convertEditorTabStateToProps),
-            editorSessionId: '',
-            handleDeclarationNavigate: handleDeclarationNavigate,
-            handleEditorEval: handleEval,
-            handleEditorValueChange: handleEditorValueChange,
-            handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-            handlePromptAutocomplete: handlePromptAutocomplete,
-            isEditorAutorun: false,
+            editorSessionId,
+            isEditorAutorun,
+            isFolderModeEnabled,
+            handleDeclarationNavigate,
+            handlePromptAutocomplete,
+            handleEditorEval,
+            activeEditorTabIndex,
+            setActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
+            removeEditorTabByIndex: handleRemoveEditorTabByIndex,
+            handleEditorUpdateBreakpoints,
+            handleEditorValueChange,
             sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
             sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
-            externalLibraryName: question?.library?.external?.name || 'NONE'
+            // externalLibraryName: question?.library?.external?.name || 'NONE'
           }
         : undefined,
-    handleSideContentHeightChange: handleSideContentHeightChange,
     mcqProps: {
       mcq: question as IMCQQuestion,
       handleMCQSubmit: (i: number) => {}
@@ -484,20 +438,17 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
-      handleBrowseHistoryDown: handleBrowseHistoryDown,
-      handleBrowseHistoryUp: handleBrowseHistoryUp,
+      location: workspaceLocation,
       handleReplEval: handleReplEval,
-      handleReplValueChange: handleReplValueChange,
       output: output,
-      replValue: replValue,
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
       // externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons()
-    }
+    },
+    workspaceLocation
   };
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>

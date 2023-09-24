@@ -29,8 +29,8 @@ import {
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { gradingActions } from 'src/commons/redux/workspace/assessment/GradingRedux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
 import GradingActions from './GradingActions';
@@ -140,7 +140,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
 
   useEffect(() => {
     dispatch(
-      updateSubmissionsTableFilters({
+      gradingActions.updateSubmissionsTableFilters({
         columnFilters,
         globalFilter
       })

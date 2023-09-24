@@ -14,15 +14,15 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { OverallState } from 'src/commons/redux/AllTypes';
+import { allWorkspaceActions, getWorkspace } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import { PlaygroundWorkspaces } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
-import { OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
-import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../../workspace/WorkspaceActions';
-import { evalEditor } from '../../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import { SideContentType } from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -45,17 +45,17 @@ type StateProps = {
 };
 
 type OwnProps = {
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: PlaygroundWorkspaces;
 };
 
 type DispatchProps = {
-  handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
-  handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
+  handleEnvStepUpdate: (steps: number) => void;
+  handleEditorEval: () => void;
   setEditorHighlightedLines: (
-    workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
     newHighlightedLines: HighlightedLines[]
   ) => void;
+  handleAlertSideContent: () => void
 };
 
 const envVizKeyMap = {
@@ -77,13 +77,18 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       stepLimitExceeded: false
     };
     EnvVisualizer.init(
-      visualization => this.setState({ visualization }),
+      visualization => {
+        this.setState({ visualization });
+        if (visualization) {
+          this.props.handleAlertSideContent()
+        }
+      },
       this.state.width,
       this.state.height,
       (segments: [number, number][]) => {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         // This comment is copied over from workspace saga
-        props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
+        props.setEditorHighlightedLines(0, segments);
       },
       isAgendaEmpty => {
         this.setState({ stepLimitExceeded: !isAgendaEmpty && this.state.lastStep });
@@ -383,11 +388,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     } else {
       this.setState({ lastStep: false });
     }
-    this.props.handleEditorEval(this.props.workspaceLocation);
+    this.props.handleEditorEval();
   };
 
   private sliderShift = (newValue: number) => {
-    this.props.handleEnvStepUpdate(newValue, this.props.workspaceLocation);
+    this.props.handleEnvStepUpdate(newValue);
     this.setState((state: State) => {
       return { value: newValue };
     });
@@ -447,35 +452,26 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
 }
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
-  state: OverallState,
-  ownProps: OwnProps
+  state ,
+  { workspaceLocation }
 ) => {
-  let workspaceLocation: WorkspaceLocation;
-  if (ownProps.workspaceLocation === 'playground' || ownProps.workspaceLocation === 'sicp') {
-    workspaceLocation = ownProps.workspaceLocation;
-  } else {
-    workspaceLocation = 'playground';
-  }
+  const workspace = getWorkspace(state.workspaces, workspaceLocation)
   return {
-    ...ownProps,
-    numOfStepsTotal: state.workspaces[workspaceLocation].envStepsTotal,
-    numOfSteps: state.workspaces[workspaceLocation].envSteps,
-    breakpointSteps: state.workspaces[workspaceLocation].breakpointSteps,
-    needEnvUpdate: state.workspaces[workspaceLocation].updateEnv
-  };
+    numOfStepsTotal: workspace.envStepsTotal,
+    numOfSteps: workspace.envSteps,
+    breakpointSteps: workspace.breakpointSteps,
+    needEnvUpdate: workspace.updateEnv
+  }
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch: Dispatch, { workspaceLocation }) =>
   bindActionCreators(
     {
-      handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
-      handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
-        updateEnvSteps(steps, workspaceLocation),
-      setEditorHighlightedLines: (
-        workspaceLocation: WorkspaceLocation,
-        editorTabIndex: number,
-        newHighlightedLines: HighlightedLines[]
-      ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
+      handleAlertSideContent: () => allWorkspaceActions.beginAlertSideContent(workspaceLocation, SideContentType.envVisualizer),
+      handleEditorEval: () => allWorkspaceActions.evalEditor(workspaceLocation),
+      handleEnvStepUpdate: (steps: number) =>
+        allWorkspaceActions.updateEnvSteps(workspaceLocation, steps),
+      setEditorHighlightedLines: ( editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => allWorkspaceActions.updateEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
     },
     dispatch
   );

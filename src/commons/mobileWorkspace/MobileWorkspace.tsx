@@ -42,7 +42,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   // Handles the panel height when the mobile top controlbar is rendered in the Assessment Workspace
   React.useEffect(() => {
-    if (props.mobileSideContentProps.workspaceLocation === 'assessment') {
+    if (props.mobileSideContentProps.location === 'assessment') {
       document.documentElement.style.setProperty(
         '--mobile-panel-height',
         'calc(100% - 100px - 1.1rem)'
@@ -231,7 +231,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       prevTabId: SideContentType,
       event: React.MouseEvent<HTMLElement>
     ) => {
-      onChange(newTabId, prevTabId, event);
+      if (onChange) onChange(newTabId, prevTabId, event);
       handleTabChangeForRepl(newTabId, prevTabId);
     },
     [handleTabChangeForRepl, onChange]
@@ -268,9 +268,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         beforeDynamicTabs: [
           ...sideBarTabs,
           mobileEditorTab,
-          ...props.mobileSideContentProps.tabs.beforeDynamicTabs
+          ...props.mobileSideContentProps.tabs?.beforeDynamicTabs ?? []
         ],
-        afterDynamicTabs: [...props.mobileSideContentProps.tabs.afterDynamicTabs, mobileRunTab]
+        afterDynamicTabs: [...props.mobileSideContentProps.tabs?.afterDynamicTabs ?? [], mobileRunTab]
       }
     };
   }, [
@@ -282,8 +282,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   ]);
 
   const inAssessmentWorkspace =
-    props.mobileSideContentProps.workspaceLocation === 'assessment' ||
-    props.mobileSideContentProps.workspaceLocation === 'githubAssessment';
+    props.mobileSideContentProps.location === 'assessment' ||
+    props.mobileSideContentProps.location === 'githubAssessment';
 
   return (
     <div className="workspace mobile-workspace">

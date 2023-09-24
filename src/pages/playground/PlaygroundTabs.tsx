@@ -1,12 +1,12 @@
 import { IconNames } from '@blueprintjs/icons';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
+import { PlaygroundWorkspaces } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
 import SideContentDataVisualizer from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import SideContentEnvVisualizer from 'src/commons/sideContent/content/SideContentEnvVisualizer';
 import SideContentHtmlDisplay from 'src/commons/sideContent/content/SideContentHtmlDisplay';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, ResultOutput } from '../../commons/application/ApplicationTypes';
 import Markdown from '../../commons/Markdown';
@@ -17,14 +17,14 @@ export const mobileOnlyTabIds: readonly SideContentType[] = [
 ];
 export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
-export const dataVisualizerTab: SideContentTab = {
+export const makeDataVisualizerTabFrom = (workspaceLocation: PlaygroundWorkspaces): SideContentTab => ({
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
+  body: <SideContentDataVisualizer workspaceLocation={workspaceLocation} />,
   id: SideContentType.dataVisualizer
-};
+});
 
-export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
+export const makeEnvVisualizerTabFrom = (workspaceLocation: PlaygroundWorkspaces): SideContentTab => ({
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,

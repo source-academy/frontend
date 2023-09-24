@@ -2,10 +2,10 @@ import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
+import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 
 import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
 import ControlButton from '../../ControlButton';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
 import SideContentTestcaseCard from  './SideContentTestcaseCard';
 
@@ -25,7 +25,7 @@ type OwnProps = {
    * We need to know the workspace location to hide 'opaque' testcases
    * in AssessmentsWorkspace, but show them in GradingWorkspace.
    */
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: SideContentLocation;
 };
 
 const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps> = props => {

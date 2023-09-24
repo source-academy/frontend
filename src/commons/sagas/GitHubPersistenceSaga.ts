@@ -3,7 +3,7 @@ import {
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 import {
   GITHUB_OPEN_FILE,
@@ -13,15 +13,15 @@ import {
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
-import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
-import { actions } from '../utils/ActionsHelper';
+import { actions } from '../redux/ActionsHelper';
+import { selectWorkspace } from '../redux/utils/Selectors';
+import { PlaygroundState } from '../redux/workspace/WorkspaceReduxTypes';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -41,8 +41,8 @@ function* githubLoginSaga() {
   const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
 
   broadcastChannel.onmessage = receivedMessage => {
-    store.dispatch(actions.setGitHubOctokitObject(receivedMessage.data));
-    store.dispatch(actions.setGitHubAccessToken(receivedMessage.data));
+    store.dispatch(actions.setGithubOctokitObject(receivedMessage.data));
+    store.dispatch(actions.setGithubAccessToken(receivedMessage.data));
     showSuccessMessage('Logged in to GitHub', 1000);
   };
 
@@ -118,20 +118,21 @@ function* githubSaveFile(): any {
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const repoName = store.getState().playground.githubSaveInfo.repoName;
-  const filePath = store.getState().playground.githubSaveInfo.filePath;
+  const { 
+    editorState: {
+      activeEditorTabIndex,
+      editorTabs
+    },
+    githubSaveInfo: { repoName, filePath }
+  }: PlaygroundState = yield selectWorkspace('playground')  
+
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
+
   if (activeEditorTabIndex === null) {
     throw new Error('No active editor tab found.');
   }
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
   const content = editorTabs[activeEditorTabIndex].value;
 
   GitHubUtils.performOverwritingSave(
@@ -170,15 +171,17 @@ function* githubSaveFileAs(): any {
     }));
   const repoName = yield call(getRepoName);
 
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
+  const { 
+    editorState: {
+      activeEditorTabIndex,
+      editorTabs
+    }
+  }: PlaygroundState = yield selectWorkspace('playground')
+
   if (activeEditorTabIndex === null) {
     throw new Error('No active editor tab found.');
   }
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
+
   const editorContent = editorTabs[activeEditorTabIndex].value;
 
   if (repoName !== '') {

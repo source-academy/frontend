@@ -1,11 +1,12 @@
 import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React from 'react';
 
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { propsAreEqual } from '../utils/MemoizeHelper';
 import { assertType } from '../utils/TypeHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import GenericSideContent, { generateIconId, GenericSideContentProps } from './GenericSideContent';
+import { generateIconId, getTabId } from './SideContentHelper';
+import { SideContentProvider, SideContentProviderProps } from './SideContentProvider';
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
@@ -23,34 +24,33 @@ import { SideContentTab, SideContentType } from './SideContentTypes';
  * mounting of the SideContent component. Switching tabs
  * will merely hide them from view.
  */
-export type SideContentProps = Omit<GenericSideContentProps, 'renderFunction'> & StateProps;
-
-type StateProps = {
+export type SideContentProps = {
   selectedTabId?: SideContentType; // Optional due to uncontrolled tab component in EditingWorkspace
   renderActiveTabPanelOnly?: boolean;
   editorWidth?: string;
   sideContentHeight?: number;
-};
+} & Omit<SideContentProviderProps, 'children'>;
 
-/**
- * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
- */
-const generateClassName = (id: string | undefined) =>
-  id === SideContentType.module || id === SideContentType.htmlDisplay
-    ? 'side-content-tooltip side-content-tab-alert'
-    : 'side-content-tooltip';
+// /**
+//  * Adds 'side-content-tab-alert' style to newly spawned module tabs or HTML Display tab
+//  */
+// const generateClassName = (id: string | undefined) =>
+//   id === SideContentType.module || id === SideContentType.htmlDisplay
+//     ? 'side-content-tooltip side-content-tab-alert'
+//     : 'side-content-tooltip';
 
 const renderTab = (
   tab: SideContentTab,
-  workspaceLocation?: WorkspaceLocation,
+  shouldAlert: boolean,
+  workspaceLocation?: SideContentLocation,
   editorWidth?: string,
   sideContentHeight?: number
 ) => {
   const iconSize = 20;
-  const tabId = tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+  const tabId = getTabId(tab)
   const tabTitle = (
     <Tooltip2 content={tab.label}>
-      <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
+      <div className={`side-content-tooltip ${shouldAlert ? 'side-content-tab-alert' : ''}`} id={generateIconId(tabId)}>
         <Icon icon={tab.iconName} iconSize={iconSize} />
       </div>
     </Tooltip2>
@@ -90,27 +90,29 @@ const SideContent: React.FC<SideContentProps> = ({
   ...otherProps
 }) => {
   return (
-    <GenericSideContent
-      {...otherProps}
-      renderFunction={(dynamicTabs, changeTabsCallback) => (
-        <div className="side-content">
-          <Card>
-            <div className="side-content-tabs">
+    <div className="side-content">
+      <Card>
+        <div className="side-content-tabs">
+          <SideContentProvider
+            {...otherProps}
+          >
+            {(allTabs, changeTabsCallback, alerts, selectedTabId, sideContentHeight) => (
               <Tabs
                 id="side-content-tabs"
                 onChange={changeTabsCallback}
                 renderActiveTabPanelOnly={renderActiveTabPanelOnly}
                 selectedTabId={selectedTabId}
-              >
-                {dynamicTabs.map(tab =>
-                  renderTab(tab, otherProps.workspaceLocation, editorWidth, sideContentHeight)
-                )}
+                >
+                {allTabs.map(tab => {
+                  const tabId = getTabId(tab)
+                  return renderTab(tab, alerts.includes(tabId), otherProps.location, editorWidth, sideContentHeight);
+                })}
               </Tabs>
-            </div>
-          </Card>
+            )}
+          </SideContentProvider>
         </div>
-      )}
-    />
+      </Card>
+    </div>
   );
 };
 

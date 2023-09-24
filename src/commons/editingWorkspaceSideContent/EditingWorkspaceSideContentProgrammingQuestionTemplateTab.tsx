@@ -6,7 +6,7 @@ import AceEditor from 'react-ace';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import { WorkspaceState } from '../redux/workspace/WorkspaceReduxTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type QuestionEditorProps = DispatchProps & StateProps;

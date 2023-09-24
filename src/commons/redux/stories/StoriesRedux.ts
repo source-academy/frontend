@@ -1,51 +1,12 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import { Chapter, Variant } from "js-slang/dist/types";
-import { StoryData, StoryListView } from "src/features/stories/StoriesTypes";
+import { StoriesRole, StoryData, StoryListView, StoryParams } from "src/features/stories/StoriesTypes";
+import { NameUsernameRole } from "src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel";
 
-import { StoriesRole } from "../../application/ApplicationTypes";
-import Constants from "../../utils/Constants";
-import { createContext } from "../../utils/JsSlangHelper";
-import { getDefaultPlaygroundState,PlaygroundWorkspaceState } from "./playground/PlaygroundBase";
+import { defaultStories, getDefaultStoriesEnv } from "../workspace/WorkspaceReduxTypes";
+import { createActions } from "../utils";
 
-export type StoriesAuthState = {
-  readonly userId?: number;
-  readonly userName?: string;
-  readonly groupId?: number;
-  readonly groupName?: string;
-  readonly role?: StoriesRole;
-};
-
-export type StoriesEnvState = PlaygroundWorkspaceState
-
-export type StoriesState = {
-  readonly storyList: StoryListView[];
-  readonly currentStoryId: number | null;
-  readonly currentStory: StoryData | null;
-  readonly envs: { [key: string]: StoriesEnvState };
-} & StoriesAuthState;
-
-export const defaultStories: StoriesState = {
-  storyList: [],
-  currentStory: null,
-  currentStoryId: null,
-  envs: {}
-}
-
-export const getDefaultStoriesEnv = (
-  env: string,
-  chapter: Chapter = Constants.defaultSourceChapter,
-  variant: Variant = Constants.defaultSourceVariant
-): StoriesEnvState => ({
-  ...getDefaultPlaygroundState(),
-  context: createContext(
-    chapter,
-    [],
-    env,
-    variant
-  )
-})
-
-export const { actions: storiesActions, reducer: storiesReducer } = createSlice({
+const { actions: reducerActions, reducer: storiesReducer } = createSlice({
   name: 'stories',
   initialState: defaultStories,
   reducers: {
@@ -90,3 +51,21 @@ export const { actions: storiesActions, reducer: storiesReducer } = createSlice(
     }
   }
 })
+
+export const sagaActions = createActions('stories', {
+  addNewStoriesUsersToCourse: (users: NameUsernameRole[], provider: string) => ({ users, provider }),
+  createStory: (storyParams: StoryParams) => storyParams,
+  deleteStory: (storyId: number) => storyId,
+  evalStory: (env: string, code: string) => ({ env, code }),
+  getStoriesList: (storyId: number | null = null) => storyId,
+  getStoriesUser: 0,
+  saveStory: (story: StoryData, id: number) => ({ story, id}),
+})
+
+export const storiesActions = {
+  ...sagaActions,
+  ...reducerActions,
+}
+
+export { storiesReducer, reducerActions }
+

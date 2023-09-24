@@ -26,14 +26,13 @@ const mockShortDefaultState: SavedState = {
   achievements: defaultState.achievement.achievements,
   playgroundIsFolderModeEnabled: defaultState.workspaces.playground.isFolderModeEnabled,
   playgroundActiveEditorTabIndex: {
-    value: defaultState.workspaces.playground.activeEditorTabIndex
+    value: defaultState.workspaces.playground.editorState.activeEditorTabIndex
   },
-  playgroundEditorTabs: defaultState.workspaces.playground.editorTabs,
+  playgroundEditorTabs: defaultState.workspaces.playground.editorState.editorTabs,
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
   playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
   playgroundLanguage: defaultState.playground.languageConfig,
-  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
   stories: {
     userId: defaultState.stories.userId,
     groupId: defaultState.stories.groupId,

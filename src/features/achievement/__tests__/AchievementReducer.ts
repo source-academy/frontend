@@ -1,6 +1,6 @@
 import { defaultAchievement } from 'src/commons/application/ApplicationTypes';
 
-import { AchievementReducer } from '../AchievementReducer';
+import { AchievementReducer } from '../../../commons/redux/achievement/AchievementReducer';
 import { AchievementState, SAVE_ACHIEVEMENTS } from '../AchievementTypes';
 
 test('SAVE_ACHIEVEMENTS works correctly on default achievements', () => {

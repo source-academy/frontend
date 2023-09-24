@@ -3,8 +3,8 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
+import { actions } from 'src/commons/redux/ActionsHelper';
 
-import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import {
   showSuccessMessage,
@@ -200,7 +200,7 @@ export async function openFileInEditor(
       throw new Error('No active editor tab found.');
     }
     store.dispatch(actions.updateEditorValue('playground', activeEditorTabIndex, newEditorValue));
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    store.dispatch(actions.playgroundUpdateGithubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully loaded file!', 1000);
   }
 }
@@ -252,7 +252,7 @@ export async function performOverwritingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    store.dispatch(actions.playgroundUpdateGithubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
     console.error(err);
@@ -289,7 +289,7 @@ export async function performCreatingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    store.dispatch(actions.playgroundUpdateGithubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully created file!', 1000);
   } catch (err) {
     console.error(err);

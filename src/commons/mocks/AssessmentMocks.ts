@@ -1,6 +1,5 @@
 import { Chapter } from 'js-slang/dist/types';
 
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -276,7 +275,6 @@ export const mockAssessmentOverviews = [
 export const mockLibrary: Library = {
   chapter: Chapter.SOURCE_1,
   external: {
-    name: ExternalLibraryName.NONE,
     symbols: []
   },
   globals: []

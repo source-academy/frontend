@@ -1,4 +1,3 @@
-import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { courseIdWithoutPrefix } from 'src/commons/sagas/RequestsSaga';
 import Constants from 'src/commons/utils/Constants';
 import {
@@ -11,7 +10,7 @@ import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
-import { StoryListView, StoryView } from '../StoriesTypes';
+import { StoriesRole, StoryListView, StoryView } from '../StoriesTypes';
 
 // Helpers
 
@@ -22,7 +21,7 @@ const requestStoryBackend = async (...[path, method, opts]: StoryRequestHelperPa
 };
 
 const getStoriesGroupId: () => string = () => {
-  const id = store.getState().stories.groupId;
+  const id = store.getState().workspaces.stories.groupId;
   if (id) {
     return `${id}`;
   } else {

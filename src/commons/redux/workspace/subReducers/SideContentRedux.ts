@@ -1,50 +1,35 @@
-import { createAction, createReducer } from '@reduxjs/toolkit'
-import { Context } from 'js-slang'
+import { createReducer } from '@reduxjs/toolkit'
+import type { Context } from 'js-slang'
 
 import { getDynamicTabs, getTabId } from '../../../sideContent/SideContentHelper'
-import { SideContentTab, SideContentType } from '../../../sideContent/SideContentTypes'
-import { DebuggerContext, WorkspaceLocation } from '../../../workspace/WorkspaceTypes'
+import { SideContentType } from '../../../sideContent/SideContentTypes'
+import { createActions } from '../../utils'
+import { DebuggerContext, defaultSideContent } from '../WorkspaceReduxTypes'
 
-export type NonStoryWorkspaceLocation = Exclude<WorkspaceLocation, 'stories'>
-export type StoryWorkspaceLocation = `stories.${string}`
-export type SideContentLocation = NonStoryWorkspaceLocation | StoryWorkspaceLocation
-
-export type SideContentState = {
-  dynamicTabs: SideContentTab[]
-  alerts: string[]
-  selectedTabId?: SideContentType
-  height?: number
-}
-
-export const defaultSideContent: SideContentState = {
-  dynamicTabs: [],
-  alerts: []
-}
-
-export const sideContentActions = {
-  beginAlertSideContent: createAction('sideContent/beginAlertSideContent', (newId: SideContentType) => ({ payload: newId })),
-  changeSideContentHeight: createAction('sideContent/changeSideContentHeight', (payload: number) => ({ payload })),
-  endAlertSideContentHeight: createAction('sideContent/endAlertSideContentHeight', (payload: SideContentType) => ({ payload })),
-  notifyProgramEvaluated: createAction('sideContent/notifyProgramEvaluated', (
+export const sideContentActions = createActions('sideContent', {
+  beginAlertSideContent: (newId: SideContentType) => newId,
+  changeSideContentHeight: (height: number) => height,
+  endAlertSideContent: (newId: SideContentType) => newId,
+  notifyProgramEvaluated: (
     result: any, 
     lastDebuggerResult: any,
     code: string,
     context: Context,
-  ): { payload: DebuggerContext } => ({ payload: {
+  ): DebuggerContext => ({
     result,
     lastDebuggerResult,
     code,
     context
-  } })),
-  visitSideContent: createAction('sideContent/visitSideContent', (payload: SideContentType) => ({ payload })),
-}
+  }),
+  visitSideContent: (id: SideContentType) => id,
+})
 
 export const sideContentReducer = createReducer(defaultSideContent, builder => {
   builder.addCase(sideContentActions.changeSideContentHeight, (state, { payload }) => {
     state.height = payload
   })
 
-  builder.addCase(sideContentActions.endAlertSideContentHeight, (state, { payload: newId }) => {
+  builder.addCase(sideContentActions.endAlertSideContent, (state, { payload: newId }) => {
     if (newId === state.selectedTabId) return
 
     state.alerts.push(newId)

@@ -2,7 +2,6 @@ import { createContext, hasDeclaration } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
-import { Documentation } from '../documentation/Documentation';
 import { Links } from '../utils/Constants';
 import { EditorHook } from './Editor';
 
@@ -44,22 +43,24 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
       propsRef.current.sourceVariant === Variant.DEFAULT
         ? ''
         : `_${propsRef.current.sourceVariant}`;
-    const external =
-      propsRef.current.externalLibraryName === undefined
-        ? 'NONE'
-        : propsRef.current.externalLibraryName;
-    const externalUrl =
-      propsRef.current.externalLibraryName === 'ALL' ? `External%20libraries` : external;
-    const ext = Documentation.externalLibraries[external];
+    // const external =
+    //   propsRef.current.externalLibraryName === undefined
+    //     ? 'NONE'
+    //     : propsRef.current.externalLibraryName;
+    // const externalUrl =
+    //   propsRef.current.externalLibraryName === 'ALL' ? `External%20libraries` : external;
+    // const ext = Documentation.externalLibraries[external];
 
-    if (ext.some((node: { caption: string }) => node.caption === (token && token.value))) {
-      if (
-        token !== null &&
-        (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
-      ) {
-        window.open(`${url}${externalUrl}/global.html#${token.value}`); // opens external library link
-      }
-    } else if (
+    // if (ext.some((node: { caption: string }) => node.caption === (token && token.value))) {
+    //   if (
+    //     token !== null &&
+    //     (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
+    //   ) {
+    //     window.open(`${url}${externalUrl}/global.html#${token.value}`); // opens external library link
+    //   }
+    // }
+    
+    if (
       token !== null &&
       (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
     ) {

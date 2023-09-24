@@ -1,9 +1,8 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
-import { OverallState } from '../../../commons/application/ApplicationTypes';
+import AchievementInferencer from 'src/commons/achievement/utils/AchievementInferencer';
+import { fetchAssessmentOverviews } from 'src/commons/application/actions/SessionActions';
+import { OverallState } from 'src/commons/redux/AllTypes';
 import {
   getAchievements,
   getGoals,
@@ -11,7 +10,8 @@ import {
   getUserAssessmentOverviews,
   getUsers,
   updateGoalProgress
-} from '../../../features/achievement/AchievementActions';
+} from 'src/features/achievement/AchievementActions';
+
 import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

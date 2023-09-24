@@ -1,7 +1,7 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { Chapter } from 'js-slang/dist/types';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 
 import { Ev3DevicePeripherals } from './RemoteExecutionEv3Types';
 
@@ -35,7 +35,7 @@ export type DeviceConnection =
   | { status: 'FAILED'; error?: string; client?: SlingClient };
 
 export interface DeviceSession {
-  workspace: WorkspaceLocation;
+  workspace: SideContentLocation;
   device: Device;
   connection: DeviceConnection;
 }

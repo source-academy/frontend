@@ -1,11 +1,12 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
+import { OverallState } from 'src/commons/redux/AllTypes';
+import { EditorTabState } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
-import { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
+import { SALanguage } from '../commons/application/ApplicationTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/notifications/NotificationsHelper';
-import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
 import { AchievementItem } from '../features/achievement/AchievementTypes';
 
 // In JSON, missing keys & keys with the value 'null' are both
@@ -73,19 +74,19 @@ export const saveState = (state: OverallState) => {
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
-      playgroundIsFolderModeEnabled: state.workspaces.playground.isFolderModeEnabled,
+      playgroundIsFolderModeEnabled: state.workspaces.playground.editorState.isFolderModeEnabled,
       playgroundActiveEditorTabIndex: {
         value: state.workspaces.playground.editorState.activeEditorTabIndex
       },
       playgroundEditorTabs: state.workspaces.playground.editorState.editorTabs,
-      playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
+      playgroundIsEditorAutorun: state.workspaces.playground.editorState.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
-      playgroundLanguage: state.playground.languageConfig,
+      playgroundLanguage: state.workspaces.playground.languageConfig,
       stories: {
-        userId: state.stories.userId,
-        groupId: state.stories.groupId,
-        role: state.stories.role
+        userId: state.workspaces.stories.userId,
+        groupId: state.workspaces.stories.groupId,
+        role: state.workspaces.stories.role
       }
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));

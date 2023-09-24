@@ -1,10 +1,12 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
+import { defaultWorkspaceManager, WorkspaceManagerState } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import { allWorkspacesReducer as WorkspaceReducer } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import { defaultPlayground, PlaygroundState } from 'src/commons/redux/workspace/playground/PlaygroundRedux';
 
 import {
   CodeOutput,
   createDefaultWorkspace,
-  defaultWorkspaceManager,
   InterpreterOutput,
   RunningOutput
 } from '../../application/ApplicationTypes';
@@ -30,7 +32,6 @@ import {
 import { HighlightedLines, Position } from '../../editor/EditorTypes';
 import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
-import { WorkspaceReducer } from '../WorkspaceReducer';
 import {
   ADD_EDITOR_TAB,
   BROWSE_REPL_HISTORY_DOWN,
@@ -45,7 +46,6 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   MOVE_CURSOR,
-  PlaygroundWorkspaceState,
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
   REMOVE_EDITOR_TABS_FOR_DIRECTORY,
@@ -67,7 +67,6 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   WorkspaceLocation,
-  WorkspaceManagerState
 } from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
@@ -1000,20 +999,25 @@ describe('HANDLE_CONSOLE_LOG', () => {
 
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const newPlayground: PlaygroundWorkspaceState = {
-      ...defaultPlaygroundState,
-      editorTabs: [
-        {
-          ...defaultPlaygroundState.editorTabs[0],
-          highlightedLines: [
-            [1, 2],
-            [3, 4]
-          ]
-        }
-      ],
-      externalLibrary: 'NONE' as ExternalLibraryName,
-      replValue: 'test repl value here',
+    // const defaultPlaygroundState = createDefaultWorkspace('playground');
+    const newPlayground: PlaygroundState = {
+      ...defaultPlayground,
+      editorState: {
+        ...defaultPlayground.editorState,
+        editorTabs: [
+          {
+            ...defaultPlayground.editorState.editorTabs[0],
+            highlightedLines: [
+              [1, 2],
+              [3, 4]
+            ]
+          }
+        ],
+      },
+      repl: {
+        ...defaultPlayground.repl,
+        replValue: 'test repl value here',
+      },
       sharedbConnected: false,
       usingSubst: false,
       usingEnv: false,

@@ -2,32 +2,23 @@ import { Classes, Icon, Tab, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
+import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
+import { SideContentProvider } from 'src/commons/sideContent/SideContentProvider';
 
 import { ControlBarProps } from '../../controlBar/ControlBar';
-import GenericSideContent, {
-  generateIconId,
-  GenericSideContentProps
-} from '../../sideContent/GenericSideContent';
-import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
+import { SideContentTab } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import MobileControlBar from './MobileControlBar';
 
-export type MobileSideContentProps = Omit<GenericSideContentProps, 'renderFunction'> &
-  Required<Pick<GenericSideContentProps, 'onChange'>> &
-  StateProps &
-  MobileControlBarProps;
-
-type StateProps = {
-  selectedTabId: SideContentType;
-  renderActiveTabPanelOnly?: boolean;
-};
+export type MobileSideContentProps = SideContentProps & MobileControlBarProps;
 
 type MobileControlBarProps = {
   mobileControlBarProps: ControlBarProps;
 };
 
-const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: WorkspaceLocation) => {
+const renderTab = (tab: SideContentTab, isIOS: boolean, location?: SideContentLocation) => {
   const iconSize = 20;
   const tabId = tab.id === undefined ? tab.label : tab.id;
   const tabTitle: JSX.Element = (
@@ -71,15 +62,15 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
    */
   const renderedPanels = (dynamicTabs: SideContentTab[]) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
-    const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+    const renderPanel = (tab: SideContentTab, location?: SideContentLocation) => {
       if (!tab.body) return;
 
-      const tabBody: JSX.Element = workspaceLocation
+      const tabBody: JSX.Element = location
         ? {
             ...tab.body,
             props: {
               ...tab.body.props,
-              workspaceLocation
+              workspaceLocation: location
             }
           }
         : tab.body;
@@ -95,16 +86,15 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
       );
     };
 
-    return dynamicTabs.map(tab => renderPanel(tab, otherProps.workspaceLocation));
+    return dynamicTabs.map(tab => renderPanel(tab, otherProps.location));
   };
 
   return (
-    <GenericSideContent
+    <SideContentProvider
       {...otherProps}
-      renderFunction={(dynamicTabs, changeTabsCallback) => {
-        return (
-          <>
-            {renderedPanels(dynamicTabs)}
+    >
+      {(allTabs, changeTabsCallback) => (<>
+        {renderedPanels(allTabs)}
             <div className="mobile-tabs-container">
               <Tabs
                 id="mobile-side-content"
@@ -113,19 +103,19 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
                 selectedTabId={selectedTabId}
                 className={classNames(Classes.DARK, 'mobile-side-content')}
               >
-                {dynamicTabs.map(tab => renderTab(tab, isIOS, otherProps.workspaceLocation))}
+                {allTabs.map(tab => renderTab(tab, isIOS, otherProps.location))}
 
                 {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
-                {(otherProps.workspaceLocation === 'playground' ||
-                  otherProps.workspaceLocation === 'sicp') && (
+                {(otherProps.location === 'playground' ||
+                  otherProps.location === 'sicp') && (
                   <MobileControlBar {...mobileControlBarProps} />
                 )}
               </Tabs>
             </div>
-          </>
-        );
-      }}
-    />
+      </>)}
+
+
+    </SideContentProvider>
   );
 };
 

@@ -1,23 +1,16 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
 import {
-  Assessment,
   AssessmentConfiguration,
-  AssessmentOverview,
   ContestEntry
 } from '../../assessment/AssessmentTypes';
-import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import {
   Notification,
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
-import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import { Role } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  AdminPanelCourseRegistration,
-  CourseRegistration,
   DELETE_ASSESSMENT_CONFIG,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
@@ -45,43 +38,22 @@ import {
   NotificationPreference,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
-  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
-  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  SET_ASSESSMENT_CONFIGURATIONS,
-  SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
-  SET_COURSE_CONFIGURATION,
-  SET_COURSE_REGISTRATION,
-  SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_ASSESSMENT,
-  SET_GITHUB_OCTOKIT_OBJECT,
-  SET_GOOGLE_USER,
-  SET_NOTIFICATION_CONFIGS,
-  SET_TOKENS,
-  SET_USER,
   SUBMIT_ANSWER,
   SUBMIT_ASSESSMENT,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
   TimeOption,
-  Tokens,
   UNSUBMIT_SUBMISSION,
-  UPDATE_ALL_USER_XP,
-  UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_CONFIGS,
-  UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_COURSE_CONFIG,
   UPDATE_COURSE_RESEARCH_AGREEMENT,
-  UPDATE_GRADING,
-  UPDATE_GRADING_OVERVIEWS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_NOTIFICATIONS,
   UPDATE_TIME_OPTIONS,
-  UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
-  User
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
@@ -120,48 +92,6 @@ export const logoutGoogle = () => action(LOGOUT_GOOGLE);
 export const loginGitHub = () => action(LOGIN_GITHUB);
 
 export const logoutGitHub = () => action(LOGOUT_GITHUB);
-
-export const setTokens = ({ accessToken, refreshToken }: Tokens) =>
-  action(SET_TOKENS, {
-    accessToken,
-    refreshToken
-  });
-
-export const setUser = (user: User) => action(SET_USER, user);
-
-export const setCourseConfiguration = (courseConfiguration: UpdateCourseConfiguration) =>
-  action(SET_COURSE_CONFIGURATION, courseConfiguration);
-
-export const setCourseRegistration = (courseRegistration: Partial<CourseRegistration>) =>
-  action(SET_COURSE_REGISTRATION, courseRegistration);
-
-export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
-  action(SET_ASSESSMENT_CONFIGURATIONS, assessmentConfigurations);
-
-export const setConfigurableNotificationConfigs = (
-  notificationConfigs: NotificationConfiguration[]
-) => action(SET_CONFIGURABLE_NOTIFICATION_CONFIGS, notificationConfigs);
-
-export const setNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
-  action(SET_NOTIFICATION_CONFIGS, notificationConfigs);
-
-export const setAdminPanelCourseRegistrations = (
-  courseRegistrations: AdminPanelCourseRegistration[]
-) => action(SET_ADMIN_PANEL_COURSE_REGISTRATIONS, courseRegistrations);
-
-export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
-
-export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
-  action(SET_GITHUB_ASSESSMENT, missionRepoData);
-
-export const setGitHubOctokitObject = (authToken?: string) =>
-  action(SET_GITHUB_OCTOKIT_OBJECT, generateOctokitInstance(authToken || ''));
-
-export const setGitHubAccessToken = (authToken?: string) =>
-  action(SET_GITHUB_ACCESS_TOKEN, authToken);
-
-export const removeGitHubOctokitObjectAndAccessToken = () =>
-  action(REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN);
 
 export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
   action(SUBMIT_ANSWER, {
@@ -202,28 +132,6 @@ export const reautogradeSubmission = (submissionId: number) =>
 
 export const reautogradeAnswer = (submissionId: number, questionId: number) =>
   action(REAUTOGRADE_ANSWER, { submissionId, questionId });
-
-export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
-  action(UPDATE_ASSESSMENT_OVERVIEWS, overviews);
-
-export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalXp);
-
-export const updateAllUserXp = (allUserXp: string[][]) => action(UPDATE_ALL_USER_XP, allUserXp);
-
-export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
-
-export const updateGradingOverviews = (overviews: GradingOverview[]) =>
-  action(UPDATE_GRADING_OVERVIEWS, overviews);
-
-/**
- * An extra id parameter is included here because of
- * no id for Grading.
- */
-export const updateGrading = (submissionId: number, grading: Grading) =>
-  action(UPDATE_GRADING, {
-    submissionId,
-    grading
-  });
 
 export const unsubmitSubmission = (submissionId: number) =>
   action(UNSUBMIT_SUBMISSION, {

@@ -23,7 +23,6 @@ import {
   frontendifyAchievementItem
 } from '../achievement/utils/AchievementBackender';
 import { Role } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
@@ -559,7 +558,7 @@ export const getAssessment = async (
     }
 
     // Make library.external.name uppercase
-    q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
+    // q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
     // Make globals into an Array of (string, value)
     q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {

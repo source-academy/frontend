@@ -1,10 +1,10 @@
 import { Chapter } from 'js-slang/dist/types';
+import { defaultSourcereel } from 'src/commons/redux/workspace/SourcereelRedux';
+import { sourcereelReducer } from 'src/commons/redux/workspace/SourcereelRedux';
 import { action as generateAction } from 'typesafe-actions';
 
-import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../SourceRecorderTypes';
-import { SourcereelReducer } from '../SourcereelReducer';
 import {
   RECORD_INIT,
   RECORD_INPUT,
@@ -23,11 +23,11 @@ describe('RECORD_INIT', () => {
       externalLibrary: ExternalLibraryName.NONE
     };
     const action = generateAction(RECORD_INIT, { initData, workspaceLocation: undefined! });
-    const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
+    const result = sourcereelReducer(defaultSourcereel, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultSourcereel,
       playbackData: {
-        ...defaultWorkspaceManager.sourcereel.playbackData,
+        ...defaultSourcereel.playbackData,
         init: initData
       }
     });
@@ -56,12 +56,12 @@ describe('RECORD_INPUT', () => {
     };
 
     const action = generateAction(RECORD_INPUT, { input, workspaceLocation: undefined! });
-    const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
+    const result = sourcereelReducer(defaultSourcereel, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultSourcereel,
       playbackData: {
-        ...defaultWorkspaceManager.sourcereel.playbackData,
-        inputs: [...defaultWorkspaceManager.sourcereel.playbackData.inputs, input]
+        ...defaultSourcereel.playbackData,
+        inputs: [...defaultSourcereel.playbackData.inputs, input]
       }
     });
   });
@@ -71,14 +71,14 @@ describe('TIMER_PAUSE', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
     const action = generateAction(TIMER_PAUSE, { timeNow, workspaceLocation: undefined! });
-    const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
+    const result = sourcereelReducer(defaultSourcereel, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultSourcereel,
       recordingStatus: RecordingStatus.paused,
       timeElapsedBeforePause:
-        defaultWorkspaceManager.sourcereel.timeElapsedBeforePause +
+        defaultSourcereel.timeElapsedBeforePause +
         timeNow -
-        defaultWorkspaceManager.sourcereel.timeResumed
+        defaultSourcereel.timeResumed
     });
   });
 });
@@ -86,9 +86,9 @@ describe('TIMER_PAUSE', () => {
 describe('TIMER_RESET', () => {
   test('pauses timer correctly', () => {
     const action = generateAction(TIMER_RESET, { workspaceLocation: undefined! });
-    const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
+    const result = sourcereelReducer(defaultSourcereel, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultSourcereel,
       recordingStatus: RecordingStatus.notStarted,
       timeElapsedBeforePause: 0,
       timeResumed: 0
@@ -104,9 +104,9 @@ describe('TIMER_RESUME', () => {
       workspaceLocation: undefined!,
       timeBefore: 0
     });
-    const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
+    const result = sourcereelReducer(defaultSourcereel, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultSourcereel,
       recordingStatus: RecordingStatus.recording,
       timeResumed: timeNow
     });
@@ -117,9 +117,9 @@ describe('TIMER_START', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
     const action = generateAction(TIMER_START, { timeNow, workspaceLocation: undefined! });
-    const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
+    const result = sourcereelReducer(defaultSourcereel, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultSourcereel,
       recordingStatus: RecordingStatus.recording,
       timeResumed: timeNow,
       timeElapsedBeforePause: 0
@@ -131,9 +131,9 @@ describe('TIMER_STOP', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
     const action = generateAction(TIMER_STOP, { timeNow, workspaceLocation: undefined! });
-    const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
+    const result = sourcereelReducer(defaultSourcereel, action);
     expect(result).toEqual({
-      ...defaultWorkspaceManager.sourcereel,
+      ...defaultSourcereel,
       recordingStatus: RecordingStatus.finished,
       timeResumed: 0,
       timeElapsedBeforePause: 0

@@ -4,25 +4,17 @@ import { Chapter, Finished, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
+import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from 'src/commons/redux/workspace/NewWorkspaceSaga';
+import { NonStoryWorkspaceLocation, SideContentLocation } from 'src/commons/redux/workspace/subReducers/SideContentRedux';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 
-import {
-  beginInterruptExecution,
-  debuggerReset,
-  endDebuggerPause,
-  endInterruptExecution,
-  evalInterpreterError,
-  evalInterpreterSuccess,
-  evalTestcaseFailure,
-  evalTestcaseSuccess
-} from '../../application/actions/InterpreterActions';
 import {
   defaultState,
   fullJSLanguage,
   fullTSLanguage,
   OverallState
 } from '../../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -30,7 +22,7 @@ import {
   DEBUG_RESUME,
   EVAL_INTERPRETER_ERROR
 } from '../../application/types/InterpreterTypes';
-import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import { Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
 import {
@@ -38,20 +30,7 @@ import {
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
 import {
-  beginClearContext,
-  changeExternalLibrary,
-  clearReplInput,
-  clearReplOutput,
-  clearReplOutputLast,
-  endClearContext,
-  moveCursor,
-  sendReplInputToOutput,
-  setEditorHighlightedLines,
-  setFolderMode
-} from '../../workspace/WorkspaceActions';
-import {
   BEGIN_CLEAR_CONTEXT,
-  CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
   CLEAR_REPL_OUTPUT,
   END_CLEAR_CONTEXT,
@@ -60,16 +39,13 @@ import {
   EVAL_REPL,
   EVAL_TESTCASE,
   NAV_DECLARATION,
-  PLAYGROUND_EXTERNAL_SELECT,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
-  WorkspaceLocation,
   WorkspaceState
 } from '../../workspace/WorkspaceTypes';
-import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from '../WorkspaceSaga';
 
 function generateDefaultState(
-  workspaceLocation: WorkspaceLocation,
+  workspaceLocation: NonStoryWorkspaceLocation,
   payload: any = {}
 ): OverallState {
   return {
@@ -106,7 +82,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
-      .put(setFolderMode(workspaceLocation, true))
+      .put(allWorkspaceActions.setFolderMode(workspaceLocation, true))
       .call(showWarningMessage, 'Folder mode enabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,
@@ -124,7 +100,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
 
     return expectSaga(workspaceSaga)
       .withState(updatedDefaultState)
-      .put(setFolderMode(workspaceLocation, false))
+      .put(allWorkspaceActions.setFolderMode(workspaceLocation, false))
       .call(showWarningMessage, 'Folder mode disabled', 750)
       .dispatch({
         type: TOGGLE_FOLDER_MODE,
@@ -149,16 +125,6 @@ describe('EVAL_EDITOR', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
 
-    const library = {
-      chapter: context.chapter,
-      variant,
-      external: {
-        name: ExternalLibraryName.NONE,
-        symbols: context.externalSymbols
-      },
-      globals
-    };
-
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [
         {
@@ -177,9 +143,9 @@ describe('EVAL_EDITOR', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
-        .put(beginInterruptExecution(workspaceLocation))
-        .put(beginClearContext(workspaceLocation, library, false))
-        .put(clearReplOutput(workspaceLocation))
+        .put(allWorkspaceActions.beginInterruptExecution(workspaceLocation))
+        .put(allWorkspaceActions.beginClearContext(workspaceLocation, context.chapter, variant, globals, context.externalSymbols))
+        .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
           fn: runFilesInContext,
@@ -196,7 +162,7 @@ describe('EVAL_EDITOR', () => {
           ]
         })
         // running the prepend block should return 'reeee', but silent run -> not written to REPL
-        .not.put(evalInterpreterSuccess('reeee', workspaceLocation))
+        .not.put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, 'reeee'))
         // Single call to evalCode made by blockExtraMethods
         .call.like({ fn: runFilesInContext })
         // calls evalCode here with the student's program in normal Context
@@ -216,7 +182,7 @@ describe('EVAL_EDITOR', () => {
           ]
         })
         // running the student's program should return -1, which is written to REPL
-        .put(evalInterpreterSuccess(-1, workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, -1))
         // should NOT attempt to execute the postpend block after above
         .not.call(runFilesInContext)
         .dispatch({
@@ -270,9 +236,9 @@ describe('EVAL_REPL', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newState)
-        .put(beginInterruptExecution(workspaceLocation))
-        .put(clearReplInput(workspaceLocation))
-        .put(sendReplInputToOutput(replValue, workspaceLocation))
+        .put(allWorkspaceActions.beginInterruptExecution(workspaceLocation))
+        .put(allWorkspaceActions.clearReplInput(workspaceLocation))
+        .put(allWorkspaceActions.sendReplInputToOutput(workspaceLocation, replValue))
         // also calls evalCode here
         .call(runFilesInContext, { '/code.js': replValue }, '/code.js', context, {
           scheduler: 'preemptive',
@@ -292,7 +258,7 @@ describe('EVAL_REPL', () => {
 });
 
 describe('DEBUG_RESUME', () => {
-  let workspaceLocation: WorkspaceLocation;
+  let workspaceLocation: NonStoryWorkspaceLocation;
   let editorValue: string;
   let editorValueFilePath: string;
   let files: Record<string, string>;
@@ -343,10 +309,10 @@ describe('DEBUG_RESUME', () => {
             }
           }
         })
-        .put(beginInterruptExecution(workspaceLocation))
-        .put(clearReplOutput(workspaceLocation))
+        .put(allWorkspaceActions.beginInterruptExecution(workspaceLocation))
+        .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .put(setEditorHighlightedLines(workspaceLocation, 0, []))
+        .put(allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, 0, []))
         // also calls evalCode here
         .call.like({
           fn: evalCode,
@@ -359,10 +325,8 @@ describe('DEBUG_RESUME', () => {
             DEBUG_RESUME
           ]
         })
-        .dispatch({
-          type: DEBUG_RESUME,
-          payload: { workspaceLocation }
-        })
+        // TODO Check this
+        .dispatch(allWorkspaceActions.debugResume)
         .silentRun()
     );
   });
@@ -378,9 +342,9 @@ describe('DEBUG_RESET', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
-        .put(clearReplOutput(workspaceLocation))
+        .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .put(setEditorHighlightedLines(workspaceLocation, 0, []))
+        .put(allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, 0, []))
         .dispatch({
           type: DEBUG_RESET,
           payload: { workspaceLocation }
@@ -418,16 +382,6 @@ describe('EVAL_TESTCASE', () => {
       ['testArray', [1, 2, 'a', 'b']]
     ];
 
-    const library: Library = {
-      chapter: context.chapter,
-      variant: Variant.DEFAULT,
-      external: {
-        name: ExternalLibraryName.NONE,
-        symbols: context.externalSymbols
-      },
-      globals
-    };
-
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [
         {
@@ -448,8 +402,13 @@ describe('EVAL_TESTCASE', () => {
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
         // Should interrupt execution and clear context but not clear REPL
-        .not.put(beginInterruptExecution(workspaceLocation))
-        .put(beginClearContext(workspaceLocation, library, false))
+        .not.put(allWorkspaceActions.beginInterruptExecution(workspaceLocation))
+        .put(allWorkspaceActions.beginClearContext(workspaceLocation, 
+          context.chapter,
+          Variant.DEFAULT,
+          globals,
+          context.externalSymbols
+        ))
         .not.put.actionType(CLEAR_REPL_OUTPUT)
         // Expect it to shard a new privileged context here and execute chunks in order
         // calls evalCode here with the prepend in elevated Context: silent run
@@ -462,7 +421,7 @@ describe('EVAL_TESTCASE', () => {
           ]
         })
         // running the prepend block should return 'boink', but silent run -> not written to REPL
-        .not.put(evalInterpreterSuccess('boink', workspaceLocation))
+        .not.put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, 'boink'))
         // Single call to evalCode made by blockExtraMethods
         .call.like({ fn: runFilesInContext })
         // calls evalCode here with the student's program in normal Context
@@ -476,7 +435,7 @@ describe('EVAL_TESTCASE', () => {
           ]
         })
         // running the student's program should return 69, which is NOT written to REPL (silent)
-        .not.put(evalInterpreterSuccess(69, workspaceLocation))
+        .not.put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, 69))
         // Single call to evalCode made by restoreExtraMethods to enable postpend to run in S4
         .call.like({ fn: runFilesInContext })
         // calls evalCode here again with the postpend now in elevated Context: silent run
@@ -489,7 +448,7 @@ describe('EVAL_TESTCASE', () => {
           ]
         })
         // running the postpend block should return true, but silent run -> not written to REPL
-        .not.put(evalInterpreterSuccess(true, workspaceLocation))
+        .not.put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, true))
         // Single call to evalCode made by blockExtraMethods after postpend execution is complete
         .call.like({ fn: runFilesInContext })
         // finally calls evalTestCode on the testcase
@@ -498,8 +457,8 @@ describe('EVAL_TESTCASE', () => {
           args: [editorTestcases[0].program]
         })
         // this testcase should execute fine in the elevated context and thus write result to REPL
-        .put(evalInterpreterSuccess(42, workspaceLocation))
-        .put(evalTestcaseSuccess(42, workspaceLocation, testcaseId))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, 42))
+        .put(allWorkspaceActions.evalTestCaseSuccess(workspaceLocation, 42, testcaseId))
         .dispatch({
           type: EVAL_TESTCASE,
           payload: { workspaceLocation, testcaseId }
@@ -513,7 +472,7 @@ describe('EVAL_TESTCASE', () => {
 });
 
 describe('CHAPTER_SELECT', () => {
-  let workspaceLocation: WorkspaceLocation;
+  let workspaceLocation: NonStoryWorkspaceLocation;
   let globals: Array<[string, any]>;
   let context: Context;
 
@@ -532,22 +491,12 @@ describe('CHAPTER_SELECT', () => {
 
   test('puts beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
     const newChapter = Chapter.SOURCE_3;
-    const library: Library = {
-      chapter: newChapter,
-      variant: Variant.DEFAULT,
-      external: {
-        name: 'NONE' as ExternalLibraryName,
-        symbols: context.externalSymbols
-      },
-      globals
-    };
-
     const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .put(beginClearContext(workspaceLocation, library, false))
-      .put(clearReplOutput(workspaceLocation))
+      .put(allWorkspaceActions.beginClearContext(workspaceLocation, newChapter, Variant.DEFAULT, globals, context.externalSymbols))
+      .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
       .call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
         type: CHAPTER_SELECT,
@@ -576,22 +525,18 @@ describe('CHAPTER_SELECT', () => {
   describe('show disclaimer when fullJS is chosen', () => {
     test('correct actions when user proceeds', () => {
       const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
-      const library: Library = {
-        chapter: fullJSLanguage.chapter,
-        variant: fullJSLanguage.variant,
-        external: {
-          name: 'NONE' as ExternalLibraryName,
-          symbols: context.externalSymbols
-        },
-        globals
-      };
 
       return expectSaga(workspaceSaga)
         .provide([[matchers.call.fn(showFullJSDisclaimer), true]])
         .withState(newDefaultState)
         .call(showFullJSDisclaimer)
-        .put(beginClearContext(workspaceLocation, library, false))
-        .put(clearReplOutput(workspaceLocation))
+        .put(allWorkspaceActions.beginClearContext(workspaceLocation, 
+          fullJSLanguage.chapter,
+          fullJSLanguage.variant,
+          globals,
+          context.externalSymbols
+        ))
+        .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         .call(showSuccessMessage, `Switched to full JavaScript`, 1000)
         .dispatch({
           type: CHAPTER_SELECT,
@@ -629,22 +574,18 @@ describe('CHAPTER_SELECT', () => {
   describe('show disclaimer when fullTS is chosen', () => {
     test('correct actions when user proceeds', () => {
       const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
-      const library: Library = {
-        chapter: fullTSLanguage.chapter,
-        variant: fullTSLanguage.variant,
-        external: {
-          name: 'NONE' as ExternalLibraryName,
-          symbols: context.externalSymbols
-        },
-        globals
-      };
 
       return expectSaga(workspaceSaga)
         .provide([[matchers.call.fn(showFullTSDisclaimer), true]])
         .withState(newDefaultState)
         .call(showFullTSDisclaimer)
-        .put(beginClearContext(workspaceLocation, library, false))
-        .put(clearReplOutput(workspaceLocation))
+        .put(allWorkspaceActions.beginClearContext(workspaceLocation, 
+          fullTSLanguage.chapter,
+          fullTSLanguage.variant,
+          globals,
+          context.externalSymbols
+        ))
+        .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         .call(showSuccessMessage, `Switched to full TypeScript`, 1000)
         .dispatch({
           type: CHAPTER_SELECT,
@@ -680,139 +621,143 @@ describe('CHAPTER_SELECT', () => {
   });
 });
 
-describe('PLAYGROUND_EXTERNAL_SELECT', () => {
-  let workspaceLocation: WorkspaceLocation;
-  let globals: Array<[string, any]>;
-  let chapter: Chapter;
-  let context: Context;
+// describe('PLAYGROUND_EXTERNAL_SELECT', () => {
+//   let workspaceLocation: WorkspaceLocation;
+//   let globals: Array<[string, any]>;
+//   let chapter: Chapter;
+//   let context: Context;
 
-  beforeEach(() => {
-    workspaceLocation = 'playground';
-    globals = [
-      ['testNumber', 3.141592653589793],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']]
-    ];
-    chapter = Chapter.SOURCE_4;
-    context = {
-      ...mockRuntimeContext(),
-      chapter
-    };
-  });
+//   beforeEach(() => {
+//     workspaceLocation = 'playground';
+//     globals = [
+//       ['testNumber', 3.141592653589793],
+//       ['testObject', { a: 1, b: 2 }],
+//       ['testArray', [1, 2, 'a', 'b']]
+//     ];
+//     chapter = Chapter.SOURCE_4;
+//     context = {
+//       ...mockRuntimeContext(),
+//       chapter
+//     };
+//   });
 
-  test('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
-    const oldExternalLibraryName = ExternalLibraryName.NONE;
-    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
+//   test('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
+//     const oldExternalLibraryName = ExternalLibraryName.NONE;
+//     const newExternalLibraryName = ExternalLibraryName.SOUNDS;
 
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      context,
-      globals,
-      externalLibrary: oldExternalLibraryName
-    });
+//     const newDefaultState = generateDefaultState(workspaceLocation, {
+//       context,
+//       globals,
+//       externalLibrary: oldExternalLibraryName
+//     });
 
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals
-    };
+//     const symbols = externalLibraries.get(newExternalLibraryName)!;
+//     const library: Library = {
+//       chapter,
+//       external: {
+//         name: newExternalLibraryName,
+//         symbols
+//       },
+//       globals
+//     };
 
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .put(changeExternalLibrary(newExternalLibraryName, workspaceLocation))
-      .put(beginClearContext(workspaceLocation, library, true))
-      .put(clearReplOutput(workspaceLocation))
-      .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
-      .dispatch({
-        type: PLAYGROUND_EXTERNAL_SELECT,
-        payload: {
-          externalLibraryName: newExternalLibraryName,
-          workspaceLocation
-        }
-      })
-      .silentRun();
-  });
+//     return expectSaga(workspaceSaga)
+//       .withState(newDefaultState)
+//       // .put(changeExternalLibrary(newExternalLibraryName, workspaceLocation))
+//       .put(allWorkspaceActions.beginClearContext(workspaceLocation, library, true))
+//       .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
+//       .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
+//       .dispatch({
+//         type: PLAYGROUND_EXTERNAL_SELECT,
+//         payload: {
+//           externalLibraryName: newExternalLibraryName,
+//           workspaceLocation
+//         }
+//       })
+//       .silentRun();
+//   });
 
-  test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
-    const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
-    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      context,
-      globals,
-      externalLibrary: oldExternalLibraryName
-    });
+//   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
+//     const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
+//     const newExternalLibraryName = ExternalLibraryName.SOUNDS;
+//     const newDefaultState = generateDefaultState(workspaceLocation, {
+//       context,
+//       globals,
+//       externalLibrary: oldExternalLibraryName
+//     });
 
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .not.put.actionType(CHANGE_EXTERNAL_LIBRARY)
-      .not.put.actionType(BEGIN_CLEAR_CONTEXT)
-      .not.put.actionType(CLEAR_REPL_OUTPUT)
-      .not.call.fn(showSuccessMessage)
-      .dispatch({
-        type: PLAYGROUND_EXTERNAL_SELECT,
-        payload: {
-          externalLibraryName: newExternalLibraryName,
-          workspaceLocation
-        }
-      })
-      .silentRun();
-  });
-});
+//     return expectSaga(workspaceSaga)
+//       .withState(newDefaultState)
+//       .not.put.actionType(CHANGE_EXTERNAL_LIBRARY)
+//       .not.put.actionType(BEGIN_CLEAR_CONTEXT)
+//       .not.put.actionType(CLEAR_REPL_OUTPUT)
+//       .not.call.fn(showSuccessMessage)
+//       .dispatch({
+//         type: PLAYGROUND_EXTERNAL_SELECT,
+//         payload: {
+//           externalLibraryName: newExternalLibraryName,
+//           workspaceLocation
+//         }
+//       })
+//       .silentRun();
+//   });
+// });
 
-describe('BEGIN_CLEAR_CONTEXT', () => {
-  let loadLib: any;
-  let getReadyWebGLForCanvas: any;
-  let getReadyStringifyForRunes: any;
-  let chapter: Chapter;
-  let globals: Array<[string, any]>;
-  let workspaceLocation: WorkspaceLocation;
+// describe('BEGIN_CLEAR_CONTEXT', () => {
+//   let loadLib: any;
+//   let getReadyWebGLForCanvas: any;
+//   let getReadyStringifyForRunes: any;
+//   let chapter: Chapter;
+//   let globals: Array<[string, any]>;
+//   let workspaceLocation: WorkspaceLocation;
 
-  beforeEach(() => {
-    loadLib = jest.fn();
-    getReadyWebGLForCanvas = jest.fn();
-    getReadyStringifyForRunes = jest.fn();
+//   beforeEach(() => {
+//     loadLib = jest.fn();
+//     getReadyWebGLForCanvas = jest.fn();
+//     getReadyStringifyForRunes = jest.fn();
 
-    (window as any).loadLib = loadLib;
-    (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;
-    (window as any).getReadyStringifyForRunes = getReadyStringifyForRunes;
+//     (window as any).loadLib = loadLib;
+//     (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;
+//     (window as any).getReadyStringifyForRunes = getReadyStringifyForRunes;
 
-    workspaceLocation = 'grading';
-    chapter = Chapter.SOURCE_4;
-    globals = [
-      ['testNumber', 3.141592653589793],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']]
-    ];
-  });
+//     workspaceLocation = 'grading';
+//     chapter = Chapter.SOURCE_4;
+//     globals = [
+//       ['testNumber', 3.141592653589793],
+//       ['testObject', { a: 1, b: 2 }],
+//       ['testArray', [1, 2, 'a', 'b']]
+//     ];
+//   });
 
-  test('loads SOUNDS library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
+//   // test('loads SOUNDS library correctly', () => {
+//   //   const newExternalLibraryName = ExternalLibraryName.SOUNDS;
 
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals
-    };
+//   //   const symbols = externalLibraries.get(newExternalLibraryName)!;
+//   //   const library: Library = {
+//   //     chapter,
+//   //     external: {
+//   //       name: newExternalLibraryName,
+//   //       symbols
+//   //     },
+//   //     globals
+//   //   };
 
-    return expectSaga(workspaceSaga)
-      .put.like({ action: endClearContext(library, workspaceLocation) })
-      .dispatch({
-        type: BEGIN_CLEAR_CONTEXT,
-        payload: { library, workspaceLocation, shouldInitLibrary: true }
-      })
-      .silentRun();
-  });
-});
+//   //   return expectSaga(workspaceSaga)
+//   //     .put.like({ action: allWorkspaceActions.endClearContext(
+//   //       workspaceLocation,
+//   //         chapter,
+
+//   //       ) })
+//   //     .dispatch({
+//   //       type: BEGIN_CLEAR_CONTEXT,
+//   //       payload: { library, workspaceLocation, shouldInitLibrary: true }
+//   //     })
+//   //     .silentRun();
+//   // });
+// });
 
 describe('evalCode', () => {
-  let workspaceLocation: WorkspaceLocation;
+  let workspaceLocation: NonStoryWorkspaceLocation;
   let code: string;
   let codeFilePath: string;
   let files: Record<string, string>;
@@ -873,7 +818,7 @@ describe('evalCode', () => {
           throwInfiniteLoops: true,
           envSteps: -1
         })
-        .put(evalInterpreterSuccess(value, workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, value))
         .silentRun();
     });
 
@@ -899,8 +844,8 @@ describe('evalCode', () => {
           throwInfiniteLoops: true,
           envSteps: -1
         })
-        .put(endDebuggerPause(workspaceLocation))
-        .put(evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
+        .put(allWorkspaceActions.endDebugPause(workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, 'Breakpoint hit!'))
         .silentRun();
     });
 
@@ -958,7 +903,7 @@ describe('evalCode', () => {
           throwInfiniteLoops: true,
           envSteps: -1
         })
-        .put(evalInterpreterError(context.errors, workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterError(workspaceLocation, context.errors))
         .silentRun();
     });
   });
@@ -994,7 +939,7 @@ describe('evalCode', () => {
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
         .call(resume, lastDebuggerResult)
-        .put(evalInterpreterSuccess(value, workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, value))
         .silentRun();
     });
 
@@ -1013,8 +958,8 @@ describe('evalCode', () => {
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'suspended' }]])
         .call(resume, lastDebuggerResult)
-        .put(endDebuggerPause(workspaceLocation))
-        .put(evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
+        .put(allWorkspaceActions.endDebugPause(workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, 'Breakpoint hit!'))
         .silentRun();
     });
 
@@ -1057,8 +1002,8 @@ describe('evalCode', () => {
             }
           })
         })
-        .put(debuggerReset(workspaceLocation))
-        .put(endInterruptExecution(workspaceLocation))
+        .put(allWorkspaceActions.debugReset(workspaceLocation))
+        .put(allWorkspaceActions.endInterruptExecution(workspaceLocation))
         .call(showWarningMessage, 'Execution aborted', 750)
         .silentRun()
         .then(result => {
@@ -1087,7 +1032,7 @@ describe('evalCode', () => {
             }
           })
         })
-        .put(endDebuggerPause(workspaceLocation))
+        .put(allWorkspaceActions.endDebugPause(workspaceLocation))
         .call(showWarningMessage, 'Execution paused', 750)
         .silentRun();
     });
@@ -1095,7 +1040,7 @@ describe('evalCode', () => {
 });
 
 describe('evalTestCode', () => {
-  let workspaceLocation: WorkspaceLocation;
+  let workspaceLocation: SideContentLocation;
   let code: string;
   let execTime: number;
   let context: Context;
@@ -1126,9 +1071,9 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .put(evalTestcaseSuccess(value, workspaceLocation, index))
-        .not.put(clearReplOutputLast(workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, value))
+        .put(allWorkspaceActions.evalTestCaseSuccess(workspaceLocation, value, index))
+        .not.put(allWorkspaceActions.clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
 
@@ -1138,9 +1083,9 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .put(evalTestcaseSuccess(value, workspaceLocation, index))
-        .put(clearReplOutputLast(workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterSuccess(workspaceLocation, value))
+        .put(allWorkspaceActions.evalTestCaseSuccess(workspaceLocation, value, index))
+        .put(allWorkspaceActions.clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
 
@@ -1148,9 +1093,9 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
-        .put(evalInterpreterError(context.errors, workspaceLocation))
-        .put(evalTestcaseFailure(context.errors, workspaceLocation, index))
-        .not.put(clearReplOutputLast(workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterError(workspaceLocation, context.errors))
+        .put(allWorkspaceActions.evalTestCaseFailure(workspaceLocation, context.errors, index))
+        .not.put(allWorkspaceActions.clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
 
@@ -1160,9 +1105,9 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
-        .put(evalInterpreterError(context.errors, workspaceLocation))
-        .put(evalTestcaseFailure(context.errors, workspaceLocation, index))
-        .put(clearReplOutputLast(workspaceLocation))
+        .put(allWorkspaceActions.evalInterpreterError(workspaceLocation, context.errors))
+        .put(allWorkspaceActions.evalTestCaseFailure(workspaceLocation, context.errors, index))
+        .put(allWorkspaceActions.clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
   });
@@ -1187,7 +1132,7 @@ describe('evalTestCode', () => {
             }
           })
         })
-        .put(endInterruptExecution(workspaceLocation))
+        .put(allWorkspaceActions.endInterruptExecution(workspaceLocation))
         .call(showWarningMessage, `Execution of testcase ${index} aborted`, 750)
         .silentRun()
         .then(() => {
@@ -1198,7 +1143,7 @@ describe('evalTestCode', () => {
 });
 
 describe('NAV_DECLARATION', () => {
-  let workspaceLocation: WorkspaceLocation;
+  let workspaceLocation: NonStoryWorkspaceLocation;
   let context: Context;
   let editorValue: string;
   let state: OverallState;
@@ -1227,7 +1172,7 @@ describe('NAV_DECLARATION', () => {
           payload: { workspaceLocation, cursorPosition: loc }
         })
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .put(moveCursor(workspaceLocation, 0, resultLoc))
+        .put(allWorkspaceActions.moveCursor(workspaceLocation, 0, resultLoc))
         .silentRun()
     );
   });
@@ -1243,7 +1188,7 @@ describe('NAV_DECLARATION', () => {
           payload: { workspaceLocation, cursorPosition: pos }
         })
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .not.put(moveCursor(workspaceLocation, 0, resultPos))
+        .not.put(allWorkspaceActions.moveCursor(workspaceLocation, 0, resultPos))
         .silentRun()
     );
   });
@@ -1259,14 +1204,14 @@ describe('NAV_DECLARATION', () => {
           payload: { workspaceLocation, cursorPosition: pos }
         })
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .not.put(moveCursor(workspaceLocation, 0, resultPos))
+        .not.put(allWorkspaceActions.moveCursor(workspaceLocation, 0, resultPos))
         .silentRun()
     );
   });
 });
 
 describe('EVAL_EDITOR_AND_TESTCASES', () => {
-  let workspaceLocation: WorkspaceLocation;
+  let workspaceLocation: NonStoryWorkspaceLocation;
   let state: OverallState;
 
   beforeEach(() => {

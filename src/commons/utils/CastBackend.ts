@@ -1,4 +1,3 @@
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { Library } from '../assessment/AssessmentTypes';
 
 /**
@@ -9,7 +8,7 @@ export const castLibrary = (lib: any): Library => ({
   chapter: lib.chapter,
   external: {
     /** external names are lowercase for API results */
-    name: lib.external.name.toUpperCase() as ExternalLibraryName,
+    // name: lib.external.name.toUpperCase() as ExternalLibraryName,
     symbols: lib.external.symbols
   },
   // backend provides `null` if these fields are not set, but frontend wants undefined (for defaulting)
