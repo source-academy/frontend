@@ -314,24 +314,8 @@ const Sourcereel: React.FC = () => {
     });
   };
 
-<<<<<<< HEAD
   const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
   const envVisualizerTab = makeEnvVisualizerTabFrom(workspaceLocation);
-=======
-  const dataVisualizerTab: SideContentTab = {
-    label: 'Data Visualizer',
-    iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer />,
-    id: SideContentType.dataVisualizer
-  };
-
-  const envVisualizerTab: SideContentTab = {
-    label: 'CSE Machine',
-    iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-    id: SideContentType.envVisualizer
-  };
->>>>>>> origin/master
 
   const workspaceHandlers = useMemo(() => {
     return {
