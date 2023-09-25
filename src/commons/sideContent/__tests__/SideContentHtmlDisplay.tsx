@@ -8,6 +8,7 @@ import {
   SideContentHtmlDisplay,
   SideContentHtmlDisplayProps
 } from '../content/SideContentHtmlDisplay';
+import { SideContentLocation } from '../SideContentTypes';
 
 const Component = (props: SideContentHtmlDisplayProps) => {
   const store = mockInitialStore();
@@ -21,6 +22,7 @@ const Component = (props: SideContentHtmlDisplayProps) => {
 test('HTML Display renders correctly', () => {
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),
+    workspaceLocation: 'playground' as SideContentLocation,
     handleAddHtmlConsoleError: (errorMsg: string) => {}
   };
   const htmlDisplay = renderTreeJson(<Component {...mockProps} />);
@@ -32,7 +34,8 @@ describe('HTML Display postMessage Listener', () => {
 
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),
-    handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError
+    handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError,
+    workspaceLocation: 'playground' as SideContentLocation,
   };
 
   const element = <Component {...mockProps} />;

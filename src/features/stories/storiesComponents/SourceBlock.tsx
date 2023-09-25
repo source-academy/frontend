@@ -104,7 +104,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   // TODO: Add env visualiser tabs and shift to language config
 
   // const envVisualizerTab: SideContentTab = {
-  //   label: 'Env Visualizer',
+  //   label: 'CSE Machine',
   //   iconName: IconNames.GLOBE,
   //   body: <SideContentEnvVisualizer />,
   //   id: SideContentType.envVisualizer

@@ -2,6 +2,8 @@ import { TabId } from '@blueprintjs/core';
 import * as bp3core from '@blueprintjs/core';
 import * as bp3icons from '@blueprintjs/icons';
 import * as bp3popover from '@blueprintjs/popover2';
+import * as jsslang from 'js-slang';
+import * as jsslangDist from 'js-slang/dist';
 import lodash from 'lodash';
 import phaser from 'phaser';
 import React, { useCallback } from 'react';
@@ -24,21 +26,23 @@ import {
 const requireProvider = (x: string) => {
   const exports = {
     react: React,
+    'react/jsx-runtime': JSXRuntime,
     'react-ace': ace,
     'react-dom': ReactDOM,
-    'react/jsx-runtime': JSXRuntime,
-    lodash,
-    phaser,
     '@blueprintjs/core': bp3core,
     '@blueprintjs/icons': bp3icons,
-    '@blueprintjs/popover2': bp3popover
+    '@blueprintjs/popover2': bp3popover,
+    'js-slang': jsslang,
+    'js-slang/dist': jsslangDist,
+    lodash,
+    phaser
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
   return exports[x];
 };
 
-type RawTab = (provider: typeof requireProvider) => ModuleSideContent;
+type RawTab = (provider: ReturnType<typeof requireProvider>) => ModuleSideContent;
 
 /**
  * Returns an array of SideContentTabs to be spawned
