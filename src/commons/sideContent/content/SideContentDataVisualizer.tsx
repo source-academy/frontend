@@ -4,26 +4,26 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { configure, GlobalHotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../../utils/Constants';
-import { addAlertSideContentToProps } from '../SideContentHelper';
-import {
-  SideContentDispatchProps,
-  SideContentLocation,
-  SideContentTab,
-  SideContentType
-} from '../SideContentTypes';
+import { beginAlertSideContent } from '../SideContentActions';
+import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type State = {
   steps: Step[];
   currentStep: number;
 };
 
-type OwnProps = SideContentLocation;
+type OwnProps = {
+  workspaceLocation: SideContentLocation;
+};
 
-type DispatchProps = SideContentDispatchProps;
+type DispatchProps = {
+  alertSideContent: () => void;
+};
 
 const dataVisualizerKeyMap = {
   PREVIOUS_STEP: 'left',
@@ -42,7 +42,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
     DataVisualizer.init(steps => {
       if (this.state.steps.length > 0) {
         //  Blink icon
-        this.props.alertSideContent(SideContentType.dataVisualizer);
+        this.props.alertSideContent();
       }
       this.setState({ steps, currentStep: 0 });
     });
@@ -192,7 +192,14 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
-  addAlertSideContentToProps(dispatch, props, {});
+  bindActionCreators(
+    {
+      alertSideContent: () =>
+        beginAlertSideContent(SideContentType.dataVisualizer, props.workspaceLocation)
+    },
+    dispatch
+  );
+
 export const SideContentDataVisualizer = connect(
   null,
   mapDispatchToProps
@@ -201,7 +208,7 @@ export const SideContentDataVisualizer = connect(
 const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer {...location} />,
+  body: <SideContentDataVisualizer workspaceLocation={location} />,
   id: SideContentType.dataVisualizer
 });
 

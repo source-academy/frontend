@@ -1,22 +1,21 @@
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect } from 'react';
 import { connect, MapDispatchToProps } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { ResultOutput } from 'src/commons/application/ApplicationTypes';
 
-import { addAlertSideContentToProps } from '../SideContentHelper';
-import {
-  SideContentDispatchProps,
-  SideContentLocation,
-  SideContentTab,
-  SideContentType
-} from '../SideContentTypes';
+import { beginAlertSideContent } from '../SideContentActions';
+import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type OwnProps = {
   content: string;
   handleAddHtmlConsoleError: (errorMsg: string) => void;
-} & SideContentLocation;
+  workspaceLocation: SideContentLocation;
+};
 
-type DispatchProps = SideContentDispatchProps;
+type DispatchProps = {
+  alertSideContent: () => void;
+};
 
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
@@ -39,7 +38,7 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
   });
 
   useEffect(() => {
-    alertSideContent(SideContentType.htmlDisplay);
+    alertSideContent();
   }, []);
 
   return (
@@ -54,7 +53,14 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
 };
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
-  addAlertSideContentToProps(dispatch, props, {});
+  bindActionCreators(
+    {
+      alertSideContent: () =>
+        beginAlertSideContent(SideContentType.htmlDisplay, props.workspaceLocation)
+    },
+    dispatch
+  );
+
 export const SideContentHtmlDisplay = connect(null, mapDispatchToProps)(SideContentHtmlDisplayBase);
 
 const makeHtmlDisplayTabFrom = (
@@ -66,7 +72,7 @@ const makeHtmlDisplayTabFrom = (
   iconName: IconNames.MODAL,
   body: (
     <SideContentHtmlDisplay
-      {...workspaceLocation}
+      workspaceLocation={workspaceLocation}
       content={output.value}
       handleAddHtmlConsoleError={handleError}
     />

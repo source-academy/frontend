@@ -305,8 +305,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const [lastEdit, setLastEdit] = useState(new Date());
   const [isGreen, setIsGreen] = useState(false);
-  const [selectedTab, setSelectedTab] = useSideContent(
-    { workspaceLocation },
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
   );
   // const [selectedTab, setSelectedTab] = useState(
@@ -387,6 +387,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
+    if (!selectedTab) return;
+
     if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
@@ -740,7 +742,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           makeHtmlDisplayTabFrom(
             output[0] as ResultOutput,
             errorMsg => dispatch(addHtmlConsoleError(errorMsg, workspaceLocation)),
-            { workspaceLocation }
+            workspaceLocation
           )
         );
       }
@@ -750,13 +752,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
       if (shouldShowDataVisualizer) {
-        tabs.push(makeDataVisualizerTabFrom({ workspaceLocation }));
+        tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
       if (shouldShowEnvVisualizer) {
-        tabs.push(makeEnvVisualizerTabFrom({ workspaceLocation }));
+        tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
       }
       if (shouldShowSubstVisualizer) {
-        tabs.push(makeSubstVisualizerTabFrom(output));
+        tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
       }
     }
 

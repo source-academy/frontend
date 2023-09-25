@@ -1,4 +1,4 @@
-import { useSideContentInternal } from './SideContentHelper';
+import { useSideContent } from './SideContentHelper';
 import type {
   ChangeTabsCallback,
   SideContentLocation,
@@ -26,7 +26,8 @@ type SideContentProviderProps = {
   onChange?: ChangeTabsCallback;
   selectedTab?: SideContentType;
   defaultTab?: SideContentType;
-} & SideContentLocation;
+  workspaceLocation: SideContentLocation;
+};
 
 export default function SideContentProvider({
   tabs,
@@ -34,8 +35,8 @@ export default function SideContentProvider({
   children,
   ...props
 }: SideContentProviderProps) {
-  const { alerts, height, dynamicTabs, setSelectedTab, selectedTab } = useSideContentInternal(
-    props,
+  const { alerts, height, dynamicTabs, setSelectedTab, selectedTab } = useSideContent(
+    props.workspaceLocation,
     defaultTab
   );
 

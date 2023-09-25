@@ -7,6 +7,7 @@ export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
 export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
 export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
 export const RESET_SIDE_CONTENT = 'RESET_SIDE_CONTENT';
+export const SPAWN_SIDE_CONTENT = 'SPAWN_SIDE_CONTENT';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -87,14 +88,23 @@ export type ModuleSideContent = {
   toSpawn?: (context: DebuggerContext) => boolean;
 };
 
-export type SideContentLocation =
-  | {
-      workspaceLocation?: Exclude<WorkspaceLocation, 'stories'>;
-    }
-  | {
-      workspaceLocation: 'stories';
-      storiesEnv: string;
-    };
+export type NonStoryWorkspaceLocation = Exclude<WorkspaceLocation, 'stories'>;
+export type StoryWorkspaceLocation = `stories.${string}`;
+export type SideContentManagerState = Record<NonStoryWorkspaceLocation, SideContentState> & {
+  stories: Record<string, SideContentState>;
+};
+
+export type SideContentLocation = NonStoryWorkspaceLocation | StoryWorkspaceLocation;
+
+export const isStoryLocation = (
+  location: SideContentLocation
+): location is StoryWorkspaceLocation => location.startsWith('stories');
+export const getLocation = (
+  location: SideContentLocation
+): [NonStoryWorkspaceLocation] | ['stories', string] => {
+  if (isStoryLocation(location)) return location.split('.') as ['stories', string];
+  return [location];
+};
 
 export type SideContentState = {
   height?: number;

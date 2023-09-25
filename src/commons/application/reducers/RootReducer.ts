@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { SideContentReducer as sideContent } from 'src/commons/sideContent/SideContentReducer';
 
 import { AcademyReducer as academy } from '../../../features/academy/AcademyReducer';
 import { AchievementReducer as achievement } from '../../../features/achievement/AchievementReducer';
@@ -22,7 +23,8 @@ const createRootReducer = () =>
     session,
     stories,
     workspaces,
-    fileSystem
+    fileSystem,
+    sideContent
   });
 
 export default createRootReducer;

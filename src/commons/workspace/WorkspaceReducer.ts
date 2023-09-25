@@ -1141,7 +1141,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             alerts: []
           }
         }
-      }
+      };
     default:
       return state;
   }

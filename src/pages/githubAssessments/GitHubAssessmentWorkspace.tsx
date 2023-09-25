@@ -175,7 +175,10 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const assessmentOverview = location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
-  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation }, SideContentType.questionOverview);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.questionOverview
+  );
   // const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
   const { isMobileBreakpoint } = useResponsive();
 
@@ -727,7 +730,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     ) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const onEditorValueChange = useCallback(
     (editorTabIndex: number, val: string) => {

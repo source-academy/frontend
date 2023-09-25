@@ -2,7 +2,6 @@ import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 
 import { assertType } from '../utils/TypeHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { generateTabAlert, getTabId } from './SideContentHelper';
 import SideContentProvider from './SideContentProvider';
 import type {
@@ -22,12 +21,13 @@ export type SideContentProps = {
   onChange?: ChangeTabsCallback;
   selectedTabId?: SideContentType;
   defaultTab?: SideContentType;
-} & SideContentLocation;
+  workspaceLocation: SideContentLocation;
+};
 
 const renderTab = (
   tab: SideContentTab,
   shouldAlert: boolean,
-  workspaceLocation?: WorkspaceLocation,
+  workspaceLocation?: SideContentLocation,
   editorWidth?: string,
   sideContentHeight?: number
 ) => {

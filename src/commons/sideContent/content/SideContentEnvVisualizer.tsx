@@ -14,6 +14,7 @@ import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
@@ -23,8 +24,8 @@ import Constants, { Links } from '../../utils/Constants';
 import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../../workspace/WorkspaceActions';
 import { evalEditor } from '../../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
-import { addAlertSideContentToProps } from '../SideContentHelper';
-import { SideContentDispatchProps, SideContentTab, SideContentType } from '../SideContentTypes';
+import { beginAlertSideContent } from '../SideContentActions';
+import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -46,9 +47,9 @@ type StateProps = {
   needEnvUpdate: boolean;
 };
 
-type OwnProps =
-  | { workspaceLocation: Exclude<WorkspaceLocation, 'stories'> }
-  | { workspaceLocation: 'stories'; storiesEnv: string };
+type OwnProps = {
+  workspaceLocation: NonStoryWorkspaceLocation;
+};
 
 type DispatchProps = {
   handleEnvStepUpdate: (steps: number) => void;
@@ -57,7 +58,8 @@ type DispatchProps = {
     editorTabIndex: number,
     newHighlightedLines: HighlightedLines[]
   ) => void;
-} & SideContentDispatchProps;
+  handleAlertSideContent: () => void;
+};
 
 const envVizKeyMap = {
   FIRST_STEP: 'a',
@@ -80,7 +82,7 @@ class SideContentEnvVisualizerBase extends React.Component<EnvVisualizerProps, S
     EnvVisualizer.init(
       visualization => {
         this.setState({ visualization });
-        if (visualization) this.props.alertSideContent(SideContentType.envVisualizer);
+        if (visualization) this.props.handleAlertSideContent();
       },
       this.state.width,
       this.state.height,
@@ -470,22 +472,34 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
 };
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
-  addAlertSideContentToProps(dispatch, props, {
-    handleEditorEval: () => evalEditor(props.workspaceLocation),
-    handleEnvStepUpdate: (steps: number) => updateEnvSteps(steps, props.workspaceLocation),
-    setEditorHighlightedLines: (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) =>
-      setEditorHighlightedLinesAgenda(props.workspaceLocation, editorTabIndex, newHighlightedLines)
-  });
+  bindActionCreators(
+    {
+      handleEditorEval: () => evalEditor(props.workspaceLocation),
+      handleEnvStepUpdate: (steps: number) => updateEnvSteps(steps, props.workspaceLocation),
+      handleAlertSideContent: () =>
+        beginAlertSideContent(SideContentType.envVisualizer, props.workspaceLocation),
+      setEditorHighlightedLines: (
+        editorTabIndex: number,
+        newHighlightedLines: HighlightedLines[]
+      ) =>
+        setEditorHighlightedLinesAgenda(
+          props.workspaceLocation,
+          editorTabIndex,
+          newHighlightedLines
+        )
+    },
+    dispatch
+  );
 
 export const SideContentEnvVisualizer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(SideContentEnvVisualizerBase);
 
-const makeEnvVisualizerTabFrom = (location: OwnProps): SideContentTab => ({
+const makeEnvVisualizerTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer {...location} />,
+  body: <SideContentEnvVisualizer workspaceLocation={location} />,
   id: SideContentType.envVisualizer
 });
 

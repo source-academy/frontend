@@ -14,13 +14,11 @@ import {
   SideContentType
 } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import MobileControlBar from './MobileControlBar';
 
-export type MobileSideContentProps = Omit<SideContentProps, 'workspaceLocation' | 'onChange'> & {
+export type MobileSideContentProps = Omit<SideContentProps, 'onChange'> & {
   onChange: ChangeTabsCallback;
-} & MobileControlBarProps &
-  SideContentLocation;
+} & MobileControlBarProps;
 
 type MobileControlBarProps = {
   mobileControlBarProps: ControlBarProps;
@@ -71,7 +69,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
    */
   const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentType) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
-    const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+    const renderPanel = (tab: SideContentTab, workspaceLocation?: SideContentLocation) => {
       if (!tab.body) return;
 
       const tabBody: JSX.Element = workspaceLocation

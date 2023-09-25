@@ -8,9 +8,10 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 import classNames from 'classnames';
-import { SideContentDispatchProps, SideContentLocation, SideContentType } from '../SideContentTypes';
-import { addAlertSideContentToProps } from '../SideContentHelper';
+import { SideContentLocation, SideContentType } from '../SideContentTypes';
 import { MapDispatchToProps, connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { beginAlertSideContent } from '../SideContentActions';
 
 const SubstDefaultText = () => {
   return (
@@ -68,13 +69,16 @@ type SubstVisualizerProps = OwnProps & DispatchProps;
 
 type OwnProps = {
   content: IStepperPropContents[];
-} & SideContentLocation;
+  workspaceLocation: SideContentLocation;
+};
 
 type State = {
   value: number;
 };
 
-type DispatchProps = SideContentDispatchProps
+type DispatchProps = {
+  alertSideContent: () => void;
+};
 
 class SideContentSubstVisualizerBase extends React.Component<SubstVisualizerProps, State> {
   constructor(props: SubstVisualizerProps) {
@@ -95,7 +99,7 @@ class SideContentSubstVisualizerBase extends React.Component<SubstVisualizerProp
       });
 
       if (this.props.content.length > 0) {
-        this.props.alertSideContent(SideContentType.substVisualizer)
+        this.props.alertSideContent();
       }
     }
   }
@@ -360,5 +364,15 @@ class SideContentSubstVisualizerBase extends React.Component<SubstVisualizerProp
   };
 }
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) => addAlertSideContentToProps(dispatch, props, {})
-export default connect(null, mapDispatchToProps)(SideContentSubstVisualizerBase)
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (
+  dispatch,
+  { workspaceLocation }
+) =>
+  bindActionCreators(
+    {
+      alertSideContent: () =>
+        beginAlertSideContent(SideContentType.substVisualizer, workspaceLocation)
+    },
+    dispatch
+  );
+export default connect(null, mapDispatchToProps)(SideContentSubstVisualizerBase);

@@ -10,6 +10,7 @@ import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTyp
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
+import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
@@ -33,10 +34,12 @@ export type OverallState = {
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
+  readonly sideContent: SideContentManagerState;
 };
 
 export type ApplicationState = {
   readonly environment: ApplicationEnvironment;
+  readonly moduleBackend: string;
 };
 
 export type Story = {
@@ -306,7 +309,8 @@ export const defaultAcademy: AcademyState = {
 };
 
 export const defaultApplication: ApplicationState = {
-  environment: currentEnvironment()
+  environment: currentEnvironment(),
+  moduleBackend: Constants.moduleBackendUrl
 };
 
 export const defaultDashboard: DashboardState = {
@@ -554,6 +558,22 @@ export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null
 };
 
+export const defaultSideContent: SideContentState = {
+  dynamicTabs: [],
+  alerts: []
+};
+
+export const defaultSideContentManager: SideContentManagerState = {
+  assessment: defaultSideContent,
+  grading: defaultSideContent,
+  playground: defaultSideContent,
+  githubAssessment: defaultSideContent,
+  sicp: defaultSideContent,
+  sourcecast: defaultSideContent,
+  sourcereel: defaultSideContent,
+  stories: {}
+};
+
 export const defaultState: OverallState = {
   router: defaultRouter,
   academy: defaultAcademy,
@@ -564,5 +584,6 @@ export const defaultState: OverallState = {
   session: defaultSession,
   stories: defaultStories,
   workspaces: defaultWorkspaceManager,
-  fileSystem: defaultFileSystem
+  fileSystem: defaultFileSystem,
+  sideContent: defaultSideContentManager
 };

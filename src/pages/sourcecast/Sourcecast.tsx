@@ -152,7 +152,10 @@ const Sourcecast: React.FC = () => {
    * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
   // const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
-  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation }, SideContentType.introduction);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.introduction
+  );
 
   const handleQueryParam = () => {
     const newUid = params.sourcecastId;
@@ -212,7 +215,7 @@ const Sourcecast: React.FC = () => {
     ) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const autorunButtonHandlers = useMemo(() => {
     return {
@@ -260,9 +263,9 @@ const Sourcecast: React.FC = () => {
     <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
   );
 
-  const dataVisualizerTab: SideContentTab = makeDataVisualizerTabFrom({ workspaceLocation });
+  const dataVisualizerTab: SideContentTab = makeDataVisualizerTabFrom(workspaceLocation);
 
-  const envVisualizerTab: SideContentTab = makeEnvVisualizerTabFrom({ workspaceLocation });
+  const envVisualizerTab: SideContentTab = makeEnvVisualizerTabFrom(workspaceLocation);
 
   const tabs: SideContentTab[] = [
     {

@@ -11,6 +11,7 @@ import {
   defaultPlayground,
   defaultRouter,
   defaultSession,
+  defaultSideContentManager,
   defaultStories,
   defaultWorkspaceManager,
   OverallState
@@ -28,7 +29,8 @@ export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<O
     workspaces: defaultWorkspaceManager,
     session: defaultSession,
     stories: defaultStories,
-    fileSystem: defaultFileSystem
+    fileSystem: defaultFileSystem,
+    sideContent: defaultSideContentManager
   };
   return createStore(_.merge(state, overrides));
 }

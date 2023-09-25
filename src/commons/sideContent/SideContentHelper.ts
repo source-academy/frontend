@@ -1,34 +1,37 @@
 import { TabId } from '@blueprintjs/core';
+import * as bp3core from '@blueprintjs/core';
+import * as bp3icons from '@blueprintjs/icons';
+import * as bp3popover from '@blueprintjs/popover2';
+import lodash from 'lodash';
+import phaser from 'phaser';
 import React, { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
+import ace from 'react-ace';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
-import { Action, ActionCreatorsMapObject, bindActionCreators, Dispatch } from 'redux';
-import {
-  beginStoriesAlertSideContent,
-  storiesVisitSideContent
-} from 'src/features/stories/StoriesActions';
 
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
-import { beginAlertSideContent, visitSideContent } from './SideContentActions';
+import { visitSideContent } from './SideContentActions';
 import {
+  getLocation,
   ModuleSideContent,
   SideContentLocation,
   SideContentTab,
   SideContentType
 } from './SideContentTypes';
 
-// const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
-//   WorkspaceLocation,
-//   string[]
-// >();
-
 const requireProvider = (x: string) => {
   const exports = {
     react: React,
+    'react-ace': ace,
     'react-dom': ReactDOM,
-    'react/jsx-runtime': JSXRuntime
+    'react/jsx-runtime': JSXRuntime,
+    lodash,
+    phaser,
+    '@blueprintjs/core': bp3core,
+    '@blueprintjs/icons': bp3icons,
+    '@blueprintjs/popover2': bp3popover
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
@@ -63,66 +66,26 @@ export const getTabId = (tab: SideContentTab) =>
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
-/**
- * A wrapper around `mapDispatchToProps` to automatically provide a SideContent's props
- * with the `alertSideContent` prop
- */
-export const addAlertSideContentToProps = <TDispatchProps extends ActionCreatorsMapObject<any>>(
-  dispatch: Dispatch<Action<unknown>>,
-  loc: SideContentLocation,
-  dispatchProps: TDispatchProps
-) => ({
-  ...bindActionCreators(dispatchProps, dispatch),
-  alertSideContent: (newId: SideContentType) => {
-    if (loc.workspaceLocation === 'stories') {
-      // If in stories workspace, dispatch different event
-      dispatch(beginStoriesAlertSideContent(newId, loc.storiesEnv));
-    } else if (loc.workspaceLocation) {
-      dispatch(beginAlertSideContent(newId, loc.workspaceLocation));
-    }
-  }
-});
-
-// type SideContentHook = {
-//   setSelectedTab: (newId: SideContentType) => void;
-// } & Replace<SideContentState, { selectedTab: SideContentType }>;
-
-export function useSideContentInternal(loc: SideContentLocation, defaultTab?: SideContentType) {
+export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
+  const [workspaceLocation, storyEnv] = getLocation(location);
+  const { alerts, dynamicTabs, selectedTab, height } = useTypedSelector(state =>
+    workspaceLocation === 'stories'
+      ? state.sideContent.stories[storyEnv]
+      : state.sideContent[workspaceLocation]
+  );
   const dispatch = useDispatch();
-  const { selectedTab, ...sideContent } = useTypedSelector(state => {
-    if (loc.workspaceLocation === 'stories') {
-      return state.stories.envs[loc.storiesEnv].sideContent;
-    } else if (loc.workspaceLocation) {
-      return state.workspaces[loc.workspaceLocation].sideContent;
-    } else {
-      return {
-        dynamicTabs: [],
-        alerts: []
-      };
-    }
-  });
-
   const setSelectedTab = useCallback(
     (newId: SideContentType) => {
-      if (loc.workspaceLocation === 'stories') {
-        dispatch(storiesVisitSideContent(newId, loc.storiesEnv));
-      } else if (loc.workspaceLocation) {
-        dispatch(visitSideContent(newId, selectedTab, loc.workspaceLocation));
-      }
+      dispatch(visitSideContent(newId, selectedTab, location));
     },
-    // Not necessary to add dispatch, it's from a hook
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [loc]
+    [dispatch, location, selectedTab]
   );
 
   return {
-    ...sideContent,
+    alerts,
+    dynamicTabs,
+    selectedTab: selectedTab ?? defaultTab,
     setSelectedTab,
-    selectedTab: selectedTab ?? defaultTab
+    height
   };
-}
-
-export const useSideContent = (loc: SideContentLocation, defaultTab: SideContentType) => {
-  const { selectedTab, setSelectedTab } = useSideContentInternal(loc, defaultTab);
-  return [selectedTab!, setSelectedTab] as [SideContentType, (newId: SideContentType) => void];
 };

@@ -116,11 +116,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   //     ? SideContentType.grading
   //     : SideContentType.questionOverview
   // );
-  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation },
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
-    )
+  );
 
   const navigate = useNavigate();
 
@@ -235,10 +236,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
+    if (!selectedTab) return;
+
     if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, props, selectedTab, setSelectedTab]);
 
   /* ==================
      onChange handlers

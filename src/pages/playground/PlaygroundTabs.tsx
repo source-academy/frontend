@@ -4,7 +4,11 @@ import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import {
+  SideContentLocation,
+  SideContentTab,
+  SideContentType
+} from 'src/commons/sideContent/SideContentTypes';
 
 export const mobileOnlyTabIds: readonly SideContentType[] = [
   SideContentType.mobileEditor,
@@ -35,7 +39,10 @@ export const makeRemoteExecutionTabFrom = (
   id: SideContentType.remoteExecution
 });
 
-export const makeSubstVisualizerTabFrom = (output: InterpreterOutput[]): SideContentTab => {
+export const makeSubstVisualizerTabFrom = (
+  workspaceLocation: SideContentLocation,
+  output: InterpreterOutput[]
+): SideContentTab => {
   const processStepperOutput = (output: InterpreterOutput[]) => {
     const editorOutput = output[0];
     if (
@@ -54,7 +61,12 @@ export const makeSubstVisualizerTabFrom = (output: InterpreterOutput[]): SideCon
   return {
     label: 'Stepper',
     iconName: IconNames.FLOW_REVIEW,
-    body: <SideContentSubstVisualizer content={processStepperOutput(output)} />,
+    body: (
+      <SideContentSubstVisualizer
+        workspaceLocation={workspaceLocation}
+        content={processStepperOutput(output)}
+      />
+    ),
     id: SideContentType.substVisualizer
   };
 };

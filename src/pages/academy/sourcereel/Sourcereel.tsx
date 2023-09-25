@@ -86,8 +86,10 @@ const workspaceLocation: WorkspaceLocation = 'sourcereel';
 const sourcecastLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcereel: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useSideContent({ workspaceLocation }, SideContentType.sourcereel);
-  // const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.sourcereel
+  );
 
   const courseId = useTypedSelector(state => state.session.courseId);
   const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(
@@ -312,8 +314,8 @@ const Sourcereel: React.FC = () => {
     });
   };
 
-  const dataVisualizerTab = makeDataVisualizerTabFrom({ workspaceLocation });
-  const envVisualizerTab = makeEnvVisualizerTabFrom({ workspaceLocation });
+  const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
+  const envVisualizerTab = makeEnvVisualizerTabFrom(workspaceLocation);
 
   const workspaceHandlers = useMemo(() => {
     return {
