@@ -6,7 +6,7 @@ type Props<T extends OptionType> = {
   options: T[];
   selectedValue?: T['value'];
   onClick?: (v: T['value']) => void;
-  buttonProps?: Partial<React.ComponentProps<typeof Button>>;
+  buttonProps?: Partial<React.ComponentProps<typeof Button> & { 'data-testid': string }>;
   popoverProps?: Partial<React.ComponentProps<typeof Popover2>>;
 };
 

@@ -41,7 +41,11 @@ const NavigationBarLangSelectButton = () => {
       onClick={selectLang}
       selectedValue={lang}
       popoverProps={{ position: Position.BOTTOM_RIGHT, onClose: () => setIsOpen(false), isOpen }}
-      buttonProps={{ rightIcon: 'caret-down', onClick: () => setIsOpen(true) }}
+      buttonProps={{
+        rightIcon: 'caret-down',
+        onClick: () => setIsOpen(true),
+        'data-testid': 'NavigationBarLangSelectButton'
+      }}
     />
   );
 };
