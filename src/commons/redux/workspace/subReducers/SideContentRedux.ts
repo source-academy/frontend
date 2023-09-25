@@ -1,15 +1,17 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { Action, createReducer } from '@reduxjs/toolkit';
 import type { Context } from 'js-slang';
 
-import { getDynamicTabs, getTabId } from '../../../sideContent/SideContentHelper';
-import { DebuggerContext, SideContentType } from '../../../sideContent/SideContentTypes';
+import { getTabId } from '../../../sideContent/SideContentHelper';
+import { DebuggerContext, SideContentTab, SideContentType } from '../../../sideContent/SideContentTypes';
 import { createActions } from '../../utils';
 import { defaultSideContent } from '../WorkspaceStateTypes';
 
 export const sideContentActions = createActions('sideContent', {
   beginAlertSideContent: (newId: SideContentType) => newId,
+  beginSpawnSideContent: 0,
   changeSideContentHeight: (height: number) => height,
   endAlertSideContent: (newId: SideContentType) => newId,
+  endSpawnSideContent: (dynamicTabs: SideContentTab[]) => dynamicTabs,
   notifyProgramEvaluated: (
     result: any,
     lastDebuggerResult: any,
@@ -24,6 +26,8 @@ export const sideContentActions = createActions('sideContent', {
   visitSideContent: (id: SideContentType) => id
 });
 
+export const isSideContentAction = (action: Action): action is ReturnType<(typeof sideContentActions)[keyof typeof sideContentActions]> => action.type.startsWith('sideContent')
+
 export const sideContentReducer = createReducer(defaultSideContent, builder => {
   builder.addCase(sideContentActions.changeSideContentHeight, (state, { payload }) => {
     state.height = payload;
@@ -35,8 +39,7 @@ export const sideContentReducer = createReducer(defaultSideContent, builder => {
     state.alerts.push(newId);
   });
 
-  builder.addCase(sideContentActions.notifyProgramEvaluated, (state, { payload }) => {
-    const dynamicTabs = getDynamicTabs(payload);
+  builder.addCase(sideContentActions.endSpawnSideContent, (state, { payload: dynamicTabs }) => {
     state.alerts = dynamicTabs.map(getTabId).filter(id => id !== state.selectedTabId);
     state.dynamicTabs = dynamicTabs;
   });

@@ -16,7 +16,7 @@ import {
   logoutGitHub,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
-import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import { actions } from 'src/commons/redux/ActionsHelper';
 import {
   useEditorState,
   useRepl,
@@ -46,12 +46,6 @@ import {
   persistenceSaveFile,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
-import {
-  generateLzString,
-  playgroundConfigLanguage,
-  shortenURL,
-  updateShortURL
-} from 'src/features/playground/PlaygroundActions';
 
 import {
   getLanguageConfig,
@@ -156,12 +150,12 @@ export async function handleHash(
     // BrowserFS does not provide a way of listening to changes in the file system, which makes
     // updating the file system view troublesome. To force the file system view to re-render
     // (and thus display the updated file system), we first disable Folder mode.
-    dispatch(allWorkspaceActions.setFolderMode(workspaceLocation, false));
+    dispatch(actions.setFolderMode(workspaceLocation, false));
     const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
     // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
     // newly-added files to be shown. Note that this has to take place after the files are
     // already added to the file system.
-    dispatch(allWorkspaceActions.setFolderMode(workspaceLocation, isFolderModeEnabled));
+    dispatch(actions.setFolderMode(workspaceLocation, isFolderModeEnabled));
 
     // By default, open a single editor tab containing the default playground file.
     const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
@@ -169,7 +163,7 @@ export async function handleHash(
     ];
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
-      allWorkspaceActions.removeEditorTabsForDirectory(
+      actions.removeEditorTabsForDirectory(
         workspaceLocation,
         getWorkspaceBasePath(workspaceLocation)
       )
@@ -177,13 +171,13 @@ export async function handleHash(
     // Add editor tabs from the query string.
     editorTabFilePaths.forEach(filePath =>
       // Fall back on the empty string if the file contents do not exist.
-      dispatch(allWorkspaceActions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
+      dispatch(actions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
     );
 
     // By default, use the first editor tab.
     const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
     dispatch(
-      allWorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+      actions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
     );
     if (chapter) {
       // TODO: To migrate the state logic away from playgroundSourceChapter
@@ -192,7 +186,7 @@ export async function handleHash(
       handlers.handleChapterSelect(chapter, languageConfig.variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
-      dispatch(playgroundConfigLanguage(languageConfig));
+      dispatch(actions.playgroundUpdateLanguageConfig(languageConfig));
     }
 
     const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
@@ -234,7 +228,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     stepLimit,
     isRunning,
     isDebugging,
-    output,
+    repl: { output },
     sharedbConnected,
     usingSubst,
     usingEnv,
@@ -267,9 +261,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const { handleUsingEnv, handleUsingSubst } = useMemo(() => {
     return {
       handleUsingEnv: (usingEnv: boolean) =>
-        dispatch(allWorkspaceActions.toggleUsingEnv(workspaceLocation, usingEnv)),
+        dispatch(actions.toggleUsingEnv(workspaceLocation, usingEnv)),
       handleUsingSubst: (usingSubst: boolean) =>
-        dispatch(allWorkspaceActions.toggleUsingSubst(workspaceLocation, usingSubst))
+        dispatch(actions.toggleUsingSubst(workspaceLocation, usingSubst))
     };
   }, [dispatch, workspaceLocation]);
 
@@ -333,7 +327,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         const languageConfig = getLanguageConfig(courseSourceChapter, courseSourceVariant);
         // Hardcoded for Playground only for now, while we await workspace refactoring
         // to decouple the SicpWorkspace from the Playground.
-        dispatch(playgroundConfigLanguage(languageConfig));
+        dispatch(actions.playgroundUpdateLanguageConfig(languageConfig));
         // Disable Folder mode when forcing the Source chapter and variant to follow the current course's.
         // This is because Folder mode only works in Source 2+.
         handleSetFolderMode(false);
@@ -403,9 +397,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const handleEnvVisualiserReset = useCallback(() => {
     handleUsingEnv(false);
     EnvVisualizer.clearEnv();
-    dispatch(allWorkspaceActions.updateEnvSteps(workspaceLocation, -1));
-    dispatch(allWorkspaceActions.updateEnvStepsTotal(workspaceLocation, 0));
-    dispatch(allWorkspaceActions.toggleUpdateEnv(workspaceLocation, true));
+    dispatch(actions.updateEnvSteps(workspaceLocation, -1));
+    dispatch(actions.updateEnvStepsTotal(workspaceLocation, 0));
+    dispatch(actions.toggleUpdateEnv(workspaceLocation, true));
 
     // TODO update to using current tab
     setEditorHighlightedLines(0, []);
@@ -520,7 +514,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleChapterSelect(chapter, variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
-      dispatch(playgroundConfigLanguage(sublanguage));
+      dispatch(actions.playgroundUpdateLanguageConfig(sublanguage));
     },
     [
       dispatch,
@@ -637,14 +631,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
         stepLimit={stepLimit}
         stepSize={usingSubst ? 2 : 1}
         handleChangeStepLimit={limit => {
-          dispatch(allWorkspaceActions.changeStepLimit(workspaceLocation, limit));
-          usingEnv && dispatch(allWorkspaceActions.toggleUpdateEnv(workspaceLocation, true));
+          dispatch(actions.changeStepLimit(workspaceLocation, limit));
+          usingEnv && dispatch(actions.toggleUpdateEnv(workspaceLocation, true));
         }}
         handleOnBlurAutoScale={limit => {
           limit % 2 === 0 || !usingSubst
-            ? dispatch(allWorkspaceActions.changeStepLimit(workspaceLocation, limit))
-            : dispatch(allWorkspaceActions.changeStepLimit(workspaceLocation, limit + 1));
-          usingEnv && dispatch(allWorkspaceActions.toggleUpdateEnv(workspaceLocation, true));
+            ? dispatch(actions.changeStepLimit(workspaceLocation, limit))
+            : dispatch(actions.changeStepLimit(workspaceLocation, limit + 1));
+          usingEnv && dispatch(actions.toggleUpdateEnv(workspaceLocation, true));
         }}
         key="step_limit"
       />
@@ -683,9 +677,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
     return (
       <ControlBarShareButton
-        handleGenerateLz={() => dispatch(generateLzString())}
-        handleShortenURL={s => dispatch(shortenURL(s))}
-        handleUpdateShortURL={s => dispatch(updateShortURL(s))}
+        handleGenerateLz={() => dispatch(actions.generateLzString())}
+        handleShortenURL={s => dispatch(actions.shortenUrl(s))}
+        handleUpdateShortURL={s => dispatch(actions.updateShortURL(s))}
         queryString={qs}
         shortURL={shortURL}
         isSicp={isSicpEditor}
@@ -718,7 +712,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     const languageConfigToSet = getLanguageConfig(playgroundSourceChapter, playgroundSourceVariant);
     // Hardcoded for Playground only for now, while we await workspace refactoring
     // to decouple the SicpWorkspace from the Playground.
-    dispatch(playgroundConfigLanguage(languageConfigToSet));
+    dispatch(actions.playgroundUpdateLanguageConfig(languageConfigToSet));
   }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
 
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
@@ -738,7 +732,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       if (output.length > 0 && output[0].type === 'result') {
         tabs.push(
           makeHtmlDisplayTabFrom(output[0] as ResultOutput, errorMsg =>
-            dispatch(allWorkspaceActions.handleConsoleLog(workspaceLocation, [errorMsg]))
+            dispatch(actions.handleConsoleLog(workspaceLocation, [errorMsg]))
           )
         );
       }
@@ -801,7 +795,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       };
 
       pushLog(input);
-      dispatch(allWorkspaceActions.toggleUpdateEnv(workspaceLocation, true));
+      dispatch(actions.toggleUpdateEnv(workspaceLocation, true));
       setEditorHighlightedLines(0, []);
     },
     [pushLog, dispatch, workspaceLocation, setEditorHighlightedLines]

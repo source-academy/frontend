@@ -2,13 +2,13 @@ import { BFSRequire, configure } from 'browserfs';
 import { ApiError } from 'browserfs/dist/node/core/api_error';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Store } from 'redux';
+import { actions } from 'src/commons/redux/ActionsHelper';
 import { OverallState } from 'src/commons/redux/AllTypes';
 import {
   WORKSPACE_BASE_PATHS,
 } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { EditorTabState } from 'src/commons/redux/workspace/WorkspaceStateTypes';
 
-import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 import { writeFileRecursively } from '../../commons/fileSystem/utils';
 
 export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<void> => {
@@ -39,7 +39,7 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
         // Set the browser file system reference in the Redux store for retrieval
         // in other parts of the codebase.
         const fileSystem = BFSRequire('fs');
-        store.dispatch(setInBrowserFileSystem(fileSystem));
+        store.dispatch(actions.setInBrowserFileSystem(fileSystem));
         // Create files for editor tabs if they do not exist. This can happen when
         // editor tabs are initialised from the Redux store defaults, as opposed to
         // being created by the user.

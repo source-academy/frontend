@@ -1,6 +1,7 @@
 import { academyActions } from './academy/AcademyReducer';
 import { achievementActions } from './achievement/AchievementReducer';
 import { dashboardActions } from './DashboardRedux';
+import { fileSystemActions } from './FileSystemRedux';
 import { routerActions } from './RouterReducer';
 import { sessionReducerActions } from './session/SessionsReducer';
 import { allWorkspaceActions } from './workspace/AllWorkspacesRedux';
@@ -16,6 +17,7 @@ export const actions = {
   ...allWorkspaceActions,
   ...assessmentActions,
   ...dashboardActions,
+  ...fileSystemActions,
   ...gradingActions,
   ...playgroundActions,
   ...routerActions,

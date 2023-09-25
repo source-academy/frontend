@@ -81,7 +81,7 @@ const Sourcereel: React.FC = () => {
   const {
     isDebugging,
     isRunning,
-    output,
+    repl: { output },
     playbackData,
     recordingStatus,
     timeElapsedBeforePause,

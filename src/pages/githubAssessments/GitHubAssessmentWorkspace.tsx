@@ -156,7 +156,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     editorTestcases,
     hasUnsavedChanges,
     isRunning,
-    output,
+    repl: { output }, 
     evalEditor: handleEditorEval,
     evalRepl: handleReplEval,
     navDeclaration: handleDeclarationNavigate,

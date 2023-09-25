@@ -65,6 +65,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       ? commandsEnv
       : DEFAULT_ENV;
 
+
   const chapter = useTypedSelector(
     store => store.workspaces.stories.envs[env]?.context.chapter || Constants.defaultSourceChapter
   );
@@ -76,7 +77,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     setCode(props.content);
   }, [props.content]);
 
-  const output = useTypedSelector(store => store.workspaces.stories.envs[env]?.output || []);
+  const output = useTypedSelector(store => store.workspaces.stories.envs[env]?.repl.output || []);
 
   const { selectedTab } = useSideContent(`stories.${env}`);
 

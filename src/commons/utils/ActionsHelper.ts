@@ -2,7 +2,6 @@ import { ActionType } from 'typesafe-actions';
 
 import * as CommonsActions from '../../commons/application/actions/CommonsActions';
 import * as SessionActions from '../../commons/application/actions/SessionActions';
-import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import * as AcademyActions from '../../features/academy/AcademyActions';
 import * as AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
@@ -27,7 +26,6 @@ export const actions = {
   ...AcademyActions,
   ...PersistenceActions,
   ...RemoteExecutionActions,
-  ...FileSystemActions,
   ...playgroundActions,
   ...sessionReducerActions,
   ...sourcecastActions,

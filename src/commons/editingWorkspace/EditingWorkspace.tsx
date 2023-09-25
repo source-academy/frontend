@@ -93,7 +93,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
   const {
     isRunning,
-    output,
+    repl: { output },
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId,
     evalEditor: handleEditorEval,

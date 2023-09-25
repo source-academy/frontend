@@ -1,9 +1,13 @@
 import { Action } from '@reduxjs/toolkit';
+import _ from 'lodash';
 import { SagaIterator } from 'redux-saga';
-import { put, take } from 'redux-saga/effects';
+import { call, put, take } from 'redux-saga/effects';
+import { getDynamicTabs } from 'src/commons/sideContent/SideContentHelper';
 
-import { safeTakeEvery as takeEvery } from '../../utils/SafeEffects';
+import { safeTakeEvery } from '../../utils/SafeEffects';
+import { selectWorkspace } from '../../utils/Selectors';
 import { allWorkspaceActions } from '../AllWorkspacesRedux';
+import { WorkspaceState } from '../WorkspaceStateTypes';
 
 const isNotifyProgramEvaluated = (
   action: Action
@@ -11,7 +15,18 @@ const isNotifyProgramEvaluated = (
   action.type === allWorkspaceActions.notifyProgramEvaluated.type;
 
 export default function* SideContentSaga(): SagaIterator {
-  yield takeEvery(
+  yield safeTakeEvery(
+    allWorkspaceActions.beginSpawnSideContent,
+    function* ({ payload: { location }}) {
+      const workspace: WorkspaceState = yield selectWorkspace(location)
+      const debuggerContext = _.cloneDeep(workspace.debuggerContext)
+      const dynamicTabs = yield call(getDynamicTabs, debuggerContext)
+      yield put(allWorkspaceActions.endSpawnSideContent(location, dynamicTabs))
+      yield put(allWorkspaceActions.updateWorkspace(location, { debuggerContext }))
+    }
+  )
+
+  yield safeTakeEvery(
     allWorkspaceActions.beginAlertSideContent,
     function* ({
       payload

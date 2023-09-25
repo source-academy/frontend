@@ -73,7 +73,7 @@ const Sourcecast: React.FC = () => {
     inputToApply,
     isRunning,
     isDebugging,
-    output,
+    repl: { output },
     playbackDuration,
     playbackData,
     playbackStatus,

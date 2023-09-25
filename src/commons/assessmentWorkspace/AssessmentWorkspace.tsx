@@ -124,7 +124,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     editorTestcases,
     hasUnsavedChanges,
     isRunning,
-    output,
+    repl: { output },
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId,
     globals: workspaceGlobals,

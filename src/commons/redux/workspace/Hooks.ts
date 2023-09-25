@@ -41,16 +41,19 @@ type UseWorkspaceReturn<State> = State & {
 export function useWorkspace<T extends NonStoryWorkspaceLocation>(
   location: T
 ): UseWorkspaceReturn<WorkspaceManagerState[T]>;
+export function useWorkspace<T extends NonStoryWorkspaceLocation>(
+  location: T,
+  selector: (workspace: WorkspaceManagerState[T]) => any
+): ReturnType<typeof selector>
 export function useWorkspace(location: StoryWorkspaceLocation): UseWorkspaceReturn<StoriesEnvState>;
+// export function useWorkspace(location: StoryWorkspaceLocation, selector: (state: StoriesEnvState) => any): ReturnType<typeof selector>
 export function useWorkspace(location: SideContentLocation): UseWorkspaceReturn<WorkspaceState>;
-export function useWorkspace(location: SideContentLocation) {
+export function useWorkspace(location: SideContentLocation, selector: (state: WorkspaceState) => any): ReturnType<typeof selector>
+export function useWorkspace(location: SideContentLocation, selector?: (state: WorkspaceState) => any) {
   const workspace = useTypedSelector(state => {
     const [workspaceLocation, storyEnv] = getLocation(location);
-    if (workspaceLocation === 'stories') {
-      return state.workspaces.stories.envs[storyEnv];
-    }
-
-    return state.workspaces[workspaceLocation];
+    const workspace = workspaceLocation === 'stories' ? state.workspaces.stories.envs[storyEnv] : state.workspaces[workspaceLocation]
+    return selector ? selector(workspace) : workspace
   });
 
   const dispatch = useDispatch();
@@ -90,9 +93,9 @@ const bindActionCreatorsToLocation = <
       ...res,
       [name]: (...args: any) => {
         try {
-          return dispatch(actionCreator(location, ...args));
+          dispatch(actionCreator(location, ...args));
         } catch (error) {
-          console.log(`actionCreator for ${name} in ${location}:`, actionCreator)
+          // console.log(`actionCreator for ${name} in ${location}:`, actionCreator)
           throw error
         }
       }

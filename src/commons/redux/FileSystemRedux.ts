@@ -3,7 +3,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 
 import { defaultFileSystem } from './AllTypes';
 
-export const { actions: fileActions, reducer: fileSystemReducer } = createSlice({
+export const { actions: fileSystemActions, reducer: fileSystemReducer } = createSlice({
   name: 'fileSystem',
   initialState: defaultFileSystem,
   reducers: {

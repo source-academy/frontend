@@ -1,4 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { Action, createReducer } from '@reduxjs/toolkit';
 import type { SourceError, Value } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 
@@ -22,6 +22,9 @@ export const replActions = createActions('repl', {
   }),
   updateReplValue: (newValue: string) => newValue
 });
+
+const replActionTypes = Object.values(replActions).map(creator => creator.type)
+export const isReplAction = (action: Action): action is ReturnType<(typeof replActions)[keyof typeof replActions]> => replActionTypes.includes(action.type)
 
 export const replActionNames = Object.keys(replActions) as Array<keyof typeof replActions>;
 

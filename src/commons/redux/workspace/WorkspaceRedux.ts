@@ -2,20 +2,19 @@ import {
   type ActionReducerMapBuilder,
   type SliceCaseReducers,
   type ValidateSliceCaseReducers,
-  combineReducers,
   createSlice,
   DeepPartial
 } from '@reduxjs/toolkit';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Context, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
 import type { SALanguage } from 'src/commons/application/ApplicationTypes';
 import type { Position } from 'src/commons/editor/EditorTypes';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 
 import { createActions } from '../utils';
-import { getEditorReducer } from './subReducers/EditorRedux';
-import { replActions, replReducer } from './subReducers/ReplRedux';
-import { sideContentActions, sideContentReducer } from './subReducers/SideContentRedux';
+import { getEditorReducer, isEditorAction } from './subReducers/EditorRedux';
+import { isReplAction, replActions, replReducer } from './subReducers/ReplRedux';
+import { isSideContentAction, sideContentActions, sideContentReducer } from './subReducers/SideContentRedux';
 import { WorkspaceState } from './WorkspaceStateTypes';
 
 export const workspaceActions = createActions('workspace', {
@@ -52,6 +51,7 @@ export const workspaceActions = createActions('workspace', {
   resetWorkspace: (options: DeepPartial<WorkspaceState> = {}) => options,
   updateHasUnsavedChanges: (value: boolean) => value,
   updateSharedbConnected: (newValue: boolean) => newValue,
+  updateContext: (context: Context) => context,
   updateSublanguage: (sublang: SALanguage) => sublang,
   updateWorkspace: (options: DeepPartial<WorkspaceState> = {}) => options
 });
@@ -67,12 +67,6 @@ export const createWorkspaceSlice = <
   extraReducers?: (builder: ActionReducerMapBuilder<TState>) => void
 ) => {
   const editorReducer = getEditorReducer(initialState.editorState.editorTabs);
-
-  const subReducer = combineReducers({
-    editorState: editorReducer,
-    sideContent: sideContentReducer,
-    repl: replReducer
-  });
 
   return createSlice<TState, TReducers, TName>({
     name,
@@ -149,9 +143,17 @@ export const createWorkspaceSlice = <
 
       if (extraReducers) extraReducers(builder);
 
-      builder.addDefaultCase((state, action) => {
-        subReducer(state, action);
-      });
+      builder.addMatcher(isEditorAction, (state, action) => {
+        editorReducer(state.editorState, action)
+      })
+
+      builder.addMatcher(isReplAction, (state, action) => {
+        replReducer(state.repl, action)
+      })
+
+      builder.addMatcher(isSideContentAction, (state, action) => {
+        sideContentReducer(state.sideContent, action)
+      })
     }
   });
 };

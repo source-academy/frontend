@@ -4,9 +4,9 @@ import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
+import { actions } from '../redux/ActionsHelper';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
-import { updateReactRouter } from './actions/CommonsActions';
 
 /**
  * Application wrapper component which figures out which deployment and set of routes to render.
@@ -31,7 +31,7 @@ const ApplicationWrapper: React.FC = () => {
         });
 
     const r = createBrowserRouter(routerConfig);
-    dispatch(updateReactRouter(r));
+    dispatch(actions.updateReactRouter(r));
 
     return r;
   }, [isLoggedIn, role, name, courseId, dispatch]);

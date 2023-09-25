@@ -101,9 +101,10 @@ export function getWorkspaceReducer<T extends NonStoryWorkspaceLocation>(
   return allWorkspaceReducers[location];
 }
 
-const commonWorkspaceActionTypes = Object.keys(allWorkspaceActions);
+const commonWorkspaceActionTypes = Object.values(allWorkspaceActions).map(creator => creator.type);
+
 const isCommonWorkspaceAction = (action: Action): action is CommonWorkspaceAction<any> =>
-  commonWorkspaceActionTypes.includes[action.type];
+  commonWorkspaceActionTypes.includes(action.type);
 
 export const allWorkspacesReducer = createReducer(defaultWorkspaceManager, builder => {
   builder.addCase(LOG_OUT, state => {
@@ -126,31 +127,14 @@ export const allWorkspacesReducer = createReducer(defaultWorkspaceManager, build
       if (!isNonStoryWorkspaceLocation(location)) {
         const [, storyEnv] = location.split('.');
         const storyReducer = basePlaygroundReducer(getDefaultStoriesEnv(storyEnv));
-
-        return {
-          ...state,
-          stories: {
-            ...state.stories,
-            envs: {
-              ...state.stories.envs,
-              [storyEnv]: storyReducer(state.stories[storyEnv], action)
-            }
-          }
-        };
+        storyReducer(state.stories[storyEnv], action)
       } else {
         const workspace = getWorkspace(state, location);
         const reducer = getWorkspaceReducer(location);
-
-        return {
-          ...state,
-          [location]: reducer(workspace as any, newAction)
-        };
-        // state[location] = allWorkspaceReducers[location](workspace, newAction)
+        reducer(workspace as any, newAction)
       }
     }
   );
 
-  builder.addDefaultCase((state, action) =>
-    workspaceManagerReducer(state as WorkspaceManagerState, action)
-  );
+  builder.addDefaultCase((state, action) => workspaceManagerReducer(state as WorkspaceManagerState, action));
 });

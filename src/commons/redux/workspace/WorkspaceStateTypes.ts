@@ -81,8 +81,6 @@ export type WorkspaceState = {
   readonly isDebugging: boolean;
   readonly isRunning: boolean;
 
-  readonly output: InterpreterOutput[];
-
   readonly programPrependValue: string;
   readonly programPostpendValue: string;
   readonly repl: ReplState;
@@ -101,7 +99,6 @@ export const getDefaultWorkspaceState = (initialTabs: EditorTabState[] = []): Wo
   isDebugging: false,
   isRunning: false,
   globals: [],
-  output: [],
   repl: defaultRepl,
   programPostpendValue: '',
   programPrependValue: '',

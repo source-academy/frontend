@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { enableMapSet,setAutoFreeze } from 'immer'
 import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 import { defaultState, OverallState } from 'src/commons/redux/AllTypes';
@@ -14,15 +15,20 @@ export const store = createStore();
 export function createStore() {
   const sagaMiddleware = createSagaMiddleware();
 
-  const initialStore = loadStore(loadStoredState()) || defaultState;
+  setAutoFreeze(false)
+  enableMapSet()
 
+  const initialStore = loadStore(loadStoredState()) || defaultState;
   const createdStore = configureStore({
     reducer: rootReducer,
     preloadedState: initialStore as any,
-    middleware: [
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false
+    }).concat([
       sagaMiddleware
       // backendApi.middleware,
-    ]
+    ])
   });
 
   sagaMiddleware.run(MainSaga);

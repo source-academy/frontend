@@ -209,7 +209,9 @@ export const remoteExecutionSaga = combineSagaHandlers(
             isEditorAutorun: false
           },
           isDebugging: false,
-          output: []
+          repl: {
+            output: []
+          }
         })
       );
       yield put(

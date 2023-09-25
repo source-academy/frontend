@@ -83,7 +83,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     autogradingResults,
     editorTestcases,
     isRunning,
-    output,
+    repl: { output },
     context,
     globals,
     currentSubmission: storedSubmissionId,

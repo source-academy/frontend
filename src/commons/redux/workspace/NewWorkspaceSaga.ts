@@ -8,8 +8,7 @@ import {
   parseError,
   resume,
   runFilesInContext,
-  runInContext
-} from 'js-slang';
+  runInContext} from 'js-slang';
 import { TRY_AGAIN } from 'js-slang/dist/constants';
 // import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
@@ -19,6 +18,7 @@ import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { type SourceError, Chapter, Variant } from 'js-slang/dist/types';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
+import _ from 'lodash';
 import { posix as pathlib } from 'path';
 import type { SagaIterator } from 'redux-saga';
 import { type CallEffect, type StrictEffect, call, put, race } from 'redux-saga/effects';
@@ -280,8 +280,7 @@ const WorkspaceSaga = combineSagaHandlers(
     beginClearContext: function* ({ payload: { location, payload } }) {
       yield call([DataVisualizer, DataVisualizer.clear]);
       yield call([EnvVisualizer, EnvVisualizer.clear]);
-      const globals: Array<[string, any]> = payload.globals as Array<[string, any]>;
-      for (const [key, value] of globals) {
+      for (const [key, value] of payload.globals) {
         window[key] = value;
       }
 
@@ -729,6 +728,8 @@ function retrieveFilesInWorkspaceAsRecord(location: SideContentLocation, fileSys
 
 export function* evalEditor(location: SideContentLocation) {
   const workspace: WorkspaceState = yield selectWorkspace(location);
+  const copiedContext = _.cloneDeep(workspace.context)
+
   const fileSystem: FSModule = yield selectFileSystem();
 
   const activeEditorTabIndex = workspace.editorState.activeEditorTabIndex;
@@ -770,16 +771,13 @@ export function* evalEditor(location: SideContentLocation) {
         location,
         code,
         breakpoints,
-        workspace.context
+        copiedContext,
       );
     }
 
-    
-  // console.log('Is context frozen?: ', Object.isFrozen(context))
-
     // Evaluate the prepend silently with a privileged context, if it exists
     if (workspace.programPrependValue.length) {
-      const elevatedContext = makeElevatedContext(workspace.context);
+      const elevatedContext = makeElevatedContext(copiedContext);
       const prependFilePath = '/prepend.js';
       const prependFiles = {
         [prependFilePath]: workspace.programPrependValue
@@ -794,19 +792,20 @@ export function* evalEditor(location: SideContentLocation) {
         EVAL_SILENT
       );
       // Block use of methods from privileged context
-      yield* blockExtraMethods(elevatedContext, workspace.context, workspace.execTime, location);
+      yield* blockExtraMethods(elevatedContext, copiedContext, workspace.execTime, location);
     }
 
     yield call(
       evalCode,
       files,
       entrypointFilePath,
-      workspace.context,
+      copiedContext,
       workspace.execTime,
       location,
       allWorkspaceActions.evalEditor.type
     );
   }
+
 }
 
 function* evalWithEnvOrSubst(
@@ -967,6 +966,8 @@ export function* evalCode(
     interrupted: take(allWorkspaceActions.beginInterruptExecution),
     paused: take(allWorkspaceActions.beginDebugPause)
   });
+
+  yield put(allWorkspaceActions.updateWorkspace(location, { context }))
 
   if (interrupted) {
     interrupt(context);

@@ -1,5 +1,11 @@
+import * as bp3core from '@blueprintjs/core'
+import * as bp3icons from '@blueprintjs/icons'
+import * as bp3popover from '@blueprintjs/popover2'
+import lodash from 'lodash'
+import * as phaser from 'phaser'
 import React, { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
+import ace from 'react-ace';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
 
@@ -8,16 +14,17 @@ import { useWorkspace } from '../redux/workspace/Hooks';
 import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { DebuggerContext, ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
-// const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
-//   WorkspaceLocation,
-//   string[]
-// >();
-
 const requireProvider = (x: string) => {
   const exports = {
     react: React,
     'react-dom': ReactDOM,
-    'react/jsx-runtime': JSXRuntime
+    'react/jsx-runtime': JSXRuntime,
+    'react-ace': ace,
+    lodash,
+    phaser,
+    '@blueprintjs/core': bp3core,
+    '@blueprintjs/icons': bp3icons,
+    '@blueprintjs/popover': bp3popover
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
