@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
-import { remoteExecutionActions } from 'src/commons/redux/RemoteExecRedux';
+import { remoteExecutionActions } from 'src/commons/redux/remoteExec/RemoteExecRedux';
 import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
@@ -164,7 +164,9 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
               return (
                 <MenuItem
                   key={id}
-                  onClick={() => dispatch(remoteExecutionActions.remoteExecConnect(props.workspace, device))}
+                  onClick={() =>
+                    dispatch(remoteExecutionActions.remoteExecConnect(props.workspace, device))
+                  }
                   text={`${title} (${type})`}
                   icon={isSelected && 'tick'}
                   labelElement={

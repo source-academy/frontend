@@ -80,22 +80,22 @@ export function* persistenceSaga(): SagaIterator {
       });
       const contents = yield call([gapi.client.drive.files, 'get'], { fileId: id, alt: 'media' });
       const {
-        editorState: {
-          activeEditorTabIndex
-        }
-      }: PlaygroundState = yield selectWorkspace('playground')
+        editorState: { activeEditorTabIndex }
+      }: PlaygroundState = yield selectWorkspace('playground');
 
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');
       }
-      yield put(allWorkspaceActions.updateEditorValue('playground', activeEditorTabIndex, contents.body));
+      yield put(
+        allWorkspaceActions.updateEditorValue('playground', activeEditorTabIndex, contents.body)
+      );
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
       if (meta && meta.appProperties) {
         yield put(
           allWorkspaceActions.chapterSelect(
             'playground',
             parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
-            meta.appProperties.variant || Variant.DEFAULT,
+            meta.appProperties.variant || Variant.DEFAULT
           )
         );
         // yield put(
@@ -124,15 +124,9 @@ export function* persistenceSaga(): SagaIterator {
       yield call(ensureInitialisedAndAuthorised);
 
       const {
-        editorState: {
-          activeEditorTabIndex,
-          editorTabs,
-        },
-        context: {
-          chapter,
-          variant
-        }
-      }: PlaygroundState = yield selectWorkspace('playground')
+        editorState: { activeEditorTabIndex, editorTabs },
+        context: { chapter, variant }
+      }: PlaygroundState = yield selectWorkspace('playground');
 
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');
@@ -205,7 +199,7 @@ export function* persistenceSaga(): SagaIterator {
 
         const config: IPlaygroundConfig = {
           chapter,
-          variant,
+          variant
         };
 
         toastKey = yield call(showMessage, {
@@ -254,15 +248,9 @@ export function* persistenceSaga(): SagaIterator {
         yield call(ensureInitialisedAndAuthorised);
 
         const {
-          editorState: {
-            activeEditorTabIndex,
-            editorTabs,
-          },
-          context: {
-            chapter,
-            variant
-          }
-        }: PlaygroundState = yield selectWorkspace('playground')
+          editorState: { activeEditorTabIndex, editorTabs },
+          context: { chapter, variant }
+        }: PlaygroundState = yield selectWorkspace('playground');
 
         if (activeEditorTabIndex === null) {
           throw new Error('No active editor tab found.');
@@ -271,7 +259,7 @@ export function* persistenceSaga(): SagaIterator {
 
         const config: IPlaygroundConfig = {
           chapter,
-          variant,
+          variant
         };
 
         yield call(updateFile, id, name, MIME_SOURCE, code, config);

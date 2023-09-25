@@ -47,10 +47,13 @@ const renderTab = (
   sideContentHeight?: number
 ) => {
   const iconSize = 20;
-  const tabId = getTabId(tab)
+  const tabId = getTabId(tab);
   const tabTitle = (
     <Tooltip2 content={tab.label}>
-      <div className={`side-content-tooltip ${shouldAlert ? 'side-content-tab-alert' : ''}`} id={generateIconId(tabId)}>
+      <div
+        className={`side-content-tooltip ${shouldAlert ? 'side-content-tab-alert' : ''}`}
+        id={generateIconId(tabId)}
+      >
         <Icon icon={tab.iconName} iconSize={iconSize} />
       </div>
     </Tooltip2>
@@ -93,19 +96,23 @@ const SideContent: React.FC<SideContentProps> = ({
     <div className="side-content">
       <Card>
         <div className="side-content-tabs">
-          <SideContentProvider
-            {...otherProps}
-          >
+          <SideContentProvider {...otherProps}>
             {(allTabs, changeTabsCallback, alerts, selectedTabId, sideContentHeight) => (
               <Tabs
                 id="side-content-tabs"
                 onChange={changeTabsCallback}
                 renderActiveTabPanelOnly={renderActiveTabPanelOnly}
                 selectedTabId={selectedTabId}
-                >
+              >
                 {allTabs.map(tab => {
-                  const tabId = getTabId(tab)
-                  return renderTab(tab, alerts.includes(tabId), otherProps.location, editorWidth, sideContentHeight);
+                  const tabId = getTabId(tab);
+                  return renderTab(
+                    tab,
+                    alerts.includes(tabId),
+                    otherProps.location,
+                    editorWidth,
+                    sideContentHeight
+                  );
                 })}
               </Tabs>
             )}

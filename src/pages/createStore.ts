@@ -1,8 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { defaultState } from 'src/commons/redux/AllTypes';
+import { defaultState, OverallState } from 'src/commons/redux/AllTypes';
 import rootReducer from 'src/commons/redux/RootReducer';
 import { defaultPlayground } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 
@@ -21,9 +20,9 @@ export function createStore() {
     reducer: rootReducer,
     preloadedState: initialStore as any,
     middleware: [
-      sagaMiddleware,
+      sagaMiddleware
       // backendApi.middleware,
-    ],
+    ]
   });
 
   sagaMiddleware.run(MainSaga);
@@ -37,7 +36,7 @@ export function createStore() {
   return createdStore;
 }
 
-function loadStore(loadedStore: SavedState | undefined) {
+function loadStore(loadedStore: SavedState | undefined): OverallState | undefined {
   if (!loadedStore) {
     return undefined;
   }
@@ -56,19 +55,21 @@ function loadStore(loadedStore: SavedState | undefined) {
       ...defaultState.workspaces,
       playground: {
         ...defaultState.workspaces.playground,
-        isFolderModeEnabled: loadedStore.playgroundIsFolderModeEnabled
-          ? loadedStore.playgroundIsFolderModeEnabled
-          : defaultState.workspaces.playground.editorState.isFolderModeEnabled,
-        activeEditorTabIndex: loadedStore.playgroundActiveEditorTabIndex
-          ? loadedStore.playgroundActiveEditorTabIndex.value
-          : defaultPlayground.editorState.activeEditorTabIndex,
-        editorTabs: loadedStore.playgroundEditorTabs
-          ? loadedStore.playgroundEditorTabs
-          : defaultPlayground.editorState.editorTabs,
-        isEditorAutorun: loadedStore.playgroundIsEditorAutorun
-          ? loadedStore.playgroundIsEditorAutorun
-          : defaultState.workspaces.playground.editorState.isEditorAutorun,
-        externalLibrary: ExternalLibraryName.NONE,
+        editorState: {
+          ...defaultState.workspaces.playground.editorState,
+          isFolderModeEnabled: loadedStore.playgroundIsFolderModeEnabled
+            ? loadedStore.playgroundIsFolderModeEnabled
+            : defaultState.workspaces.playground.editorState.isFolderModeEnabled,
+          activeEditorTabIndex: loadedStore.playgroundActiveEditorTabIndex
+            ? loadedStore.playgroundActiveEditorTabIndex.value
+            : defaultPlayground.editorState.activeEditorTabIndex,
+          editorTabs: loadedStore.playgroundEditorTabs
+            ? loadedStore.playgroundEditorTabs
+            : defaultPlayground.editorState.editorTabs,
+          isEditorAutorun: loadedStore.playgroundIsEditorAutorun
+            ? loadedStore.playgroundIsEditorAutorun
+            : defaultState.workspaces.playground.editorState.isEditorAutorun,
+        },
         // externalLibrary: loadedStore.playgroundExternalLibrary
         //   ? loadedStore.playgroundExternalLibrary
         //   : defaultState.workspaces.playground.externalLibrary,
@@ -81,11 +82,11 @@ function loadStore(loadedStore: SavedState | undefined) {
             ? loadedStore.playgroundSourceVariant
             : defaultState.workspaces.playground.context.variant
         }
+      },
+      stories: {
+        ...defaultState.workspaces.stories,
+        ...loadedStore.stories
       }
-    },
-    stories: {
-      ...defaultState.workspaces.stories,
-      ...loadedStore.stories
     }
   };
 }

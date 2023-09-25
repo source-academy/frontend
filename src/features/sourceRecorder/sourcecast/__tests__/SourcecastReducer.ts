@@ -1,5 +1,8 @@
 import { Chapter } from 'js-slang/dist/types';
-import { defaultSourcecast, sourcecastReducer } from 'src/commons/redux/workspace/sourceRecorder/SourcecastRedux';
+import {
+  defaultSourcecast,
+  sourcecastReducer
+} from 'src/commons/redux/workspace/sourceRecorder/SourcecastRedux';
 import { action as generateAction } from 'typesafe-actions';
 
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';

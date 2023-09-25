@@ -1,4 +1,4 @@
-import { SideContentLocation } from 'src/commons/redux/workspace/subReducers/SideContentRedux';
+import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { action } from 'typesafe-actions';
 
 import {

@@ -90,31 +90,28 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
   };
 
   return (
-    <SideContentProvider
-      {...otherProps}
-    >
-      {(allTabs, changeTabsCallback) => (<>
-        {renderedPanels(allTabs)}
-            <div className="mobile-tabs-container">
-              <Tabs
-                id="mobile-side-content"
-                onChange={changeTabsCallback}
-                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-                selectedTabId={selectedTabId}
-                className={classNames(Classes.DARK, 'mobile-side-content')}
-              >
-                {allTabs.map(tab => renderTab(tab, isIOS, otherProps.location))}
+    <SideContentProvider {...otherProps}>
+      {(allTabs, changeTabsCallback) => (
+        <>
+          {renderedPanels(allTabs)}
+          <div className="mobile-tabs-container">
+            <Tabs
+              id="mobile-side-content"
+              onChange={changeTabsCallback}
+              renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+              selectedTabId={selectedTabId}
+              className={classNames(Classes.DARK, 'mobile-side-content')}
+            >
+              {allTabs.map(tab => renderTab(tab, isIOS, otherProps.location))}
 
-                {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
-                {(otherProps.location === 'playground' ||
-                  otherProps.location === 'sicp') && (
-                  <MobileControlBar {...mobileControlBarProps} />
-                )}
-              </Tabs>
-            </div>
-      </>)}
-
-
+              {/* Render the bottom ControlBar 'Cog' button only in the Playground or Sicp Workspace */}
+              {(otherProps.location === 'playground' || otherProps.location === 'sicp') && (
+                <MobileControlBar {...mobileControlBarProps} />
+              )}
+            </Tabs>
+          </div>
+        </>
+      )}
     </SideContentProvider>
   );
 };

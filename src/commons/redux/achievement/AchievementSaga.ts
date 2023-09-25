@@ -1,15 +1,27 @@
-import { call, delay, put } from "redux-saga/effects";
-import { updateGoalProcessed } from "src/commons/achievement/AchievementManualEditor";
-import { SessionState, Tokens } from "src/commons/application/types/SessionTypes";
-import { bulkUpdateAchievements, bulkUpdateGoals, getAchievements, getAllUsers, getGoals, getOwnGoals, getUserAssessmentOverviews, removeAchievement, removeGoal, updateGoalProgress, updateOwnGoalProgress } from "src/commons/sagas/RequestsSaga";
-import { SideContentType } from "src/commons/sideContent/SideContentTypes";
-import Constants from "src/commons/utils/Constants";
-import { EventType } from "src/features/achievement/AchievementTypes";
+import { call, delay, put } from 'redux-saga/effects';
+import { updateGoalProcessed } from 'src/commons/achievement/AchievementManualEditor';
+import { SessionState, Tokens } from 'src/commons/application/types/SessionTypes';
+import {
+  bulkUpdateAchievements,
+  bulkUpdateGoals,
+  getAchievements,
+  getAllUsers,
+  getGoals,
+  getOwnGoals,
+  getUserAssessmentOverviews,
+  removeAchievement,
+  removeGoal,
+  updateGoalProgress,
+  updateOwnGoalProgress
+} from 'src/commons/sagas/RequestsSaga';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import Constants from 'src/commons/utils/Constants';
+import { EventType } from 'src/features/achievement/AchievementTypes';
 
-import { actions } from "../ActionsHelper";
-import { combineSagaHandlers } from "../utils";
-import { selectSession, selectTokens } from "../utils/Selectors";
-import { achievementActions } from "./AchievementReducer";
+import { actions } from '../ActionsHelper';
+import { combineSagaHandlers } from '../utils';
+import { selectSession, selectTokens } from '../utils/Selectors';
+import { achievementActions } from './AchievementReducer';
 
 let loggedEvents: EventType[][] = [];
 let timeoutSet: boolean = false;
@@ -17,7 +29,7 @@ const updateInterval = 3000;
 
 export const AchievementSaga = combineSagaHandlers(achievementActions, {
   addEvent: function* (action) {
-    const { role, enableAchievements }: SessionState = yield selectSession()
+    const { role, enableAchievements }: SessionState = yield selectSession();
 
     if (action.payload.find(e => e === EventType.ERROR)) {
       // Flash the home icon if there is an error and the user is in the env viz or subst viz tab
@@ -114,7 +126,7 @@ export const AchievementSaga = combineSagaHandlers(achievementActions, {
     const tokens: Tokens = yield selectTokens();
     yield call(removeGoal, definition, tokens);
   },
-  updateGoalProgress: function* ({ payload: { studentCourseRegId, progress }}) {
+  updateGoalProgress: function* ({ payload: { studentCourseRegId, progress } }) {
     const tokens: Tokens = yield selectTokens();
     const resp = yield call(updateGoalProgress, studentCourseRegId, progress, tokens);
 
@@ -127,4 +139,4 @@ export const AchievementSaga = combineSagaHandlers(achievementActions, {
     const tokens: Tokens = yield selectTokens();
     yield call(updateOwnGoalProgress, progress, tokens);
   }
-})
+});

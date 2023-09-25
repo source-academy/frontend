@@ -1,4 +1,4 @@
-import { applicationReducer } from '../../redux/ApplicationRedux'
+import { applicationReducer } from '../../redux/ApplicationRedux';
 
 const initialState = applicationReducer(undefined!, { type: '*' });
 

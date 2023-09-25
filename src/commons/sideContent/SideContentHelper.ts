@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 
 import { allWorkspaceActions } from '../redux/workspace/AllWorkspacesRedux';
 import { useWorkspace } from '../redux/workspace/Hooks';
-import { DebuggerContext, SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
-import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
+import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
+import { DebuggerContext, ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 
 // const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<
 //   WorkspaceLocation,
@@ -46,24 +46,33 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
     }));
 };
 
-export const getTabId = (tab: SideContentTab) => tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id
-export const generateIconId = (name: string) => `icon-${name}`
+export const getTabId = (tab: SideContentTab) =>
+  tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+export const generateIconId = (name: string) => `icon-${name}`;
 
 export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
-  const { sideContent: { selectedTabId, ...sideContent } } = useWorkspace(location)
-  const dispatch = useDispatch()
-  const setSelectedTab = useCallback((newId: SideContentType) => {
-    dispatch(allWorkspaceActions.visitSideContent(location, newId))
-  }, [dispatch, location])
+  const {
+    sideContent: { selectedTabId, ...sideContent }
+  } = useWorkspace(location);
+  const dispatch = useDispatch();
+  const setSelectedTab = useCallback(
+    (newId: SideContentType) => {
+      dispatch(allWorkspaceActions.visitSideContent(location, newId));
+    },
+    [dispatch, location]
+  );
 
-  const setSideContentHeight = useCallback((height: number) => {
-    dispatch(allWorkspaceActions.changeSideContentHeight(location, height))
-  }, [dispatch, location])
+  const setSideContentHeight = useCallback(
+    (height: number) => {
+      dispatch(allWorkspaceActions.changeSideContentHeight(location, height));
+    },
+    [dispatch, location]
+  );
 
   return {
     ...sideContent,
     selectedTab: selectedTabId ?? defaultTab,
     setSelectedTab,
-    setSideContentHeight,
-  }
-}
+    setSideContentHeight
+  };
+};

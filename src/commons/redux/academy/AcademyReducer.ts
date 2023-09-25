@@ -1,14 +1,10 @@
-import { createSlice,PayloadAction } from '@reduxjs/toolkit';
-import { AcademyState } from 'src/features/academy/AcademyTypes';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NameUsernameRole } from 'src/pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { UpdateCourseConfiguration } from '../../application/types/SessionTypes';
+import { defaultAcademy } from '../AllTypes';
 import { combineSagaHandlers, createActions } from '../utils';
-
-export const defaultAcademy: AcademyState = {
-  gameCanvas: undefined
-};
 
 const { actions, reducer } = createSlice({
   name: 'academy',
@@ -21,21 +17,22 @@ const { actions, reducer } = createSlice({
       };
     }
   }
-})
+});
 
 const sagaActions = createActions('academy', {
   addNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => ({ users, provider }),
-  addNewStoriesUsersToCourse: (users: NameUsernameRole[], provider: string) => ({ users, provider }),
-  createCourse: (courseConfig: UpdateCourseConfiguration) => courseConfig,
-})
+  addNewStoriesUsersToCourse: (users: NameUsernameRole[], provider: string) => ({
+    users,
+    provider
+  }),
+  createCourse: (courseConfig: UpdateCourseConfiguration) => courseConfig
+});
 
 export const academyActions = {
   ...sagaActions,
   ...actions
-}
+};
 
-export { reducer as AcademyReducer }
+export { reducer as AcademyReducer };
 
-combineSagaHandlers(sagaActions, {
-
-})
+combineSagaHandlers(sagaActions, {});

@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { configure, GlobalHotKeys } from 'react-hotkeys';
-import { connect,MapDispatchToProps } from 'react-redux';
+import { connect, MapDispatchToProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions } from 'src/commons/redux/ActionsHelper';
 import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
@@ -19,14 +19,14 @@ type State = {
 };
 
 type OwnProps = {
-  workspaceLocation: SideContentLocation
-}
+  workspaceLocation: SideContentLocation;
+};
 
 type DispatchProps = {
-  handleAlertSideContent: () => void
-}
+  handleAlertSideContent: () => void;
+};
 
-export type { OwnProps as SideContentDataVisualizerProps }
+export type { OwnProps as SideContentDataVisualizerProps };
 
 const dataVisualizerKeyMap = {
   PREVIOUS_STEP: 'left',
@@ -44,7 +44,7 @@ class SideContentDataVisualizer extends React.Component<OwnProps & DispatchProps
     this.state = { steps: [], currentStep: 0 };
     DataVisualizer.init(steps => {
       if (this.state.steps.length > 0) {
-        this.props.handleAlertSideContent()
+        this.props.handleAlertSideContent();
       }
       this.setState({ steps, currentStep: 0 });
     });
@@ -193,8 +193,16 @@ class SideContentDataVisualizer extends React.Component<OwnProps & DispatchProps
   };
 }
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, { workspaceLocation }) => bindActionCreators({
-  handleAlertSideContent: () => actions.beginAlertSideContent(workspaceLocation, SideContentType.dataVisualizer)
-}, dispatch)
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (
+  dispatch,
+  { workspaceLocation }
+) =>
+  bindActionCreators(
+    {
+      handleAlertSideContent: () =>
+        actions.beginAlertSideContent(workspaceLocation, SideContentType.dataVisualizer)
+    },
+    dispatch
+  );
 
-export default connect(null, mapDispatchToProps)(SideContentDataVisualizer)
+export default connect(null, mapDispatchToProps)(SideContentDataVisualizer);

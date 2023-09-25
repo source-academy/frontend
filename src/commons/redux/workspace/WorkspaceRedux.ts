@@ -1,21 +1,28 @@
-import { type ActionReducerMapBuilder, type SliceCaseReducers,type ValidateSliceCaseReducers,combineReducers, createSlice, DeepPartial } from "@reduxjs/toolkit";
-import { Chapter, Variant } from "js-slang/dist/types";
-import _ from "lodash";
-import type { SALanguage } from "src/commons/application/ApplicationTypes";
-import type { Position } from "src/commons/editor/EditorTypes";
-import { createContext } from "src/commons/utils/JsSlangHelper";
+import {
+  type ActionReducerMapBuilder,
+  type SliceCaseReducers,
+  type ValidateSliceCaseReducers,
+  combineReducers,
+  createSlice,
+  DeepPartial
+} from '@reduxjs/toolkit';
+import { Chapter, Variant } from 'js-slang/dist/types';
+import _ from 'lodash';
+import type { SALanguage } from 'src/commons/application/ApplicationTypes';
+import type { Position } from 'src/commons/editor/EditorTypes';
+import { createContext } from 'src/commons/utils/JsSlangHelper';
 
-import { createActions } from "../utils";
-import { getEditorReducer } from "./subReducers/EditorRedux";
-import { replActions,replReducer } from "./subReducers/ReplRedux";
-import { sideContentActions, sideContentReducer } from "./subReducers/SideContentRedux";
-import { WorkspaceState } from "./WorkspaceReduxTypes";
+import { createActions } from '../utils';
+import { getEditorReducer } from './subReducers/EditorRedux';
+import { replActions, replReducer } from './subReducers/ReplRedux';
+import { sideContentActions, sideContentReducer } from './subReducers/SideContentRedux';
+import { WorkspaceState } from './WorkspaceStateTypes';
 
 export const workspaceActions = createActions('workspace', {
   beginClearContext: (
     chapter: Chapter,
     variant: Variant,
-    globals: Array<[string, any]>, 
+    globals: Array<[string, any]>,
     symbols: string[]
   ) => ({ chapter, variant, globals, symbols }),
   beginDebugPause: 0,
@@ -25,8 +32,16 @@ export const workspaceActions = createActions('workspace', {
   changeSublanguage: (sublang: SALanguage) => sublang,
   debugReset: 0,
   debugResume: 0,
-  endClearContext: (chapter: Chapter, variant: Variant, globals: Array<[string, any]>, symbols: string[]) => ({
-    chapter, variant, globals, symbols
+  endClearContext: (
+    chapter: Chapter,
+    variant: Variant,
+    globals: Array<[string, any]>,
+    symbols: string[]
+  ) => ({
+    chapter,
+    variant,
+    globals,
+    symbols
   }),
   endDebugPause: 0,
   endInterruptExecution: 0,
@@ -38,8 +53,8 @@ export const workspaceActions = createActions('workspace', {
   updateHasUnsavedChanges: (value: boolean) => value,
   updateSharedbConnected: (newValue: boolean) => newValue,
   updateSublanguage: (sublang: SALanguage) => sublang,
-  updateWorkspace: (options: DeepPartial<WorkspaceState> = {}) =>  options
-})
+  updateWorkspace: (options: DeepPartial<WorkspaceState> = {}) => options
+});
 
 export const createWorkspaceSlice = <
   TState extends WorkspaceState,
@@ -51,13 +66,13 @@ export const createWorkspaceSlice = <
   reducers: ValidateSliceCaseReducers<TState, TReducers>,
   extraReducers?: (builder: ActionReducerMapBuilder<TState>) => void
 ) => {
-  const editorReducer = getEditorReducer(initialState.editorState.editorTabs)
+  const editorReducer = getEditorReducer(initialState.editorState.editorTabs);
 
   const subReducer = combineReducers({
     editorState: editorReducer,
     sideContent: sideContentReducer,
     repl: replReducer
-  })
+  });
 
   return createSlice<TState, TReducers, TName>({
     name,
@@ -65,60 +80,59 @@ export const createWorkspaceSlice = <
     reducers,
     extraReducers: builder => {
       builder.addCase(workspaceActions.changeExecTime, (state, { payload }) => {
-        state.execTime = payload
-      })
+        state.execTime = payload;
+      });
 
-      builder.addCase(workspaceActions.debugReset, (state) => {
+      builder.addCase(workspaceActions.debugReset, state => {
         state.isDebugging = false;
         state.isRunning = false;
-      })
-      builder.addCase(workspaceActions.debugResume, (state) => {
+      });
+      builder.addCase(workspaceActions.debugResume, state => {
         state.isDebugging = false;
         state.isRunning = true;
-      })
+      });
 
       builder.addCase(workspaceActions.endClearContext, (state, { payload }) => {
-        state.context = createContext(
-          payload.chapter,
-          payload.symbols,
-          '',
-          payload.variant
-        )
+        state.context = createContext(payload.chapter, payload.symbols, '', payload.variant);
 
-        state.globals = payload.globals
-      })
+        state.globals = payload.globals;
+      });
 
-      builder.addCase(workspaceActions.endDebugPause, (state) => {
+      builder.addCase(workspaceActions.endDebugPause, state => {
         state.isDebugging = true;
         state.isRunning = false;
-      })
+      });
 
-      builder.addCase(workspaceActions.endInterruptExecution, (state) => {
+      builder.addCase(workspaceActions.endInterruptExecution, state => {
         // same as debug reset
         state.isDebugging = false;
         state.isRunning = false;
-      })  
+      });
 
-      builder.addCase(workspaceActions.evalEditor, (state) => {
+      builder.addCase(workspaceActions.evalEditor, state => {
         state.isDebugging = false;
         state.isRunning = true;
-      })
-      
-      builder.addCase(workspaceActions.evalRepl, (state) => {
-        state.isRunning = true;
-      })
+      });
 
-      builder.addCase(workspaceActions.resetWorkspace, (__, { payload }) => _.merge({ ...initialState }, payload))
+      builder.addCase(workspaceActions.evalRepl, state => {
+        state.isRunning = true;
+      });
+
+      builder.addCase(workspaceActions.resetWorkspace, (__, { payload }) =>
+        _.merge({ ...initialState }, payload)
+      );
 
       builder.addCase(workspaceActions.updateSharedbConnected, (state, { payload }) => {
-        state.sharedbConnected = payload
-      })
+        state.sharedbConnected = payload;
+      });
 
-      builder.addCase(workspaceActions.updateWorkspace, (state, { payload }) => _.merge({ ...state }, payload))
+      builder.addCase(workspaceActions.updateWorkspace, (state, { payload }) =>
+        _.merge({ ...state }, payload)
+      );
 
       builder.addCase(workspaceActions.updateHasUnsavedChanges, (state, { payload }) => {
-        state.hasUnsavedChanges = payload
-      })
+        state.hasUnsavedChanges = payload;
+      });
 
       builder.addCase(replActions.evalInterpreterError, state => {
         state.isDebugging = false;
@@ -133,11 +147,11 @@ export const createWorkspaceSlice = <
         state.debuggerContext = payload;
       });
 
-      if (extraReducers) extraReducers(builder)
+      if (extraReducers) extraReducers(builder);
 
       builder.addDefaultCase((state, action) => {
-        subReducer(state, action)
-      })
+        subReducer(state, action);
+      });
     }
   });
-}
+};

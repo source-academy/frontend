@@ -1,25 +1,26 @@
-import type { FSModule } from "browserfs/dist/node/core/FS";
+import type { FSModule } from 'browserfs/dist/node/core/FS';
+import { Chapter, Variant } from 'js-slang/dist/types';
+import { compressToEncodedURIComponent } from 'lz-string';
+import * as qs from 'query-string';
+import { call, delay, put, race, select } from 'redux-saga/effects';
+import { retrieveFilesInWorkspaceAsRecord } from 'src/commons/fileSystem/utils';
+import Constants from 'src/commons/utils/Constants';
 import {
-  Chapter,
-  Variant
-} from "js-slang/dist/types";
-import { compressToEncodedURIComponent } from "lz-string";
-import * as qs from "query-string";
-import { call, delay, put, race, select } from "redux-saga/effects";
-import { retrieveFilesInWorkspaceAsRecord } from "src/commons/fileSystem/utils";
-import Constants from "src/commons/utils/Constants";
-import { showSuccessMessage, showWarningMessage } from "src/commons/utils/notifications/NotificationsHelper";
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 
-import { OverallState } from "../../AllTypes";
-import { combineSagaHandlers } from "../../utils";
-import { selectWorkspace } from "../../utils/Selectors";
-import { EditorTabState, PlaygroundState } from "../WorkspaceReduxTypes";
-import { playgroundActions, playgroundSagaActions } from "./PlaygroundRedux";
+import { OverallState } from '../../AllTypes';
+import { combineSagaHandlers } from '../../utils';
+import { selectWorkspace } from '../../utils/Selectors';
+import { PlaygroundState } from '../WorkspaceReduxTypes';
+import { EditorTabState } from '../WorkspaceStateTypes';
+import { playgroundActions, playgroundSagaActions } from './PlaygroundRedux';
 
 export const PlaygroundSaga = combineSagaHandlers(playgroundSagaActions, {
   generateLzString: updateQueryString,
   shortenUrl: function* ({ payload: keyword }) {
-    const { queryString }: PlaygroundState = yield selectWorkspace('playground')
+    const { queryString }: PlaygroundState = yield selectWorkspace('playground');
     const errorMsg = 'ERROR';
 
     let resp, timeout;
@@ -33,7 +34,7 @@ export const PlaygroundSaga = combineSagaHandlers(playgroundSagaActions, {
 
       resp = result;
       timeout = hasTimedOut;
-    } catch (_) { }
+    } catch (_) {}
 
     if (!resp || timeout) {
       yield put(playgroundActions.updateShortURL(errorMsg));
@@ -50,7 +51,7 @@ export const PlaygroundSaga = combineSagaHandlers(playgroundSagaActions, {
     }
     yield put(playgroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
   }
-})
+});
 
 /**
  * Gets short url from microservice
@@ -87,11 +88,9 @@ export async function shortenURLRequest(
 }
 
 export function* updateQueryString() {
-  const { editorState: {
-    activeEditorTabIndex,
-    editorTabs,
-    isFolderModeEnabled,
- } }: PlaygroundState = yield selectWorkspace('playground')
+  const {
+    editorState: { activeEditorTabIndex, editorTabs, isFolderModeEnabled }
+  }: PlaygroundState = yield selectWorkspace('playground');
 
   const fileSystem: FSModule = yield select(
     (state: OverallState) => state.fileSystem.inBrowserFileSystem
@@ -129,4 +128,3 @@ export function* updateQueryString() {
   });
   yield put(playgroundActions.changeQueryString(newQueryString));
 }
-

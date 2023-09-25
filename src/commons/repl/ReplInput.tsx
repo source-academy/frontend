@@ -16,8 +16,8 @@ import { getModeString, selectMode } from '../utils/AceHelper';
 export type ReplInputProps = DispatchProps & StateProps & OwnProps;
 
 type DispatchProps = {
-  location: SideContentLocation
-  handleReplEval: () => void
+  location: SideContentLocation;
+  handleReplEval: () => void;
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
 };
@@ -39,14 +39,9 @@ export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
   const replInput = React.useRef<ReactAce>(null);
   const replInputBottom = React.useRef<HTMLDivElement>(null);
 
-  const {
-    replValue,
-    browseReplHistoryDown,
-    browseReplHistoryUp,
-    updateReplValue
-  } = useRepl(props.location)
-
-
+  const { replValue, browseReplHistoryDown, browseReplHistoryUp, updateReplValue } = useRepl(
+    props.location
+  );
 
   const execEvaluate = () => {
     props.handleReplEval();

@@ -2,10 +2,7 @@ import _ from 'lodash';
 import { DeepPartial, Store } from 'redux';
 import mockStore from 'redux-mock-store';
 
-import { defaultFileSystem } from '../application/ApplicationTypes';
-import { defaultAcademy } from '../redux/academy/AcademyReducer';
-import { defaultAchievement } from '../redux/achievement/AchievementReducer';
-import { defaultDashboard,OverallState } from '../redux/AllTypes';
+import { defaultAcademy, defaultAchievement, defaultDashboard, defaultFileSystem, OverallState } from '../redux/AllTypes';
 import { defaultApplication } from '../redux/ApplicationRedux';
 import { defaultRouter } from '../redux/RouterReducer';
 import { defaultSession } from '../redux/session/SessionsReducer';

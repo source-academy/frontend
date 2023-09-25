@@ -2,13 +2,13 @@ import { SagaIterator } from 'redux-saga';
 import { fork } from 'redux-saga/effects';
 
 import { mockBackendSaga } from '../mocks/BackendMocks';
-import { remoteExecutionSaga as RemoteExecutionSaga } from '../redux/RemoteExecRedux';
-import { StoriesSaga } from "../redux/stories/StoriesSaga";
+import BackendSaga from '../redux/BackendSaga';
+import { remoteExecutionSaga as RemoteExecutionSaga } from '../redux/remoteExec/RemoteExecRedux';
+import { StoriesSaga } from '../redux/stories/StoriesSaga';
 import WorkspaceSaga from '../redux/workspace/NewWorkspaceSaga';
-import { PlaygroundSaga } from "../redux/workspace/playground/PlaygroundSaga";
+import { PlaygroundSaga } from '../redux/workspace/playground/PlaygroundSaga';
 import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
-import BackendSaga from './BackendSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';
 import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';

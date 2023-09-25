@@ -57,9 +57,7 @@ const Sicp: React.FC = () => {
     });
   };
 
-  const {
-    resetWorkspace,
-  } = useWorkspace('sicp')
+  const { resetWorkspace } = useWorkspace('sicp');
 
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {

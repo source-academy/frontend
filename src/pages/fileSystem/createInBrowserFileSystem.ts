@@ -3,35 +3,13 @@ import { ApiError } from 'browserfs/dist/node/core/api_error';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Store } from 'redux';
 import { OverallState } from 'src/commons/redux/AllTypes';
-import { EditorTabState, isNonStoryWorkspaceLocation, SideContentLocation, WorkspaceManagerState } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import {
+  WORKSPACE_BASE_PATHS,
+} from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import { EditorTabState } from 'src/commons/redux/workspace/WorkspaceStateTypes';
 
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 import { writeFileRecursively } from '../../commons/fileSystem/utils';
-
-/**
- * Maps workspaces to their file system base path.
- * An empty path indicates that the workspace is not
- * linked to the file system.
- */
-const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
-  assessment: '',
-  githubAssessment: '',
-  grading: '',
-  playground: '/playground',
-  sicp: '/sicp',
-  sourcecast: '',
-  sourcereel: '',
-  stories: '' // TODO: Investigate if stories workspace base path is needed
-};
-
-export const getWorkspaceBasePath = (location: SideContentLocation) => {
-  if (isNonStoryWorkspaceLocation(location)) {
-    return WORKSPACE_BASE_PATHS[location]
-  }
-
-  const [, storyEnv] = location.split('.')
-  return `${WORKSPACE_BASE_PATHS.stories}/${storyEnv}`
-}
 
 export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -65,10 +43,7 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
         // Create files for editor tabs if they do not exist. This can happen when
         // editor tabs are initialised from the Redux store defaults, as opposed to
         // being created by the user.
-        const {
-          stories,
-          ...workspaceStates
-        } = store.getState().workspaces;
+        const { stories, ...workspaceStates } = store.getState().workspaces;
         const promises: Promise<void>[] = [];
         for (const workspaceState of Object.values(workspaceStates)) {
           const editorTabs = workspaceState.editorState.editorTabs;

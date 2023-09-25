@@ -33,7 +33,7 @@ export const actions = {
   ...sourcecastActions,
   ...sourcereelActions,
   ...storiesActions,
-  ...allWorkspaceActions,
+  ...allWorkspaceActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

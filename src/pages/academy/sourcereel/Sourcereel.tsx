@@ -13,7 +13,12 @@ import {
   SourcecastEditorContainerProps
 } from 'src/commons/editor/EditorContainer';
 import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
-import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
+import {
+  useEditorState,
+  useRepl,
+  useSideContent,
+  useWorkspace
+} from 'src/commons/redux/workspace/Hooks';
 import { sourcecastActions } from 'src/commons/redux/workspace/sourceRecorder/SourcecastRedux';
 import { sourcereelActions } from 'src/commons/redux/workspace/sourceRecorder/SourcereelRedux';
 import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
@@ -53,8 +58,8 @@ const Sourcereel: React.FC = () => {
     sourcecastIndex
   } = useTypedSelector(state => state.workspaces.sourcecast);
 
-  const { 
-    activeEditorTabIndex, 
+  const {
+    activeEditorTabIndex,
     editorTabs,
     isEditorAutorun,
     isEditorReadonly,
@@ -64,12 +69,12 @@ const Sourcereel: React.FC = () => {
     updateEditorValue: handleEditorValueChange,
     updateActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
     updateEditorBreakpoints: handleUpdateEditorBreakpoints,
-    removeEditorTab: handleRemoveEditorTabByIndex,
-  } = useEditorState(workspaceLocation)
+    removeEditorTab: handleRemoveEditorTabByIndex
+  } = useEditorState(workspaceLocation);
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     SideContentType.sourcereel
-  )
+  );
 
   const dispatch = useDispatch();
 
@@ -89,24 +94,18 @@ const Sourcereel: React.FC = () => {
     debugResume: handleDebuggerResume,
     evalRepl: handleReplEval,
     navDeclaration: handleDeclarationNavigate,
-    promptAutocomplete: handlePromptAutocomplete,
+    promptAutocomplete: handlePromptAutocomplete
   } = useWorkspace(workspaceLocation);
 
-  const {
-    clearReplOutput
-  } = useRepl(workspaceLocation)
+  const { clearReplOutput } = useRepl(workspaceLocation);
 
-  const {
-    handleChapterSelect,
-    handleRecordInput,
-    handleSetSourcecastStatus,
-  } = useMemo(() => {
+  const { handleChapterSelect, handleRecordInput, handleSetSourcecastStatus } = useMemo(() => {
     return {
       handleChapterSelect: (chapter: Chapter) =>
         dispatch(allWorkspaceActions.chapterSelect(workspaceLocation, chapter, Variant.DEFAULT)),
       handleRecordInput: (input: Input) => dispatch(sourcereelActions.recordInput(input)),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
-        dispatch(sourcecastActions.setSourcecastPlaybackStatus(playbackStatus)),
+        dispatch(sourcecastActions.setSourcecastPlaybackStatus(playbackStatus))
     };
   }, [dispatch]);
 
@@ -207,12 +206,7 @@ const Sourcereel: React.FC = () => {
   );
 
   const clearButton = useMemo(
-    () => (
-      <ControlBarClearButton
-        handleReplOutputClear={clearReplOutput}
-        key="clear_repl"
-      />
-    ),
+    () => <ControlBarClearButton handleReplOutputClear={clearReplOutput} key="clear_repl" />,
     [clearReplOutput]
   );
 
@@ -232,8 +226,8 @@ const Sourcereel: React.FC = () => {
     setActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
     removeEditorTabByIndex: handleRemoveEditorTabByIndex,
     // TODO check for hardcoding
-    handleEditorUpdateBreakpoints: (value) => handleUpdateEditorBreakpoints(0, value),
-    handleEditorValueChange: (value) => handleEditorValueChange(0, value),
+    handleEditorUpdateBreakpoints: value => handleUpdateEditorBreakpoints(0, value),
+    handleEditorValueChange: value => handleEditorValueChange(0, value),
     editorVariant: sourcecastLocation,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     handleDeclarationNavigate,
@@ -315,7 +309,7 @@ const Sourcereel: React.FC = () => {
       sourceVariant: sourceVariant,
       // externalLibrary: externalLibraryName,
       replButtons: [evalButton, clearButton],
-      location: workspaceLocation,
+      location: workspaceLocation
     },
     sideBarProps: {
       tabs: []
@@ -395,7 +389,7 @@ const Sourcereel: React.FC = () => {
       handleSetInputToApply: (inputToApply: Input) =>
         dispatch(sourcecastActions.setInputToApply(inputToApply)),
       handleSetSourcecastDuration: (duration: number) =>
-        dispatch(sourcecastActions.setSourcecastPlaybackDuration(duration)),
+        dispatch(sourcecastActions.setSourcecastPlaybackDuration(duration))
     };
   }, [dispatch]);
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {

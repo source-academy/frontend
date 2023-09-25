@@ -1,58 +1,98 @@
-import type { FSModule } from "browserfs/dist/node/core/FS";
-import { type Context, type Result, findDeclaration,getNames,interrupt, parseError, resume, runFilesInContext, runInContext } from "js-slang";
-import { TRY_AGAIN } from "js-slang/dist/constants";
-import { defineSymbol } from "js-slang/dist/createContext";
-import { InterruptedError } from "js-slang/dist/errors/errors";
-import { parse } from "js-slang/dist/parser/parser";
-import { manualToggleDebugger } from "js-slang/dist/stdlib/inspector";
-import { typeCheck } from "js-slang/dist/typeChecker/typeChecker";
-import { type SourceError, Chapter, Variant } from "js-slang/dist/types";
-import { validateAndAnnotate } from "js-slang/dist/validator/validator";
-import { random } from "lodash";
+import type { FSModule } from 'browserfs/dist/node/core/FS';
+import {
+  type Context,
+  type Result,
+  findDeclaration,
+  getNames,
+  interrupt,
+  parseError,
+  resume,
+  runFilesInContext,
+  runInContext
+} from 'js-slang';
+import { TRY_AGAIN } from 'js-slang/dist/constants';
+// import { defineSymbol } from 'js-slang/dist/createContext';
+import { InterruptedError } from 'js-slang/dist/errors/errors';
+import { parse } from 'js-slang/dist/parser/parser';
+import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
+import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
+import { type SourceError, Chapter, Variant } from 'js-slang/dist/types';
+import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
+import { random } from 'lodash';
 import { posix as pathlib } from 'path';
-import type { SagaIterator } from "redux-saga";
-import { type CallEffect, type StrictEffect, call, put, race, take } from "redux-saga/effects";
+import type { SagaIterator } from 'redux-saga';
+import { type CallEffect, type StrictEffect, call, put, race } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
-import { isSourceLanguage, styliseSublanguage } from "src/commons/application/ApplicationTypes";
-import { type TestcaseType, TestcaseTypes } from "src/commons/assessment/AssessmentTypes";
-import { Documentation } from "src/commons/documentation/Documentation";
-import { writeFileRecursively } from "src/commons/fileSystem/utils";
-import { SideContentType } from "src/commons/sideContent/SideContentTypes";
-import { actions } from "src/commons/utils/ActionsHelper";
-import DisplayBufferService from "src/commons/utils/DisplayBufferService";
-import { getBlockExtraMethodsString, getDifferenceInMethods, getRestoreExtraMethodsString, getStoreExtraMethodsString, highlightClean, highlightCleanForAgenda, highlightLine, highlightLineForAgenda, makeElevatedContext, visualizeEnv } from "src/commons/utils/JsSlangHelper";
-import { showSuccessMessage, showWarningMessage } from "src/commons/utils/notifications/NotificationsHelper";
-import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from "src/commons/utils/SourcerorHelper";
-import { showFullJSDisclaimer, showFullTSDisclaimer } from "src/commons/utils/WarningDialogHelper";
-import { EventType } from "src/features/achievement/AchievementTypes";
-import DataVisualizer from "src/features/dataVisualizer/dataVisualizer";
-import EnvVisualizer from "src/features/envVisualizer/EnvVisualizer";
-import { getWorkspaceBasePath } from "src/pages/fileSystem/createInBrowserFileSystem";
+import { isSourceLanguage, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
+import { type TestcaseType, TestcaseTypes } from 'src/commons/assessment/AssessmentTypes';
+import { Documentation } from 'src/commons/documentation/Documentation';
+import { writeFileRecursively } from 'src/commons/fileSystem/utils';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+import DisplayBufferService from 'src/commons/utils/DisplayBufferService';
+import {
+  getBlockExtraMethodsString,
+  getDifferenceInMethods,
+  getRestoreExtraMethodsString,
+  getStoreExtraMethodsString,
+  highlightClean,
+  highlightCleanForAgenda,
+  highlightLine,
+  highlightLineForAgenda,
+  makeElevatedContext,
+  visualizeEnv
+} from 'src/commons/utils/JsSlangHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
+import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from 'src/commons/utils/SourcerorHelper';
+import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
+import { EventType } from 'src/features/achievement/AchievementTypes';
+import DataVisualizer from 'src/features/dataVisualizer/dataVisualizer';
+import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 
-import { SessionState } from "../session/SessionsReducer";
-import { combineSagaHandlers } from "../utils";
-import { selectFileSystem, selectSession, selectWorkspace } from "../utils/Selectors";
-import { allWorkspaceActions } from "./AllWorkspacesRedux";
-import { AssessmentLocations, AssessmentWorkspaceState, defaultEditorValue, PlaygroundWorkspaces, PlaygroundWorkspaceState, SideContentLocation, WorkspaceState } from "./WorkspaceReduxTypes";
+import { SessionState } from '../session/SessionsReducer';
+import { combineSagaHandlers } from '../utils';
+import { safeTake as take, safeTakeEvery as takeEvery } from '../utils/SafeEffects';
+import { selectFileSystem, selectSession, selectWorkspace } from '../utils/Selectors';
+import { allWorkspaceActions } from './AllWorkspacesRedux';
+import {
+  AssessmentLocations,
+  AssessmentWorkspaceState,
+  getWorkspaceBasePath,
+  PlaygroundWorkspaces,
+  PlaygroundWorkspaceState,
+  SideContentLocation,
+} from './WorkspaceReduxTypes';
+import { defaultEditorValue, WorkspaceState } from './WorkspaceStateTypes';
 
 function* updateInspector(workspaceLocation: SideContentLocation): SagaIterator {
-  const workspace: WorkspaceState = yield selectWorkspace(workspaceLocation)
-  const activeEditorTabIndex = workspace.editorState.activeEditorTabIndex!
+  const workspace: WorkspaceState = yield selectWorkspace(workspaceLocation);
+  const activeEditorTabIndex = workspace.editorState.activeEditorTabIndex!;
 
   try {
     const row = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
 
-    yield put(allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, activeEditorTabIndex, []));
+    yield put(
+      allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, activeEditorTabIndex, [])
+    );
     // We highlight only one row to show the current line
     // If we highlight from start to end, the whole program block will be highlighted at the start
     // since the first node is the program node
-    yield put(allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, activeEditorTabIndex, [[row, row]]));
-    yield call(visualizeEnv, lastDebuggerResult)
+    yield put(
+      allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, activeEditorTabIndex, [
+        [row, row]
+      ])
+    );
+    yield call(visualizeEnv, lastDebuggerResult);
     // visualizeEnv(lastDebuggerResult);
   } catch (e) {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, activeEditorTabIndex, []));
+    yield put(
+      allWorkspaceActions.updateEditorHighlightedLines(workspaceLocation, activeEditorTabIndex, [])
+    );
     // most likely harmless, we can pretty much ignore this.
     // half of the time this comes from execution ending or a stack overflow and
     // the context goes missing.
@@ -157,6 +197,8 @@ function* insertDebuggerStatements(
   return transformedCode;
 }
 
+const EVAL_SILENT = 'EVAL_SILENT';
+
 export function* blockExtraMethods(
   elevatedContext: Context,
   context: Context,
@@ -232,435 +274,469 @@ export function* dumpDisplayBuffer(
 let lastDebuggerResult: any;
 let lastNonDetResult: Result;
 
-const WorkspaceSaga = combineSagaHandlers(allWorkspaceActions, {
-  beginClearContext: function* ({ payload: { location, payload } }) {
-    yield call([DataVisualizer, DataVisualizer.clear])
-    yield call([EnvVisualizer, EnvVisualizer.clear])
-    const globals: Array<[string, any]> = payload.globals as Array<[string, any]>;
-    for (const [key, value] of globals) {
-      window[key] = value;
-    }
-
-    yield put(allWorkspaceActions.endClearContext(
-      location,
-      payload.chapter,
-      payload.variant,
-      payload.globals,
-      payload.symbols
-    ));
-  },
-  chapterSelect: function* ({ payload }) {
-    const { location, payload: { chapter: newChapter, variant: newVariant } } = payload;
-
-    const {
-      globals,
-      context: {
-        chapter: oldChapter,
-        variant: oldVariant,
-        externalSymbols: symbols
+const WorkspaceSaga = combineSagaHandlers(
+  allWorkspaceActions,
+  {
+    beginClearContext: function* ({ payload: { location, payload } }) {
+      yield call([DataVisualizer, DataVisualizer.clear]);
+      yield call([EnvVisualizer, EnvVisualizer.clear]);
+      const globals: Array<[string, any]> = payload.globals as Array<[string, any]>;
+      for (const [key, value] of globals) {
+        window[key] = value;
       }
-    }: WorkspaceState = yield selectWorkspace(location)
 
-    const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean =
-      newChapter === Chapter.FULL_JS
-        ? chapterChanged && (yield call(showFullJSDisclaimer))
-        : newChapter === Chapter.FULL_TS
-        ? chapterChanged && (yield call(showFullTSDisclaimer))
-        : chapterChanged;
-
-    if (toChangeChapter) {
-      yield put(allWorkspaceActions.beginClearContext(location, 
-          newChapter,
-          newVariant,
-          globals,
-          symbols
-        ));
-      yield put(allWorkspaceActions.clearReplOutput(location));
-      yield put(allWorkspaceActions.debugReset(location));
-      yield call(
-        showSuccessMessage,
-        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
-        1000
-      );
-    }
-  },
-  changeSublanguage: function* ({ payload }) {
-
-  },
-  debugReset: function* ({ payload: { location }}) {
-    const { context }: WorkspaceState = yield selectWorkspace(location)
-
-    yield put(allWorkspaceActions.clearReplOutput(location));
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(allWorkspaceActions.updateEditorHighlightedLines(location, 0, []));
-    context.runtime.break = false;
-    lastDebuggerResult = undefined;
-  },
-  debugResume: function* ({ payload: { location } }) {
-    const [code, execTime, context]: [string, number, Context] = yield selectWorkspace(
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      location,
-      (workspace) => {
-        return [
-          workspace.editorState.editorTabs[0].value,
-          workspace.execTime,
-          workspace.context
-        ]
-      }
-    );
-
-    yield put(allWorkspaceActions.beginInterruptExecution(location));
-
-    /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(allWorkspaceActions.clearReplOutput(location));
-
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(allWorkspaceActions.updateEditorHighlightedLines(location, 0, []));
-    const codeFilePath = '/code.js';
-    const codeFiles = {
-      [codeFilePath]: code
-    };
-    yield call(
-      evalCode,
-      codeFiles,
-      codeFilePath,
-      context,
-      execTime,
-      location,
-      allWorkspaceActions.debugResume.type
-    );
-  },
-  evalEditor: function* ({ payload: { location }}) {
-    yield* evalEditor(location);
-  },
-  evalRepl: function* ({ payload: { location }}) {
-    const {
-      repl: { replValue: code },
-      execTime,
-      context
-    }: WorkspaceState = yield selectWorkspace(location)
-
-    yield put(allWorkspaceActions.beginInterruptExecution(location));
-    yield put(allWorkspaceActions.clearReplInput(location));
-    yield put(allWorkspaceActions.sendReplInputToOutput(location, code));
-    // Reset old context.errors
-    context.errors = [];
-
-    const codeFilePath = '/code.js';
-    const codeFiles = {
-      [codeFilePath]: code
-    };
-    yield call(evalCode, codeFiles, codeFilePath, context, execTime, location, allWorkspaceActions.evalRepl.type);
-  },
-  navDeclaration: function* ({ payload: { location, payload }}) {
-    
-    const [code, context]: [string, Context] = yield selectWorkspace(location, workspace => [
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      workspace.editorState.editorTabs[0].value,
-      workspace.context,
-    ])
-
-    const result: ReturnType<typeof findDeclaration> = yield call(findDeclaration, code, context, {
-      line: payload.row + 1,
-      column: payload.column
-    });
-
-    if (result) {
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       yield put(
-        allWorkspaceActions.moveCursor(location, 0, {
-          row: result.start.line - 1,
-          column: result.start.column
-        })
+        allWorkspaceActions.endClearContext(
+          location,
+          payload.chapter,
+          payload.variant,
+          payload.globals,
+          payload.symbols
+        )
       );
-    }
-  },
-  promptAutocomplete: function* ({ payload: { location, payload }}) {
-    const {
-      context,
-      programPrependValue: prepend,
-      editorState
-    }: WorkspaceState = yield selectWorkspace(location)
+    },
+    chapterSelect: function* ({ payload }) {
+      const {
+        location,
+        payload: { chapter: newChapter, variant: newVariant }
+      } = payload;
 
-    if (editorState.activeEditorTabIndex === null) {
-      throw new Error('Prompt autocomplete called without an active editor tab')
-    }
+      const {
+        globals,
+        context: { chapter: oldChapter, variant: oldVariant, externalSymbols: symbols }
+      }: WorkspaceState = yield selectWorkspace(location);
 
-    const editorValue = editorState.editorTabs[editorState.activeEditorTabIndex].value
+      const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
+      const toChangeChapter: boolean =
+        newChapter === Chapter.FULL_JS
+          ? chapterChanged && (yield call(showFullJSDisclaimer))
+          : newChapter === Chapter.FULL_TS
+          ? chapterChanged && (yield call(showFullTSDisclaimer))
+          : chapterChanged;
 
-    // Deal with prepended code
-    let autocompleteCode;
-    let prependLength = 0;
-    if (!prepend) {
-      autocompleteCode = editorValue;
-    } else {
-      prependLength = prepend.split('\n').length;
-      autocompleteCode = prepend + '\n' + editorValue;
-    }
+      if (toChangeChapter) {
+        yield put(
+          allWorkspaceActions.beginClearContext(location, newChapter, newVariant, globals, symbols)
+        );
+        yield put(allWorkspaceActions.clearReplOutput(location));
+        yield put(allWorkspaceActions.debugReset(location));
+        yield call(
+          showSuccessMessage,
+          `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
+          1000
+        );
+      }
+    },
+    changeSublanguage: function* ({ payload }) {},
+    debugReset: function* ({ payload: { location } }) {
+      const { context }: WorkspaceState = yield selectWorkspace(location);
 
-    const [editorNames, displaySuggestions] = yield call(
-      getNames,
-      autocompleteCode,
-      payload.row + prependLength,
-      payload.column,
-      context
-    );
+      yield put(allWorkspaceActions.clearReplOutput(location));
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      yield put(allWorkspaceActions.updateEditorHighlightedLines(location, 0, []));
+      context.runtime.break = false;
+      lastDebuggerResult = undefined;
+    },
+    debugResume: function* ({ payload: { location } }) {
+      const [code, execTime, context]: [string, number, Context] = yield selectWorkspace(
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        location,
+        workspace => {
+          return [workspace.editorState.editorTabs[0].value, workspace.execTime, workspace.context];
+        }
+      );
 
-    if (!displaySuggestions) {
-      yield call(payload.callback);
-      return;
-    }
+      yield put(allWorkspaceActions.beginInterruptExecution(location));
 
-    const editorSuggestions = editorNames.map((name: any) => {
-      return {
-        ...name,
-        caption: name.name,
-        value: name.name,
-        score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
-        name: undefined
+      /** Clear the context, with the same chapter and externalSymbols as before. */
+      yield put(allWorkspaceActions.clearReplOutput(location));
+
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      yield put(allWorkspaceActions.updateEditorHighlightedLines(location, 0, []));
+      const codeFilePath = '/code.js';
+      const codeFiles = {
+        [codeFilePath]: code
       };
-    });
-
-    let chapterName = context.chapter.toString();
-    const variant = context.variant ?? Variant.DEFAULT;
-    if (variant !== Variant.DEFAULT) {
-      chapterName += '_' + variant;
-    }
-
-    const builtinSuggestions = Documentation.builtins[chapterName] || [];
-
-    yield call(
-      payload.callback,
-      null,
-      editorSuggestions.concat(builtinSuggestions)
+      yield call(
+        evalCode,
+        codeFiles,
+        codeFilePath,
+        context,
+        execTime,
+        location,
+        allWorkspaceActions.debugResume.type
       );
-  },
-  setFolderMode: function* ({ payload: { location }}) {
-    const { editorState: {
-      isFolderModeEnabled,
-      editorTabs
-    } }: WorkspaceState = yield selectWorkspace(location)
-    // Do nothing if Folder mode is enabled.
-    if (isFolderModeEnabled) {
-      return;
-    }
+    },
+    evalEditor: function* ({ payload: { location } }) {
+      yield* evalEditor(location);
+    },
+    evalRepl: function* ({ payload: { location } }) {
+      const {
+        repl: { replValue: code },
+        execTime,
+        context
+      }: WorkspaceState = yield selectWorkspace(location);
 
-    // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
-    if (editorTabs.length === 0) {
-      const defaultFilePath = `${getWorkspaceBasePath(location)}/program.js`;
-      const fileSystem: FSModule | null = yield selectFileSystem()
+      yield put(allWorkspaceActions.beginInterruptExecution(location));
+      yield put(allWorkspaceActions.clearReplInput(location));
+      yield put(allWorkspaceActions.sendReplInputToOutput(location, code));
+      // Reset old context.errors
+      context.errors = [];
 
-      // If the file system is not initialised, add an editor tab with the default editor value.
-      if (fileSystem === null) {
-        yield put(allWorkspaceActions.addEditorTab(location, defaultFilePath, defaultEditorValue));
+      const codeFilePath = '/code.js';
+      const codeFiles = {
+        [codeFilePath]: code
+      };
+      yield call(
+        evalCode,
+        codeFiles,
+        codeFilePath,
+        context,
+        execTime,
+        location,
+        allWorkspaceActions.evalRepl.type
+      );
+    },
+    navDeclaration: function* ({ payload: { location, payload } }) {
+      const [code, context]: [string, Context] = yield selectWorkspace(location, workspace => [
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        workspace.editorState.editorTabs[0].value,
+        workspace.context
+      ]);
+
+      const result: ReturnType<typeof findDeclaration> = yield call(
+        findDeclaration,
+        code,
+        context,
+        {
+          line: payload.row + 1,
+          column: payload.column
+        }
+      );
+
+      if (result) {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        yield put(
+          allWorkspaceActions.moveCursor(location, 0, {
+            row: result.start.line - 1,
+            column: result.start.column
+          })
+        );
+      }
+    },
+    promptAutocomplete: function* ({ payload: { location, payload } }) {
+      const {
+        context,
+        programPrependValue: prepend,
+        editorState
+      }: WorkspaceState = yield selectWorkspace(location);
+
+      if (editorState.activeEditorTabIndex === null) {
+        throw new Error('Prompt autocomplete called without an active editor tab');
+      }
+
+      const editorValue = editorState.editorTabs[editorState.activeEditorTabIndex].value;
+
+      // Deal with prepended code
+      let autocompleteCode;
+      let prependLength = 0;
+      if (!prepend) {
+        autocompleteCode = editorValue;
+      } else {
+        prependLength = prepend.split('\n').length;
+        autocompleteCode = prepend + '\n' + editorValue;
+      }
+
+      const [editorNames, displaySuggestions] = yield call(
+        getNames,
+        autocompleteCode,
+        payload.row + prependLength,
+        payload.column,
+        context
+      );
+
+      if (!displaySuggestions) {
+        yield call(payload.callback);
         return;
       }
-      const editorValue: string = yield new Promise<string>((resolve, reject) => {
-        fileSystem.exists(defaultFilePath, fileExists => {
-          if (!fileExists) {
-            // If the file does not exist, we need to also create it in the file system.
-            writeFileRecursively(fileSystem, defaultFilePath, defaultEditorValue)
-              .then(() => resolve(defaultEditorValue))
-              .catch(err => reject(err));
-            return;
-          }
-          fileSystem.readFile(defaultFilePath, 'utf-8', (err, fileContents) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            if (fileContents === undefined) {
-              reject(new Error('File exists but has no contents.'));
-              return;
-            }
-            resolve(fileContents);
-          });
-        });
+
+      const editorSuggestions = editorNames.map((name: any) => {
+        return {
+          ...name,
+          caption: name.name,
+          value: name.name,
+          score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
+          name: undefined
+        };
       });
-      yield put(allWorkspaceActions.addEditorTab(location, defaultFilePath, editorValue));
-    }
-  },
-  toggleEditorAutorun: function* ({ payload: { location }}) {
-    const { editorState: { isEditorAutorun } }: WorkspaceState = yield selectWorkspace(location)
-    yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
-  },
-  toggleFolderMode: function* ({ payload: { location }}) {
-    const { editorState: { isFolderModeEnabled } }: WorkspaceState = yield selectWorkspace(location)
 
-    yield put(allWorkspaceActions.setFolderMode(location, !isFolderModeEnabled));
-    const warningMessage = `Folder mode ${!isFolderModeEnabled ? 'enabled' : 'disabled'}`;
-    yield call(showWarningMessage, warningMessage, 750);
-  },
-  updateEditorHighlightedLines: function* ({ payload: { payload: { newHighlightedLines } }}) {
-    if (newHighlightedLines.length === 0) {
-      yield call(highlightClean);
-    } else {
-      try {
-        for (const [startRow, endRow] of newHighlightedLines) {
-          for (let row = startRow; row <= endRow; row++) {
-            yield call(highlightLine, row);
-          }
-        }
-      } catch (e) {
-        // Error most likely caused by trying to highlight the lines of the prelude
-        // in Env Viz. Can be ignored.
+      let chapterName = context.chapter.toString();
+      const variant = context.variant ?? Variant.DEFAULT;
+      if (variant !== Variant.DEFAULT) {
+        chapterName += '_' + variant;
       }
-    }
-  },
-  updateEditorHighlightedLinesAgenda: function* ({ payload: { payload: { newHighlightedLines }}}) {
-    if (newHighlightedLines.length === 0) {
-      yield call(highlightCleanForAgenda);
-    } else {
-      try {
-        for (const [startRow, endRow] of newHighlightedLines) {
-          for (let row = startRow; row <= endRow; row++) {
-            yield call(highlightLineForAgenda, row);
-          }
-        }
-      } catch (e) {
-        // Error most likely caused by trying to highlight the lines of the prelude
-        // in Env Viz. Can be ignored.
+
+      const builtinSuggestions = Documentation.builtins[chapterName] || [];
+
+      yield call(payload.callback, null, editorSuggestions.concat(builtinSuggestions));
+    },
+    setFolderMode: function* ({ payload: { location } }) {
+      const {
+        editorState: { isFolderModeEnabled, editorTabs }
+      }: WorkspaceState = yield selectWorkspace(location);
+      // Do nothing if Folder mode is enabled.
+      if (isFolderModeEnabled) {
+        return;
       }
-    }
-  },
-  updateEditorValue: function* ( { payload: { location, payload: { editorTabIndex, newEditorValue } }}) {
-    const { editorState: {
-      editorTabs: {
-        [editorTabIndex]: { filePath }
-      }
-    }}: WorkspaceState = yield selectWorkspace(location)
 
-    // If the code does not have an associated file, do nothing.
-    if (filePath === undefined) {
-      return;
-    }
+      // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
+      if (editorTabs.length === 0) {
+        const defaultFilePath = `${getWorkspaceBasePath(location)}/program.js`;
+        const fileSystem: FSModule | null = yield selectFileSystem();
 
-    const fileSystem: FSModule | null = yield selectFileSystem()
-    // If the file system is not initialised, do nothing.
-    if (fileSystem === null) {
-      return;
-    }
-
-    fileSystem.writeFile(filePath, newEditorValue, err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-  }
-}, function* (takeEvery) {
-  yield takeEvery(allWorkspaceActions.evalTestCase, function* ({ payload: { location, payload: index }}) {
-    yield put(actions.addEvent([EventType.RUN_TESTCASE]));
-    yield* runTestCase(location, index);
-  })
-
-  yield takeEvery(allWorkspaceActions.evalEditorAndTestcases, function* ({ payload: { location } }) {
-    yield call(evalEditor, location);
-
-    const { editorTestcases: testcases }: AssessmentWorkspaceState = yield selectWorkspace(location)
-
-    // Avoid displaying message if there are no testcases
-    if (testcases.length > 0) {
-      // Display a message to the user
-      yield call(showSuccessMessage, `Running all testcases!`, 2000);
-      for (const idx of testcases.keys()) {
-        // break each testcase up into separate event loop iterations
-        // so that the UI updates
-        yield new Promise(resolve => setTimeout(resolve, 0));
-
-        const programSucceeded: boolean = yield call(runTestCase, location, idx);
-        // Prematurely terminate if execution of the program failed (not the testcase)
-        if (!programSucceeded) {
+        // If the file system is not initialised, add an editor tab with the default editor value.
+        if (fileSystem === null) {
+          yield put(
+            allWorkspaceActions.addEditorTab(location, defaultFilePath, defaultEditorValue)
+          );
           return;
         }
+        const editorValue: string = yield new Promise<string>((resolve, reject) => {
+          fileSystem.exists(defaultFilePath, fileExists => {
+            if (!fileExists) {
+              // If the file does not exist, we need to also create it in the file system.
+              writeFileRecursively(fileSystem, defaultFilePath, defaultEditorValue)
+                .then(() => resolve(defaultEditorValue))
+                .catch(err => reject(err));
+              return;
+            }
+            fileSystem.readFile(defaultFilePath, 'utf-8', (err, fileContents) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+              if (fileContents === undefined) {
+                reject(new Error('File exists but has no contents.'));
+                return;
+              }
+              resolve(fileContents);
+            });
+          });
+        });
+        yield put(allWorkspaceActions.addEditorTab(location, defaultFilePath, editorValue));
       }
-    }
-  })
-})
+    },
+    toggleEditorAutorun: function* ({ payload: { location } }) {
+      const {
+        editorState: { isEditorAutorun }
+      }: WorkspaceState = yield selectWorkspace(location);
+      yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
+    },
+    toggleFolderMode: function* ({ payload: { location } }) {
+      const {
+        editorState: { isFolderModeEnabled }
+      }: WorkspaceState = yield selectWorkspace(location);
 
-export { WorkspaceSaga as default }
+      yield put(allWorkspaceActions.setFolderMode(location, !isFolderModeEnabled));
+      const warningMessage = `Folder mode ${!isFolderModeEnabled ? 'enabled' : 'disabled'}`;
+      yield call(showWarningMessage, warningMessage, 750);
+    },
+    updateEditorHighlightedLines: function* ({
+      payload: {
+        payload: { newHighlightedLines }
+      }
+    }) {
+      if (newHighlightedLines.length === 0) {
+        yield call(highlightClean);
+      } else {
+        try {
+          for (const [startRow, endRow] of newHighlightedLines) {
+            for (let row = startRow; row <= endRow; row++) {
+              yield call(highlightLine, row);
+            }
+          }
+        } catch (e) {
+          // Error most likely caused by trying to highlight the lines of the prelude
+          // in Env Viz. Can be ignored.
+        }
+      }
+    },
+    updateEditorHighlightedLinesAgenda: function* ({
+      payload: {
+        payload: { newHighlightedLines }
+      }
+    }) {
+      if (newHighlightedLines.length === 0) {
+        yield call(highlightCleanForAgenda);
+      } else {
+        try {
+          for (const [startRow, endRow] of newHighlightedLines) {
+            for (let row = startRow; row <= endRow; row++) {
+              yield call(highlightLineForAgenda, row);
+            }
+          }
+        } catch (e) {
+          // Error most likely caused by trying to highlight the lines of the prelude
+          // in Env Viz. Can be ignored.
+        }
+      }
+    },
+    updateEditorValue: function* ({
+      payload: {
+        location,
+        payload: { editorTabIndex, newEditorValue }
+      }
+    }) {
+      const {
+        editorState: {
+          editorTabs: {
+            [editorTabIndex]: { filePath }
+          }
+        }
+      }: WorkspaceState = yield selectWorkspace(location);
+
+      // If the code does not have an associated file, do nothing.
+      if (filePath === undefined) {
+        return;
+      }
+
+      const fileSystem: FSModule | null = yield selectFileSystem();
+      // If the file system is not initialised, do nothing.
+      if (fileSystem === null) {
+        return;
+      }
+
+      fileSystem.writeFile(filePath, newEditorValue, err => {
+        if (err) {
+          console.error(err);
+        }
+      });
+    }
+  },
+  function* () {
+    yield takeEvery(
+      allWorkspaceActions.evalTestCase,
+      function* ({ payload: { location, payload: index } }) {
+        yield put(actions.addEvent([EventType.RUN_TESTCASE]));
+        yield* runTestCase(location, index);
+      }
+    );
+
+    yield takeEvery(
+      allWorkspaceActions.evalEditorAndTestcases,
+      function* ({ payload: { location } }) {
+        yield call(evalEditor, location);
+
+        const { editorTestcases: testcases }: AssessmentWorkspaceState = yield selectWorkspace(
+          location
+        );
+
+        // Avoid displaying message if there are no testcases
+        if (testcases.length > 0) {
+          // Display a message to the user
+          yield call(showSuccessMessage, `Running all testcases!`, 2000);
+          for (const idx of testcases.keys()) {
+            // break each testcase up into separate event loop iterations
+            // so that the UI updates
+            yield new Promise(resolve => setTimeout(resolve, 0));
+
+            const programSucceeded: boolean = yield call(runTestCase, location, idx);
+            // Prematurely terminate if execution of the program failed (not the testcase)
+            if (!programSucceeded) {
+              return;
+            }
+          }
+        }
+      }
+    );
+  }
+);
+
+export { WorkspaceSaga as default };
 
 function* clearContext(location: SideContentLocation, code: string) {
-  const workspace: WorkspaceState = yield selectWorkspace(location)
+  const workspace: WorkspaceState = yield selectWorkspace(location);
 
-  yield put(allWorkspaceActions.beginClearContext(location,
-    workspace.context.chapter,
-    workspace.context.variant,
-    workspace.globals,
-    workspace.context.externalSymbols
-  ))
+  yield put(
+    allWorkspaceActions.beginClearContext(
+      location,
+      workspace.context.chapter,
+      workspace.context.variant,
+      workspace.globals,
+      workspace.context.externalSymbols
+    )
+  );
 
-  yield take(allWorkspaceActions.endClearContext)
-  defineSymbol(workspace.context, '__PROGRAM__', code)
+  yield take(allWorkspaceActions.endClearContext);
+  // defineSymbol(workspace.context, '__PROGRAM__', code);
 }
 
-function retrieveFilesInWorkspaceAsRecord(
-  location: SideContentLocation,
-  fileSystem: FSModule
-) {
-  const workspaceBasePath = getWorkspaceBasePath(location)
-  const files: Record<string, string> = {}
-  const processDirectory = (path: string) => new Promise<void>((resolve, reject) => fileSystem.readdir(path, (err, fileNames) => {
-    if (err) {
-      reject(err)
-      return
-    }
+function retrieveFilesInWorkspaceAsRecord(location: SideContentLocation, fileSystem: FSModule) {
+  const workspaceBasePath = getWorkspaceBasePath(location);
+  const files: Record<string, string> = {};
+  const processDirectory = (path: string) =>
+    new Promise<void>((resolve, reject) =>
+      fileSystem.readdir(path, (err, fileNames) => {
+        if (err) {
+          reject(err);
+          return;
+        }
 
-    if (fileNames) {
-      Promise.all(fileNames.map(fileName => {
-        const fullPath = pathlib.join(path, fileName)
-        return new Promise<void>((resolve, reject) => fileSystem.lstat(fullPath, (err, stats) => {
-          if (err) {
-            reject(err)
-            return
-          }
+        if (fileNames) {
+          Promise.all(
+            fileNames.map(fileName => {
+              const fullPath = pathlib.join(path, fileName);
+              return new Promise<void>((resolve, reject) =>
+                fileSystem.lstat(fullPath, (err, stats) => {
+                  if (err) {
+                    reject(err);
+                    return;
+                  }
 
-          if (stats !== undefined) {
-            if (stats.isFile()) {
-              fileSystem.readFile(fullPath, 'utf-8', (err, contents) => {
-                if (err) {
-                  reject(err)
-                  return
-                }
+                  if (stats !== undefined) {
+                    if (stats.isFile()) {
+                      fileSystem.readFile(fullPath, 'utf-8', (err, contents) => {
+                        if (err) {
+                          reject(err);
+                          return;
+                        }
 
-                if (contents === undefined) {
-                  // TODO check this
-                  reject('some err here')
-                  return
-                }
+                        if (contents === undefined) {
+                          // TODO check this
+                          reject('some err here');
+                          return;
+                        }
 
-                files[fullPath] = contents
-                resolve()
-              })
-            } else if (stats.isDirectory()) {
-              processDirectory(fullPath)
-                .then(resolve)
-                .catch(reject)
-            }
-            reject('Should never get here!')
-          } else {
-            resolve()
-          }
-        }))
-      }
-    )).then(() => resolve())
-    }
-  }))
-  return processDirectory(workspaceBasePath)
+                        files[fullPath] = contents;
+                        resolve();
+                      });
+                    } else if (stats.isDirectory()) {
+                      processDirectory(fullPath).then(resolve).catch(reject);
+                    }
+                    reject('Should never get here!');
+                  } else {
+                    resolve();
+                  }
+                })
+              );
+            })
+          ).then(() => resolve());
+        }
+      })
+    );
+  return processDirectory(workspaceBasePath);
 }
 
-export function* evalEditor(
-  location: SideContentLocation
-) {
-  const workspace: WorkspaceState = yield selectWorkspace(location)
-  const fileSystem: FSModule = yield selectFileSystem()
+export function* evalEditor(location: SideContentLocation) {
+  const workspace: WorkspaceState = yield selectWorkspace(location);
+  const fileSystem: FSModule = yield selectFileSystem();
 
-  const activeEditorTabIndex = workspace.editorState.activeEditorTabIndex
+  const activeEditorTabIndex = workspace.editorState.activeEditorTabIndex;
   if (activeEditorTabIndex === null) {
     throw new Error('Cannot evaluate program without an entrypoint file.');
   }
 
-  const defaultFilePath = `${getWorkspaceBasePath(location)}/program.js`
+  const defaultFilePath = `${getWorkspaceBasePath(location)}/program.js`;
   let files: Record<string, string>;
   if (workspace.editorState.isFolderModeEnabled) {
     files = yield call(retrieveFilesInWorkspaceAsRecord, location, fileSystem);
@@ -670,10 +746,11 @@ export function* evalEditor(
     };
   }
 
-  yield put(actions.addEvent([EventType.RUN_CODE]))
+  yield put(actions.addEvent([EventType.RUN_CODE]));
 
-  const entrypointFilePath = workspace.editorState.editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
-  const { remoteExecutionSession } : SessionState = yield selectSession()
+  const entrypointFilePath =
+    workspace.editorState.editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
+  const { remoteExecutionSession }: SessionState = yield selectSession();
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === location) {
     yield put(actions.remoteExecRun(files, entrypointFilePath));
@@ -683,7 +760,6 @@ export function* evalEditor(
     const entrypointCode = files[entrypointFilePath];
     yield* clearContext(location, entrypointCode);
     yield put(allWorkspaceActions.clearReplOutput(location));
-
 
     // Insert debugger statements at the lines of the program with a breakpoint.
     for (const editorTab of workspace.editorState.editorTabs) {
@@ -697,6 +773,9 @@ export function* evalEditor(
         workspace.context
       );
     }
+
+    
+  // console.log('Is context frozen?: ', Object.isFrozen(context))
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (workspace.programPrependValue.length) {
@@ -725,7 +804,7 @@ export function* evalEditor(
       workspace.context,
       workspace.execTime,
       location,
-      allWorkspaceActions.evalEditor.type,
+      allWorkspaceActions.evalEditor.type
     );
   }
 }
@@ -736,25 +815,23 @@ function* evalWithEnvOrSubst(
   context: Context,
   location: PlaygroundWorkspaces
 ) {
-  const workspace: PlaygroundWorkspaceState = yield selectWorkspace(location)
+  const workspace: PlaygroundWorkspaceState = yield selectWorkspace(location);
 
-  const substActiveAndCorrectChapter = workspace.sideContent.selectedTabId === SideContentType.substVisualizer && context.chapter <= Chapter.SOURCE_2
-  const envActiveAndCorrectChapter = workspace.sideContent.selectedTabId === SideContentType.envVisualizer && context.chapter >= Chapter.SOURCE_3
+  const substActiveAndCorrectChapter =
+    workspace.sideContent.selectedTabId === SideContentType.substVisualizer &&
+    context.chapter <= Chapter.SOURCE_2;
+  const envActiveAndCorrectChapter =
+    workspace.sideContent.selectedTabId === SideContentType.envVisualizer &&
+    context.chapter >= Chapter.SOURCE_3;
 
-  const result: Result = yield call(
-    runFilesInContext,
-    files,
-    entrypointFilePath,
-    context,
-    {
-      executionMethod: envActiveAndCorrectChapter ? 'ec-evaluator' : 'auto',
-      envSteps: workspace.envSteps,
-      originalMaxExecTime: workspace.execTime,
-      stepLimit: workspace.stepLimit,
-      throwInfiniteLoops: true,
-      useSubst: substActiveAndCorrectChapter,
-    }
-  )
+  const result: Result = yield call(runFilesInContext, files, entrypointFilePath, context, {
+    executionMethod: envActiveAndCorrectChapter ? 'ec-evaluator' : 'auto',
+    envSteps: workspace.envSteps,
+    originalMaxExecTime: workspace.execTime,
+    stepLimit: workspace.stepLimit,
+    throwInfiniteLoops: true,
+    useSubst: substActiveAndCorrectChapter
+  });
 
   // The first time the code is executed using the explicit control evaluator,
   // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
@@ -775,17 +852,19 @@ export function* evalCode(
   location: SideContentLocation,
   actionType: string
 ): SagaIterator {
-   context.runtime.debuggerOn =
-    (actionType === allWorkspaceActions.evalEditor.type || actionType === allWorkspaceActions.debugResume.type) && context.chapter > 2; 
+  context.runtime.debuggerOn =
+    (actionType === allWorkspaceActions.evalEditor.type ||
+      actionType === allWorkspaceActions.debugResume.type) &&
+    context.chapter > 2;
 
   function isPlaygroundWorkspace(location: SideContentLocation): location is PlaygroundWorkspaces {
-    return location === 'playground' || location === 'sicp' || location.startsWith('stories')
+    return location === 'playground' || location === 'sicp' || location.startsWith('stories');
   }
 
-  const workspace: WorkspaceState = yield selectWorkspace(location)
+  const workspace: WorkspaceState = yield selectWorkspace(location);
 
   if (isPlaygroundWorkspace(location)) {
-    yield* evalWithEnvOrSubst(files, entrypointFilePath, context, location)
+    yield* evalWithEnvOrSubst(files, entrypointFilePath, context, location);
   }
 
   const isNonDet: boolean = context.variant === Variant.NON_DET;
@@ -793,31 +872,35 @@ export function* evalCode(
   const isWasm: boolean = context.variant === Variant.WASM;
 
   // handle env visualizer and subst visualizers
-  const substActiveAndCorrectChapter = workspace.sideContent.selectedTabId === SideContentType.substVisualizer && context.chapter <= Chapter.SOURCE_2
-  const envActiveAndCorrectChapter = workspace.sideContent.selectedTabId === SideContentType.envVisualizer && context.chapter >= Chapter.SOURCE_3
+  const substActiveAndCorrectChapter =
+    workspace.sideContent.selectedTabId === SideContentType.substVisualizer &&
+    context.chapter <= Chapter.SOURCE_2;
+  const envActiveAndCorrectChapter =
+    workspace.sideContent.selectedTabId === SideContentType.envVisualizer &&
+    context.chapter >= Chapter.SOURCE_3;
 
-  let evalCallEffect: CallEffect<Result | Promise<Result>>
+  let evalCallEffect: CallEffect<Result | Promise<Result>>;
   if (substActiveAndCorrectChapter || envActiveAndCorrectChapter) {
-    evalCallEffect = call(evalWithEnvOrSubst,
+    evalCallEffect = call(
+      evalWithEnvOrSubst,
       files,
       entrypointFilePath,
       context,
       // TODO check this!
       location as PlaygroundWorkspaces
-    )
-
+    );
   } else if (isNonDet || isLazy || isWasm) {
-    evalCallEffect = call_variant(context.variant)
+    evalCallEffect = call_variant(context.variant);
   } else if (actionType === allWorkspaceActions.debugResume.type) {
-    evalCallEffect = call(resume, lastDebuggerResult)
+    evalCallEffect = call(resume, lastDebuggerResult);
   } else {
     evalCallEffect = call(runFilesInContext, files, entrypointFilePath, context, {
       originalMaxExecTime: execTime,
-      throwInfiniteLoops: true,
-    })
+      throwInfiniteLoops: true
+    });
   }
 
-  const entrypointCode = files[entrypointFilePath]
+  const entrypointCode = files[entrypointFilePath];
   async function wasm_compile_and_run(
     wasmCode: string,
     wasmContext: Context,
@@ -850,7 +933,7 @@ export function* evalCode(
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
             // stepLimit: workspace.stepLimit,
-            useSubst: substActiveAndCorrectChapter,
+            useSubst: substActiveAndCorrectChapter
             // envSteps: workspace.envSteps
           });
     } else if (variant === Variant.LAZY) {
@@ -858,12 +941,17 @@ export function* evalCode(
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
         // stepLimit: stepLimit,
-        useSubst: substActiveAndCorrectChapter,
+        useSubst: substActiveAndCorrectChapter
         // envSteps: envSteps
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
-      return call(wasm_compile_and_run, entrypointCode, context, actionType === allWorkspaceActions.evalRepl.type);
+      return call(
+        wasm_compile_and_run,
+        entrypointCode,
+        context,
+        actionType === allWorkspaceActions.evalRepl.type
+      );
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
@@ -878,7 +966,7 @@ export function* evalCode(
      */
     interrupted: take(allWorkspaceActions.beginInterruptExecution),
     paused: take(allWorkspaceActions.beginDebugPause)
-  })
+  });
 
   if (interrupted) {
     interrupt(context);
@@ -904,26 +992,28 @@ export function* evalCode(
     result.status !== 'suspended-non-det' &&
     result.status !== 'suspended-ec-eval'
   ) {
-    yield put(allWorkspaceActions.handleConsoleLog(location, DisplayBufferService.dump()))
-    yield put(allWorkspaceActions.evalInterpreterError(location, context.errors))
+    yield put(allWorkspaceActions.handleConsoleLog(location, DisplayBufferService.dump()));
+    yield put(allWorkspaceActions.evalInterpreterError(location, context.errors));
 
     // we need to parse again, but preserve the errors in context
     const oldErrors = context.errors;
     context.errors = [];
     // Note: Type checking does not support multiple file programs.
-    const parsed = yield call(parse, entrypointCode, context)
-    let typeErrors: SourceError[] = []
+    const parsed = yield call(parse, entrypointCode, context);
+    let typeErrors: SourceError[] = [];
     if (parsed) {
-      const validatedProgram = yield call(validateAndAnnotate, parsed, context)
-      ;([, typeErrors] = yield call(typeCheck, validatedProgram, context))
+      const validatedProgram = yield call(validateAndAnnotate, parsed, context);
+      [, typeErrors] = yield call(typeCheck, validatedProgram, context);
     }
 
     context.errors = oldErrors;
     // for achievement event tracking
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
     if (typeErrors.length > 0) {
-      events.push(EventType.ERROR)
-      yield put(allWorkspaceActions.sendReplInputToOutput(location, `Hints:\n${parseError(typeErrors)}`))
+      events.push(EventType.ERROR);
+      yield put(
+        allWorkspaceActions.sendReplInputToOutput(location, `Hints:\n${parseError(typeErrors)}`)
+      );
     }
 
     yield put(actions.addEvent(events));
@@ -939,11 +1029,11 @@ export function* evalCode(
     lastNonDetResult = result;
   }
 
-  yield put(allWorkspaceActions.handleConsoleLog(location, DisplayBufferService.dump()))
+  yield put(allWorkspaceActions.handleConsoleLog(location, DisplayBufferService.dump()));
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
-    yield put(allWorkspaceActions.evalInterpreterSuccess(location, result.value))
+    yield put(allWorkspaceActions.evalInterpreterSuccess(location, result.value));
   }
 
   if (
@@ -952,18 +1042,18 @@ export function* evalCode(
     actionType === allWorkspaceActions.debugResume.type
   ) {
     if (context.errors.length > 0) {
-      yield put(actions.addEvent([EventType.ERROR]))
+      yield put(actions.addEvent([EventType.ERROR]));
     }
-    yield put(allWorkspaceActions.notifyProgramEvaluated(
-      location,
-      result,
-      lastDebuggerResult,
-      entrypointCode,
-      context
-    ))
+    yield put(
+      allWorkspaceActions.notifyProgramEvaluated(
+        location,
+        result,
+        lastDebuggerResult,
+        entrypointCode,
+        context
+      )
+    );
   }
-
-
 
   // we need to stop the intro icon from flashing?
 }
@@ -1023,7 +1113,6 @@ export function* runTestCase(
   workspaceLocation: AssessmentLocations,
   index: number
 ): Generator<StrictEffect, boolean, any> {
-
   /**
    *  Shard a new privileged context elevated to use Source chapter 4 for testcases - enables
    *  grader programs in postpend to run as expected without raising interpreter errors
@@ -1038,10 +1127,8 @@ export function* runTestCase(
       editorTabs: [{ value }]
     },
     execTime,
-    editorTestcases: {
-      [index]: testcase
-    }
-  }: AssessmentWorkspaceState = yield selectWorkspace(workspaceLocation)
+    editorTestcases: { [index]: testcase }
+  }: AssessmentWorkspaceState = yield selectWorkspace(workspaceLocation);
 
   // Do NOT clear the REPL output!
   yield* clearContext(workspaceLocation, value);
@@ -1107,6 +1194,13 @@ export function* runTestCase(
     yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
   }
   // Finally execute the testcase function call in the privileged context
-  yield* evalTestCode(testcase.program, elevatedContext, execTime, workspaceLocation, index, testcase.type);
+  yield* evalTestCode(
+    testcase.program,
+    elevatedContext,
+    execTime,
+    workspaceLocation,
+    index,
+    testcase.type
+  );
   return true;
 }

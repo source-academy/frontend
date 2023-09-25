@@ -1,4 +1,8 @@
-import { defaultGithubAssessment } from "../WorkspaceReduxTypes";
-import { createAssessmentSlice } from "./AssessmentBase";
+import { defaultGithubAssessment } from '../WorkspaceReduxTypes';
+import { createAssessmentSlice } from './AssessmentBase';
 
-export const { reducer: githubAssessmentReducer } = createAssessmentSlice('githubAssessment', defaultGithubAssessment, {})
+export const { reducer: githubAssessmentReducer } = createAssessmentSlice(
+  'githubAssessment',
+  defaultGithubAssessment,
+  {}
+);

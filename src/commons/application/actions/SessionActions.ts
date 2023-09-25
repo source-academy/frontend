@@ -1,9 +1,6 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import {
-  AssessmentConfiguration,
-  ContestEntry
-} from '../../assessment/AssessmentTypes';
+import { AssessmentConfiguration, ContestEntry } from '../../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -53,7 +50,7 @@ import {
   UPDATE_NOTIFICATIONS,
   UPDATE_TIME_OPTIONS,
   UPDATE_USER_ROLE,
-  UpdateCourseConfiguration,
+  UpdateCourseConfiguration
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>

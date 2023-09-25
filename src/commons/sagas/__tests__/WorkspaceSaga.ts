@@ -5,8 +5,16 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
-import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from 'src/commons/redux/workspace/NewWorkspaceSaga';
-import { NonStoryWorkspaceLocation, SideContentLocation } from 'src/commons/redux/workspace/subReducers/SideContentRedux';
+import workspaceSaga, {
+  evalCode,
+  evalEditor,
+  evalTestCode,
+  runTestCase
+} from 'src/commons/redux/workspace/NewWorkspaceSaga';
+import {
+  NonStoryWorkspaceLocation,
+  SideContentLocation
+} from 'src/commons/redux/workspace/subReducers/SideContentRedux';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 
 import {
@@ -144,7 +152,15 @@ describe('EVAL_EDITOR', () => {
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
         .put(allWorkspaceActions.beginInterruptExecution(workspaceLocation))
-        .put(allWorkspaceActions.beginClearContext(workspaceLocation, context.chapter, variant, globals, context.externalSymbols))
+        .put(
+          allWorkspaceActions.beginClearContext(
+            workspaceLocation,
+            context.chapter,
+            variant,
+            globals,
+            context.externalSymbols
+          )
+        )
         .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
@@ -403,12 +419,15 @@ describe('EVAL_TESTCASE', () => {
         .withState(newDefaultState)
         // Should interrupt execution and clear context but not clear REPL
         .not.put(allWorkspaceActions.beginInterruptExecution(workspaceLocation))
-        .put(allWorkspaceActions.beginClearContext(workspaceLocation, 
-          context.chapter,
-          Variant.DEFAULT,
-          globals,
-          context.externalSymbols
-        ))
+        .put(
+          allWorkspaceActions.beginClearContext(
+            workspaceLocation,
+            context.chapter,
+            Variant.DEFAULT,
+            globals,
+            context.externalSymbols
+          )
+        )
         .not.put.actionType(CLEAR_REPL_OUTPUT)
         // Expect it to shard a new privileged context here and execute chunks in order
         // calls evalCode here with the prepend in elevated Context: silent run
@@ -495,7 +514,15 @@ describe('CHAPTER_SELECT', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .put(allWorkspaceActions.beginClearContext(workspaceLocation, newChapter, Variant.DEFAULT, globals, context.externalSymbols))
+      .put(
+        allWorkspaceActions.beginClearContext(
+          workspaceLocation,
+          newChapter,
+          Variant.DEFAULT,
+          globals,
+          context.externalSymbols
+        )
+      )
       .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
       .call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
@@ -530,12 +557,15 @@ describe('CHAPTER_SELECT', () => {
         .provide([[matchers.call.fn(showFullJSDisclaimer), true]])
         .withState(newDefaultState)
         .call(showFullJSDisclaimer)
-        .put(allWorkspaceActions.beginClearContext(workspaceLocation, 
-          fullJSLanguage.chapter,
-          fullJSLanguage.variant,
-          globals,
-          context.externalSymbols
-        ))
+        .put(
+          allWorkspaceActions.beginClearContext(
+            workspaceLocation,
+            fullJSLanguage.chapter,
+            fullJSLanguage.variant,
+            globals,
+            context.externalSymbols
+          )
+        )
         .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         .call(showSuccessMessage, `Switched to full JavaScript`, 1000)
         .dispatch({
@@ -579,12 +609,15 @@ describe('CHAPTER_SELECT', () => {
         .provide([[matchers.call.fn(showFullTSDisclaimer), true]])
         .withState(newDefaultState)
         .call(showFullTSDisclaimer)
-        .put(allWorkspaceActions.beginClearContext(workspaceLocation, 
-          fullTSLanguage.chapter,
-          fullTSLanguage.variant,
-          globals,
-          context.externalSymbols
-        ))
+        .put(
+          allWorkspaceActions.beginClearContext(
+            workspaceLocation,
+            fullTSLanguage.chapter,
+            fullTSLanguage.variant,
+            globals,
+            context.externalSymbols
+          )
+        )
         .put(allWorkspaceActions.clearReplOutput(workspaceLocation))
         .call(showSuccessMessage, `Switched to full TypeScript`, 1000)
         .dispatch({

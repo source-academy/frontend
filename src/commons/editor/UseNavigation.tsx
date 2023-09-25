@@ -59,7 +59,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     //     window.open(`${url}${externalUrl}/global.html#${token.value}`); // opens external library link
     //   }
     // }
-    
+
     if (
       token !== null &&
       (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))

@@ -195,7 +195,8 @@ export async function openFileInEditor(
 
   if (content) {
     const newEditorValue = Buffer.from(content, 'base64').toString();
-    const activeEditorTabIndex = store.getState().workspaces.playground.editorState.activeEditorTabIndex;
+    const activeEditorTabIndex =
+      store.getState().workspaces.playground.editorState.activeEditorTabIndex;
     if (activeEditorTabIndex === null) {
       throw new Error('No active editor tab found.');
     }

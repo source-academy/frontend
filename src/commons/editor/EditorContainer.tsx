@@ -7,7 +7,7 @@ import 'ace-builds/webpack-resolver';
 import _ from 'lodash';
 import React from 'react';
 
-import { EditorTabState } from '../redux/workspace/WorkspaceReduxTypes';
+import { EditorTabState } from '../redux/workspace/WorkspaceStateTypes';
 import SourcecastEditor, {
   SourceRecorderEditorProps
 } from '../sourceRecorder/SourceRecorderEditor';

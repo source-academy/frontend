@@ -1,22 +1,32 @@
-import { createAction } from "@reduxjs/toolkit";
-import { SlingClient } from "@sourceacademy/sling-client";
-import { assemble, compileFiles } from "js-slang";
-import { ExceptionError } from "js-slang/dist/errors/errors";
-import { type Context, Chapter, Variant } from "js-slang/dist/types";
-import _ from "lodash";
-import { call, put, race, select, take } from "redux-saga/effects";
-import * as remoteExecutionActionsOld from 'src/features/remoteExecution/RemoteExecutionActions';
-import type { Ev3DevicePeripherals, Ev3MotorData, Ev3MotorTypes, Ev3SensorData, Ev3SensorTypes } from "src/features/remoteExecution/RemoteExecutionEv3Types";
-import { type Device, type DeviceSession, deviceTypesById,WebSocketEndpointInformation } from "src/features/remoteExecution/RemoteExecutionTypes";
-import { store } from "src/pages/createStore";
+import { SlingClient } from '@sourceacademy/sling-client';
+import { assemble, compileFiles } from 'js-slang';
+import { ExceptionError } from 'js-slang/dist/errors/errors';
+import { type Context, Chapter, Variant } from 'js-slang/dist/types';
+import _ from 'lodash';
+import { call, put, race, select } from 'redux-saga/effects';
+import type {
+  Ev3DevicePeripherals,
+  Ev3MotorData,
+  Ev3MotorTypes,
+  Ev3SensorData,
+  Ev3SensorTypes
+} from 'src/features/remoteExecution/RemoteExecutionEv3Types';
+import {
+  type Device,
+  type DeviceSession,
+  deviceTypesById,
+  WebSocketEndpointInformation
+} from 'src/features/remoteExecution/RemoteExecutionTypes';
+import { store } from 'src/pages/createStore';
 
-import { fetchDevices, getDeviceWSEndpoint } from "../sagas/RequestsSaga";
-import { safeTakeEvery, safeTakeLatest } from "../sagas/SafeEffects";
-import type { MaybePromise } from "../utils/TypeHelper";
-import { OverallState } from "./AllTypes";
-import { combineSagaHandlers, createActions } from "./utils";
-import { allWorkspaceActions } from "./workspace/AllWorkspacesRedux";
-import { SideContentLocation } from "./workspace/WorkspaceReduxTypes";
+import { fetchDevices, getDeviceWSEndpoint } from '../../sagas/RequestsSaga';
+import type { MaybePromise } from '../../utils/TypeHelper';
+import { OverallState } from '../AllTypes';
+import { combineSagaHandlers, createActions } from '../utils';
+import { safeTake as take,safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from '../utils/SafeEffects';
+import { selectSession } from '../utils/Selectors';
+import { allWorkspaceActions } from '../workspace/AllWorkspacesRedux';
+import { SideContentLocation } from '../workspace/WorkspaceReduxTypes';
 
 const dummyLocation = {
   start: { line: 0, column: 0 },
@@ -24,114 +34,63 @@ const dummyLocation = {
 };
 
 const sagaActions = createActions('remoteExec', {
+  remoteExecConnect: (location: SideContentLocation, device: Device) => ({ location, device }),
+  remoteExecDisconnect: 0,
   remoteExecFetchDevices: 0,
-  remoteExecRun: (files: Record<string, string>, entrypointFilePath: string) => ({ files, entrypointFilePath }),
-})
+  remoteExecRun: (files: Record<string, string>, entrypointFilePath: string) => ({
+    files,
+    entrypointFilePath
+  }),
+  remoteExecUpdateDevices: (devices: Device[]) => devices,
+  remoteExecUpdateSession: (session?: DeviceSession) => session,
+});
 
-const remoteExecConnect = createAction('remoteExec/remoteExecConnect', (workspace: SideContentLocation, device: Device) => ({ payload: { workspace, device }}) )
-const remoteExecDisconnect = createAction('remoteExec/remoteExecDisconnect')
+export const remoteExecutionSaga = combineSagaHandlers(
+  sagaActions,
+  {
+    remoteExecRun: function* (action) {
+      const { files, entrypointFilePath } = action.payload;
 
-export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
-  remoteExecFetchDevices: function* () {
-    const [tokens, session]: [any, DeviceSession | undefined] = yield select(
-      (state: OverallState) => [
-        {
-          accessToken: state.session.accessToken,
-          refreshToken: state.session.refreshToken
-        },
-        state.session.remoteExecutionSession
-      ]
-    );
-    const devices: Device[] = yield call(fetchDevices, tokens);
-
-    yield put(remoteExecutionActionsOld.remoteExecUpdateDevices(devices));
-
-    if (!session) {
-      return;
-    }
-    const updatedDevice = devices.find(({ id }) => id === session.device.id);
-    if (updatedDevice) {
-      yield put(
-        remoteExecutionActionsOld.remoteExecUpdateSession({
-          ...session,
-          device: updatedDevice
-        })
-      );
-    }
-  },
-  remoteExecRun: function* (action) {
-    const { files, entrypointFilePath } = action.payload;
-
-    const session: DeviceSession | undefined = yield select(
-      (state: OverallState) => state.session.remoteExecutionSession
-    );
-    if (!session) {
-      return;
-    }
-    if (session.connection.status !== 'CONNECTED') {
-      yield put(
-        allWorkspaceActions.updateWorkspace(session.workspace, {
-          isRunning: false
-        })
-      );
-      return;
-    }
-
-    yield put(allWorkspaceActions.clearReplOutput(session.workspace));
-
-    const client = session.connection.client;
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[session.workspace].context
-    );
-    // clear the context of errors (note: the way this works is that the context
-    // is mutated by js-slang anyway, so it's ok to do it like this)
-    context.errors.length = 0;
-    const compiled: MaybePromise<ReturnType<typeof compileFiles>> = yield call(
-      compileFiles,
-      files,
-      entrypointFilePath,
-      context,
-      deviceTypesById.get(session.device.type)?.internalFunctions
-    );
-    if (!compiled) {
-      yield put(allWorkspaceActions.evalInterpreterError(session.workspace, context.errors));
-      return;
-    }
-    const assembled = assemble(compiled);
-
-    client.sendRun(Buffer.from(assembled));
-  }
-}, function* () {
-    yield safeTakeEvery(allWorkspaceActions.beginInterruptExecution, function* () {
-      const session: DeviceSession | undefined = yield select(
-        (state: OverallState) => state.session.remoteExecutionSession
-      );
-      if (!session || session.connection.status !== 'CONNECTED') {
-        return;
-      }
-
-      yield call([
-        session.connection.client,
-        session.connection.client.sendStop
-      ])
-    })
-
-    yield safeTakeLatest(remoteExecDisconnect, function* () {
       const session: DeviceSession | undefined = yield select(
         (state: OverallState) => state.session.remoteExecutionSession
       );
       if (!session) {
         return;
       }
-      const oldClient = session.connection.client;
-      if (oldClient) {
-        oldClient.disconnect();
+      if (session.connection.status !== 'CONNECTED') {
+        yield put(
+          allWorkspaceActions.updateWorkspace(session.workspace, {
+            isRunning: false
+          })
+        );
+        return;
       }
-      yield put(remoteExecutionActionsOld.remoteExecUpdateSession(undefined));
-      // yield put(actions.externalLibrarySelect(ExternalLibraryName.NONE, session.workspace, true));
-    })
 
-    yield safeTakeLatest(remoteExecConnect, function* ({ payload: { device, workspace } }) {
+      yield put(allWorkspaceActions.clearReplOutput(session.workspace));
+
+      const client = session.connection.client;
+      const context: Context = yield select(
+        (state: OverallState) => state.workspaces[session.workspace].context
+      );
+      // clear the context of errors (note: the way this works is that the context
+      // is mutated by js-slang anyway, so it's ok to do it like this)
+      context.errors.length = 0;
+      const compiled: MaybePromise<ReturnType<typeof compileFiles>> = yield call(
+        compileFiles,
+        files,
+        entrypointFilePath,
+        context,
+        deviceTypesById.get(session.device.type)?.internalFunctions
+      );
+      if (!compiled) {
+        yield put(allWorkspaceActions.evalInterpreterError(session.workspace, context.errors));
+        return;
+      }
+      const assembled = assemble(compiled);
+
+      client.sendRun(Buffer.from(assembled));
+    },
+    remoteExecConnect: function* ({ payload: { device, location: workspace } }) {
       const [tokens, session]: [any, DeviceSession | undefined] = yield select(
         (state: OverallState) => [
           {
@@ -142,7 +101,7 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
         ]
       );
       yield put(
-        remoteExecutionActionsOld.remoteExecUpdateSession({
+        sagaActions.remoteExecUpdateSession({
           device,
           workspace,
           connection: { status: 'CONNECTING' }
@@ -155,7 +114,7 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
       );
       if (!endpoint) {
         yield put(
-          remoteExecutionActionsOld.remoteExecUpdateSession({
+          sagaActions.remoteExecUpdateSession({
             device,
             workspace,
             connection: { status: 'FAILED', error: 'Could not retrieve MQTT endpoint' }
@@ -189,7 +148,7 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
 
         const dispatchAction = (peripheralData: Ev3MotorData | Ev3SensorData) =>
           store.dispatch(
-            remoteExecutionActionsOld.remoteExecUpdateSession({
+            sagaActions.remoteExecUpdateSession({
               ...currentSession,
               device: {
                 ...currentSession.device,
@@ -237,7 +196,7 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
       const deviceType = deviceTypesById.get(device.type);
 
       yield put(
-        remoteExecutionActionsOld.remoteExecUpdateSession({
+        sagaActions.remoteExecUpdateSession({
           device,
           workspace,
           connection: { status: 'CONNECTING', client, endpoint }
@@ -247,7 +206,7 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
         allWorkspaceActions.updateWorkspace(workspace, {
           isRunning: false,
           editorState: {
-            isEditorAutorun: false,
+            isEditorAutorun: false
           },
           isDebugging: false,
           output: []
@@ -263,7 +222,7 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
         )
       );
       try {
-        const connectPromise = new Promise((resolve, reject) => {
+        const connectPromise = new Promise<true>((resolve, reject) => {
           try {
             client.once('connect', () => resolve(true));
             client.once('error', reject);
@@ -276,12 +235,12 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
           connect?: boolean;
         } = yield race({
           connect: connectPromise,
-          reconnect: take(remoteExecConnect.type),
-          disconnect: take(remoteExecDisconnect.type)
+          reconnect: take(sagaActions.remoteExecConnect),
+          disconnect: take(sagaActions.remoteExecDisconnect)
         });
         if (connectOrCancel.connect) {
           yield put(
-            remoteExecutionActionsOld.remoteExecUpdateSession({
+            sagaActions.remoteExecUpdateSession({
               device,
               workspace,
               connection: { status: 'CONNECTED', client, endpoint }
@@ -293,22 +252,72 @@ export const remoteExecutionSaga = combineSagaHandlers(sagaActions, {
       } catch (err) {
         client.disconnect();
         yield put(
-          remoteExecutionActionsOld.remoteExecUpdateSession({
+          sagaActions.remoteExecUpdateSession({
             device,
             workspace,
             connection: { status: 'FAILED', client, error: err.toString() }
           })
         );
       }
+    },
+  },
+  function* () {
+    yield takeEvery(allWorkspaceActions.beginInterruptExecution, function* () {
+      const session: DeviceSession | undefined = yield select(
+        (state: OverallState) => state.session.remoteExecutionSession
+      );
+      if (!session || session.connection.status !== 'CONNECTED') {
+        return;
+      }
+
+      yield call([session.connection.client, session.connection.client.sendStop]);
+    });
+
+    yield takeLatest(sagaActions.remoteExecFetchDevices, function* () {
+      const [tokens, session]: [any, DeviceSession | undefined] = yield select(
+        (state: OverallState) => [
+          {
+            accessToken: state.session.accessToken,
+            refreshToken: state.session.refreshToken
+          },
+          state.session.remoteExecutionSession
+        ]
+      );
+      const devices: Device[] = yield call(fetchDevices, tokens);
+
+      yield put(sagaActions.remoteExecUpdateDevices(devices));
+
+      if (!session) {
+        return;
+      }
+      const updatedDevice = devices.find(({ id }) => id === session.device.id);
+      if (updatedDevice) {
+        yield put(
+          sagaActions.remoteExecUpdateSession({
+            ...session,
+            device: updatedDevice
+          })
+        );
+      }
+    })
+
+    yield takeLatest(sagaActions.remoteExecDisconnect, function* () {
+      const session: DeviceSession | undefined = yield selectSession(session => session.remoteExecutionSession)
+      if (!session) {
+        return;
+      }
+      const oldClient = session.connection.client;
+      if (oldClient) {
+        oldClient.disconnect();
+      }
+      yield put(sagaActions.remoteExecUpdateSession(undefined));
     })
   }
-)
+);
 
 export const remoteExecutionActions = {
   ...sagaActions,
-  remoteExecConnect,
-  remoteExecDisconnect
-}
+};
 
 const ALPHANUMERIC = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

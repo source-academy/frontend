@@ -41,9 +41,9 @@ import {
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
 import { OverallState } from '../redux/AllTypes';
+import { routerNavigate } from '../redux/BackendSaga';
 import { SessionState } from '../redux/session/SessionsReducer';
 import { selectSession } from '../redux/utils/Selectors';
-import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import {
@@ -70,7 +70,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.setTokens(tokens));
     yield mockGetUserAndCourse();
 
-    const { courseId }: SessionState = yield selectSession()
+    const { courseId }: SessionState = yield selectSession();
     yield routerNavigate(`/courses/${courseId}`);
   });
 
@@ -119,12 +119,10 @@ export function* mockBackendSaga(): SagaIterator {
     const answer = action.payload.answer;
     // Now, update the answer for the question in the assessment in the store
 
-    const assessment = yield select((state: OverallState) =>
-      {
-        const assessmentId = state.workspaces.assessment.currentAssessment!
-        return state.session.assessments.get(assessmentId);
-      }
-    );
+    const assessment = yield select((state: OverallState) => {
+      const assessmentId = state.workspaces.assessment.currentAssessment!;
+      return state.session.assessments.get(assessmentId);
+    });
     const newQuestions = assessment.questions.slice().map((question: Question) => {
       if (question.id === questionId) {
         question.answer = answer;

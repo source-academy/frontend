@@ -5,16 +5,12 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { defaultWorkspaceManager } from 'src/commons/redux/workspace/AllWorkspacesRedux';
 import { defaultPlayground } from 'src/commons/redux/workspace/playground/PlaygroundRedux';
-import { shortenURLRequest } from "src/commons/redux/workspace/playground/PlaygroundSaga";
-import { PlaygroundSaga } from "src/commons/redux/workspace/playground/PlaygroundSaga";
+import { shortenURLRequest } from 'src/commons/redux/workspace/playground/PlaygroundSaga';
+import { PlaygroundSaga } from 'src/commons/redux/workspace/playground/PlaygroundSaga';
 
 import { updateShortURL } from '../../../features/playground/PlaygroundActions';
 import { SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
-import {
-  defaultState,
-  getDefaultFilePath,
-  OverallState
-} from '../../application/ApplicationTypes';
+import { defaultState, getDefaultFilePath, OverallState } from '../../application/ApplicationTypes';
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
@@ -81,7 +77,7 @@ describe('Playground saga tests', () => {
                 breakpoints: [],
                 highlightedLines: []
               }
-            ],
+            ]
           },
           usingSubst: false,
           usingEnv: false,
@@ -149,7 +145,7 @@ describe('Playground saga tests', () => {
                 breakpoints: [],
                 highlightedLines: []
               }
-            ],
+            ]
           },
           usingSubst: false,
           usingEnv: false,
@@ -217,7 +213,7 @@ describe('Playground saga tests', () => {
                 breakpoints: [],
                 highlightedLines: []
               }
-            ],
+            ]
           },
           usingSubst: false,
           usingEnv: false,
@@ -268,7 +264,7 @@ describe('Playground saga tests', () => {
                 breakpoints: [],
                 highlightedLines: []
               }
-            ],
+            ]
           },
           usingSubst: false,
           usingEnv: false,
@@ -338,7 +334,7 @@ describe('Playground saga tests', () => {
                 breakpoints: [],
                 highlightedLines: []
               }
-            ],
+            ]
           },
           usingSubst: false,
           usingEnv: false,
@@ -397,7 +393,7 @@ describe('Playground saga tests', () => {
                 breakpoints: [],
                 highlightedLines: []
               }
-            ],
+            ]
           },
           usingSubst: false,
           usingEnv: false,
@@ -440,7 +436,8 @@ function createQueryString(files: Record<string, string>, state: OverallState): 
   const editorTabFilePaths: string[] = state.workspaces.playground.editorState.editorTabs
     .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
-  const activeEditorTabIndex: number | null = state.workspaces.playground.editorState.activeEditorTabIndex;
+  const activeEditorTabIndex: number | null =
+    state.workspaces.playground.editorState.activeEditorTabIndex;
   const chapter: Chapter = state.workspaces.playground.context.chapter;
   const variant: Variant = state.workspaces.playground.context.variant;
   const execTime: number = state.workspaces.playground.execTime;

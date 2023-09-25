@@ -58,7 +58,11 @@ import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/Mob
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import { allWorkspaceActions } from '../redux/workspace/AllWorkspacesRedux';
 import { useEditorState, useRepl, useSideContent, useWorkspace } from '../redux/workspace/Hooks';
-import { AssessmentWorkspaceState, defaultAssessment, SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
+import {
+  AssessmentWorkspaceState,
+  defaultAssessment,
+  SideContentLocation
+} from '../redux/workspace/WorkspaceReduxTypes';
 import { ReplProps } from '../repl/Repl';
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
@@ -90,12 +94,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
-  const { selectedTab, setSelectedTab } = useSideContent(workspaceLocation,
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
     assessment?.questions[props.questionId].grader !== undefined
-    ? SideContentType.grading
-    : SideContentType.questionOverview
-  )
-  
+      ? SideContentType.grading
+      : SideContentType.questionOverview
+  );
+
   const {
     activeEditorTabIndex,
     editorTabs,
@@ -105,12 +110,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     updateEditorBreakpoints: handleEditorUpdateBreakpoints,
     updateEditorValue: handleEditorValueChange,
     updateActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
-    removeEditorTab: handleRemoveEditorTabByIndex,
-  } = useEditorState(workspaceLocation)
+    removeEditorTab: handleRemoveEditorTabByIndex
+  } = useEditorState(workspaceLocation);
 
-  const {
-    clearReplOutput
-  } = useRepl(workspaceLocation)
+  const { clearReplOutput } = useRepl(workspaceLocation);
 
   const navigate = useNavigate();
 
@@ -133,7 +136,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     promptAutocomplete: handlePromptAutocomplete,
     resetWorkspace: handleResetWorkspace,
     updateHasUnsavedChanges: handleUpdateHasUnsavedChanges
-  } = useWorkspace(workspaceLocation)
+  } = useWorkspace(workspaceLocation);
 
   const dispatch = useDispatch();
   const {
@@ -141,16 +144,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleUpdateCurrentAssessmentId,
     handleRunAllTestcases,
     handleAssessmentFetch,
-    handleSave,
+    handleSave
   } = useMemo(() => {
     return {
-      handleTestcaseEval: (id: number) => dispatch(allWorkspaceActions.evalTestCase(workspaceLocation, id)),
+      handleTestcaseEval: (id: number) =>
+        dispatch(allWorkspaceActions.evalTestCase(workspaceLocation, id)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
-        dispatch(allWorkspaceActions.updateCurrentAssessmentId(workspaceLocation, assessmentId, questionId)),
-      handleRunAllTestcases: () => dispatch(allWorkspaceActions.evalEditorAndTestcases(workspaceLocation)),
+        dispatch(
+          allWorkspaceActions.updateCurrentAssessmentId(workspaceLocation, assessmentId, questionId)
+        ),
+      handleRunAllTestcases: () =>
+        dispatch(allWorkspaceActions.evalEditorAndTestcases(workspaceLocation)),
       handleAssessmentFetch: (assessmentId: number) => dispatch(fetchAssessment(assessmentId)),
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
-        dispatch(submitAnswer(id, answer)),
+        dispatch(submitAnswer(id, answer))
     };
   }, [dispatch]);
 
@@ -345,17 +352,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       autogradingResults: options.autogradingResults ?? [],
       editorState: {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
+        editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }]
       },
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
       editorTestcases: options.editorTestcases ?? []
     });
     handleResetWorkspace(resetWorkspaceOptions);
-    handleChangeExecTime(
-      question.library.execTimeMs ?? defaultAssessment.execTime
+    handleChangeExecTime(question.library.execTimeMs ?? defaultAssessment.execTime);
+    handleClearContext(
+      context.chapter,
+      context.variant,
+      workspaceGlobals,
+      context.externalContext.symbols
     );
-    handleClearContext(context.chapter, context.variant, workspaceGlobals, context.externalContext.symbols);
     handleUpdateHasUnsavedChanges(false);
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -636,10 +646,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const replButtons = useMemo(() => {
     const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={clearReplOutput}
-        key="clear_repl"
-      />
+      <ControlBarClearButton handleReplOutputClear={clearReplOutput} key="clear_repl" />
     );
     const evalButton = (
       <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
@@ -736,7 +743,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           removeEditorTabByIndex: handleRemoveEditorTabByIndex,
           // TODO check this
           handleEditorUpdateBreakpoints,
-          handleEditorValueChange,
+          handleEditorValueChange
         }
       : undefined;
   const mcqProps = {

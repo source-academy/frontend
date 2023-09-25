@@ -1,8 +1,14 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
-import { defaultWorkspaceManager, WorkspaceManagerState } from 'src/commons/redux/workspace/AllWorkspacesRedux';
+import {
+  defaultWorkspaceManager,
+  WorkspaceManagerState
+} from 'src/commons/redux/workspace/AllWorkspacesRedux';
 import { allWorkspacesReducer as WorkspaceReducer } from 'src/commons/redux/workspace/AllWorkspacesRedux';
-import { defaultPlayground, PlaygroundState } from 'src/commons/redux/workspace/playground/PlaygroundRedux';
+import {
+  defaultPlayground,
+  PlaygroundState
+} from 'src/commons/redux/workspace/playground/PlaygroundRedux';
 
 import {
   CodeOutput,
@@ -66,7 +72,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  WorkspaceLocation,
+  WorkspaceLocation
 } from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
@@ -1012,11 +1018,11 @@ describe('LOG_OUT', () => {
               [3, 4]
             ]
           }
-        ],
+        ]
       },
       repl: {
         ...defaultPlayground.repl,
-        replValue: 'test repl value here',
+        replValue: 'test repl value here'
       },
       sharedbConnected: false,
       usingSubst: false,

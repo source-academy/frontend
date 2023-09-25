@@ -1,24 +1,24 @@
-import { combineReducers } from "@reduxjs/toolkit";
+import { combineReducers } from '@reduxjs/toolkit';
 
-import { FileSystemReducer } from "../fileSystem/FileSystemReducer";
-import { AcademyReducer } from "./academy/AcademyReducer";
-import { AchievementReducer } from "./achievement/AchievementReducer";
-import { OverallState } from "./AllTypes";
-import { applicationReducer } from "./ApplicationRedux";
-import { dashboardReducer } from "./DashboardRedux";
-import { routerReducer } from "./RouterReducer";
-import { sessionsReducer } from "./session/SessionsReducer";
-import { allWorkspacesReducer } from "./workspace/AllWorkspacesRedux";
+import { AcademyReducer } from './academy/AcademyReducer';
+import { AchievementReducer } from './achievement/AchievementReducer';
+import { OverallState } from './AllTypes';
+import { applicationReducer } from './ApplicationRedux';
+import { dashboardReducer } from './DashboardRedux';
+import { fileSystemReducer } from './FileSystemRedux';
+import { routerReducer } from './RouterReducer';
+import { sessionsReducer } from './session/SessionsReducer';
+import { allWorkspacesReducer } from './workspace/AllWorkspacesRedux';
 
 const rootReducer = combineReducers<OverallState>({
   academy: AcademyReducer,
   achievement: AchievementReducer,
   application: applicationReducer,
   dashboard: dashboardReducer,
-  fileSystem: FileSystemReducer,
+  fileSystem: fileSystemReducer,
   router: routerReducer,
   session: sessionsReducer,
-  workspaces: allWorkspacesReducer,
-})
+  workspaces: allWorkspacesReducer
+});
 
-export default rootReducer
+export default rootReducer;

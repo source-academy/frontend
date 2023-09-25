@@ -16,7 +16,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
-import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
+import {
+  useEditorState,
+  useRepl,
+  useSideContent,
+  useWorkspace
+} from 'src/commons/redux/workspace/Hooks';
 import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { ReplProps } from 'src/commons/repl/Repl';
 import { useResponsive } from 'src/commons/utils/Hooks';
@@ -130,7 +135,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
 
-  const { 
+  const {
     activeEditorTabIndex,
     editorTabs,
     editorSessionId,
@@ -139,15 +144,13 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     updateEditorValue: handleEditorValueChange,
     updateActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
     updateEditorBreakpoints: handleEditorUpdateBreakpoints,
-    removeEditorTab: handleRemoveEditorTabByIndex,
-  } = useEditorState(workspaceLocation)
-  const { 
-    clearReplOutput: handleReplOutputClear
-  } = useRepl(workspaceLocation)
+    removeEditorTab: handleRemoveEditorTabByIndex
+  } = useEditorState(workspaceLocation);
+  const { clearReplOutput: handleReplOutputClear } = useRepl(workspaceLocation);
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     SideContentType.questionOverview
-  )
+  );
 
   const {
     editorTestcases,
@@ -159,7 +162,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     navDeclaration: handleDeclarationNavigate,
     promptAutocomplete: handlePromptAutocomplete,
     updateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
-    updateWorkspace: handleUpdateWorkspace,
+    updateWorkspace: handleUpdateWorkspace
   } = useWorkspace('githubAssessment');
 
   /**
@@ -173,14 +176,13 @@ const GitHubAssessmentWorkspace: React.FC = () => {
       handleUpdateWorkspace({
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         editorState: {
-
           editorTabs: [
             {
               value: currentTaskList[actualTaskIndex].savedCode,
               highlightedLines: [],
               breakpoints: []
             }
-          ],
+          ]
         },
         programPrependValue: currentTaskList[actualTaskIndex].testPrepend,
         programPostpendValue: currentTaskList[actualTaskIndex].testPostpend,
@@ -841,7 +843,9 @@ const GitHubAssessmentWorkspace: React.FC = () => {
           setTaskTestcases={setTaskTestcases}
           setTestPrepend={setTestPrepend}
           setTestPostpend={setTestPostpend}
-          handleTestcaseEval={testcaseId => dispatch(allWorkspaceActions.evalTestCase(workspaceLocation, testcaseId))}
+          handleTestcaseEval={testcaseId =>
+            dispatch(allWorkspaceActions.evalTestCase(workspaceLocation, testcaseId))
+          }
         />
       ),
       id: SideContentType.testcases
@@ -1070,7 +1074,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints,
     setActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
-    removeEditorTabByIndex: handleRemoveEditorTabByIndex,
+    removeEditorTabByIndex: handleRemoveEditorTabByIndex
   };
   const replProps: ReplProps = {
     handleReplEval: handleReplEval,
@@ -1090,8 +1094,8 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
     sideContentProps: sideContentProps(),
-    replProps, 
-    workspaceLocation,
+    replProps,
+    workspaceLocation
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

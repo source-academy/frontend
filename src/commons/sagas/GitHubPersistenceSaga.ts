@@ -118,13 +118,10 @@ function* githubSaveFile(): any {
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const { 
-    editorState: {
-      activeEditorTabIndex,
-      editorTabs
-    },
+  const {
+    editorState: { activeEditorTabIndex, editorTabs },
     githubSaveInfo: { repoName, filePath }
-  }: PlaygroundState = yield selectWorkspace('playground')  
+  }: PlaygroundState = yield selectWorkspace('playground');
 
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
@@ -171,12 +168,9 @@ function* githubSaveFileAs(): any {
     }));
   const repoName = yield call(getRepoName);
 
-  const { 
-    editorState: {
-      activeEditorTabIndex,
-      editorTabs
-    }
-  }: PlaygroundState = yield selectWorkspace('playground')
+  const {
+    editorState: { activeEditorTabIndex, editorTabs }
+  }: PlaygroundState = yield selectWorkspace('playground');
 
   if (activeEditorTabIndex === null) {
     throw new Error('No active editor tab found.');

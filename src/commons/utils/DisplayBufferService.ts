@@ -1,5 +1,7 @@
-import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
+// import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 import { consoleOverloads } from './ConsoleOverload';
+
+type SideContentLocation = 'assessment' | 'githubAssessment' | 'grading' | 'playground' | 'sicp' | 'sourcecast' | 'sourcereel' | `stories.${string}`
 
 class BufferService {
   private buffer: string[];

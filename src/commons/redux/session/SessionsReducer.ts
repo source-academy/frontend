@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import { createSlice,PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Variant } from 'js-slang/dist/types';
 import { GameState, Role, Story } from 'src/commons/application/ApplicationTypes';
 import {
@@ -8,18 +8,19 @@ import {
   NotificationConfiguration,
   Tokens,
   UpdateCourseConfiguration,
-  User,
+  User
 } from 'src/commons/application/types/SessionTypes';
 import { UserCourse } from 'src/commons/application/types/SessionTypes';
-import { Assessment, AssessmentConfiguration, AssessmentOverview,} from 'src/commons/assessment/AssessmentTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview
+} from 'src/commons/assessment/AssessmentTypes';
 import { MissionRepoData } from 'src/commons/githubAssessments/GitHubMissionTypes';
 import { Notification } from 'src/commons/notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from 'src/commons/utils/GitHubPersistenceHelper';
 import { Grading, GradingOverview } from 'src/features/grading/GradingTypes';
-import {
-  Device,
-  DeviceSession,
-} from 'src/features/remoteExecution/RemoteExecutionTypes';
+import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 export type SessionState = {
   // Tokens
@@ -74,7 +75,7 @@ export type SessionState = {
   readonly githubAccessToken?: string;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
-}
+};
 
 export const defaultSession: SessionState = {
   courses: [],
@@ -97,94 +98,100 @@ export const defaultSession: SessionState = {
   gradingOverviews: undefined,
   gradings: new Map<number, Grading>(),
   notifications: []
-}
+};
 
 export const { actions: sessionReducerActions, reducer: sessionsReducer } = createSlice({
   name: 'session',
   initialState: defaultSession,
   reducers: {
     remoteExecUpdateDevices(state, { payload }: PayloadAction<Device[]>) {
-      state.remoteExecutionDevices = payload
+      state.remoteExecutionDevices = payload;
     },
     remoteExecUpdateSession(state, { payload }: PayloadAction<DeviceSession>) {
-      state.remoteExecutionSession = payload
+      state.remoteExecutionSession = payload;
     },
     removeGitHubOctokitObjectAndAccessToken(state) {
-      state.githubOctokitObject.octokit = undefined
-      state.githubAccessToken = undefined
+      state.githubOctokitObject.octokit = undefined;
+      state.githubAccessToken = undefined;
     },
-    setAdminPanelCourseRegistrations(state, { payload }: PayloadAction<AdminPanelCourseRegistration[]>) {
-      state.userCourseRegistrations = payload
+    setAdminPanelCourseRegistrations(
+      state,
+      { payload }: PayloadAction<AdminPanelCourseRegistration[]>
+    ) {
+      state.userCourseRegistrations = payload;
     },
     setAssessmentConfigurations(state, { payload }: PayloadAction<AssessmentConfiguration[]>) {
-      state.assessmentConfigurations = payload
+      state.assessmentConfigurations = payload;
     },
-    setConfigurableNotificationConfigs(state, { payload }: PayloadAction<NotificationConfiguration[]>) {
-      state.configurableNotificationConfigs = payload
+    setConfigurableNotificationConfigs(
+      state,
+      { payload }: PayloadAction<NotificationConfiguration[]>
+    ) {
+      state.configurableNotificationConfigs = payload;
     },
     setCourseConfiguration(state, { payload }: PayloadAction<UpdateCourseConfiguration>) {
       return {
         ...state,
         ...payload
-      }
+      };
     },
     setCourseRegistration(state, { payload }: PayloadAction<Partial<CourseRegistration>>) {
       return {
         ...state,
         ...payload
-      }
+      };
     },
     setGithubAccessToken(state, { payload }: PayloadAction<string | undefined>) {
-      state.githubAccessToken = payload
+      state.githubAccessToken = payload;
     },
     setGithubAssessment(state, { payload }: PayloadAction<MissionRepoData>) {
-      state.githubAssessment = payload
+      state.githubAssessment = payload;
     },
     setGithubOctokitObject: {
       prepare: (authToken?: string) => ({ payload: generateOctokitInstance(authToken ?? '') }),
       reducer(state, { payload }: PayloadAction<ReturnType<typeof generateOctokitInstance>>) {
-        state.githubOctokitObject.octokit = payload
+        state.githubOctokitObject.octokit = payload;
       }
     },
     setGoogleUser(state, { payload }: PayloadAction<string | undefined>) {
-      state.googleUser = payload
+      state.googleUser = payload;
     },
     setNotificationConfigs(state, { payload }: PayloadAction<NotificationConfiguration[]>) {
-      state.notificationConfigs = payload
+      state.notificationConfigs = payload;
     },
     setTokens(state, { payload }: PayloadAction<Tokens>) {
-      state.accessToken = payload.accessToken
-      state.refreshToken = payload.refreshToken
+      state.accessToken = payload.accessToken;
+      state.refreshToken = payload.refreshToken;
     },
     setUser(state, { payload }: PayloadAction<User>) {
       return {
         ...state,
         ...payload
-      }
+      };
     },
     updateAllUserXp(state, { payload }: PayloadAction<string[][]>) {
-      state.allUserXp = payload
+      state.allUserXp = payload;
     },
     updateAssessment(state, { payload }: PayloadAction<Assessment>) {
-      state.assessments.set(payload.id, payload)
+      state.assessments.set(payload.id, payload);
     },
     updateAssessmentOverviews(state, { payload }: PayloadAction<AssessmentOverview[]>) {
-      state.assessmentOverviews = payload
+      state.assessmentOverviews = payload;
     },
     updateGrading: {
-      prepare: (submissionId: number, grading: Grading) => ({ payload: { submissionId, grading }}),
-      reducer(state, { payload }: PayloadAction<{ grading: Grading, submissionId: number }>) {
-        state.gradings.set(payload.submissionId, payload.grading)
+      prepare: (submissionId: number, grading: Grading) => ({ payload: { submissionId, grading } }),
+      reducer(state, { payload }: PayloadAction<{ grading: Grading; submissionId: number }>) {
+        state.gradings.set(payload.submissionId, payload.grading);
       }
     },
     updateGradingOverviews(state, { payload }: PayloadAction<GradingOverview[]>) {
-      state.gradingOverviews = payload
+      state.gradingOverviews = payload;
     },
     updateNotifications(state, { payload }: PayloadAction<Notification[]>) {
-      state.notifications = payload
+      state.notifications = payload;
     },
     updateTotalXp(state, { payload }: PayloadAction<number>) {
-      state.xp = payload
+      state.xp = payload;
     }
   }
-})
+});

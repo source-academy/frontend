@@ -16,10 +16,14 @@ import {
   logoutGitHub,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
-import { getDefaultFilePath } from 'src/commons/redux/AllTypes';
 import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
-import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
-import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import {
+  useEditorState,
+  useRepl,
+  useSideContent,
+  useWorkspace
+} from 'src/commons/redux/workspace/Hooks';
+import { getDefaultFilePath, getWorkspaceBasePath, SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { ReplProps } from 'src/commons/repl/Repl';
 import { useResponsive, useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
@@ -88,7 +92,6 @@ import {
   Input,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { getWorkspaceBasePath } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
   makeDataVisualizerTabFrom,
@@ -166,7 +169,10 @@ export async function handleHash(
     ];
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
-      allWorkspaceActions.removeEditorTabsForDirectory(workspaceLocation, getWorkspaceBasePath(workspaceLocation))
+      allWorkspaceActions.removeEditorTabsForDirectory(
+        workspaceLocation,
+        getWorkspaceBasePath(workspaceLocation)
+      )
     );
     // Add editor tabs from the query string.
     editorTabFilePaths.forEach(filePath =>
@@ -176,7 +182,9 @@ export async function handleHash(
 
     // By default, use the first editor tab.
     const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
-    dispatch(allWorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
+    dispatch(
+      allWorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+    );
     if (chapter) {
       // TODO: To migrate the state logic away from playgroundSourceChapter
       //       and playgroundSourceVariant into the language config instead
@@ -217,8 +225,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     updateEditorValue: handleEditorValueChange,
     updateEditorHighlightedLines: setEditorHighlightedLines,
     updateEditorBreakpoints: handleEditorUpdateBreakpoints,
-    setEditorSessionId: handleSetEditorSessionId,
-  } = useEditorState(workspaceLocation)
+    setEditorSessionId: handleSetEditorSessionId
+  } = useEditorState(workspaceLocation);
 
   // Selectors and handlers migrated over from deprecated withRouter implementation
   const {
@@ -241,29 +249,25 @@ const Playground: React.FC<PlaygroundProps> = props => {
     evalRepl: handleReplEval,
     promptAutocomplete: handlePromptAutocomplete,
     navDeclaration: handleDeclarationNavigate,
-    updateSharedbConnected: handleSetSharedbConnected,
-  } = useWorkspace(workspaceLocation)
+    updateSharedbConnected: handleSetSharedbConnected
+  } = useWorkspace(workspaceLocation);
 
-  const {
-    clearReplOutput: handleReplOutputClear
-  } = useRepl(workspaceLocation)
+  const { clearReplOutput: handleReplOutputClear } = useRepl(workspaceLocation);
 
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useWorkspace('playground')
+  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useWorkspace('playground');
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
     githubOctokitObject
-  } = useSession()
+  } = useSession();
 
   const dispatch = useDispatch();
-  const {
-    handleUsingEnv,
-    handleUsingSubst,
-  } = useMemo(() => {
+  const { handleUsingEnv, handleUsingSubst } = useMemo(() => {
     return {
-      handleUsingEnv: (usingEnv: boolean) => dispatch(allWorkspaceActions.toggleUsingEnv(workspaceLocation, usingEnv)),
+      handleUsingEnv: (usingEnv: boolean) =>
+        dispatch(allWorkspaceActions.toggleUsingEnv(workspaceLocation, usingEnv)),
       handleUsingSubst: (usingSubst: boolean) =>
         dispatch(allWorkspaceActions.toggleUsingSubst(workspaceLocation, usingSubst))
     };
@@ -278,12 +282,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const [lastEdit, setLastEdit] = useState(new Date());
   const [isGreen, setIsGreen] = useState(false);
-  const {
-    selectedTab,
-    setSelectedTab,
-  } = useSideContent(workspaceLocation,
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
-  )
+  );
 
   const [hasBreakpoints, setHasBreakpoints] = useState(false);
   const [sessionId, setSessionId] = useState(() =>
@@ -334,7 +336,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(playgroundConfigLanguage(languageConfig));
         // Disable Folder mode when forcing the Source chapter and variant to follow the current course's.
         // This is because Folder mode only works in Source 2+.
-        handleSetFolderMode(false)
+        handleSetFolderMode(false);
         // dispatch(setFolderMode(workspaceLocation, false));
       }
       return;
@@ -346,7 +348,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
       dispatch,
       fileSystem
     );
-  }, [dispatch, fileSystem, hash, courseSourceChapter, courseSourceVariant, workspaceLocation, handleChapterSelect, handleChangeExecTime, handleSetFolderMode]);
+  }, [
+    dispatch,
+    fileSystem,
+    hash,
+    courseSourceChapter,
+    courseSourceVariant,
+    workspaceLocation,
+    handleChapterSelect,
+    handleChangeExecTime,
+    handleSetFolderMode
+  ]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -374,16 +386,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleEditorValueChange]
   );
 
-  const onEditorBreakpointsChange = React.useCallback((editorTabIndex: number, breakpoints: string[]) => {
-    const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
-    setHasBreakpoints(numberOfBreakpoints > 0)
+  const onEditorBreakpointsChange = React.useCallback(
+    (editorTabIndex: number, breakpoints: string[]) => {
+      const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
+      setHasBreakpoints(numberOfBreakpoints > 0);
 
-    if (numberOfBreakpoints === 0) {
-      handleReplOutputClear()
-    }
+      if (numberOfBreakpoints === 0) {
+        handleReplOutputClear();
+      }
 
-    handleEditorUpdateBreakpoints(editorTabIndex, breakpoints)
-  }, [handleEditorUpdateBreakpoints, handleReplOutputClear])
+      handleEditorUpdateBreakpoints(editorTabIndex, breakpoints);
+    },
+    [handleEditorUpdateBreakpoints, handleReplOutputClear]
+  );
 
   const handleEnvVisualiserReset = useCallback(() => {
     handleUsingEnv(false);
@@ -391,7 +406,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch(allWorkspaceActions.updateEnvSteps(workspaceLocation, -1));
     dispatch(allWorkspaceActions.updateEnvStepsTotal(workspaceLocation, 0));
     dispatch(allWorkspaceActions.toggleUpdateEnv(workspaceLocation, true));
-    
+
     // TODO update to using current tab
     setEditorHighlightedLines(0, []);
   }, [handleUsingEnv, dispatch, workspaceLocation, setEditorHighlightedLines]);
@@ -436,14 +451,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       setSelectedTab(newTabId);
     },
-    [
-      hasBreakpoints,
-      handleEnvVisualiserReset,
-      playgroundSourceChapter,
-      handleUsingSubst,
-      handleUsingEnv,
-      handleReplOutputClear
-    ]
+    [playgroundSourceChapter, hasBreakpoints, setSelectedTab, handleEnvVisualiserReset, handleUsingSubst, handleUsingEnv, handleReplOutputClear]
   );
 
   const pushLog = useCallback(
@@ -453,7 +461,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [sessionId]
   );
 
-  const languageConfig: SALanguage = useTypedSelector(state => state.workspaces.playground.languageConfig);
+  const languageConfig: SALanguage = useTypedSelector(
+    state => state.workspaces.playground.languageConfig
+  );
 
   const autorunButtons = useMemo(() => {
     return (
@@ -474,7 +484,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)}
       />
     );
-  }, [activeEditorTabIndex, handleDebuggerPause, handleDebuggerReset, handleDebuggerResume, handleEditorEval, handleInterruptEval, isDebugging, isEditorAutorun, isRunning, languageConfig.chapter, usingRemoteExecution]);
+  }, [
+    activeEditorTabIndex,
+    handleDebuggerPause,
+    handleDebuggerReset,
+    handleDebuggerResume,
+    handleEditorEval,
+    handleInterruptEval,
+    isDebugging,
+    isEditorAutorun,
+    isRunning,
+    languageConfig.chapter,
+    usingRemoteExecution
+  ]);
 
   const chapterSelectHandler = useCallback(
     (sublanguage: SALanguage, e: any) => {
@@ -633,7 +655,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const getEditorValue = useCallback(
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     // TODO check this
-    () => activeEditorTabIndex !== null ? editorTabs[activeEditorTabIndex].value : "",
+    () => (activeEditorTabIndex !== null ? editorTabs[activeEditorTabIndex].value : ''),
     [editorTabs, activeEditorTabIndex]
   );
 
@@ -648,7 +670,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="session"
       />
     ),
-    [isFolderModeEnabled, editorSessionId, getEditorValue, handleSetEditorSessionId, sharedbConnected]
+    [
+      isFolderModeEnabled,
+      editorSessionId,
+      getEditorValue,
+      handleSetEditorSessionId,
+      sharedbConnected
+    ]
   );
 
   const shareButton = useMemo(() => {
@@ -676,7 +704,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="folder"
       />
     );
-  }, [isFolderModeEnabled, editorSessionId, persistenceFile, githubSaveInfo.repoName, handleSetFolderMode]);
+  }, [
+    isFolderModeEnabled,
+    editorSessionId,
+    persistenceFile,
+    githubSaveInfo.repoName,
+    handleSetFolderMode
+  ]);
 
   useEffect(() => {
     // TODO: To migrate the state logic away from playgroundSourceChapter
@@ -813,7 +847,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isFolderModeEnabled,
     baseFilePath: getWorkspaceBasePath(workspaceLocation),
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate, 
+    handleDeclarationNavigate,
     handlePromptAutocomplete,
     handleSetSharedbConnected,
     handleEditorEval,
@@ -826,7 +860,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
     sourceChapter: languageConfig.chapter,
-    sourceVariant: languageConfig.variant,
+    sourceVariant: languageConfig.variant
   };
 
   const replProps: ReplProps = {
@@ -841,7 +875,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor,
     location: workspaceLocation,
-    handleReplEval,
+    handleReplEval
   };
 
   const sideBarProps: { tabs: SideBarTab[] } = useMemo(() => {
@@ -899,12 +933,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      location: workspaceLocation,
+      location: workspaceLocation
     },
     sideContentIsResizeable:
       selectedTab !== SideContentType.substVisualizer &&
       selectedTab !== SideContentType.envVisualizer,
-    workspaceLocation,
+    workspaceLocation
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

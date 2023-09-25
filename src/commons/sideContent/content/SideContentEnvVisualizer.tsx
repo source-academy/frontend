@@ -55,7 +55,7 @@ type DispatchProps = {
     editorTabIndex: number,
     newHighlightedLines: HighlightedLines[]
   ) => void;
-  handleAlertSideContent: () => void
+  handleAlertSideContent: () => void;
 };
 
 const envVizKeyMap = {
@@ -80,7 +80,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       visualization => {
         this.setState({ visualization });
         if (visualization) {
-          this.props.handleAlertSideContent()
+          this.props.handleAlertSideContent();
         }
       },
       this.state.width,
@@ -452,26 +452,38 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
 }
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
-  state ,
+  state,
   { workspaceLocation }
 ) => {
-  const workspace = getWorkspace(state.workspaces, workspaceLocation)
+  const workspace = getWorkspace(state.workspaces, workspaceLocation);
   return {
     numOfStepsTotal: workspace.envStepsTotal,
     numOfSteps: workspace.envSteps,
     breakpointSteps: workspace.breakpointSteps,
     needEnvUpdate: workspace.updateEnv
-  }
+  };
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch: Dispatch, { workspaceLocation }) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (
+  dispatch: Dispatch,
+  { workspaceLocation }
+) =>
   bindActionCreators(
     {
-      handleAlertSideContent: () => allWorkspaceActions.beginAlertSideContent(workspaceLocation, SideContentType.envVisualizer),
+      handleAlertSideContent: () =>
+        allWorkspaceActions.beginAlertSideContent(workspaceLocation, SideContentType.envVisualizer),
       handleEditorEval: () => allWorkspaceActions.evalEditor(workspaceLocation),
       handleEnvStepUpdate: (steps: number) =>
         allWorkspaceActions.updateEnvSteps(workspaceLocation, steps),
-      setEditorHighlightedLines: ( editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => allWorkspaceActions.updateEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
+      setEditorHighlightedLines: (
+        editorTabIndex: number,
+        newHighlightedLines: HighlightedLines[]
+      ) =>
+        allWorkspaceActions.updateEditorHighlightedLinesAgenda(
+          workspaceLocation,
+          editorTabIndex,
+          newHighlightedLines
+        )
     },
     dispatch
   );

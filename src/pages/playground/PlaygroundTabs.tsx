@@ -17,14 +17,18 @@ export const mobileOnlyTabIds: readonly SideContentType[] = [
 ];
 export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
-export const makeDataVisualizerTabFrom = (workspaceLocation: PlaygroundWorkspaces): SideContentTab => ({
+export const makeDataVisualizerTabFrom = (
+  workspaceLocation: PlaygroundWorkspaces
+): SideContentTab => ({
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer workspaceLocation={workspaceLocation} />,
   id: SideContentType.dataVisualizer
 });
 
-export const makeEnvVisualizerTabFrom = (workspaceLocation: PlaygroundWorkspaces): SideContentTab => ({
+export const makeEnvVisualizerTabFrom = (
+  workspaceLocation: PlaygroundWorkspaces
+): SideContentTab => ({
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,

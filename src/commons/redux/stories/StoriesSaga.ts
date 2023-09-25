@@ -1,17 +1,23 @@
-import { call, put, select } from "redux-saga/effects";
-import { Tokens } from "src/commons/application/types/SessionTypes";
-import { showWarningMessage } from "src/commons/utils/notifications/NotificationsHelper";
-import { defaultStoryContent } from "src/commons/utils/StoriesHelper";
-import { deleteStory, getStoriesUser, getStory, postNewStoriesUsers, postStory, updateStory } from "src/features/stories/storiesComponents/BackendAccess";
-import { StoriesRole, StoryData, StoryView } from "src/features/stories/StoriesTypes";
+import { call, put, select } from 'redux-saga/effects';
+import { Tokens } from 'src/commons/application/types/SessionTypes';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import { defaultStoryContent } from 'src/commons/utils/StoriesHelper';
+import {
+  deleteStory,
+  getStoriesUser,
+  getStory,
+  postNewStoriesUsers,
+  postStory,
+  updateStory
+} from 'src/features/stories/storiesComponents/BackendAccess';
+import { StoriesRole, StoryData, StoryView } from 'src/features/stories/StoriesTypes';
 
-import { OverallState } from "../AllTypes";
-import { combineSagaHandlers } from "../utils";
-import { selectTokens, selectWorkspace } from "../utils/Selectors";
-import { evalCode } from "../workspace/NewWorkspaceSaga";
-import { StoriesEnvState } from "../workspace/WorkspaceReduxTypes";
-import { storiesActions } from "./StoriesRedux";
-
+import { OverallState } from '../AllTypes';
+import { combineSagaHandlers } from '../utils';
+import { selectTokens, selectWorkspace } from '../utils/Selectors';
+import { evalCode } from '../workspace/NewWorkspaceSaga';
+import { StoriesEnvState } from '../workspace/WorkspaceReduxTypes';
+import { storiesActions } from './StoriesRedux';
 
 export const StoriesSaga = combineSagaHandlers(storiesActions, {
   addNewStoriesUsersToCourse: function* ({ payload: { users, provider } }) {
@@ -24,13 +30,12 @@ export const StoriesSaga = combineSagaHandlers(storiesActions, {
   },
   createStory: function* ({ payload: story }) {
     const tokens: Tokens = yield selectTokens();
-    const userId: number | undefined = yield select((state: OverallState) => state.workspaces.stories.userId);
+    const userId: number | undefined = yield select(
+      (state: OverallState) => state.workspaces.stories.userId
+    );
 
     if (userId === undefined) {
-      yield call(
-        showWarningMessage,
-        'Failed to create story: Invalid user'
-      );
+      yield call(showWarningMessage, 'Failed to create story: Invalid user');
       return;
     }
 
@@ -57,13 +62,14 @@ export const StoriesSaga = combineSagaHandlers(storiesActions, {
     yield put(storiesActions.getStoriesList());
   },
   evalStory: function* ({ payload: { env, code } }) {
-    const { execTime, context }: StoriesEnvState = yield selectWorkspace(`stories.${env}`)
+    const { execTime, context }: StoriesEnvState = yield selectWorkspace(`stories.${env}`);
 
     const codeFilePath = '/code.js';
     const codeFiles = {
       [codeFilePath]: code
     };
-    yield call(evalCode,
+    yield call(
+      evalCode,
       codeFiles,
       codeFilePath,
       context,

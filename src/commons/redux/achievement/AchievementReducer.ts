@@ -4,20 +4,13 @@ import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import {
   AchievementGoal,
   AchievementItem,
-  AchievementState,
   AchievementUser,
   EventType,
   GoalDefinition,
-  GoalProgress,
+  GoalProgress
 } from '../../../features/achievement/AchievementTypes';
+import { defaultAchievement } from '../AllTypes';
 import { createActions } from '../utils';
-
-export const defaultAchievement: AchievementState = {
-  achievements: [],
-  goals: [],
-  users: [],
-  assessmentOverviews: []
-};
 
 const sagaActions = createActions('achievement', {
   addEvent: (eventNames: EventType[]) => eventNames,
@@ -31,32 +24,35 @@ const sagaActions = createActions('achievement', {
   handleEvent: (eventNames: EventType[][]) => eventNames,
   removeAchievement: (uuid: string) => uuid,
   removeGoal: (uuid: string) => uuid,
-  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => ({ studentCourseRegId, progress }),
-  updateOwnGoalProgress: (progress: GoalProgress) => progress,
-})
+  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => ({
+    studentCourseRegId,
+    progress
+  }),
+  updateOwnGoalProgress: (progress: GoalProgress) => progress
+});
 
 const { actions, reducer: AchievementReducer } = createSlice({
   name: 'achievement',
   initialState: defaultAchievement,
   reducers: {
     saveAchievements(state, { payload }: PayloadAction<AchievementItem[]>) {
-      state.achievements = payload
+      state.achievements = payload;
     },
     saveGoals(state, { payload }: PayloadAction<AchievementGoal[]>) {
-      state.goals = payload
+      state.goals = payload;
     },
     saveUsers(state, { payload }: PayloadAction<AchievementUser[]>) {
-      state.users = payload
+      state.users = payload;
     },
     saveUserAssessmentOverviews(state, { payload }: PayloadAction<AssessmentOverview[]>) {
-      state.assessmentOverviews = payload
+      state.assessmentOverviews = payload;
     }
   }
-})
+});
 
 export const achievementActions = {
   ...sagaActions,
   ...actions
-}
+};
 
-export { AchievementReducer }
+export { AchievementReducer };

@@ -76,8 +76,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const [originalMaxXp, setOriginalMaxXp] = useState(0);
   const navigate = useNavigate();
 
-  const { 
-    activeEditorTabIndex, 
+  const {
+    activeEditorTabIndex,
     editorTabs,
     editorSessionId,
     isEditorAutorun,
@@ -86,15 +86,10 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     updateActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
     updateEditorValue: handleEditorValueChange,
     updateEditorBreakpoints: handleEditorUpdateBreakpoints
-  } = useEditorState(workspaceLocation)
-  useSideContent(
-    workspaceLocation,
-    SideContentType.introduction
-  )
+  } = useEditorState(workspaceLocation);
+  useSideContent(workspaceLocation, SideContentType.introduction);
 
-  const {
-    clearReplOutput: handleReplOutputClear,
-  } = useRepl(workspaceLocation)
+  const { clearReplOutput: handleReplOutputClear } = useRepl(workspaceLocation);
 
   const {
     isRunning,
@@ -108,7 +103,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     resetWorkspace: handleResetWorkspace,
     updateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
     updateWorkspace: handleUpdateWorkspace
-  } = useWorkspace(workspaceLocation)
+  } = useWorkspace(workspaceLocation);
 
   /**
    * After mounting (either an older copy of the assessment
@@ -130,15 +125,14 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   useEffect(() => checkWorkspaceReset());
 
   const dispatch = useDispatch();
-  const {
-    handleSubmitAnswer,
-    handleUpdateCurrentAssessmentId,
-  } = useMemo(() => {
+  const { handleSubmitAnswer, handleUpdateCurrentAssessmentId } = useMemo(() => {
     return {
       handleSubmitAnswer: (id: number, answer: string | number) =>
         dispatch(submitAnswer(id, answer)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
-        dispatch(allWorkspaceActions.updateCurrentAssessmentId(workspaceLocation, assessmentId, questionId)),
+        dispatch(
+          allWorkspaceActions.updateCurrentAssessmentId(workspaceLocation, assessmentId, questionId)
+        )
     };
   }, [dispatch]);
 
@@ -271,14 +265,13 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     handleResetWorkspace({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorState: {
-
         editorTabs: [
           {
             value: editorValue,
             highlightedLines: [],
             breakpoints: []
           }
-        ],
+        ]
       },
       programPrependValue,
       programPostpendValue
@@ -514,7 +507,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
     return {
       tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
-      location: workspaceLocation,
+      location: workspaceLocation
     };
   };
 
@@ -636,7 +629,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             removeEditorTabByIndex: handleRemoveEditorTabByIndex,
             handleEditorUpdateBreakpoints,
             handleEditorEval,
-            handleEditorValueChange,
+            handleEditorValueChange
           }
         : undefined,
     hasUnsavedChanges: hasUnsavedChanges,

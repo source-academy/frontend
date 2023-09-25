@@ -23,11 +23,11 @@ type StateProps = {
   sourceVariant: Variant;
   // externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
-  location: SideContentLocation
+  location: SideContentLocation;
 };
 
 type DispatchProps = {
-  handleReplEval: () => void
+  handleReplEval: () => void;
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
 };

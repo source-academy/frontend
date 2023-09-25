@@ -27,7 +27,7 @@ const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {
     languageConfig: { mainLanguage: lang }
-  } = useWorkspace('playground')
+  } = useWorkspace('playground');
 
   const dispatch = useDispatch();
   const selectLang = (language: SupportedLanguage) => {

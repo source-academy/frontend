@@ -2,8 +2,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import Stats from 'browserfs/dist/node/core/node_fs_stats';
 import path from 'path';
 
-import { getWorkspaceBasePath } from '../../pages/fileSystem/createInBrowserFileSystem';
-import { SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
+import { getWorkspaceBasePath,SideContentLocation } from '../redux/workspace/WorkspaceReduxTypes';
 
 type File = {
   path: string;
@@ -107,14 +106,15 @@ export const overwriteFilesInWorkspace = (
   workspaceLocation: SideContentLocation,
   fileSystem: FSModule,
   files: Record<string, string>
-): Promise<void> => rmFilesInDirRecursively(fileSystem, getWorkspaceBasePath(workspaceLocation)).then(() => {
-  return new Promise(async (resolve, reject) => {
-    for (const [filePath, fileContents] of Object.entries(files)) {
-      await writeFileRecursively(fileSystem, filePath, fileContents).catch(err => reject(err));
-    }
-    resolve();
+): Promise<void> =>
+  rmFilesInDirRecursively(fileSystem, getWorkspaceBasePath(workspaceLocation)).then(() => {
+    return new Promise(async (resolve, reject) => {
+      for (const [filePath, fileContents] of Object.entries(files)) {
+        await writeFileRecursively(fileSystem, filePath, fileContents).catch(err => reject(err));
+      }
+      resolve();
+    });
   });
-});
 
 /**
  * Removes the files & directories in a directory recursively, but leave

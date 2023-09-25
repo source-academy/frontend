@@ -1,11 +1,14 @@
-import { HighlightedLines, Position } from "src/commons/editor/EditorTypes"
+import { HighlightedLines, Position } from 'src/commons/editor/EditorTypes';
 
-import { type EditorTabState,getDefaultEditorState } from "../WorkspaceReduxTypes"
-import { buildReducer, createActions } from "../../utils"
+import { buildReducer, createActions } from '../../utils';
+import { EditorTabState, getDefaultEditorState } from '../WorkspaceStateTypes';
 
 export const editorActions = createActions('editorBase', {
   addEditorTab: (filePath: string, editorValue: string) => ({ filePath, editorValue }),
-  moveCursor: (editorTabIndex: number, newCursorPosition: Position) => ({ editorTabIndex, newCursorPosition }),
+  moveCursor: (editorTabIndex: number, newCursorPosition: Position) => ({
+    editorTabIndex,
+    newCursorPosition
+  }),
   removeEditorTab: (editorTabIndex: number) => editorTabIndex,
   removeEditorTabForFile: (removedFilePath: string) => removedFilePath,
   removeEditorTabsForDirectory: (removedDirectoryPath: string) => removedDirectoryPath,
@@ -20,13 +23,25 @@ export const editorActions = createActions('editorBase', {
   toggleFolderMode: 0,
   updateActiveEditorTab: (editorOptions: Partial<EditorTabState> | undefined) => editorOptions,
   updateActiveEditorTabIndex: (activeEditorTabIndex: number | null) => activeEditorTabIndex,
-  updateEditorBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => ({ editorTabIndex, newBreakpoints }),
-  updateEditorHighlightedLines: (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => ({ editorTabIndex, newHighlightedLines }),
-  updateEditorHighlightedLinesAgenda: (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => ({ editorTabIndex, newHighlightedLines }),
-  updateEditorValue: (editorTabIndex: number, newEditorValue: string) => ({ editorTabIndex, newEditorValue }),
-})
+  updateEditorBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => ({
+    editorTabIndex,
+    newBreakpoints
+  }),
+  updateEditorHighlightedLines: (
+    editorTabIndex: number,
+    newHighlightedLines: HighlightedLines[]
+  ) => ({ editorTabIndex, newHighlightedLines }),
+  updateEditorHighlightedLinesAgenda: (
+    editorTabIndex: number,
+    newHighlightedLines: HighlightedLines[]
+  ) => ({ editorTabIndex, newHighlightedLines }),
+  updateEditorValue: (editorTabIndex: number, newEditorValue: string) => ({
+    editorTabIndex,
+    newEditorValue
+  })
+});
 
-export const editorActionNames = Object.keys(editorActions) as Array<keyof typeof editorActions>
+export const editorActionNames = Object.keys(editorActions) as Array<keyof typeof editorActions>;
 
 // export const {
 //   actions: test2,
@@ -46,11 +61,8 @@ export const editorActionNames = Object.keys(editorActions) as Array<keyof typeo
 
 // test2.addEditorTab()
 
-
-export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildReducer(
-  getDefaultEditorState(defaultTabs),
-  editorActions, 
-  {
+export const getEditorReducer = (defaultTabs: EditorTabState[] = []) =>
+  buildReducer(getDefaultEditorState(defaultTabs), editorActions, {
     addEditorTab(state, { payload }) {
       const { filePath, editorValue } = payload;
 
@@ -61,8 +73,8 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
       const fileIsAlreadyOpen = openedEditorTabIndex !== -1;
       if (fileIsAlreadyOpen) {
         // If the file is already opened just swap to the tab
-        state.activeEditorTabIndex = openedEditorTabIndex
-        return
+        state.activeEditorTabIndex = openedEditorTabIndex;
+        return;
       }
 
       state.editorTabs.push({
@@ -70,10 +82,10 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
         value: editorValue,
         highlightedLines: [],
         breakpoints: []
-      })
+      });
 
       // Check if this works properly
-      state.activeEditorTabIndex = state.editorTabs.length + 1
+      state.activeEditorTabIndex = state.editorTabs.length + 1;
     },
     moveCursor(state, { payload }) {
       const { editorTabIndex, newCursorPosition } = payload;
@@ -84,7 +96,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
 
-      state.editorTabs[editorTabIndex].newCursorPosition = newCursorPosition
+      state.editorTabs[editorTabIndex].newCursorPosition = newCursorPosition;
     },
     removeEditorTab(state, { payload: editorTabIndex }) {
       if (editorTabIndex < 0) {
@@ -101,15 +113,15 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
         state.editorTabs.length - 1
       );
 
-      state.activeEditorTabIndex = newActiveEditorTabIndex
-      state.editorTabs.splice(editorTabIndex, 1)
+      state.activeEditorTabIndex = newActiveEditorTabIndex;
+      state.editorTabs.splice(editorTabIndex, 1);
     },
     removeEditorTabForFile(state, { payload: removedFilePath }) {
       const editorTabs = state.editorTabs;
       const editorTabIndexToRemove = editorTabs.findIndex(
         (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
       );
-      if (editorTabIndexToRemove === -1) return
+      if (editorTabIndexToRemove === -1) return;
 
       const newEditorTabs = editorTabs.filter(
         (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
@@ -121,7 +133,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
         editorTabIndexToRemove,
         newEditorTabs.length
       );
-      state.editorTabs = newEditorTabs
+      state.editorTabs = newEditorTabs;
     },
     removeEditorTabsForDirectory(state, { payload: removedDirectoryPath }) {
       const editorTabs = state.editorTabs;
@@ -133,7 +145,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
           return null;
         })
         .filter((index: number | null): index is number => index !== null);
-      if (editorTabIndicesToRemove.length === 0) return
+      if (editorTabIndicesToRemove.length === 0) return;
 
       let newActiveEditorTabIndex = state.activeEditorTabIndex;
       const newEditorTabs = [...editorTabs];
@@ -147,8 +159,8 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
         );
       }
 
-      state.activeEditorTabIndex = newActiveEditorTabIndex
-      state.editorTabs = newEditorTabs
+      state.activeEditorTabIndex = newActiveEditorTabIndex;
+      state.editorTabs = newEditorTabs;
     },
     renameEditorTabsForDirectory(state, { payload: { oldPath, newPath } }) {
       const editorTabs = state.editorTabs;
@@ -161,9 +173,9 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
           : editorTab
       );
 
-      state.editorTabs = newEditorTabs
+      state.editorTabs = newEditorTabs;
     },
-    renameEditorTabForFile(state, { payload: { oldPath, newPath }}) {
+    renameEditorTabForFile(state, { payload: { oldPath, newPath } }) {
       const editorTabs = state.editorTabs;
       const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
         editorTab.filePath === oldPath
@@ -174,19 +186,19 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
           : editorTab
       );
 
-      state.editorTabs = newEditorTabs
+      state.editorTabs = newEditorTabs;
     },
     setEditorSessionId(state, { payload }) {
-      state.editorSessionId = payload
+      state.editorSessionId = payload;
     },
     setIsEditorAutorun(state, { payload }) {
-      state.isEditorAutorun = payload
+      state.isEditorAutorun = payload;
     },
     setIsEditorReadonly(state, { payload }) {
-      state.isEditorReadonly = payload
+      state.isEditorReadonly = payload;
     },
     setFolderMode(state, { payload }) {
-      state.isFolderModeEnabled = payload
+      state.isFolderModeEnabled = payload;
     },
     shiftEditorTab(state, action) {
       const { previousIndex, newIndex } = action.payload;
@@ -203,9 +215,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
         throw new Error('New editor tab index must have a corresponding editor tab!');
       }
       state.activeEditorTabIndex =
-        state.activeEditorTabIndex === previousIndex
-          ? newIndex
-          : state.activeEditorTabIndex;
+        state.activeEditorTabIndex === previousIndex ? newIndex : state.activeEditorTabIndex;
       const editorTabs = state.editorTabs;
       const shiftedEditorTab = editorTabs[previousIndex];
       const filteredEditorTabs = editorTabs.filter(
@@ -218,20 +228,20 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
       ];
     },
     toggleEditorAutorun(state) {
-      state.isEditorAutorun = !state.isEditorAutorun
+      state.isEditorAutorun = !state.isEditorAutorun;
     },
     toggleFolderMode(state) {
-      state.isFolderModeEnabled = !state.isFolderModeEnabled
+      state.isFolderModeEnabled = !state.isFolderModeEnabled;
     },
     updateActiveEditorTab(state, { payload: activeEditorTabOptions }) {
       const activeEditorTabIndex = state.activeEditorTabIndex;
       // Do not modify the workspace state if there is no active editor tab.
-      if (activeEditorTabIndex === null) return 
+      if (activeEditorTabIndex === null) return;
 
       state.editorTabs[activeEditorTabIndex] = {
         ...state.editorTabs[activeEditorTabIndex],
         ...activeEditorTabOptions
-      }
+      };
     },
     updateActiveEditorTabIndex(state, { payload: activeEditorTabIndex }) {
       if (activeEditorTabIndex !== null) {
@@ -242,7 +252,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
           throw new Error('Active editor tab index must have a corresponding editor tab!');
         }
       }
-      state.activeEditorTabIndex = activeEditorTabIndex
+      state.activeEditorTabIndex = activeEditorTabIndex;
     },
     updateEditorBreakpoints(state, { payload }) {
       if (payload.editorTabIndex < 0) {
@@ -251,7 +261,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
       if (payload.editorTabIndex >= state.editorTabs.length) {
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
-      state.editorTabs[payload.editorTabIndex].breakpoints = payload.newBreakpoints
+      state.editorTabs[payload.editorTabIndex].breakpoints = payload.newBreakpoints;
     },
     updateEditorHighlightedLines(state, { payload }) {
       if (payload.editorTabIndex < 0) {
@@ -260,7 +270,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
       if (payload.editorTabIndex >= state.editorTabs.length) {
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
-      state.editorTabs[payload.editorTabIndex].highlightedLines = payload.newHighlightedLines
+      state.editorTabs[payload.editorTabIndex].highlightedLines = payload.newHighlightedLines;
     },
     updateEditorHighlightedLinesAgenda(state, { payload }) {
       if (payload.editorTabIndex < 0) {
@@ -269,7 +279,7 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
       if (payload.editorTabIndex >= state.editorTabs.length) {
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
-      state.editorTabs[payload.editorTabIndex].highlightedLines = payload.newHighlightedLines
+      state.editorTabs[payload.editorTabIndex].highlightedLines = payload.newHighlightedLines;
     },
     updateEditorValue(state, { payload }) {
       if (payload.editorTabIndex < 0) {
@@ -278,9 +288,9 @@ export const getEditorReducer = (defaultTabs: EditorTabState[] = []) => buildRed
       if (payload.editorTabIndex >= state.editorTabs.length) {
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
-      state.editorTabs[payload.editorTabIndex].value = payload.newEditorValue
+      state.editorTabs[payload.editorTabIndex].value = payload.newEditorValue;
     }
-  })
+  });
 
 const getNextActiveEditorTabIndexAfterTabRemoval = (
   activeEditorTabIndex: number | null,
@@ -418,7 +428,7 @@ const getNextActiveEditorTabIndexAfterTabRemoval = (
 //   //   updateActiveEditorTab(state, { payload: activeEditorTabOptions }: PayloadAction<Partial<EditorTabState> | undefined>) {
 //   //     const activeEditorTabIndex = state.activeEditorTabIndex;
 //   //     // Do not modify the workspace state if there is no active editor tab.
-//   //     if (activeEditorTabIndex === null) return 
+//   //     if (activeEditorTabIndex === null) return
 
 //   //     state.editorTabs[activeEditorTabIndex] = {
 //   //       ...state.editorTabs[activeEditorTabIndex],
@@ -549,7 +559,7 @@ const getNextActiveEditorTabIndexAfterTabRemoval = (
 //     builder.addCase(editorActions.setIsEditorAutorun, (state, { payload }) => {
 //       state.isEditorAutorun = payload
 //     })
-    
+
 //     builder.addCase(editorActions.setIsEditorReadonly, (state, { payload }) => {
 //       state.isEditorReadonly = payload
 //     })
@@ -587,7 +597,7 @@ const getNextActiveEditorTabIndexAfterTabRemoval = (
 //     builder.addCase(editorActions.updateActiveEditorTab, (state, { payload: activeEditorTabOptions }) => {
 //       const activeEditorTabIndex = state.activeEditorTabIndex;
 //       // Do not modify the workspace state if there is no active editor tab.
-//       if (activeEditorTabIndex === null) return 
+//       if (activeEditorTabIndex === null) return
 
 //       state.editorTabs[activeEditorTabIndex] = {
 //         ...state.editorTabs[activeEditorTabIndex],
@@ -626,7 +636,7 @@ const getNextActiveEditorTabIndexAfterTabRemoval = (
 //       }
 //       state.editorTabs[payload.editorTabIndex].highlightedLines = payload.newHighlightedLines
 //     })
-    
+
 //     builder.addCase(editorActions.updateEditorHighlightedLinesAgenda, (state, { payload }) => {
 //       if (payload.editorTabIndex < 0) {
 //         throw new Error('Editor tab index must be non-negative!');

@@ -69,9 +69,13 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           }
 
           if (isDirectory) {
-            dispatch(allWorkspaceActions.renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
+            dispatch(
+              allWorkspaceActions.renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath)
+            );
           } else {
-            dispatch(allWorkspaceActions.renameEditorTabForFile(workspaceLocation, oldPath, newPath));
+            dispatch(
+              allWorkspaceActions.renameEditorTabForFile(workspaceLocation, oldPath, newPath)
+            );
           }
           refreshDirectory();
         });

@@ -1,11 +1,5 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 
-import { Grading } from '../../features/grading/GradingTypes';
-import { Assessment } from '../assessment/AssessmentTypes';
-import { FileSystemState } from '../fileSystem/FileSystemTypes';
-import { SessionState } from './types/SessionTypes';
-
-
 export type Story = {
   story: string;
   playStory: boolean;
@@ -61,7 +55,6 @@ export type ErrorOutput = {
 };
 
 export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
-
 
 export enum Role {
   Student = 'student',
@@ -243,7 +236,6 @@ export const getLanguageConfig = (
   return languageConfig;
 };
 
-
 // /**
 //  * Create a default IWorkspaceState for 'resetting' a workspace.
 //  * Takes in parameters to set the js-slang library and chapter.
@@ -295,8 +287,6 @@ export const getLanguageConfig = (
 //   enableDebugging: true,
 //   debuggerContext: {} as DebuggerContext
 // });
-
-
 
 // export const defaultWorkspaceManager: WorkspaceManagerState2 = {
 //   assessment: {
@@ -396,29 +386,6 @@ export const getLanguageConfig = (
 //   }
 // };
 
-export const defaultSession: SessionState = {
-  courses: [],
-  group: null,
-  gameState: {
-    completed_quests: [],
-    collectibles: {}
-  },
-  xp: 0,
-  allUserXp: undefined,
-  story: {
-    story: '',
-    playStory: false
-  },
-  assessments: new Map<number, Assessment>(),
-  assessmentOverviews: undefined,
-  agreedToResearch: undefined,
-  sessionId: Date.now(),
-  githubOctokitObject: { octokit: undefined },
-  gradingOverviews: undefined,
-  gradings: new Map<number, Grading>(),
-  notifications: []
-};
-
 // export const createDefaultStoriesEnv = (
 //   envName: string,
 //   chapter: Chapter,
@@ -433,7 +400,3 @@ export const defaultSession: SessionState = {
 //   usingSubst: false,
 //   debuggerContext: {} as DebuggerContext
 // });
-
-export const defaultFileSystem: FileSystemState = {
-  inBrowserFileSystem: null
-};

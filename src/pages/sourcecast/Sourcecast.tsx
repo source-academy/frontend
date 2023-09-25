@@ -6,7 +6,12 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
-import { useEditorState, useRepl, useSideContent,useWorkspace } from 'src/commons/redux/workspace/Hooks';
+import {
+  useEditorState,
+  useRepl,
+  useSideContent,
+  useWorkspace
+} from 'src/commons/redux/workspace/Hooks';
 import { sourcecastActions } from 'src/commons/redux/workspace/sourceRecorder/SourcecastRedux';
 import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import { ReplProps } from 'src/commons/repl/Repl';
@@ -44,7 +49,7 @@ const Sourcecast: React.FC = () => {
   const { isMobileBreakpoint } = useResponsive();
   const params = useParams<{ sourcecastId: string }>();
 
-  const { 
+  const {
     activeEditorTabIndex,
     editorTabs,
     isEditorAutorun,
@@ -56,7 +61,7 @@ const Sourcecast: React.FC = () => {
     updateEditorValue: handleEditorValueChange,
     updateEditorBreakpoints: handleEditorUpdateBreakpoints,
     setIsEditorReadonly: handleSetIsEditorReadonly
-  } = useEditorState(workspaceLocation)
+  } = useEditorState(workspaceLocation);
 
   // Handlers migrated over from deprecated withRouter implementation
   const {
@@ -82,12 +87,10 @@ const Sourcecast: React.FC = () => {
     evalEditor: handleEditorEval,
     evalRepl: handleReplEval,
     navDeclaration: handleDeclarationNavigate,
-    promptAutocomplete: handlePromptAutocomplete,
+    promptAutocomplete: handlePromptAutocomplete
   } = useWorkspace(workspaceLocation);
 
-  const {
-    clearReplOutput: handleReplOutputClear,
- } = useRepl(workspaceLocation)
+  const { clearReplOutput: handleReplOutputClear } = useRepl(workspaceLocation);
 
   const courseId = useTypedSelector(store => store.session.courseId);
 
@@ -96,7 +99,7 @@ const Sourcecast: React.FC = () => {
     handleFetchSourcecastIndex,
     handleChapterSelect,
     handleSetSourcecastData,
-    handleSetSourcecastStatus,
+    handleSetSourcecastStatus
   } = useMemo(() => {
     return {
       handleFetchSourcecastIndex: () => dispatch(sourcecastActions.fetchSourcecastIndex()),
@@ -114,7 +117,7 @@ const Sourcecast: React.FC = () => {
           sourcecastActions.setSourcecastData(title, description, uid, audioUrl, playbackData)
         ),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
-        dispatch(sourcecastActions.setSourcecastPlaybackStatus(playbackStatus)),
+        dispatch(sourcecastActions.setSourcecastPlaybackStatus(playbackStatus))
     };
   }, [dispatch]);
 
@@ -123,7 +126,10 @@ const Sourcecast: React.FC = () => {
    * which contains the ag-grid table of available Sourcecasts. This is intentional
    * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
-  const { selectedTab, setSelectedTab } = useSideContent(workspaceLocation, SideContentType.introduction)
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.introduction
+  );
 
   const handleQueryParam = () => {
     const newUid = params.sourcecastId;
@@ -184,7 +190,6 @@ const Sourcecast: React.FC = () => {
       setSelectedTab(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
-
 
   const autorunButtons = (
     <ControlBarAutorunButtons
@@ -284,10 +289,10 @@ const Sourcecast: React.FC = () => {
     inputToApply: inputToApply,
     isPlaying: playbackStatus === PlaybackStatus.playing,
     // TODO check editor tab hardcoding
-    handleEditorUpdateBreakpoints: (breakpoints) => handleEditorUpdateBreakpoints(0, breakpoints),
+    handleEditorUpdateBreakpoints: breakpoints => handleEditorUpdateBreakpoints(0, breakpoints),
     setActiveEditorTabIndex: handleSetActiveEditorTabIndex,
     removeEditorTabByIndex: handleRemoveEditorTab,
-    activeEditorTabIndex,
+    activeEditorTabIndex
   };
 
   const replProps: ReplProps = {
@@ -318,7 +323,7 @@ const Sourcecast: React.FC = () => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      location: workspaceLocation,
+      location: workspaceLocation
     },
     workspaceLocation
   };

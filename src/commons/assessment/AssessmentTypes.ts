@@ -156,8 +156,8 @@ export type Library = {
     2?: string; // For mission control
   }>;
   external: {
-    symbols: string[]
-  }
+    symbols: string[];
+  };
   moduleParams?: any;
 };
 

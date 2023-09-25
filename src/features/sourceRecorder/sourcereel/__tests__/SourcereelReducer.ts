@@ -76,9 +76,7 @@ describe('TIMER_PAUSE', () => {
       ...defaultSourcereel,
       recordingStatus: RecordingStatus.paused,
       timeElapsedBeforePause:
-        defaultSourcereel.timeElapsedBeforePause +
-        timeNow -
-        defaultSourcereel.timeResumed
+        defaultSourcereel.timeElapsedBeforePause + timeNow - defaultSourcereel.timeResumed
     });
   });
 });

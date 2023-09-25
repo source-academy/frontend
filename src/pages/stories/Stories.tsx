@@ -23,7 +23,7 @@ const columns = [
   { id: 'actions', header: 'Actions' }
 ];
 
-const useStoriesWorkspace = () => useTypedSelector(state => state.workspaces.stories)
+const useStoriesWorkspace = () => useTypedSelector(state => state.workspaces.stories);
 
 const Stories: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -50,7 +50,7 @@ const Stories: React.FC = () => {
     [dispatch]
   );
 
-  const { storyList } = useStoriesWorkspace()
+  const { storyList } = useStoriesWorkspace();
 
   const handleTogglePinStory = useCallback(
     (id: number) => {

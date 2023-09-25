@@ -14,9 +14,7 @@ import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  clearStoryEnv,
-} from 'src/features/stories/StoriesActions';
+import { clearStoryEnv } from 'src/features/stories/StoriesActions';
 import {
   makeDataVisualizerTabFrom,
   makeHtmlDisplayTabFrom,
@@ -67,7 +65,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       ? commandsEnv
       : DEFAULT_ENV;
 
-
   const chapter = useTypedSelector(
     store => store.workspaces.stories.envs[env]?.context.chapter || Constants.defaultSourceChapter
   );
@@ -81,7 +78,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
   const output = useTypedSelector(store => store.workspaces.stories.envs[env]?.output || []);
 
-  const { selectedTab } = useSideContent(`stories.${env}`)
+  const { selectedTab } = useSideContent(`stories.${env}`);
 
   const envDisplayLabel =
     env === DEFAULT_ENV
@@ -157,7 +154,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     return tabs;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter, variant, output, dispatch, env]);
-
 
   const execEvaluate = () => {
     // We call onChangeTabs with the current tab when the run

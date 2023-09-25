@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { OverallState } from 'src/commons/redux/AllTypes';
-import { EditorTabState } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import { EditorTabState } from 'src/commons/redux/workspace/WorkspaceStateTypes';
 import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
 import { SALanguage } from '../commons/application/ApplicationTypes';

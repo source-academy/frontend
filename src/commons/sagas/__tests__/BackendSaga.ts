@@ -90,7 +90,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
-import BackendSaga from '../BackendSaga';
+import BackendSaga from '../../redux/BackendSaga';
 import {
   getAssessment,
   getAssessmentConfigs,

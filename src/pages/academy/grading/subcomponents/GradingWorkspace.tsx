@@ -24,8 +24,16 @@ import { convertEditorTabStateToProps } from 'src/commons/editor/EditorContainer
 import Markdown from 'src/commons/Markdown';
 import { allWorkspaceActions } from 'src/commons/redux/workspace/AllWorkspacesRedux';
 import { gradingActions } from 'src/commons/redux/workspace/assessment/GradingRedux';
-import { useEditorState, useRepl, useSideContent, useWorkspace } from 'src/commons/redux/workspace/Hooks';
-import { defaultGradingState, SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxTypes';
+import {
+  useEditorState,
+  useRepl,
+  useSideContent,
+  useWorkspace
+} from 'src/commons/redux/workspace/Hooks';
+import {
+  defaultGradingState,
+  SideContentLocation
+} from 'src/commons/redux/workspace/WorkspaceReduxTypes';
 import SideContentAutograder from 'src/commons/sideContent/content/SideContentAutograder';
 import SideContentToneMatrix from 'src/commons/sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
@@ -52,9 +60,12 @@ const unansweredPrependValue: string = `// This answer does not have significant
 
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
-  const { selectedTab, setSelectedTab } = useSideContent(workspaceLocation, SideContentType.grading)
-  const { 
-    editorTabs, 
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.grading
+  );
+  const {
+    editorTabs,
     editorSessionId,
     activeEditorTabIndex,
     isEditorAutorun,
@@ -62,8 +73,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     updateEditorValue: handleEditorValueChange,
     updateEditorBreakpoints: handleEditorUpdateBreakpoints,
     updateActiveEditorTabIndex: handleUpdateActiveEditorTabIndex,
-    removeEditorTab: handleRemoveEditorTabByIndex,
- } = useEditorState(workspaceLocation)
+    removeEditorTab: handleRemoveEditorTabByIndex
+  } = useEditorState(workspaceLocation);
   // const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
@@ -85,26 +96,25 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     promptAutocomplete: handlePromptAutocomplete,
     resetWorkspace: handleResetWorkspace,
     updateHasUnsavedChanges: handleUpdateHasUnsavedChanges
-  } = useWorkspace(workspaceLocation)
+  } = useWorkspace(workspaceLocation);
 
-  const {
-    clearReplOutput: handleReplOutputClear
-  } = useRepl(workspaceLocation)
+  const { clearReplOutput: handleReplOutputClear } = useRepl(workspaceLocation);
 
   const dispatch = useDispatch();
   const {
     handleGradingFetch,
     handleTestcaseEval,
     handleRunAllTestcases,
-    handleUpdateCurrentSubmissionId,
+    handleUpdateCurrentSubmissionId
   } = useMemo(() => {
     return {
       handleGradingFetch: (submissionId: number) => dispatch(fetchGrading(submissionId)),
       handleTestcaseEval: (testcaseId: number) =>
         dispatch(allWorkspaceActions.evalTestCase(workspaceLocation, testcaseId)),
-      handleRunAllTestcases: () => dispatch(allWorkspaceActions.evalEditorAndTestcases(workspaceLocation)),
+      handleRunAllTestcases: () =>
+        dispatch(allWorkspaceActions.evalEditorAndTestcases(workspaceLocation)),
       handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) =>
-        dispatch(gradingActions.updateCurrentSubmissionId(submissionId, questionId)),
+        dispatch(gradingActions.updateCurrentSubmissionId(submissionId, questionId))
     };
   }, [dispatch]);
 
@@ -226,7 +236,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             highlightedLines: [],
             breakpoints: []
           }
-        ],
+        ]
       },
       programPrependValue,
       programPostpendValue,
@@ -427,7 +437,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             handleEditorUpdateBreakpoints,
             handleEditorValueChange,
             sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-            sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
+            sourceVariant: question?.library?.variant ?? Variant.DEFAULT
             // externalLibraryName: question?.library?.external?.name || 'NONE'
           }
         : undefined,

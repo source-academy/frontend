@@ -80,7 +80,7 @@ const mockChangedState: OverallState = {
           }
         ],
         isEditorAutorun: true
-      },
+      }
     }
   }
 };

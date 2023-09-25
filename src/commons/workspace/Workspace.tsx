@@ -28,7 +28,7 @@ type StateProps = {
   };
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
-  workspaceLocation: SideContentLocation
+  workspaceLocation: SideContentLocation;
 };
 
 const Workspace: React.FC<WorkspaceProps> = props => {
@@ -41,7 +41,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
   const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState<number>(200);
   const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(true);
-  const { setSideContentHeight } = useSideContent(props.workspaceLocation)
+  const { setSideContentHeight } = useSideContent(props.workspaceLocation);
 
   const sideBarCollapsedWidth = 40;
 
@@ -100,8 +100,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   };
 
   const sideContentResizableProps = () => {
-    const onResizeStop: ResizeCallback = (_a, _b, ref) =>
-      setSideContentHeight(ref.clientHeight);
+    const onResizeStop: ResizeCallback = (_a, _b, ref) => setSideContentHeight(ref.clientHeight);
     return {
       bounds: 'parent',
       className: 'resize-side-content',

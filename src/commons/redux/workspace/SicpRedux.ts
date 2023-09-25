@@ -1,4 +1,4 @@
-import { defaultSicp } from "./WorkspaceReduxTypes";
-import { createPlaygroundSlice } from "./playground/PlaygroundBase";
+import { createPlaygroundSlice } from './playground/PlaygroundBase';
+import { defaultSicp } from './WorkspaceReduxTypes';
 
-export const { reducer: sicpReducer } = createPlaygroundSlice('sicp', defaultSicp, {})
+export const { reducer: sicpReducer } = createPlaygroundSlice('sicp', defaultSicp, {});

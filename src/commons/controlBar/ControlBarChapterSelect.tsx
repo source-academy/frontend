@@ -78,7 +78,9 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   handleChapterSelect = () => {},
   disabled = false
 }) => {
-  const selectedLang = useTypedSelector(store => store.workspaces.playground.languageConfig.mainLanguage);
+  const selectedLang = useTypedSelector(
+    store => store.workspaces.playground.languageConfig.mainLanguage
+  );
 
   const choices = [
     ...sourceLanguages,

@@ -7,7 +7,7 @@ import { SideContentLocation } from 'src/commons/redux/workspace/WorkspaceReduxT
 import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
 import ControlButton from '../../ControlButton';
 import SideContentResultCard from './SideContentResultCard';
-import SideContentTestcaseCard from  './SideContentTestcaseCard';
+import SideContentTestcaseCard from './SideContentTestcaseCard';
 
 export type SideContentAutograderProps = DispatchProps & StateProps & OwnProps;
 

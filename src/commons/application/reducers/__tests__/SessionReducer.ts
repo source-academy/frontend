@@ -8,6 +8,7 @@ import {
   GradingStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
+import { SessionsReducer } from '../../../redux/session/SessionsReducer';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
@@ -25,7 +26,6 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_NOTIFICATIONS
 } from '../../types/SessionTypes';
-import { SessionsReducer } from '../../../redux/session/SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {
   const action = {

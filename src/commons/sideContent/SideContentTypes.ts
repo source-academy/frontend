@@ -1,6 +1,5 @@
 import { IconName } from '@blueprintjs/core';
-
-import { DebuggerContext } from '../redux/workspace/WorkspaceReduxTypes';
+import { Context } from 'js-slang/dist/types';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -60,6 +59,14 @@ export type SideContentTab = {
   disabled?: boolean;
 };
 
+export type DebuggerContext = {
+  result: any;
+  lastDebuggerResult: any;
+  code: string;
+  context: Context;
+  // workspaceLocation?: WorkspaceLocation;
+};
+
 /**
  * Used for modules that dynamically spawn when imported
  *
@@ -81,6 +88,8 @@ export type ModuleSideContent = {
   toSpawn?: (context: DebuggerContext) => boolean;
 };
 
-export type ChangeTabsCallback = (newId: SideContentType, oldId: SideContentType, event: React.MouseEvent<HTMLElement>) => void
-
-
+export type ChangeTabsCallback = (
+  newId: SideContentType,
+  oldId: SideContentType,
+  event: React.MouseEvent<HTMLElement>
+) => void;
