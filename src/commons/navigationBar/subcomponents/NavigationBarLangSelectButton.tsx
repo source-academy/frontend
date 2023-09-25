@@ -35,13 +35,11 @@ const NavigationBarLangSelectButton = () => {
     setIsOpen(false);
   };
 
-  console.log('lang', lang); // FIXME: Not updating
-
   return (
     <SimpleDropdown
       options={SUPPORTED_LANGUAGES.map(lang => ({ value: lang, label: lang }))}
       onClick={selectLang}
-      defaultValue={lang}
+      selectedValue={lang}
       popoverProps={{ position: Position.BOTTOM_RIGHT, onClose: () => setIsOpen(false), isOpen }}
       buttonProps={{ rightIcon: 'caret-down', onClick: () => setIsOpen(true) }}
     />

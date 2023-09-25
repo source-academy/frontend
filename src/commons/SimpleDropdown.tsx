@@ -1,27 +1,24 @@
 import { Button, Menu, MenuItem } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
-import { useState } from 'react';
 
 type OptionType = { value: any; label: string };
 type Props<T extends OptionType> = {
   options: T[];
-  defaultValue?: T['value'];
+  selectedValue?: T['value'];
   onClick?: (v: T['value']) => void;
   buttonProps?: Partial<React.ComponentProps<typeof Button>>;
   popoverProps?: Partial<React.ComponentProps<typeof Popover2>>;
 };
 
 function SimpleDropdown<T extends OptionType>(props: Props<T>) {
-  const { options, defaultValue, onClick, buttonProps, popoverProps } = props;
-  const [selectedOption, setSelectedOption] = useState(defaultValue);
+  const { options, selectedValue, onClick, buttonProps, popoverProps } = props;
 
   const handleClick = (value: T['value']) => {
-    setSelectedOption(value);
     onClick?.(value);
   };
 
   const buttonLabel = () => {
-    const option = options.find(({ value }) => value === selectedOption);
+    const option = options.find(({ value }) => value === selectedValue);
     return option?.label;
   };
 
