@@ -29,7 +29,7 @@ function SimpleDropdown<T extends OptionType>(props: Props<T>) {
       content={
         <Menu>
           {options.map(({ value, label }) => (
-            <MenuItem text={label} onClick={() => handleClick(value)} />
+            <MenuItem key={label} text={label} onClick={() => handleClick(value)} />
           ))}
         </Menu>
       }
