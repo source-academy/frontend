@@ -1,9 +1,10 @@
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
+import { CHANGE_SIDE_CONTENT_HEIGHT } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs, getTabId } from './SideContentHelper';
+import { getLocation } from './SideContentHelper';
 import {
   END_ALERT_SIDE_CONTENT,
-  getLocation,
   RESET_SIDE_CONTENT,
   SideContentManagerState,
   SPAWN_SIDE_CONTENT,
@@ -23,6 +24,23 @@ export function SideContentReducer(
     workspaceLocation === 'stories' ? state.stories[storyEnv] : state[workspaceLocation];
 
   switch (action.type) {
+    case CHANGE_SIDE_CONTENT_HEIGHT:
+      return workspaceLocation === 'stories' ? {
+        ...state,
+        stories: {
+          ...state.stories,
+          [storyEnv]: {
+            ...state.stories[storyEnv],
+            height: action.payload.height
+          }
+        }
+      } : {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          height: action.payload.height
+        }
+      }
     case END_ALERT_SIDE_CONTENT: {
       if (action.payload.id !== sideContentState.selectedTab) {
         return workspaceLocation === 'stories'
@@ -92,7 +110,7 @@ export function SideContentReducer(
               [storyEnv]: {
                 ...state.stories[storyEnv],
                 alerts: state.stories[storyEnv].alerts.filter(id => id !== action.payload.newId),
-                selectedTab: action.payload.newId,
+                selectedTab: action.payload.newId
               }
             }
           }
@@ -101,7 +119,7 @@ export function SideContentReducer(
             [workspaceLocation]: {
               ...state[workspaceLocation],
               alerts: state[workspaceLocation].alerts.filter(id => id !== action.payload.newId),
-              selectedTab: action.payload.newId,
+              selectedTab: action.payload.newId
             }
           };
     default:

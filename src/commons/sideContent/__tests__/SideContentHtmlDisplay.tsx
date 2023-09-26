@@ -35,7 +35,7 @@ describe('HTML Display postMessage Listener', () => {
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),
     handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError,
-    workspaceLocation: 'playground' as SideContentLocation,
+    workspaceLocation: 'playground' as SideContentLocation
   };
 
   const element = <Component {...mockProps} />;

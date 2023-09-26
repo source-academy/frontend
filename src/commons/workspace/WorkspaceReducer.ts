@@ -28,12 +28,8 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
-import { getDynamicTabs, getTabId } from '../sideContent/SideContentHelper';
 import {
-  END_ALERT_SIDE_CONTENT,
   NOTIFY_PROGRAM_EVALUATED,
-  RESET_SIDE_CONTENT,
-  VISIT_SIDE_CONTENT
 } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -44,7 +40,6 @@ import {
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CHANGE_STEP_LIMIT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -216,14 +211,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           execTime: action.payload.execTime
-        }
-      };
-    case CHANGE_SIDE_CONTENT_HEIGHT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContentHeight: action.payload.height
         }
       };
     case CHANGE_STEP_LIMIT:
@@ -1081,67 +1068,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         context: action.payload.context,
         workspaceLocation: action.payload.workspaceLocation
       };
-
-      const dynamicTabs = getDynamicTabs(debuggerContext);
-      const {
-        sideContent: { selectedTab }
-      } = state[workspaceLocation];
-      const allAlerts = dynamicTabs.map(getTabId);
-      const alerts = selectedTab ? allAlerts.filter(id => id !== selectedTab) : allAlerts;
-
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
           debuggerContext,
-          sideContent: {
-            ...state[workspaceLocation].sideContent,
-            alerts,
-            dynamicTabs
-          }
         }
       };
     }
-    case END_ALERT_SIDE_CONTENT: {
-      if (action.payload.id === state[workspaceLocation].sideContent.selectedTab) return state;
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContent: {
-            ...state[workspaceLocation].sideContent,
-            alerts: [...state[workspaceLocation].sideContent.alerts, action.payload.id]
-          }
-        }
-      };
-    }
-    case VISIT_SIDE_CONTENT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContent: {
-            ...state[workspaceLocation].sideContent,
-            alerts: state[workspaceLocation].sideContent.alerts.filter(
-              id => id !== action.payload.newId
-            ),
-            selectedTab: action.payload.newId
-          }
-        }
-      };
-    case RESET_SIDE_CONTENT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContent: {
-            ...state[workspaceLocation].sideContent,
-            dynamicTabs: [],
-            alerts: []
-          }
-        }
-      };
     default:
       return state;
   }

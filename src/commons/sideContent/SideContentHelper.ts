@@ -16,12 +16,11 @@ import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import {
-  getLocation,
   ModuleSideContent,
-  SideContentLocation,
   SideContentTab,
   SideContentType
 } from './SideContentTypes';
+import { NonStoryWorkspaceLocation,SideContentLocation, StoryWorkspaceLocation } from './SideContentTypes';
 
 const requireProvider = (x: string) => {
   const exports = {
@@ -92,4 +91,23 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
     setSelectedTab,
     height
   };
+};
+
+/**
+ * Determine if the given SideContentLocation is a Story location specification
+ * or a regular WorkspaceSpecification
+ */
+export const isStoryLocation = (
+  location: SideContentLocation
+): location is StoryWorkspaceLocation => location.startsWith('stories');
+
+/**
+ * Give a SideContentLocation specification, return the WorkspaceLocation
+ * and StoryEnv value, if present
+ */
+export const getLocation = (
+  location: SideContentLocation
+): [NonStoryWorkspaceLocation] | ['stories', string] => {
+  if (isStoryLocation(location)) return location.split('.') as ['stories', string];
+  return [location];
 };

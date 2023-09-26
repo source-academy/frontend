@@ -1824,6 +1824,55 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
 </React.Fragment>
 `;
 
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 17`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={250.3125}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="0"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={255.3125}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="0"
+    />
+  </Label>
+</React.Fragment>
+`;
+
 exports[`EnvVisualizer Agenda Stash correctly renders: global environments are treated correctly 1`] = `
 <React.Fragment>
   <Label

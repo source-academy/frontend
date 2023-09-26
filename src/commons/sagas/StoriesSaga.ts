@@ -1,4 +1,3 @@
-import { take } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
@@ -12,12 +11,10 @@ import {
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
-  BEGIN_STORIES_ALERT_SIDE_CONTENT,
   CREATE_STORY,
   DELETE_STORY,
   GET_STORIES_LIST,
   GET_STORIES_USER,
-  NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
   SET_CURRENT_STORY_ID,
   StoryData,
@@ -149,14 +146,6 @@ export function* storiesSaga(): SagaIterator {
 
       // TODO: Refresh the list of story users
       //       once that page is implemented
-    }
-  );
-
-  yield takeEvery(
-    BEGIN_STORIES_ALERT_SIDE_CONTENT,
-    function* ({ payload: { id, env } }: ReturnType<typeof actions.beginStoriesAlertSideContent>) {
-      yield take(NOTIFY_STORIES_EVALUATED);
-      yield put(actions.endStoriesAlertSideContent(id, env));
     }
   );
 }

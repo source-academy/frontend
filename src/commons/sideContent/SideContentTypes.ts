@@ -94,17 +94,12 @@ export type SideContentManagerState = Record<NonStoryWorkspaceLocation, SideCont
   stories: Record<string, SideContentState>;
 };
 
+/**
+ * A SideContentLocation specifier is an extension of the WorkspaceLocation type
+ * that includes a specification for story workspaces
+ * Story Envs should be specified in the following format: ``stories.${env}``
+ */
 export type SideContentLocation = NonStoryWorkspaceLocation | StoryWorkspaceLocation;
-
-export const isStoryLocation = (
-  location: SideContentLocation
-): location is StoryWorkspaceLocation => location.startsWith('stories');
-export const getLocation = (
-  location: SideContentLocation
-): [NonStoryWorkspaceLocation] | ['stories', string] => {
-  if (isStoryLocation(location)) return location.split('.') as ['stories', string];
-  return [location];
-};
 
 export type SideContentState = {
   height?: number;

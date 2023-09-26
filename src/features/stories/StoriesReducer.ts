@@ -1,7 +1,6 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
-import { getDynamicTabs, getTabId } from 'src/commons/sideContent/SideContentHelper';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import {
@@ -16,7 +15,6 @@ import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 import {
   ADD_STORY_ENV,
   CLEAR_STORY_ENV,
-  END_STORIES_ALERT_SIDE_CONTENT,
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
@@ -26,7 +24,6 @@ import {
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
-  STORIES_VISIT_SIDE_CONTENT,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
   UPDATE_STORIES_LIST
@@ -181,12 +178,6 @@ export const StoriesReducer: Reducer<StoriesState> = (
         workspaceLocation: 'stories'
       };
 
-      const dynamicTabs = getDynamicTabs(debuggerContext);
-      const { sideContent } = state.envs[env];
-      const allAlerts = dynamicTabs.map(getTabId);
-      const alerts = sideContent.selectedTab
-        ? allAlerts.filter(id => id !== sideContent.selectedTab)
-        : allAlerts;
       return {
         ...state,
         envs: {
@@ -194,44 +185,9 @@ export const StoriesReducer: Reducer<StoriesState> = (
           [env]: {
             ...state.envs[env],
             debuggerContext,
-            sideContent: {
-              alerts,
-              dynamicTabs
-            }
           }
         }
       };
-    case STORIES_VISIT_SIDE_CONTENT:
-      return {
-        ...state,
-        envs: {
-          ...state.envs,
-          [env]: {
-            ...state.envs[env],
-            sideContent: {
-              ...state.envs[env].sideContent,
-              alerts: state.envs[env].sideContent.alerts.filter(id => id !== action.payload.id),
-              selectedTab: action.payload.id
-            }
-          }
-        }
-      };
-    case END_STORIES_ALERT_SIDE_CONTENT:
-      if (action.payload.id === state.envs[env].sideContent.selectedTab) return state;
-      return {
-        ...state,
-        envs: {
-          ...state.envs,
-          [env]: {
-            ...state.envs[env],
-            sideContent: {
-              ...state.envs[env].sideContent,
-              alerts: [...state.envs[env].sideContent.alerts, action.payload.id]
-            }
-          }
-        }
-      };
-
     case TOGGLE_STORIES_USING_SUBST:
       return {
         ...state,
