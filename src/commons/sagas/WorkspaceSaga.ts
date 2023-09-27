@@ -1064,11 +1064,6 @@ export function* evalCode(
   const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
-    // icon to blink
-    const icon = document.getElementById(SideContentType.substVisualizer + '-icon');
-    if (icon) {
-      icon.classList.add('side-content-tab-alert');
-    }
   }
 
   // For the environment visualiser slider

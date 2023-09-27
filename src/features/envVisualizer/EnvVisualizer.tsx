@@ -97,10 +97,6 @@ export default class EnvVisualizer {
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.agenda.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
-
-    // icon to blink
-    const icon = document.getElementById('env_visualizer-icon');
-    icon && icon.classList.add('side-content-tab-alert');
   }
 
   static redraw() {

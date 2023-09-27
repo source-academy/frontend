@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { useSideContent } from './SideContentHelper';
 import type {
@@ -57,17 +57,11 @@ export default function SideContentProvider({
     defaultTab
   );
 
-  useEffect(() => {
-    if (propsSelectedTab === undefined && onChange) {
-      console.warn('onChange was provided, but selectedTab was not. Changes to selectedTab will not be reflected')
-    }
-  }, [onChange, propsSelectedTab])
-
   const allTabs = tabs
     ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs]
     : dynamicTabs;
 
-  const changeTabsCallback: ChangeTabsCallback = (newId, oldId, event) => {
+  const changeTabsCallback: ChangeTabsCallback = useCallback((newId, oldId, event) => {
     if (onChange) {
       // Controlled mode
       onChange(newId, oldId, event);
@@ -75,7 +69,7 @@ export default function SideContentProvider({
       // Uncontrolled mode
       setSelectedTab(newId);
     }
-  };
+  }, [onChange, setSelectedTab]);
 
   return children({
     tabs: allTabs,
