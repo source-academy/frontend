@@ -5,6 +5,7 @@ import { getDynamicTabs, getTabId } from './SideContentHelper';
 import { getLocation } from './SideContentHelper';
 import {
   END_ALERT_SIDE_CONTENT,
+  REMOVE_SIDE_CONTENT_ALERT,
   RESET_SIDE_CONTENT,
   SideContentManagerState,
   SPAWN_SIDE_CONTENT,
@@ -66,6 +67,25 @@ export function SideContentReducer(
       }
       return state;
     }
+    case REMOVE_SIDE_CONTENT_ALERT:
+      return workspaceLocation === 'stories'
+        ? {
+            ...state,
+            stories: {
+              ...state.stories,
+              [storyEnv]: {
+                ...state.stories[storyEnv],
+                alerts: state.stories[storyEnv].alerts.filter(id => id !== action.payload.id)
+              }
+            }
+          }
+        : {
+            ...state,
+            [workspaceLocation]: {
+              ...state[workspaceLocation],
+              alerts: state[workspaceLocation].alerts.filter(id => id !== action.payload.id)
+            }
+          };
     case RESET_SIDE_CONTENT:
       return workspaceLocation === 'stories'
         ? {

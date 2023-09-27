@@ -8,6 +8,7 @@ export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
 export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
 export const RESET_SIDE_CONTENT = 'RESET_SIDE_CONTENT';
 export const SPAWN_SIDE_CONTENT = 'SPAWN_SIDE_CONTENT';
+export const REMOVE_SIDE_CONTENT_ALERT = 'REMOVE_SIDE_CONTENT_ALERT';
 
 export enum SideContentType {
   autograder = 'autograder',

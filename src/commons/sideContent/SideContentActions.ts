@@ -4,6 +4,7 @@ import { DebuggerContext } from '../workspace/WorkspaceTypes';
 import {
   BEGIN_ALERT_SIDE_CONTENT,
   END_ALERT_SIDE_CONTENT,
+  REMOVE_SIDE_CONTENT_ALERT,
   RESET_SIDE_CONTENT,
   SideContentLocation,
   SideContentType,
@@ -22,6 +23,11 @@ export const visitSideContent = (
   prevId: SideContentType | undefined,
   workspaceLocation: SideContentLocation
 ) => action(VISIT_SIDE_CONTENT, { newId, prevId, workspaceLocation });
+
+export const removeSideContentAlert = (
+  id: SideContentType,
+  workspaceLocation: SideContentLocation
+) => action(REMOVE_SIDE_CONTENT_ALERT, { id, workspaceLocation });
 
 export const spawnSideContent = (
   workspaceLocation: SideContentLocation,
