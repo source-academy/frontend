@@ -28,9 +28,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
-import {
-  NOTIFY_PROGRAM_EVALUATED,
-} from '../sideContent/SideContentTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
@@ -1072,7 +1070,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          debuggerContext,
+          debuggerContext
         }
       };
     }

@@ -184,7 +184,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
           ...state.envs,
           [env]: {
             ...state.envs[env],
-            debuggerContext,
+            debuggerContext
           }
         }
       };

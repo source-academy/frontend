@@ -1014,8 +1014,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation,
-      
+      workspaceLocation
     },
     sideContentIsResizeable:
       selectedTab !== SideContentType.substVisualizer &&

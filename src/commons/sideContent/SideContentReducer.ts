@@ -25,22 +25,24 @@ export function SideContentReducer(
 
   switch (action.type) {
     case CHANGE_SIDE_CONTENT_HEIGHT:
-      return workspaceLocation === 'stories' ? {
-        ...state,
-        stories: {
-          ...state.stories,
-          [storyEnv]: {
-            ...state.stories[storyEnv],
-            height: action.payload.height
+      return workspaceLocation === 'stories'
+        ? {
+            ...state,
+            stories: {
+              ...state.stories,
+              [storyEnv]: {
+                ...state.stories[storyEnv],
+                height: action.payload.height
+              }
+            }
           }
-        }
-      } : {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          height: action.payload.height
-        }
-      }
+        : {
+            ...state,
+            [workspaceLocation]: {
+              ...state[workspaceLocation],
+              height: action.payload.height
+            }
+          };
     case END_ALERT_SIDE_CONTENT: {
       if (action.payload.id !== sideContentState.selectedTab) {
         return workspaceLocation === 'stories'

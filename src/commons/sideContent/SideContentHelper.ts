@@ -15,12 +15,12 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
+import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 import {
-  ModuleSideContent,
-  SideContentTab,
-  SideContentType
+  NonStoryWorkspaceLocation,
+  SideContentLocation,
+  StoryWorkspaceLocation
 } from './SideContentTypes';
-import { NonStoryWorkspaceLocation,SideContentLocation, StoryWorkspaceLocation } from './SideContentTypes';
 
 const requireProvider = (x: string) => {
   const exports = {

@@ -27,7 +27,7 @@ type SideContentProviderProps = {
    */
   onChange?: ChangeTabsCallback;
   selectedTab?: SideContentType;
-  
+
   /**
    * Value to use if the currently selected tab is undefined
    */
@@ -38,10 +38,10 @@ type SideContentProviderProps = {
 /**
  * Component that connects its child SideContentComponent to the Redux store, automatically
  * providing SideContentHeight information.
- * 
+ *
  * If the `onChange` prop is specified, the component enters controlled mode, and the user
  * is responsible for handling the `onChange` event, as well as providing the `selectedTab`
- * 
+ *
  * If not, the component, will automatically handle dispatching events to the Redux store
  */
 export default function SideContentProvider({
@@ -50,7 +50,7 @@ export default function SideContentProvider({
   children,
   onChange,
   selectedTab: propsSelectedTab,
-  workspaceLocation,
+  workspaceLocation
 }: SideContentProviderProps) {
   const { alerts, height, dynamicTabs, setSelectedTab, selectedTab } = useSideContent(
     workspaceLocation,
@@ -61,15 +61,18 @@ export default function SideContentProvider({
     ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs]
     : dynamicTabs;
 
-  const changeTabsCallback: ChangeTabsCallback = useCallback((newId, oldId, event) => {
-    if (onChange) {
-      // Controlled mode
-      onChange(newId, oldId, event);
-    } else {
-      // Uncontrolled mode
-      setSelectedTab(newId);
-    }
-  }, [onChange, setSelectedTab]);
+  const changeTabsCallback: ChangeTabsCallback = useCallback(
+    (newId, oldId, event) => {
+      if (onChange) {
+        // Controlled mode
+        onChange(newId, oldId, event);
+      } else {
+        // Uncontrolled mode
+        setSelectedTab(newId);
+      }
+    },
+    [onChange, setSelectedTab]
+  );
 
   return children({
     tabs: allTabs,
