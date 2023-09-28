@@ -79,7 +79,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     workspaceLocation,
     SideContentType.grading
   );
-  // const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
