@@ -310,9 +310,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
   );
-  // const [selectedTab, setSelectedTab] = useState(
-  //   shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
-  // );
   const [hasBreakpoints, setHasBreakpoints] = useState(false);
   const [sessionId, setSessionId] = useState(() =>
     initSession('playground', {
