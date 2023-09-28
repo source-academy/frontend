@@ -179,7 +179,6 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     workspaceLocation,
     SideContentType.questionOverview
   );
-  // const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
   const { isMobileBreakpoint } = useResponsive();
 
   const {
