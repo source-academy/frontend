@@ -111,11 +111,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
-  // const [selectedTab, setSelectedTab] = useState(
-  //   assessment?.questions[props.questionId].grader !== undefined
-  //     ? SideContentType.grading
-  //     : SideContentType.questionOverview
-  // );
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     assessment?.questions[props.questionId].grader !== undefined

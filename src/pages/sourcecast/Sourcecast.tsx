@@ -151,7 +151,6 @@ const Sourcecast: React.FC = () => {
    * which contains the ag-grid table of available Sourcecasts. This is intentional
    * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
-  // const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     SideContentType.introduction
