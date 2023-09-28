@@ -168,7 +168,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
           }
         }
       };
-    case NOTIFY_STORIES_EVALUATED:
+    case NOTIFY_STORIES_EVALUATED: {
       const debuggerContext: DebuggerContext = {
         ...state.envs[env].debuggerContext,
         result: action.payload.result,
@@ -188,6 +188,7 @@ export const StoriesReducer: Reducer<StoriesState> = (
           }
         }
       };
+    }
     case TOGGLE_STORIES_USING_SUBST:
       return {
         ...state,
