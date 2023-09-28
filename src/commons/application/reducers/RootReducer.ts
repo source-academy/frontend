@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { SideContentReducer as sideContent } from 'src/commons/sideContent/SideContentReducer';
 
 import { AcademyReducer as academy } from '../../../features/academy/AcademyReducer';
 import { AchievementReducer as achievement } from '../../../features/achievement/AchievementReducer';
@@ -7,6 +6,7 @@ import { DashboardReducer as dashboard } from '../../../features/dashboard/Dashb
 import { PlaygroundReducer as playground } from '../../../features/playground/PlaygroundReducer';
 import { StoriesReducer as stories } from '../../../features/stories/StoriesReducer';
 import { FileSystemReducer as fileSystem } from '../../fileSystem/FileSystemReducer';
+import { SideContentReducer as sideContent } from '../../sideContent/SideContentReducer';
 import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer';
 import { ApplicationReducer as application } from '../ApplicationReducer';
 import { RouterReducer as router } from './CommonsReducer';
