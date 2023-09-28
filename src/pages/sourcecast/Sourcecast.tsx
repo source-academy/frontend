@@ -262,9 +262,9 @@ const Sourcecast: React.FC = () => {
     <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
   );
 
-  const dataVisualizerTab: SideContentTab = makeDataVisualizerTabFrom(workspaceLocation);
+  const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
 
-  const envVisualizerTab: SideContentTab = makeEnvVisualizerTabFrom(workspaceLocation);
+  const envVisualizerTab = makeEnvVisualizerTabFrom(workspaceLocation);
 
   const tabs: SideContentTab[] = [
     {
