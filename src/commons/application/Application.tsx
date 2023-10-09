@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
+import Chatbot from '../chatbot/Chatbot';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
@@ -71,14 +72,17 @@ const Application: React.FC = () => {
   }, [isPWA, isMobile]);
 
   return (
-    <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
-      <div className="Application">
-        <NavigationBar />
-        <div className="Application__main">
-          <Outlet />
+    <>
+      <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
+        <div className="Application">
+          <NavigationBar />
+          <div className="Application__main">
+            <Outlet />
+          </div>
         </div>
-      </div>
-    </WorkspaceSettingsContext.Provider>
+      </WorkspaceSettingsContext.Provider>
+      <Chatbot />
+    </>
   );
 };
 
