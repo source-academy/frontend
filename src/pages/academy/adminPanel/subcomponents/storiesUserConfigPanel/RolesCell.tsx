@@ -1,16 +1,16 @@
 import { HTMLSelect, Position } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { AdminPanelStoriesUsers } from 'src/features/stories/StoriesTypes';
 
 type RolesCellProps = OwnProps;
 
 type OwnProps = {
-  data: AdminPanelCourseRegistration;
+  data: AdminPanelStoriesUsers;
   rowIndex: number;
-  courseRegId: number;
-  handleUpdateUserRole: (courseRegId: number, role: Role) => void;
+  id: number;
+  handleUpdateUserRole: (id: number, role: StoriesRole) => void;
 };
 
 const RolesCell: React.FC<RolesCellProps> = props => {
@@ -18,23 +18,23 @@ const RolesCell: React.FC<RolesCellProps> = props => {
 
   const changeHandler = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
-      props.handleUpdateUserRole(data.courseRegId, e.target.value as Role);
+      props.handleUpdateUserRole(data.id, e.target.value as StoriesRole);
     },
     [data, props]
   );
 
   const roleOptions = [
     {
-      label: 'Student',
-      value: Role.Student
+      label: 'User',
+      value: StoriesRole.Standard
     },
     {
-      label: 'Staff',
-      value: Role.Staff
+      label: 'Moderator',
+      value: StoriesRole.Moderator
     },
     {
       label: 'Admin',
-      value: Role.Admin
+      value: StoriesRole.Admin
     }
   ];
   return (
@@ -42,7 +42,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
       content="You cannot downgrade yourself from an admin role!"
       interactionKind="click"
       position={Position.TOP}
-      disabled={props.courseRegId !== data.courseRegId}
+      disabled={props.id !== data.id}
     >
       <HTMLSelect
         options={roleOptions}
@@ -50,8 +50,9 @@ const RolesCell: React.FC<RolesCellProps> = props => {
         fill
         minimal
         style={{ textAlign: 'center' }}
-        value={data.role}
-        disabled={props.courseRegId === data.courseRegId}
+        // value={data.role}
+        value = {'to be added'}
+        disabled={props.id === data.id}
       />
     </Popover2>
   );

@@ -5,7 +5,7 @@ import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Role } from 'src/commons/application/ApplicationTypes';
+import { Role, StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   addNewStoriesUsersToCourse,
@@ -133,11 +133,21 @@ const AdminPanel: React.FC = () => {
 
   const storiesUserConfigPanelProps = {
     userId: stories.userId,
-    userCourseRegistrations: session.userCourseRegistrations,
-    handleUpdateUserRole: (courseRegId: number, role: Role) =>
-      dispatch(updateUserRole(courseRegId, role)),
-    handleDeleteUserFromCourse: (courseRegId: number) =>
-      dispatch(deleteUserCourseRegistration(courseRegId))
+    storiesUsers: [
+      {
+        'id': 1,
+        'created_at': '2023-10-11',
+        'updated_at': '2023-10-11',
+        'deleted_at': '2023-10-11',
+        'username': 'test_stories_user',
+        'login_provider': 'login provider',
+        'full_name': 'Stories User'
+      }
+    ],
+    handleUpdateUserRole: (id: number, role: StoriesRole) =>
+      dispatch(updateUserRole(id, role as unknown as Role)),
+    handleDeleteUserFromCourse: (id: number) =>
+      dispatch(deleteUserCourseRegistration(id))
   };
 
   const addUserPanelProps = {

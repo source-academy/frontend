@@ -2,32 +2,33 @@ import { Button, Classes, Dialog, Intent, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ControlButton from 'src/commons/ControlButton';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import { AdminPanelStoriesUsers } from 'src/features/stories/StoriesTypes';
 
-type DeleteUserCellProps = OwnProps;
+type DeleteStoriesUserCellProps = OwnProps;
 
 type OwnProps = {
-  data: AdminPanelCourseRegistration;
+  data: AdminPanelStoriesUsers;
   rowIndex: number;
-  handleDeleteUserFromCourse: (courseRegId: number) => void;
+  handleDeleteUserFromCourse: (id: number) => void;
 };
 
-const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
+const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
   const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
 
   const clickHandler = () => {
-    if (props.data.role === Role.Admin) {
-      showWarningMessage('You cannot delete an admin user!');
-      return;
-    }
-    setIsDialogOpen(true);
+  // AdminPanelStoriesUsers does not contain role yet
+  //   if (props.data.role === StoriesRole.Admin) {
+  //     showWarningMessage('You cannot delete an admin user!');
+  //     return;
+  //   }
+  //   setIsDialogOpen(true);
   };
 
   const handleDelete = React.useCallback(() => {
-    props.handleDeleteUserFromCourse(props.data.courseRegId);
+    props.handleDeleteUserFromCourse(props.data.id);
     setIsDialogOpen(false);
   }, [props]);
 
@@ -37,13 +38,15 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
         content="You cannot delete an admin!"
         interactionKind="click"
         position={Position.TOP}
-        disabled={props.data.role !== Role.Admin}
+        disabled={false}
+        // disabled={props.data.role !== Role.Admin}
       >
         <Button
           text="Delete User"
           icon={IconNames.CROSS}
           onClick={clickHandler}
-          disabled={props.data.role === Role.Admin}
+          disabled={true}
+          // disabled={props.data.role === Role.Admin}
         />
       </Popover2>
       <Dialog
@@ -57,7 +60,7 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
           <p>
             Are you sure you want to <b>delete</b> the user{' '}
             <i>
-              {props.data.name} ({props.data.username})
+              {props.data.full_name} ({props.data.username})
             </i>
             ?
           </p>
@@ -86,4 +89,4 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
   );
 };
 
-export default DeleteUserCell;
+export default DeleteStoriesUserCell;

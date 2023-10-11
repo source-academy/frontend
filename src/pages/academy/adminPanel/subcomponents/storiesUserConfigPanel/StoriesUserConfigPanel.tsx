@@ -2,19 +2,19 @@ import { Button, H2 } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 
 import RolesCell from './RolesCell';
-import UserActionsCell from './StoriesUserActionsCell';
+import StoriesUserActionsCell from './StoriesUserActionsCell';
+import { AdminPanelStoriesUsers } from 'src/features/stories/StoriesTypes';
 
-export type UserConfigPanelProps = OwnProps;
+export type StoriesUserConfigPanelProps = OwnProps;
 
 type OwnProps = {
-  courseRegId?: number;
-  userCourseRegistrations?: AdminPanelCourseRegistration[];
-  handleUpdateUserRole: (courseRegId: number, role: Role) => void;
-  handleDeleteUserFromCourse: (courseRegId: number) => void;
+  userId?: number;
+  storiesUsers?: AdminPanelStoriesUsers[];
+  handleUpdateUserRole: (id: number, role: StoriesRole) => void;
+  handleDeleteUserFromCourse: (id: number) => void;
 };
 
 /**
@@ -24,33 +24,33 @@ type OwnProps = {
  *   other admins can do so, to prevent a scenario where there are
  *   no admins left in a course)
  */
-const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
+const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
   const gridApi = React.useRef<GridApi>();
 
-  const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
-    !e.name ? { ...e, name: '(user has yet to log in)' } : e
+  const storiesUsers = props.storiesUsers?.map(e =>
+    !e.full_name ? { ...e, full_name: '(user has yet to log in)' } : e
   );
 
   const columnDefs: ColDef[] = [
     {
       headerName: 'Name',
-      field: 'name',
+      field: 'full_name',
       sort: 'asc'
     },
     {
       headerName: 'Username',
       field: 'username'
     },
-    {
-      headerName: 'Group',
-      field: 'group'
-    },
+    // {
+    //   headerName: 'Group',
+    //   field: 'group'
+    // },
     {
       headerName: 'Role',
       field: 'role',
       cellRendererFramework: RolesCell,
       cellRendererParams: {
-        courseRegId: props.courseRegId,
+        id: props.userId,
         handleUpdateUserRole: props.handleUpdateUserRole
       },
       width: 110
@@ -58,7 +58,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     {
       headerName: 'Actions',
       field: 'actions',
-      cellRendererFramework: UserActionsCell,
+      cellRendererFramework: StoriesUserActionsCell,
       cellRendererParams: {
         handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
       },
@@ -86,7 +86,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
-        rowData={userCourseRegistrations}
+        rowData={storiesUsers}
         rowHeight={36}
         suppressCellSelection={true}
         suppressMovableColumns={true}
@@ -117,4 +117,4 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   );
 };
 
-export default UserConfigPanel;
+export default StoriesUserConfigPanel;
