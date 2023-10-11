@@ -74,3 +74,13 @@ export type StoriesState = {
   readonly currentStory: StoryData | null;
   readonly envs: { [key: string]: StoriesEnvState };
 } & StoriesAuthState;
+
+export type AdminPanelStoriesUsers = {
+  readonly id: number;
+  readonly created_at: string;
+  readonly updated_at: string;
+  readonly deleted_at: string;
+  readonly username: string;
+  readonly login_provider: string;
+  readonly full_name: string;
+};
