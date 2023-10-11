@@ -32,6 +32,7 @@ import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
+import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
 const AdminPanel: React.FC = () => {
@@ -51,6 +52,8 @@ const AdminPanel: React.FC = () => {
   const dispatch = useDispatch();
 
   const session = useTypedSelector(state => state.session);
+
+  const stories = useTypedSelector(state => state.stories)
 
   /**
    * Mutable ref to track the assessment configuration form state instead of useState. This is
@@ -128,6 +131,15 @@ const AdminPanel: React.FC = () => {
       dispatch(deleteUserCourseRegistration(courseRegId))
   };
 
+  const storiesUserConfigPanelProps = {
+    userId: stories.userId,
+    userCourseRegistrations: session.userCourseRegistrations,
+    handleUpdateUserRole: (courseRegId: number, role: Role) =>
+      dispatch(updateUserRole(courseRegId, role)),
+    handleDeleteUserFromCourse: (courseRegId: number) =>
+      dispatch(deleteUserCourseRegistration(courseRegId))
+  };
+
   const addUserPanelProps = {
     handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) =>
       dispatch(addNewUsersToCourse(users, provider))
@@ -188,6 +200,7 @@ const AdminPanel: React.FC = () => {
           }
         />
         <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
+        <Tab id="stories-users" title="Stories Users" panel={<StoriesUserConfigPanel {...storiesUserConfigPanelProps} />} />
         <Tab id="add-users" title="Add Users" panel={<AddUserPanel {...addUserPanelProps} />} />
         <Tab
           id="add-stories-users"
