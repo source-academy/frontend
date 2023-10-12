@@ -1,6 +1,7 @@
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
+import { AdminPanelStoriesUser } from './StoriesTypes';
 
 import {
   ADD_STORY_ENV,
@@ -23,7 +24,9 @@ import {
   StoryListView,
   StoryParams,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_LIST
+  UPDATE_STORIES_LIST,
+  FETCH_ADMIN_PANEL_STORIES_USERS,
+  SET_ADMIN_PANEL_STORIES_USERS
 } from './StoriesTypes';
 
 export const addStoryEnv = (env: string, chapter: Chapter, variant: Variant) =>
@@ -78,3 +81,5 @@ export const setCurrentStoriesGroup = (
   name: string | undefined,
   role: StoriesRole | undefined
 ) => action(SET_CURRENT_STORIES_GROUP, { id, name, role });
+export const fetchAdminPanelStoriesUsers = () => action(FETCH_ADMIN_PANEL_STORIES_USERS);
+export const setAdminPanelStoriesUsers = (users: AdminPanelStoriesUser[]) => action(SET_ADMIN_PANEL_STORIES_USERS, { users });

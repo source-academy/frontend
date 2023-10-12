@@ -24,6 +24,9 @@ import {
   updateCourseConfig,
   updateUserRole
 } from '../../../commons/application/actions/SessionActions';
+import {
+  fetchAdminPanelStoriesUsers,
+}  from 'src/features/stories/StoriesActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -76,6 +79,7 @@ const AdminPanel: React.FC = () => {
     dispatch(fetchAssessmentConfigs());
     dispatch(fetchAdminPanelCourseRegistrations());
     dispatch(fetchNotificationConfigs());
+    dispatch(fetchAdminPanelStoriesUsers());
   }, [dispatch]);
 
   // After updated configs have been loaded from the backend, put them into local React state
@@ -133,14 +137,7 @@ const AdminPanel: React.FC = () => {
 
   const storiesUserConfigPanelProps = {
     userId: stories.userId,
-    storiesUsers: [
-      {
-        'id': 1,
-        'username': 'test_stories_user',
-        'provider': 'login provider',
-        'name': 'Stories User'
-      }
-    ],
+    storiesUsers: stories.storiesUsers,
     handleUpdateUserRole: (id: number, role: StoriesRole) =>
       dispatch(updateUserRole(id, role as unknown as Role)),
     handleDeleteUserFromCourse: (id: number) =>

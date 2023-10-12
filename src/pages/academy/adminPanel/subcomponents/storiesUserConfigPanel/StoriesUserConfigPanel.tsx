@@ -6,13 +6,13 @@ import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 
 import RolesCell from './RolesCell';
 import StoriesUserActionsCell from './StoriesUserActionsCell';
-import { AdminPanelStoriesUsers } from 'src/features/stories/StoriesTypes';
+import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
 export type StoriesUserConfigPanelProps = OwnProps;
 
 type OwnProps = {
   userId?: number;
-  storiesUsers?: AdminPanelStoriesUsers[];
+  storiesUsers?: AdminPanelStoriesUser[];
   handleUpdateUserRole: (id: number, role: StoriesRole) => void;
   handleDeleteUserFromCourse: (id: number) => void;
 };

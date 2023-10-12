@@ -25,7 +25,8 @@ import {
   SET_CURRENT_STORY_ID,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_LIST
+  UPDATE_STORIES_LIST,
+  SET_ADMIN_PANEL_STORIES_USERS
 } from './StoriesTypes';
 
 export const StoriesReducer: Reducer<StoriesState> = (
@@ -227,6 +228,11 @@ export const StoriesReducer: Reducer<StoriesState> = (
       };
     case LOG_OUT:
       return defaultStories;
+    case SET_ADMIN_PANEL_STORIES_USERS:
+      return {
+        ...state,
+        storiesUsers: action.payload.users
+      };
     default:
       return state;
   }

@@ -2,12 +2,12 @@ import { HTMLSelect, Position } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
-import { AdminPanelStoriesUsers } from 'src/features/stories/StoriesTypes';
+import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
 type RolesCellProps = OwnProps;
 
 type OwnProps = {
-  data: AdminPanelStoriesUsers;
+  data: AdminPanelStoriesUser;
   rowIndex: number;
   id: number;
   handleUpdateUserRole: (id: number, role: StoriesRole) => void;

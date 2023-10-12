@@ -5,12 +5,12 @@ import React from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ControlButton from 'src/commons/ControlButton';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
-import { AdminPanelStoriesUsers } from 'src/features/stories/StoriesTypes';
+import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
 type DeleteStoriesUserCellProps = OwnProps;
 
 type OwnProps = {
-  data: AdminPanelStoriesUsers;
+  data: AdminPanelStoriesUser;
   rowIndex: number;
   handleDeleteUserFromCourse: (id: number) => void;
 };

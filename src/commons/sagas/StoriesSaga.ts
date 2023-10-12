@@ -3,16 +3,18 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import {
   deleteStory,
+  getAdminPanelStoriesUsers,
   getStories,
   getStoriesUser,
   getStory,
   postNewStoriesUsers,
   postStory,
-  updateStory
+  updateStory,
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   CREATE_STORY,
   DELETE_STORY,
+  FETCH_ADMIN_PANEL_STORIES_USERS,
   GET_STORIES_LIST,
   GET_STORIES_USER,
   SAVE_STORY,
@@ -146,6 +148,19 @@ export function* storiesSaga(): SagaIterator {
 
       // TODO: Refresh the list of story users
       //       once that page is implemented
+    }
+  );
+  yield takeEvery(
+    FETCH_ADMIN_PANEL_STORIES_USERS,
+    function* (action: ReturnType<typeof actions.fetchAdminPanelStoriesUsers>): any {
+      const tokens: Tokens = yield selectTokens();
+
+      const storiesUsers = yield call(getAdminPanelStoriesUsers, tokens);
+
+      if (storiesUsers) {
+        yield put(actions.setAdminPanelStoriesUsers(storiesUsers));
+      }
+
     }
   );
 }

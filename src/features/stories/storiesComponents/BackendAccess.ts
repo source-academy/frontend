@@ -11,7 +11,7 @@ import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
-import { StoryListView, StoryView } from '../StoriesTypes';
+import { AdminPanelStoriesUser, StoryListView, StoryView } from '../StoriesTypes';
 
 // Helpers
 
@@ -150,3 +150,14 @@ export const deleteStory = async (tokens: Tokens, id: number): Promise<StoryView
   const story = await resp.json();
   return story;
 };
+
+export const getAdminPanelStoriesUsers = async(tokens: Tokens): Promise<AdminPanelStoriesUser[] | null> => {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/users`, 'GET', {
+    ...tokens
+  });
+  if (!resp) {
+    return null;
+  }
+  const users = await resp.json();
+  return users;
+}

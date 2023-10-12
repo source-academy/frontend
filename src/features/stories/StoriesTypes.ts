@@ -24,6 +24,8 @@ export const GET_STORIES_USER = 'GET_STORIES_USER';
 // TODO: Investigate possibility of combining the two actions
 export const SET_CURRENT_STORIES_USER = 'SET_CURRENT_STORIES_USER';
 export const SET_CURRENT_STORIES_GROUP = 'SET_CURRENT_STORIES_GROUP';
+export const FETCH_ADMIN_PANEL_STORIES_USERS = 'FETCH_ADMIN_PANEL_STORIES_USERS';
+export const SET_ADMIN_PANEL_STORIES_USERS = 'SET_ADMIN_PANEL_STORIES_USERS';
 
 export type StoryMetadata = {
   authorId: number;
@@ -68,16 +70,17 @@ export type StoriesAuthState = {
   readonly role?: StoriesRole;
 };
 
-export type StoriesState = {
-  readonly storyList: StoryListView[];
-  readonly currentStoryId: number | null;
-  readonly currentStory: StoryData | null;
-  readonly envs: { [key: string]: StoriesEnvState };
-} & StoriesAuthState;
-
-export type AdminPanelStoriesUsers = {
+export type AdminPanelStoriesUser = {
   readonly id: number;
   readonly name: string;
   readonly username: string;
   readonly provider: string;
 };
+
+export type StoriesState = {
+  readonly storyList: StoryListView[];
+  readonly currentStoryId: number | null;
+  readonly currentStory: StoryData | null;
+  readonly envs: { [key: string]: StoriesEnvState };
+  readonly storiesUsers: AdminPanelStoriesUser[];
+} & StoriesAuthState;
