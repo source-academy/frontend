@@ -19,12 +19,11 @@ const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
   const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
 
   const clickHandler = () => {
-  // AdminPanelStoriesUsers does not contain role yet
-  //   if (props.data.role === StoriesRole.Admin) {
-  //     showWarningMessage('You cannot delete an admin user!');
-  //     return;
-  //   }
-  //   setIsDialogOpen(true);
+    if (props.data.role === StoriesRole.Admin) {
+      showWarningMessage('You cannot delete an admin user!');
+      return;
+    }
+    setIsDialogOpen(true);
   };
 
   const handleDelete = React.useCallback(() => {
@@ -38,15 +37,13 @@ const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
         content="You cannot delete an admin!"
         interactionKind="click"
         position={Position.TOP}
-        disabled={false}
-        // disabled={props.data.role !== Role.Admin}
+        disabled={props.data.role !== StoriesRole.Admin}
       >
         <Button
           text="Delete User"
           icon={IconNames.CROSS}
           onClick={clickHandler}
-          disabled={true}
-          // disabled={props.data.role === Role.Admin}
+          disabled={props.data.role === StoriesRole.Admin}
         />
       </Popover2>
       <Dialog

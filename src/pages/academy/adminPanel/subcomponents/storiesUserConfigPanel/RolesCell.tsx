@@ -50,8 +50,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
         fill
         minimal
         style={{ textAlign: 'center' }}
-        // value={data.role}
-        value = {'to be added'}
+        value={data.role}
         disabled={props.id === data.id}
       />
     </Popover2>
