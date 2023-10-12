@@ -105,8 +105,8 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
           onClick={() => {
             if (gridApi.current) {
               gridApi.current.exportDataAsCsv({
-                fileName: `SA Users (${new Date().toISOString()}).csv`,
-                columnKeys: ['name', 'username', 'group', 'role']
+                fileName: `SA Stories Users (${new Date().toISOString()}).csv`,
+                columnKeys: ['name', 'username', 'role']
               });
             }
           }}
