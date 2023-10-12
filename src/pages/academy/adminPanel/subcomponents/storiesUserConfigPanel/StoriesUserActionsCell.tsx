@@ -60,7 +60,7 @@ const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
           <p>
             Are you sure you want to <b>delete</b> the user{' '}
             <i>
-              {props.data.full_name} ({props.data.username})
+              {props.data.name} ({props.data.username})
             </i>
             ?
           </p>

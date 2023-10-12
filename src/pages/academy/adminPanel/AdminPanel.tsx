@@ -136,12 +136,9 @@ const AdminPanel: React.FC = () => {
     storiesUsers: [
       {
         'id': 1,
-        'created_at': '2023-10-11',
-        'updated_at': '2023-10-11',
-        'deleted_at': '2023-10-11',
         'username': 'test_stories_user',
-        'login_provider': 'login provider',
-        'full_name': 'Stories User'
+        'provider': 'login provider',
+        'name': 'Stories User'
       }
     ],
     handleUpdateUserRole: (id: number, role: StoriesRole) =>

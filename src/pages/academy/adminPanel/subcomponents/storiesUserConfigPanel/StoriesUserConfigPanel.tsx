@@ -28,13 +28,13 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
   const gridApi = React.useRef<GridApi>();
 
   const storiesUsers = props.storiesUsers?.map(e =>
-    !e.full_name ? { ...e, full_name: '(user has yet to log in)' } : e
+    !e.name ? { ...e, name: '(user has yet to log in)' } : e
   );
 
   const columnDefs: ColDef[] = [
     {
       headerName: 'Name',
-      field: 'full_name',
+      field: 'name',
       sort: 'asc'
     },
     {
