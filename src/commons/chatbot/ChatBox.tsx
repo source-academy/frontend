@@ -13,7 +13,9 @@ if (!(window as any).Buffer) {
 const ChatBox: React.FC = () => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const key = Constants.chatGptKey;
-  const [messages, setMessages] = React.useState<{ text: string; sender: 'user' | 'bot' }[]>([]);
+  const [messages, setMessages] = React.useState<{ text: string; sender: 'user' | 'bot' }[]>([
+    { text: "Ask me something about SICP!", sender: 'bot' }
+  ]);
   const [userInput, setUserInput] = React.useState<string>('');
   const [temp, setTemp] = React.useState<string>('');
   const [conversation, setConversation] = React.useState<string>('');
@@ -43,7 +45,7 @@ const ChatBox: React.FC = () => {
   };
 
   const cleanMessage = () => {
-    setMessages([]);
+    setMessages([{ text: "Ask me something about SICP!", sender: 'bot' }]);
     setHistory('');
   };
 
@@ -63,7 +65,9 @@ const ChatBox: React.FC = () => {
   };
 
   React.useEffect(() => {
-    setMessages([...messages, { text: temp, sender: 'bot' }]);
+    if (temp.trim() != '') {
+      setMessages([...messages, { text: temp, sender: 'bot' }]);
+    }
   }, [temp]);
 
   const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -87,7 +91,6 @@ const ChatBox: React.FC = () => {
           <div key={index} className={`message ${message.sender}`}>
             <div className="message-text">
               {message.text}
-              <hr />
             </div>
           </div>
         ))}

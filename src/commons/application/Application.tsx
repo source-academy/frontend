@@ -76,12 +76,12 @@ const Application: React.FC = () => {
       <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
         <div className="Application">
           <NavigationBar />
+          <Chatbot />
           <div className="Application__main">
             <Outlet />
           </div>
         </div>
       </WorkspaceSettingsContext.Provider>
-      <Chatbot />
     </>
   );
 };

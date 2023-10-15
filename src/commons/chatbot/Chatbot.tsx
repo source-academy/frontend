@@ -1,5 +1,3 @@
-import './Chatbot.scss';
-
 import * as React from 'react';
 import logo from 'src/assets/SA.jpg';
 
@@ -14,7 +12,7 @@ const Chatbot: React.FC = () => {
   const togglePop = () => {
     setPop(!isPop);
     if (!isPop) {
-      setTipsMessage('Ask me something');
+      setTipsMessage('Ask me something about SICP');
     } else {
       setTipsMessage('You can click me for a chat');
     }
