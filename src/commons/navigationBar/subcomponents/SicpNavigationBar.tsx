@@ -64,12 +64,12 @@ const SicpNavigationBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [indexSearchQuery, setIndexSearchQuery] = React.useState('');
   const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
-
   const [queryResult, setQueryResult] = React.useState<SearchResultProps[]>([
     { title: 'no result found', url: '' }
   ]);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();
+  const [isSubmenuVisible, setIsSubmenuVisible] = React.useState('');
   const navigate = useNavigate();
 
   // `section` is defined due to the navigate logic in the useEffect in Sicp.tsx
@@ -307,27 +307,47 @@ const SicpNavigationBar: React.FC = () => {
         >
           {searchAutocompleteResults.map((result, index) => (
             <div
-              style={{ margin: '2px 2px 3px 3px', cursor: 'pointer' }}
+              style={{
+                margin: '2px 2px 3px 3px',
+                cursor: 'pointer',
+                display: 'flex',
+              }}
               onClick={() => {
                 setSearchQuery(result);
                 handleAutoSearch(result);
               }}
               onMouseOver={e => {
-                const element = e!.nativeEvent!.srcElement as any;
+                const element = e.target as HTMLDivElement;
                 element.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                setIsSubmenuVisible(result);
               }}
               onMouseOut={e => {
-                const element = e!.nativeEvent!.srcElement as any;
+                const element = e.target as HTMLDivElement;
                 element.style.backgroundColor = 'rgba(0,0,0,0)';
               }}
             >
               {result}
+              {/* Submenu */}
+              <div
+                style={{
+                  display: isSubmenuVisible === result ? 'block' : 'none',
+                  marginLeft: '10px',
+                }}
+              >
+                {isSubmenuVisible === result && (
+                  // Conditional rendering of submenu content
+                  <h1>searchResult</h1>
+                )}
+              </div>
             </div>
           ))}
         </div>
       )}
     </div>
   );
+
+  
+
 
   const indexSearch = (
     <div className="indexSearch" style={{ position: 'relative' }} key="indexSearch">
