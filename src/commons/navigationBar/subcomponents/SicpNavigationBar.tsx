@@ -41,6 +41,12 @@ type TrieNode = {
   key: string;
 };
 
+type SearchData = {
+  indexTrie: TrieNode;
+  textTrie: TrieNode;
+  idToContentMap: Record<string, string>;
+};
+
 const fetchSearchData = () => {
   const xhr = new XMLHttpRequest();
   //todo replace this with real url
@@ -51,19 +57,12 @@ const fetchSearchData = () => {
     alert('Unable to get rewrited search data. Error code = ' + xhr.status + ' url is ' + url);
     throw new Error('Unable to get search data. Error code = ' + xhr.status + ' url is ' + url);
   } else {
-    const searchData = JSON.parse(xhr.responseText);
-    console.log("searchData is: " + searchData);
-    console.log(searchData);
-    const indexTrie:TrieNode = searchData['indexTrie'];
-    console.log("indexTrie is " + indexTrie);
-    const textTrie:TrieNode = searchData['textTrie'];
-    console.log("textTrie is " + textTrie);
-    const idToContentMap:Record<string, string> = searchData['idToContentMap'];
-    console.log("idToContentMap is " + idToContentMap);
+    const searchData:SearchData = JSON.parse(xhr.responseText);
+    return searchData;
   }
 };
-/*
-function search(keyStr:String, trie:TrieNode) {
+
+function search1(keyStr:String, trie:TrieNode) {
   const keys = [...keyStr];
   let node = trie;
   for (let i = 0; i < keys.length; i++) {
@@ -80,7 +79,31 @@ function search(keyStr:String, trie:TrieNode) {
   }
   return node.value;
 }
-*/
+
+function autoComplete1(incompleteKeys:String, trie:TrieNode, n:number = 30) {
+  let node = trie;
+  for (let i = 0; i < incompleteKeys.length; i++) {
+      if (!node.children[incompleteKeys[i]]) {
+          return [];
+      }
+      node = node.children[incompleteKeys[i]];
+  }
+  const result = [];
+  const queue = [node];
+  while (queue.length > 0 && result.length < n) {
+      const currNode = queue.shift();
+      if (currNode && currNode.value.length > 0) {
+          result.push(currNode.key);
+      }
+      if (currNode && currNode.children) {
+        for (const child of Object.values(currNode.children)) {
+            queue.push(child);
+        }
+      }
+  }
+  return result;
+}
+
 
 // end of rewrited portion
 
@@ -109,7 +132,13 @@ type SearchResultsProps = {
 };
 
 const SicpNavigationBar: React.FC = () => {
-  const rewritedSearchData = memoize(fetchSearchData)();
+  const rewritedSearchData:SearchData = memoize(fetchSearchData)();
+  const test1 = autoComplete1("a", rewritedSearchData.indexTrie);
+  console.log("test1 is ");
+  console.log(test1);
+  const test2 = search1("table", rewritedSearchData.indexTrie);
+  console.log("test2 is ");
+  console.log(test2);
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
   const [isTocOpen, setIsTocOpen] = React.useState(false);
   const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
