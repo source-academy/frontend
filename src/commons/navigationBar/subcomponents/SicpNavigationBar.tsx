@@ -32,6 +32,29 @@ const fetchData = () => {
 };
 const memoizedFetchData = memoize(fetchData);
 
+/*
+type TrieNode = {
+  children: Record<string, TrieNode>;
+  value: any[]; 
+  key: string;
+};
+*/
+
+const fetchSearchData = () => {
+  const xhr = new XMLHttpRequest();
+  //todo replace this with real url
+  const url = "http://127.0.0.1:8080/json/rewritedSearchData.json";
+  xhr.open('GET', url, false); //sync download
+  xhr.send();
+  if (xhr.status !== 200) {
+    alert('Unable to get rewrited search data. Error code = ' + xhr.status + ' url is ' + url);
+    throw new Error('Unable to get search data. Error code = ' + xhr.status + ' url is ' + url);
+  } else {
+    const searchData = JSON.parse(xhr.responseText);
+    return searchData;
+  }
+};
+
 // FIXME: Remove this any type
 function queryTrie(startingNode: any, query: string) {
   let node = startingNode;
@@ -57,6 +80,7 @@ type SearchResultsProps = {
 };
 
 const SicpNavigationBar: React.FC = () => {
+  const rewritedSearchData = memoize(fetchSearchData)();
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
   const [isTocOpen, setIsTocOpen] = React.useState(false);
   const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
