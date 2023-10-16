@@ -32,13 +32,14 @@ const fetchData = () => {
 };
 const memoizedFetchData = memoize(fetchData);
 
-/*
+
+// start of rewrited portion
+
 type TrieNode = {
   children: Record<string, TrieNode>;
   value: any[]; 
   key: string;
 };
-*/
 
 const fetchSearchData = () => {
   const xhr = new XMLHttpRequest();
@@ -51,9 +52,37 @@ const fetchSearchData = () => {
     throw new Error('Unable to get search data. Error code = ' + xhr.status + ' url is ' + url);
   } else {
     const searchData = JSON.parse(xhr.responseText);
-    return searchData;
+    console.log("searchData is: " + searchData);
+    console.log(searchData);
+    const indexTrie:TrieNode = searchData['indexTrie'];
+    console.log("indexTrie is " + indexTrie);
+    const textTrie:TrieNode = searchData['textTrie'];
+    console.log("textTrie is " + textTrie);
+    const idToContentMap:Record<string, string> = searchData['idToContentMap'];
+    console.log("idToContentMap is " + idToContentMap);
   }
 };
+/*
+function search(keyStr:String, trie:TrieNode) {
+  const keys = [...keyStr];
+  let node = trie;
+  for (let i = 0; i < keys.length; i++) {
+      if(node === undefined || node.children === undefined) {
+          console.log("when searching, got undefined node or node.children");
+          console.log("i is " + i);
+          return null;
+      }
+
+      if (!node.children[keys[i]]) {
+          return null;
+      }
+      node = node.children[keys[i]];
+  }
+  return node.value;
+}
+*/
+
+// end of rewrited portion
 
 // FIXME: Remove this any type
 function queryTrie(startingNode: any, query: string) {
