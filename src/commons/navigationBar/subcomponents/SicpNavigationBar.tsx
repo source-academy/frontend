@@ -276,6 +276,8 @@ const SicpNavigationBar: React.FC = () => {
     setIndexSearchQuery(s);
     setIndexAutocompleteResults(autoComplete(s, 250, indexTrie));
   };
+  
+  const resultsStub = ["result1", "result2", "result3"];
 
   const userSearch = (
     <div className="userSearch" style={{ position: 'relative' }} key="userSearch">
@@ -301,8 +303,6 @@ const SicpNavigationBar: React.FC = () => {
             backgroundColor: 'white',
             outline: 'dashed',
             width: '100%',
-            height: '600%',
-            overflow: 'auto'
           }}
         >
           {searchAutocompleteResults.map((result, index) => (
@@ -310,11 +310,12 @@ const SicpNavigationBar: React.FC = () => {
               style={{
                 margin: '2px 2px 3px 3px',
                 cursor: 'pointer',
+                position: 'relative',
                 display: 'flex',
               }}
               onClick={() => {
                 setSearchQuery(result);
-                handleAutoSearch(result);
+                handleAutoSearch(result); 
               }}
               onMouseOver={e => {
                 const element = e.target as HTMLDivElement;
@@ -328,23 +329,28 @@ const SicpNavigationBar: React.FC = () => {
             >
               {result}
               {/* Submenu */}
-              <div
-                style={{
-                  display: isSubmenuVisible === result ? 'block' : 'none',
-                  marginLeft: '10px',
-                }}
-              >
-                {isSubmenuVisible === result && (
-                  // Conditional rendering of submenu content
-                  <h1>searchResult</h1>
-                )}
-              </div>
+              {isSubmenuVisible === result && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '100%',
+                    width: '200px', // Adjust the submenu width as needed
+                    backgroundColor: 'lightgray',
+                  }}
+                >
+                  {resultsStub.map((result, index) => {
+                    return <div key={index} onClick={() => {console.log("is clicked")}}>{result}</div>;
+                  })}
+                </div>
+              )}
             </div>
           ))}
         </div>
       )}
     </div>
   );
+  
 
   
 
