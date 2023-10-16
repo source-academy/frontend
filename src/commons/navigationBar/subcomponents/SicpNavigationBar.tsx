@@ -61,7 +61,7 @@ const fetchSearchData = () => {
     return searchData;
   }
 };
-
+// todo, remove old search and autocomplete funcitons and properly rename the new ones
 function search1(keyStr:String, trie:TrieNode) {
   const keys = [...keyStr];
   let node = trie;
@@ -69,11 +69,11 @@ function search1(keyStr:String, trie:TrieNode) {
       if(node === undefined || node.children === undefined) {
           console.log("when searching, got undefined node or node.children");
           console.log("i is " + i);
-          return null;
+          return [];
       }
 
       if (!node.children[keys[i]]) {
-          return null;
+          return [];
       }
       node = node.children[keys[i]];
   }
@@ -133,10 +133,10 @@ type SearchResultsProps = {
 
 const SicpNavigationBar: React.FC = () => {
   const rewritedSearchData:SearchData = memoize(fetchSearchData)();
-  const test1 = autoComplete1("a", rewritedSearchData.indexTrie);
+  const test1 = autoComplete1("a", rewritedSearchData.textTrie);
   console.log("test1 is ");
   console.log(test1);
-  const test2 = search1("table", rewritedSearchData.indexTrie);
+  const test2 = search1("table", rewritedSearchData.textTrie);
   console.log("test2 is ");
   console.log(test2);
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
@@ -280,7 +280,7 @@ const SicpNavigationBar: React.FC = () => {
       .map(toSearchResult)
       .filter((obj: SearchResultProps) => obj.title.toLowerCase().includes(query.toLowerCase()));
   };
-
+  /*
   function sentenceAutoComplete(query: string, limit: number, trie: any): string[] {
     const words = query
       .toLowerCase()
@@ -304,7 +304,7 @@ const SicpNavigationBar: React.FC = () => {
       )
       .map(word => pre + ' ' + word);
   }
-
+  */
   const handleSearchButton = () => {
     handleOpenSearch();
     setDisplayedQuery(searchQuery);
@@ -351,7 +351,7 @@ const SicpNavigationBar: React.FC = () => {
 
   const handleUserSearchChange = (s: string) => {
     setSearchQuery(s);
-    setSearchAutocompleteResults(sentenceAutoComplete(s, 250, textTrie));
+    setSearchAutocompleteResults(autoComplete1(s,rewritedSearchData.textTrie));
   };
 
   const handleIndexSearchChange = (s: string) => {
@@ -359,7 +359,7 @@ const SicpNavigationBar: React.FC = () => {
     setIndexAutocompleteResults(autoComplete(s, 250, indexTrie));
   };
   
-  const resultsStub = ["result1", "result2", "result3"];
+  const [results, setResults] = React.useState(["result1", "result2", "result3"]);
 
   const userSearch = (
     <div className="userSearch" style={{ position: 'relative' }} key="userSearch">
@@ -402,6 +402,8 @@ const SicpNavigationBar: React.FC = () => {
               onMouseOver={e => {
                 const element = e.target as HTMLDivElement;
                 element.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                setSearchQuery(result);
+                setResults(search1(result, rewritedSearchData.textTrie));
                 setIsSubmenuVisible(result);
               }}
               onMouseOut={e => {
@@ -421,7 +423,7 @@ const SicpNavigationBar: React.FC = () => {
                     backgroundColor: 'lightgray',
                   }}
                 >
-                  {resultsStub.map((result, index) => {
+                  {results.map((result, index) => {
                     return <div key={index} onClick={() => {console.log("is clicked")}}>{result}</div>;
                   })}
                 </div>
