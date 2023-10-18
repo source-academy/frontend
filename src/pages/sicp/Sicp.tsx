@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
@@ -153,7 +154,9 @@ const Sicp: React.FC = () => {
     <div
       className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
       ref={parentRef}
-    >
+    >   
+      <Link to="#begin" ref={ref => (refs.current["#begin"] = ref)}>
+       </Link>
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
           {loading ? (
@@ -168,6 +171,8 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
+      <Link to="#end" ref={ref => (refs.current["#end"] = ref)}>
+      </Link>
     </div>
   );
 };

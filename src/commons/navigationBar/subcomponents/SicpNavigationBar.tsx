@@ -62,6 +62,7 @@ const fetchSearchData = () => {
   }
 };
 // todo, remove old search and autocomplete funcitons and properly rename the new ones
+// todo, debug the url of the text search
 function search1(keyStr:String, trie:TrieNode) {
   const keys = [...keyStr];
   let node = trie;
@@ -133,25 +134,24 @@ type SearchResultsProps = {
 
 const SicpNavigationBar: React.FC = () => {
   const rewritedSearchData:SearchData = memoize(fetchSearchData)();
-  const test1 = autoComplete1("a", rewritedSearchData.textTrie);
-  console.log("test1 is ");
-  console.log(test1);
-  const test2 = search1("table", rewritedSearchData.textTrie);
-  console.log("test2 is ");
-  console.log(test2);
+  //console.log(rewritedSearchData.idToContentMap["1#h1"])
+  const [focusedSearchResultIndex, setFocusedSearchResultIndex] = React.useState<number>(-1);
+  const [focusedIndexSearchResultIndex, setFocusedIndexSearchResultIndex] = React.useState<number>(-1);
   const { indexTrie, textbook, textTrie } = memoizedFetchData();
   const [isTocOpen, setIsTocOpen] = React.useState(false);
   const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
+  const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
   const [displayedQuery, setDisplayedQuery] = React.useState('');
+  //const [displayedIndexQuery, setDisplayedIndexQuery] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [indexSearchQuery, setIndexSearchQuery] = React.useState('');
-  const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
   const [queryResult, setQueryResult] = React.useState<SearchResultProps[]>([
     { title: 'no result found', url: '' }
   ]);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();
   const [isSubmenuVisible, setIsSubmenuVisible] = React.useState('');
+  const [isSubmenuVisibleIndex, setIsSubmenuVisibleIndex] = React.useState('');
   const navigate = useNavigate();
 
   // `section` is defined due to the navigate logic in the useEffect in Sicp.tsx
@@ -216,46 +216,6 @@ const SicpNavigationBar: React.FC = () => {
     usePortal: false
   };
 
-  function autoComplete(str: string, limit: number, trie: any) {
-    if (str.length === 0) {
-      return [];
-    }
-    str = str.toLowerCase();
-
-    function next(node: any, i: number) {
-      return letters[i] ? node[letters[i]] : null;
-    }
-    const letters = [...'abcdefghijklmnopqrstuvwxyz'.split(''), ' '];
-
-    function toEnd(query: any) {
-      let node = trie;
-      for (const char of query) {
-        if (node[char]) {
-          node = node[char];
-        } else {
-          return null;
-        }
-      }
-      return node;
-    }
-
-    function recur(node: any, path: string) {
-      if (node == null || limit < 0) {
-        return;
-      }
-      if (node.value && voidSearch(path).length > 0) {
-        ans.push(path);
-        limit--;
-      }
-      for (let i = 0; i < letters.length; i++) {
-        recur(next(node, i), path + letters[i]);
-      }
-    }
-    const ans: string[] = [];
-    recur(toEnd(str), str);
-    return ans;
-  }
-
   const voidSearch = (query: string): SearchResultProps[] => {
     function toSearchResult(array: any[]): SearchResultProps {
       if (array == null || array[0] == null || array[1] == null || array[2] == null) {
@@ -310,15 +270,15 @@ const SicpNavigationBar: React.FC = () => {
     setDisplayedQuery(searchQuery);
     setQueryResult(voidSearch(searchQuery));
   };
+  /*
   const handleAutoSearch = (str: string) => {
     handleOpenSearch();
     setDisplayedQuery(str);
     setQueryResult(voidSearch(str));
     setSearchQuery(str);
   };
-  const handleAutoIndexSearch = (str: string) => {
-    handleIndexSearchButton(str);
-  };
+  */
+
 
   const handleIndexSearchButton = (str: string) => {
     handleOpenSearch();
@@ -348,19 +308,10 @@ const SicpNavigationBar: React.FC = () => {
 
     setQueryResult(tem);
   };
-
-  const handleUserSearchChange = (s: string) => {
-    setSearchQuery(s);
-    setSearchAutocompleteResults(autoComplete1(s,rewritedSearchData.textTrie));
-  };
-
-  const handleIndexSearchChange = (s: string) => {
-    setIndexSearchQuery(s);
-    setIndexAutocompleteResults(autoComplete(s, 250, indexTrie));
-  };
   
   const [results, setResults] = React.useState(["result1", "result2", "result3"]);
-
+  const [resultsIndex, setResultsIndex] = React.useState([{text:"", order:"", id:"", hasSubindex: false}]);
+  // debug; use a state selected auto complete result to display the submenu, use cursor on to reset it
   const userSearch = (
     <div className="userSearch" style={{ position: 'relative' }} key="userSearch">
       <div className="userSearch-inner">
@@ -368,7 +319,11 @@ const SicpNavigationBar: React.FC = () => {
           <InputGroup
             placeholder="Search"
             value={searchQuery}
-            onChange={event => handleUserSearchChange(event.target.value)}
+            onChange={event => {
+              const s = event.target.value;
+              setSearchQuery(s);
+              setSearchAutocompleteResults(autoComplete1(s,rewritedSearchData.textTrie));
+            }}
           />
           <ControlButton
             label="Text"
@@ -384,49 +339,63 @@ const SicpNavigationBar: React.FC = () => {
             position: 'absolute',
             backgroundColor: 'white',
             outline: 'dashed',
-            width: '100%',
+            width: '75%',
           }}
         >
           {searchAutocompleteResults.map((result, index) => (
             <div
               style={{
-                margin: '2px 2px 3px 3px',
+                margin: 0,
                 cursor: 'pointer',
                 position: 'relative',
                 display: 'flex',
               }}
-              onClick={() => {
+            >
+              <div style={{width: "100%", backgroundColor: isSubmenuVisible!==result?'white':'grey',}} 
+              onMouseOver={() => {
+                // todo: this works but is juggy, how could only compute when mouse stay for a while
                 setSearchQuery(result);
-                handleAutoSearch(result); 
-              }}
-              onMouseOver={e => {
-                const element = e.target as HTMLDivElement;
-                element.style.backgroundColor = 'rgba(0,0,0,0.5)';
-                setSearchQuery(result);
+                setFocusedSearchResultIndex(-1);
                 setResults(search1(result, rewritedSearchData.textTrie));
                 setIsSubmenuVisible(result);
               }}
-              onMouseOut={e => {
-                const element = e.target as HTMLDivElement;
-                element.style.backgroundColor = 'rgba(0,0,0,0)';
-              }}
-            >
+               >
               {result}
+              </div >
               {/* Submenu */}
-              {isSubmenuVisible === result && (
-                <div
+              {isSubmenuVisible === result 
+              && (() =>{
+                //for debug purpose
+                console.log("line 411 onwards is executed"); 
+                return true;})() 
+              && (
+                <ul
                   style={{
                     position: 'absolute',
                     top: 0,
                     left: '100%',
-                    width: '200px', // Adjust the submenu width as needed
-                    backgroundColor: 'lightgray',
+                    width: '800px', // Adjust the submenu width as needed
+                    backgroundColor: 'white',
+                    outline: 'dashed',
+                    overflow: 'auto',
+                    margin: 0,
+                    padding: 0,
                   }}
-                >
+                  onClick={() => {console.log("ul is clicked, line 428")}}
+                > 
                   {results.map((result, index) => {
-                    return <div key={index} onClick={() => {console.log("is clicked")}}>{result}</div>;
+                    return <div 
+                            style={{ margin: '5px 0', width: "100%", backgroundColor: focusedSearchResultIndex!==index?'white':'grey',}} 
+                            key={index} 
+                            onClick={() => {
+                              window.location.href = 'http://localhost:8000/sicpjs/' + result;
+                            }}
+                            onMouseOver={() => setFocusedSearchResultIndex(index)}
+                            >
+                              {rewritedSearchData.idToContentMap[result]}
+                            </div>;
                   })}
-                </div>
+                </ul>
               )}
             </div>
           ))}
@@ -435,10 +404,7 @@ const SicpNavigationBar: React.FC = () => {
     </div>
   );
   
-
-  
-
-
+ //todo: debug, the id of some search result is undefined
   const indexSearch = (
     <div className="indexSearch" style={{ position: 'relative' }} key="indexSearch">
       <div className="indexSearch-inner">
@@ -446,15 +412,20 @@ const SicpNavigationBar: React.FC = () => {
           <InputGroup
             placeholder="Search"
             value={indexSearchQuery}
-            onChange={event => handleIndexSearchChange(event.target.value)}
+            onChange={event => {
+              const s = event.target.value;
+              setIndexSearchQuery(s);
+              setIndexAutocompleteResults(autoComplete1(s, rewritedSearchData.indexTrie));
+            }}
           />
           <ControlButton
             label="Index"
             icon={IconNames.SEARCH}
+            // todo, to modify
             onClick={() => handleIndexSearchButton(indexSearchQuery)}
           />
         </div>
-      </div>
+        </div>
       {indexAutocompleteResults.length !== 0 && (
         <div
           className="userSearchDropdown"
@@ -462,28 +433,74 @@ const SicpNavigationBar: React.FC = () => {
             position: 'absolute',
             backgroundColor: 'white',
             outline: 'dashed',
-            width: '100%',
-            height: '600%',
-            overflow: 'auto'
+            width: '75%',
           }}
         >
-          {indexAutocompleteResults.map(result => (
+          {indexAutocompleteResults.map((result, index) => (
             <div
-              style={{ margin: '2px 2px 3px 3px', cursor: 'pointer' }}
-              onClick={() => {
-                setIndexSearchQuery(result);
-                handleAutoIndexSearch(result);
-              }}
-              onMouseOver={e => {
-                const element = e.target as HTMLDivElement;
-                element.style.backgroundColor = 'rgba(0,0,0,0.5)';
-              }}
-              onMouseOut={e => {
-                const element = e.target as HTMLDivElement;
-                element.style.backgroundColor = 'rgba(0,0,0,0)';
+              style={{
+                margin: 0,
+                cursor: 'pointer',
+                position: 'relative',
+                display: 'flex',
               }}
             >
+              <div style={{width: "100%", backgroundColor: isSubmenuVisible!==result?'white':'grey',}} 
+              onMouseOver={() => {
+                // todo: this works but is juggy, how could only compute when mouse stay for a while
+                setIndexSearchQuery(result);
+                setFocusedIndexSearchResultIndex(-1);
+                setResultsIndex(search1(result, rewritedSearchData.indexTrie));
+                setIsSubmenuVisibleIndex(result);
+              }}
+               >
               {result}
+              </div >
+              {/* Submenu */}
+              {isSubmenuVisibleIndex === result 
+              && (() =>{
+                //for debug purpose
+                console.log("line 462 onwards is executed");
+                return true;})() 
+              && (
+                <ul
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '100%',
+                    width: '200%', // Adjust the submenu width as needed
+                    backgroundColor: 'white',
+                    outline: 'dashed',
+                    overflow: 'auto',
+                    margin: 0,
+                    padding: 0,
+                  }}
+                  onClick={() => {console.log("ul is clicked, line 477")}}
+                > 
+                  {resultsIndex.filter((result) => result.id)
+                               .sort((a, b) => {
+                                if (a.hasSubindex && !b.hasSubindex) {
+                                  return 1;
+                                }
+                                if (!a.hasSubindex && b.hasSubindex) {
+                                  return -1;
+                                }
+                                return a.order.localeCompare(b.order);
+                              })
+                               .map((result, index) => {
+                    return <div 
+                            style={{ margin: '5px 0', width: "100%", backgroundColor: focusedIndexSearchResultIndex!==index?'white':'grey',}} 
+                            key={index} 
+                            onClick={() => {
+                              window.location.href = 'http://localhost:8000/sicpjs/' + result.id;
+                            }}
+                            onMouseOver={() => setFocusedIndexSearchResultIndex(index)}
+                            >
+                              {result.text}
+                            </div>;
+                  })}
+                </ul>
+              )}
             </div>
           ))}
         </div>
