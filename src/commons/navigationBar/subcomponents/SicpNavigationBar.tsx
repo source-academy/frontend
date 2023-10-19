@@ -4,7 +4,7 @@ import { memoize } from 'lodash';
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
-//import Constants from 'src/commons/utils/Constants';
+import Constants from 'src/commons/utils/Constants';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
@@ -129,7 +129,7 @@ const SicpNavigationBar: React.FC = () => {
   const fetchSearchData = () => {
     const xhr = new XMLHttpRequest();
   //todo replace this with real url
-    const url = "http://127.0.0.1:8080/json/rewritedSearchData.json";
+    const url = Constants.sicpBackendUrl + "json/rewritedSearchData.json";
     xhr.open('GET', url, false); //sync download
     xhr.send();
     if (xhr.status !== 200) {
@@ -268,7 +268,7 @@ const SicpNavigationBar: React.FC = () => {
         <div 
           style={{ margin: '5px 0', width: "100%", backgroundColor: focusedSearchResultIndex!==index?'white':'grey',}} 
           key={index} 
-          onClick={() => {window.location.href = 'http://localhost:8000/sicpjs/' + result;}}
+          onClick={() => {window.location.href = "https://sourceacademy.nus.edu.sg/sicpjs/" + result;}}
           onMouseOver={() => setFocusedSearchResultIndex(index)}>
             {rewritedSearchData.idToContentMap[result]}
         </div>
@@ -323,7 +323,7 @@ const SicpNavigationBar: React.FC = () => {
         <div 
             style={{ margin: '5px 0', width: "100%", backgroundColor: focusedIndexSearchResultIndex!==index?'white':'grey',}} 
             key={index} 
-            onClick={() => {window.location.href = 'http://localhost:8000/sicpjs/' + result.id;}}
+            onClick={() => {window.location.href = "https://sourceacademy.nus.edu.sg/sicpjs/" + result.id;}}
             onMouseOver={() => setFocusedIndexSearchResultIndex(index)}>
               {result.text}
         </div>
