@@ -19,6 +19,7 @@ import {
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
+import Chatbot from './subcomponents/chatbot/Chatbot';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
@@ -168,6 +169,7 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
+      <Chatbot />
     </div>
   );
 };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
-import Chatbot from '../chatbot/Chatbot';
+// import Chatbot from '../chatbot/Chatbot';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
@@ -76,7 +76,7 @@ const Application: React.FC = () => {
       <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
         <div className="Application">
           <NavigationBar />
-          <Chatbot />
+          {/* <Chatbot /> */}
           <div className="Application__main">
             <Outlet />
           </div>

@@ -12,7 +12,7 @@ const Chatbot: React.FC = () => {
   const togglePop = () => {
     setPop(!isPop);
     if (!isPop) {
-      setTipsMessage('Ask me something about SICP');
+      setTipsMessage('');
     } else {
       setTipsMessage('You can click me for a chat');
     }
