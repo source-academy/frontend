@@ -275,8 +275,20 @@ const Assessment: React.FC<AssessmentProps> = props => {
     if (!overview) {
       return <AssessmentNotFound />;
     }
+    let assessmentPassword: string | null = null;
+    // Only need to prompt for password the first time
+    if (overview.private && overview.status === AssessmentStatuses.not_attempted) {
+      // Attempt to load password-protected assessment
+      assessmentPassword = window.prompt('Please enter password.', '');
+      if (!assessmentPassword) {
+        // Cancelled action, redirect back to the Assessment overviews page
+        return <Navigate to={`/courses/${courseId}/${props.assessmentConfiguration.type}`} />;
+      }
+    }
+
     const assessmentWorkspaceProps: AssessmentWorkspaceProps = {
       assessmentId,
+      assessmentPassword,
       questionId,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
       canSave:

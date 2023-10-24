@@ -309,9 +309,15 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
     const tokens: Tokens = yield selectTokens();
 
-    const { assessmentId } = action.payload;
+    const { assessmentId, assessmentPassword } = action.payload;
 
-    const assessment: Assessment | null = yield call(getAssessment, assessmentId, tokens);
+    const assessment: Assessment | null = yield call(
+      getAssessment,
+      assessmentId,
+      tokens,
+      undefined,
+      assessmentPassword
+    );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
     }

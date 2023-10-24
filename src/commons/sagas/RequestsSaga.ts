@@ -493,7 +493,8 @@ export const getUserAssessmentOverviews = async (
 export const getAssessment = async (
   assessmentId: number,
   tokens: Tokens,
-  courseRegId?: number
+  courseRegId?: number,
+  password?: string
 ): Promise<Assessment | null> => {
   let resp;
   if (courseRegId !== undefined) {
@@ -507,29 +508,22 @@ export const getAssessment = async (
     );
   } else {
     // Otherwise, we are getting the assessment for the current user
+    // After unlocking the first time, password is no longer necessary
     resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
       ...tokens
     });
-  }
-
-  // Attempt to load password-protected assessment
-  while (resp && resp.status === 403) {
-    const input = window.prompt('Please enter password.', '');
-    if (!input) {
-      resp = null;
-      window.history.back();
-      return null;
+    if (!resp) {
+      // Try again with the password for the first time unlock
+      resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
+        ...tokens,
+        body: { password }
+      });
     }
-
-    resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
-      ...tokens,
-      body: {
-        password: input
-      }
-    });
   }
 
   if (!resp || !resp.ok) {
+    // Failed to load assessment, go back
+    window.history.back();
     return null;
   }
 
