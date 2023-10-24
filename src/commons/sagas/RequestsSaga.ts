@@ -517,7 +517,8 @@ export const getAssessment = async (
       // First-time unlocking password-protected assessments
       resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
         ...tokens,
-        body: { password }
+        body: { password },
+        errorMessage: 'Incorrect password'
       });
     }
   }
