@@ -566,7 +566,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .provide([[call(getAssessment, mockId, mockTokens), mockAssessment]])
       .put(updateAssessment(mockAssessment))
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: FETCH_ASSESSMENT, payload: mockId })
+      .dispatch({ type: FETCH_ASSESSMENT, payload: { mockId } })
       .silentRun();
   });
 
@@ -578,7 +578,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .call(getAssessment, mockId, mockTokens)
       .not.put.actionType(UPDATE_ASSESSMENT)
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: FETCH_ASSESSMENT, payload: mockId })
+      .dispatch({ type: FETCH_ASSESSMENT, payload: { mockId } })
       .silentRun();
   });
 });
