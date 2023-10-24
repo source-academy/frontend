@@ -197,8 +197,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       if (!assessmentPassword) {
         window.history.back();
         return;
-        // Cancelled action, redirect back to the Assessment overviews page
-        // return <Navigate to={`/courses/${courseId}/${props.assessmentConfiguration.type}`} />;
       }
     }
     handleAssessmentFetch(props.assessmentId, assessmentPassword || undefined);
