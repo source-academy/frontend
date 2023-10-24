@@ -18,7 +18,7 @@ const acequireMock = acequire as jest.Mock;
 
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
-  assessmentPassword: null,
+  needsPassword: false,
   notAttempted: true,
   canSave: true,
   assessmentConfiguration: {

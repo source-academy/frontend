@@ -508,12 +508,13 @@ export const getAssessment = async (
     );
   } else {
     // Otherwise, we are getting the assessment for the current user
-    // After unlocking the first time, password is no longer necessary
-    resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
-      ...tokens
-    });
-    if (!resp) {
-      // Try again with the password for the first time unlock
+    if (password === undefined) {
+      // No password required (either not password-protected, or already previously unlocked)
+      resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
+        ...tokens
+      });
+    } else {
+      // First-time unlocking password-protected assessments
       resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
         ...tokens,
         body: { password }
