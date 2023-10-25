@@ -126,7 +126,7 @@ test('fetchAssessment generates correct action object', () => {
   const action = fetchAssessment(id);
   expect(action).toEqual({
     type: FETCH_ASSESSMENT,
-    payload: id
+    payload: { assessmentId: id }
   });
 });
 
