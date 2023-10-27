@@ -1,6 +1,5 @@
 import { Buffer as NodeBuffer } from 'buffer';
 import { ChatGPTAPI } from 'chatgpt';
-import { useMemo } from 'react';
 import * as React from 'react';
 import Constants from 'src/commons/utils/Constants';
 
@@ -21,12 +20,11 @@ const ChatBox: React.FC = () => {
   const [conversation, setConversation] = React.useState<string>('');
   const [history, setHistory] = React.useState<string>('');
 
-  const api = useMemo(() => {
-    return new ChatGPTAPI({
-      apiKey: key,
-      fetch: window.fetch.bind(window)
-    });
-  }, [key]);
+  const api = new ChatGPTAPI({
+    apiKey: key,
+    fetch: window.fetch.bind(window)
+  });
+
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -53,26 +51,26 @@ const ChatBox: React.FC = () => {
     setHistory('');
   };
 
-  React.useEffect(() => {
-    const getResponse = async (userInput: string) => {
-      try {
-        const response = await api.sendMessage(userInput);
-        setTemp(response.text);
-      } catch (error) {
-        setMessages([...messages, { text: `Error: ${error.message}`, sender: 'bot' }]);
-      }
-    };
+  const getResponse = async (userInput: string) => {
+    try {
+      const response = await api.sendMessage(userInput);
+      setTemp(response.text);
+    } catch (error) {
+      setMessages([...messages, { text: `Error: ${error.message}`, sender: 'bot' }]);
+    }
+  };
 
+  React.useEffect(() => {
     if (conversation.trim() !== '') {
       getResponse(conversation);
     }
-  }, [conversation, api, messages, setTemp, setMessages]);
+  }, [conversation]);
 
   React.useEffect(() => {
     if (temp.trim() !== '') {
       setMessages([...messages, { text: temp, sender: 'bot' }]);
     }
-  }, [temp, messages, setMessages]);
+  }, [temp]);
 
   const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
