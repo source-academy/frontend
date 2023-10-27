@@ -1,6 +1,8 @@
 import { Buffer as NodeBuffer } from 'buffer';
 import { ChatGPTAPI } from 'chatgpt';
 import * as React from 'react';
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Constants from 'src/commons/utils/Constants';
 
 Buffer.from('anything', 'base64');
@@ -12,7 +14,7 @@ if (!(window as any).Buffer) {
 const ChatBox: React.FC = () => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const key = Constants.chatGptKey;
-  const [messages, setMessages] = React.useState<{ text: string; sender: 'user' | 'bot' }[]>([
+  const [messages, setMessages] = React.useState<{ text: any; sender: 'user' | 'bot' }[]>([ //text: string
     { text: 'Ask me something about this charpter!', sender: 'bot' }
   ]);
   const [userInput, setUserInput] = React.useState<string>('');
@@ -68,6 +70,8 @@ const ChatBox: React.FC = () => {
 
   React.useEffect(() => {
     if (temp.trim() !== '') {
+      const newNew = temp.split("```");
+      console.log(newNew);
       setMessages([...messages, { text: temp, sender: 'bot' }]);
     }
   }, [temp]);
@@ -85,12 +89,13 @@ const ChatBox: React.FC = () => {
   const scrollToBottom = () => {
     chatRef.current?.scrollTo({ top: chatRef.current?.scrollHeight });
   };
+  
 
   return (
     <div className="chat-container">
       <div className="chat-message" ref={chatRef}>
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.sender}`}>
+          <div key={index} className={`message ${message.sender}`} style={{ whiteSpace: 'pre-line' }}>
             {message.text}
           </div>
         ))}
