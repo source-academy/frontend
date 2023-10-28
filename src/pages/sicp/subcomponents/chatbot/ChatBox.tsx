@@ -1,8 +1,8 @@
 import { Buffer as NodeBuffer } from 'buffer';
 import { ChatGPTAPI } from 'chatgpt';
 import * as React from 'react';
-// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Constants from 'src/commons/utils/Constants';
 
 Buffer.from('anything', 'base64');
@@ -14,8 +14,8 @@ if (!(window as any).Buffer) {
 const ChatBox: React.FC = () => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const key = Constants.chatGptKey;
-  const [messages, setMessages] = React.useState<{ text: any; sender: 'user' | 'bot' }[]>([ //text: string
-    { text: 'Ask me something about this charpter!', sender: 'bot' }
+  const [messages, setMessages] = React.useState<{ text: string[]; sender: 'user' | 'bot' }[]>([ //todo: change the type fo text
+    { text: ['Ask me something about this charpter!'], sender: 'bot' }
   ]);
   const [userInput, setUserInput] = React.useState<string>('');
   const [temp, setTemp] = React.useState<string>('');
@@ -32,9 +32,13 @@ const ChatBox: React.FC = () => {
     setUserInput(event.target.value);
   };
 
+  const codeBlocks = (temp:string) => { return temp.split('```');}
+
+
   const sendMessage = () => {
     if (userInput.trim() !== '') {
-      setMessages([...messages, { text: userInput, sender: 'user' }]);
+      const blocks = codeBlocks(userInput);
+      setMessages([...messages, { text: blocks, sender: 'user' }]);
       const newConversation =
         'The following questions are about SICP JS. If it is not must not answer!' +
         'Please answer the questions based on this book \n' +
@@ -49,7 +53,7 @@ const ChatBox: React.FC = () => {
   };
 
   const cleanMessage = () => {
-    setMessages([{ text: 'Ask me something about this charpter!', sender: 'bot' }]);
+    setMessages([{ text: ['Ask me something about this charpter!'], sender: 'bot' }]);
     setHistory('');
   };
 
@@ -58,7 +62,7 @@ const ChatBox: React.FC = () => {
       const response = await api.sendMessage(userInput);
       setTemp(response.text);
     } catch (error) {
-      setMessages([...messages, { text: `Error: ${error.message}`, sender: 'bot' }]);
+      setMessages([...messages, { text: [`Error: ${error.message}`], sender: 'bot' }]);
     }
   };
 
@@ -70,10 +74,10 @@ const ChatBox: React.FC = () => {
 
   React.useEffect(() => {
     if (temp.trim() !== '') {
-      const newNew = temp.split("```");
-      console.log(newNew);
-      setMessages([...messages, { text: temp, sender: 'bot' }]);
-    }
+      // Split the response into code blocks
+      const blocks = codeBlocks(temp);
+        setMessages([...messages, { text: blocks, sender: 'bot' }]);
+      }
   }, [temp]);
 
   const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -96,7 +100,20 @@ const ChatBox: React.FC = () => {
       <div className="chat-message" ref={chatRef}>
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.sender}`} style={{ whiteSpace: 'pre-line' }}>
-            {message.text}
+            {Array.isArray(message.text) ? (
+              message.text.map((block, index) => (
+                (block.substring(0,10) == "javascript") ? (
+                  <SyntaxHighlighter language="javascript" style={vs} key={index}>
+                    {block}
+                  </SyntaxHighlighter>
+                )
+                : (
+                  block
+                )
+              ))
+            ) : (
+              message.text
+            )}
           </div>
         ))}
       </div>
