@@ -2,6 +2,7 @@ import { Alignment, Drawer, InputGroup, Navbar, NavbarGroup, Position } from '@b
 import { IconNames } from '@blueprintjs/icons';
 import { memoize } from 'lodash';
 import * as React from 'react';
+import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
 import Constants from 'src/commons/utils/Constants';
@@ -9,7 +10,6 @@ import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
-
 
 
 
@@ -128,7 +128,6 @@ const SicpNavigationBar: React.FC = () => {
 
   const fetchSearchData = () => {
     const xhr = new XMLHttpRequest();
-  //todo replace this with real url
     const url = Constants.sicpBackendUrl + "json/rewritedSearchData.json";
     xhr.open('GET', url, false); //sync download
     xhr.send();
@@ -164,6 +163,7 @@ const SicpNavigationBar: React.FC = () => {
     const longestWord = words.reduce((a, b) => a.length > b.length ? a : b, "");
     const results = search(longestWord, rewritedSearchData.textTrie)
                      .map((id) => ({text:rewritedSearchData.idToContentMap[id].toLowerCase(), id: id}))
+                     .map((result) => ({text:result.text.replaceAll("\n", " "), id: result.id}))
                      .filter((result) => result.text.includes(keyStr))
                      .map((result) => result.id);
     return results;
@@ -192,40 +192,53 @@ const SicpNavigationBar: React.FC = () => {
     }
     return result;
   }
+  function indexAutoComplete(incompleteKeys:string, n:number = 25) {
+    const firstIsLowerCase = incompleteKeys[0].toLowerCase() + incompleteKeys.slice(1);
+    const firstIsUpperCase = incompleteKeys[0].toUpperCase() + incompleteKeys.slice(1);
+    const result1 = autocomplete(firstIsLowerCase, rewritedSearchData.indexTrie, n);
+    const result2 = autocomplete(firstIsUpperCase, rewritedSearchData.indexTrie, n);
+    while (result1.length < n && result2.length > 0) {
+      const toPush = result2.shift();
+      if (toPush === undefined) {
+        console.log("when searching, got undefined toPush");
+        continue;
+      }
+      result1.push(toPush);
+    }
+    return result1;
+  }
 
   function sentenceAutoComplete(incompleteKeys:string, n:number = 25) {
-    const words = incompleteKeys.split(" ").filter((word) => word.length > 0);
+    const words = incompleteKeys.split(" ");
     if(words.length === 0) {
       return [];
     }
     if(words.length === 1) {
       return autocomplete(words[0], rewritedSearchData.textTrie, n);
     }
-    
-    const results = sentenceSearch(incompleteKeys).map((id) => rewritedSearchData.idToContentMap[id].toLowerCase());
+    const pre = words.slice(0, -1).join(' ');
+    const results = sentenceSearch(pre).map((id) => rewritedSearchData.idToContentMap[id].toLowerCase());
     const answers:string[] = [];
-    const find = (sentence:string) => {
-      if(n <= answers.length) {
-        return;
+    while (answers.length < n && results.length > 0) {
+      let sentence = results.shift();
+      if(sentence === undefined) {
+        console.log("when searching, got undefined sentence");
+        continue;
       }
+      sentence = sentence.replaceAll("\n", " ");
       const start = sentence.indexOf(incompleteKeys) + incompleteKeys.length;
       if (start >= incompleteKeys.length) {
         const rest = sentence.slice(start);
-        // find the index of first non-alphabet character in rest
-        let end = rest.search(/[^a-zA-Z]/);
+        let end = rest.search(/[^a-zA-Z _]/);
         if (end === -1) {
           end = rest.length;
         }
         const toPush = incompleteKeys + rest.slice(0, end);
-        if(!answers.includes(toPush)) {
-        answers.push(toPush);
+        console.log("toPush is " + toPush);
+        if(!answers.includes(toPush.trim())) {
+        answers.push(toPush.trim());
         }
-        find(sentence.slice(end));
       }
-    }
-
-    for (const result of results) {
-      find(result);
     }
     return answers;
   }
@@ -241,20 +254,72 @@ const SicpNavigationBar: React.FC = () => {
   const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [indexSearchQuery, setIndexSearchQuery] = React.useState('');
- 
+  const [indexAutoCompleteCouldShow, setIndexAutoCompleteCouldShow] = React.useState(false);
+  const [searchAutoCompleteCouldShow, setSearchAutoCompleteCouldShow] = React.useState(false);
+  const autocompleteMenuRef = React.useRef<HTMLDivElement>(null);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const indexSearchInputRef = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchInputRef.current && searchInputRef.current.contains(event.target as Node)) {
+        setSearchAutoCompleteCouldShow(true);
+        setIndexAutoCompleteCouldShow(false);
+      } else if (indexSearchInputRef.current && indexSearchInputRef.current.contains(event.target as Node)) {
+        setSearchAutoCompleteCouldShow(false);
+        setIndexAutoCompleteCouldShow(true);
+      } else if (autocompleteMenuRef.current && !autocompleteMenuRef.current.contains(event.target as Node)) {
+        setSearchAutoCompleteCouldShow(false);
+        setIndexAutoCompleteCouldShow(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [autocompleteMenuRef, searchInputRef, indexSearchInputRef]);
   const menu = (searchInput:string,
                   isSubMenueHidden:(searchInput: string) => Boolean, 
                   getResults:() => any[],
                   buildMenuEntry: (searchResult:any, index:number) => React.ReactNode,
-                  buildMenuWith:(children:React.ReactNode) => React.ReactNode) => {
+                  buildMenuWith:(children:React.ReactNode, ref: React.RefObject<HTMLDivElement>) => React.ReactNode) => {
                     if(isSubMenueHidden(searchInput)) {
                       return (<></>);
                     } 
                     const children = getResults().map((buildMenuEntry))
-                    return buildMenuWith(children);
+                    return buildMenuWith(children, autocompleteMenuRef);
                   } 
     
   const userSearchResultSubMenu = (searchInput: string) => {
+      const focusResult = (result:string) => {
+        result = result.replaceAll("\n", " ").toLowerCase();
+        const startIndex = result.indexOf(searchInput);
+        let start = startIndex;
+        while (start > 0) {
+          if (result[start - 1].match(/[^a-zA-Z, _]/)) {
+            console.log("break at " + (start - 1) + " " + result[start - 1]);
+            break;
+          }
+          start--;
+        }
+        const endIndex = startIndex + searchInput.length;
+        let end = endIndex;
+        while (end < result.length) {
+          if(result[end].match(/[^a-zA-Z _,]/)) {
+            console.log("break at " + end + " " + result[end]);
+            break;
+          }
+          end++;
+        }
+        let subStr = result.slice(start, end);
+        console.log("subStr is " + subStr);
+        if (start > 0) {
+          subStr = "..." + subStr;
+        }
+        if (end < result.length) {
+          subStr = subStr + "...";
+        }
+        return subStr;
+      }
 
       const isUserSearchSubMenuHidden = (searchInput: string) => {
         return !(isSubmenuVisible === searchInput);
@@ -266,14 +331,17 @@ const SicpNavigationBar: React.FC = () => {
 
       const buildUserSearchResultsMenuEntry = (result:any, index:number) => (
         <div 
-          style={{ margin: '5px 0', width: "100%", backgroundColor: focusedSearchResultIndex!==index?'white':'grey',}} 
+          style={{ margin: '0', width: "100%", backgroundColor: focusedSearchResultIndex!==index?'white':'grey',border: '1px solid black',}} 
           key={index} 
-          onClick={() => {window.location.href = "https://sourceacademy.nus.edu.sg/sicpjs/" + result;}}
+          onClick={() => {
+            setIndexAutoCompleteCouldShow(false);
+            setSearchAutoCompleteCouldShow(false);
+            window.location.href = `http://localhost:8000/sicpjs/${result}`}}
           onMouseOver={() => setFocusedSearchResultIndex(index)}>
-            {rewritedSearchData.idToContentMap[result]}
+            {focusResult(rewritedSearchData.idToContentMap[result])}
         </div>
       );
-
+      
       const buildSearchResultsMenuWith = (children:React.ReactNode) => {
         return (<div
                 style={{
@@ -284,7 +352,6 @@ const SicpNavigationBar: React.FC = () => {
                 left: '100%',
                 width: '300%', 
                 backgroundColor: 'white',
-                outline: 'dashed',
                 overflow: 'auto',
                 margin: 0,
                 padding: 0,
@@ -319,15 +386,20 @@ const SicpNavigationBar: React.FC = () => {
          });
       }
 
-      const buildIndexSearchResultsMenuEntry = (result:any, index:number) => (
+      const buildIndexSearchResultsMenuEntry = (result:any, index:number) => {
+        return (
         <div 
-            style={{ margin: '5px 0', width: "100%", backgroundColor: focusedIndexSearchResultIndex!==index?'white':'grey',}} 
+            style={{ margin: '0', width: "100%", backgroundColor: focusedIndexSearchResultIndex!==index?'white':'grey', border: '1px solid black',}} 
             key={index} 
-            onClick={() => {window.location.href = "https://sourceacademy.nus.edu.sg/sicpjs/" + result.id;}}
+            onClick={() => {
+            setIndexAutoCompleteCouldShow(false);
+            setSearchAutoCompleteCouldShow(false);
+            window.location.href = `http://localhost:8000/sicpjs/${result.id}`}}
             onMouseOver={() => setFocusedIndexSearchResultIndex(index)}>
-              {result.text}
+              <Latex>{result.text.replaceAll("LATEX: ", "")}</Latex>
         </div>
       );
+            }
 
       const buildIndexSearchResultsMenuWith = (children:React.ReactNode) => {
         return (<div
@@ -358,7 +430,7 @@ const SicpNavigationBar: React.FC = () => {
 
   const userSearchAutocompleteMenu = (searchInput: string) => {
       const isUserSearchAutocompleteMenuHidden = (searchInput: string) => {
-        return searchAutocompleteResults.length === 0
+        return searchQuery.length===0 || searchAutocompleteResults.length === 0 || !searchAutoCompleteCouldShow;
       }
 
       const getUserSearchAutocompleteResults = () => {
@@ -372,13 +444,14 @@ const SicpNavigationBar: React.FC = () => {
           cursor: 'pointer',
           position: 'relative',
           display: 'flex',
+          border: '1px solid black',
         }}>
           <div style={{width: "100%", backgroundColor: isSubmenuVisible!==result?'white':'grey',}} 
                onMouseOver={() => {
-                setSearchQuery(result);
                 setFocusedSearchResultIndex(-1);
                 setResults(sentenceSearch(result));
-                setIsSubmenuVisible(result);}}>
+                setIsSubmenuVisible(result);}}
+                onClick = {() => setSearchQuery(result)}>
              {result}
            </div >
            
@@ -391,12 +464,12 @@ const SicpNavigationBar: React.FC = () => {
                  isUserSearchAutocompleteMenuHidden,
                  getUserSearchAutocompleteResults,
                  buildUserSearchAutocompleteMenuEntry,
-                 buildAutocompleteResultsMenuWith);
+                 AutocompleteResultsMenuWith);
       }
     
   const indexSearchAutocompleteMenu = (searchInput: string) => {
       const isIndexSearchAutocompleteMenuHidden = (searchInput: string) => {
-        return indexAutocompleteResults.length === 0
+        return indexSearchQuery.length === 0 || indexAutocompleteResults.length === 0 || !indexAutoCompleteCouldShow;
       }
 
       const getIndexSearchAutocompleteResults = () => {
@@ -405,16 +478,21 @@ const SicpNavigationBar: React.FC = () => {
 
       const buildIndexSearchAutocompleteMenuEntry = (result:any, index:number) => (
           <div style={{
+               border: '1px solid black',
                margin: 0,
                cursor: 'pointer',
                position: 'relative',
                display: 'flex',}}>
               <div style={{width: "100%", backgroundColor: isSubmenuVisibleIndex!==result?'white':'grey',}} 
                    onMouseOver={() => {
-                     setIndexSearchQuery(result);
+                     //setIndexSearchQuery(result);
                      setFocusedIndexSearchResultIndex(-1);
                      setResultsIndex(search(result, rewritedSearchData.indexTrie));
-                     setIsSubmenuVisibleIndex(result);}}>
+                     setIsSubmenuVisibleIndex(result);}}
+
+                     onClick={() => {
+                      setIndexSearchQuery(result);
+                     }}>
                   {result}
               </div >
               {indexSearchResultSubMenu(result)}
@@ -425,20 +503,19 @@ const SicpNavigationBar: React.FC = () => {
                  isIndexSearchAutocompleteMenuHidden,
                  getIndexSearchAutocompleteResults,
                  buildIndexSearchAutocompleteMenuEntry,
-                 buildAutocompleteResultsMenuWith);
+                 AutocompleteResultsMenuWith);
       }
 
-  const buildAutocompleteResultsMenuWith = (children:React.ReactNode) => (
+  const AutocompleteResultsMenuWith = (children:React.ReactNode, ref: React.RefObject<HTMLDivElement>) => {
+    return (
       <div style={{
-           // how to make the menu scrollable only on y axis?
-           height: '100px',
            position: 'absolute',
            backgroundColor: 'white',
-           outline: 'dashed',
-           width: '75%',}}>
+           width: '75%',}}
+           ref = {ref}>
              {children}
       </div>
-    );
+    );}
 
   const handleUserSearchButton = () => {
     setFocusedSearchResultIndex(-1);
@@ -454,13 +531,14 @@ const SicpNavigationBar: React.FC = () => {
 
   const userSearch = (
       <div style={{ position: 'relative' }}>
-        <div style={{ display: 'inline-flex' }}> 
+        <div style={{ display: 'inline-flex' }} ref = {searchInputRef}> 
           <InputGroup
             placeholder="Search"
             value={searchQuery}
             onChange={event => {
               const s = event.target.value;
               setSearchQuery(s);
+              setSearchAutoCompleteCouldShow(true);
               setSearchAutocompleteResults(sentenceAutoComplete(s));
             }}/>
           <ControlButton
@@ -474,14 +552,15 @@ const SicpNavigationBar: React.FC = () => {
   
   const indexSearch = (
       <div style={{ position: 'relative' }}>
-        <div style={{ display: 'inline-flex' }}>
+        <div style={{ display: 'inline-flex' }} ref = {indexSearchInputRef}>
           <InputGroup
             placeholder="Search"
             value={indexSearchQuery}
             onChange={event => {
               const s = event.target.value;
               setIndexSearchQuery(s);
-              setIndexAutocompleteResults(autocomplete(s, rewritedSearchData.indexTrie));
+              setIndexAutoCompleteCouldShow(true);
+              setIndexAutocompleteResults(indexAutoComplete(s));
             }}/>
           <ControlButton
             label="Index"
