@@ -155,7 +155,6 @@ const Sicp: React.FC = () => {
       className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
       ref={parentRef}
     >
-      
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
           {loading ? (
@@ -172,7 +171,6 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      
     </div>
   );
 };
