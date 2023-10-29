@@ -155,7 +155,7 @@ const Sicp: React.FC = () => {
       className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
       ref={parentRef}
     >
-      <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)}></Link>
+      
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
           {loading ? (
@@ -164,13 +164,15 @@ const Sicp: React.FC = () => {
             <SicpIndexPage />
           ) : (
             <div className="sicp-content">
+              <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)}></Link>
               {data}
               {navigationButtons}
+              <Link to="#end" ref={ref => (refs.current['#end'] = ref)}></Link>
             </div>
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      <Link to="#end" ref={ref => (refs.current['#end'] = ref)}></Link>
+      
     </div>
   );
 };
