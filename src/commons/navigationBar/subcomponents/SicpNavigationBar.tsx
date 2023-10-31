@@ -94,8 +94,6 @@ const SicpNavigationBar: React.FC = () => {
     let node = trie;
     for (let i = 0; i < keys.length; i++) {
       if (node === undefined || node.children === undefined) {
-        console.log('when searching, got undefined node or node.children');
-        console.log('i is ' + i);
         return [];
       }
 
