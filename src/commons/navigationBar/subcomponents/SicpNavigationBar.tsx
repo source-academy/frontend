@@ -170,7 +170,6 @@ const SicpNavigationBar: React.FC = () => {
     while (answers.length < n && results.length > 0) {
       let sentence = results.shift();
       if (sentence === undefined) {
-        console.log('when searching, got undefined sentence');
         continue;
       }
       sentence = sentence.replaceAll('\n', ' ');
