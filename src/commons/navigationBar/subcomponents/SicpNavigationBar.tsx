@@ -5,7 +5,7 @@ import * as React from 'react';
 import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
-import Constants from 'src/commons/utils/Constants';
+import Constants, { Links } from 'src/commons/utils/Constants';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
@@ -307,7 +307,7 @@ const SicpNavigationBar: React.FC = () => {
         onClick={() => {
           setIndexAutoCompleteCouldShow(false);
           setSearchAutoCompleteCouldShow(false);
-          window.location.href = `http://localhost:8000/sicpjs/${result}`;
+          window.location.href = `${Links.textbook}${result}`;
         }}
         onMouseOver={() => setFocusedSearchResultIndex(index)}
       >
@@ -377,7 +377,7 @@ const SicpNavigationBar: React.FC = () => {
           onClick={() => {
             setIndexAutoCompleteCouldShow(false);
             setSearchAutoCompleteCouldShow(false);
-            window.location.href = `http://localhost:8000/sicpjs/${result.id}`;
+            window.location.href = `${Links.textbook}${result.id}`;
           }}
           onMouseOver={() => setFocusedIndexSearchResultIndex(index)}
         >
