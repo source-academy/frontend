@@ -108,11 +108,10 @@ const SicpNavigationBar: React.FC = () => {
   function sentenceSearch(keyStr: string) {
     const words = keyStr.split(' ');
     const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), '');
-    const results = search(longestWord, rewritedSearchData.textTrie)
-      .map(id => ({ text: rewritedSearchData.idToContentMap[id].toLowerCase(), id: id }))
-      .map(result => ({ text: result.text.replaceAll('\n', ' '), id: result.id }))
-      .filter(result => result.text.includes(keyStr))
-      .map(result => result.id);
+    const results = search(longestWord, rewritedSearchData.textTrie).filter(id => {
+      const text = rewritedSearchData.idToContentMap[id].toLowerCase().replaceAll('\n', ' ');
+      return text.includes(keyStr);
+    });
     return results;
   }
 
