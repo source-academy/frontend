@@ -2,6 +2,22 @@
 
 exports[`Navbar renders correctly 1`] = `
 <React.Fragment>
+  <Blueprint4.Omnibar
+    inputProps={
+      Object {
+        "disabled": false,
+        "placeholder": "Text Search...",
+      }
+    }
+    isOpen={false}
+    itemListRenderer={[Function]}
+    itemRenderer={[Function]}
+    items={Array []}
+    onClose={[Function]}
+    onItemSelect={[Function]}
+    onQueryChange={[Function]}
+    query=""
+  />
   <Blueprint4.Navbar
     className="SicpNavigationBar secondary-navbar"
   >
@@ -41,52 +57,16 @@ exports[`Navbar renders correctly 1`] = `
           }
         }
       >
-        <div
-          style={
-            Object {
-              "position": "relative",
-            }
-          }
-        >
-          <div>
-            <Blueprint4.InputGroup
-              onChange={[Function]}
-              placeholder="Search"
-              rightElement={
-                <ControlButton
-                  icon="search"
-                  label="Text"
-                  onClick={[Function]}
-                />
-              }
-              value=""
-            />
-          </div>
-          <React.Fragment />
-        </div>
-        <div
-          style={
-            Object {
-              "position": "relative",
-            }
-          }
-        >
-          <div>
-            <Blueprint4.InputGroup
-              onChange={[Function]}
-              placeholder="Search"
-              rightElement={
-                <ControlButton
-                  icon="search"
-                  label="Index"
-                  onClick={[Function]}
-                />
-              }
-              value=""
-            />
-          </div>
-          <React.Fragment />
-        </div>
+        <ControlButton
+          icon="search"
+          label="Text Search"
+          onClick={[Function]}
+        />
+        <ControlButton
+          icon="search"
+          label="Index Search"
+          onClick={[Function]}
+        />
       </div>
     </Blueprint4.NavbarGroup>
   </Blueprint4.Navbar>
