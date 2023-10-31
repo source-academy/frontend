@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
@@ -162,8 +163,10 @@ const Sicp: React.FC = () => {
             <SicpIndexPage />
           ) : (
             <div className="sicp-content">
+              <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)} />
               {data}
               {navigationButtons}
+              <Link to="#end" ref={ref => (refs.current['#end'] = ref)} />
             </div>
           )}
         </CodeSnippetContext.Provider>
