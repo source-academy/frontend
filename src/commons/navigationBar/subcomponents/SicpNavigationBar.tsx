@@ -345,7 +345,7 @@ const SicpNavigationBar: React.FC = () => {
     };
     const getDisplayedIndex = (id: string) => {
       const index = id.indexOf('#');
-      const numId = index == -1 ? id : id.slice(0, index);
+      const numId = index === -1 ? id : id.slice(0, index);
       return numId + ': ';
     };
 
