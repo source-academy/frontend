@@ -263,9 +263,7 @@ const SicpNavigationBar: React.FC = () => {
             {focusResult(rewritedSearchData.idToContentMap[result], query)}
           </>
         }
-        onClick={() => {
-          handleNavigation(result);
-        }}
+        onClick={() => handleNavigation(result)}
       />
     );
   };
@@ -284,13 +282,11 @@ const SicpNavigationBar: React.FC = () => {
       });
   };
 
-  const makeIndexSearchSubmenuItem = (result: any) => {
+  const makeIndexSearchSubmenuItem = (result: IndexSearchResult) => {
     return (
       <MenuItem
         text={<Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>}
-        onClick={() => {
-          handleNavigation(result.id);
-        }}
+        onClick={() => handleNavigation(result.id)}
       />
     );
   };
@@ -429,7 +425,7 @@ const SicpNavigationBar: React.FC = () => {
                 case 'text':
                   return makeTextSearchSubmenuItem(result);
                 case 'index':
-                  return makeIndexSearchSubmenuItem(result);
+                  return makeIndexSearchSubmenuItem(result as unknown as IndexSearchResult);
               }
           }
         }}
