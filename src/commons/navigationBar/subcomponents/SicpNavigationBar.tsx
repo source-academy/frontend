@@ -325,22 +325,17 @@ const SicpNavigationBar: React.FC = () => {
 
     const buildSearchResultsMenuWith = (children: React.ReactNode) => {
       return (
-        <div
+        <Menu
           style={{
-            height: '4000%',
+            height: '4000%', // causes clipping near bottom of page
             overflowY: 'auto',
             position: 'absolute',
-            top: `0`,
             left: '100%',
-            width: '300%',
-            backgroundColor: 'white',
-            overflow: 'auto',
-            margin: 0,
-            padding: 0
+            width: '300%'
           }}
         >
           {children}
-        </div>
+        </Menu>
       );
     };
 
@@ -396,23 +391,17 @@ const SicpNavigationBar: React.FC = () => {
 
     const buildIndexSearchResultsMenuWith = (children: React.ReactNode) => {
       return (
-        <div
+        <Menu
           style={{
             height: '4000%',
             overflowY: 'auto',
             position: 'absolute',
-            top: `0`,
             left: '100%',
-            width: '200%',
-            backgroundColor: 'white',
-            outline: 'dashed',
-            overflow: 'auto',
-            margin: 0,
-            padding: 0
+            width: '200%'
           }}
         >
           {children}
-        </div>
+        </Menu>
       );
     };
 
