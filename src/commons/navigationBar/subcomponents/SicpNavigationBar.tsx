@@ -3,6 +3,7 @@ import {
   Drawer,
   InputGroup,
   Menu,
+  MenuItem,
   Navbar,
   NavbarGroup,
   Position
@@ -206,8 +207,6 @@ const SicpNavigationBar: React.FC = () => {
     { text: '', order: '', id: '', hasSubindex: false }
   ]);
   const [focusedSearchResultIndex, setFocusedSearchResultIndex] = React.useState<number>(-1);
-  const [focusedIndexSearchResultIndex, setFocusedIndexSearchResultIndex] =
-    React.useState<number>(-1);
   const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
   const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -369,23 +368,15 @@ const SicpNavigationBar: React.FC = () => {
 
     const buildIndexSearchResultsMenuEntry = (result: any, index: number) => {
       return (
-        <div
-          style={{
-            margin: '0',
-            width: '100%',
-            backgroundColor: focusedIndexSearchResultIndex !== index ? 'white' : 'grey',
-            border: '1px solid black'
-          }}
+        <MenuItem
+          text={<Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>}
           key={index}
           onClick={() => {
             setIndexAutoCompleteCouldShow(false);
             setSearchAutoCompleteCouldShow(false);
             handleNavigation(result.id);
           }}
-          onMouseOver={() => setFocusedIndexSearchResultIndex(index)}
-        >
-          <Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>
-        </div>
+        />
       );
     };
 
@@ -491,8 +482,6 @@ const SicpNavigationBar: React.FC = () => {
             backgroundColor: isSubmenuVisibleIndex !== result ? 'white' : 'grey'
           }}
           onMouseOver={() => {
-            //setIndexSearchQuery(result);
-            setFocusedIndexSearchResultIndex(-1);
             setResultsIndex(search(result, rewritedSearchData.indexTrie));
             setIsSubmenuVisibleIndex(result);
           }}
@@ -529,7 +518,6 @@ const SicpNavigationBar: React.FC = () => {
   };
 
   const handleIndexSearchButton = () => {
-    setFocusedIndexSearchResultIndex(-1);
     setResultsIndex(search(indexSearchQuery, rewritedSearchData.indexTrie));
     setIsSubmenuVisibleIndex(indexSearchQuery);
   };
