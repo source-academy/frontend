@@ -205,9 +205,6 @@ const SicpNavigationBar: React.FC = () => {
   }
 
   const rewritedSearchData: SearchData = memoize(fetchSearchData)();
-  // const [resultsIndex, setResultsIndex] = React.useState([
-  //   { text: '', order: '', id: '', hasSubindex: false }
-  // ]);
 
   const focusResult = (result: string, query: string): React.ReactNode => {
     result = result.replaceAll('\n', ' ').toLowerCase();
@@ -368,11 +365,10 @@ const SicpNavigationBar: React.FC = () => {
         inputProps={{ disabled: omnibarMode === 'submenu' }}
         onClose={() => setIsOmnibarOpen(false)}
         items={searchResults}
+        // Handled by individual items
         onItemSelect={() => {}}
         query={query}
         onQueryChange={handleQueryChange}
-        // Don't show results on empty query
-        itemPredicate={query => query.length > 0}
         itemListRenderer={({ itemsParentRef, renderItem, items }) => {
           return (
             <Menu ulRef={itemsParentRef}>
