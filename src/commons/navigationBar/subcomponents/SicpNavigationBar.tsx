@@ -25,6 +25,8 @@ import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
 
+type IndexSearchResult = { text: string; order: string; id: string; hasSubindex: boolean };
+
 const SicpNavigationBar: React.FC = () => {
   // this section responsible for the travel and table of content
   const [isTocOpen, setIsTocOpen] = React.useState(false);
@@ -268,7 +270,7 @@ const SicpNavigationBar: React.FC = () => {
     );
   };
 
-  const processIndexSearchResults = (searchResults: any[]) => {
+  const processIndexSearchResults = (searchResults: IndexSearchResult[]) => {
     return searchResults
       .filter(result => result.id)
       .sort((a, b) => {
@@ -353,7 +355,10 @@ const SicpNavigationBar: React.FC = () => {
         setSearchResults(sentenceSearch(result));
         break;
       case 'index':
-        setSearchResults(processIndexSearchResults(search(result, rewritedSearchData.indexTrie)));
+        setSearchResults(
+          // Supposed to be IndexSearchResult[], but typing can be improved with further, future refactoring
+          processIndexSearchResults(search(result, rewritedSearchData.indexTrie)) as any[]
+        );
         break;
     }
   };
