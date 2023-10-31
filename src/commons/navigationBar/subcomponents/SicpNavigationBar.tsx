@@ -62,56 +62,6 @@ const SicpNavigationBar: React.FC = () => {
     usePortal: false
   };
 
-  /*
-  const voidSearch = (query: string): SearchResultProps[] => {
-    function toSearchResult(array: any[]): SearchResultProps {
-      if (array == null || array[0] == null || array[1] == null || array[2] == null) {
-        return { title: '', url: '' };
-      }
-      return {
-        //  array[0] is sth like /sicpjs/3.3.3; slice out the /sicpjs/
-        title: array[0].slice(8) + ': ' + textbook[array[0]][array[1]][array[2]],
-        url: SearchUrl + array[0] + array[1]
-      };
-    }
-    const SearchUrl = '..';
-    const words = query
-      .toLowerCase()
-      .split(' ')
-      .filter(word => word !== '');
-    if (words.length === 0) {
-      setQueryResult([]);
-      return [];
-    }
-    return queryTrie(textTrie, words[0])
-      .map(toSearchResult)
-      .filter((obj: SearchResultProps) => obj.title.toLowerCase().includes(query.toLowerCase()));
-  };
- 
-  function sentenceAutoComplete(query: string, limit: number, trie: any): string[] {
-    const words = query
-      .toLowerCase()
-      .split(' ')
-      .filter(word => word !== '');
-    if (words.length < 2) {
-      return autoComplete(query, 250, trie);
-    }
-    const pre = words.slice(0, -1).join(' ');
-    const lastWord = words[words.length - 1];
-    const preResults = voidSearch(pre).filter((obj: any) => obj.title.includes(lastWord));
-    if (preResults.length === 0) {
-      return [];
-    }
-    const lastwords = autoComplete(lastWord, 3000, trie);
-    return lastwords
-      .filter(
-        word =>
-          // Not sure why the length attribute is accessed here
-          preResults.filter(obj => obj.title.toLowerCase().includes(`${pre} ${word}`)).length > 0
-      )
-      .map(word => pre + ' ' + word);
-  }
-  */
   // this section responsible for the search
   type TrieNode = {
     children: Record<string, TrieNode>;
