@@ -249,7 +249,7 @@ const SicpNavigationBar: React.FC = () => {
       children: React.ReactNode,
       ref: React.RefObject<HTMLDivElement>
     ) => React.ReactNode
-  ) => {
+  ): React.ReactNode => {
     if (isSubMenueHidden(searchInput)) {
       return <></>;
     }
