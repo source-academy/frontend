@@ -343,6 +343,11 @@ const SicpNavigationBar: React.FC = () => {
     const getUserSearchResults = () => {
       return results;
     };
+    const getDisplayedIndex = (id: string) => {
+      const index = id.indexOf('#');
+      const numId = index == -1 ? id : id.slice(0, index);
+      return numId + ': ';
+    };
 
     const buildUserSearchResultsMenuEntry = (result: any, index: number) => (
       <div
@@ -360,7 +365,7 @@ const SicpNavigationBar: React.FC = () => {
         }}
         onMouseOver={() => setFocusedSearchResultIndex(index)}
       >
-        {focusResult(rewritedSearchData.idToContentMap[result])}
+        {getDisplayedIndex(result) + focusResult(rewritedSearchData.idToContentMap[result])}
       </div>
     );
 
