@@ -1,4 +1,12 @@
-import { Alignment, Drawer, InputGroup, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
+import {
+  Alignment,
+  Drawer,
+  InputGroup,
+  Menu,
+  Navbar,
+  NavbarGroup,
+  Position
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { memoize } from 'lodash';
 import * as React from 'react';
@@ -522,18 +530,7 @@ const SicpNavigationBar: React.FC = () => {
     children: React.ReactNode,
     ref: React.RefObject<HTMLDivElement>
   ) => {
-    return (
-      <div
-        style={{
-          position: 'absolute',
-          backgroundColor: 'white',
-          width: '75%'
-        }}
-        ref={ref}
-      >
-        {children}
-      </div>
-    );
+    return <Menu style={{ position: 'absolute' }}>{children}</Menu>;
   };
 
   const handleUserSearchButton = () => {
