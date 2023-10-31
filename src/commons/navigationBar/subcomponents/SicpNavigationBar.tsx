@@ -181,7 +181,7 @@ const SicpNavigationBar: React.FC = () => {
           end = rest.length;
         }
         const toPush = incompleteKeys + rest.slice(0, end);
-        console.log('toPush is ' + toPush);
+        // console.log('toPush is ' + toPush);
         if (!answers.includes(toPush.trim())) {
           answers.push(toPush.trim());
         }
@@ -257,7 +257,7 @@ const SicpNavigationBar: React.FC = () => {
       let start = startIndex;
       while (start > 0) {
         if (result[start - 1].match(/[^a-zA-Z, _]/)) {
-          console.log('break at ' + (start - 1) + ' ' + result[start - 1]);
+          // console.log('break at ' + (start - 1) + ' ' + result[start - 1]);
           break;
         }
         start--;
@@ -266,13 +266,13 @@ const SicpNavigationBar: React.FC = () => {
       let end = endIndex;
       while (end < result.length) {
         if (result[end].match(/[^a-zA-Z _,]/)) {
-          console.log('break at ' + end + ' ' + result[end]);
+          // console.log('break at ' + end + ' ' + result[end]);
           break;
         }
         end++;
       }
       let subStr = result.slice(start, end);
-      console.log('subStr is ' + subStr);
+      // console.log('subStr is ' + subStr);
       if (start > 0) {
         subStr = '...' + subStr;
       }
