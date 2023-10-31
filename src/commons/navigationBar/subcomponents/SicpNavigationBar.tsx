@@ -201,7 +201,6 @@ const SicpNavigationBar: React.FC = () => {
 
   const rewritedSearchData: SearchData = memoize(fetchSearchData)();
   const [isSubmenuVisible, setIsSubmenuVisible] = React.useState('');
-  const [isSubmenuVisibleIndex, setIsSubmenuVisibleIndex] = React.useState('');
   const [results, setResults] = React.useState(['']);
   const [resultsIndex, setResultsIndex] = React.useState([
     { text: '', order: '', id: '', hasSubindex: false }
@@ -349,7 +348,7 @@ const SicpNavigationBar: React.FC = () => {
 
   const indexSearchResultSubMenu = (searchInput: string) => {
     const isIndexSearchSubMenuHidden = (searchInput: String) => {
-      return !(isSubmenuVisibleIndex === searchInput);
+      return false;
     };
 
     const getIndexSearchResults = () => {
@@ -381,19 +380,7 @@ const SicpNavigationBar: React.FC = () => {
     };
 
     const buildIndexSearchResultsMenuWith = (children: React.ReactNode) => {
-      return (
-        <Menu
-          style={{
-            height: '4000%',
-            overflowY: 'auto',
-            position: 'absolute',
-            left: '100%',
-            width: '200%'
-          }}
-        >
-          {children}
-        </Menu>
-      );
+      return children;
     };
 
     return menu(
@@ -467,32 +454,13 @@ const SicpNavigationBar: React.FC = () => {
     };
 
     const buildIndexSearchAutocompleteMenuEntry = (result: any, index: number) => (
-      <div
-        style={{
-          border: '1px solid black',
-          margin: 0,
-          cursor: 'pointer',
-          position: 'relative',
-          display: 'flex'
-        }}
+      <MenuItem
+        text={result}
+        onMouseOver={() => setResultsIndex(search(result, rewritedSearchData.indexTrie))}
+        onClick={() => setIndexSearchQuery(result)}
       >
-        <div
-          style={{
-            width: '100%',
-            backgroundColor: isSubmenuVisibleIndex !== result ? 'white' : 'grey'
-          }}
-          onMouseOver={() => {
-            setResultsIndex(search(result, rewritedSearchData.indexTrie));
-            setIsSubmenuVisibleIndex(result);
-          }}
-          onClick={() => {
-            setIndexSearchQuery(result);
-          }}
-        >
-          {result}
-        </div>
         {indexSearchResultSubMenu(result)}
-      </div>
+      </MenuItem>
     );
 
     return menu(
@@ -519,7 +487,6 @@ const SicpNavigationBar: React.FC = () => {
 
   const handleIndexSearchButton = () => {
     setResultsIndex(search(indexSearchQuery, rewritedSearchData.indexTrie));
-    setIsSubmenuVisibleIndex(indexSearchQuery);
   };
 
   const userSearch = (
