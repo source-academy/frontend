@@ -314,19 +314,7 @@ const SicpNavigationBar: React.FC = () => {
     );
 
     const buildSearchResultsMenuWith = (children: React.ReactNode) => {
-      return (
-        <Menu
-          style={{
-            height: '4000%', // causes clipping near bottom of page
-            overflowY: 'auto',
-            position: 'absolute',
-            left: '100%',
-            width: '300%'
-          }}
-        >
-          {children}
-        </Menu>
-      );
+      return children;
     };
 
     return menu(
@@ -398,28 +386,16 @@ const SicpNavigationBar: React.FC = () => {
     };
 
     const buildUserSearchAutocompleteMenuEntry = (result: any, index: number) => (
-      <div
-        style={{
-          margin: 0,
-          cursor: 'pointer',
-          position: 'relative',
-          display: 'flex',
-          border: '1px solid black'
+      <MenuItem
+        text={result}
+        onMouseOver={() => {
+          setResults(sentenceSearch(result));
+          setIsSubmenuVisible(result);
         }}
+        onClick={() => setSearchQuery(result)}
       >
-        <div
-          style={{ width: '100%', backgroundColor: isSubmenuVisible !== result ? 'white' : 'grey' }}
-          onMouseOver={() => {
-            setResults(sentenceSearch(result));
-            setIsSubmenuVisible(result);
-          }}
-          onClick={() => setSearchQuery(result)}
-        >
-          {result}
-        </div>
-
         {userSearchResultSubMenu(result)}
-      </div>
+      </MenuItem>
     );
 
     return menu(
