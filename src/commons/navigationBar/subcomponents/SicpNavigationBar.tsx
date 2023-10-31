@@ -367,7 +367,10 @@ const SicpNavigationBar: React.FC = () => {
     <>
       <Omnibar
         isOpen={isOmnibarOpen}
-        inputProps={{ disabled: omnibarMode === 'submenu' }}
+        inputProps={{
+          disabled: omnibarMode === 'submenu',
+          placeholder: `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`
+        }}
         onClose={() => setIsOmnibarOpen(false)}
         items={searchResults}
         // Handled by individual items
