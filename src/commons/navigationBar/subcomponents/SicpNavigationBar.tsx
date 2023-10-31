@@ -307,7 +307,7 @@ const SicpNavigationBar: React.FC = () => {
         onClick={() => {
           setIndexAutoCompleteCouldShow(false);
           setSearchAutoCompleteCouldShow(false);
-          window.location.href = `http://localhost:8000/sicpjs/${result}`;
+          handleNavigation(result);
         }}
         onMouseOver={() => setFocusedSearchResultIndex(index)}
       >
@@ -377,7 +377,7 @@ const SicpNavigationBar: React.FC = () => {
           onClick={() => {
             setIndexAutoCompleteCouldShow(false);
             setSearchAutoCompleteCouldShow(false);
-            window.location.href = `http://localhost:8000/sicpjs/${result.id}`;
+            handleNavigation(result.id);
           }}
           onMouseOver={() => setFocusedIndexSearchResultIndex(index)}
         >
