@@ -443,7 +443,7 @@ const SicpNavigationBar: React.FC = () => {
     children: React.ReactNode,
     ref: React.RefObject<HTMLDivElement>
   ) => {
-    return <Menu style={{ position: 'absolute' }}>{children}</Menu>;
+    return <Menu style={{ position: 'absolute', top: '100%', width: '100%' }}>{children}</Menu>;
   };
 
   const handleUserSearchButton = () => {
@@ -457,7 +457,7 @@ const SicpNavigationBar: React.FC = () => {
 
   const userSearch = (
     <div style={{ position: 'relative' }}>
-      <div style={{ display: 'inline-flex' }} ref={searchInputRef}>
+      <div ref={searchInputRef}>
         <InputGroup
           placeholder="Search"
           value={searchQuery}
@@ -467,8 +467,10 @@ const SicpNavigationBar: React.FC = () => {
             setSearchAutoCompleteCouldShow(true);
             setSearchAutocompleteResults(sentenceAutoComplete(s));
           }}
+          rightElement={
+            <ControlButton label="Text" icon={IconNames.SEARCH} onClick={handleUserSearchButton} />
+          }
         />
-        <ControlButton label="Text" icon={IconNames.SEARCH} onClick={handleUserSearchButton} />
       </div>
       {userSearchAutocompleteMenu(searchQuery)}
     </div>
@@ -476,7 +478,7 @@ const SicpNavigationBar: React.FC = () => {
 
   const indexSearch = (
     <div style={{ position: 'relative' }}>
-      <div style={{ display: 'inline-flex' }} ref={indexSearchInputRef}>
+      <div ref={indexSearchInputRef}>
         <InputGroup
           placeholder="Search"
           value={indexSearchQuery}
@@ -486,16 +488,23 @@ const SicpNavigationBar: React.FC = () => {
             setIndexAutoCompleteCouldShow(true);
             setIndexAutocompleteResults(indexAutoComplete(s));
           }}
+          rightElement={
+            <ControlButton
+              label="Index"
+              icon={IconNames.SEARCH}
+              onClick={handleIndexSearchButton}
+            />
+          }
         />
-        <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
       </div>
       {indexSearchAutocompleteMenu(indexSearchQuery)}
     </div>
   );
 
   const searchWrapper = (
-    <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }} key="searchWrapper">
-      {[userSearch, indexSearch]}
+    <div style={{ width: '100%', display: 'flex', gap: 2, justifyContent: 'center' }}>
+      {userSearch}
+      {indexSearch}
     </div>
   );
 
