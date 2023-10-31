@@ -205,7 +205,6 @@ const SicpNavigationBar: React.FC = () => {
   const [resultsIndex, setResultsIndex] = React.useState([
     { text: '', order: '', id: '', hasSubindex: false }
   ]);
-  const [focusedSearchResultIndex, setFocusedSearchResultIndex] = React.useState<number>(-1);
   const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
   const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -302,23 +301,16 @@ const SicpNavigationBar: React.FC = () => {
     };
 
     const buildUserSearchResultsMenuEntry = (result: any, index: number) => (
-      <div
-        style={{
-          margin: '0',
-          width: '100%',
-          backgroundColor: focusedSearchResultIndex !== index ? 'white' : 'grey',
-          border: '1px solid black'
-        }}
+      <MenuItem
+        multiline
+        text={getDisplayedIndex(result) + focusResult(rewritedSearchData.idToContentMap[result])}
         key={index}
         onClick={() => {
           setIndexAutoCompleteCouldShow(false);
           setSearchAutoCompleteCouldShow(false);
           handleNavigation(result);
         }}
-        onMouseOver={() => setFocusedSearchResultIndex(index)}
-      >
-        {getDisplayedIndex(result) + focusResult(rewritedSearchData.idToContentMap[result])}
-      </div>
+      />
     );
 
     const buildSearchResultsMenuWith = (children: React.ReactNode) => {
@@ -418,7 +410,6 @@ const SicpNavigationBar: React.FC = () => {
         <div
           style={{ width: '100%', backgroundColor: isSubmenuVisible !== result ? 'white' : 'grey' }}
           onMouseOver={() => {
-            setFocusedSearchResultIndex(-1);
             setResults(sentenceSearch(result));
             setIsSubmenuVisible(result);
           }}
@@ -480,7 +471,6 @@ const SicpNavigationBar: React.FC = () => {
   };
 
   const handleUserSearchButton = () => {
-    setFocusedSearchResultIndex(-1);
     setResults(sentenceSearch(searchQuery));
     setIsSubmenuVisible(searchQuery);
   };
