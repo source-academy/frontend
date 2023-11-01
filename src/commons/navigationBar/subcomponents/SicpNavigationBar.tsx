@@ -197,7 +197,6 @@ const SicpNavigationBar: React.FC = () => {
           end = rest.length;
         }
         const toPush = incompleteKeys + rest.slice(0, end);
-        // console.log('toPush is ' + toPush);
         if (!answers.includes(toPush.trim())) {
           answers.push(toPush.trim());
         }
