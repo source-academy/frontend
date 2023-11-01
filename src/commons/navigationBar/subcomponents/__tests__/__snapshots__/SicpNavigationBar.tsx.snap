@@ -35,6 +35,7 @@ exports[`Navbar renders correctly 1`] = `
         style={
           Object {
             "display": "flex",
+            "gap": 2,
             "justifyContent": "center",
             "width": "100%",
           }
@@ -47,22 +48,18 @@ exports[`Navbar renders correctly 1`] = `
             }
           }
         >
-          <div
-            style={
-              Object {
-                "display": "inline-flex",
-              }
-            }
-          >
+          <div>
             <Blueprint4.InputGroup
               onChange={[Function]}
               placeholder="Search"
+              rightElement={
+                <ControlButton
+                  icon="search"
+                  label="Text"
+                  onClick={[Function]}
+                />
+              }
               value=""
-            />
-            <ControlButton
-              icon="search"
-              label="Text"
-              onClick={[Function]}
             />
           </div>
           <React.Fragment />
@@ -74,22 +71,18 @@ exports[`Navbar renders correctly 1`] = `
             }
           }
         >
-          <div
-            style={
-              Object {
-                "display": "inline-flex",
-              }
-            }
-          >
+          <div>
             <Blueprint4.InputGroup
               onChange={[Function]}
               placeholder="Search"
+              rightElement={
+                <ControlButton
+                  icon="search"
+                  label="Index"
+                  onClick={[Function]}
+                />
+              }
               value=""
-            />
-            <ControlButton
-              icon="search"
-              label="Index"
-              onClick={[Function]}
             />
           </div>
           <React.Fragment />

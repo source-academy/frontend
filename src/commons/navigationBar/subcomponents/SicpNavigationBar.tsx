@@ -1,4 +1,13 @@
-import { Alignment, Drawer, InputGroup, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
+import {
+  Alignment,
+  Drawer,
+  InputGroup,
+  Menu,
+  MenuItem,
+  Navbar,
+  NavbarGroup,
+  Position
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { memoize } from 'lodash';
 import * as React from 'react';
@@ -192,14 +201,10 @@ const SicpNavigationBar: React.FC = () => {
 
   const rewritedSearchData: SearchData = memoize(fetchSearchData)();
   const [isSubmenuVisible, setIsSubmenuVisible] = React.useState('');
-  const [isSubmenuVisibleIndex, setIsSubmenuVisibleIndex] = React.useState('');
   const [results, setResults] = React.useState(['']);
   const [resultsIndex, setResultsIndex] = React.useState([
     { text: '', order: '', id: '', hasSubindex: false }
   ]);
-  const [focusedSearchResultIndex, setFocusedSearchResultIndex] = React.useState<number>(-1);
-  const [focusedIndexSearchResultIndex, setFocusedIndexSearchResultIndex] =
-    React.useState<number>(-1);
   const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
   const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -242,7 +247,7 @@ const SicpNavigationBar: React.FC = () => {
       children: React.ReactNode,
       ref: React.RefObject<HTMLDivElement>
     ) => React.ReactNode
-  ) => {
+  ): React.ReactNode => {
     if (isSubMenueHidden(searchInput)) {
       return <></>;
     }
@@ -296,44 +301,20 @@ const SicpNavigationBar: React.FC = () => {
     };
 
     const buildUserSearchResultsMenuEntry = (result: any, index: number) => (
-      <div
-        style={{
-          margin: '0',
-          width: '100%',
-          backgroundColor: focusedSearchResultIndex !== index ? 'white' : 'grey',
-          border: '1px solid black'
-        }}
+      <MenuItem
+        multiline
+        text={getDisplayedIndex(result) + focusResult(rewritedSearchData.idToContentMap[result])}
         key={index}
         onClick={() => {
           setIndexAutoCompleteCouldShow(false);
           setSearchAutoCompleteCouldShow(false);
           handleNavigation(result);
         }}
-        onMouseOver={() => setFocusedSearchResultIndex(index)}
-      >
-        {getDisplayedIndex(result) + focusResult(rewritedSearchData.idToContentMap[result])}
-      </div>
+      />
     );
 
     const buildSearchResultsMenuWith = (children: React.ReactNode) => {
-      return (
-        <div
-          style={{
-            height: '4000%',
-            overflowY: 'auto',
-            position: 'absolute',
-            top: `0`,
-            left: '100%',
-            width: '300%',
-            backgroundColor: 'white',
-            overflow: 'auto',
-            margin: 0,
-            padding: 0
-          }}
-        >
-          {children}
-        </div>
-      );
+      return children;
     };
 
     return menu(
@@ -347,7 +328,7 @@ const SicpNavigationBar: React.FC = () => {
 
   const indexSearchResultSubMenu = (searchInput: string) => {
     const isIndexSearchSubMenuHidden = (searchInput: String) => {
-      return !(isSubmenuVisibleIndex === searchInput);
+      return false;
     };
 
     const getIndexSearchResults = () => {
@@ -366,46 +347,20 @@ const SicpNavigationBar: React.FC = () => {
 
     const buildIndexSearchResultsMenuEntry = (result: any, index: number) => {
       return (
-        <div
-          style={{
-            margin: '0',
-            width: '100%',
-            backgroundColor: focusedIndexSearchResultIndex !== index ? 'white' : 'grey',
-            border: '1px solid black'
-          }}
+        <MenuItem
+          text={<Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>}
           key={index}
           onClick={() => {
             setIndexAutoCompleteCouldShow(false);
             setSearchAutoCompleteCouldShow(false);
             handleNavigation(result.id);
           }}
-          onMouseOver={() => setFocusedIndexSearchResultIndex(index)}
-        >
-          <Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>
-        </div>
+        />
       );
     };
 
     const buildIndexSearchResultsMenuWith = (children: React.ReactNode) => {
-      return (
-        <div
-          style={{
-            height: '4000%',
-            overflowY: 'auto',
-            position: 'absolute',
-            top: `0`,
-            left: '100%',
-            width: '200%',
-            backgroundColor: 'white',
-            outline: 'dashed',
-            overflow: 'auto',
-            margin: 0,
-            padding: 0
-          }}
-        >
-          {children}
-        </div>
-      );
+      return children;
     };
 
     return menu(
@@ -431,29 +386,16 @@ const SicpNavigationBar: React.FC = () => {
     };
 
     const buildUserSearchAutocompleteMenuEntry = (result: any, index: number) => (
-      <div
-        style={{
-          margin: 0,
-          cursor: 'pointer',
-          position: 'relative',
-          display: 'flex',
-          border: '1px solid black'
+      <MenuItem
+        text={result}
+        onMouseOver={() => {
+          setResults(sentenceSearch(result));
+          setIsSubmenuVisible(result);
         }}
+        onClick={() => setSearchQuery(result)}
       >
-        <div
-          style={{ width: '100%', backgroundColor: isSubmenuVisible !== result ? 'white' : 'grey' }}
-          onMouseOver={() => {
-            setFocusedSearchResultIndex(-1);
-            setResults(sentenceSearch(result));
-            setIsSubmenuVisible(result);
-          }}
-          onClick={() => setSearchQuery(result)}
-        >
-          {result}
-        </div>
-
         {userSearchResultSubMenu(result)}
-      </div>
+      </MenuItem>
     );
 
     return menu(
@@ -479,34 +421,13 @@ const SicpNavigationBar: React.FC = () => {
     };
 
     const buildIndexSearchAutocompleteMenuEntry = (result: any, index: number) => (
-      <div
-        style={{
-          border: '1px solid black',
-          margin: 0,
-          cursor: 'pointer',
-          position: 'relative',
-          display: 'flex'
-        }}
+      <MenuItem
+        text={result}
+        onMouseOver={() => setResultsIndex(search(result, rewritedSearchData.indexTrie))}
+        onClick={() => setIndexSearchQuery(result)}
       >
-        <div
-          style={{
-            width: '100%',
-            backgroundColor: isSubmenuVisibleIndex !== result ? 'white' : 'grey'
-          }}
-          onMouseOver={() => {
-            //setIndexSearchQuery(result);
-            setFocusedIndexSearchResultIndex(-1);
-            setResultsIndex(search(result, rewritedSearchData.indexTrie));
-            setIsSubmenuVisibleIndex(result);
-          }}
-          onClick={() => {
-            setIndexSearchQuery(result);
-          }}
-        >
-          {result}
-        </div>
         {indexSearchResultSubMenu(result)}
-      </div>
+      </MenuItem>
     );
 
     return menu(
@@ -522,35 +443,21 @@ const SicpNavigationBar: React.FC = () => {
     children: React.ReactNode,
     ref: React.RefObject<HTMLDivElement>
   ) => {
-    return (
-      <div
-        style={{
-          position: 'absolute',
-          backgroundColor: 'white',
-          width: '75%'
-        }}
-        ref={ref}
-      >
-        {children}
-      </div>
-    );
+    return <Menu style={{ position: 'absolute', top: '100%', width: '100%' }}>{children}</Menu>;
   };
 
   const handleUserSearchButton = () => {
-    setFocusedSearchResultIndex(-1);
     setResults(sentenceSearch(searchQuery));
     setIsSubmenuVisible(searchQuery);
   };
 
   const handleIndexSearchButton = () => {
-    setFocusedIndexSearchResultIndex(-1);
     setResultsIndex(search(indexSearchQuery, rewritedSearchData.indexTrie));
-    setIsSubmenuVisibleIndex(indexSearchQuery);
   };
 
   const userSearch = (
     <div style={{ position: 'relative' }}>
-      <div style={{ display: 'inline-flex' }} ref={searchInputRef}>
+      <div ref={searchInputRef}>
         <InputGroup
           placeholder="Search"
           value={searchQuery}
@@ -560,8 +467,10 @@ const SicpNavigationBar: React.FC = () => {
             setSearchAutoCompleteCouldShow(true);
             setSearchAutocompleteResults(sentenceAutoComplete(s));
           }}
+          rightElement={
+            <ControlButton label="Text" icon={IconNames.SEARCH} onClick={handleUserSearchButton} />
+          }
         />
-        <ControlButton label="Text" icon={IconNames.SEARCH} onClick={handleUserSearchButton} />
       </div>
       {userSearchAutocompleteMenu(searchQuery)}
     </div>
@@ -569,7 +478,7 @@ const SicpNavigationBar: React.FC = () => {
 
   const indexSearch = (
     <div style={{ position: 'relative' }}>
-      <div style={{ display: 'inline-flex' }} ref={indexSearchInputRef}>
+      <div ref={indexSearchInputRef}>
         <InputGroup
           placeholder="Search"
           value={indexSearchQuery}
@@ -579,16 +488,23 @@ const SicpNavigationBar: React.FC = () => {
             setIndexAutoCompleteCouldShow(true);
             setIndexAutocompleteResults(indexAutoComplete(s));
           }}
+          rightElement={
+            <ControlButton
+              label="Index"
+              icon={IconNames.SEARCH}
+              onClick={handleIndexSearchButton}
+            />
+          }
         />
-        <ControlButton label="Index" icon={IconNames.SEARCH} onClick={handleIndexSearchButton} />
       </div>
       {indexSearchAutocompleteMenu(indexSearchQuery)}
     </div>
   );
 
   const searchWrapper = (
-    <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }} key="searchWrapper">
-      {[userSearch, indexSearch]}
+    <div style={{ width: '100%', display: 'flex', gap: 2, justifyContent: 'center' }}>
+      {userSearch}
+      {indexSearch}
     </div>
   );
 
