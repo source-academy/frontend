@@ -493,7 +493,8 @@ export const getUserAssessmentOverviews = async (
 export const getAssessment = async (
   assessmentId: number,
   tokens: Tokens,
-  courseRegId?: number
+  courseRegId?: number,
+  password?: string
 ): Promise<Assessment | null> => {
   let resp;
   if (courseRegId !== undefined) {
@@ -507,29 +508,24 @@ export const getAssessment = async (
     );
   } else {
     // Otherwise, we are getting the assessment for the current user
-    resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
-      ...tokens
-    });
-  }
-
-  // Attempt to load password-protected assessment
-  while (resp && resp.status === 403) {
-    const input = window.prompt('Please enter password.', '');
-    if (!input) {
-      resp = null;
-      window.history.back();
-      return null;
+    if (password === undefined) {
+      // No password required (either not password-protected, or already previously unlocked)
+      resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
+        ...tokens
+      });
+    } else {
+      // First-time unlocking password-protected assessments
+      resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
+        ...tokens,
+        body: { password },
+        errorMessage: 'Incorrect password'
+      });
     }
-
-    resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
-      ...tokens,
-      body: {
-        password: input
-      }
-    });
   }
 
   if (!resp || !resp.ok) {
+    // Failed to load assessment, go back
+    window.history.back();
     return null;
   }
 
