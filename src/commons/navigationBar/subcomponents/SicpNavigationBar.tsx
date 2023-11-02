@@ -262,7 +262,10 @@ const SicpNavigationBar: React.FC = () => {
             {focusResult(rewritedSearchData.idToContentMap[result], query)}
           </>
         }
-        onClick={() => handleNavigation(result)}
+        onClick={() => {
+          handleNavigation(result);
+          setIsOmnibarOpen(false);
+        }}
       />
     );
   };
@@ -285,7 +288,10 @@ const SicpNavigationBar: React.FC = () => {
     return (
       <MenuItem
         text={<Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>}
-        onClick={() => handleNavigation(result.id)}
+        onClick={() => {
+          handleNavigation(result.id);
+          setIsOmnibarOpen(false);
+        }}
       />
     );
   };
