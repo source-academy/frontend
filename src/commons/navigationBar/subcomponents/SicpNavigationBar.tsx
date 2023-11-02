@@ -306,12 +306,14 @@ const SicpNavigationBar: React.FC = () => {
     setOmnibarMode('text');
     setIsOmnibarOpen(true);
     setQuery('');
+    setSearchResults([]);
   };
 
   const initIndexSearch = () => {
     setOmnibarMode('index');
     setIsOmnibarOpen(true);
     setQuery('');
+    setSearchResults([]);
   };
 
   const handleQueryChange = (query: string) => {
