@@ -14,7 +14,6 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Omnibar } from '@blueprintjs/select';
-import { memoize } from 'lodash';
 import * as React from 'react';
 import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
@@ -205,7 +204,8 @@ const SicpNavigationBar: React.FC = () => {
     return answers;
   }
 
-  const rewritedSearchData: SearchData = memoize(fetchSearchData)();
+  // fetch search catalog only once
+  const rewritedSearchData: SearchData = React.useMemo(fetchSearchData, []);
 
   const focusResult = (result: string, query: string): React.ReactNode => {
     result = result.replaceAll('\n', ' ').toLowerCase();
