@@ -80,7 +80,7 @@ const SicpNavigationBar: React.FC = () => {
   // this section responsible for the search
   type TrieNode = {
     children: Record<string, TrieNode>;
-    value: any[];
+    value: string[] & IndexSearchResult[];
     key: string;
   };
 
