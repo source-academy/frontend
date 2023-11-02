@@ -372,6 +372,7 @@ const SicpNavigationBar: React.FC = () => {
           disabled: omnibarMode === 'submenu',
           placeholder: `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`
         }}
+        overlayProps={{ className: Classes.OVERLAY_SCROLL_CONTAINER }}
         onClose={() => setIsOmnibarOpen(false)}
         items={searchResults}
         // Handled by individual items
