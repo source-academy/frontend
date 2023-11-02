@@ -1,15 +1,19 @@
 import {
   Alignment,
+  Button,
+  Classes,
   Drawer,
-  InputGroup,
+  Icon,
   Menu,
   MenuItem,
   Navbar,
   NavbarGroup,
-  Position
+  Position,
+  Tag,
+  Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { memoize } from 'lodash';
+import { Omnibar } from '@blueprintjs/select';
 import * as React from 'react';
 import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
@@ -19,6 +23,8 @@ import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
+
+type IndexSearchResult = { text: string; order: string; id: string; hasSubindex: boolean };
 
 const SicpNavigationBar: React.FC = () => {
   // this section responsible for the travel and table of content
@@ -74,7 +80,7 @@ const SicpNavigationBar: React.FC = () => {
   // this section responsible for the search
   type TrieNode = {
     children: Record<string, TrieNode>;
-    value: any[];
+    value: string[] & IndexSearchResult[];
     key: string;
   };
 
@@ -190,7 +196,6 @@ const SicpNavigationBar: React.FC = () => {
           end = rest.length;
         }
         const toPush = incompleteKeys + rest.slice(0, end);
-        // console.log('toPush is ' + toPush);
         if (!answers.includes(toPush.trim())) {
           answers.push(toPush.trim());
         }
@@ -199,306 +204,141 @@ const SicpNavigationBar: React.FC = () => {
     return answers;
   }
 
-  const rewritedSearchData: SearchData = memoize(fetchSearchData)();
-  const [isSubmenuVisible, setIsSubmenuVisible] = React.useState('');
-  const [results, setResults] = React.useState(['']);
-  const [resultsIndex, setResultsIndex] = React.useState([
-    { text: '', order: '', id: '', hasSubindex: false }
-  ]);
-  const [searchAutocompleteResults, setSearchAutocompleteResults] = React.useState<string[]>([]);
-  const [indexAutocompleteResults, setIndexAutocompleteResults] = React.useState<string[]>([]);
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [indexSearchQuery, setIndexSearchQuery] = React.useState('');
-  const [indexAutoCompleteCouldShow, setIndexAutoCompleteCouldShow] = React.useState(false);
-  const [searchAutoCompleteCouldShow, setSearchAutoCompleteCouldShow] = React.useState(false);
-  const autocompleteMenuRef = React.useRef<HTMLDivElement>(null);
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
-  const indexSearchInputRef = React.useRef<HTMLInputElement>(null);
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchInputRef.current && searchInputRef.current.contains(event.target as Node)) {
-        setSearchAutoCompleteCouldShow(true);
-        setIndexAutoCompleteCouldShow(false);
-      } else if (
-        indexSearchInputRef.current &&
-        indexSearchInputRef.current.contains(event.target as Node)
-      ) {
-        setSearchAutoCompleteCouldShow(false);
-        setIndexAutoCompleteCouldShow(true);
-      } else if (
-        autocompleteMenuRef.current &&
-        !autocompleteMenuRef.current.contains(event.target as Node)
-      ) {
-        setSearchAutoCompleteCouldShow(false);
-        setIndexAutoCompleteCouldShow(false);
+  // fetch search catalog only once
+  const rewritedSearchData: SearchData = React.useMemo(fetchSearchData, []);
+
+  const focusResult = (result: string, query: string): React.ReactNode => {
+    result = result.replaceAll('\n', ' ').toLowerCase();
+    const startIndex = result.indexOf(query);
+    let start = startIndex;
+    while (start > 0) {
+      if (result[start - 1].match(/[^a-zA-Z, _]/)) {
+        break;
       }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [autocompleteMenuRef, searchInputRef, indexSearchInputRef]);
-  const menu = (
-    searchInput: string,
-    isSubMenueHidden: (searchInput: string) => Boolean,
-    getResults: () => any[],
-    buildMenuEntry: (searchResult: any, index: number) => React.ReactNode,
-    buildMenuWith: (
-      children: React.ReactNode,
-      ref: React.RefObject<HTMLDivElement>
-    ) => React.ReactNode
-  ): React.ReactNode => {
-    if (isSubMenueHidden(searchInput)) {
-      return <></>;
+      start--;
     }
-    const children = getResults().map(buildMenuEntry);
-    return buildMenuWith(children, autocompleteMenuRef);
+    const endIndex = startIndex + query.length;
+    let end = endIndex;
+    while (end < result.length) {
+      if (result[end].match(/[^a-zA-Z _,]/)) {
+        break;
+      }
+      end++;
+    }
+    let subStr = result.slice(start, end);
+    if (start > 0) {
+      subStr = '...' + subStr;
+    }
+    if (end < result.length) {
+      subStr = subStr + '...';
+    }
+    subStr = subStr.trim();
+    return (
+      <>
+        {subStr.slice(0, subStr.indexOf(query))}
+        <mark>
+          <strong>
+            {subStr.slice(subStr.indexOf(query), subStr.indexOf(query) + query.length)}
+          </strong>
+        </mark>
+        {subStr.slice(subStr.indexOf(query) + query.length)}
+      </>
+    );
+  };
+  const getIndex = (id: string) => {
+    const index = id.indexOf('#');
+    const numId = index === -1 ? id : id.slice(0, index);
+    return numId;
   };
 
-  const userSearchResultSubMenu = (searchInput: string) => {
-    const focusResult = (result: string) => {
-      result = result.replaceAll('\n', ' ').toLowerCase();
-      const startIndex = result.indexOf(searchInput);
-      let start = startIndex;
-      while (start > 0) {
-        if (result[start - 1].match(/[^a-zA-Z, _]/)) {
-          // console.log('break at ' + (start - 1) + ' ' + result[start - 1]);
-          break;
-        }
-        start--;
-      }
-      const endIndex = startIndex + searchInput.length;
-      let end = endIndex;
-      while (end < result.length) {
-        if (result[end].match(/[^a-zA-Z _,]/)) {
-          // console.log('break at ' + end + ' ' + result[end]);
-          break;
-        }
-        end++;
-      }
-      let subStr = result.slice(start, end);
-      // console.log('subStr is ' + subStr);
-      if (start > 0) {
-        subStr = '...' + subStr;
-      }
-      if (end < result.length) {
-        subStr = subStr + '...';
-      }
-      return subStr;
-    };
-
-    const isUserSearchSubMenuHidden = (searchInput: string) => {
-      return !(isSubmenuVisible === searchInput);
-    };
-
-    const getUserSearchResults = () => {
-      return results;
-    };
-    const getDisplayedIndex = (id: string) => {
-      const index = id.indexOf('#');
-      const numId = index === -1 ? id : id.slice(0, index);
-      return numId + ': ';
-    };
-
-    const buildUserSearchResultsMenuEntry = (result: any, index: number) => (
+  const makeTextSearchSubmenuItem = (result: string) => {
+    return (
       <MenuItem
         multiline
-        text={getDisplayedIndex(result) + focusResult(rewritedSearchData.idToContentMap[result])}
-        key={index}
+        text={
+          <>
+            <Tag minimal>Section {getIndex(result)}</Tag>
+            <br />
+            {focusResult(rewritedSearchData.idToContentMap[result], query)}
+          </>
+        }
         onClick={() => {
-          setIndexAutoCompleteCouldShow(false);
-          setSearchAutoCompleteCouldShow(false);
           handleNavigation(result);
+          setIsOmnibarOpen(false);
         }}
       />
     );
-
-    const buildSearchResultsMenuWith = (children: React.ReactNode) => {
-      return children;
-    };
-
-    return menu(
-      searchInput,
-      isUserSearchSubMenuHidden,
-      getUserSearchResults,
-      buildUserSearchResultsMenuEntry,
-      buildSearchResultsMenuWith
-    );
   };
 
-  const indexSearchResultSubMenu = (searchInput: string) => {
-    const isIndexSearchSubMenuHidden = (searchInput: String) => {
-      return false;
-    };
-
-    const getIndexSearchResults = () => {
-      return resultsIndex
-        .filter(result => result.id)
-        .sort((a, b) => {
-          if (a.hasSubindex && !b.hasSubindex) {
-            return 1;
-          }
-          if (!a.hasSubindex && b.hasSubindex) {
-            return -1;
-          }
-          return a.order.localeCompare(b.order);
-        });
-    };
-
-    const buildIndexSearchResultsMenuEntry = (result: any, index: number) => {
-      return (
-        <MenuItem
-          text={<Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>}
-          key={index}
-          onClick={() => {
-            setIndexAutoCompleteCouldShow(false);
-            setSearchAutoCompleteCouldShow(false);
-            handleNavigation(result.id);
-          }}
-        />
-      );
-    };
-
-    const buildIndexSearchResultsMenuWith = (children: React.ReactNode) => {
-      return children;
-    };
-
-    return menu(
-      searchInput,
-      isIndexSearchSubMenuHidden,
-      getIndexSearchResults,
-      buildIndexSearchResultsMenuEntry,
-      buildIndexSearchResultsMenuWith
-    );
+  const processIndexSearchResults = (searchResults: IndexSearchResult[]) => {
+    return searchResults
+      .filter(result => result.id)
+      .sort((a, b) => {
+        if (a.hasSubindex && !b.hasSubindex) {
+          return 1;
+        }
+        if (!a.hasSubindex && b.hasSubindex) {
+          return -1;
+        }
+        return a.order.localeCompare(b.order);
+      });
   };
 
-  const userSearchAutocompleteMenu = (searchInput: string) => {
-    const isUserSearchAutocompleteMenuHidden = (searchInput: string) => {
-      return (
-        searchQuery.length === 0 ||
-        searchAutocompleteResults.length === 0 ||
-        !searchAutoCompleteCouldShow
-      );
-    };
-
-    const getUserSearchAutocompleteResults = () => {
-      return searchAutocompleteResults;
-    };
-
-    const buildUserSearchAutocompleteMenuEntry = (result: any, index: number) => (
+  const makeIndexSearchSubmenuItem = (result: IndexSearchResult) => {
+    return (
       <MenuItem
-        text={result}
-        onMouseOver={() => {
-          setResults(sentenceSearch(result));
-          setIsSubmenuVisible(result);
+        text={<Latex>{result.text.replaceAll('LATEX: ', '')}</Latex>}
+        onClick={() => {
+          handleNavigation(result.id);
+          setIsOmnibarOpen(false);
         }}
-        onClick={() => setSearchQuery(result)}
-      >
-        {userSearchResultSubMenu(result)}
-      </MenuItem>
-    );
-
-    return menu(
-      searchInput,
-      isUserSearchAutocompleteMenuHidden,
-      getUserSearchAutocompleteResults,
-      buildUserSearchAutocompleteMenuEntry,
-      AutocompleteResultsMenuWith
+      />
     );
   };
 
-  const indexSearchAutocompleteMenu = (searchInput: string) => {
-    const isIndexSearchAutocompleteMenuHidden = (searchInput: string) => {
-      return (
-        indexSearchQuery.length === 0 ||
-        indexAutocompleteResults.length === 0 ||
-        !indexAutoCompleteCouldShow
-      );
-    };
+  const [isOmnibarOpen, setIsOmnibarOpen] = React.useState(false);
+  const [omnibarMode, setOmnibarMode] = React.useState<'text' | 'index' | 'submenu'>('text');
+  const [previousMode, setPreviousMode] = React.useState<'text' | 'index' | null>(null);
+  const [query, setQuery] = React.useState('');
+  const [searchResults, setSearchResults] = React.useState<string[]>([]);
 
-    const getIndexSearchAutocompleteResults = () => {
-      return indexAutocompleteResults;
-    };
-
-    const buildIndexSearchAutocompleteMenuEntry = (result: any, index: number) => (
-      <MenuItem
-        text={result}
-        onMouseOver={() => setResultsIndex(search(result, rewritedSearchData.indexTrie))}
-        onClick={() => setIndexSearchQuery(result)}
-      >
-        {indexSearchResultSubMenu(result)}
-      </MenuItem>
-    );
-
-    return menu(
-      searchInput,
-      isIndexSearchAutocompleteMenuHidden,
-      getIndexSearchAutocompleteResults,
-      buildIndexSearchAutocompleteMenuEntry,
-      AutocompleteResultsMenuWith
-    );
+  const initTextSearch = () => {
+    setOmnibarMode('text');
+    setIsOmnibarOpen(true);
+    setQuery('');
+    setSearchResults([]);
   };
 
-  const AutocompleteResultsMenuWith = (
-    children: React.ReactNode,
-    ref: React.RefObject<HTMLDivElement>
-  ) => {
-    return <Menu style={{ position: 'absolute', top: '100%', width: '100%' }}>{children}</Menu>;
+  const initIndexSearch = () => {
+    setOmnibarMode('index');
+    setIsOmnibarOpen(true);
+    setQuery('');
+    setSearchResults([]);
   };
 
-  const handleUserSearchButton = () => {
-    setResults(sentenceSearch(searchQuery));
-    setIsSubmenuVisible(searchQuery);
-  };
+  const handleQueryChange = (query: string) => {
+    setQuery(query);
+    if (query.length === 0) {
+      setSearchResults([]);
+      return;
+    }
 
-  const handleIndexSearchButton = () => {
-    setResultsIndex(search(indexSearchQuery, rewritedSearchData.indexTrie));
+    switch (omnibarMode) {
+      case 'text':
+        setSearchResults(sentenceAutoComplete(query));
+        break;
+      case 'index':
+        setSearchResults(indexAutoComplete(query));
+        break;
+    }
   };
 
   const userSearch = (
-    <div style={{ position: 'relative' }}>
-      <div ref={searchInputRef}>
-        <InputGroup
-          placeholder="Search"
-          value={searchQuery}
-          onChange={event => {
-            const s = event.target.value;
-            setSearchQuery(s);
-            setSearchAutoCompleteCouldShow(true);
-            setSearchAutocompleteResults(sentenceAutoComplete(s));
-          }}
-          rightElement={
-            <ControlButton label="Text" icon={IconNames.SEARCH} onClick={handleUserSearchButton} />
-          }
-        />
-      </div>
-      {userSearchAutocompleteMenu(searchQuery)}
-    </div>
+    <ControlButton label="Text Search" icon={IconNames.SEARCH} onClick={initTextSearch} />
   );
 
   const indexSearch = (
-    <div style={{ position: 'relative' }}>
-      <div ref={indexSearchInputRef}>
-        <InputGroup
-          placeholder="Search"
-          value={indexSearchQuery}
-          onChange={event => {
-            const s = event.target.value;
-            setIndexSearchQuery(s);
-            setIndexAutoCompleteCouldShow(true);
-            setIndexAutocompleteResults(indexAutoComplete(s));
-          }}
-          rightElement={
-            <ControlButton
-              label="Index"
-              icon={IconNames.SEARCH}
-              onClick={handleIndexSearchButton}
-            />
-          }
-        />
-      </div>
-      {indexSearchAutocompleteMenu(indexSearchQuery)}
-    </div>
+    <ControlButton label="Index Search" icon={IconNames.SEARCH} onClick={initIndexSearch} />
   );
 
   const searchWrapper = (
@@ -508,8 +348,96 @@ const SicpNavigationBar: React.FC = () => {
     </div>
   );
 
+  const handleResultClick = (result: string) => {
+    setQuery(result);
+    // Safe to typecast due to logic
+    setPreviousMode(omnibarMode as 'text' | 'index');
+    setOmnibarMode('submenu');
+    switch (omnibarMode) {
+      case 'text':
+        setSearchResults(sentenceSearch(result));
+        break;
+      case 'index':
+        setSearchResults(
+          // Supposed to be IndexSearchResult[], but typing can be improved with further, future refactoring
+          processIndexSearchResults(search(result, rewritedSearchData.indexTrie)) as any[]
+        );
+        break;
+    }
+  };
+
   return (
     <>
+      <Omnibar
+        isOpen={isOmnibarOpen}
+        inputProps={{
+          disabled: omnibarMode === 'submenu',
+          placeholder: `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`
+        }}
+        overlayProps={{ className: Classes.OVERLAY_SCROLL_CONTAINER }}
+        onClose={() => setIsOmnibarOpen(false)}
+        items={searchResults}
+        // Handled by individual items
+        onItemSelect={() => {}}
+        query={query}
+        onQueryChange={handleQueryChange}
+        itemListRenderer={({ itemsParentRef, renderItem, items }) => {
+          return (
+            <Menu ulRef={itemsParentRef}>
+              {omnibarMode === 'submenu' && (
+                <Text className={Classes.TEXT_MUTED} style={{ padding: 6 }}>
+                  Showing results for <strong>{query}</strong>&hellip;{' '}
+                  <Button
+                    small
+                    intent="primary"
+                    minimal
+                    style={{ padding: 0, minHeight: 0, verticalAlign: 'baseline' }}
+                    onClick={() => {
+                      // Safe to assert non-null due to logic
+                      setOmnibarMode(previousMode!);
+                      setPreviousMode(null);
+
+                      // Restore previous search results
+                      switch (previousMode) {
+                        case 'text':
+                          setSearchResults(sentenceAutoComplete(query));
+                          break;
+                        case 'index':
+                          setSearchResults(indexAutoComplete(query));
+                          break;
+                      }
+                    }}
+                  >
+                    back to {previousMode} search
+                  </Button>
+                </Text>
+              )}
+              {items.map(renderItem)}
+            </Menu>
+          );
+        }}
+        itemRenderer={result => {
+          switch (omnibarMode) {
+            case 'text':
+            case 'index':
+              return (
+                <MenuItem
+                  text={result}
+                  onClick={() => handleResultClick(result)}
+                  labelElement={<Icon icon={IconNames.CARET_RIGHT} />}
+                />
+              );
+            case 'submenu':
+              // Safe to assert non-null due to logic
+              switch (previousMode!) {
+                case 'text':
+                  return makeTextSearchSubmenuItem(result);
+                case 'index':
+                  return makeIndexSearchSubmenuItem(result as unknown as IndexSearchResult);
+              }
+          }
+        }}
+      />
       <Navbar className="SicpNavigationBar secondary-navbar">
         <NavbarGroup align={Alignment.LEFT}>{tocButton}</NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>{[prevButton, nextButton]}</NavbarGroup>
