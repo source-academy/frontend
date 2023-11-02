@@ -16,6 +16,11 @@ exports[`Navbar renders correctly 1`] = `
     onClose={[Function]}
     onItemSelect={[Function]}
     onQueryChange={[Function]}
+    overlayProps={
+      Object {
+        "className": "bp4-overlay-scroll-container",
+      }
+    }
     query=""
   />
   <Blueprint4.Navbar
