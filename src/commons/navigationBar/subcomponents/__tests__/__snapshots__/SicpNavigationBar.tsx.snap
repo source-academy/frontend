@@ -32,76 +32,60 @@ exports[`Navbar renders correctly 1`] = `
       align="center"
     >
       <div
-        className="searchWrapper"
         style={
           Object {
             "display": "flex",
+            "gap": 2,
             "justifyContent": "center",
             "width": "100%",
           }
         }
       >
         <div
-          className="userSearch"
           style={
             Object {
               "position": "relative",
             }
           }
         >
-          <div
-            className="userSearch-inner"
-          >
-            <div
-              style={
-                Object {
-                  "display": "inline-flex",
-                }
+          <div>
+            <Blueprint4.InputGroup
+              onChange={[Function]}
+              placeholder="Search"
+              rightElement={
+                <ControlButton
+                  icon="search"
+                  label="Text"
+                  onClick={[Function]}
+                />
               }
-            >
-              <Blueprint4.InputGroup
-                onChange={[Function]}
-                placeholder="Search"
-                value=""
-              />
-              <ControlButton
-                icon="search"
-                label="Text"
-                onClick={[Function]}
-              />
-            </div>
+              value=""
+            />
           </div>
+          <React.Fragment />
         </div>
         <div
-          className="indexSearch"
           style={
             Object {
               "position": "relative",
             }
           }
         >
-          <div
-            className="indexSearch-inner"
-          >
-            <div
-              style={
-                Object {
-                  "display": "inline-flex",
-                }
+          <div>
+            <Blueprint4.InputGroup
+              onChange={[Function]}
+              placeholder="Search"
+              rightElement={
+                <ControlButton
+                  icon="search"
+                  label="Index"
+                  onClick={[Function]}
+                />
               }
-            >
-              <Blueprint4.InputGroup
-                onChange={[Function]}
-                placeholder="Search"
-                value=""
-              />
-              <ControlButton
-                icon="search"
-                label="Index"
-                onClick={[Function]}
-              />
-            </div>
+              value=""
+            />
           </div>
+          <React.Fragment />
         </div>
       </div>
     </Blueprint4.NavbarGroup>
@@ -123,22 +107,5 @@ exports[`Navbar renders correctly 1`] = `
       handleCloseToc={[Function]}
     />
   </Blueprint4.Drawer>
-  <Blueprint4.Drawer
-    autoFocus={true}
-    canEscapeKeyClose={true}
-    canOutsideClickClose={true}
-    className="sicp-toc-drawer"
-    enforceFocus={true}
-    hasBackdrop={true}
-    isOpen={false}
-    onClose={[Function]}
-    position="left"
-    style={
-      Object {
-        "overflow": "auto",
-      }
-    }
-    usePortal={false}
-  />
 </React.Fragment>
 `;
