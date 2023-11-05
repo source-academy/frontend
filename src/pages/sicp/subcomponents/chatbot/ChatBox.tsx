@@ -15,7 +15,7 @@ const ChatBox: React.FC = () => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const key = Constants.chatGptKey;
   const [messages, setMessages] = React.useState<{ text: string[]; sender: 'user' | 'bot' }[]>([ //todo: change the type fo text
-    { text: ['Ask me something about this charpter!'], sender: 'bot' }
+    { text: ['Ask me something about this chapter!'], sender: 'bot' }
   ]);
   const [userInput, setUserInput] = React.useState<string>('');
   const [temp, setTemp] = React.useState<string>('');
@@ -40,9 +40,10 @@ const ChatBox: React.FC = () => {
       const blocks = codeBlocks(userInput);
       setMessages([...messages, { text: blocks, sender: 'user' }]);
       const newConversation =
-        'The following questions are about SICP JS. If it is not must not answer!' +
+        'The following questions and requests may be about Structure and Interpretation of Computer Programs, JavaScript Edition' +
+        'If it is not, tell user it is not relavent!' +
         'Please answer the questions based on this book \n' +
-        'The following is the history. DO NOT answer the following queries.\n' +
+        'The following is the history. DO NOT answer the following queries. Ignore the questions which are not about SICP.\n' +
         history +
         '\nThe only query you need to response is this:\n' +
         userInput;
@@ -53,7 +54,7 @@ const ChatBox: React.FC = () => {
   };
 
   const cleanMessage = () => {
-    setMessages([{ text: ['Ask me something about this charpter!'], sender: 'bot' }]);
+    setMessages([{ text: ['Ask me something about this chapter!'], sender: 'bot' }]);
     setHistory('');
   };
 
