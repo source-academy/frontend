@@ -57,6 +57,7 @@ export const saveState = (state: OverallState) => {
         refreshToken: state.session.refreshToken,
         courseRegId: state.session.courseRegId,
         role: state.session.role,
+        group: state.session.group,
         name: state.session.name,
         userId: state.session.userId,
         courses: state.session.courses,
