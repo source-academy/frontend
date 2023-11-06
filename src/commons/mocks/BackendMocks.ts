@@ -107,7 +107,7 @@ export function* mockBackendSaga(): SagaIterator {
   });
 
   yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
-    const id = action.payload;
+    const { assessmentId: id } = action.payload;
     const assessment = mockAssessments[id - 1];
     yield put(actions.updateAssessment({ ...assessment }));
   });
