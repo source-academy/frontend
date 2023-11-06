@@ -11,7 +11,11 @@ if (!(window as any).Buffer) {
   (window as any).Buffer = NodeBuffer;
 }
 
-const ChatBox: React.FC = () => {
+interface ChatBoxProps {
+  getText: () => string;
+}  
+
+const ChatBox: React.FC<ChatBoxProps> = ({ getText }) => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const key = Constants.chatGptKey;
   const [messages, setMessages] = React.useState<{ text: string[]; sender: 'user' | 'bot' }[]>([ //todo: change the type fo text
@@ -37,15 +41,18 @@ const ChatBox: React.FC = () => {
 
   const sendMessage = () => {
     if (userInput.trim() !== '') {
+      const text = getText();
       const blocks = codeBlocks(userInput);
       setMessages([...messages, { text: blocks, sender: 'user' }]);
       const newConversation =
         'The following questions and requests may be about Structure and Interpretation of Computer Programs, JavaScript Edition' +
         'If it is not, tell user it is not relavent!' +
-        'Please answer the questions based on this book \n' +
-        'The following is the history. DO NOT answer the following queries. Ignore the questions which are not about SICP.\n' +
+        'Please answer the questions based on this book.' +
+        'The following text is the reference chapter of this book and you do not need to say I provide you text:\n' +
+        text +
+        '\n\nThe following is the history. DO NOT answer the following queries. Ignore the questions which are not about SICP.\n' +
         history +
-        '\nThe only query you need to response is this:\n' +
+        '\n\nThe only query you need to response is this:\n' +
         userInput;
       setHistory(his => `${his}\n${userInput}`);
       setConversation(newConversation);

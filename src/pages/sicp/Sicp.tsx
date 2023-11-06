@@ -43,6 +43,70 @@ const Sicp: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const ref: React.MutableRefObject<HTMLDivElement | null>[] = [];
+  const ref1 = React.useRef<HTMLDivElement | null>(null);
+  const ref2 = React.useRef<HTMLDivElement | null>(null);
+  const ref3 = React.useRef<HTMLDivElement | null>(null);
+  const ref4 = React.useRef<HTMLDivElement | null>(null);
+  const ref5 = React.useRef<HTMLDivElement | null>(null);
+  const ref6 = React.useRef<HTMLDivElement | null>(null);
+  const ref7 = React.useRef<HTMLDivElement | null>(null);
+  const ref8 = React.useRef<HTMLDivElement | null>(null);
+  const ref9 = React.useRef<HTMLDivElement | null>(null);
+  const ref10 = React.useRef<HTMLDivElement | null>(null);
+  const ref11 = React.useRef<HTMLDivElement | null>(null);
+  const ref12 = React.useRef<HTMLDivElement | null>(null);
+  const ref13 = React.useRef<HTMLDivElement | null>(null);
+  const ref14 = React.useRef<HTMLDivElement | null>(null);
+  const ref15 = React.useRef<HTMLDivElement | null>(null);
+  const ref16 = React.useRef<HTMLDivElement | null>(null);
+  const ref17 = React.useRef<HTMLDivElement | null>(null);
+  const ref18 = React.useRef<HTMLDivElement | null>(null);
+  const ref19 = React.useRef<HTMLDivElement | null>(null);
+  const ref20 = React.useRef<HTMLDivElement | null>(null);
+  ref[1] = ref1;
+  ref[2] = ref2;
+  ref[3] = ref3;
+  ref[4] = ref4;
+  ref[5] = ref5;
+  ref[6] = ref6;
+  ref[7] = ref7;
+  ref[8] = ref8;
+  ref[9] = ref9;
+  ref[10] = ref10;
+  ref[11] = ref11;
+  ref[12] = ref12;
+  ref[13] = ref13;
+  ref[14] = ref14;
+  ref[15] = ref15;
+  ref[16] = ref16;
+  ref[17] = ref17;
+  ref[18] = ref18;
+  ref[19] = ref19;
+  ref[20] = ref20;
+
+// Now you can use the `refs` array as needed
+function isElementOnScreen(element:HTMLElement) {
+  const elementRect = element.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  
+  return (
+    elementRect.bottom >= 0 &&
+    elementRect.top <= viewportHeight
+  );
+}
+
+function getText() {
+  let visibleParagraphs = "";
+
+  ref.forEach((r) => {
+    if (r.current && isElementOnScreen(r.current)) {
+      visibleParagraphs += r.current.textContent + "\n";
+    }
+  });
+  return visibleParagraphs;
+}
+
   const scrollRefIntoView = (ref: HTMLDivElement | null) => {
     if (!ref || !parentRef?.current) {
       return;
@@ -85,7 +149,7 @@ const Sicp: React.FC = () => {
       })
       .then(myJson => {
         try {
-          const newData = parseArr(myJson, refs); // Might throw error
+          const newData = parseArr(myJson, refs, ref); // Might throw error
           setData(newData);
           setSicpSectionLocalStorage(section); // Sets local storage if valid page
         } catch (error) {
@@ -169,7 +233,7 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      <Chatbot />
+      <Chatbot getText={getText}/>
     </div>
   );
 };

@@ -126,6 +126,7 @@
     "babel-runtime": "^6.26.0",
     "buffer": "^6.0.3",
     "canvas": "^2.11.2",
+    "chatgpt": "^1.22.19",
     "constants-browserify": "^1.0.0",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
