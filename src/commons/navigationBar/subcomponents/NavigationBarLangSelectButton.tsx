@@ -1,5 +1,4 @@
-import { Button, Menu, MenuItem, Position } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -11,6 +10,7 @@ import {
   SUPPORTED_LANGUAGES,
   SupportedLanguage
 } from 'src/commons/application/ApplicationTypes';
+import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { chapterSelect } from 'src/commons/workspace/WorkspaceActions';
 import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
@@ -36,28 +36,17 @@ const NavigationBarLangSelectButton = () => {
   };
 
   return (
-    <Popover2
-      hasBackdrop
-      interactionKind="click"
-      position={Position.BOTTOM_RIGHT}
-      isOpen={isOpen}
-      content={
-        <Menu>
-          {SUPPORTED_LANGUAGES.map(language => (
-            <MenuItem key={language} onClick={() => selectLang(language)} text={language} />
-          ))}
-        </Menu>
-      }
-      onClose={() => setIsOpen(false)}
-    >
-      <Button
-        rightIcon="caret-down"
-        onClick={() => setIsOpen(true)}
-        data-testid="NavigationBarLangSelectButton"
-      >
-        {lang}
-      </Button>
-    </Popover2>
+    <SimpleDropdown
+      options={SUPPORTED_LANGUAGES.map(lang => ({ value: lang, label: lang }))}
+      onClick={selectLang}
+      selectedValue={lang}
+      popoverProps={{ position: Position.BOTTOM_RIGHT, onClose: () => setIsOpen(false), isOpen }}
+      buttonProps={{
+        rightIcon: 'caret-down',
+        onClick: () => setIsOpen(true),
+        'data-testid': 'NavigationBarLangSelectButton'
+      }}
+    />
   );
 };
 
