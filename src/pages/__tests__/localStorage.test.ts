@@ -9,6 +9,7 @@ const mockShortDefaultState: SavedState = {
     refreshToken: defaultState.session.refreshToken,
     courseRegId: defaultState.session.courseRegId,
     role: defaultState.session.role,
+    group: defaultState.session.group,
     name: defaultState.session.name,
     userId: defaultState.session.userId,
     courses: defaultState.session.courses,
