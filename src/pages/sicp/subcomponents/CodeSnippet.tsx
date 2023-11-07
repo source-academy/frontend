@@ -7,9 +7,9 @@ import ControlBar from 'src/commons/controlBar/ControlBar';
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
-import Playground from 'src/pages/playground/Playground';
 
 import { CodeSnippetContext } from '../Sicp';
+import SicpWorkspace from './SicpWorkspace';
 
 export type CodeSnippetProps = OwnProps;
 type OwnProps = {
@@ -55,7 +55,6 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const WorkspaceProps = {
     initialEditorValueHash: props.initialEditorValueHash,
     prependLength: props.prependLength,
-    isSicpEditor: true,
 
     handleCloseEditor: handleClose
   };
@@ -81,13 +80,13 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           <ControlBar {...controlBarProps} />
           {isMobileBreakpoint ? (
             <div className="sicp-workspace-container-container">
-              <Playground {...WorkspaceProps} />
+              <SicpWorkspace {...WorkspaceProps} />
             </div>
           ) : (
             <div className="sicp-code-snippet-desktop-open">
               <Resizable {...resizableProps}>
                 <div className="sicp-workspace-container-container">
-                  <Playground {...WorkspaceProps} />
+                  <SicpWorkspace {...WorkspaceProps} />
                 </div>
               </Resizable>
             </div>
