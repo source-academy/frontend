@@ -21,7 +21,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Install dependencies (apt)
-        run: apt-get install -y --no-recommends libxi-dev libgl1-mesa-dev
+        run: |
+          apt-get install -y --no-install-recommends \
+          libxi-dev libgl1-mesa-dev
       - name: Setup node
         uses: actions/setup-node@v3
         with:
