@@ -9,36 +9,23 @@ jobs:
     name: Build and deploy sourceacademy.org
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Use Node.js
-        uses: actions/setup-node@v2-beta
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install dependencies (apt)
+        run: apt-get install -y --no-recommends libxi-dev libgl1-mesa-dev
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
           node-version: 20
+          cache: yarn
       - name: Setup Sentry CLI
         run: |
           curl -sL https://sentry.io/get-cli/ | INSTALL_DIR=. bash
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - id: get-time
         run: echo "time=$(date -Iseconds)" >> $GITHUB_OUTPUT
-      - uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: 1-${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            1-${{ runner.os }}-yarn-
-      - uses: actions/cache@v2
-        id: build-cache
-        with:
-          path: node_modules/.cache
-          key: 1-${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            1-${{ runner.os }}-build-
       - name: yarn install and build
         run: |
-          yarn install
+          yarn install --frozen-lockfile
           yarn run build
         env:
           REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
