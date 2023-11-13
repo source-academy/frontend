@@ -4,10 +4,11 @@ import logo from 'src/assets/SA.jpg';
 import ChatBox from './ChatBox';
 
 interface ChatbotProps {
+  getChapter: () => string;
   getText: () => string;
-}  
+}
 
-const Chatbot: React.FC <ChatbotProps> = ({ getText }) => {
+const Chatbot: React.FC<ChatbotProps> = ({ getChapter, getText }) => {
   const [isPop, setPop] = React.useState(false);
   const [tipsMessage, setTipsMessage] = React.useState('You can click me for a chat');
   const buttonRef = React.useRef<HTMLButtonElement | null>(null);
@@ -61,7 +62,7 @@ const Chatbot: React.FC <ChatbotProps> = ({ getText }) => {
           <img src={logo} className="iSA" alt="SA Logo" />
         </button>
       </div>
-      {isPop && <ChatBox getText={getText}/>}
+      {isPop && <ChatBox getChapter={getChapter} getText={getText} />}
     </div>
   );
 };

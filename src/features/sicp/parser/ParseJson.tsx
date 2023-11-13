@@ -279,16 +279,23 @@ export const processingFunctions = {
     </table>
   ),
 
-  TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>, ref:React.MutableRefObject<HTMLDivElement|null>[]) => {
+  TEXT: (
+    obj: JsonType,
+    refs: React.MutableRefObject<{}>,
+    ref: React.MutableRefObject<HTMLDivElement | null>[]
+  ) => {
     const id = obj['id'];
     if (id === undefined) {
       return <div></div>;
     }
     return (
-    <AnchorLink id={obj['id']} refs={refs} top={-3}>
-      <div className="sicp-text" ref = {ref[parseInt(id.replace("#p", ''))]}>{parseArr(obj['child']!, refs)}</div>
-    </AnchorLink>
-  )},
+      <AnchorLink id={obj['id']} refs={refs} top={-3}>
+        <div className="sicp-text" ref={ref[parseInt(id.replace('#p', ''))]}>
+          {parseArr(obj['child']!, refs)}
+        </div>
+      </AnchorLink>
+    );
+  },
 
   TITLE: handleTitle,
 
@@ -300,7 +307,11 @@ export const processingFunctions = {
 };
 
 // Parse array of objects. An array of objects represent sibling nodes.
-export const parseArr = (arr: Array<JsonType>, refs: React.MutableRefObject<{}>, ref:React.MutableRefObject<HTMLDivElement|null>[] = []) => {
+export const parseArr = (
+  arr: Array<JsonType>,
+  refs: React.MutableRefObject<{}>,
+  ref: React.MutableRefObject<HTMLDivElement | null>[] = []
+) => {
   if (!arr) {
     return <></>;
   }
@@ -313,7 +324,7 @@ export const parseObj = (
   obj: JsonType,
   index: number | undefined,
   refs: React.MutableRefObject<{}>,
-  ref:React.MutableRefObject<HTMLDivElement|null>[] = []
+  ref: React.MutableRefObject<HTMLDivElement | null>[] = []
 ) => {
   if (obj['tag']) {
     if (obj['tag'] === 'TEXT') {

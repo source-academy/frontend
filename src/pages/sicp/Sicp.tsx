@@ -42,6 +42,7 @@ const Sicp: React.FC = () => {
   const refs = React.useRef({});
   const navigate = useNavigate();
   const location = useLocation();
+  let chapter = '';
 
   const ref: React.MutableRefObject<HTMLDivElement | null>[] = [];
   const ref1 = React.useRef<HTMLDivElement | null>(null);
@@ -85,27 +86,28 @@ const Sicp: React.FC = () => {
   ref[19] = ref19;
   ref[20] = ref20;
 
-// Now you can use the `refs` array as needed
-function isElementOnScreen(element:HTMLElement) {
-  const elementRect = element.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  
-  return (
-    elementRect.bottom >= 0 &&
-    elementRect.top <= viewportHeight
-  );
-}
+  // Now you can use the `refs` array as needed
+  function isElementOnScreen(element: HTMLElement) {
+    const elementRect = element.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
 
-function getText() {
-  let visibleParagraphs = "";
+    return elementRect.bottom >= 0 && elementRect.top <= viewportHeight;
+  }
 
-  ref.forEach((r) => {
-    if (r.current && isElementOnScreen(r.current)) {
-      visibleParagraphs += r.current.textContent + "\n";
-    }
-  });
-  return visibleParagraphs;
-}
+  function getChapter() {
+    return chapter;
+  }
+
+  function getText() {
+    let visibleParagraphs = '';
+
+    ref.forEach(r => {
+      if (r.current && isElementOnScreen(r.current)) {
+        visibleParagraphs += r.current.textContent + '\n';
+      }
+    });
+    return visibleParagraphs;
+  }
 
   const scrollRefIntoView = (ref: HTMLDivElement | null) => {
     if (!ref || !parentRef?.current) {
@@ -181,6 +183,7 @@ function getText() {
       return;
     }
 
+    chapter = location.pathname.substring(8); // To discard /sicpjs/
     const hash = location.hash;
     const ref = refs.current[hash];
 
@@ -233,7 +236,7 @@ function getText() {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      <Chatbot getText={getText}/>
+      <Chatbot getChapter={getChapter} getText={getText} />
     </div>
   );
 };
