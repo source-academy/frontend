@@ -26,6 +26,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
     { content: ['Ask me something about this paragraph!'], role: 'bot' }
   ]);
   const [userInput, setUserInput] = React.useState<string>('');
+  // Use temp and conversation to make sure both student's query and response can be displayed 
+  // because of the asynchronous function
   const [temp, setTemp] = React.useState<string>('');
   const [conversation, setConversation] = React.useState<string>('');
   const [history, setHistory] = React.useState<string>('');
@@ -61,11 +63,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
     return prompt;
   }
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (userInput.trim() !== '') {
       const blocks = codeBlocks(userInput);
       setMessages([...messages, { role: 'user', content: blocks, }]);
-      setConversation(userInput);
+      setConversation(userInput); // To trigger the function to send request to gpt
       setHistory(his => `${his}\n${userInput}`);
       setUserInput('');
     }
@@ -79,14 +81,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
   const getResponse = async (userInput: string) => {
     const prompt = getPrompt();
       try {
-        setIsLoading(true);
         const response = await openai.chat.completions.create({
           messages: [{ role: "system", content: prompt }, {role: "user", content: userInput }],
           model: 'gpt-4'
         });
-
         setTemp(response.choices[0]?.message['content'] || '');
       } catch (error) {
+        setIsLoading(false);
         setMessages([...messages, { content: [`Error: ${error.message}`], role: 'bot' }]);
       }
   };
@@ -95,6 +96,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
     if (conversation.trim() !== '') {
       getResponse(conversation);
       setIsLoading(true);
+      setConversation('');
     }
   }, [conversation]);
 

@@ -45,6 +45,7 @@ const Sicp: React.FC = () => {
   let chapter = '';
 
   const ref: React.MutableRefObject<HTMLDivElement | null>[] = [];
+  // Can't use loop to create the useRef. So can only manually create and push.
   const ref1 = React.useRef<HTMLDivElement | null>(null);
   const ref2 = React.useRef<HTMLDivElement | null>(null);
   const ref3 = React.useRef<HTMLDivElement | null>(null);

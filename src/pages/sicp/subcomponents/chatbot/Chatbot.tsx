@@ -14,6 +14,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ getChapter, getText }) => {
   const buttonRef = React.useRef<HTMLButtonElement | null>(null);
   const tipsBoxRef = React.useRef<HTMLDivElement | null>(null);
 
+  // To Show reminder words
   const togglePop = () => {
     setPop(!isPop);
     if (!isPop) {
