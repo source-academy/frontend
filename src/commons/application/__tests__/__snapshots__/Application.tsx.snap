@@ -1,25 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Application renders correctly 1`] = `
-<Context.Provider
-  value={
-    Array [
-      Object {
-        "editorBinding": "",
-      },
-      [Function],
-    ]
-  }
->
-  <div
-    className="Application"
+<React.Fragment>
+  <Context.Provider
+    value={
+      Array [
+        Object {
+          "editorBinding": "",
+        },
+        [Function],
+      ]
+    }
   >
-    <NavigationBar />
     <div
-      className="Application__main"
+      className="Application"
     >
-      <Outlet />
+      <NavigationBar />
+      <div
+        className="Application__main"
+      >
+        <Outlet />
+      </div>
     </div>
-  </div>
-</Context.Provider>
+  </Context.Provider>
+</React.Fragment>
 `;
