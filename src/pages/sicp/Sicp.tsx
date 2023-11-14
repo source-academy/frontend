@@ -97,7 +97,7 @@ const Sicp: React.FC = () => {
   }
 
   function getChapter() {
-    return chapter;
+    return chapter.replace('/sicpjs/', '');  // To discard the '/sicpjs/'
   }
 
   function getText() {
@@ -185,7 +185,7 @@ const Sicp: React.FC = () => {
       return;
     }
 
-    chapter = location.pathname.substring(8); // To discard /sicpjs/
+    chapter = location.pathname;
     const hash = location.hash;
     const ref = refs.current[hash];
 
