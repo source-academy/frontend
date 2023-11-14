@@ -2,8 +2,8 @@ import { Buffer as NodeBuffer } from 'buffer';
 import { OpenAI } from 'openai';
 import * as React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Constants from 'src/commons/utils/Constants';
+import { SourceTheme } from 'src/features/sicp/SourceTheme';
 
 import SICPNotes from './SicpNotes';
 
@@ -136,7 +136,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
               ? message.content.map((block, index) =>
                   // Assume that only javascript code snippets will appear
                   block.substring(0, 10) === 'javascript' ? (
-                    <SyntaxHighlighter language="javascript" style={vs} key={index}>
+                    <SyntaxHighlighter language="javascript" style={SourceTheme} key={index}>
                       {block}
                     </SyntaxHighlighter>
                   ) : (
