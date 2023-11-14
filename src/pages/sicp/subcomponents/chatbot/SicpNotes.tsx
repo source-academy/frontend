@@ -1142,6 +1142,8 @@ const summary3_5_5 =
   '- Challenges arise in functional models, especially in interactive systems with independent entities.' +
   '- Merging streams introduces time-related problems, reminiscent of synchronization issues in object-oriented models.';
 
+//...
+
 const SICPNotes = {
   '1': summary1,
   '1.1': summary1_1,
@@ -1214,6 +1216,7 @@ const SICPNotes = {
   '3.5.3': summary3_5_3,
   '3.5.4': summary3_5_4,
   '3.5.5': summary3_5_5
+  //...
 };
 
 export default SICPNotes;

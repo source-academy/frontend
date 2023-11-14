@@ -53,7 +53,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ getChapter, getText }) => {
       <div className="bot-area">
         <div className="tips-box" ref={tipsBoxRef}>
           <p className="tips-message">
-            I am your little SA bot
+            I am Louis, your SICP bot
             <br />
             {tipsMessage}
           </p>
