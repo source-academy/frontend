@@ -71,16 +71,14 @@ const Application: React.FC = () => {
   }, [isPWA, isMobile]);
 
   return (
-    <>
-      <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
-        <div className="Application">
-          <NavigationBar />
-          <div className="Application__main">
-            <Outlet />
-          </div>
+    <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
+      <div className="Application">
+        <NavigationBar />
+        <div className="Application__main">
+          <Outlet />
         </div>
-      </WorkspaceSettingsContext.Provider>
-    </>
+      </div>
+    </WorkspaceSettingsContext.Provider>
   );
 };
 
