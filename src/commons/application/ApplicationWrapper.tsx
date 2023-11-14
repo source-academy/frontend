@@ -1,9 +1,13 @@
-import { useMemo } from 'react';
+import { Classes, NonIdealState } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
+import { getHealth } from '../sagas/RequestsSaga';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import { updateReactRouter } from './actions/CommonsActions';
@@ -19,6 +23,11 @@ import { updateReactRouter } from './actions/CommonsActions';
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
   const { isLoggedIn, role, name, courseId } = useSession();
+  const [isApiHealthy, setIsApiHealthy] = useState(true);
+
+  useEffect(() => {
+    getHealth().then(res => setIsApiHealthy(!!res));
+  }, []);
 
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly
@@ -35,6 +44,18 @@ const ApplicationWrapper: React.FC = () => {
 
     return r;
   }, [isLoggedIn, role, name, courseId, dispatch]);
+
+  if (!isApiHealthy) {
+    return (
+      <div className={classNames('NoPage', Classes.DARK)}>
+        <NonIdealState
+          icon={IconNames.WRENCH}
+          title="Under maintenance"
+          description="The Source Academy is currently undergoing maintenance. Please try again later."
+        />
+      </div>
+    );
+  }
 
   return <RouterProvider router={router} />;
 };

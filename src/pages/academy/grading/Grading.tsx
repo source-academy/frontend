@@ -110,7 +110,7 @@ const Grading: React.FC = () => {
                   <Text>Viewing</Text>
                   <SimpleDropdown
                     options={showOptions}
-                    defaultValue={showAllSubmissions}
+                    selectedValue={showAllSubmissions}
                     onClick={setShowAllSubmissions}
                     popoverProps={{ position: Position.BOTTOM }}
                     buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
@@ -118,7 +118,7 @@ const Grading: React.FC = () => {
                   <Text>submissions from</Text>
                   <SimpleDropdown
                     options={groupOptions}
-                    defaultValue={showAllGroups}
+                    selectedValue={showAllGroups}
                     onClick={setShowAllGroups}
                     popoverProps={{ position: Position.BOTTOM }}
                     buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
