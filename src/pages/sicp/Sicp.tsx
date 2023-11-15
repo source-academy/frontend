@@ -43,7 +43,7 @@ const Sicp: React.FC = () => {
   const refs = React.useRef({});
   const navigate = useNavigate();
   const location = useLocation();
-  let chapter = '';
+  let sectionNumber = '';
 
   const ref: React.MutableRefObject<HTMLDivElement | null>[] = [];
   // Can't use loop to create the useRef. So can only manually create and push.
@@ -96,8 +96,8 @@ const Sicp: React.FC = () => {
     return elementRect.bottom >= 0 && elementRect.top <= viewportHeight;
   }
 
-  function getChapter() {
-    return chapter.replace('/sicpjs/', ''); // To discard the '/sicpjs/'
+  function getSection() {
+    return sectionNumber.replace('/sicpjs/', ''); // To discard the '/sicpjs/'
   }
 
   function getText() {
@@ -185,7 +185,7 @@ const Sicp: React.FC = () => {
       return;
     }
 
-    chapter = location.pathname;
+    sectionNumber = location.pathname;
     const hash = location.hash;
     const ref = refs.current[hash];
 
@@ -240,7 +240,7 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      <Chatbot getChapter={getChapter} getText={getText} />
+      <Chatbot getSection={getSection} getText={getText} />
     </div>
   );
 };

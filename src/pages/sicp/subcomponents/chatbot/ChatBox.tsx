@@ -14,11 +14,11 @@ if (!(window as any).Buffer) {
 }
 
 interface ChatBoxProps {
-  getChapter: () => string;
+  getSection: () => string;
   getText: () => string;
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
+const ChatBox: React.FC<ChatBoxProps> = ({ getSection, getText }) => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const key = Constants.chatGptKey;
   const [isLoading, setIsLoading] = React.useState(false);
@@ -53,10 +53,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
       'JavaScript edition". The student request is about a paragraph of the book. The request may be a follow-up request to a request that was posed to you' +
       'previously.\n' +
       'What follows are:\n' +
-      '(1) the summary of chapter (2) the full paragraph, (3) the history of previous questions. Please answer the student request,' +
+      '(1) the summary of section (2) the full paragraph, (3) the history of previous questions. Please answer the student request,' +
       'not the requests of the history. If the student request is not related to the book, ask them to ask questions that are related to the book. Donot say that I provide you text\n\n' +
-      '\n(1) Here is the summary of this chapter:\n' +
-      SICPNotes[getChapter()] +
+      '\n(1) Here is the summary of this section:\n' +
+      SICPNotes[getSection()] +
       '\n(2) Here is the paragraph:\n' +
       text +
       '\n(3) Here is the history\n' +
