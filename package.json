@@ -151,7 +151,7 @@
     "webpack-bundle-analyzer": "^4.9.0"
   },
   "resolutions": {
-    "**/gl": "6.0.2"
+    "**/gl": "^6.0.2"
   },
   "browserslist": {
     "production": [
