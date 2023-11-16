@@ -18,28 +18,34 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 ## Getting Started
 
-### Installation of Source Academy (latest version [available in GitHub Pages](https://source-academy.github.io/))
+### Installation of [Source Academy](https://source-academy.github.io/)
 
-1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current or lower LTS version. (Known working version of node: v16.16.0)
-2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `yarn install` to install dependencies.  
-    - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
-    - If you are on the new M1 or M2 Mac chips, and encounter an error while installing `canvas`, refer to [this documentation](https://github.com/Automattic/node-canvas/wiki/Installation:-Mac-OS-X#homebrew) to install the requisite dependencies first.
+1. Install the version of Node.js as specified in the `.node-version` file
 
-4. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
-5. Point your browser to `http://localhost:8000` to see your local Source Academy.
+1. Install Python (known working versions: `2.7`, `3.8`, `3.9`, `3.10`)
+
+1. Clone this repository and navigate to it using your command line
+
+1. Run `yarn install` to install dependencies.
+
+   - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
+   - If you are on the new M1 or M2 Mac chips, and encounter an error while installing `canvas`, refer to [this documentation](https://github.com/Automattic/node-canvas/wiki/Installation:-Mac-OS-X#homebrew) to install the requisite dependencies first.
+
+1. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
+
+1. Point your browser to `http://localhost:8000` to see your local Source Academy.
 
 In this edition, you will only see the Playground with all its tools, but no login options or homework submission features.
 
 If you wish to set up the GitHub or Google Drive integrations, copy the `.env.example` file as `.env` and refer to [_Setting up your environment_](#setting-up-your-environment) below for the relevant configuration options.
 
-### Installation of Source Academy @ NUS (access [latest production version here](https://sourceacademy.nus.edu.sg))
+### Installation of [Source Academy @ NUS](https://sourceacademy.nus.edu.sg)
 
-1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current LTS.
-2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `yarn install` to install dependencies.
-4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
-5. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
+1. Repeat steps 1-4 above
+1. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
+1. Run `yarn run start` to start the server at `localhost:8000`
+
+**Note: It might take a couple of minutes for the server to start the first time.**
 
 ### Setting up your environment
 
