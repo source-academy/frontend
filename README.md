@@ -22,7 +22,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 1. Install the version of Node.js as specified in the `.node-version` file
 
-1. Install Python (known working versions: `2.7`, `3.8`, `3.9`, `3.10`)
+1. Install Python (known working versions: `2.7`, `3.8`, `3.9`, `3.10`) – **Note: Python `3.11` does not work**
 
 1. Clone this repository and navigate to it using your command line
 
