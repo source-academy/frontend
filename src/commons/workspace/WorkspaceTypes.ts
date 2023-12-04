@@ -74,6 +74,7 @@ type AssessmentWorkspaceState = AssessmentWorkspaceAttr & WorkspaceState;
 
 type GradingWorkspaceAttr = {
   readonly submissionsTableFilters: SubmissionsTableFilters;
+  readonly currentAssessment?: number;
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;

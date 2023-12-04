@@ -31,6 +31,7 @@ const Grading: React.FC = () => {
   const params = useParams<{
     submissionId: string;
     questionId: string;
+    assessmentId: string;//TODO
   }>();
 
   const isAdmin = role === Role.Admin;
@@ -54,7 +55,8 @@ const Grading: React.FC = () => {
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
     (params.submissionId && !params.submissionId?.match(numberRegExp)) ||
-    (params.questionId && !params.questionId?.match(numberRegExp))
+    (params.questionId && !params.questionId?.match(numberRegExp)) || 
+    (params.assessmentId && !params.assessmentId?.match(numberRegExp))//TODO
   ) {
     return <Navigate to={`/courses/${courseId}/grading`} />;
   }
@@ -63,9 +65,11 @@ const Grading: React.FC = () => {
   // default questionId is 0 (the first question)
   const questionId: number = convertParamToInt(params.questionId) || 0;
 
+  const assessmentId: number = convertParamToInt(params.assessmentId) || 0;//TODO
+
   /* Create a workspace to grade a submission. */
   if (submissionId !== null) {
-    return <GradingWorkspace questionId={questionId} submissionId={submissionId} />;
+    return <GradingWorkspace assessmentId={assessmentId} questionId={questionId} submissionId={submissionId} />;
   }
 
   /* Display either a loading screen or a table with overviews. */
