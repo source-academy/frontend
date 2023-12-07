@@ -1,9 +1,9 @@
 import { Buffer as NodeBuffer } from 'buffer';
-import { ChatGPTAPI } from 'chatgpt';
+import { OpenAI } from 'openai';
 import * as React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Constants from 'src/commons/utils/Constants';
+import { SourceTheme } from 'src/features/sicp/SourceTheme';
 
 import SICPNotes from './SicpNotes';
 
@@ -22,66 +22,77 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const key = Constants.chatGptKey;
   const [isLoading, setIsLoading] = React.useState(false);
-  const [messages, setMessages] = React.useState<{ text: string[]; sender: 'user' | 'bot' }[]>([
-    //todo: change the type fo text
-    { text: ['Ask me something about this chapter!'], sender: 'bot' }
+  const [messages, setMessages] = React.useState<{ role: 'user' | 'bot'; content: string[] }[]>([
+    { content: ['Ask me something about this paragraph!'], role: 'bot' }
   ]);
   const [userInput, setUserInput] = React.useState<string>('');
+  // Use temp and conversation to make sure both student's query and response can be displayed
+  // because of the asynchronous function
   const [temp, setTemp] = React.useState<string>('');
   const [conversation, setConversation] = React.useState<string>('');
   const [history, setHistory] = React.useState<string>('');
 
-  const api = new ChatGPTAPI({
+  const openai = new OpenAI({
     apiKey: key,
-    fetch: window.fetch.bind(window)
+    dangerouslyAllowBrowser: true
   });
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
   };
 
+  // To get code snippets
   const codeBlocks = (temp: string) => {
     return temp.split('```');
   };
 
+  function getPrompt() {
+    const text = getText();
+    const prompt =
+      'You are a competent tutor, assisting a student who is learning computer science following the textbook "Structure and Interpretation of Computer Programs,' +
+      'JavaScript edition". The student request is about a paragraph of the book. The request may be a follow-up request to a request that was posed to you' +
+      'previously.\n' +
+      'What follows are:\n' +
+      '(1) the summary of section (2) the full paragraph, (3) the history of previous questions. Please answer the student request,' +
+      'not the requests of the history. If the student request is not related to the book, ask them to ask questions that are related to the book. Donot say that I provide you text\n\n' +
+      '\n(1) Here is the summary of this section:\n' +
+      SICPNotes[getChapter()] +
+      '\n(2) Here is the paragraph:\n' +
+      text +
+      '\n(3) Here is the history\n' +
+      history;
+    return prompt;
+  }
+
   const sendMessage = () => {
     if (userInput.trim() !== '') {
-      const text = getText();
       const blocks = codeBlocks(userInput);
-      setMessages([...messages, { text: blocks, sender: 'user' }]);
-      const newConversation =
-        'You are a competent tutor, assisting a student who is learning computer science following the textbook "Structure and Interpretation of Computer Programs,' +
-        'JavaScript edition". The student request is about a paragraph of the book. The request may be a follow-up request to a request that was posed to you' +
-        'previously. What follows are:\n' +
-        '(1) the summary of chapter (2) the full paragraph, (3) the history of previous questions, and (4) the student question. Please answer the student request,' +
-        'not the requests of the history. If the student request is not related to the book, ask them to ask questions that are related to the book. Donot say that I provide you text\n\n' +
-        '\n(1) Here is the summary of this chapter:\n' +
-        SICPNotes[getChapter()] +
-        '\n(2) Here is the paragraph:\n' +
-        text +
-        '\n(3) Here is the history\n' +
-        history +
-        '\n(4) Here is the student question\n' +
-        userInput;
-      //console.log(newConversation);
-      console.log(text.replaceAll("\n", ""));
+      setMessages([...messages, { role: 'user', content: blocks }]);
+      setConversation(userInput); // To trigger the function to send request to gpt
       setHistory(his => `${his}\n${userInput}`);
-      setConversation(newConversation);
       setUserInput('');
     }
   };
 
   const cleanMessage = () => {
-    setMessages([{ text: ['Ask me something about this chapter!'], sender: 'bot' }]);
+    setMessages([{ content: ['Ask me something about this paragraph!'], role: 'bot' }]);
     setHistory('');
   };
 
   const getResponse = async (userInput: string) => {
+    const prompt = getPrompt();
     try {
-      const response = await api.sendMessage(userInput);
-      setTemp(response.text);
+      const response = await openai.chat.completions.create({
+        messages: [
+          { role: 'system', content: prompt },
+          { role: 'user', content: userInput }
+        ],
+        model: 'gpt-4'
+      });
+      setTemp(response.choices[0]?.message['content'] || '');
     } catch (error) {
-      setMessages([...messages, { text: [`Error: ${error.message}`], sender: 'bot' }]);
+      setIsLoading(false);
+      setMessages([...messages, { content: [`Error: ${error.message}`], role: 'bot' }]);
     }
   };
 
@@ -89,6 +100,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
     if (conversation.trim() !== '') {
       getResponse(conversation);
       setIsLoading(true);
+      setConversation('');
     }
   }, [conversation]);
 
@@ -96,8 +108,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
     if (temp.trim() !== '') {
       // Split the response into code blocks
       setIsLoading(false);
-      const blocks = codeBlocks(temp);
-      setMessages([...messages, { text: blocks, sender: 'bot' }]);
+      const blocks = codeBlocks(temp + '\n\nThe answer is generated by GPT-4');
+      setMessages([...messages, { content: blocks, role: 'bot' }]);
     }
   }, [temp]);
 
@@ -115,49 +127,26 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
     chatRef.current?.scrollTo({ top: chatRef.current?.scrollHeight });
   };
 
-  // const sendAndWrite = async (obj:any, i:number,j:number,message:string) => {
-  //   const response = await api.sendMessage(userInput);
-  //   obj[i][j] = response;
-  // }
-  // const testParagraphs = [,,""];
-  // const testNotes = [];
-  // const testQuries = [];
-  // const prompts:any[] = [];
-  // const answers = {} 
-  // const test = () => {
-  //   for (let i = 0; i < prompts.length; i++) {
-  //     answers[i] = {};
-  //     for (let j = 0; j < testQuries.length; j++) {
-  //       sendAndWrite(answers, i, j, prompts[i](j))
-  //     }
-  //   }
-  //   // wait for all to finish
-  //   console.log(answers);
-  // }
-  
   return (
     <div className="chat-container">
       <div className="chat-message" ref={chatRef}>
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${message.sender}`}
-            style={{ whiteSpace: 'pre-line' }}
-          >
-            {Array.isArray(message.text)
-              ? message.text.map((block, index) =>
+          <div key={index} className={`message ${message.role}`} style={{ whiteSpace: 'pre-line' }}>
+            {Array.isArray(message.content)
+              ? message.content.map((block, index) =>
+                  // Assume that only javascript code snippets will appear
                   block.substring(0, 10) === 'javascript' ? (
-                    <SyntaxHighlighter language="javascript" style={vs} key={index}>
+                    <SyntaxHighlighter language="javascript" style={SourceTheme} key={index}>
                       {block}
                     </SyntaxHighlighter>
                   ) : (
                     block
                   )
                 )
-              : message.text}
+              : message.content}
           </div>
         ))}
-        {isLoading && <p>is loading...</p>}
+        {isLoading && <p>loading...</p>}
       </div>
       <input
         type="text"
@@ -180,4 +169,3 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getChapter, getText }) => {
 };
 
 export default ChatBox;
-
