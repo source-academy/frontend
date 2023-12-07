@@ -11,6 +11,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  Row,
   useReactTable
 } from '@tanstack/react-table';
 import {
@@ -26,6 +27,7 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -53,7 +55,25 @@ const columns = [
   }),
   columnHelper.accessor('studentNames', {
     header: 'Students',
-    cell: info => <Filterable column={info.column} value={info.getValue().join(', ')} />
+    cell: info =>
+      info.getValue().map((name: string, index: number) => (
+        <React.Fragment key={index}>
+          <Filterable column={info.column} value={name}>
+            {name}
+          </Filterable>
+          {', '}
+        </React.Fragment>
+      )),
+    // <Filterable column={info.column} value={info.getValue().join(', ')} />
+    filterFn: (row: Row<TeamFormationOverview>, id: string | number, filterValue: any): boolean => {
+      // const rowValue = row.original[id];
+      // return Array.isArray(rowValue) && rowValue.includes(filterValue);
+      const rowValue = row.original[id];
+      const filterValues = filterValue.split(',').map((value: string) => value.trim());
+      return (
+        Array.isArray(rowValue) && filterValues.every((value: any) => rowValue.includes(value))
+      );
+    }
   }),
   columnHelper.accessor(({ teamId }) => ({ teamId }), {
     header: 'Actions',
