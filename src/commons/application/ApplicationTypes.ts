@@ -407,6 +407,13 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
+  teamFormation: {
+    ...createDefaultWorkspace('teamFormation'),
+    teamFormationTableFilters: {
+      columnFilters: [],
+      globalFilter: null
+    },
+  },
   groundControl: {
     ...createDefaultWorkspace('groundControl'),
     GroundControlTableFilters: {

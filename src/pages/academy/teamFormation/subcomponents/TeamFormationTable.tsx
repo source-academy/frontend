@@ -29,11 +29,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
+import { updateTeamFormationsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
-import GradingSubmissionFilters from '../../grading/subcomponents/GradingSubmissionFilters';
 import { AssessmentTypeBadge } from '../../teamFormation/subcomponents/TeamFormationBadges';
+import TeamFormationFilters from '../../teamFormation/subcomponents/TeamFormationFilters';
 import TeamFormationActions from './TeamFormationActions';
 
 const columnHelper = createColumnHelper<TeamFormationOverview>();
@@ -72,7 +72,9 @@ type TeamFormationTableProps = {
 
 const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams }) => {
   const dispatch = useDispatch();
-  const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
+  const tableFilters = useTypedSelector(
+    state => state.workspaces.teamFormation.teamFormationTableFilters
+  );
 
   const defaultFilters = [];
   if (group && !tableFilters.columnFilters.find(filter => filter.id === 'groupName')) {
@@ -86,7 +88,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
     ...tableFilters.columnFilters,
     ...defaultFilters
   ]);
-  
+
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
   const table = useReactTable({
@@ -110,7 +112,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
 
   useEffect(() => {
     dispatch(
-      updateSubmissionsTableFilters({
+      updateTeamFormationsTableFilters({
         columnFilters,
         globalFilter
       })
@@ -129,7 +131,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
                 : 'No filters applied. Click on any cell to filter by its value.'}{' '}
             </Text>
           </div>
-          <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
+          <TeamFormationFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
         </Flex>
 
         <TextInput
@@ -164,7 +166,6 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
             </TableRow>
           ))}
         </TableBody>
-
       </Table>
       <div>
         <Flex justifyContent="justify-center" spaceX="space-x-3">
