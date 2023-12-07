@@ -75,6 +75,7 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
+  UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
@@ -613,6 +614,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         grading: {
           ...state.grading,
           submissionsTableFilters: action.payload.filters
+        }
+      };
+    case UPDATE_TEAM_FORMATIONS_TABLE_FILTERS:
+      return {
+        ...state,
+        teamFormation: {
+          ...state.teamFormation,
+          teamFormationTableFilters: action.payload.filters
         }
       };
     case UPDATE_CURRENT_ASSESSMENT_ID:

@@ -49,6 +49,7 @@ import {
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   SubmissionsTableFilters,
+  TeamFormationsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
   TOGGLE_UPDATE_ENV,
@@ -68,6 +69,7 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
+  UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceState
@@ -333,6 +335,9 @@ export const setIsEditorReadonly = (
 
 export const updateSubmissionsTableFilters = (filters: SubmissionsTableFilters) =>
   action(UPDATE_SUBMISSIONS_TABLE_FILTERS, { filters });
+
+export const updateTeamFormationsTableFilters = (filters: TeamFormationsTableFilters) =>
+  action(UPDATE_TEAM_FORMATIONS_TABLE_FILTERS, { filters });
 
 export const updateGroundControlTableFilters = (filters: GroundControlTableFilters) =>
   action(UPDATE_GROUND_CONTROL_TABLE_FILTERS, { filters });

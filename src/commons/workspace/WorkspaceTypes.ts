@@ -38,6 +38,7 @@ export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const TOGGLE_USING_ENV = 'TOGGLE_USING_ENV';
 export const TOGGLE_UPDATE_ENV = 'TOGGLE_UPDATE_ENV';
 export const UPDATE_SUBMISSIONS_TABLE_FILTERS = 'UPDATE_SUBMISSIONS_TABLE_FILTERS';
+export const UPDATE_TEAM_FORMATIONS_TABLE_FILTERS = 'UPDATE_TEAM_FORMATIONS_TABLE_FILTERS';
 export const UPDATE_GROUND_CONTROL_TABLE_FILTERS = 'UPDATE_GROUND_CONTROL_TABLE_FILTERS';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
@@ -78,7 +79,14 @@ type GradingWorkspaceAttr = {
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
 };
+
+type TeamFormationWorkspaceAttr = {
+  readonly teamFormationTableFilters: TeamFormationsTableFilters;
+};
+
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
+
+type TeamFormationWorkspaceState = TeamFormationWorkspaceAttr & WorkspaceState;
 
 type GroundControlWorkspaceAttr = {
   readonly GroundControlTableFilters: GroundControlTableFilters;
@@ -100,6 +108,7 @@ export type SicpWorkspaceState = PlaygroundWorkspaceState;
 export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
   readonly grading: GradingWorkspaceState;
+  readonly teamFormation: TeamFormationWorkspaceState;
   readonly groundControl: GroundControlWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
   readonly sourcecast: SourcecastWorkspaceState;
@@ -158,6 +167,11 @@ export type DebuggerContext = {
 };
 
 export type SubmissionsTableFilters = {
+  columnFilters: { id: string; value: unknown }[];
+  globalFilter: string | null;
+};
+
+export type TeamFormationsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
   globalFilter: string | null;
 };
