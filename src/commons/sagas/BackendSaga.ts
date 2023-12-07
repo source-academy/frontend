@@ -508,10 +508,7 @@ function* BackendSaga(): SagaIterator {
     }
     yield call(showSuccessMessage, 'Team created successfully', 1000);
     if (resp && resp.status === 409) {
-      return yield call(
-        showWarningMessage,
-        'Team with the same members already exists for this assessment!'
-      );
+      return yield call(showWarningMessage, resp.statusText);
     }
   });
 
