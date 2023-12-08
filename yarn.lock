@@ -1189,7 +1189,21 @@
     react-transition-group "^4.4.5"
     tslib "~2.6.2"
 
-"@blueprintjs/datetime@^5.2.0":
+"@blueprintjs/datetime2@^2.2.7":
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/datetime2/-/datetime2-2.2.7.tgz#6f5b80e49797222f93db86143d1e18f154c28262"
+  integrity sha512-JLBYczY8iowo7gGoPlyIx3RA34dvzUDIKzD/mpXTUR3szCF9Is2EoZLJF59jE+x0xhDxhS++2RYrOB93VkEsSw==
+  dependencies:
+    "@blueprintjs/core" "^5.7.2"
+    "@blueprintjs/datetime" "^5.2.8"
+    "@blueprintjs/icons" "^5.5.0"
+    classnames "^2.3.1"
+    date-fns "^2.28.0"
+    react-day-picker "^8.5.1"
+    react-innertext "^1.1.5"
+    tslib "~2.6.2"
+
+"@blueprintjs/datetime@^5.2.8":
   version "5.2.8"
   resolved "https://registry.yarnpkg.com/@blueprintjs/datetime/-/datetime-5.2.8.tgz#21f125d64fc3d872565d2b4c58c593136d9152e8"
   integrity sha512-HcuCeKJRC7XyLyuDWRdS4OdK7wBqxBnZBoPRjHl6I3C13ZHGXnx159UtOuckNob280BIgX+mKbR1lCBKW1Kn/A==
@@ -10737,6 +10751,11 @@ react-day-picker@7.4.9:
   dependencies:
     prop-types "^15.6.2"
 
+react-day-picker@^8.5.1:
+  version "8.9.1"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-8.9.1.tgz#62dcc2bc1282ac72d057266112d9c8558334e757"
+  integrity sha512-W0SPApKIsYq+XCtfGeMYDoU0KbsG3wfkYtlw8l+vZp6KoBXGOlhzBUp4tNx1XiwiOZwhfdGOlj7NGSCKGSlg5Q==
+
 react-debounce-render@^8.0.2:
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/react-debounce-render/-/react-debounce-render-8.0.2.tgz#ce37864e9bd8d086dbd3e3e784d3270bac2cf2d3"
@@ -10816,6 +10835,11 @@ react-hotkeys@^2.0.0:
   integrity sha512-3n3OU8vLX/pfcJrR3xJ1zlww6KS1kEJt0Whxc4FiGV+MJrQ1mYSYI3qS/11d2MJDFm8IhOXMTFQirfu6AVOF6Q==
   dependencies:
     prop-types "^15.6.1"
+
+react-innertext@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-innertext/-/react-innertext-1.1.5.tgz#8147ac54db3f7067d95f49e2d2c05a720d27d8d0"
+  integrity sha512-PWAqdqhxhHIv80dT9znP2KvS+hfkbRovFp4zFYHFFlOoQLRiawIic81gKb3U1wEyJZgMwgs3JoLtwryASRWP3Q==
 
 react-is@^16.10.2, react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
