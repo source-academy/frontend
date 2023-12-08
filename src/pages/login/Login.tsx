@@ -30,7 +30,10 @@ const Login: React.FunctionComponent<{}> = () => {
   const location = useLocation();
   const { isLoggedIn, courseId } = useSession();
   const navigate = useNavigate();
-  const { code, provider: providerId } = parseQuery(location.search);
+  const { code, ticket, provider: providerId } = parseQuery(location.search);
+
+  // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
+  const authCode = code || ticket;
 
   const handleLogin = React.useCallback(
     (providerId: string) => dispatch(login(providerId)),
@@ -49,12 +52,12 @@ const Login: React.FunctionComponent<{}> = () => {
     }
 
     // Else fetch JWT tokens and user info from backend when auth provider code is present
-    if (code && !isLoggedIn) {
-      dispatch(fetchAuth(code, providerId));
+    if (authCode && !isLoggedIn) {
+      dispatch(fetchAuth(authCode, providerId));
     }
-  }, [code, providerId, dispatch, courseId, navigate, isLoggedIn]);
+  }, [authCode, providerId, dispatch, courseId, navigate, isLoggedIn]);
 
-  if (code) {
+  if (authCode) {
     return (
       <div className={classNames('Login', Classes.DARK)}>
         <Card className={classNames('login-card', Classes.ELEVATION_4)}>
