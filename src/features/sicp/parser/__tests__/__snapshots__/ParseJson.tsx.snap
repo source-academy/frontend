@@ -13,7 +13,7 @@ Array [
 
 exports[`Parse epigraph EPIGRAPH with all successful 1`] = `
 <blockquote
-  className="bp4-blockquote sicp-epigraph"
+  className="bp5-blockquote sicp-epigraph"
 >
   Mock Text
   <div
@@ -31,7 +31,7 @@ exports[`Parse epigraph EPIGRAPH with all successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with author successful 1`] = `
 <blockquote
-  className="bp4-blockquote sicp-epigraph"
+  className="bp5-blockquote sicp-epigraph"
 >
   Mock Text
   <div
@@ -45,7 +45,7 @@ exports[`Parse epigraph EPIGRAPH with author successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with date successful 1`] = `
 <blockquote
-  className="bp4-blockquote sicp-epigraph"
+  className="bp5-blockquote sicp-epigraph"
 >
   Mock Text
   <div
@@ -59,7 +59,7 @@ exports[`Parse epigraph EPIGRAPH with date successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with none successful 1`] = `
 <blockquote
-  className="bp4-blockquote sicp-epigraph"
+  className="bp5-blockquote sicp-epigraph"
 >
   Mock Text
 </blockquote>
@@ -67,7 +67,7 @@ exports[`Parse epigraph EPIGRAPH with none successful 1`] = `
 
 exports[`Parse epigraph EPIGRAPH with title successful 1`] = `
 <blockquote
-  className="bp4-blockquote sicp-epigraph"
+  className="bp5-blockquote sicp-epigraph"
 >
   Mock Text
   <div
@@ -86,7 +86,7 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
   className="sicp-anchor-link-container"
 >
   <div
-    className="bp4-card bp4-elevation-1 sicp-exercise"
+    className="sicp-exercise bp5-card bp5-elevation-1"
   >
     <b />
     <div />
@@ -94,7 +94,7 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
       className="sicp-button-container"
     >
       <button
-        className="bp4-button bp4-large sicp-show-solution-button"
+        className="bp5-button bp5-large sicp-show-solution-button"
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
@@ -103,14 +103,14 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
         type="button"
       >
         <span
-          className="bp4-button-text"
+          className="bp5-button-text"
         >
           Show Solution
         </span>
       </button>
     </div>
     <div
-      className="bp4-collapse sicp-solution"
+      className="bp5-collapse sicp-solution"
       style={
         Object {
           "height": undefined,
@@ -121,7 +121,7 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
     >
       <div
         aria-hidden={true}
-        className="bp4-collapse-body"
+        className="bp5-collapse-body"
         style={
           Object {
             "transform": "translateY(-undefinedpx)",
@@ -139,7 +139,7 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
   className="sicp-anchor-link-container"
 >
   <div
-    className="bp4-card bp4-elevation-1 sicp-exercise"
+    className="sicp-exercise bp5-card bp5-elevation-1"
   >
     <b>
       Title
@@ -151,7 +151,7 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
       className="sicp-button-container"
     >
       <button
-        className="bp4-button bp4-large sicp-show-solution-button"
+        className="bp5-button bp5-large sicp-show-solution-button"
         disabled={false}
         onBlur={[Function]}
         onClick={[Function]}
@@ -160,14 +160,14 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
         type="button"
       >
         <span
-          className="bp4-button-text"
+          className="bp5-button-text"
         >
           Show Solution
         </span>
       </button>
     </div>
     <div
-      className="bp4-collapse sicp-solution"
+      className="bp5-collapse sicp-solution"
       style={
         Object {
           "height": undefined,
@@ -178,7 +178,7 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
     >
       <div
         aria-hidden={true}
-        className="bp4-collapse-body"
+        className="bp5-collapse-body"
         style={
           Object {
             "transform": "translateY(-undefinedpx)",
@@ -207,22 +207,9 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
   >
     <span
       aria-hidden={true}
-      className="bp4-icon bp4-icon-link"
-      icon="link"
-    >
-      <svg
-        data-icon="link"
-        height={16}
-        role="img"
-        viewBox="0 0 16 16"
-        width={16}
-      >
-        <path
-          d="M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z"
-          fillRule="evenodd"
-        />
-      </svg>
-    </span>
+      className="bp5-icon bp5-icon-standard bp5-icon-link"
+      data-icon="link"
+    />
   </a>
   <div
     className="sicp-figure"
@@ -258,22 +245,9 @@ exports[`Parse figures FIGURE with image successful 1`] = `
   >
     <span
       aria-hidden={true}
-      className="bp4-icon bp4-icon-link"
-      icon="link"
-    >
-      <svg
-        data-icon="link"
-        height={16}
-        role="img"
-        viewBox="0 0 16 16"
-        width={16}
-      >
-        <path
-          d="M4.99 11.99c.28 0 .53-.11.71-.29l6-6a1.003 1.003 0 00-1.42-1.42l-6 6a1.003 1.003 0 00.71 1.71zm3.85-2.02L6.4 12.41l-1 1-.01-.01c-.36.36-.85.6-1.4.6-1.1 0-2-.9-2-2 0-.55.24-1.04.6-1.4l-.01-.01 1-1 2.44-2.44c-.33-.1-.67-.16-1.03-.16-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.73.72-1.19 1.71-1.19 2.81 0 2.21 1.79 4 4 4 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02c.73-.72 1.19-1.71 1.19-2.81 0-.35-.06-.69-.15-1.02zm7.15-5.98c0-2.21-1.79-4-4-4-1.1 0-2.09.46-2.81 1.19l-.02-.02-1 1 .02.02c-.72.72-1.19 1.71-1.19 2.81 0 .36.06.69.15 1.02l2.44-2.44 1-1 .01.01c.36-.36.85-.6 1.4-.6 1.1 0 2 .9 2 2 0 .55-.24 1.04-.6 1.4l.01.01-1 1-2.43 2.45c.33.09.67.15 1.02.15 1.1 0 2.09-.46 2.81-1.19l.02.02 1-1-.02-.02a3.92 3.92 0 001.19-2.81z"
-          fillRule="evenodd"
-        />
-      </svg>
-    </span>
+      className="bp5-icon bp5-icon-standard bp5-icon-link"
+      data-icon="link"
+    />
   </a>
   <div
     className="sicp-figure"
@@ -309,8 +283,7 @@ exports[`Parse figures FIGURE with snippet successful 1`] = `
   >
     <span
       aria-hidden={true}
-      className="bp4-icon bp4-icon-link"
-      icon="link"
+      className="bp5-icon bp5-icon-link"
     >
       <svg
         data-icon="link"
@@ -358,8 +331,7 @@ exports[`Parse figures FIGURE with table successful 1`] = `
   >
     <span
       aria-hidden={true}
-      className="bp4-icon bp4-icon-link"
-      icon="link"
+      className="bp5-icon bp5-icon-link"
     >
       <svg
         data-icon="link"
@@ -516,7 +488,7 @@ exports[`Parse links REF  successful 1`] = `
 
 exports[`Parse list OL  successful 1`] = `
 <ol
-  className="bp4-list"
+  className="bp5-list"
 >
   <li>
     Mock Text
@@ -526,7 +498,7 @@ exports[`Parse list OL  successful 1`] = `
 
 exports[`Parse list UL  successful 1`] = `
 <ul
-  className="bp4-list"
+  className="bp5-list"
 >
   <li>
     Mock Text
@@ -548,7 +520,7 @@ exports[`Parse reference REFERENCE  successful 1`] = `
 
 exports[`Parse snippet SNIPPET no eval successful 1`] = `
 <pre
-  className="bp4-code-block"
+  className="bp5-code-block"
 >
   const a = 1;
 a+1;
@@ -557,7 +529,7 @@ a+1;
 
 exports[`Parse snippet SNIPPET with latex successful 1`] = `
 <pre
-  className="bp4-code-block"
+  className="bp5-code-block"
 >
   <span
     className="__Latex__"
@@ -603,7 +575,7 @@ exports[`Parse styling EM  successful 1`] = `
 
 exports[`Parse styling JAVASCRIPTINLINE  successful 1`] = `
 <code
-  className="bp4-code"
+  className="bp5-code"
 />
 `;
 
@@ -611,7 +583,7 @@ exports[`Parse styling META  successful 1`] = `<em />`;
 
 exports[`Parse styling TT  successful 1`] = `
 <code
-  className="bp4-code"
+  className="bp5-code"
 >
   Mock Text
 </code>
@@ -647,7 +619,7 @@ exports[`Parse title TITLE  successful 1`] = `
   className="sicp-anchor-link-container"
 >
   <h1
-    className="bp4-heading"
+    className="bp5-heading"
   >
     Title
   </h1>
