@@ -11,8 +11,7 @@ import {
   NavbarHeading,
   Position
 } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated-icons/16px/blueprint-icons-16';
+import { IconName, IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { Location } from 'history';
@@ -33,7 +32,7 @@ import SicpNavigationBar from './subcomponents/SicpNavigationBar';
 
 export type NavbarEntryInfo = {
   to: string;
-  icon: BlueprintIcons_16Id;
+  icon: IconName;
   text: string;
   disabled?: boolean; // entry is not rendered when disabled
   hasNotifications?: boolean; // whether to render NotificationBadge
