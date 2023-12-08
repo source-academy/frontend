@@ -282,7 +282,6 @@ export const processingFunctions = {
   TEXT: (
     obj: JsonType,
     refs: React.MutableRefObject<{}>,
-    ref: React.MutableRefObject<HTMLDivElement | null>[]
   ) => {
     const id = obj['id'];
     if (id === undefined) {
@@ -290,9 +289,7 @@ export const processingFunctions = {
     }
     return (
       <AnchorLink id={obj['id']} refs={refs} top={-3}>
-        <div className="sicp-text" ref={ref[parseInt(id.replace('#p', ''))]}>
-          {parseArr(obj['child']!, refs)}
-        </div>
+        <div className="sicp-text">{parseArr(obj['child']!, refs)}</div>
       </AnchorLink>
     );
   },
@@ -310,13 +307,12 @@ export const processingFunctions = {
 export const parseArr = (
   arr: Array<JsonType>,
   refs: React.MutableRefObject<{}>,
-  ref: React.MutableRefObject<HTMLDivElement | null>[] = []
 ) => {
   if (!arr) {
     return <></>;
   }
 
-  return <>{arr.map((item, index) => parseObj(item, index, refs, ref))}</>;
+  return <>{arr.map((item, index) => parseObj(item, index, refs))}</>;
 };
 
 // Parse an object.
@@ -324,14 +320,8 @@ export const parseObj = (
   obj: JsonType,
   index: number | undefined,
   refs: React.MutableRefObject<{}>,
-  ref: React.MutableRefObject<HTMLDivElement | null>[] = []
 ) => {
   if (obj['tag']) {
-    if (obj['tag'] === 'TEXT') {
-      return (
-        <React.Fragment key={index}>{processingFunctions['TEXT'](obj, refs, ref)}</React.Fragment>
-      );
-    }
     if (processingFunctions[obj['tag']]) {
       return (
         <React.Fragment key={index}>{processingFunctions[obj['tag']](obj, refs)}</React.Fragment>
