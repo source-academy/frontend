@@ -279,10 +279,7 @@ export const processingFunctions = {
     </table>
   ),
 
-  TEXT: (
-    obj: JsonType,
-    refs: React.MutableRefObject<{}>,
-  ) => {
+  TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
     const id = obj['id'];
     if (id === undefined) {
       return <div></div>;
@@ -304,10 +301,7 @@ export const processingFunctions = {
 };
 
 // Parse array of objects. An array of objects represent sibling nodes.
-export const parseArr = (
-  arr: Array<JsonType>,
-  refs: React.MutableRefObject<{}>,
-) => {
+export const parseArr = (arr: Array<JsonType>, refs: React.MutableRefObject<{}>) => {
   if (!arr) {
     return <></>;
   }
@@ -319,7 +313,7 @@ export const parseArr = (
 export const parseObj = (
   obj: JsonType,
   index: number | undefined,
-  refs: React.MutableRefObject<{}>,
+  refs: React.MutableRefObject<{}>
 ) => {
   if (obj['tag']) {
     if (processingFunctions[obj['tag']]) {

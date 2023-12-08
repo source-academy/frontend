@@ -45,7 +45,6 @@ const Sicp: React.FC = () => {
   const location = useLocation();
   let sectionNumber = '';
 
-
   function getSection() {
     return sectionNumber.replace('/sicpjs/', ''); // To discard the '/sicpjs/'
   }
@@ -53,10 +52,10 @@ const Sicp: React.FC = () => {
   const getText = () => {
     const divs = document.querySelectorAll('div.sicp-text');
     let visibleParagraphs = '';
-  
-    divs.forEach((div) => {
+
+    divs.forEach(div => {
       const rect = div.getBoundingClientRect();
-  
+
       if (
         rect.top <= window.innerHeight &&
         rect.bottom >= 0 &&
@@ -67,9 +66,9 @@ const Sicp: React.FC = () => {
         visibleParagraphs += text + '\n';
       }
     });
-  
+
     return visibleParagraphs;
-  };  
+  };
 
   const scrollRefIntoView = (ref: HTMLDivElement | null) => {
     if (!ref || !parentRef?.current) {
