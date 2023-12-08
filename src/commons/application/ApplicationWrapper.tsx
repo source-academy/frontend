@@ -26,7 +26,9 @@ const ApplicationWrapper: React.FC = () => {
   const [isApiHealthy, setIsApiHealthy] = useState(true);
 
   useEffect(() => {
-    getHealth().then(res => setIsApiHealthy(!!res));
+    if (Constants.useBackend) {
+      getHealth().then(res => setIsApiHealthy(!!res));
+    }
   }, []);
 
   const router = useMemo(() => {
