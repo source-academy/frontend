@@ -1,5 +1,10 @@
 import Constants from './Constants';
 
+export enum AuthProviderType {
+  OAUTH2 = 'OAUTH2',
+  CAS = 'CAS'
+}
+
 export function computeEndpointUrl(providerId: string): string | undefined {
   const ep = Constants.authProviders.get(providerId);
   if (!ep) {
@@ -7,7 +12,14 @@ export function computeEndpointUrl(providerId: string): string | undefined {
   }
   try {
     const epUrl = new URL(ep.endpoint);
-    epUrl.searchParams.set('redirect_uri', computeRedirectUri(providerId)!);
+    switch (ep.type) {
+      case AuthProviderType.OAUTH2:
+        epUrl.searchParams.set('redirect_uri', computeRedirectUri(providerId)!);
+        break;
+      case AuthProviderType.CAS:
+        epUrl.searchParams.set('service', computeRedirectUri(providerId)!);
+        break;
+    }
     return epUrl.toString();
   } catch (e) {
     // in dev, sometimes the endpoint is a dummy; allow that
