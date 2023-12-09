@@ -61,18 +61,12 @@ const columns = [
           <Filterable column={info.column} value={name}>
             {name}
           </Filterable>
-          {', '}
+          {'  '}
         </React.Fragment>
       )),
-    // <Filterable column={info.column} value={info.getValue().join(', ')} />
     filterFn: (row: Row<TeamFormationOverview>, id: string | number, filterValue: any): boolean => {
-      // const rowValue = row.original[id];
-      // return Array.isArray(rowValue) && rowValue.includes(filterValue);
       const rowValue = row.original[id];
-      const filterValues = filterValue.split(',').map((value: string) => value.trim());
-      return (
-        Array.isArray(rowValue) && filterValues.every((value: any) => rowValue.includes(value))
-      );
+      return Array.isArray(rowValue) && rowValue.includes(filterValue);
     }
   }),
   columnHelper.accessor(({ teamId }) => ({ teamId }), {
@@ -111,6 +105,28 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
 
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
+  const globalFilterFn = (
+    row: Row<TeamFormationOverview>,
+    columnId: string | number,
+    filterValue: any
+  ): boolean => {
+    for (const column of Object.keys(row.original)) {
+      const rowValue = row.original[column];
+
+      if (Array.isArray(rowValue)) {
+        for (const value of rowValue) {
+          if (typeof value === 'string' && value.includes(filterValue)) {
+            return true;
+          }
+        }
+      } else if (typeof rowValue === 'string' && rowValue.includes(filterValue)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const table = useReactTable({
     data: teams,
     columns,
@@ -120,6 +136,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
     },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: globalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel()
