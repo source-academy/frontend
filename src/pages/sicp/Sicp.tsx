@@ -43,10 +43,9 @@ const Sicp: React.FC = () => {
   const refs = React.useRef({});
   const navigate = useNavigate();
   const location = useLocation();
-  let sectionNumber = '';
 
   function getSection() {
-    return sectionNumber.replace('/sicpjs/', ''); // To discard the '/sicpjs/'
+    return location.pathname.replace('/sicpjs/', ''); // To discard the '/sicpjs/'
   }
 
   const getText = () => {
@@ -144,7 +143,6 @@ const Sicp: React.FC = () => {
       return;
     }
 
-    sectionNumber = location.pathname;
     const hash = location.hash;
     const ref = refs.current[hash];
 
