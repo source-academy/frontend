@@ -51,6 +51,7 @@ export type Grading = GradingQuestion[];
 export type GradingQuestion = {
   question: AnsweredQuestion;
   team?: Array<{
+    username: any;
     name: string;
     id: number;
   }>;
