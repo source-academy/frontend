@@ -13,7 +13,9 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
+import { AuthProviderType } from 'src/commons/utils/AuthHelper';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
 import Constants from '../../commons/utils/Constants';
@@ -27,20 +29,39 @@ const providers = [...Constants.authProviders.entries()].map(([id, { name }]) =>
 const Login: React.FunctionComponent<{}> = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { code, provider: providerId } = parseQuery(location.search);
+  const { isLoggedIn, courseId } = useSession();
+  const navigate = useNavigate();
+  const { code, ticket, provider: providerId } = parseQuery(location.search);
+
+  // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
+  const authCode = code || ticket;
 
   const handleLogin = React.useCallback(
     (providerId: string) => dispatch(login(providerId)),
     [dispatch]
   );
 
-  React.useEffect(() => {
-    if (code) {
-      dispatch(fetchAuth(code, providerId));
-    }
-  }, [code, providerId, dispatch]);
+  const isSaml = Constants.authProviders.get(providerId)?.type === AuthProviderType.SAML_SSO;
 
-  if (code) {
+  React.useEffect(() => {
+    // If already logged in, navigate to relevant course page
+    if (isLoggedIn) {
+      if (courseId !== undefined) {
+        navigate(`/courses/${courseId}`);
+      } else {
+        navigate('/welcome');
+      }
+      return;
+    }
+
+    // Else fetch JWT tokens and user info from backend when auth provider code is present
+    // SAML does not require code, as relay is handled in backend
+    if ((authCode || isSaml) && !isLoggedIn) {
+      dispatch(fetchAuth(authCode, providerId));
+    }
+  }, [authCode, isSaml, providerId, dispatch, courseId, navigate, isLoggedIn]);
+
+  if (authCode || isSaml) {
     return (
       <div className={classNames('Login', Classes.DARK)}>
         <Card className={classNames('login-card', Classes.ELEVATION_4)}>

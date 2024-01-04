@@ -1,5 +1,7 @@
 import {
   AgendaItem,
+  AppInstr,
+  ArrLitInstr,
   AssmtInstr,
   BinOpInstr,
   EnvInstr,
@@ -7,7 +9,7 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/ec-evaluator/types';
-import Closure from 'js-slang/dist/interpreter/closure';
+import { Value as StashValue } from 'js-slang/dist/types';
 import { Environment } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
@@ -15,8 +17,10 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 
+import { AgendaItemComponent } from './compactComponents/AgendaItemComponent';
 import { Frame } from './compactComponents/Frame';
-import { StackItemComponent } from './compactComponents/StackItemComponent';
+import { StashItemComponent } from './compactComponents/StashItemComponent';
+import { ArrayValue } from './compactComponents/values/ArrayValue';
 import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
@@ -24,6 +28,7 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
 import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
+import { CompactConfig } from './EnvVisualizerCompactConfig';
 import { Config } from './EnvVisualizerConfig';
 import { Layout } from './EnvVisualizerLayout';
 import {
@@ -248,12 +253,18 @@ export function getBodyText(data: () => any): string {
 
 export function setHoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
-  container && (container.style.cursor = 'pointer');
+  if (container) {
+    container.classList.remove('draggable');
+    container.classList.add('clickable');
+  }
 }
 
 export function setUnhoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
-  container && (container.style.cursor = 'default');
+  if (container) {
+    container.classList.remove('clickable');
+    container.classList.add('draggable');
+  }
 }
 
 /** Updates the styles of a Konva node and its children on hover, and then redraw the layer */
@@ -393,304 +404,308 @@ export const isInstr = (command: AgendaItem): command is Instr => {
 export function getAgendaItemComponent(
   agendaItem: AgendaItem,
   stackHeight: number,
-  highlightOnHover?: () => void,
-  unhighlightOnHover?: () => void
-): StackItemComponent {
+  index: number,
+  highlightOnHover: () => void,
+  unhighlightOnHover: () => void
+): AgendaItemComponent {
+  const topItem = EnvVisualizer.getStackTruncated()
+    ? index === Math.min(Layout.agenda.size() - 1, 9)
+    : index === Layout.agenda.size() - 1;
   if (!isInstr(agendaItem)) {
     switch (agendaItem.type) {
-      // case 'BlockStatement':
-      //   return new StackItemComponent('BlockStatement', true, stackHeight);
-      // case 'WhileStatement':
-      //   return new StackItemComponent('WhileStatement', true, stackHeight);
-      // case 'ForStatement':
-      //   return new StackItemComponent('ForStatement', true, stackHeight);
-      // case 'IfStatement':
-      //   return new StackItemComponent('IfStatement', true, stackHeight);
-      // case 'ExpressionStatement':
-      //   return new StackItemComponent('ExpressionStatement', true, stackHeight);
-      // case 'DebuggerStatement':
-      //   return new StackItemComponent('DebuggerStatement', true, stackHeight);
-      // case 'VariableDeclaration':
-      //   return new StackItemComponent('VariableDeclaration', true, stackHeight);
-      // case 'FunctionDeclaration':
-      //   return new StackItemComponent('FunctionDeclaration', true, stackHeight);
-      // case 'ReturnStatement':
-      //   return new StackItemComponent('ReturnStatement', true, stackHeight);
-      // case 'ContinueStatement':
-      //   return new StackItemComponent('ContinueStatement', true, stackHeight);
-      // case 'BreakStatement':
-      //   return new StackItemComponent('BreakStatement', true, stackHeight);
-      // case 'ImportDeclaration':
-      //   return new StackItemComponent('ImportDeclaration', true, stackHeight);
       case 'Literal':
-        return new StackItemComponent(
-          typeof agendaItem.value === 'string' ? `"${agendaItem.value}"` : agendaItem.value,
-          true,
+        const textL =
+          typeof agendaItem.value === 'string' ? `"${agendaItem.value}"` : agendaItem.value;
+        return new AgendaItemComponent(
+          textL,
+          String(textL),
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
-      // case 'AssignmentExpression':
-      //   return new StackItemComponent('AssignmentExpression', true, stackHeight);
-      // case 'ArrayExpression':
-      //   return new StackItemComponent('ArrayExpression', true, stackHeight);
-      // case 'MemberExpression':
-      //   return new StackItemComponent('MemberExpression', true, stackHeight);
-      // case 'ConditionalExpression':
-      //   return new StackItemComponent('ConditionalExpression', true, stackHeight);
-      // case 'Identifier':
-      //   return new StackItemComponent('Identifier', true, stackHeight);
-      // case 'UnaryExpression':
-      //   return new StackItemComponent('UnaryExpression', true, stackHeight);
-      // case 'BinaryExpression':
-      //   return new StackItemComponent('BinaryExpression', true, stackHeight);
-      // case 'LogicalExpression':
-      //   return new StackItemComponent('LogicalExpression', true, stackHeight);
-      // case 'ArrowFunctionExpression':
-      //   return new StackItemComponent('ArrowFunctionExpression', true, stackHeight);
-      // case 'CallExpression':
-      //   return new StackItemComponent('CallExpression', true, stackHeight);
       default:
-        return new StackItemComponent(
-          astToString(agendaItem).trim(),
-          true,
+        const text = astToString(agendaItem).trim();
+        return new AgendaItemComponent(
+          text,
+          text,
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
     }
   } else {
     switch (agendaItem.instrType) {
       case InstrType.RESET:
-        return new StackItemComponent(
-          'RESET',
-          true,
+        return new AgendaItemComponent(
+          'return',
+          'Skip agenda items until marker instruction is reached',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.WHILE:
-        return new StackItemComponent(
-          'WHILE',
-          true,
+        return new AgendaItemComponent(
+          'while',
+          'Keep executing while loop body if predicate holds',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.FOR:
-        return new StackItemComponent(
-          'FOR',
-          true,
+        return new AgendaItemComponent(
+          'for',
+          'Keep executing for loop body if predicate holds',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.ASSIGNMENT:
         const assmtInstr = agendaItem as AssmtInstr;
-        return new StackItemComponent(
-          `ASSIGN ${assmtInstr.symbol}`,
-          true,
+        return new AgendaItemComponent(
+          `asgn ${assmtInstr.symbol}`,
+          `Assign value on top of stash to ${assmtInstr.symbol}`,
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.UNARY_OP:
         const unOpInstr = agendaItem as UnOpInstr;
-        return new StackItemComponent(
+        return new AgendaItemComponent(
           unOpInstr.symbol,
-          true,
+          `Perform ${unOpInstr.symbol} on top stash value`,
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.BINARY_OP:
         const binOpInstr = agendaItem as BinOpInstr;
-        return new StackItemComponent(
+        return new AgendaItemComponent(
           binOpInstr.symbol,
-          true,
+          `Perform ${binOpInstr.symbol} on top 2 stash values`,
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.POP:
-        return new StackItemComponent(
-          'POP',
-          true,
+        return new AgendaItemComponent(
+          'pop',
+          'Pop most recently pushed value from stash',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.APPLICATION:
-        return new StackItemComponent(
-          'APPLICATION',
-          true,
+        const appInstr = agendaItem as AppInstr;
+        return new AgendaItemComponent(
+          `call ${appInstr.numOfArgs}`,
+          `Call function with ${appInstr.numOfArgs} argument${appInstr.numOfArgs === 1 ? '' : 's'}`,
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.BRANCH:
-        return new StackItemComponent(
-          'BRANCH',
-          true,
+        return new AgendaItemComponent(
+          'branch',
+          'Pop boolean value from stash and execute corresponding branch',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.ENVIRONMENT:
         const envInstr = agendaItem as EnvInstr;
-        return new StackItemComponent(
-          'ENVIRONMENT',
-          true,
+        return new AgendaItemComponent(
+          'env',
+          'Set current environment to this environment',
           stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem,
           Layout.compactLevels.reduce<Frame | undefined>(
             (accum, level) =>
-              accum ? accum : level.frames.find(frame => frame.environment?.id === envInstr.env.id),
+              accum
+                ? accum
+                : level.frames.find(frame => frame.environment?.id === getEnvID(envInstr.env)),
             undefined
-          ),
-          highlightOnHover,
-          unhighlightOnHover
-        );
-      case InstrType.PUSH_UNDEFINED_IF_NEEDED:
-        return new StackItemComponent(
-          'PUSH UNDEFINED IF NEEDED',
-          true,
-          stackHeight,
-          undefined,
-          highlightOnHover,
-          unhighlightOnHover
+          )
         );
       case InstrType.ARRAY_LITERAL:
-        return new StackItemComponent(
-          'ARRAY LITERAL',
-          true,
+        const arrayLiteralInstr = agendaItem as ArrLitInstr;
+        const arity = arrayLiteralInstr.arity;
+        return new AgendaItemComponent(
+          `arr lit ${arity}`,
+          `Create array using ${arity} value${arity === 1 ? '' : 's'} on stash`,
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.ARRAY_ACCESS:
-        return new StackItemComponent(
-          'ARRAY ACCESS',
-          true,
+        return new AgendaItemComponent(
+          'arr acc',
+          'Access array at given index',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.ARRAY_ASSIGNMENT:
-        return new StackItemComponent(
-          'ARRAY ASSIGNMENT',
-          true,
+        return new AgendaItemComponent(
+          'arr asgn',
+          'Assign new value to array at given index',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.ARRAY_LENGTH:
-        return new StackItemComponent(
-          'ARRAY LENGTH',
-          true,
+        return new AgendaItemComponent(
+          'arr len',
+          'Obtain array length',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
-        );
-      case InstrType.CONTINUE:
-        return new StackItemComponent(
-          'CONTINUE',
-          true,
-          stackHeight,
-          undefined,
-          highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.CONTINUE_MARKER:
-        return new StackItemComponent(
-          'CONTINUE MARKER',
-          true,
+        return new AgendaItemComponent(
+          'cont mark',
+          'Mark end of loop body',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.BREAK:
-        return new StackItemComponent(
-          'BREAK',
-          true,
+        return new AgendaItemComponent(
+          'break',
+          'Control items until break marker will be skipped',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.BREAK_MARKER:
-        return new StackItemComponent(
-          'BREAK MARKER',
-          true,
+        return new AgendaItemComponent(
+          'brk mark',
+          'Mark end of all loop-associated statements and instructions',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       case InstrType.MARKER:
-        return new StackItemComponent(
-          'MARKER',
-          true,
+        return new AgendaItemComponent(
+          'mark',
+          'Mark return address',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
       default:
-        return new StackItemComponent(
+        return new AgendaItemComponent(
           'INSTRUCTION',
-          true,
+          'INSTRUCTION',
           stackHeight,
-          undefined,
           highlightOnHover,
-          unhighlightOnHover
+          unhighlightOnHover,
+          topItem
         );
     }
   }
 }
 
-export function getStashItemComponent(stashItem: any, stackHeight: number) {
-  if (stashItem instanceof Closure) {
+export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
+  if (isFn(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
     for (const level of Layout.compactLevels) {
       for (const frame of level.frames) {
-        const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
-          if (isFn(binding.data)) {
-            return binding.data.id === stashItem.id;
-          }
-          return false;
-        })?.value as FnValue | GlobalFnValue;
-        if (fn) return new StackItemComponent('', false, stackHeight, fn);
+        if (isFn(stashItem) || isGlobalFn(stashItem)) {
+          const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
+            if (isFn(stashItem) && isFn(binding.data)) {
+              return binding.data.id === stashItem.id;
+            } else if (isGlobalFn(stashItem) && isGlobalFn(binding.data)) {
+              return binding.data?.toString() === stashItem.toString();
+            }
+            return false;
+          })?.value as FnValue | GlobalFnValue;
+          if (fn) return new StashItemComponent(stashItem, stackHeight, index, fn);
+        } else {
+          const ar: ArrayValue | undefined = frame.bindings.find(binding => {
+            if (isArray(binding.data)) {
+              return binding.data === stashItem;
+            }
+            return false;
+          })?.value as ArrayValue;
+          if (ar) return new StashItemComponent(stashItem, stackHeight, index, ar);
+        }
       }
     }
   }
-  return new StackItemComponent(
-    typeof stashItem === 'string'
-      ? truncateText(
-          `"${stashItem}"`.trim(),
-          AgendaStashConfig.StashMaxTextWidth,
-          AgendaStashConfig.StashMaxTextHeight
-        )
-      : truncateText(
-          String(stashItem),
-          AgendaStashConfig.StashMaxTextWidth,
-          AgendaStashConfig.StashMaxTextHeight
-        ),
-    false,
-    stackHeight
-  );
+  return new StashItemComponent(stashItem, stackHeight, index);
 }
+
+// Helper function to get environment ID. Accounts for the hidden prelude environment right
+// after the global environment. Does not need to be used for frame environments, only for
+// environments from the context.
+export const getEnvID = (environment: Environment): string =>
+  environment.tail?.name === 'global' ? environment.tail.id : environment.id;
+
+// Function that returns whether the stash item will be popped off in the next step
+export const isStashItemInDanger = (stashIndex: number): boolean => {
+  const agendaItem = Layout.agenda.peek();
+  if (agendaItem && isInstr(agendaItem)) {
+    switch (agendaItem.instrType) {
+      case InstrType.WHILE:
+      case InstrType.FOR:
+      case InstrType.UNARY_OP:
+      case InstrType.POP:
+      case InstrType.BRANCH:
+        return Layout.stashComponent.stashItemComponents.length - stashIndex <= 1;
+      case InstrType.BINARY_OP:
+      case InstrType.ARRAY_ACCESS:
+        return Layout.stashComponent.stashItemComponents.length - stashIndex <= 2;
+      case InstrType.ARRAY_ASSIGNMENT:
+        return Layout.stashComponent.stashItemComponents.length - stashIndex <= 3;
+      case InstrType.APPLICATION:
+        return (
+          Layout.stashComponent.stashItemComponents.length - stashIndex <=
+          (agendaItem as AppInstr).numOfArgs + 1
+        );
+      case InstrType.ARRAY_LITERAL:
+        return (
+          Layout.stashComponent.stashItemComponents.length - stashIndex <=
+          (agendaItem as ArrLitInstr).arity
+        );
+    }
+  }
+  return false;
+};
+
+export const defaultSAColor = () =>
+  EnvVisualizer.getPrintableMode()
+    ? CompactConfig.SA_BLUE.toString()
+    : CompactConfig.SA_WHITE.toString();
+
+export const stackItemSAColor = (index: number) =>
+  isStashItemInDanger(index)
+    ? AgendaStashConfig.STASH_DANGER_ITEM.toString()
+    : EnvVisualizer.getPrintableMode()
+    ? AgendaStashConfig.SA_BLUE.toString()
+    : AgendaStashConfig.SA_WHITE.toString();
+export const currentItemSAColor = (test: boolean) =>
+  test
+    ? CompactConfig.SA_CURRENT_ITEM.toString()
+    : EnvVisualizer.getPrintableMode()
+    ? AgendaStashConfig.SA_BLUE.toString()
+    : AgendaStashConfig.SA_WHITE.toString();

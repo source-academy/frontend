@@ -1,5 +1,1174 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated properly 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated properly 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff0000"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated properly 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={178.060546875}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff0000"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="362880"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={183.060546875}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="362880"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="call 0"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Call function with 0 arguments"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr acc"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Access array at given index"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="1"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="1"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 162.5 L 170 240 L 170 240 M 140 162.5 L 170 240 L 170 240 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          162.5,
+          170,
+          240,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="mark"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Mark return address"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 6`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 232.5 L 170 390 L 170 390 M 140 232.5 L 170 390 L 170 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          232.5,
+          170,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 7`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="return ar…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="return arr;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 8`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 9`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="while"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Keep executing while loop body if predicate holds"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 10`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x < n"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x < n"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 11`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={390}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x = x + 1;"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={395}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x = x + 1;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={425}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={430}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={460}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr asgn"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={465}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Assign new value to array at given index"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 14`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={495}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="() => x"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={500}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="() => x"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={530}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={535}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="pair/array"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="pair/array"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 195.1513671875 40 L 316.12109375 555 L 316.12109375 555 M 195.1513671875 40 L 316.12109375 555 L 316.12109375 555 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          195.1513671875,
+          40,
+          316.12109375,
+          555,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: global environments are treated correctly 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="math_sin(…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="math_sin(math_PI / 2);"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Agenda Stash correctly renders: global environments are treated correctly 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 92.5 L 30 60 L 30 60 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          92.5,
+          30,
+          60,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
 exports[`EnvVisualizer calculates correct layout for code sample 0 1`] = `
 Object {
   "head": Object {
@@ -991,7 +2160,7 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "256": [Function],
+    "255": [Function],
     "x": 11,
   },
   "id": Any<String>,
@@ -1088,7 +2257,7 @@ Array [
   2,
   "x: ",
   11,
-  "256:= ",
+  "255:= ",
   [Function],
 ]
 `;
@@ -1170,7 +2339,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "257",
+    "id": "256",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1278,7 +2447,7 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "304",
+    "id": "303",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1308,6 +2477,7 @@ Array [
 exports[`EnvVisualizer calculates correct layout for code sample 7 1`] = `
 Object {
   "head": Object {
+    "411": [Function],
     ":::pre-declared names::": Symbol(),
     "integers_from": [Function],
   },
@@ -1320,7 +2490,6 @@ Object {
 exports[`EnvVisualizer calculates correct layout for code sample 7 2`] = `
 Object {
   "head": Object {
-    "413": [Function],
     "eval_stream": [Function],
     "x": 1,
     "y": Array [
@@ -1347,6 +2516,7 @@ Object {
       "$remove": [Function],
       "$remove_all": [Function],
       "$reverse": [Function],
+      "411": [Function],
       "__access_export__": [Function],
       "__access_named_export__": [Function],
       "accumulate": [Function],
@@ -1382,10 +2552,11 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "351",
+    "id": "350",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "411": [Function],
         ":::pre-declared names::": Symbol(),
         "integers_from": [Function],
       },
@@ -1438,8 +2609,8 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "416": [Function],
-    "424": [Function],
+    "414": [Function],
+    "422": [Function],
     "n": 1,
   },
   "id": Any<String>,
@@ -1457,6 +2628,7 @@ Object {
       "$remove": [Function],
       "$remove_all": [Function],
       "$reverse": [Function],
+      "411": [Function],
       "__access_export__": [Function],
       "__access_named_export__": [Function],
       "accumulate": [Function],
@@ -1492,10 +2664,11 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "351",
+    "id": "350",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "411": [Function],
         ":::pre-declared names::": Symbol(),
         "integers_from": [Function],
       },
@@ -1548,7 +2721,7 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "428": [Function],
+    "426": [Function],
     "n": 2,
   },
   "id": Any<String>,
@@ -1566,6 +2739,7 @@ Object {
       "$remove": [Function],
       "$remove_all": [Function],
       "$reverse": [Function],
+      "411": [Function],
       "__access_export__": [Function],
       "__access_named_export__": [Function],
       "accumulate": [Function],
@@ -1601,10 +2775,11 @@ Object {
       "stream_reverse": [Function],
       "stream_to_list": [Function],
     },
-    "id": "351",
+    "id": "350",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
+        "411": [Function],
         ":::pre-declared names::": Symbol(),
         "integers_from": [Function],
       },
@@ -1625,7 +2800,6 @@ Object {
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "413": [Function],
       "eval_stream": [Function],
       "x": 1,
       "y": Array [
@@ -1637,7 +2811,7 @@ Object {
         ],
       ],
     },
-    "id": "397",
+    "id": "396",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1652,6 +2826,7 @@ Object {
         "$remove": [Function],
         "$remove_all": [Function],
         "$reverse": [Function],
+        "411": [Function],
         "__access_export__": [Function],
         "__access_named_export__": [Function],
         "accumulate": [Function],
@@ -1687,10 +2862,11 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "351",
+      "id": "350",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
+          "411": [Function],
           ":::pre-declared names::": Symbol(),
           "integers_from": [Function],
         },
@@ -1762,7 +2938,6 @@ Object {
   "name": "eval_stream",
   "tail": Object {
     "head": Object {
-      "413": [Function],
       "eval_stream": [Function],
       "x": 1,
       "y": Array [
@@ -1774,7 +2949,7 @@ Object {
         ],
       ],
     },
-    "id": "397",
+    "id": "396",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -1789,6 +2964,7 @@ Object {
         "$remove": [Function],
         "$remove_all": [Function],
         "$reverse": [Function],
+        "411": [Function],
         "__access_export__": [Function],
         "__access_named_export__": [Function],
         "accumulate": [Function],
@@ -1824,10 +3000,11 @@ Object {
         "stream_reverse": [Function],
         "stream_to_list": [Function],
       },
-      "id": "351",
+      "id": "350",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
+          "411": [Function],
           ":::pre-declared names::": Symbol(),
           "integers_from": [Function],
         },
@@ -1851,11 +3028,10 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "398",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "413": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -1867,7 +3043,7 @@ Object {
           ],
         ],
       },
-      "id": "397",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1882,6 +3058,7 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
+          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -1917,10 +3094,11 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "351",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
+            "411": [Function],
             ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
           },
@@ -1945,11 +3123,10 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "398",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "413": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -1961,7 +3138,7 @@ Object {
           ],
         ],
       },
-      "id": "397",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -1976,6 +3153,7 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
+          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -2011,10 +3189,11 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "351",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
+            "411": [Function],
             ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
           },
@@ -2039,11 +3218,10 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "398",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "413": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -2055,7 +3233,7 @@ Object {
           ],
         ],
       },
-      "id": "397",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2070,6 +3248,7 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
+          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -2105,10 +3284,11 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "351",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
+            "411": [Function],
             ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
           },
@@ -2133,11 +3313,10 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "398",
+    "id": "397",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "413": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -2149,7 +3328,7 @@ Object {
           ],
         ],
       },
-      "id": "397",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2164,6 +3343,7 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
+          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -2199,10 +3379,11 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "351",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
+            "411": [Function],
             ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
           },
@@ -2277,11 +3458,10 @@ Object {
         [Function],
       ],
     },
-    "id": "417",
+    "id": "415",
     "name": "eval_stream",
     "tail": Object {
       "head": Object {
-        "413": [Function],
         "eval_stream": [Function],
         "x": 1,
         "y": Array [
@@ -2293,7 +3473,7 @@ Object {
           ],
         ],
       },
-      "id": "397",
+      "id": "396",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -2308,6 +3488,7 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
+          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -2343,10 +3524,11 @@ Object {
           "stream_reverse": [Function],
           "stream_to_list": [Function],
         },
-        "id": "351",
+        "id": "350",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
+            "411": [Function],
             ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
           },
@@ -2371,17 +3553,16 @@ Object {
     "head": Object {
       "_copy_of_i": 1,
     },
-    "id": "399",
+    "id": "398",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "398",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "413": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2393,7 +3574,7 @@ Object {
             ],
           ],
         },
-        "id": "397",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2408,6 +3589,7 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
+            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -2443,10 +3625,11 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "351",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
+              "411": [Function],
               ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
             },
@@ -2472,17 +3655,16 @@ Object {
     "head": Object {
       "_copy_of_i": 2,
     },
-    "id": "402",
+    "id": "401",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "398",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "413": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2494,7 +3676,7 @@ Object {
             ],
           ],
         },
-        "id": "397",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2509,6 +3691,7 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
+            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -2544,10 +3727,11 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "351",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
+              "411": [Function],
               ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
             },
@@ -2573,17 +3757,16 @@ Object {
     "head": Object {
       "_copy_of_i": 3,
     },
-    "id": "405",
+    "id": "404",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "398",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "413": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2595,7 +3778,7 @@ Object {
             ],
           ],
         },
-        "id": "397",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2610,6 +3793,7 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
+            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -2645,10 +3829,11 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "351",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
+              "411": [Function],
               ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
             },
@@ -2674,17 +3859,16 @@ Object {
     "head": Object {
       "_copy_of_i": 4,
     },
-    "id": "408",
+    "id": "407",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "398",
+      "id": "397",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
-          "413": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2696,7 +3880,7 @@ Object {
             ],
           ],
         },
-        "id": "397",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2711,6 +3895,7 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
+            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -2746,10 +3931,11 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "351",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
+              "411": [Function],
               ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
             },
@@ -2825,7 +4011,7 @@ Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "418",
+    "id": "416",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -2881,11 +4067,10 @@ Object {
           [Function],
         ],
       },
-      "id": "417",
+      "id": "415",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
-          "413": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -2897,7 +4082,7 @@ Object {
             ],
           ],
         },
-        "id": "397",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -2912,6 +4097,7 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
+            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -2947,10 +4133,11 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "351",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
+              "411": [Function],
               ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
             },
@@ -3026,7 +4213,7 @@ Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "418",
+    "id": "416",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -3082,11 +4269,10 @@ Object {
           [Function],
         ],
       },
-      "id": "417",
+      "id": "415",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
-          "413": [Function],
           "eval_stream": [Function],
           "x": 1,
           "y": Array [
@@ -3098,7 +4284,7 @@ Object {
             ],
           ],
         },
-        "id": "397",
+        "id": "396",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -3113,6 +4299,7 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
+            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -3148,10 +4335,11 @@ Object {
             "stream_reverse": [Function],
             "stream_to_list": [Function],
           },
-          "id": "351",
+          "id": "350",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
+              "411": [Function],
               ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
             },
@@ -3179,23 +4367,22 @@ Object {
     "head": Object {
       "i": 1,
     },
-    "id": "400",
+    "id": "399",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 1,
       },
-      "id": "399",
+      "id": "398",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "398",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "413": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3207,7 +4394,7 @@ Object {
               ],
             ],
           },
-          "id": "397",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3222,6 +4409,7 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
+              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -3257,10 +4445,11 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "351",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
+                "411": [Function],
                 ":::pre-declared names::": Symbol(),
                 "integers_from": [Function],
               },
@@ -3289,23 +4478,22 @@ Object {
     "head": Object {
       "i": 2,
     },
-    "id": "403",
+    "id": "402",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 2,
       },
-      "id": "402",
+      "id": "401",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "398",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "413": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3317,7 +4505,7 @@ Object {
               ],
             ],
           },
-          "id": "397",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3332,6 +4520,7 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
+              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -3367,10 +4556,11 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "351",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
+                "411": [Function],
                 ":::pre-declared names::": Symbol(),
                 "integers_from": [Function],
               },
@@ -3399,23 +4589,22 @@ Object {
     "head": Object {
       "i": 3,
     },
-    "id": "406",
+    "id": "405",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 3,
       },
-      "id": "405",
+      "id": "404",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "398",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "413": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3427,7 +4616,7 @@ Object {
               ],
             ],
           },
-          "id": "397",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3442,6 +4631,7 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
+              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -3477,10 +4667,11 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "351",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
+                "411": [Function],
                 ":::pre-declared names::": Symbol(),
                 "integers_from": [Function],
               },
@@ -3509,23 +4700,22 @@ Object {
     "head": Object {
       "i": 4,
     },
-    "id": "409",
+    "id": "408",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 4,
       },
-      "id": "408",
+      "id": "407",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "398",
+        "id": "397",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
-            "413": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3537,7 +4727,7 @@ Object {
               ],
             ],
           },
-          "id": "397",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3552,6 +4742,7 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
+              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -3587,10 +4778,11 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "351",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
+                "411": [Function],
                 ":::pre-declared names::": Symbol(),
                 "integers_from": [Function],
               },
@@ -3676,13 +4868,13 @@ Object {
         [Function],
       ],
     },
-    "id": "420",
+    "id": "418",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "418",
+      "id": "416",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -3738,11 +4930,10 @@ Object {
             [Function],
           ],
         },
-        "id": "417",
+        "id": "415",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
-            "413": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3754,7 +4945,7 @@ Object {
               ],
             ],
           },
-          "id": "397",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3769,6 +4960,7 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
+              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -3804,10 +4996,11 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "351",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
+                "411": [Function],
                 ":::pre-declared names::": Symbol(),
                 "integers_from": [Function],
               },
@@ -3893,13 +5086,13 @@ Object {
         [Function],
       ],
     },
-    "id": "429",
+    "id": "427",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "418",
+      "id": "416",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -3955,11 +5148,10 @@ Object {
             [Function],
           ],
         },
-        "id": "417",
+        "id": "415",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
-            "413": [Function],
             "eval_stream": [Function],
             "x": 1,
             "y": Array [
@@ -3971,7 +5163,7 @@ Object {
               ],
             ],
           },
-          "id": "397",
+          "id": "396",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -3986,6 +5178,7 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
+              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -4021,10 +5214,11 @@ Object {
               "stream_reverse": [Function],
               "stream_to_list": [Function],
             },
-            "id": "351",
+            "id": "350",
             "name": "programEnvironment",
             "tail": Object {
               "head": Object {
+                "411": [Function],
                 ":::pre-declared names::": Symbol(),
                 "integers_from": [Function],
               },
@@ -4067,13 +5261,13 @@ Array [
   1,
   "n: ",
   1,
-  "416:= ",
+  "414:= ",
   [Function],
   2,
   1,
   "n: ",
   2,
-  "428:= ",
+  "426:= ",
   [Function],
   0,
   2,

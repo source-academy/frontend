@@ -104,7 +104,8 @@ export const fetchUserAndCourse = () => action(FETCH_USER_AND_COURSE);
 
 export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
 
-export const fetchAssessment = (assessmentId: number) => action(FETCH_ASSESSMENT, assessmentId);
+export const fetchAssessment = (assessmentId: number, assessmentPassword?: string) =>
+  action(FETCH_ASSESSMENT, { assessmentId, assessmentPassword });
 
 export const fetchAssessmentAdmin = (assessmentId: number, courseRegId: number) =>
   action(FETCH_ASSESSMENT_ADMIN, { assessmentId, courseRegId });

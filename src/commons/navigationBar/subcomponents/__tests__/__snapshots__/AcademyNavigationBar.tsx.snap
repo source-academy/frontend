@@ -103,6 +103,80 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
   >
     <NavLink
       className={[Function]}
+      title="Ground Control"
+      to="/courses/0/groundcontrol"
+    >
+      <Blueprint4.Icon
+        icon="satellite"
+      />
+      <div
+        className="navbar-button-text hidden-xs hidden-sm"
+      >
+        Ground Control
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Dashboard"
+      to="/courses/0/dashboard"
+    >
+      <Blueprint4.Icon
+        icon="globe"
+      />
+      <div
+        className="navbar-button-text hidden-xs hidden-sm"
+      >
+        Dashboard
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Sourcereel"
+      to="/courses/0/sourcereel"
+    >
+      <Blueprint4.Icon
+        icon="mobile-video"
+      />
+      <div
+        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+      >
+        Sourcereel
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Grading"
+      to="/courses/0/grading"
+    >
+      <Blueprint4.Icon
+        icon="endorsed"
+      />
+      <div
+        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+      >
+        Grading
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Game Simulator"
+      to="/courses/0/storysimulator"
+    >
+      <Blueprint4.Icon
+        icon="crown"
+      />
+      <div
+        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+      >
+        Game Simulator
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
       title="Notifications"
       to="/courses/0/notipreference"
     >
@@ -531,7 +605,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, T
     </NavLink>
     <NavLink
       className={[Function]}
-      title="Story Simulator"
+      title="Game Simulator"
       to="/courses/0/storysimulator"
     >
       <Blueprint4.Icon
@@ -540,7 +614,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, T
       <div
         className="navbar-button-text hidden-xs hidden-sm hidden-md"
       >
-        Story Simulator
+        Game Simulator
       </div>
     </NavLink>
     <NavLink

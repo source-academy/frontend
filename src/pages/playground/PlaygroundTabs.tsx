@@ -25,7 +25,7 @@ export const dataVisualizerTab: SideContentTab = {
 };
 
 export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
-  label: 'Env Visualizer',
+  label: 'CSE Machine',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
   id: SideContentType.envVisualizer

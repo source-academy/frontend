@@ -286,10 +286,13 @@ const Assessment: React.FC<AssessmentProps> = props => {
     if (!overview) {
       return <AssessmentNotFound />;
     }
+
+    const notAttempted = overview.status === AssessmentStatuses.not_attempted;
     const assessmentWorkspaceProps: AssessmentWorkspaceProps = {
       assessmentId,
       questionId,
-      notAttempted: overview.status === AssessmentStatuses.not_attempted,
+      notAttempted,
+      needsPassword: !!overview.private && notAttempted,
       canSave:
         !isStudent ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),

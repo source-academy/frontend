@@ -22,7 +22,8 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   playground: '/playground',
   sicp: '/sicp',
   sourcecast: '',
-  sourcereel: ''
+  sourcereel: '',
+  stories: '' // TODO: Investigate if stories workspace base path is needed
 };
 
 export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<void> => {

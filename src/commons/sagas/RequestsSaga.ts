@@ -50,11 +50,21 @@ import {
 } from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
+import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const XLSX = require('xlsx');
+
+/**
+ * GET /
+ * (health check)
+ */
+export const getHealth = async (): Promise<Response | null> => {
+  const resp = await request('', 'GET', {}, Constants.backendUrl);
+  return resp;
+};
 
 /**
  * POST /auth/login
@@ -72,7 +82,8 @@ export const postAuth = async (
       ...(clientId ? { client_id: clientId } : {}),
       ...(redirectUri ? { redirect_uri: redirectUri } : {})
     },
-    errorMessage: 'Could not login. Please contact the module administrator.'
+    errorMessage: 'Could not login. Please contact the module administrator.',
+    withCredentials: true
   });
   if (!resp) {
     return null;
@@ -499,7 +510,8 @@ export const getUserAssessmentOverviews = async (
 export const getAssessment = async (
   assessmentId: number,
   tokens: Tokens,
-  courseRegId?: number
+  courseRegId?: number,
+  password?: string
 ): Promise<Assessment | null> => {
   let resp;
   if (courseRegId !== undefined) {
@@ -513,29 +525,24 @@ export const getAssessment = async (
     );
   } else {
     // Otherwise, we are getting the assessment for the current user
-    resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
-      ...tokens
-    });
-  }
-
-  // Attempt to load password-protected assessment
-  while (resp && resp.status === 403) {
-    const input = window.prompt('Please enter password.', '');
-    if (!input) {
-      resp = null;
-      window.history.back();
-      return null;
+    if (password === undefined) {
+      // No password required (either not password-protected, or already previously unlocked)
+      resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
+        ...tokens
+      });
+    } else {
+      // First-time unlocking password-protected assessments
+      resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
+        ...tokens,
+        body: { password },
+        errorMessage: 'Incorrect password'
+      });
     }
-
-    resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
-      ...tokens,
-      body: {
-        password: input
-      }
-    });
   }
 
   if (!resp || !resp.ok) {
+    // Failed to load assessment, go back
+    window.history.back();
     return null;
   }
 
@@ -647,10 +654,12 @@ export const getGradingOverviews = async (
     .map((overview: any) => {
       const gradingOverview: GradingOverview = {
         assessmentId: overview.assessment.id,
+        assessmentNumber: overview.assessment.assessmentNumber,
         assessmentName: overview.assessment.title,
         assessmentType: overview.assessment.type,
         studentId: overview.participant.id ? overview.participant.id : -1,
         studentName: overview.participant.name ? overview.participant.name : overview.participant.student_names.join(", "),
+        studentUsername: overview.participant.username,
         submissionId: overview.id,
         submissionStatus: overview.status,
         groupName: overview.participant.groupName,
@@ -1604,7 +1613,7 @@ const courseId: () => string = () => {
   }
 };
 
-const courseIdWithoutPrefix: () => string = () => {
+export const courseIdWithoutPrefix: () => string = () => {
   const id = store.getState().session.courseId;
   if (id) {
     return `${id}`;

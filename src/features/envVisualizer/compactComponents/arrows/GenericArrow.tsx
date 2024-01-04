@@ -1,10 +1,10 @@
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import EnvVisualizer from '../../EnvVisualizer';
 import { CompactConfig, ShapeDefaultProps } from '../../EnvVisualizerCompactConfig';
 import { Layout } from '../../EnvVisualizerLayout';
 import { IVisible, StepsArray } from '../../EnvVisualizerTypes';
+import { defaultSAColor } from '../../EnvVisualizerUtils';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible {
@@ -104,11 +104,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
       >
         <KonvaPath
           {...ShapeDefaultProps}
-          stroke={
-            EnvVisualizer.getPrintableMode()
-              ? CompactConfig.SA_BLUE.toString()
-              : CompactConfig.SA_WHITE.toString()
-          }
+          stroke={defaultSAColor()}
           strokeWidth={Number(CompactConfig.ArrowStrokeWidth)}
           hitStrokeWidth={Number(CompactConfig.ArrowHitStrokeWidth)}
           data={this.path()}
@@ -117,11 +113,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
         <KonvaArrow
           {...ShapeDefaultProps}
           points={points.slice(points.length - 4)}
-          fill={
-            EnvVisualizer.getPrintableMode()
-              ? CompactConfig.SA_BLUE.toString()
-              : CompactConfig.SA_WHITE.toString()
-          }
+          fill={defaultSAColor()}
           strokeEnabled={false}
           pointerWidth={Number(CompactConfig.ArrowHeadSize)}
           key={Layout.key++}

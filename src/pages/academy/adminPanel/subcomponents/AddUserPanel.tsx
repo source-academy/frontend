@@ -21,9 +21,7 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 
 import Constants from '../../../../commons/utils/Constants';
 
-export type AddUserPanelProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => void;
 };
 
@@ -33,7 +31,7 @@ export type UsernameRoleGroup = {
   group?: string;
 };
 
-const AddUserPanel: React.FC<AddUserPanelProps> = props => {
+const AddUserPanel: React.FC<Props> = props => {
   const [users, setUsers] = React.useState<UsernameRoleGroup[]>([]);
   const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
   const gridApi = React.useRef<GridApi>();

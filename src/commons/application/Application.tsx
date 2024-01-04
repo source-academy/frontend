@@ -4,14 +4,13 @@ import { Outlet } from 'react-router-dom';
 
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
-import { useLocalStorageState, useTypedSelector } from '../utils/Hooks';
+import { useLocalStorageState, useSession } from '../utils/Hooks';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import { fetchUserAndCourse } from './actions/SessionActions';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
-  const session = useTypedSelector(state => state.session);
-  const { name } = session;
+  const { isLoggedIn } = useSession();
 
   // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
@@ -26,7 +25,7 @@ const Application: React.FC = () => {
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
   React.useEffect(() => {
-    if (name) {
+    if (isLoggedIn) {
       dispatch(fetchUserAndCourse());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
