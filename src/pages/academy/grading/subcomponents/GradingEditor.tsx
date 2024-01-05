@@ -236,7 +236,22 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
 
       <div className="grading-editor-header">
         <H3>
-          Currently Grading: {props.studentName} ({props.studentUsername})
+          Currently Grading:<br />
+            {props.studentName ? props.studentName.split(',').map((student, index) => {
+              const usernameList = props.studentUsername ? props.studentUsername.split(',') : [];
+              const username = usernameList.length > index ? usernameList[index].trim() : '';
+              return (
+                <div key={index}>
+                  {student.trim()} {' '}
+                  ({username && (
+                    <span>
+                      {username}
+                    </span>
+                  )})
+                  <br />
+                </div>
+              );
+            }) : props.studentName}
         </H3>
       </div>
       {props.solution !== null ? (
