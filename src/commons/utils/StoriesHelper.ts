@@ -3,6 +3,7 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import { defaultHandlers, toHast } from 'mdast-util-to-hast';
 import { MdastNodes, Options as MdastToHastConverterOptions } from 'mdast-util-to-hast/lib';
 import React from 'react';
+import * as runtime from 'react/jsx-runtime';
 import { IEditorProps } from 'react-ace';
 import rehypeReact from 'rehype-react';
 import SourceBlock, { SourceBlockProps } from 'src/features/stories/storiesComponents/SourceBlock';
@@ -146,7 +147,7 @@ export const scrollSync = (editor: IEditorProps, preview: HTMLElement) => {
 // below is typed as `any` if we use the default typings.
 // Thus, we create `HandlerType` to have type safety for the
 // `node` parameter based on the actual mdast node type.
-type HandlerOption = NonNullable<MdastToHastConverterOptions['handlers']>;
+type HandlerOption = NonNullable<Required<MdastToHastConverterOptions['handlers']>>;
 type AllowedMdElements = Exclude<keyof typeof defaultHandlers, 'toml'>;
 type MdastNodeType<key extends AllowedMdElements> = Extract<MdastNodes, { type: key }>;
 type HandlerType = {
@@ -180,13 +181,12 @@ export const renderStoryMarkdown = (markdown: string): React.ReactNode => {
   return (
     unified()
       .use(rehypeReact, {
-        createElement: React.createElement,
-        Fragment: React.Fragment,
+        ...runtime,
         components: {
           'source-block': SourceBlock
-          // Disable typecheck as "source-block" is not a standard HTML tag
-        } as any
-      })
+        }
+        // Disable typecheck as "source-block" is not a standard HTML tag
+      } as any)
       // We use `any` due to incompatible type definitions (although it
       // actually works). Either way, this is never exposed, and so is okay.
       .stringify(hast as any)

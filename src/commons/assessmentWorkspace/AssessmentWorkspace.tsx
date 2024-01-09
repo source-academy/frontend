@@ -95,6 +95,7 @@ import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
+  needsPassword: boolean;
   questionId: number;
   notAttempted: boolean;
   canSave: boolean;
@@ -162,7 +163,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(resetWorkspace(workspaceLocation, options)),
       handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
-      handleAssessmentFetch: (assessmentId: number) => dispatch(fetchAssessment(assessmentId)),
+      handleAssessmentFetch: (assessmentId: number, assessmentPassword?: string) =>
+        dispatch(fetchAssessment(assessmentId, assessmentPassword)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
@@ -187,7 +189,17 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * and show the briefing.
    */
   useEffect(() => {
-    handleAssessmentFetch(props.assessmentId);
+    let assessmentPassword: string | null = null;
+    if (props.needsPassword) {
+      // Only need to prompt for password the first time
+      // Attempt to load password-protected assessment
+      assessmentPassword = window.prompt('Please enter password.', '');
+      if (!assessmentPassword) {
+        window.history.back();
+        return;
+      }
+    }
+    handleAssessmentFetch(props.assessmentId, assessmentPassword || undefined);
 
     if (props.questionId === 0 && props.notAttempted) {
       setShowOverlay(true);

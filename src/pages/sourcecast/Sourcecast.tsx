@@ -267,7 +267,7 @@ const Sourcecast: React.FC = () => {
   };
 
   const envVisualizerTab: SideContentTab = {
-    label: 'Env Visualizer',
+    label: 'CSE Machine',
     iconName: IconNames.GLOBE,
     body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
     id: SideContentType.envVisualizer
