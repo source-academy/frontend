@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { AuthProviderType } from 'src/commons/utils/AuthHelper';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
@@ -40,6 +41,8 @@ const Login: React.FunctionComponent<{}> = () => {
     [dispatch]
   );
 
+  const isSaml = Constants.authProviders.get(providerId)?.type === AuthProviderType.SAML_SSO;
+
   React.useEffect(() => {
     // If already logged in, navigate to relevant course page
     if (isLoggedIn) {
@@ -52,12 +55,13 @@ const Login: React.FunctionComponent<{}> = () => {
     }
 
     // Else fetch JWT tokens and user info from backend when auth provider code is present
-    if (authCode && !isLoggedIn) {
+    // SAML does not require code, as relay is handled in backend
+    if ((authCode || isSaml) && !isLoggedIn) {
       dispatch(fetchAuth(authCode, providerId));
     }
-  }, [authCode, providerId, dispatch, courseId, navigate, isLoggedIn]);
+  }, [authCode, isSaml, providerId, dispatch, courseId, navigate, isLoggedIn]);
 
-  if (authCode) {
+  if (authCode || isSaml) {
     return (
       <div className={classNames('Login', Classes.DARK)}>
         <Card className={classNames('login-card', Classes.ELEVATION_4)}>
