@@ -78,6 +78,18 @@ for (let i = 1; ; ++i) {
   authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS });
 }
 
+for (let i = 1; ; ++i) {
+  const id = process.env[`REACT_APP_SAML_PROVIDER${i}`];
+  if (!id) {
+    break;
+  }
+
+  const name = process.env[`REACT_APP_SAML_PROVIDER${i}_NAME`] || 'Unnamed provider';
+  const endpoint = process.env[`REACT_APP_SAML_PROVIDER${i}_ENDPOINT`] || '';
+
+  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
+}
+
 export enum Links {
   githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',

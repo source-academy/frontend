@@ -2,7 +2,8 @@ import Constants from './Constants';
 
 export enum AuthProviderType {
   OAUTH2 = 'OAUTH2',
-  CAS = 'CAS'
+  CAS = 'CAS',
+  SAML_SSO = 'SAML'
 }
 
 export function computeEndpointUrl(providerId: string): string | undefined {
@@ -18,6 +19,9 @@ export function computeEndpointUrl(providerId: string): string | undefined {
         break;
       case AuthProviderType.CAS:
         epUrl.searchParams.set('service', computeRedirectUri(providerId)!);
+        break;
+      case AuthProviderType.SAML_SSO:
+        epUrl.searchParams.set('target_url', computeRedirectUri(providerId)!);
         break;
     }
     return epUrl.toString();
