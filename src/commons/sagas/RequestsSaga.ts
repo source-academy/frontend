@@ -77,7 +77,8 @@ export const postAuth = async (
       ...(clientId ? { client_id: clientId } : {}),
       ...(redirectUri ? { redirect_uri: redirectUri } : {})
     },
-    errorMessage: 'Could not login. Please contact the module administrator.'
+    errorMessage: 'Could not login. Please contact the module administrator.',
+    withCredentials: true
   });
   if (!resp) {
     return null;
