@@ -53,11 +53,11 @@ const columns = [
     )
   }),
   columnHelper.accessor('studentName', {
-    header: 'Student',
+    header: 'Student(s)',
     cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('studentUsername', {
-    header: 'Username',
+    header: 'Username(s)',
     cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('groupName', {
