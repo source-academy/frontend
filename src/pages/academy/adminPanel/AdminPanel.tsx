@@ -45,6 +45,7 @@ const AdminPanel: React.FC = () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     moduleHelpText: ''
   });
 
@@ -84,6 +85,7 @@ const AdminPanel: React.FC = () => {
       enableGame: session.enableGame,
       enableAchievements: session.enableAchievements,
       enableSourcecast: session.enableSourcecast,
+      enableStories: session.enableStories,
       moduleHelpText: session.moduleHelpText
     });
 
