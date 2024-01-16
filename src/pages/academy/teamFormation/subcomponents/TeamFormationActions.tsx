@@ -3,9 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Flex, Icon } from '@tremor/react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  deleteTeam,
-} from 'src/commons/application/actions/SessionActions';
+import { deleteTeam } from 'src/commons/application/actions/SessionActions';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
@@ -40,11 +38,7 @@ const TeamFormationActions: React.FC<TeamFormationActionsProps> = ({ teamId }) =
       </Link>
 
       <button type="button" style={{ padding: 0 }} onClick={handleDeleteTeamClick}>
-        <Icon
-          tooltip="Delete"
-          icon={() => <BpIcon icon={IconNames.TRASH} />}
-          variant="simple"
-        />
+        <Icon tooltip="Delete" icon={() => <BpIcon icon={IconNames.TRASH} />} variant="simple" />
       </button>
     </Flex>
   );

@@ -610,13 +610,17 @@ export const checkAnswerLastModifiedAt = async (
   lastModifiedAt: string,
   tokens: Tokens
 ): Promise<boolean | null> => {
-  const resp = await request(`${courseId()}/assessments/question/${id}/answerLastModified`, 'POST', {
-    ...tokens,
-    body: {
-      lastModifiedAt: lastModifiedAt
-    },
-    noHeaderAccept: true
-  });
+  const resp = await request(
+    `${courseId()}/assessments/question/${id}/answerLastModified`,
+    'POST',
+    {
+      ...tokens,
+      body: {
+        lastModifiedAt: lastModifiedAt
+      },
+      noHeaderAccept: true
+    }
+  );
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
   }
@@ -658,8 +662,14 @@ export const getGradingOverviews = async (
         assessmentName: overview.assessment.title,
         assessmentType: overview.assessment.type,
         studentId: overview.student ? overview.student.id : -1,
-        studentName: overview.student ? overview.student.name : overview.team.team_members.map((member: { name: any; }) => member.name).join(', '),
-        studentUsername: overview.student ? overview.student.name : overview.team.team_members.map((member: { username: any; }) => member.username).join(', '),
+        studentName: overview.student
+          ? overview.student.name
+          : overview.team.team_members.map((member: { name: any }) => member.name).join(', '),
+        studentUsername: overview.student
+          ? overview.student.name
+          : overview.team.team_members
+              .map((member: { username: any }) => member.username)
+              .join(', '),
         submissionId: overview.id,
         submissionStatus: overview.status,
         groupName: overview.student ? overview.student.groupName : '-',

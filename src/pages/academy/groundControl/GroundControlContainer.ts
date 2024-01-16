@@ -33,7 +33,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     },
     dispatch
   );
-  
+
 const GroundControlContainer = connect(mapStateToProps, mapDispatchToProps)(GroundControl);
 
 export default GroundControlContainer;

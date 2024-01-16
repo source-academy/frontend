@@ -86,7 +86,7 @@ const AdminPanel: React.FC = () => {
       enableSourcecast: session.enableSourcecast,
       moduleHelpText: session.moduleHelpText
     });
-    
+
     // IMPT: To prevent mutation of props
     assessmentConfig.current = cloneDeep(session.assessmentConfigurations);
   }, [session]);

@@ -421,7 +421,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     teamFormationTableFilters: {
       columnFilters: [],
       globalFilter: null
-    },
+    }
   },
   groundControl: {
     ...createDefaultWorkspace('groundControl'),

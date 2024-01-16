@@ -7,7 +7,7 @@ const BADGE_COLORS = {
   // assessment types
   missions: 'indigo',
   quests: 'emerald',
-  paths: 'sky',
+  paths: 'sky'
 };
 
 export function getBadgeColorFromLabel(label: string) {
@@ -28,7 +28,6 @@ const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 
     />
   );
 };
-
 
 type FilterBadgeProps = {
   filter: ColumnFilter;

@@ -8,10 +8,7 @@ type TeamFormationFiltersProps = {
   onFilterRemove: (filter: ColumnFilter) => void;
 };
 
-const TeamFormationFilters: React.FC<TeamFormationFiltersProps> = ({
-  filters,
-  onFilterRemove
-}) => {
+const TeamFormationFilters: React.FC<TeamFormationFiltersProps> = ({ filters, onFilterRemove }) => {
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-1">
       {filters.map(filter => (

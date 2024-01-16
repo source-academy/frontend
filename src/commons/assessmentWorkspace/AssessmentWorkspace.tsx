@@ -168,7 +168,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleUpdateHasUnsavedChanges
   } = useMemo(() => {
     return {
-      handleTeamOverviewFetch: (assessmentId: number) => dispatch(fetchTeamFormationOverview(assessmentId)),
+      handleTeamOverviewFetch: (assessmentId: number) =>
+        dispatch(fetchTeamFormationOverview(assessmentId)),
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
         dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),

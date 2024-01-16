@@ -2,10 +2,7 @@ import '@tremor/react/dist/esm/tremor.css';
 
 import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import {
-  Button,
-  Flex,
-} from '@tremor/react';
+import { Button, Flex } from '@tremor/react';
 import { isEqual, isUndefined } from 'lodash';
 import * as React from 'react';
 
@@ -27,7 +24,8 @@ type StateProps = {
 const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props => {
   const minTeamSize = 0;
 
-  const { assessmentOverviews, setAssessmentOverview, setHasChangesAssessmentOverview, data } = props;
+  const { assessmentOverviews, setAssessmentOverview, setHasChangesAssessmentOverview, data } =
+    props;
 
   const index = indexOfObject(assessmentOverviews.current, data);
   const [newTeamSize, setNewTeamSize] = React.useState(data.maxTeamSize);
@@ -44,17 +42,24 @@ const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props =
         setAssessmentOverview(temp);
       }
     };
-  
+
     if (index !== -1) {
       handleTeamSizeChange();
     }
-  }, [newTeamSize, index, assessmentOverviews, data.maxTeamSize, setHasChangesAssessmentOverview, setAssessmentOverview]);
+  }, [
+    newTeamSize,
+    index,
+    assessmentOverviews,
+    data.maxTeamSize,
+    setHasChangesAssessmentOverview,
+    setAssessmentOverview
+  ]);
 
   const handleIncrement = () => {
     const updatedTeamSize = newTeamSize + 1;
     setNewTeamSize(updatedTeamSize);
   };
-  
+
   const handleDecrement = () => {
     if (newTeamSize > minTeamSize) {
       const updatedTeamSize = newTeamSize - 1;
@@ -72,9 +77,7 @@ const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props =
           onClick={handleDecrement}
           disabled={newTeamSize === minTeamSize}
         />
-        <span style={{ width: '4rem', padding: '0.2rem', textAlign: 'center'}}>
-          {newTeamSize}
-        </span>
+        <span style={{ width: '4rem', padding: '0.2rem', textAlign: 'center' }}>{newTeamSize}</span>
         <Button
           size="xs"
           icon={() => <BpIcon icon={IconNames.PLUS} />}
@@ -82,7 +85,6 @@ const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props =
           onClick={handleIncrement}
         />
       </Flex>
-      
     </div>
   );
 };

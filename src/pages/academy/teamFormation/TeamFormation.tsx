@@ -18,16 +18,14 @@ const TeamFormation: React.FC = () => {
       icon={<Spinner size={SpinnerSize.LARGE} />}
     />
   );
-  
+
   return (
     <ContentDisplay
       display={
         teamFormationOverviews === undefined ? (
           loadingDisplay
         ) : (
-          <TeamFormationDashboard
-            teams={data}
-          />
+          <TeamFormationDashboard teams={data} />
         )
       }
       fullWidth={true}

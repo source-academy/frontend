@@ -18,7 +18,7 @@ type StateProps = {
 
 export const ControlButtonSaveButton: React.FC<ControlBarSaveButtonProps> = props => {
   const saveButtonOpts = props.hasUnsavedChanges ? { intent: Intent.WARNING, minimal: false } : {};
-  
+
   return (
     <ControlButton
       label="Save"
