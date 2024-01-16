@@ -2,6 +2,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -82,7 +83,6 @@ import {
   mockAssessments
 } from '../../mocks/AssessmentMocks';
 import { mockGradingSummary } from '../../mocks/GradingMocks';
-import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { AuthProviderType, computeRedirectUri } from '../../utils/AuthHelper';
