@@ -18,29 +18,34 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 ## Getting Started
 
-### Installation of Source Academy (latest version [available in GitHub Pages](https://source-academy.github.io/))
+### Installation of [Source Academy](https://source-academy.github.io/)
 
-1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current or lower LTS version. (Known working version of node: v16.16.0)
-2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `yarn install` to install dependencies.  
-    - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
-    - If you are on the new M1 or M2 Mac chips, and encounter an error while installing `canvas`, refer to [this documentation](https://github.com/Automattic/node-canvas/wiki/Installation:-Mac-OS-X#homebrew) to install the requisite dependencies first.
+1. Install the version of Node.js as specified in the `.node-version` file
 
+1. Install Python (known working versions: `2.7`, `3.8`, `3.9`, `3.10`) – **Note: Python `3.11` does not work**
 
-4. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
-5. Point your browser to `http://localhost:8000` to see your local Source Academy.
+1. Clone this repository and navigate to it using your command line
+
+1. Run `yarn install` to install dependencies.
+
+   - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
+   - If you are on the new M1 or M2 Mac chips, and encounter an error while installing `canvas`, refer to [this documentation](https://github.com/Automattic/node-canvas/wiki/Installation:-Mac-OS-X#homebrew) to install the requisite dependencies first.
+
+1. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
+
+1. Point your browser to `http://localhost:8000` to see your local Source Academy.
 
 In this edition, you will only see the Playground with all its tools, but no login options or homework submission features.
 
 If you wish to set up the GitHub or Google Drive integrations, copy the `.env.example` file as `.env` and refer to [_Setting up your environment_](#setting-up-your-environment) below for the relevant configuration options.
 
-### Installation of Source Academy @ NUS (access [latest production version here](https://sourceacademy.nus.edu.sg))
+### Installation of [Source Academy @ NUS](https://sourceacademy.nus.edu.sg)
 
-1. Install the current LTS version of Node.js. The current version (usually the version one greater than the current LTS) may also work, but if you encounter issues, use the current LTS.
-2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `yarn install` to install dependencies.
-4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
-5. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
+1. Repeat steps 1-4 above
+1. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
+1. Run `yarn run start` to start the server at `localhost:8000`
+
+**Note: It might take a couple of minutes for the server to start the first time.**
 
 ### Setting up your environment
 
@@ -88,39 +93,6 @@ See [here](https://github.com/source-academy/frontend/wiki/Google-Drive-Persiste
 1. `REACT_APP_ENABLE_GITHUB_ASSESSMENTS`: Whether to enable the GitHub Assessments feature. Off by default.
 1. `REACT_APP_SHOW_RESEARCH_PROMPT`: Whether to show the educational research consent prompt to users. This is mainly for instructors using their own deployment of Source Academy @ NUS to disable this prompt.
 
-## Development
-
-### Running the tests
-
-Before pushing to Github, ensure that your code is formatted and your tests are passing. These two commands should help with that:
-
-- `yarn run format` : formats your code
-- `yarn run test`: runs the tests and prints the output
-
-### Running your own js-slang
-
-See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the frontend.
-
-### Contribution Guidelines
-
-Refer to our issue tracker and contribute to any open issues you are able to spot there. If you have any new issues, please do post there as well. We welcome any form of contribution and are open to any new ideas you may have for the project!
-
-To start contributing, create a fork from our repo and send a PR. Refer to [this article](https://help.github.com/en/articles/fork-a-repo) for more information.
-
-### Application Structure
-
-1. `assets` contains static assets.
-1. `commons` contains components or other code common to more than one page.
-1. `features` contains action creators, reducers and type declarations for specific functions.
-1. `pages` contains pages and components used only in one page; its layout should mirror the actual routes.
-1. `styles` contains all SCSS styles.
-
-### TypeScript Coding Conventions
-
-We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
-
-See also the [this standard in the wiki](https://github.com/source-academy/frontend/wiki/Coding-Standard).
-
 ## Projects
 
 For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/frontend/wiki).
@@ -135,19 +107,6 @@ There are a few additional environment variables that are used when building and
 1. `REACT_APP_SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. The service worker will ignore paths matching any of these regexes. This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
 1. `REACT_APP_CADET_LOGGER`: Log server URL. To test with cadet-logger on localhost, set it to `http://localhost:8001/assessment-logger`.
 1. `REACT_APP_CADET_LOGGER_INTERVAL`: The interval (in ms) that the frontend should upload logs.
-
-## Testing
-
-The frontend comes with an extensive test suite. To run the tests after you made your modifications, run
-`yarn test`. Regression tests are run automatically when you want to push changes to this repository.
-The regression tests are generated using `jest` and stored as snapshots in `src/\_\_tests\_\_`.  After modifying the frontend, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:
-
-``` {.}
-$ yarn test --updateSnapshot
-```
-
-and then typing `a` to update all snapshots.
-（if you run this on a macBook with ARM chip, you may run into errors; try to do this on a computer with x86 chip instead)
 
 ## License
 

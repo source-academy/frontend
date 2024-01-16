@@ -1099,6 +1099,10 @@ export function* evalCode(
     context.executionMethod = 'ec-evaluator';
   }
 
+  const isFolderModeEnabled: boolean = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
+  );
+
   const entrypointCode = files[entrypointFilePath];
 
   function call_variant(variant: Variant) {
@@ -1168,14 +1172,24 @@ export function* evalCode(
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
-        : call(runFilesInContext, files, entrypointFilePath, context, {
-            scheduler: 'preemptive',
-            originalMaxExecTime: execTime,
-            stepLimit: stepLimit,
-            throwInfiniteLoops: true,
-            useSubst: substActiveAndCorrectChapter,
-            envSteps: envSteps
-          }),
+        : call(
+            runFilesInContext,
+            isFolderModeEnabled
+              ? files
+              : {
+                  [entrypointFilePath]: files[entrypointFilePath]
+                },
+            entrypointFilePath,
+            context,
+            {
+              scheduler: 'preemptive',
+              originalMaxExecTime: execTime,
+              stepLimit: stepLimit,
+              throwInfiniteLoops: true,
+              useSubst: substActiveAndCorrectChapter,
+              envSteps: envSteps
+            }
+          ),
 
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
@@ -1288,7 +1302,9 @@ export function* evalCode(
   // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
   if (context.executionMethod === 'ec-evaluator' && needUpdateEnv) {
     yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
-    yield put(actions.toggleUpdateEnv(false, workspaceLocation));
+    // `needUpdateEnv` implies `correctWorkspace`, which satisfies the type constraint.
+    // But TS can't infer that yet, so we need a typecast here.
+    yield put(actions.toggleUpdateEnv(false, workspaceLocation as any));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful

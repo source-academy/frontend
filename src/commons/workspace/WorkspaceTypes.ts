@@ -63,6 +63,7 @@ export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
+export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
 
 type AssessmentWorkspaceAttr = {
   readonly currentAssessment?: number;

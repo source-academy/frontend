@@ -106,6 +106,7 @@ const cracoConfig = (module.exports = {
           'konva',
           'react-konva',
           'react-debounce-render',
+          'devlop',
           'hastscript',
           'hast-to-hyperscript',
           'hast-util-.+',
@@ -131,6 +132,14 @@ const cracoConfig = (module.exports = {
         '^.+\\.module\\.(css|sass|scss)$'
       ];
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';
+      jestConfig.moduleNameMapper['unist-util-visit-parents/do-not-use-color'] =
+        '<rootDir>/node_modules/unist-util-visit-parents/lib';
+      jestConfig.moduleNameMapper['vfile/do-not-use-conditional-minpath'] =
+        '<rootDir>/node_modules/vfile/lib';
+      jestConfig.moduleNameMapper['vfile/do-not-use-conditional-minproc'] =
+        '<rootDir>/node_modules/vfile/lib';
+      jestConfig.moduleNameMapper['vfile/do-not-use-conditional-minurl'] =
+        '<rootDir>/node_modules/vfile/lib';
       return jestConfig;
     }
   }

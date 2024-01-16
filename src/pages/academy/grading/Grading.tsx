@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -109,7 +110,7 @@ const Grading: React.FC = () => {
                   <Text>Viewing</Text>
                   <SimpleDropdown
                     options={showOptions}
-                    defaultValue={showAllSubmissions}
+                    selectedValue={showAllSubmissions}
                     onClick={setShowAllSubmissions}
                     popoverProps={{ position: Position.BOTTOM }}
                     buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
@@ -117,7 +118,7 @@ const Grading: React.FC = () => {
                   <Text>submissions from</Text>
                   <SimpleDropdown
                     options={groupOptions}
-                    defaultValue={showAllGroups}
+                    selectedValue={showAllGroups}
                     onClick={setShowAllGroups}
                     popoverProps={{ position: Position.BOTTOM }}
                     buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
@@ -133,7 +134,14 @@ const Grading: React.FC = () => {
 
             <Col numColSpanLg={2}>
               <Card hFull>
-                <GradingSummary group={group} submissions={submissions} assessments={assessments} />
+                <GradingSummary
+                  // Only include submissions from the same group in the summary
+                  submissions={submissions.filter(
+                    ({ groupName, gradingStatus }) =>
+                      groupName === group && gradingStatus !== GradingStatuses.excluded
+                  )}
+                  assessments={assessments}
+                />
               </Card>
             </Col>
           </ColGrid>
