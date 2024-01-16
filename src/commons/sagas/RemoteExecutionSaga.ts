@@ -28,6 +28,7 @@ import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { BEGIN_INTERRUPT_EXECUTION } from '../application/types/InterpreterTypes';
 import { actions } from '../utils/ActionsHelper';
+import { MaybePromise } from '../utils/TypeHelper';
 import { fetchDevices, getDeviceWSEndpoint } from './RequestsSaga';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
@@ -287,7 +288,7 @@ export function* remoteExecutionSaga(): SagaIterator {
     // clear the context of errors (note: the way this works is that the context
     // is mutated by js-slang anyway, so it's ok to do it like this)
     context.errors.length = 0;
-    const compiled: ReturnType<typeof compile> = yield call(
+    const compiled: MaybePromise<ReturnType<typeof compile>> = yield call(
       compileFiles,
       files,
       entrypointFilePath,

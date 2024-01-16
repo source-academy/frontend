@@ -9,6 +9,7 @@ const mockShortDefaultState: SavedState = {
     refreshToken: defaultState.session.refreshToken,
     courseRegId: defaultState.session.courseRegId,
     role: defaultState.session.role,
+    group: defaultState.session.group,
     name: defaultState.session.name,
     userId: defaultState.session.userId,
     courses: defaultState.session.courses,
@@ -33,7 +34,12 @@ const mockShortDefaultState: SavedState = {
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
   playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
   playgroundLanguage: defaultState.playground.languageConfig,
-  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary
+  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
+  stories: {
+    userId: defaultState.stories.userId,
+    groupId: defaultState.stories.groupId,
+    role: defaultState.stories.role
+  }
 };
 
 describe('loadStoredState() function', () => {

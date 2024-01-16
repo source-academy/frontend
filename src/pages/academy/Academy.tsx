@@ -9,7 +9,6 @@ import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import {
-  fetchGradingOverviews,
   fetchNotifications,
   updateLatestViewedCourse
 } from '../../commons/application/actions/SessionActions';
@@ -33,7 +32,6 @@ const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(fetchNotifications());
-    dispatch(fetchGradingOverviews(false));
   }, [dispatch]);
 
   const agreedToResearch = useTypedSelector(state => state.session.agreedToResearch);
@@ -89,7 +87,7 @@ const Academy: React.FC<{}> = () => {
           }
         />
         {staffRoutes}
-        {role === Role.Admin && <Route path={'adminpanel'} element={<AdminPanel />} />}
+        {role === Role.Admin && <Route path="adminpanel" element={<AdminPanel />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

@@ -1,8 +1,9 @@
 import { h } from 'hastscript';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { defaultHandlers, toHast } from 'mdast-util-to-hast';
-import { Options as MdastToHastConverterOptions } from 'mdast-util-to-hast/lib';
+import { MdastNodes, Options as MdastToHastConverterOptions } from 'mdast-util-to-hast/lib';
 import React from 'react';
+import * as runtime from 'react/jsx-runtime';
 import { IEditorProps } from 'react-ace';
 import rehypeReact from 'rehype-react';
 import SourceBlock, { SourceBlockProps } from 'src/features/stories/storiesComponents/SourceBlock';
@@ -117,7 +118,7 @@ env:
     variant: default
 \`\`\`
 
-to create two different environments. Then, we add \`source env:iterFib\` and \`source env:recuFib\` to the parameters of the source blocks to set them to their respective environments!
+to create two different environments. Then, we add \`env:iterFib\` and \`env:recuFib\` to the metadata of the source blocks to set them to their respective environments!
 
 ## Module Support
 
@@ -146,14 +147,12 @@ export const scrollSync = (editor: IEditorProps, preview: HTMLElement) => {
 // below is typed as `any` if we use the default typings.
 // Thus, we create `HandlerType` to have type safety for the
 // `node` parameter based on the actual mdast node type.
-type HandlerOption = NonNullable<MdastToHastConverterOptions['handlers']>;
+type HandlerOption = NonNullable<Required<MdastToHastConverterOptions['handlers']>>;
+type AllowedMdElements = Exclude<keyof typeof defaultHandlers, 'toml'>;
+type MdastNodeType<key extends AllowedMdElements> = Extract<MdastNodes, { type: key }>;
 type HandlerType = {
-  [key in keyof typeof defaultHandlers]?: (
-    ...args: ReplaceTypeAtIndex<
-      Parameters<HandlerOption[key]>,
-      1,
-      Parameters<(typeof defaultHandlers)[key]>[1]
-    >
+  [key in AllowedMdElements]?: (
+    ...args: ReplaceTypeAtIndex<Parameters<HandlerOption[key]>, 1, MdastNodeType<key>>
   ) => ReturnType<HandlerOption[key]>;
 };
 
@@ -182,13 +181,12 @@ export const renderStoryMarkdown = (markdown: string): React.ReactNode => {
   return (
     unified()
       .use(rehypeReact, {
-        createElement: React.createElement,
-        Fragment: React.Fragment,
+        ...runtime,
         components: {
           'source-block': SourceBlock
-          // Disable typecheck as "source-block" is not a standard HTML tag
-        } as any
-      })
+        }
+        // Disable typecheck as "source-block" is not a standard HTML tag
+      } as any)
       // We use `any` due to incompatible type definitions (although it
       // actually works). Either way, this is never exposed, and so is okay.
       .stringify(hast as any)

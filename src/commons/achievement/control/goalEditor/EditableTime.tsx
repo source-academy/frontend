@@ -1,7 +1,7 @@
 import { Button, Dialog } from '@blueprintjs/core';
 import { TimePicker } from '@blueprintjs/datetime';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { prettifyTime } from 'src/commons/achievement/utils/DateHelper';
 
 type EditableTimeProps = {
@@ -10,9 +10,7 @@ type EditableTimeProps = {
   changeTime: (time?: Date) => void;
 };
 
-function EditableTime(props: EditableTimeProps) {
-  const { type, time, changeTime } = props;
-
+const EditableTime: React.FC<EditableTimeProps> = ({ type, time, changeTime }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
 
@@ -40,6 +38,6 @@ function EditableTime(props: EditableTimeProps) {
       </Dialog>
     </>
   );
-}
+};
 
 export default EditableTime;

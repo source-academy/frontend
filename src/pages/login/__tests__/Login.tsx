@@ -95,7 +95,7 @@ describe('Login', () => {
     expect(navigateSpy).toBeCalledWith('/welcome');
   });
 
-  test('Redirects to /courses/${courseId} when isLoggedIn and has course', () => {
+  test('Redirects to /courses/:courseId when isLoggedIn and has course', () => {
     const navigateSpy = jest.fn();
     jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(navigateSpy);
 

@@ -9,6 +9,7 @@ export const mockGradingOverviews: GradingOverview[] = [
   {
     xpAdjustment: 0,
     assessmentType: 'Missions',
+    assessmentNumber: 'M1A',
     assessmentId: 0,
     assessmentName: 'Mission 0 ',
     questions: '',
@@ -18,6 +19,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
+    studentUsername: 'E0123456',
     submissionId: 1,
     submissionStatus: 'submitted',
     groupName: '1D',
@@ -28,6 +30,7 @@ export const mockGradingOverviews: GradingOverview[] = [
   {
     xpAdjustment: -2,
     assessmentType: 'Missions',
+    assessmentNumber: 'M2',
     assessmentId: 1,
     assessmentName: 'Mission 1',
     questions: '',
@@ -37,6 +40,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
+    studentUsername: 'E0000000',
     submissionId: 2,
     submissionStatus: 'submitted',
     groupName: '1F',
@@ -47,6 +51,7 @@ export const mockGradingOverviews: GradingOverview[] = [
   {
     xpAdjustment: 4,
     assessmentType: 'Missions',
+    assessmentNumber: 'M3',
     assessmentId: 0,
     assessmentName: 'Mission 0',
     questions: '',
@@ -56,6 +61,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 1000,
     studentId: 1,
     studentName: 'May Trix',
+    studentUsername: 'E0000001',
     submissionId: 3,
     submissionStatus: 'submitted',
     groupName: '1F',
@@ -211,6 +217,7 @@ _italics_
     },
     student: {
       name: 'Al Gorithm',
+      username: 'E0123456',
       id: 0
     }
   },
@@ -301,6 +308,7 @@ New message from **Avenger**!
     },
     student: {
       name: 'Al Gorithm',
+      username: 'E0000000',
       id: 0
     }
   },
@@ -375,6 +383,7 @@ New message from **Avenger**!
     },
     student: {
       name: 'Al Gorithm',
+      username: 'E0000000',
       id: 0
     }
   }

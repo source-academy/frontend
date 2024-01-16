@@ -25,6 +25,7 @@ type RequestOptions = {
   noContentType?: boolean;
   noHeaderAccept?: boolean;
   refreshToken?: string;
+  withCredentials?: boolean;
 };
 
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -140,15 +141,23 @@ export const generateApiCallHeadersAndFetchOptions = (
   if (opts.accessToken) {
     headers.append('Authorization', `Bearer ${opts.accessToken}`);
   }
-  const fetchOpts: { method: RequestMethod; headers: Headers; body?: any } = { method, headers };
+  const fetchOpts: {
+    method: RequestMethod;
+    headers: Headers;
+    body?: any;
+    credentials?: RequestCredentials;
+  } = { method, headers };
   if (opts.body) {
     if (opts.noContentType) {
       // Content Type is not needed for sending multipart data
-      fetchOpts.body = opts.body;
+      fetchOpts.body = opts.body as any;
     } else {
       headers.append('Content-Type', 'application/json');
       fetchOpts.body = JSON.stringify(opts.body);
     }
+  }
+  if (opts.withCredentials) {
+    fetchOpts.credentials = 'include';
   }
 
   return fetchOpts;
