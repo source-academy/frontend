@@ -78,7 +78,7 @@ import {
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { computeRedirectUri } from '../../utils/AuthHelper';
+import { AuthProviderType, computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
@@ -286,7 +286,8 @@ describe('Test FETCH_AUTH action', () => {
   Constants.authProviders.set(providerId, {
     name: providerId,
     endpoint: `https://test/?client_id=${clientId}`,
-    isDefault: true
+    isDefault: true,
+    type: AuthProviderType.OAUTH2
   });
   const redirectUrl = computeRedirectUri(providerId);
 

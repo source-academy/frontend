@@ -48,8 +48,18 @@ import {
 } from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
+import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
+
+/**
+ * GET /
+ * (health check)
+ */
+export const getHealth = async (): Promise<Response | null> => {
+  const resp = await request('', 'GET', {}, Constants.backendUrl);
+  return resp;
+};
 
 /**
  * POST /auth/login
@@ -67,7 +77,8 @@ export const postAuth = async (
       ...(clientId ? { client_id: clientId } : {}),
       ...(redirectUri ? { redirect_uri: redirectUri } : {})
     },
-    errorMessage: 'Could not login. Please contact the module administrator.'
+    errorMessage: 'Could not login. Please contact the module administrator.',
+    withCredentials: true
   });
   if (!resp) {
     return null;
