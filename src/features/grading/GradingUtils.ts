@@ -20,19 +20,15 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
 
   const content = new Blob(
     [
-      '"Assessment Number","Assessment Name","Student Name","Student Username","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
+      '"Student Name","Student Username","Group","Status","Question","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
       ...gradingOverviews.map(
         e =>
           [
-            e.assessmentNumber,
-            e.assessmentName,
             e.studentName,
             e.studentUsername,
             e.groupName,
             e.submissionStatus,
-            e.gradingStatus,
-            e.questionCount,
-            e.gradedCount,
+            e.questions,
             e.initialXp,
             e.xpAdjustment,
             e.currentXp,
