@@ -150,6 +150,9 @@
     "url": "^0.11.1",
     "webpack-bundle-analyzer": "^4.9.0"
   },
+  "resolutions": {
+    "**/gl": "^6.0.2"
+  },
   "browserslist": {
     "production": [
       "Firefox ESR",
