@@ -11,6 +11,7 @@ import {
   addNewStoriesUsersToCourse,
   addNewUsersToCourse
 } from 'src/features/academy/AcademyActions';
+import { clearStoriesUserAndGroup, getStoriesUser } from 'src/features/stories/StoriesActions';
 
 import {
   deleteAssessmentConfig,
@@ -145,6 +146,11 @@ const AdminPanel: React.FC = () => {
   const submitHandler = () => {
     if (hasChangesCourseConfig) {
       dispatch(updateCourseConfig(courseConfiguration));
+      if (courseConfiguration.enableStories) {
+        dispatch(getStoriesUser());
+      } else {
+        dispatch(clearStoriesUserAndGroup());
+      }
       setHasChangesCourseConfig(false);
     }
     if (assessmentConfigsToDelete.length > 0) {
