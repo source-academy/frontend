@@ -12,7 +12,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
 import {
   Flex,
@@ -22,7 +22,7 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-  Text,
+  Text
 } from '@tremor/react';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -31,12 +31,10 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateGroundControlTableFilters } from 'src/commons/workspace/WorkspaceActions';
 
-import {
-  updateAssessmentOverviews
-} from '../../../commons/application/actions/SessionActions';
+import { updateAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
 import {
   AssessmentConfiguration,
-  AssessmentOverview,
+  AssessmentOverview
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { AssessmentTypeBadge } from '../grading/subcomponents/GradingBadges';
@@ -67,16 +65,18 @@ export type StateProps = {
 
 const columnHelper = createColumnHelper<AssessmentOverview>();
 
-const GroundControl: React.FC<GroundControlProps> = (props) => {
+const GroundControl: React.FC<GroundControlProps> = props => {
   const [showDropzone, setShowDropzone] = React.useState(false);
   const [hasChangesAssessmentOverview, setHasChangesAssessmentOverview] = React.useState(false);
 
   const dispatch = useDispatch();
 
-  const tableFilters = useTypedSelector(state => state.workspaces.groundControl.GroundControlTableFilters);
-  
+  const tableFilters = useTypedSelector(
+    state => state.workspaces.groundControl.GroundControlTableFilters
+  );
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters,
+    ...tableFilters.columnFilters
   ]);
 
   const session = useTypedSelector(state => state.session);
@@ -93,9 +93,7 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
   useEffect(() => {
     // props.handleAssessmentOverviewFetch();
     // props.handleFetchCourseConfigs();
-    dispatch(
-      updateGroundControlTableFilters({columnFilters})
-    );
+    dispatch(updateGroundControlTableFilters({ columnFilters }));
   }, [columnFilters, dispatch]);
 
   const EditTeamSizeCellProps = React.useMemo(() => {
@@ -115,18 +113,18 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
       dispatch(updateAssessmentOverviews(assessmentOverviews.current!));
       setHasChangesAssessmentOverview(false);
     }
-  }
+  };
 
   const columns = [
     columnHelper.accessor('id', {
       header: 'ID',
-      cell: info => <span>{info.getValue()}</span>,
+      cell: info => <span>{info.getValue()}</span>
     }),
     columnHelper.accessor('title', {
       header: 'Title',
       cell: info => <span>{info.getValue()}</span>,
       enableSorting: true,
-      sortingFn:'alphanumeric'
+      sortingFn: 'alphanumeric'
     }),
     columnHelper.accessor('type', {
       header: 'Category',
@@ -135,35 +133,57 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
           <AssessmentTypeBadge type={info.getValue()} />
         </Filterable>
       ),
-      enableSorting: true,
+      enableSorting: true
     }),
     columnHelper.accessor('openAt', {
       header: 'Open Date',
-      cell: info => <EditCell handleAssessmentChangeDate={props.handleAssessmentChangeDate} data={info.row.original} forOpenDate={true} />,
-      enableSorting: true,
+      cell: info => (
+        <EditCell
+          handleAssessmentChangeDate={props.handleAssessmentChangeDate}
+          data={info.row.original}
+          forOpenDate={true}
+        />
+      ),
+      enableSorting: true
     }),
     columnHelper.accessor('closeAt', {
       header: 'Close Date',
-      cell: info => <EditCell handleAssessmentChangeDate={props.handleAssessmentChangeDate} data={info.row.original} forOpenDate={false} />,
-      enableSorting: true,
+      cell: info => (
+        <EditCell
+          handleAssessmentChangeDate={props.handleAssessmentChangeDate}
+          data={info.row.original}
+          forOpenDate={false}
+        />
+      ),
+      enableSorting: true
     }),
     columnHelper.accessor('maxTeamSize', {
-      header: "Max Team Size",
-      cell: info => <EditTeamSizeCell 
-        {...EditTeamSizeCellProps}
-        data={info.row.original}></EditTeamSizeCell>
+      header: 'Max Team Size',
+      cell: info => (
+        <EditTeamSizeCell {...EditTeamSizeCellProps} data={info.row.original}></EditTeamSizeCell>
+      )
     }),
     columnHelper.accessor('isPublished', {
       header: 'Publish',
-      cell: info => <PublishCell handlePublishAssessment={props.handlePublishAssessment} data={info.row.original} />,
-      enableSorting: false,
+      cell: info => (
+        <PublishCell
+          handlePublishAssessment={props.handlePublishAssessment}
+          data={info.row.original}
+        />
+      ),
+      enableSorting: false
     }),
     columnHelper.display({
       header: 'Delete',
       size: 100,
-      cell: info => <DeleteCell handleDeleteAssessment={props.handleDeleteAssessment} data={info.row.original} />,
-      enableSorting: false,
-    }),
+      cell: info => (
+        <DeleteCell
+          handleDeleteAssessment={props.handleDeleteAssessment}
+          data={info.row.original}
+        />
+      ),
+      enableSorting: false
+    })
   ];
 
   const controls = (
@@ -231,13 +251,8 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
               {headerGroup.headers.map(header => (
                 <TableHeaderCell key={header.id}>
                   {header.isPlaceholder ? null : (
-                      <div>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </div>
-                    )}
+                    <div>{flexRender(header.column.columnDef.header, header.getContext())}</div>
+                  )}
                 </TableHeaderCell>
               ))}
             </TableRow>
@@ -248,9 +263,9 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
             <TableRow key={row.id}>
               {row.getVisibleCells().map(cell => (
                 <TableCell key={cell.id}>
-                  {cell.getIsPlaceholder() 
-                  ? null
-                  : flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {cell.getIsPlaceholder()
+                    ? null
+                    : flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
             </TableRow>
@@ -261,10 +276,7 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
         <Button
           text="Update"
           style={{ marginTop: '15px' }}
-          intent={hasChangesAssessmentOverview
-              ? Intent.WARNING
-              : Intent.NONE
-          }
+          intent={hasChangesAssessmentOverview ? Intent.WARNING : Intent.NONE}
           onClick={submitHandler}
         />
       </div>
@@ -291,7 +303,7 @@ const GroundControl: React.FC<GroundControlProps> = (props) => {
       <ContentDisplay display={content} loadContentDispatch={loadContent} />
     </div>
   );
-}
+};
 
 type FilterableProps = {
   column: Column<any, unknown>;

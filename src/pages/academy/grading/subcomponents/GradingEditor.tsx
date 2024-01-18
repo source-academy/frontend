@@ -47,6 +47,7 @@ type OwnProps = {
   xpAdjustment: number;
   maxXp: number;
   studentName: string | undefined;
+  studentUsername: string | undefined;
   comments: string;
   graderName?: string;
   gradedAt?: string;
@@ -234,7 +235,22 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
       />
 
       <div className="grading-editor-header">
-        <H3>Currently Grading: {props.studentName}</H3>
+        <H3>
+          Currently Grading:
+          <br />
+          {props.studentName
+            ? props.studentName.split(',').map((student, index) => {
+                const usernameList = props.studentUsername ? props.studentUsername.split(',') : [];
+                const username = usernameList.length > index ? usernameList[index].trim() : '';
+                return (
+                  <div key={index}>
+                    {student.trim()} ({username && <span>{username}</span>})
+                    <br />
+                  </div>
+                );
+              })
+            : props.studentName}
+        </H3>
       </div>
       {props.solution !== null ? (
         <div className="grading-editor-marking-scheme">

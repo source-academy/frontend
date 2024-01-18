@@ -150,7 +150,7 @@ import {
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-function selectTokens() {
+export function selectTokens() {
   return select((state: OverallState) => ({
     accessToken: state.session.accessToken,
     refreshToken: state.session.refreshToken
@@ -217,16 +217,23 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      return yield routerNavigate(`/courses/${courseRegistration.courseId}`);
-    }
 
-    return yield routerNavigate('/welcome');
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+    }
+    /**
+     * NOTE: Navigation logic is now handled in <Login /> component.
+     * - Due to route hoisting in react-router v6, which requires us to declare routes at the top level,
+     *   we need to rerender the router to include Academy routes when the user logs in, which occurs in ApplicationWrapper.tsx.
+     * - However, the current router instance we have access to HERE in this saga via `routerNavigate` is the old router instance.
+     * - Thus handling navigation in <Login /> allows us to directly access the latest router via `useNavigate`.
+     */
   });
 
   yield takeEvery(
     FETCH_USER_AND_COURSE,
     function* (action: ReturnType<typeof actions.fetchUserAndCourse>): any {
-      const tokens = yield selectTokens();
+      const tokens: Tokens = yield selectTokens();
 
       const {
         user,
@@ -256,6 +263,9 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.setCourseRegistration(courseRegistration));
         yield put(actions.setCourseConfiguration(courseConfiguration));
         yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
       }
     }
   );
@@ -265,6 +275,9 @@ function* BackendSaga(): SagaIterator {
     const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
     if (config) {
       yield put(actions.setCourseConfiguration(config));
+
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
     }
   });
 
@@ -315,9 +328,15 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
     const tokens: Tokens = yield selectTokens();
 
-    const assessmentId = action.payload;
+    const { assessmentId, assessmentPassword } = action.payload;
 
-    const assessment: Assessment | null = yield call(getAssessment, assessmentId, tokens);
+    const assessment: Assessment | null = yield call(
+      getAssessment,
+      assessmentId,
+      tokens,
+      undefined,
+      assessmentPassword
+    );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
     }
@@ -878,6 +897,10 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield put(actions.setCourseRegistration(courseRegistration));
+
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
     }
   );

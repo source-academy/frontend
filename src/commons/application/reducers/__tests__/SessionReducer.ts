@@ -387,6 +387,7 @@ const gradingTest1: Grading = [
     question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
     student: {
       name: 'test student',
+      username: 'E0123456',
       id: 234
     },
     grade: {
@@ -402,6 +403,7 @@ const gradingTest2: Grading = [
     question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
     student: {
       name: 'another test student',
+      username: 'E0000000',
       id: 345
     },
     grade: {
@@ -475,6 +477,7 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
 const gradingOverviewTest1: GradingOverview[] = [
   {
     assessmentId: 1,
+    assessmentNumber: 'M1A',
     assessmentName: 'test assessment',
     assessmentType: 'Contests',
     initialXp: 0,
@@ -484,6 +487,7 @@ const gradingOverviewTest1: GradingOverview[] = [
     maxXp: 500,
     studentId: 100,
     studentName: 'test student',
+    studentUsername: 'E0123456',
     submissionId: 1,
     submissionStatus: 'attempting',
     groupName: 'group',
@@ -496,6 +500,7 @@ const gradingOverviewTest1: GradingOverview[] = [
 const gradingOverviewTest2: GradingOverview[] = [
   {
     assessmentId: 2,
+    assessmentNumber: 'P2',
     assessmentName: 'another assessment',
     assessmentType: 'Quests',
     initialXp: 20,
@@ -505,6 +510,7 @@ const gradingOverviewTest2: GradingOverview[] = [
     maxXp: 1000,
     studentId: 20,
     studentName: 'another student',
+    studentUsername: 'E0000000',
     submissionId: 2,
     submissionStatus: 'attempted',
     groupName: 'another group',

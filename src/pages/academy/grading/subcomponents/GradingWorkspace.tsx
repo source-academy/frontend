@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
 import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   beginClearContext,
@@ -64,6 +65,12 @@ type GradingWorkspaceProps = {
 };
 
 const workspaceLocation: WorkspaceLocation = 'grading';
+const unansweredPrependValue: string = `// This answer does not have significant changes from the given solution
+// template and has thus been flagged as unanswered.
+// If you think this is wrong, please ignore and grade accordingly.
+
+
+`;
 
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
@@ -168,7 +175,14 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
 
     if (question.type === QuestionTypes.programming) {
       if (question.answer) {
-        answer = question.answer as string;
+        if (question.answer.trim() === question.solutionTemplate.trim()) {
+          answer = unansweredPrependValue + question.answer;
+          showSimpleErrorDialog({
+            contents: 'Question has not been answered.'
+          });
+        } else {
+          answer = question.answer as string;
+        }
       } else {
         answer = question.solutionTemplate || '';
       }
@@ -238,6 +252,12 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       if (!editorValue) {
         editorValue = questionData.solutionTemplate!;
       }
+      if (editorValue.trim() === questionData.solutionTemplate?.trim()) {
+        showSimpleErrorDialog({
+          contents: 'Question has not been answered.'
+        });
+        editorValue = unansweredPrependValue + editorValue;
+      }
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -288,6 +308,11 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
               grading![questionId].student.name
                 ? grading![questionId].student.name
                 : grading![questionId].team?.map(member => member.name).join(', ')
+            }
+            studentUsername={
+              grading![questionId].student.username
+                ? grading![questionId].student.username
+                : grading![questionId].team?.map(member => member.username).join(', ')
             }
             comments={grading![questionId].grade.comments ?? ''}
             graderName={

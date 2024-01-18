@@ -296,7 +296,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
     </NavLink>
     <NavLink
       className={[Function]}
-      title="Story Simulator"
+      title="Game Simulator"
       to="/courses/0/storysimulator"
     >
       <Blueprint4.Icon
@@ -305,7 +305,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       <div
         className="navbar-button-text hidden-xs hidden-sm hidden-md"
       >
-        Story Simulator
+        Game Simulator
       </div>
     </NavLink>
     <NavLink
@@ -531,7 +531,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, T
     </NavLink>
     <NavLink
       className={[Function]}
-      title="Story Simulator"
+      title="Game Simulator"
       to="/courses/0/storysimulator"
     >
       <Blueprint4.Icon
@@ -540,7 +540,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, T
       <div
         className="navbar-button-text hidden-xs hidden-sm hidden-md"
       >
-        Story Simulator
+        Game Simulator
       </div>
     </NavLink>
     <NavLink

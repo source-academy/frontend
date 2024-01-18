@@ -8,10 +8,7 @@ type GroundControlFiltersProps = {
   onFilterRemove: (filter: ColumnFilter) => void;
 };
 
-const GroundControlFilters: React.FC<GroundControlFiltersProps> = ({
-  filters,
-  onFilterRemove
-}) => {
+const GroundControlFilters: React.FC<GroundControlFiltersProps> = ({ filters, onFilterRemove }) => {
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-1">
       {filters.map(filter => (

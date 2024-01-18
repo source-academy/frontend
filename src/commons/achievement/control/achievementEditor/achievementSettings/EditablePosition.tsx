@@ -1,6 +1,6 @@
 import { Button, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditablePositionProps = {
@@ -8,9 +8,7 @@ type EditablePositionProps = {
   position: number;
 };
 
-function EditablePosition(props: EditablePositionProps) {
-  const { changePosition, position } = props;
-
+const EditablePosition: React.FC<EditablePositionProps> = ({ changePosition, position }) => {
   const inferencer = useContext(AchievementContext);
   const maxPosition = inferencer.listTaskUuids().length + 1;
   const positionOptions = [...Array(maxPosition + 1).keys()]; // [0..maxPosition + 1]
@@ -30,6 +28,6 @@ function EditablePosition(props: EditablePositionProps) {
       <Button text={position} />
     </PositionSelect>
   );
-}
+};
 
 export default EditablePosition;

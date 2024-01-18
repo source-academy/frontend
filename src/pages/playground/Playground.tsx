@@ -258,6 +258,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sideContentHeight,
     sharedbConnected,
     usingSubst,
+    usingEnv,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
@@ -651,16 +652,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => (
       <ControlBarStepLimit
         stepLimit={stepLimit}
-        handleChangeStepLimit={limit => dispatch(changeStepLimit(limit, workspaceLocation))}
+        stepSize={usingSubst ? 2 : 1}
+        handleChangeStepLimit={limit => {
+          dispatch(changeStepLimit(limit, workspaceLocation));
+          usingEnv && dispatch(toggleUpdateEnv(true, workspaceLocation));
+        }}
         handleOnBlurAutoScale={limit => {
-          limit % 2 === 0
+          limit % 2 === 0 || !usingSubst
             ? dispatch(changeStepLimit(limit, workspaceLocation))
             : dispatch(changeStepLimit(limit + 1, workspaceLocation));
+          usingEnv && dispatch(toggleUpdateEnv(true, workspaceLocation));
         }}
         key="step_limit"
       />
     ),
-    [dispatch, stepLimit, workspaceLocation]
+    [dispatch, stepLimit, usingSubst, usingEnv, workspaceLocation]
   );
 
   const getEditorValue = useCallback(
@@ -997,7 +1003,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
-          : usingSubst
+          : usingSubst || usingEnv
           ? stepperStepLimit
           : executionTime
       ]
@@ -1020,7 +1026,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       workspaceLocation: workspaceLocation,
       sideContentHeight: sideContentHeight
     },
-    sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
+    sideContentIsResizeable:
+      selectedTab !== SideContentType.substVisualizer &&
+      selectedTab !== SideContentType.envVisualizer
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

@@ -11,7 +11,14 @@ jest.mock('react-redux', () => ({
 const useSelectorMock = useSelector as jest.Mock;
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
-const staffRoutes = ['grading', 'groundcontrol', 'sourcereel', 'storysimulator', 'dashboard', 'teamformation'];
+const staffRoutes = [
+  'grading',
+  'groundcontrol',
+  'sourcereel',
+  'storysimulator',
+  'dashboard',
+  'teamformation'
+];
 const adminRoutes = ['adminpanel', 'xpcalculation'];
 const courseId = 0;
 const createCoursePath = (path: string) => `/courses/${courseId}/${path}`;

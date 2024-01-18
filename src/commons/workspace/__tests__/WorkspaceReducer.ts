@@ -164,6 +164,18 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     githubAssessment: {
       ...defaultWorkspaceManager.githubAssessment,
       ...cloneDeep(payload)
+    },
+    stories: {
+      ...defaultWorkspaceManager.stories,
+      ...cloneDeep(payload)
+    },
+    teamFormation: {
+      ...defaultWorkspaceManager.teamFormation,
+      ...cloneDeep(payload)
+    },
+    groundControl: {
+      ...defaultWorkspaceManager.groundControl,
+      ...cloneDeep(payload)
     }
   };
 }

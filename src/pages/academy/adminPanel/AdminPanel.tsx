@@ -7,7 +7,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { addNewUsersToCourse } from 'src/features/academy/AcademyActions';
+import {
+  addNewStoriesUsersToCourse,
+  addNewUsersToCourse
+} from 'src/features/academy/AcademyActions';
 
 import {
   deleteAssessmentConfig,
@@ -24,6 +27,7 @@ import {
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import AddStoriesUserPanel, { NameUsernameRole } from './subcomponents/AddStoriesUserPanel';
 import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
@@ -82,7 +86,7 @@ const AdminPanel: React.FC = () => {
       enableSourcecast: session.enableSourcecast,
       moduleHelpText: session.moduleHelpText
     });
-    
+
     // IMPT: To prevent mutation of props
     assessmentConfig.current = cloneDeep(session.assessmentConfigurations);
   }, [session]);
@@ -127,6 +131,11 @@ const AdminPanel: React.FC = () => {
   const addUserPanelProps = {
     handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) =>
       dispatch(addNewUsersToCourse(users, provider))
+  };
+
+  const addStoriesUserPanelProps = {
+    handleAddNewUsersToCourse: (users: NameUsernameRole[], provider: string) =>
+      dispatch(addNewStoriesUsersToCourse(users, provider))
   };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
@@ -180,6 +189,11 @@ const AdminPanel: React.FC = () => {
         />
         <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
         <Tab id="add-users" title="Add Users" panel={<AddUserPanel {...addUserPanelProps} />} />
+        <Tab
+          id="add-stories-users"
+          title="Add Stories Users"
+          panel={<AddStoriesUserPanel {...addStoriesUserPanelProps} />}
+        />
         <Tab id="notification-config" title="Notifications" panel={<NotificationConfigPanel />} />
       </Tabs>
     </div>

@@ -109,7 +109,7 @@ const Academy: React.FC<{}> = () => {
           }
         />
         {staffRoutes}
-        {role === Role.Admin && <Route path={'adminpanel'} element={<AdminPanel />} />}
+        {role === Role.Admin && <Route path="adminpanel" element={<AdminPanel />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
