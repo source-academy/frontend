@@ -105,7 +105,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={178.00390625}
+    x={178.060546875}
     y={5}
   >
     <Tag
@@ -126,7 +126,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
   </Label>
   <Label
     visible={false}
-    x={183.00390625}
+    x={183.060546875}
     y={45}
   >
     <Tag
@@ -1017,7 +1017,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 "
+      data="M 195.1513671875 40 L 316.12109375 555 L 316.12109375 555 M 195.1513671875 40 L 316.12109375 555 L 316.12109375 555 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -1028,9 +1028,9 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       pointerWidth={10}
       points={
         Array [
-          195.009765625,
+          195.1513671875,
           40,
-          316.0078125,
+          316.12109375,
           555,
         ]
       }
