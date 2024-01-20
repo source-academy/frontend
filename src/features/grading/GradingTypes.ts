@@ -23,8 +23,10 @@ export type GradingOverview = {
   currentXp: number;
   maxXp: number;
   studentId: number;
-  studentName: string;
-  studentUsername: string;
+  studentName: string | undefined;
+  studentNames: string[] | undefined;
+  studentUsername: string | undefined;
+  studentUsernames: string[] | undefined;
   submissionId: number;
   submissionStatus: string;
   groupName: string;

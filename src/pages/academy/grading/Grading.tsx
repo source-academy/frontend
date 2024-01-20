@@ -79,7 +79,12 @@ const Grading: React.FC = () => {
 
   const submissions =
     gradingOverviews?.map(e =>
-      !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
+      !e.studentName
+        ? {
+            ...e,
+            studentName: Array.isArray(e.studentNames) ? e.studentNames.join(', ') : e.studentNames
+          }
+        : e
     ) ?? [];
 
   return (

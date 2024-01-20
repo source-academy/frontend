@@ -54,11 +54,23 @@ const columns = [
   }),
   columnHelper.accessor('studentName', {
     header: 'Student(s)',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => {
+      const value = info.getValue();
+      const fallbackValue = info.row.original.studentNames; // get studentNames from the row values
+      const finalValue = Array.isArray(value) ? value.join(', ') : value || '';
+      const finalFallbackValue = Array.isArray(fallbackValue) ? fallbackValue.join(', ') : fallbackValue || '';
+      return <Filterable column={info.column} value={finalValue !== '' ? finalValue : finalFallbackValue} />
+    }
   }),
   columnHelper.accessor('studentUsername', {
     header: 'Username(s)',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => {
+      const value = info.getValue();
+      const fallbackValue = info.row.original.studentUsernames; // get studentUsernames from the row values
+      const finalValue = Array.isArray(value) ? value.join(', ') : value || '';
+      const finalFallbackValue = Array.isArray(fallbackValue) ? fallbackValue.join(', ') : fallbackValue || '';
+      return <Filterable column={info.column} value={finalValue !== '' ? finalValue : finalFallbackValue} />
+    }
   }),
   columnHelper.accessor('groupName', {
     header: 'Group',

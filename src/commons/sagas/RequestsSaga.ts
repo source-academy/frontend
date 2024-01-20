@@ -662,14 +662,18 @@ export const getGradingOverviews = async (
         assessmentName: overview.assessment.title,
         assessmentType: overview.assessment.type,
         studentId: overview.student ? overview.student.id : -1,
-        studentName: overview.student
-          ? overview.student.name
-          : overview.team.team_members.map((member: { name: any }) => member.name).join(', '),
-        studentUsername: overview.student
-          ? overview.student.name
-          : overview.team.team_members
+        studentName: overview.student ? overview.student.name : undefined,
+        studentNames: overview.team
+          ? overview.team.team_members
+            .map((member: { name: any }) => member.name)
+            .join(', ')
+          : undefined,
+        studentUsername: overview.student ? overview.student.name : undefined,
+        studentUsernames: overview.team
+          ? overview.team.team_members
               .map((member: { username: any }) => member.username)
-              .join(', '),
+              .join(', ')
+          : undefined,
         submissionId: overview.id,
         submissionStatus: overview.status,
         groupName: overview.student ? overview.student.groupName : '-',
