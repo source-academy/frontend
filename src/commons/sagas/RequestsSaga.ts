@@ -664,9 +664,7 @@ export const getGradingOverviews = async (
         studentId: overview.student ? overview.student.id : -1,
         studentName: overview.student ? overview.student.name : undefined,
         studentNames: overview.team
-          ? overview.team.team_members
-            .map((member: { name: any }) => member.name)
-            .join(', ')
+          ? overview.team.team_members.map((member: { name: any }) => member.name).join(', ')
           : undefined,
         studentUsername: overview.student ? overview.student.name : undefined,
         studentUsernames: overview.team

@@ -58,8 +58,15 @@ const columns = [
       const value = info.getValue();
       const fallbackValue = info.row.original.studentNames; // get studentNames from the row values
       const finalValue = Array.isArray(value) ? value.join(', ') : value || '';
-      const finalFallbackValue = Array.isArray(fallbackValue) ? fallbackValue.join(', ') : fallbackValue || '';
-      return <Filterable column={info.column} value={finalValue !== '' ? finalValue : finalFallbackValue} />
+      const finalFallbackValue = Array.isArray(fallbackValue)
+        ? fallbackValue.join(', ')
+        : fallbackValue || '';
+      return (
+        <Filterable
+          column={info.column}
+          value={finalValue !== '' ? finalValue : finalFallbackValue}
+        />
+      );
     }
   }),
   columnHelper.accessor('studentUsername', {
@@ -68,8 +75,15 @@ const columns = [
       const value = info.getValue();
       const fallbackValue = info.row.original.studentUsernames; // get studentUsernames from the row values
       const finalValue = Array.isArray(value) ? value.join(', ') : value || '';
-      const finalFallbackValue = Array.isArray(fallbackValue) ? fallbackValue.join(', ') : fallbackValue || '';
-      return <Filterable column={info.column} value={finalValue !== '' ? finalValue : finalFallbackValue} />
+      const finalFallbackValue = Array.isArray(fallbackValue)
+        ? fallbackValue.join(', ')
+        : fallbackValue || '';
+      return (
+        <Filterable
+          column={info.column}
+          value={finalValue !== '' ? finalValue : finalFallbackValue}
+        />
+      );
     }
   }),
   columnHelper.accessor('groupName', {
