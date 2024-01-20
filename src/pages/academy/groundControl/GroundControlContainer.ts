@@ -24,7 +24,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleAssessmentChangeDate: changeDateAssessment,
-      // handleAssessmentChangeTeamSize: changeTeamSizeAssessment,
       handleAssessmentOverviewFetch: fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
