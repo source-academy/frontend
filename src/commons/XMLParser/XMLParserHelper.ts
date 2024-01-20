@@ -203,7 +203,7 @@ const makeProgramming = (
     testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
     testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
     answer: solution ? (solution[0] as string).trim() : '',
-    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
+    lastModifiedAt: new Date().toISOString(),
     type: 'programming'
   };
   if (problem.SNIPPET[0].GRADER) {
