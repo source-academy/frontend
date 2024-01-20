@@ -291,6 +291,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     props: GradingWorkspaceProps,
     questionId: number
   ) => {
+    
+    console.log(grading![questionId].student);
     const tabs: SideContentTab[] = [
       {
         label: `Grading: Question ${questionId + 1}`,
@@ -304,15 +306,15 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             initialXp={grading![questionId].grade.xp}
             xpAdjustment={grading![questionId].grade.xpAdjustment}
             maxXp={grading![questionId].question.maxXp}
-            studentName={
+            studentNames={
               grading![questionId].student.name
-                ? grading![questionId].student.name
-                : grading![questionId].team?.map(member => member.name).join(', ')
+              ? [grading![questionId].student.name] 
+              : grading![questionId].team!.map(member => member.name)
             }
-            studentUsername={
+            studentUsernames={
               grading![questionId].student.username
-                ? grading![questionId].student.username
-                : grading![questionId].team?.map(member => member.username).join(', ')
+              ? [grading![questionId].student.username]
+              : grading![questionId].team!.map(member => member.username)
             }
             comments={grading![questionId].grade.comments ?? ''}
             graderName={
@@ -378,6 +380,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
 
     return sideContentProps;
   };
+
 
   /** Pre-condition: Grading has been loaded */
   const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
