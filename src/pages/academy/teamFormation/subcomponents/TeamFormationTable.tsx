@@ -61,7 +61,7 @@ const columns = [
           <Filterable column={info.column} value={name}>
             {name}
           </Filterable>
-          {'  '}
+          {', '}
         </React.Fragment>
       )),
     filterFn: (row: Row<TeamFormationOverview>, id: string | number, filterValue: any): boolean => {
