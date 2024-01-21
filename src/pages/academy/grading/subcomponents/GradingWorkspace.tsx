@@ -291,7 +291,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     props: GradingWorkspaceProps,
     questionId: number
   ) => {
-    console.log(grading![questionId].student);
     const tabs: SideContentTab[] = [
       {
         label: `Grading: Question ${questionId + 1}`,

@@ -1,6 +1,3 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-
 import { Button, Collapse, Divider, Icon as BpIcon, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
@@ -25,8 +22,7 @@ import {
   Text
 } from '@tremor/react';
 import { cloneDeep } from 'lodash';
-import { useEffect, useState } from 'react';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateGroundControlTableFilters } from 'src/commons/workspace/WorkspaceActions';
@@ -91,8 +87,6 @@ const GroundControl: React.FC<GroundControlProps> = props => {
   }, [session]);
 
   useEffect(() => {
-    // props.handleAssessmentOverviewFetch();
-    // props.handleFetchCourseConfigs();
     dispatch(updateGroundControlTableFilters({ columnFilters }));
   }, [columnFilters, dispatch]);
 
