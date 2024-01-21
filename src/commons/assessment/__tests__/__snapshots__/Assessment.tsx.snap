@@ -230,13 +230,11 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       }
                     />
                   </div>
-                  <div
-                    className="listing-team_information"
-                  >
+                  <div>
                     <h6
                       className="bp4-heading"
                     >
-                       This is a team assessment. 
+                       This is an individual assessment. 
                     </h6>
                   </div>
                   <div
@@ -424,13 +422,11 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       }
                     />
                   </div>
-                  <div
-                    className="listing-team_information"
-                  >
+                  <div>
                     <h6
                       className="bp4-heading"
                     >
-                       This is a team assessment. 
+                       This is an individual assessment. 
                     </h6>
                   </div>
                   <div
@@ -1044,13 +1040,11 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       }
                     />
                   </div>
-                  <div
-                    className="listing-team_information"
-                  >
+                  <div>
                     <h6
                       className="bp4-heading"
                     >
-                       This is a team assessment. 
+                       This is an individual assessment. 
                     </h6>
                   </div>
                   <div
@@ -1286,13 +1280,11 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       }
                     />
                   </div>
-                  <div
-                    className="listing-team_information"
-                  >
+                  <div>
                     <h6
                       className="bp4-heading"
                     >
-                       This is a team assessment. 
+                       This is an individual assessment. 
                     </h6>
                   </div>
                   <div
