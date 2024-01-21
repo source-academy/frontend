@@ -239,7 +239,6 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
           Currently Grading:
           <br />
           {props.studentNames.map((name, index) => (
-            // console.log(name),
             <div key={index}>
               <span>
                 {name} ({props.studentUsernames[index]})
