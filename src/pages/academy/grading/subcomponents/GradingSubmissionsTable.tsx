@@ -56,11 +56,9 @@ const columns = [
     header: 'Student(s)',
     cell: info => {
       const value = info.getValue();
-      const fallbackValue = info.row.original.studentNames; // get studentNames from the row values
-      const finalValue = Array.isArray(value) ? value.join(', ') : value || '';
-      const finalFallbackValue = Array.isArray(fallbackValue)
-        ? fallbackValue.join(', ')
-        : fallbackValue || '';
+      const fallbackValue = info.row.original.studentNames;
+      const finalValue = value || '';
+      const finalFallbackValue = fallbackValue?.join(', ') || '';
       return (
         <Filterable
           column={info.column}
@@ -73,11 +71,9 @@ const columns = [
     header: 'Username(s)',
     cell: info => {
       const value = info.getValue();
-      const fallbackValue = info.row.original.studentUsernames; // get studentUsernames from the row values
-      const finalValue = Array.isArray(value) ? value.join(', ') : value || '';
-      const finalFallbackValue = Array.isArray(fallbackValue)
-        ? fallbackValue.join(', ')
-        : fallbackValue || '';
+      const fallbackValue = info.row.original.studentUsernames;
+      const finalValue = value || '';
+      const finalFallbackValue = fallbackValue?.join(', ') || '';
       return (
         <Filterable
           column={info.column}
