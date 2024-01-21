@@ -431,7 +431,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const question = assessment!.questions[questionId];
     const isGraded = question.grader !== undefined;
     const isTeamAssessment =
-      assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 0 : false;
+      assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 1 : false;
     const isContestVoting = question?.type === QuestionTypes.voting;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
