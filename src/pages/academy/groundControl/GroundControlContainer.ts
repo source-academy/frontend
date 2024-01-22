@@ -8,7 +8,6 @@ import {
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   changeDateAssessment,
-  // changeTeamSizeAssessment,
   deleteAssessment,
   publishAssessment,
   uploadAssessment
