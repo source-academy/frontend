@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
@@ -17,7 +17,7 @@ import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLPars
 const nullFunction = () => {};
 
 const MissionControl: React.FC = () => {
-  const { assessmentConfigurations } = useTypedSelector(state => state.session);
+  const { assessmentConfigurations } = useSession();
   const assessmentTypes = assessmentConfigurations?.map(e => e.type) || [];
 
   const [editingOverview, setEditingOverview] = useState(retrieveLocalAssessmentOverview());
