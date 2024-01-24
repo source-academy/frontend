@@ -11,6 +11,7 @@ import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
+import { Text } from './Text';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */
@@ -25,6 +26,7 @@ export class ArrayUnit extends Visible {
   readonly isMainReference: boolean;
   parent: ArrayValue;
   arrow: Arrow | undefined = undefined;
+  index: Text;
 
   constructor(
     /** index of this unit in its parent */
@@ -44,6 +46,7 @@ export class ArrayUnit extends Visible {
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createCompactValue(this.data, this);
     this.isMainReference = this.value.referencedBy.length > 1;
+    this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height());
   }
 
   updatePosition = () => {};
@@ -84,6 +87,7 @@ export class ArrayUnit extends Visible {
           cornerRadius={cornerRadius}
           forwardRef={this.ref}
         />
+        {this.index.draw()}
         {this.value.draw()}
         {this.value instanceof PrimitiveValue || new ArrowFromArrayUnit(this).to(this.value).draw()}
       </React.Fragment>
