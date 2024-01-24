@@ -191,7 +191,6 @@ const handleExercise = (obj: JsonType, refs: RefType) => {
 };
 
 const handleTitle = (obj: JsonType, refs: RefType) => {
-  console.log(obj.body);
   return (
     <AnchorLink id={obj.id} refs={refs} top={6}>
       <H1>{obj.body}</H1>
