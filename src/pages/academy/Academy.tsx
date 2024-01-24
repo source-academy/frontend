@@ -7,7 +7,7 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
-import classes from 'src/styles/_academy.module.scss';
+import classes from 'src/styles/Academy.module.scss';
 
 import {
   fetchNotifications,
