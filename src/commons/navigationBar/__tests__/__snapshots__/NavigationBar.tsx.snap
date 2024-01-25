@@ -3,7 +3,7 @@
 exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
 <React.Fragment>
   <Blueprint4.Navbar
-    className="NavigationBar primary-navbar bp4-dark"
+    className="NavigationBar primary-navbar primary-navbar bp4-dark"
   >
     <Blueprint4.NavbarGroup
       align="left"
@@ -64,7 +64,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
           icon="briefcase"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Classroom
         </div>
@@ -134,7 +134,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
 exports[`NavigationBar Renders correctly for student with course 1`] = `
 <React.Fragment>
   <Blueprint4.Navbar
-    className="NavigationBar primary-navbar bp4-dark"
+    className="NavigationBar primary-navbar primary-navbar bp4-dark"
   >
     <Blueprint4.NavbarGroup
       align="left"
@@ -156,7 +156,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                   icon="flame"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Missions
                 </div>
@@ -174,7 +174,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                   icon="lightbulb"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Quests
                 </div>
@@ -192,7 +192,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                   icon="predictive-analysis"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Paths
                 </div>
@@ -210,7 +210,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                   icon="comparison"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Contests
                 </div>
@@ -228,7 +228,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                   icon="manual"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Missions
                 </div>
@@ -286,7 +286,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           icon="music"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Sourcecast
         </div>
@@ -300,7 +300,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           icon="code"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Playground
         </div>
@@ -314,7 +314,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           icon="briefcase"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Classroom
         </div>
@@ -328,7 +328,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           icon="book"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           SICP JS
         </div>
@@ -342,7 +342,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           icon="mountain"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Achievements
         </div>
@@ -356,7 +356,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           icon="git-repo"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Stories
         </div>
@@ -438,7 +438,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
 exports[`NavigationBar Renders correctly for student without course 1`] = `
 <React.Fragment>
   <Blueprint4.Navbar
-    className="NavigationBar primary-navbar bp4-dark"
+    className="NavigationBar primary-navbar primary-navbar bp4-dark"
   >
     <Blueprint4.NavbarGroup
       align="left"
@@ -499,7 +499,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
           icon="briefcase"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Classroom
         </div>
@@ -513,7 +513,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
           icon="book"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           SICP JS
         </div>
@@ -527,7 +527,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
           icon="git-repo"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Stories
         </div>

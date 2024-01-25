@@ -7,6 +7,7 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
+import classes from 'src/styles/Academy.module.scss';
 
 import {
   fetchNotifications,
@@ -48,7 +49,7 @@ const Academy: React.FC<{}> = () => {
         ]
       : null;
   return (
-    <div className="Academy">
+    <div className={classes['Academy']}>
       {/* agreedToResearch has a default value of undefined in the store.
             It will take on null/true/false when the backend returns. */}
       {Constants.showResearchPrompt && agreedToResearch === null && <ResearchAgreementPrompt />}
@@ -112,7 +113,7 @@ const CourseSelectingAcademy: React.FC<{}> = () => {
   ) : routeCourseId === courseId ? (
     <Academy />
   ) : (
-    <div className={classNames('Academy-switching-courses', Classes.DARK)}>
+    <div className={classNames(classes['Academy-switching-courses'], Classes.DARK)}>
       <Card className={Classes.ELEVATION_4}>
         <NonIdealState
           description="Switching courses..."
