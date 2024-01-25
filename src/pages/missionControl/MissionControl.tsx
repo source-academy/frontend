@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import academyClasses from 'src/styles/Academy.module.scss';
 
 import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -50,7 +51,7 @@ const MissionControl: React.FC = () => {
       closeDate: overview.closeAt
     };
     return (
-      <div className="Academy">
+      <div className={academyClasses['Academy']}>
         <EditingWorkspace {...assessmentProps} />
       </div>
     );

@@ -14,22 +14,6 @@
   }
 }
 
-.Academy {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 100%;
-}
-
-.Academy-switching-courses {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 // Fixes excessive margins in hint notifications that contain <Markdown> elements
 .markdown-notification {
   *:first-child {
