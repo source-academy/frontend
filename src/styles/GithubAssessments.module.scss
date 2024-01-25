@@ -1,3 +1,5 @@
+@import '_global';
+
 .missionBrowser {
   background-color: $cadet-color-3;
   min-width: 600px;
@@ -16,14 +18,6 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 100%;
-
-  .workspace {
-    .ControlBar {
-      .ControlBar_editingWorkspace {
-        width: 0;
-      }
-    }
-  }
 
   .SideContentMissionEditorRow {
     display: flex;

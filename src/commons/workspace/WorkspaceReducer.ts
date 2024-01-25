@@ -562,7 +562,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           isEditorAutorun: !state[workspaceLocation].isEditorAutorun
         }
       };
-    case TOGGLE_USING_SUBST:
+    case TOGGLE_USING_SUBST: {
+      const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
@@ -574,7 +575,9 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
-    case TOGGLE_USING_ENV:
+    }
+    case TOGGLE_USING_ENV: {
+      const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
@@ -586,7 +589,9 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
-    case TOGGLE_UPDATE_ENV:
+    }
+    case TOGGLE_UPDATE_ENV: {
+      const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
@@ -598,6 +603,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
+    }
     case UPDATE_SUBMISSIONS_TABLE_FILTERS:
       return {
         ...state,

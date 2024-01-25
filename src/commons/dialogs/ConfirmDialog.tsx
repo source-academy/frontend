@@ -1,10 +1,10 @@
 import {
   Button,
+  ButtonProps,
   Classes,
   Dialog,
-  IButtonProps,
+  DialogProps,
   IconName,
-  IDialogProps,
   Intent
 } from '@blueprintjs/core';
 import classNames from 'classnames';
@@ -14,12 +14,12 @@ export interface ConfirmDialogProps<T> {
   icon?: IconName;
   title?: string;
   contents?: React.ReactNode;
-  choices: Array<{ key: T; label: string; intent?: Intent; props?: IButtonProps }>;
+  choices: Array<{ key: T; label: string; intent?: Intent; props?: ButtonProps }>;
   largeButtons?: boolean;
   escapeResponse?: T;
   onResponse: (response: T) => void;
   isOpen?: boolean;
-  props?: Omit<IDialogProps, 'isOpen'>;
+  props?: Omit<DialogProps, 'isOpen'>;
 }
 
 export function ConfirmDialog<T>(
