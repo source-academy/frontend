@@ -28,6 +28,7 @@ const SOURCE_VARIANT = Variant.LAZY;
 const SOURCE_LIBRARY = ExternalLibraryName.SOUNDS;
 
 beforeAll(() => {
+  // TODO: rewrite
   const authInstance: gapi.auth2.GoogleAuth = {
     signOut: () => {},
     isSignedIn: {
@@ -62,10 +63,9 @@ beforeAll(() => {
     }
   } as any;
 });
-
+// TODO: rewrite test
 test('LOGOUT_GOOGLE causes logout', async () => {
   const signOut = jest.spyOn(window.gapi.auth2.getAuthInstance(), 'signOut');
-
   await expectSaga(PersistenceSaga).dispatch(actions.logoutGoogle()).silentRun();
   expect(signOut).toBeCalled();
 });
