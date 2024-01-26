@@ -90,12 +90,6 @@ export type ErrorOutput = {
 
 export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
 
-export enum ApplicationEnvironment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test'
-}
-
 export enum Role {
   Student = 'student',
   Staff = 'staff',
