@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
@@ -304,7 +305,14 @@ const NavigationBar: React.FC = () => {
 
   return (
     <>
-      <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
+      <Navbar
+        className={classNames(
+          'NavigationBar',
+          'primary-navbar',
+          classes['primary-navbar'],
+          Classes.DARK
+        )}
+      >
         {Constants.playgroundOnly
           ? isMobileBreakpoint
             ? renderPlaygroundOnlyNavbarLeftMobile()
@@ -376,7 +384,7 @@ export const renderNavlinksFromInfo = (
 export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   <NavLink
     className={({ isActive }) =>
-      classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+      classNames(Classes.BUTTON, Classes.MINIMAL, {
         [Classes.ACTIVE]: isActive
       })
     }
@@ -385,12 +393,7 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
     title={navbarEntry.text}
   >
     <Icon icon={navbarEntry.icon} />
-    <div
-      className={classNames(
-        'navbar-button-text',
-        navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`)
-      )}
-    >
+    <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
       {navbarEntry.text}
     </div>
     {navbarEntry.hasNotifications && (

@@ -1,33 +1,3 @@
-div.#{$ns}-dialog.about {
-  padding: 0;
-
-  div.#{$ns}-dialog-body {
-    margin-top: 10px;
-  }
-
-  div.abt {
-    margin-top: 10px;
-    text-align: justify;
-  }
-}
-
-div.#{$ns}-dialog.help {
-  padding: 0;
-  text-align: justify;
-
-  div.#{$ns}-dialog-body {
-    margin-top: 15px;
-  }
-
-  ul {
-    padding-left: 20px;
-  }
-
-  li {
-    margin-bottom: 0.5rem;
-  }
-}
-
 .profile {
   // 30% of 1366 pixels
   min-width: 410px;
