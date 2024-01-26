@@ -35,7 +35,7 @@
     "@sentry/browser": "^7.57.0",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.1.0",
-    "@szhsin/react-menu": "^3.5.3",
+    "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-table": "^8.9.3",
     "@tremor/react": "^1.8.2",
     "ace-builds": "^1.4.14",
