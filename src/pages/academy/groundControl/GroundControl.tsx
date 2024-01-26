@@ -1,5 +1,5 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
