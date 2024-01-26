@@ -2388,13 +2388,13 @@
     "@svgr/plugin-jsx" "^6.5.1"
     "@svgr/plugin-svgo" "^6.5.1"
 
-"@szhsin/react-menu@^3.5.3":
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/@szhsin/react-menu/-/react-menu-3.5.3.tgz#eb20f5921265f3663ccf5eec2d3fe2dcd61f6582"
-  integrity sha512-jxo8oaRwxmVjUzkyOi/ZJiXaZiuFPMIxFzyJdUKfnhBLYiEOVTU9M2CiPuEkirILoareR2GJj2K3y8a81CBPlw==
+"@szhsin/react-menu@^4.0.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@szhsin/react-menu/-/react-menu-4.1.0.tgz#9a5fd3029356ae7a15122e2b378924b1989f8afd"
+  integrity sha512-lYYGUxqJxM2b/jD2Cn5a9RVOvHl9VBMX8qOnHZuX1w08cO2jslykpz5P75D7WnqudLnXsJ4k4+tI+q2U8XIFYw==
   dependencies:
     prop-types "^15.7.2"
-    react-transition-state "^1.1.5"
+    react-transition-state "^2.1.0"
 
 "@tanstack/react-table@^8.9.3":
   version "8.9.3"
@@ -11152,10 +11152,10 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-transition-state@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/react-transition-state/-/react-transition-state-1.1.5.tgz#22accee21d0011b1d0245be24b6262ae67f494c3"
-  integrity sha512-ITY2mZqc2dWG2eitJkYNdcSFW8aKeOlkL2A/vowRrLL8GH3J6Re/SpD/BLvQzrVOTqjsP0b5S9N10vgNNzwMUQ==
+react-transition-state@^2.1.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-transition-state/-/react-transition-state-2.1.1.tgz#1601a6177926b647041b7d598bf124321ab8d25b"
+  integrity sha512-kQx5g1FVu9knoz1T1WkapjUgFz08qQ/g1OmuWGi3/AoEFfS0kStxrPlZx81urjCXdz2d+1DqLpU6TyLW/Ro04Q==
 
 react@^18.2.0:
   version "18.2.0"
