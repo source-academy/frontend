@@ -520,6 +520,10 @@ export class Layout {
     }
   }
 
+  static onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+    Layout.agendaComponent.animate()
+  };
+
   static draw(): React.ReactNode {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
@@ -556,6 +560,7 @@ export class Layout {
                 draggable
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
+                onMouseEnter={Layout.onMouseEnter}
               >
                 <Layer>
                   <Rect
