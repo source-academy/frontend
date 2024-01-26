@@ -23,7 +23,7 @@
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
     "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@blueprintjs/core": "^4.20.1",
