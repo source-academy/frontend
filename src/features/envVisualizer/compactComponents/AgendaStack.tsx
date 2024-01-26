@@ -120,6 +120,10 @@ export class AgendaStack extends Visible implements IHoverable {
       </Group>
     );
   }
+
+  animate() {
+    this.stackItemComponents[this.stackItemComponents.length - 1].animate();
+  }
 }
 
 /**

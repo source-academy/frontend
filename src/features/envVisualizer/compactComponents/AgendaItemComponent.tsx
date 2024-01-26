@@ -1,4 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
+import { Easings } from 'konva/lib/Tween';
 import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
@@ -9,6 +10,7 @@ import { IHoverable } from '../EnvVisualizerTypes';
 import {
   currentItemSAColor,
   getTextHeight,
+  isNumber,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -17,11 +19,14 @@ import {
 } from '../EnvVisualizerUtils';
 import { ArrowFromAgendaItemComponent } from './arrows/ArrowFromAgendaItemComponent';
 import { Frame } from './Frame';
+import { StashItemComponent } from './StashItemComponent';
 
 export class AgendaItemComponent extends Visible implements IHoverable {
   /** text to display */
   readonly text: string;
   readonly tooltipRef: RefObject<any>;
+  readonly shapeRef: RefObject<any>;
+  readonly textRef: RefObject<any>;
   readonly arrow?: ArrowFromAgendaItemComponent;
 
   constructor(
@@ -44,6 +49,8 @@ export class AgendaItemComponent extends Visible implements IHoverable {
       AgendaStashConfig.AgendaMaxTextHeight
     );
     this.tooltipRef = React.createRef();
+    this.shapeRef = React.createRef();
+    this.textRef = React.createRef();
     this.highlightOnHover = highlightOnHover;
     this.unhighlightOnHover = unhighlightOnHover;
     this._x = AgendaStashConfig.AgendaPosX;
@@ -98,6 +105,7 @@ export class AgendaItemComponent extends Visible implements IHoverable {
     return (
       <React.Fragment key={Layout.key++}>
         <Label
+          ref={this.shapeRef}
           x={this.x()}
           y={this.y()}
           onMouseEnter={this.onMouseEnter}
@@ -107,6 +115,7 @@ export class AgendaItemComponent extends Visible implements IHoverable {
           <Text
             {...ShapeDefaultProps}
             {...textProps}
+            ref={this.textRef}
             text={this.text}
             width={this.width()}
             height={this.height()}
@@ -134,5 +143,26 @@ export class AgendaItemComponent extends Visible implements IHoverable {
         {this.arrow?.draw()}
       </React.Fragment>
     );
+  }
+
+  animate() {
+    if (isNumber(this.value)) {
+      const sic = new StashItemComponent(
+        this.value,
+        Layout.stashComponent.width(),
+        Layout.stashComponent.stashItemComponents.length
+      );
+      this.shapeRef.current.to({
+        x: Layout.stashComponent.x() + Layout.stashComponent.width(),
+        y: Layout.stashComponent.y(),
+        easing: Easings.StrongEaseInOut,
+        duration: 1.5
+      });
+      this.textRef.current.to({
+        width: sic.width(),
+        easing: Easings.StrongEaseInOut,
+        duration: 1.5
+      })
+    }
   }
 }
