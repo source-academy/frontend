@@ -27,7 +27,7 @@ import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-const SCOPES = 'profile https://www.googleapis.com/auth/drive.file';
+const SCOPES = 'profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
 const UPLOAD_PATH = 'https://www.googleapis.com/upload/drive/v3/files';
 
 // Special ID value for the Google Drive API.
@@ -36,11 +36,15 @@ const ROOT_ID = 'root';
 const MIME_SOURCE = 'text/plain';
 // const MIME_FOLDER = 'application/vnd.google-apps.folder';
 
+// TODO: fix all calls to (window.google as any).accounts
 export function* persistenceSaga(): SagaIterator {
+  // Starts the function* () for every dispatched LOGOUT_GOOGLE action
+  // Same for all takeLatest() calls below, with respective types from PersistenceTypes
   yield takeLatest(LOGOUT_GOOGLE, function* () {
     yield put(actions.playgroundUpdatePersistenceFile(undefined));
     yield call(ensureInitialised);
-    yield call([gapi.auth2.getAuthInstance(), 'signOut']);
+    yield gapi.client.setToken(null);
+    yield handleUserChanged(null);
   });
 
   yield takeLatest(PERSISTENCE_OPEN_PICKER, function* (): any {
@@ -307,24 +311,120 @@ const initialisationPromise: Promise<void> = new Promise(res => {
   startInitialisation = res;
 }).then(initialise);
 
-function handleUserChanged(user: gapi.auth2.GoogleUser) {
-  store.dispatch(
-    actions.setGoogleUser(user.isSignedIn() ? user.getBasicProfile().getEmail() : undefined)
-  );
+const getUserProfileData = async (accessToken: string) => {
+  const headers = new Headers()
+  headers.append('Authorization', `Bearer ${accessToken}`)
+  const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers
+  })
+  const data = await response.json();
+  return data;
 }
 
+async function handleUserChanged(accessToken: string | null) {
+  if (accessToken === null) { // TODO: check if access token is invalid instead of null
+    store.dispatch(actions.setGoogleUser(undefined));
+  } 
+  else {
+    const userProfileData = await getUserProfileData(accessToken)
+    const email = userProfileData.email;
+    console.log("handleUserChanged", email);
+    store.dispatch(actions.setGoogleUser(email));
+  }
+}
+
+let tokenClient: any;
+
 async function initialise() {
-  await new Promise((resolve, reject) =>
-    gapi.load('client:auth2', { callback: resolve, onerror: reject })
+  // load GIS script
+  await new Promise<void>((resolve, reject) => {
+    const scriptTag = document.createElement('script');
+    scriptTag.src = 'https://accounts.google.com/gsi/client';
+    scriptTag.async = true;
+    scriptTag.defer = true;
+    //scriptTag.nonce = nonce;
+    scriptTag.onload = () => {
+      console.log("success");
+      resolve();
+      //setScriptLoadedSuccessfully(true);
+      //onScriptLoadSuccessRef.current?.();
+    };
+    scriptTag.onerror = (ev) => {
+      console.log("failure");
+      reject(ev);
+      //setScriptLoadedSuccessfully(false);
+      //onScriptLoadErrorRef.current?.();
+    };
+
+    document.body.appendChild(scriptTag);
+  });
+
+  // load and initialize gapi.client
+  await new Promise<void>((resolve, reject) =>
+    gapi.load('client', { callback: () => {console.log("gapi.client loaded");resolve();}, onerror: reject })
   );
   await gapi.client.init({
-    apiKey: Constants.googleApiKey,
-    clientId: Constants.googleClientId,
-    discoveryDocs: DISCOVERY_DOCS,
-    scope: SCOPES
+    discoveryDocs: DISCOVERY_DOCS
   });
-  gapi.auth2.getAuthInstance().currentUser.listen(handleUserChanged);
-  handleUserChanged(gapi.auth2.getAuthInstance().currentUser.get());
+
+  // juju
+  // TODO: properly fix types here
+  await new Promise((resolve, reject) => {
+    //console.log("At least ur here");
+    resolve((window.google as any).accounts.oauth2.initTokenClient({
+      client_id: Constants.googleClientId,
+      scope: SCOPES,
+      callback: ''
+    }));
+  }).then((c) => {
+    //console.log(c);
+    tokenClient = c; 
+    //console.log(tokenClient.requestAccessToken);
+  }); 
+
+  //await console.log("tokenClient", tokenClient);
+  
+
+  //await gapi.client.init({
+    //apiKey: Constants.googleApiKey,
+    //clientId: Constants.googleClientId,
+    //discoveryDocs: DISCOVERY_DOCS,
+    //scope: SCOPES
+  //});
+  //gapi.auth2.getAuthInstance().currentUser.listen(handleUserChanged);
+  //handleUserChanged(gapi.auth2.getAuthInstance().currentUser.get());
+}
+
+// TODO: fix types
+// adapted from https://developers.google.com/identity/oauth2/web/guides/migration-to-gis
+async function getToken(err: any) {
+
+  //if (err.result.error.code == 401 || (err.result.error.code == 403) &&
+  //    (err.result.error.status == "PERMISSION_DENIED")) {
+  if (err) { //TODO: fix after debugging
+
+    // The access token is missing, invalid, or expired, prompt for user consent to obtain one.
+    await new Promise((resolve, reject) => {
+      try {
+        // Settle this promise in the response callback for requestAccessToken()
+        tokenClient.callback = (resp: any) => {
+          if (resp.error !== undefined) {
+            reject(resp);
+          }
+          // GIS has automatically updated gapi.client with the newly issued access token.
+          console.log('gapi.client access token: ' + JSON.stringify(gapi.client.getToken()));
+          resolve(resp);
+        };
+        console.log(tokenClient.requestAccessToken);
+        tokenClient.requestAccessToken();
+      } catch (err) {
+        console.log(err)
+      }
+    });
+  } else {
+    // Errors unrelated to authorization: server errors, exceeding quota, bad requests, and so on.
+    throw new Error(err);
+  }
 }
 
 function* ensureInitialised() {
@@ -334,9 +434,15 @@ function* ensureInitialised() {
 
 function* ensureInitialisedAndAuthorised() {
   yield call(ensureInitialised);
-  if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-    yield gapi.auth2.getAuthInstance().signIn();
-  }
+  // only call getToken if there is no token in gapi
+  console.log(gapi.client.getToken());
+  if (gapi.client.getToken() === null) {
+    yield getToken(true);
+    yield handleUserChanged(gapi.client.getToken().access_token);
+  } //TODO: fix after debugging
+  //if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
+  //  yield gapi.auth2.getAuthInstance().signIn();
+  //}
 }
 
 type PickFileResult =
@@ -372,9 +478,7 @@ function pickFile(
         .setTitle(title)
         .enableFeature(google.picker.Feature.NAV_HIDDEN)
         .addView(view)
-        .setOAuthToken(
-          gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token
-        )
+        .setOAuthToken(gapi.client.getToken().access_token)
         .setAppId(Constants.googleAppId!)
         .setDeveloperKey(Constants.googleApiKey!)
         .setCallback((data: any) => {
