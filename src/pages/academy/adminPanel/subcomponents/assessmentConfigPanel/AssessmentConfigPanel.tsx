@@ -1,5 +1,11 @@
 import { Button, H2 } from '@blueprintjs/core';
-import { CellValueChangedEvent, ColDef, GridApi, GridReadyEvent, RowDragEvent } from 'ag-grid-community';
+import {
+  CellValueChangedEvent,
+  ColDef,
+  GridApi,
+  GridReadyEvent,
+  RowDragEvent
+} from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash';
 import React from 'react';
