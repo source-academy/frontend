@@ -1,6 +1,7 @@
 import { Label } from '@blueprintjs/core';
 import { Chapter } from 'js-slang/dist/types';
 import React from 'react';
+import classes from 'src/styles/GithubAssessments.module.scss';
 
 import { SALanguage } from '../../application/ApplicationTypes';
 import { ControlBarChapterSelect } from '../../controlBar/ControlBarChapterSelect';
@@ -15,12 +16,12 @@ export type SideContentMissionEditorProps = {
 
 const SideContentMissionEditor: React.FC<SideContentMissionEditorProps> = props => {
   return (
-    <div className="SideContentMissionEditor">
-      <div className="SideContentMissionEditorRow">
-        <div className="SideContentMissionEditorLabelColumn">
+    <div className={classes['SideContentMissionEditor']}>
+      <div className={classes['SideContentMissionEditorRow']}>
+        <div className={classes['SideContentMissionEditorLabelColumn']}>
           <Label>Source Version</Label>
         </div>
-        <div className="SideContentMissionEditorOptionColumn">
+        <div className={classes['SideContentMissionEditorOptionColumn']}>
           <ControlBarChapterSelect
             isFolderModeEnabled={props.isFolderModeEnabled}
             sourceChapter={props.missionMetadata.sourceVersion}
