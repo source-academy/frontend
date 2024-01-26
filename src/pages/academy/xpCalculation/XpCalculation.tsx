@@ -201,7 +201,7 @@ const XpCalculation: React.FC = () => {
         rowHeight={30}
         pagination={true}
         paginationPageSize={20}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}
       />

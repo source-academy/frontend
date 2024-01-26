@@ -75,7 +75,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           inRangeInclusive: true
         },
         sortingOrder: ['desc', 'asc', null],
-        cellRendererFramework: EditCell,
+        cellRenderer: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: true
@@ -91,7 +91,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           inRangeInclusive: true
         },
         sortingOrder: ['desc', 'asc', null],
-        cellRendererFramework: EditCell,
+        cellRenderer: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: false
@@ -101,7 +101,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       {
         headerName: 'Publish',
         field: '',
-        cellRendererFramework: PublishCell,
+        cellRenderer: PublishCell,
         cellRendererParams: {
           handlePublishAssessment: this.props.handlePublishAssessment
         },
@@ -116,7 +116,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       {
         headerName: 'Delete',
         field: '',
-        cellRendererFramework: DeleteCell,
+        cellRenderer: DeleteCell,
         cellRendererParams: {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
@@ -174,7 +174,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           onGridSizeChanged={this.resizeGrid}
           rowData={this.props.assessmentOverviews}
           rowHeight={30}
-          suppressCellSelection={true}
+          suppressCellFocus={true}
           suppressMovableColumns={true}
           suppressPaginationPanel={true}
         />
