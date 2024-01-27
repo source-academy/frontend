@@ -3,6 +3,7 @@ import {
   ButtonGroup,
   Card,
   Classes,
+  Elevation,
   H4,
   Icon,
   NonIdealState,
@@ -64,8 +65,8 @@ const Login: React.FunctionComponent<{}> = () => {
   if (authCode || isSaml) {
     return (
       <div className={classNames('Login', Classes.DARK)}>
-        <Card className={classNames('login-card', Classes.ELEVATION_4)}>
-          <div className="login-body">
+        <Card elevation={Elevation.FOUR}>
+          <div>
             <NonIdealState
               description="Logging In..."
               icon={<Spinner size={SpinnerSize.LARGE} />}
@@ -78,14 +79,14 @@ const Login: React.FunctionComponent<{}> = () => {
 
   return (
     <div className={classNames('Login', Classes.DARK)}>
-      <Card className={classNames('login-card', Classes.ELEVATION_4)}>
+      <Card elevation={Elevation.FOUR}>
         <div className="login-header">
           <H4>
             <Icon icon={IconNames.LOCK} />
             LOGIN
           </H4>
         </div>
-        <div className="login-body">
+        <div>
           <ButtonGroup fill={true} vertical={true}>
             {providers.map(({ id, name }) => (
               <LoginButton handleClick={handleLogin} name={name} id={id} key={id} />
