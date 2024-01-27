@@ -12,7 +12,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { AuthProviderType } from 'src/commons/utils/AuthHelper';
@@ -27,7 +27,7 @@ const providers = [...Constants.authProviders.entries()].map(([id, { name }]) =>
   name
 }));
 
-const Login: React.FunctionComponent<{}> = () => {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { isLoggedIn, courseId } = useSession();
@@ -37,14 +37,11 @@ const Login: React.FunctionComponent<{}> = () => {
   // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
   const authCode = code || ticket;
 
-  const handleLogin = React.useCallback(
-    (providerId: string) => dispatch(login(providerId)),
-    [dispatch]
-  );
+  const handleLogin = useCallback((providerId: string) => dispatch(login(providerId)), [dispatch]);
 
   const isSaml = Constants.authProviders.get(providerId)?.type === AuthProviderType.SAML_SSO;
 
-  React.useEffect(() => {
+  useEffect(() => {
     // If already logged in, navigate to relevant course page
     if (isLoggedIn) {
       if (courseId !== undefined) {
@@ -111,7 +108,7 @@ const LoginButton = ({
     <Button
       className={Classes.LARGE}
       rightIcon={IconNames.LOG_IN}
-      onClick={React.useCallback(() => handleClick(id), [handleClick, id])}
+      onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
       {`Log in with ${name}`}
     </Button>
