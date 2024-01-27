@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { AuthProviderType } from 'src/commons/utils/AuthHelper';
 import { useSession } from 'src/commons/utils/Hooks';
+import classes from 'src/styles/Login.module.scss';
 
 import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
 import Constants from '../../commons/utils/Constants';
@@ -61,7 +62,7 @@ const Login: React.FC = () => {
 
   if (authCode || isSaml) {
     return (
-      <div className={classNames('Login', Classes.DARK)}>
+      <div className={classNames(classes['Login'], Classes.DARK)}>
         <Card elevation={Elevation.FOUR}>
           <div>
             <NonIdealState
@@ -75,9 +76,9 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className={classNames('Login', Classes.DARK)}>
+    <div className={classNames(classes['Login'], Classes.DARK)}>
       <Card elevation={Elevation.FOUR}>
-        <div className="login-header">
+        <div className={classes['login-header']}>
           <H4>
             <Icon icon={IconNames.LOCK} />
             LOGIN
