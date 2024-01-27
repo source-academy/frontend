@@ -1,6 +1,6 @@
 import * as es from 'estree';
-import { Agenda } from 'js-slang/dist/ec-evaluator/interpreter';
-import { AgendaItem, Instr } from 'js-slang/dist/ec-evaluator/types';
+import { Agenda } from 'js-slang/dist/cse-machine/interpreter';
+import { AgendaItem, Instr } from 'js-slang/dist/cse-machine/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';

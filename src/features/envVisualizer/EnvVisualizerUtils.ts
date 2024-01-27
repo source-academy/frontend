@@ -8,7 +8,7 @@ import {
   Instr,
   InstrType,
   UnOpInstr
-} from 'js-slang/dist/ec-evaluator/types';
+} from 'js-slang/dist/cse-machine/types';
 import { Value as StashValue } from 'js-slang/dist/types';
 import { Environment } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';

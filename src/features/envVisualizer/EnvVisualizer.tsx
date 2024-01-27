@@ -1,5 +1,5 @@
 import { Context } from 'js-slang';
-import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
+import { Agenda, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
 import { Layout } from './EnvVisualizerLayout';

@@ -1,4 +1,4 @@
-import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
+import { Agenda, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';

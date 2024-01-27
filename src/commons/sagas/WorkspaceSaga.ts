@@ -1096,7 +1096,7 @@ export function* evalCode(
     : -1;
   const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
   if (envActiveAndCorrectChapter) {
-    context.executionMethod = 'ec-evaluator';
+    context.executionMethod = 'cse-machine';
   }
 
   const isFolderModeEnabled: boolean = yield select(
@@ -1300,7 +1300,7 @@ export function* evalCode(
 
   // The first time the code is executed using the explicit control evaluator,
   // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
-  if (context.executionMethod === 'ec-evaluator' && needUpdateEnv) {
+  if (context.executionMethod === 'cse-machine' && needUpdateEnv) {
     yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
     // `needUpdateEnv` implies `correctWorkspace`, which satisfies the type constraint.
     // But TS can't infer that yet, so we need a typecast here.
@@ -1308,7 +1308,7 @@ export function* evalCode(
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
-  if (context.executionMethod === 'ec-evaluator' || context.executionMethod === 'interpreter') {
+  if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
     introIcon && introIcon.classList.remove('side-content-tab-alert-error');
   }

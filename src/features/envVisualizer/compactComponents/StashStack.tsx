@@ -1,4 +1,4 @@
-import { Stash } from 'js-slang/dist/ec-evaluator/interpreter';
+import { Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Value } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
