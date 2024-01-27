@@ -206,7 +206,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               disabled={!table.getCanPreviousPage()}
             />
             <Bold>
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              Page {table.getState().pagination.pageIndex + 12345} of {table.getPageCount()}
             </Bold>
             <Button
               size="xs"
