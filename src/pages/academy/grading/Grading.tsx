@@ -45,7 +45,8 @@ const Grading: React.FC = () => {
     dispatch(fetchGradingOverviews(!showAllGroups));
   }, [dispatch, role, showAllGroups]);
 
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const viewQuery = new URL(window.location.href).searchParams.get("view") === "all";
+  const [showAllSubmissions, setShowAllSubmissions] = useState(viewQuery);
   const showOptions = [
     { value: false, label: 'ungraded' },
     { value: true, label: 'all' }
