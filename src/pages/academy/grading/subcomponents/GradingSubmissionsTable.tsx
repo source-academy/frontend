@@ -126,6 +126,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
       columnFilters,
       globalFilter
     },
+    initialState: {
+      pagination: {
+        //short-circuit and use page query value if it exists, otherwise use 0. reduce by 1, as we are expecting 1-indexed querying.
+        //Issue: naively accepts out of bound pages in either direction (negative number, 0, beyond max page)
+        pageIndex: parseInt(new URL(window.location.href).searchParams.get("page") || '0') - 1
+      }
+    },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
@@ -212,15 +219,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => {
-                const currentURL = new URL(window.location.href);
-                const pageRequest = currentURL.searchParams.get("page");
-                if (pageRequest) {
-                  table.setPageIndex(parseInt(pageRequest));
-                } else {
-                  table.nextPage()
-                }
-              }}
+              onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             />
           </Flex>
