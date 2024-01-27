@@ -213,8 +213,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
               onClick={() => {
-                table.nextPage()
-                window.location.href += "?page=" + (table.getState().pagination.pageIndex + 1 + 1)
+                const currentURL = new URL(window.location.href);
+                const pageRequest = currentURL.searchParams.get("page");
+                if (pageRequest) {
+                  table.setPageIndex(parseInt(pageRequest));
+                } else {
+                  table.nextPage()
+                }
               }}
               disabled={!table.getCanNextPage()}
             />
