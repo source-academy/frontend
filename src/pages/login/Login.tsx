@@ -80,7 +80,7 @@ const Login: React.FC = () => {
       <Card elevation={Elevation.FOUR}>
         <div className={classes['login-header']}>
           <H4>
-            <Icon icon={IconNames.LOCK} />
+            <Icon className={classes['login-icon']} icon={IconNames.LOCK} />
             LOGIN
           </H4>
         </div>

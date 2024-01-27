@@ -21,7 +21,7 @@
   justify-content: center;
   vertical-align: text-top;
 
-  :global(.#{$ns}-icon) {
+  .login-icon {
     margin: 0.1rem 0.5rem 0.5rem 0;
     vertical-align: middle;
   }
