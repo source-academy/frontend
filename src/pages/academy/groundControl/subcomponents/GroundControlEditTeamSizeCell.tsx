@@ -75,7 +75,7 @@ const EditTeamSizeCell: React.FC<Props> = props => {
         onClick={handleDecrement}
         disabled={newTeamSize === minTeamSize}
       />
-      <span style={{ width: '4rem', padding: '0.2rem', textAlign: 'center' }}>{newTeamSize}</span>
+      <span>{newTeamSize}</span>
       <Button
         size="xs"
         icon={() => <BpIcon icon={IconNames.PLUS} />}
