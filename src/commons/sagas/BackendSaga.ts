@@ -12,6 +12,7 @@ import {
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
+  // CHANGE_TEAM_SIZE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
@@ -1240,6 +1241,23 @@ function* BackendSaga(): SagaIterator {
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
+
+  // yield takeEvery(
+  //   CHANGE_TEAM_SIZE_ASSESSMENT,
+  //   function* (action: ReturnType<typeof actions.changeTeamSizeAssessment>): any {
+  //     const tokens: Tokens = yield selectTokens();
+  //     const id = action.payload.id;
+  //     const maxTeamSize = action.payload.maxTeamSize;
+
+  //     const resp: Response | null = yield updateAssessment(id, { maxTeamSize }, tokens);
+  //     if (!resp || !resp.ok) {
+  //       return yield handleResponseError(resp);
+  //     }
+
+  //     yield put(actions.fetchAssessmentOverviews());
+  //     yield call(showSuccessMessage, 'Team size updated successfully!', 1000);
+  //   }
+  // );
 
   yield takeEvery(
     UPDATE_ASSESSMENT_OVERVIEWS,
