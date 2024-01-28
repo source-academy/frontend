@@ -1,5 +1,4 @@
 import '@tremor/react/dist/esm/tremor.css';
-import 'src/styles/_teamformation.scss';
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -11,6 +10,7 @@ import { User } from 'src/commons/application/types/SessionTypes';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+import classes from 'src/styles/TeamFormation.module.scss';
 
 export type OptionType = {
   label: string | null;
@@ -114,12 +114,12 @@ const TeamFormationForm: React.FC = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className={classes['form-container']}>
       <Form>
         <h2>{teamId ? 'Edit' : 'Create New'} Team</h2>
-        <div className="form-field-row">
-          <div className="form-field">
-            <label htmlFor="assessment" className="form-label">
+        <div className={classes['form-field-row']}>
+          <div className={classes['form-field']}>
+            <label htmlFor="assessment" className={classes['form-label']}>
               Assessment
             </label>
             <Select
@@ -135,15 +135,15 @@ const TeamFormationForm: React.FC = () => {
               }
               onChange={option => handleAssessmentChange(option?.value)}
               isSearchable
-              className="form-select"
+              className={classes['form-select']}
             />
           </div>
           {selectedAssessment && (
-            <div className="form-field">
-              <label className="form-label">Max No. Student:</label>
+            <div className={classes['form-field']}>
+              <label className={classes['form-label']}>Max No. Student:</label>
               <input
                 type="text"
-                className="form-select"
+                className={classes['form-select']}
                 value={maxNoOfStudents}
                 readOnly
                 disabled // Make the input read-only and disabled
@@ -153,11 +153,11 @@ const TeamFormationForm: React.FC = () => {
         </div>
 
         {teams.map((t, index) => (
-          <div className="student-form-field" key={index}>
-            <label htmlFor={`team-${index}`} className="form-label">
+          <div className={classes['student-form-field']} key={index}>
+            <label htmlFor={`team-${index}`} className={classes['form-label']}>
               Students
             </label>
-            <div className="input-container">
+            <div className={classes['input-container']}>
               <Select
                 id={`team-${index}`}
                 options={students?.map(student => ({
@@ -171,10 +171,14 @@ const TeamFormationForm: React.FC = () => {
                   selectedOption: MultiValue<OptionType>,
                   actionMeta: ActionMeta<OptionType>
                 ) => handleTeamChange(index, selectedOption, actionMeta)}
-                className="form-select"
+                className={classes['form-select']}
               />
               {index > 0 && (
-                <button type="button" onClick={() => removeTeam(index)} className="remove-button">
+                <button
+                  type="button"
+                  onClick={() => removeTeam(index)}
+                  className={classes['remove-button']}
+                >
                   Remove Team
                 </button>
               )}
@@ -182,18 +186,18 @@ const TeamFormationForm: React.FC = () => {
           </div>
         ))}
         {!teamId ? (
-          <button type="button" onClick={addAnotherTeam} className="add-button">
+          <button type="button" onClick={addAnotherTeam} className={classes['add-button']}>
             Add Another Team
           </button>
         ) : null}
 
-        <div className="form-footer">
-          <button type="button" onClick={backToTeamDashboard} className="back-button">
+        <div className={classes['form-footer']}>
+          <button type="button" onClick={backToTeamDashboard} className={classes['back-button']}>
             Back
           </button>
 
-          <div className="submit-button-container">
-            <button type="button" onClick={submitForm} className="submit-button">
+          <div className={classes['submit-button-container']}>
+            <button type="button" onClick={submitForm} className={classes['submit-button']}>
               Submit
             </button>
           </div>

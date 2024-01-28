@@ -1,5 +1,4 @@
 import '@tremor/react/dist/esm/tremor.css';
-import 'src/styles/_teamformation.scss';
 
 import { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
@@ -10,6 +9,7 @@ import Select from 'react-select';
 import { bulkUploadTeam } from 'src/commons/application/actions/SessionActions';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import classes from 'src/styles/TeamFormation.module.scss';
 
 const TeamFormationImport: React.FC = () => {
   const navigate = useNavigate();
@@ -51,12 +51,12 @@ const TeamFormationImport: React.FC = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className={classes['form-container']}>
       <Form>
         <h2>Import Team</h2>
-        <div className="form-field-row">
-          <div className="form-field">
-            <label htmlFor="assessment" className="form-label">
+        <div className={classes['form-field-row']}>
+          <div className={classes['form-field']}>
+            <label htmlFor="assessment" className={classes['form-label']}>
               Assessment
             </label>
             <Select
@@ -72,15 +72,15 @@ const TeamFormationImport: React.FC = () => {
               }
               onChange={option => handleAssessmentChange(option?.value)}
               isSearchable
-              className="form-select"
+              className={classes['form-select']}
             />
           </div>
           {selectedAssessment && (
-            <div className="form-field">
-              <label className="form-label">Max No. Student:</label>
+            <div className={classes['form-field']}>
+              <label className={classes['form-label']}>Max No. Student:</label>
               <input
                 type="text"
-                className="form-select"
+                className={classes['form-select']}
                 value={maxNoOfStudents}
                 readOnly
                 disabled // Make the input read-only and disabled
@@ -92,13 +92,13 @@ const TeamFormationImport: React.FC = () => {
         <FileUploader multiple={false} handleChange={handleChange} name="file" types={fileTypes} />
         <p>{file ? `File name: ${file.name}` : 'No file uploaded'}</p>
 
-        <div className="form-footer">
-          <button type="button" onClick={backToTeamDashboard} className="back-button">
+        <div className={classes['form-footer']}>
+          <button type="button" onClick={backToTeamDashboard} className={classes['back-button']}>
             Back
           </button>
 
-          <div className="submit-button-container">
-            <button type="button" onClick={submitForm} className="submit-button">
+          <div className={classes['submit-button-container']}>
+            <button type="button" onClick={submitForm} className={classes['submit-button']}>
               Submit
             </button>
           </div>
