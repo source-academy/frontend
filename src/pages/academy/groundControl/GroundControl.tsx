@@ -63,7 +63,7 @@ const columnHelper = createColumnHelper<AssessmentOverview>();
 
 const GroundControl: React.FC<GroundControlProps> = props => {
   const [showDropzone, setShowDropzone] = React.useState(false);
-  const [hasChangesAssessmentOverview, setHasChangesAssessmentOverview] = React.useState(false);
+  const [isDirty, setIsDirty] = React.useState(false);
 
   const dispatch = useDispatch();
 
@@ -96,16 +96,16 @@ const GroundControl: React.FC<GroundControlProps> = props => {
       assessmentOverviews: assessmentOverviews as React.MutableRefObject<AssessmentOverview[]>,
       setAssessmentOverview: (val: AssessmentOverview[]) => {
         assessmentOverviews.current = val;
-        setHasChangesAssessmentOverview(true);
+        setIsDirty(true);
       },
-      setHasChangesAssessmentOverview: setHasChangesAssessmentOverview
+      setHasChangesAssessmentOverview: setIsDirty
     };
   }, [assessmentOverviews]);
 
   const submitHandler = () => {
-    if (hasChangesAssessmentOverview) {
+    if (isDirty) {
       dispatch(updateAssessmentOverviews(assessmentOverviews.current!));
-      setHasChangesAssessmentOverview(false);
+      setIsDirty(false);
     }
   };
 
@@ -270,7 +270,7 @@ const GroundControl: React.FC<GroundControlProps> = props => {
         <Button
           text="Update"
           style={{ marginTop: '15px' }}
-          intent={hasChangesAssessmentOverview ? Intent.WARNING : Intent.NONE}
+          intent={isDirty ? Intent.WARNING : Intent.NONE}
           onClick={submitHandler}
         />
       </div>
