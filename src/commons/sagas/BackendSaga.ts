@@ -66,7 +66,6 @@ import {
   Tokens,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT_CONFIGS,
-  UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_COURSE_CONFIG,
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   UPDATE_LATEST_VIEWED_COURSE,
@@ -1256,29 +1255,6 @@ function* BackendSaga(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Team size updated successfully!', 1000);
-    }
-  );
-
-  yield takeEvery(
-    UPDATE_ASSESSMENT_OVERVIEWS,
-    function* (action: ReturnType<typeof actions.updateAssessmentOverviews>): any {
-      const role: Role = yield select((state: OverallState) => state.session.role!);
-      if (role === Role.Student) {
-        return;
-      }
-
-      const assessmentOverviews: AssessmentOverview[] = action.payload;
-      for (let i = 0; i < assessmentOverviews.length; i++) {
-        const assessmentOverview = assessmentOverviews[i];
-        const tokens: Tokens = yield selectTokens();
-        const id = assessmentOverview.id;
-        const maxTeamSize = assessmentOverview.maxTeamSize;
-        const resp: Response | null = yield updateAssessment(id, { maxTeamSize }, tokens);
-        if (!resp || !resp.ok) {
-          return yield handleResponseError(resp);
-        }
-      }
-      yield call(showSuccessMessage, 'Assessment updated successfully!', 1000);
     }
   );
 
