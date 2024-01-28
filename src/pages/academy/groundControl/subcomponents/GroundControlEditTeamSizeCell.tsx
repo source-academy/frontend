@@ -4,12 +4,11 @@ import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Button, Flex } from '@tremor/react';
 import { isEqual, isUndefined } from 'lodash';
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
-// import { consoleOverloads } from 'src/commons/utils/ConsoleOverload';
 
-export type EditTeamSizeCellProps = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps;
 
 type DispatchProps = {
   setAssessmentOverview: (val: AssessmentOverview[]) => void;
@@ -21,39 +20,39 @@ type StateProps = {
   data: AssessmentOverview;
 };
 
-const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props => {
+const EditTeamSizeCell: React.FC<Props> = props => {
   const minTeamSize = 1; // Corresponds to an individual assessment
 
   const { assessmentOverviews, setAssessmentOverview, setHasChangesAssessmentOverview, data } =
     props;
 
   const index = indexOfObject(assessmentOverviews.current, data);
-  const [newTeamSize, setNewTeamSize] = React.useState(data.maxTeamSize);
+  const [newTeamSize, setNewTeamSize] = useState(data.maxTeamSize);
 
-  React.useEffect(() => {
-    const handleTeamSizeChange = () => {
-      const temp = [...assessmentOverviews.current];
-      if (data.maxTeamSize !== newTeamSize) {
-        temp[index] = {
-          ...temp[index],
-          maxTeamSize: newTeamSize
-        };
-        setHasChangesAssessmentOverview(true);
-        setAssessmentOverview(temp);
-      }
-    };
+  const handleTeamSizeChange = useCallback(() => {
+    const temp = [...assessmentOverviews.current];
+    if (data.maxTeamSize !== newTeamSize) {
+      temp[index] = {
+        ...temp[index],
+        maxTeamSize: newTeamSize
+      };
+      setHasChangesAssessmentOverview(true);
+      setAssessmentOverview(temp);
+    }
+  }, [
+    assessmentOverviews,
+    data.maxTeamSize,
+    index,
+    newTeamSize,
+    setAssessmentOverview,
+    setHasChangesAssessmentOverview
+  ]);
 
+  useEffect(() => {
     if (index !== -1) {
       handleTeamSizeChange();
     }
-  }, [
-    newTeamSize,
-    index,
-    assessmentOverviews,
-    data.maxTeamSize,
-    setHasChangesAssessmentOverview,
-    setAssessmentOverview
-  ]);
+  }, [handleTeamSizeChange, index]);
 
   const handleIncrement = () => {
     const updatedTeamSize = newTeamSize + 1;
@@ -68,24 +67,22 @@ const EditTeamSizeCell: React.FunctionComponent<EditTeamSizeCellProps> = props =
   };
 
   return (
-    <div className="number-input">
-      <Flex>
-        <Button
-          size="xs"
-          icon={() => <BpIcon icon={IconNames.MINUS} />}
-          variant="light"
-          onClick={handleDecrement}
-          disabled={newTeamSize === minTeamSize}
-        />
-        <span style={{ width: '4rem', padding: '0.2rem', textAlign: 'center' }}>{newTeamSize}</span>
-        <Button
-          size="xs"
-          icon={() => <BpIcon icon={IconNames.PLUS} />}
-          variant="light"
-          onClick={handleIncrement}
-        />
-      </Flex>
-    </div>
+    <Flex>
+      <Button
+        size="xs"
+        icon={() => <BpIcon icon={IconNames.MINUS} />}
+        variant="light"
+        onClick={handleDecrement}
+        disabled={newTeamSize === minTeamSize}
+      />
+      <span style={{ width: '4rem', padding: '0.2rem', textAlign: 'center' }}>{newTeamSize}</span>
+      <Button
+        size="xs"
+        icon={() => <BpIcon icon={IconNames.PLUS} />}
+        variant="light"
+        onClick={handleIncrement}
+      />
+    </Flex>
   );
 };
 
