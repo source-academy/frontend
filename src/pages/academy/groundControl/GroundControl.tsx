@@ -1,4 +1,13 @@
-import { Button, Collapse, Divider, Icon as BpIcon, Intent } from '@blueprintjs/core';
+import {
+  Button,
+  Collapse,
+  Divider,
+  Icon as BpIcon,
+  Intent,
+  NonIdealState,
+  Spinner,
+  SpinnerSize
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
   Column,
@@ -21,13 +30,11 @@ import {
   TableRow,
   Text
 } from '@tremor/react';
-import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateGroundControlTableFilters } from 'src/commons/workspace/WorkspaceActions';
 
-import { updateAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
 import {
   AssessmentConfiguration,
   AssessmentOverview
@@ -50,7 +57,7 @@ export type DispatchProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
-  // handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
+  handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
   handleFetchCourseConfigs: () => void;
 };
 
@@ -63,7 +70,6 @@ const columnHelper = createColumnHelper<AssessmentOverview>();
 
 const GroundControl: React.FC<GroundControlProps> = props => {
   const [showDropzone, setShowDropzone] = React.useState(false);
-  const [isDirty, setIsDirty] = React.useState(false);
 
   const dispatch = useDispatch();
 
@@ -75,39 +81,15 @@ const GroundControl: React.FC<GroundControlProps> = props => {
     ...tableFilters.columnFilters
   ]);
 
-  const session = useTypedSelector(state => state.session);
-  const assessmentOverviews = React.useRef(session.assessmentOverviews);
+  const { assessmentOverviews } = useSession();
 
   const toggleDropzone = () => {
     setShowDropzone(!showDropzone);
   };
 
   useEffect(() => {
-    assessmentOverviews.current = cloneDeep(session.assessmentOverviews);
-  }, [session]);
-
-  useEffect(() => {
     dispatch(updateGroundControlTableFilters({ columnFilters }));
   }, [columnFilters, dispatch]);
-
-  const EditTeamSizeCellProps = React.useMemo(() => {
-    return {
-      // Would have been loaded by the useEffect above
-      assessmentOverviews: assessmentOverviews as React.MutableRefObject<AssessmentOverview[]>,
-      setAssessmentOverview: (val: AssessmentOverview[]) => {
-        assessmentOverviews.current = val;
-        setIsDirty(true);
-      },
-      setHasChangesAssessmentOverview: setIsDirty
-    };
-  }, [assessmentOverviews]);
-
-  const submitHandler = () => {
-    if (isDirty) {
-      dispatch(updateAssessmentOverviews(assessmentOverviews.current!));
-      setIsDirty(false);
-    }
-  };
 
   const columns = [
     columnHelper.accessor('id', {
@@ -151,10 +133,16 @@ const GroundControl: React.FC<GroundControlProps> = props => {
       ),
       enableSorting: true
     }),
+
     columnHelper.accessor('maxTeamSize', {
       header: 'Max Team Size',
       cell: info => (
-        <EditTeamSizeCell {...EditTeamSizeCellProps} data={info.row.original}></EditTeamSizeCell>
+        <EditTeamSizeCell
+          onTeamSizeChange={(id, newTeamSize) => {
+            props.handleAssessmentChangeTeamSize(id, newTeamSize);
+          }}
+          data={info.row.original}
+        />
       )
     }),
     columnHelper.accessor('isPublished', {
@@ -207,11 +195,9 @@ const GroundControl: React.FC<GroundControlProps> = props => {
   );
 
   const table = useReactTable({
-    data: assessmentOverviews.current || [],
+    data: assessmentOverviews ?? [],
     columns,
-    state: {
-      columnFilters
-    },
+    state: { columnFilters },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -266,16 +252,17 @@ const GroundControl: React.FC<GroundControlProps> = props => {
           ))}
         </TableBody>
       </Table>
-      <div>
-        <Button
-          text="Update"
-          style={{ marginTop: '15px' }}
-          intent={isDirty ? Intent.WARNING : Intent.NONE}
-          onClick={submitHandler}
-        />
-      </div>
     </div>
   );
+
+  if (!assessmentOverviews) {
+    return (
+      <NonIdealState
+        description="Fetching assessments..."
+        icon={<Spinner size={SpinnerSize.LARGE} />}
+      />
+    );
+  }
 
   const content = (
     <div className="GroundControl">
