@@ -3,7 +3,6 @@ import '@tremor/react/dist/esm/tremor.css';
 import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Button, Flex } from '@tremor/react';
-import { isEqual, isUndefined } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
@@ -26,7 +25,7 @@ const EditTeamSizeCell: React.FC<Props> = props => {
   const { assessmentOverviews, setAssessmentOverview, setHasChangesAssessmentOverview, data } =
     props;
 
-  const index = indexOfObject(assessmentOverviews.current, data);
+  const index = assessmentOverviews.current.findIndex(assessment => assessment.id === data.id);
   const [newTeamSize, setNewTeamSize] = useState(data.maxTeamSize);
 
   const handleTeamSizeChange = useCallback(() => {
@@ -85,17 +84,5 @@ const EditTeamSizeCell: React.FC<Props> = props => {
     </Flex>
   );
 };
-
-function indexOfObject(arr: AssessmentOverview[], obj: AssessmentOverview): number {
-  if (isUndefined(arr)) {
-    return -1;
-  }
-  for (let i = 0; i < arr.length; i++) {
-    if (isEqual(arr[i].id, obj.id)) {
-      return i;
-    }
-  }
-  return -1;
-}
 
 export default EditTeamSizeCell;
