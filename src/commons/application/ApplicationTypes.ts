@@ -38,7 +38,7 @@ export type OverallState = {
 };
 
 export type ApplicationState = {
-  readonly environment: ApplicationEnvironment;
+  // readonly environment: ApplicationEnvironment;
   readonly moduleBackend: string;
 };
 
@@ -97,12 +97,6 @@ export type ErrorOutput = {
 };
 
 export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
-
-export enum ApplicationEnvironment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test'
-}
 
 export enum Role {
   Student = 'student',
@@ -291,17 +285,6 @@ export const getLanguageConfig = (
   return languageConfig;
 };
 
-const currentEnvironment = (): ApplicationEnvironment => {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return ApplicationEnvironment.Development;
-    case 'production':
-      return ApplicationEnvironment.Production;
-    default:
-      return ApplicationEnvironment.Test;
-  }
-};
-
 export const defaultRouter: RouterState = null;
 
 export const defaultAcademy: AcademyState = {
@@ -309,7 +292,7 @@ export const defaultAcademy: AcademyState = {
 };
 
 export const defaultApplication: ApplicationState = {
-  environment: currentEnvironment(),
+  // environment: currentEnvironment(),
   moduleBackend: Constants.moduleBackendUrl
 };
 
@@ -578,7 +561,6 @@ export const defaultState: OverallState = {
   router: defaultRouter,
   academy: defaultAcademy,
   achievement: defaultAchievement,
-  application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
