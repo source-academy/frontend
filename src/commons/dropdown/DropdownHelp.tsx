@@ -1,4 +1,4 @@
-import { Classes, Dialog } from '@blueprintjs/core';
+import { Dialog, DialogBody } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -16,14 +16,14 @@ const DropdownHelp: React.FC<DialogProps> = props => {
 
   return (
     <Dialog
-      className="help"
+      style={{ textAlign: 'justify' }}
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={props.isOpen}
       onClose={props.onClose}
       title="Help"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         {moduleHelpText ? (
           <Markdown content={moduleHelpText} openLinksInNewWindow />
         ) : (
@@ -39,7 +39,7 @@ const DropdownHelp: React.FC<DialogProps> = props => {
             </p>
           </>
         )}
-      </div>
+      </DialogBody>
     </Dialog>
   );
 };

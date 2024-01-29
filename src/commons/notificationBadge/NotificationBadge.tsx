@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { acknowledgeNotifications } from '../application/actions/SessionActions';
-import { useTypedSelector } from '../utils/Hooks';
+import { useSession } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
 import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
 
@@ -19,7 +19,7 @@ type OwnProps = {
 
 const NotificationBadge: React.FC<NotificationBadgeProps> = props => {
   const dispatch = useDispatch();
-  const initialNotifications = useTypedSelector(state => state.session.notifications);
+  const { notifications: initialNotifications } = useSession();
 
   const notifications = props.notificationFilter
     ? props.notificationFilter(initialNotifications)
