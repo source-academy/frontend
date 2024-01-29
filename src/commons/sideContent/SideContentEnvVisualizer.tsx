@@ -405,6 +405,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
+      EnvVisualizer.enableAnimation();
     }
   };
 

@@ -38,9 +38,11 @@ import {
   isFn,
   isFunction,
   isGlobalFn,
+  isInstr,
   isPrimitiveData,
   isUnassigned
 } from './EnvVisualizerUtils';
+import { InstrType } from 'js-slang/dist/ec-evaluator/types';
 
 /** this class encapsulates the logic for calculating the layout */
 export class Layout {
@@ -81,6 +83,8 @@ export class Layout {
   static stash: Stash;
   static controlComponent: ControlStack;
   static stashComponent: StashStack;
+  static prevControlComponent: ControlStack;
+  static prevStashComponent: StashStack;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -215,6 +219,8 @@ export class Layout {
   }
 
   static initializeControlStash() {
+    this.prevControlComponent = this.controlComponent;
+    this.prevStashComponent = this.stashComponent;
     this.controlComponent = new ControlStack(this.control);
     this.stashComponent = new StashStack(this.stash);
   }
@@ -521,7 +527,37 @@ export class Layout {
   }
 
   static onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    Layout.agendaComponent.animate()
+    const agendaItem = Layout.prevControlComponent.control.peek();
+    if (agendaItem && EnvVisualizer.getAnimatable()) {
+      if (!isInstr(agendaItem)) {
+        switch (agendaItem.type) {
+          case 'Literal':
+            Layout.stashComponent.animate();
+        }
+      } else {
+        switch (agendaItem.instrType) {
+          case InstrType.RESET:
+          case InstrType.WHILE:
+          case InstrType.FOR:
+          case InstrType.ASSIGNMENT:
+          case InstrType.UNARY_OP:
+          case InstrType.BINARY_OP:
+          case InstrType.POP:
+          case InstrType.APPLICATION:
+          case InstrType.BRANCH:
+          case InstrType.ENVIRONMENT:
+          case InstrType.ARRAY_LITERAL:
+          case InstrType.ARRAY_ACCESS:
+          case InstrType.ARRAY_ASSIGNMENT:
+          case InstrType.ARRAY_LENGTH:
+          case InstrType.CONTINUE_MARKER:
+          case InstrType.BREAK:
+          case InstrType.BREAK_MARKER:
+          case InstrType.MARKER:
+        }
+      }
+    }
+    EnvVisualizer.disableAnimation();
   };
 
   static draw(): React.ReactNode {
