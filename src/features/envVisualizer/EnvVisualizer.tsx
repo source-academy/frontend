@@ -18,6 +18,7 @@ export default class EnvVisualizer {
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
   /** callback function to update the step limit exceeded state in the SideContentEnvVis component */
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
+  private static canAnimate: boolean = false;
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
   private static agendaStash: boolean = false;
@@ -37,6 +38,15 @@ export default class EnvVisualizer {
   }
   public static toggleStackTruncated(): void {
     EnvVisualizer.stackTruncated = !EnvVisualizer.stackTruncated;
+  }
+  public static enableAnimation(): void {
+    EnvVisualizer.canAnimate = true;
+  }
+  public static disableAnimation(): void {
+    EnvVisualizer.canAnimate = false;
+  }
+  public static getAnimatable(): boolean {
+    return EnvVisualizer.canAnimate;
   }
   public static getCurrentEnvId(): string {
     return EnvVisualizer.currentEnvId;

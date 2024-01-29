@@ -54,4 +54,8 @@ export class StashStack extends Visible implements IHoverable {
       </Group>
     );
   }
+
+  animate() {
+    this.stashItemComponents[this.stashItemComponents.length - 1].animate();
+  }
 }
