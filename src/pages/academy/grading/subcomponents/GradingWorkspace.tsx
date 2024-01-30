@@ -5,10 +5,15 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { fetchGrading } from 'src/commons/application/actions/SessionActions';
+import { fetchAssessmentAdmin, fetchGrading } from 'src/commons/application/actions/SessionActions';
 import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+/*import { FETCH_ASSESSMENT_OVERVIEWS } from 'src/commons/application/types/SessionTypes';
+import {  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview
+} from 'src/commons/assessment/AssessmentTypes';*/
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -77,6 +82,12 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
+  const gradingOverviews = useTypedSelector(state => state.session.gradingOverviews);
+  const assessmentId = gradingOverviews ? gradingOverviews[gradingOverviews.length - props.submissionId]?.assessmentId : null;
+  const longSummary = useTypedSelector(state => state.session.assessments.get(assessmentId ?? 0))?.longSummary;
+  //console.log(longSummary, "longSummary");
+  //console.log(assessmentId, "assessmentId");
+  const mission = useTypedSelector(state => state.session.assessments.get(7));
   const courseId = useTypedSelector(state => state.session.courseId);
   const {
     autogradingResults,
@@ -104,6 +115,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     handleEditorValueChange,
     handleEditorUpdateBreakpoints,
     handleGradingFetch,
+    handleMissionFetchAdmin,
     handleReplEval,
     handleReplOutputClear,
     handleReplValueChange,
@@ -133,6 +145,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleGradingFetch: (submissionId: number) => dispatch(fetchGrading(submissionId)),
+      handleMissionFetchAdmin: (questionId: number, courseRegId: number) => dispatch(fetchAssessmentAdmin(questionId, courseRegId)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
       handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
@@ -161,6 +174,9 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
    */
   useEffect(() => {
     handleGradingFetch(props.submissionId);
+    console.log(handleMissionFetchAdmin(assessmentId ?? 0, courseId ?? 0));
+    // console.log(handleGradingFetch(props.submissionId));
+    // console.log(grading);
     if (!grading) {
       return;
     }
@@ -172,6 +188,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
 
     const question: AnsweredQuestion = grading[questionId].question;
     let answer: string = '';
+
 
     if (question.type === QuestionTypes.programming) {
       if (question.answer) {
@@ -192,6 +209,15 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     handleEditorValueChange(0, answer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log(grading);
+  }, [grading]);
+
+  useEffect(() => {
+    console.log("mission:");
+    console.log(mission);
+  }, [mission]);
 
   /**
    * Once there is an update (due to the grading being fetched), check
@@ -234,7 +260,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       return;
     }
     const question = grading![questionId].question as Question;
-
+    console.log(questionId, "questionId");
+    //console.log(grading![questionId], "grading![questionId]");
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
     let programPrependValue: string = '';
@@ -337,6 +364,14 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
           />
         ),
         id: SideContentType.autograder
+      },
+      {
+        label: `Briefing`,
+        iconName: IconNames.BRIEFCASE,
+        body: (
+          longSummary ? <Markdown content={longSummary} /> : <Markdown content="No briefing available." />
+        ),
+        id: SideContentType.briefing
       }
     ];
     const externalLibrary = grading![questionId].question.library.external;
