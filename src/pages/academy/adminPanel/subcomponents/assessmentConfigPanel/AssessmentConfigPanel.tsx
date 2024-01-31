@@ -1,5 +1,11 @@
 import { Button, H2 } from '@blueprintjs/core';
-import { CellValueChangedEvent, GridApi, GridReadyEvent, RowDragEvent } from 'ag-grid-community';
+import {
+  CellValueChangedEvent,
+  ColDef,
+  GridApi,
+  GridReadyEvent,
+  RowDragEvent
+} from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash';
 import React from 'react';
@@ -95,7 +101,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     setAssessmentConfigsToDelete(deleted[0]);
   };
 
-  const columnDefs = [
+  const columnDefs: ColDef[] = [
     {
       headerName: 'Assessment Type',
       field: 'type',
@@ -105,7 +111,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     {
       headerName: 'Is Manually Graded',
       field: 'isManuallyGraded',
-      cellRendererFramework: BooleanCell,
+      cellRenderer: BooleanCell,
       cellRendererParams: {
         setStateHandler: setIsManuallyGraded,
         field: 'isManuallyGraded'
@@ -114,7 +120,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     {
       headerName: 'Display in Dashboard',
       field: 'displayInDashboard',
-      cellRendererFramework: BooleanCell,
+      cellRenderer: BooleanCell,
       cellRendererParams: {
         setStateHandler: setDisplayInDashboard,
         field: 'displayInDashboard'
@@ -123,7 +129,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     {
       headerName: 'Max Bonus XP',
       field: 'earlySubmissionXp',
-      cellRendererFramework: NumericCell,
+      cellRenderer: NumericCell,
       cellRendererParams: {
         setStateHandler: setEarlyXp,
         field: 'earlySubmissionXp'
@@ -132,7 +138,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     {
       headerName: 'Early Hours Before Decay',
       field: 'hoursBeforeEarlyXpDecay',
-      cellRendererFramework: NumericCell,
+      cellRenderer: NumericCell,
       cellRendererParams: {
         setStateHandler: setHoursBeforeDecay,
         field: 'hoursBeforeEarlyXpDecay'
@@ -141,7 +147,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     {
       headerName: 'Delete Row',
       field: 'placeholderToPreventColumnRerender',
-      cellRendererFramework: DeleteRowCell,
+      cellRenderer: DeleteRowCell,
       cellRendererParams: {
         deleteRowHandler: deleteRowHandler
       },
@@ -177,7 +183,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   );
 
   // Updates the data passed into ag-grid (this is necessary to update the rowIndex in our custom
-  // cellRendererFramework)
+  // cellRenderer)
   const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
     gridApi.current?.setRowData(assessmentConfig.current);
     props.setHasChangesAssessmentConfig(true);
@@ -212,7 +218,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         rowData={props.assessmentConfig.current}
         rowHeight={36}
         rowDragManaged={true}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}
         onRowDragMove={onRowDragMove}
