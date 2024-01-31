@@ -36,22 +36,22 @@ const ROOT_ID = 'root';
 const MIME_SOURCE = 'text/plain';
 // const MIME_FOLDER = 'application/vnd.google-apps.folder';
 
-// TODO: fix all calls to (window.google as any).accounts
+// GIS Token Client
+let tokenClient: google.accounts.oauth2.TokenClient;
+
 export function* persistenceSaga(): SagaIterator {
-  // Starts the function* () for every dispatched LOGOUT_GOOGLE action
-  // Same for all takeLatest() calls below, with respective types from PersistenceTypes
   yield takeLatest(LOGOUT_GOOGLE, function* () {
     yield put(actions.playgroundUpdatePersistenceFile(undefined));
     yield call(ensureInitialised);
     yield gapi.client.setToken(null);
     yield handleUserChanged(null);
+    yield localStorage.removeItem("gsi-access-token");
   });
 
   yield takeLatest(PERSISTENCE_OPEN_PICKER, function* (): any {
     let toastKey: string | undefined;
     try {
       yield call(ensureInitialisedAndAuthorised);
-
       const { id, name, picked } = yield call(pickFile, 'Pick a file to open');
       if (!picked) {
         return;
@@ -311,120 +311,105 @@ const initialisationPromise: Promise<void> = new Promise(res => {
   startInitialisation = res;
 }).then(initialise);
 
-const getUserProfileData = async (accessToken: string) => {
-  const headers = new Headers()
-  headers.append('Authorization', `Bearer ${accessToken}`)
+async function getUserProfileData(accessToken: string) {
+  const headers = new Headers();
+  headers.append('Authorization', `Bearer ${accessToken}`);
   const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
     headers
-  })
+  });
   const data = await response.json();
   return data;
 }
 
+async function isOAuthTokenValid(accessToken: string) {
+  const userProfileData = await getUserProfileData(accessToken);
+  return userProfileData.error ? false : true;
+}
+
+// updates store and localStorage
 async function handleUserChanged(accessToken: string | null) {
-  if (accessToken === null) { // TODO: check if access token is invalid instead of null
+  // logs out if null
+  if (accessToken === null) {
     store.dispatch(actions.setGoogleUser(undefined));
-  } 
-  else {
+  } else {
     const userProfileData = await getUserProfileData(accessToken)
     const email = userProfileData.email;
-    console.log("handleUserChanged", email);
     store.dispatch(actions.setGoogleUser(email));
+    localStorage.setItem("gsi-access-token", accessToken);
   }
 }
 
-let tokenClient: any;
-
-async function initialise() {
+async function initialise() { // only called once
   // load GIS script
-  await new Promise<void>((resolve, reject) => {
+  // adapted from https://github.com/MomenSherif/react-oauth
+  await new Promise<void> ((resolve, reject) => {
     const scriptTag = document.createElement('script');
     scriptTag.src = 'https://accounts.google.com/gsi/client';
     scriptTag.async = true;
     scriptTag.defer = true;
-    //scriptTag.nonce = nonce;
-    scriptTag.onload = () => {
-      console.log("success");
-      resolve();
-      //setScriptLoadedSuccessfully(true);
-      //onScriptLoadSuccessRef.current?.();
-    };
+    scriptTag.onload = () => resolve();
     scriptTag.onerror = (ev) => {
-      console.log("failure");
       reject(ev);
-      //setScriptLoadedSuccessfully(false);
-      //onScriptLoadErrorRef.current?.();
     };
-
     document.body.appendChild(scriptTag);
   });
 
   // load and initialize gapi.client
-  await new Promise<void>((resolve, reject) =>
-    gapi.load('client', { callback: () => {console.log("gapi.client loaded");resolve();}, onerror: reject })
+  await new Promise<void> ((resolve, reject) =>
+    gapi.load('client', { 
+      callback: resolve, 
+      onerror: reject 
+    })
   );
   await gapi.client.init({
     discoveryDocs: DISCOVERY_DOCS
   });
 
-  // juju
-  // TODO: properly fix types here
-  await new Promise((resolve, reject) => {
-    //console.log("At least ur here");
-    resolve((window.google as any).accounts.oauth2.initTokenClient({
-      client_id: Constants.googleClientId,
+  // initialize GIS client
+  await new Promise<google.accounts.oauth2.TokenClient> ((resolve, reject) => {
+    resolve(window.google.accounts.oauth2.initTokenClient({
+      client_id: Constants.googleClientId!,
       scope: SCOPES,
-      callback: ''
+      callback: () => void 0 // will be updated in getToken()
     }));
   }).then((c) => {
-    //console.log(c);
     tokenClient = c; 
-    //console.log(tokenClient.requestAccessToken);
   }); 
 
-  //await console.log("tokenClient", tokenClient);
-  
-
-  //await gapi.client.init({
-    //apiKey: Constants.googleApiKey,
-    //clientId: Constants.googleClientId,
-    //discoveryDocs: DISCOVERY_DOCS,
-    //scope: SCOPES
-  //});
-  //gapi.auth2.getAuthInstance().currentUser.listen(handleUserChanged);
-  //handleUserChanged(gapi.auth2.getAuthInstance().currentUser.get());
+  // check for stored token
+  // if it exists and is valid, load manually
+  // leave checking whether it is valid or not to ensureInitialisedAndAuthorised
+  if (localStorage.getItem("gsi-access-token")) {
+    await loadToken(localStorage.getItem("gsi-access-token")!);
+  }
 }
 
-// TODO: fix types
 // adapted from https://developers.google.com/identity/oauth2/web/guides/migration-to-gis
-async function getToken(err: any) {
+async function getToken() {
+  await new Promise((resolve, reject) => {
+    try {
+      // Settle this promise in the response callback for requestAccessToken()
+      // as any used here cos of limitations of the type declaration library
+      (tokenClient as any).callback = (resp: google.accounts.oauth2.TokenResponse) => {
+        if (resp.error !== undefined) {
+          reject(resp);
+        }
+        // GIS has automatically updated gapi.client with the newly issued access token.
+        handleUserChanged(gapi.client.getToken().access_token); 
+        resolve(resp);
+      };
+      tokenClient.requestAccessToken();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
 
-  //if (err.result.error.code == 401 || (err.result.error.code == 403) &&
-  //    (err.result.error.status == "PERMISSION_DENIED")) {
-  if (err) { //TODO: fix after debugging
-
-    // The access token is missing, invalid, or expired, prompt for user consent to obtain one.
-    await new Promise((resolve, reject) => {
-      try {
-        // Settle this promise in the response callback for requestAccessToken()
-        tokenClient.callback = (resp: any) => {
-          if (resp.error !== undefined) {
-            reject(resp);
-          }
-          // GIS has automatically updated gapi.client with the newly issued access token.
-          console.log('gapi.client access token: ' + JSON.stringify(gapi.client.getToken()));
-          resolve(resp);
-        };
-        console.log(tokenClient.requestAccessToken);
-        tokenClient.requestAccessToken();
-      } catch (err) {
-        console.log(err)
-      }
-    });
-  } else {
-    // Errors unrelated to authorization: server errors, exceeding quota, bad requests, and so on.
-    throw new Error(err);
-  }
+// manually load token, when token is not gotten from getToken()
+// but instead from localStorage
+async function loadToken(accessToken: string) {
+  gapi.client.setToken({access_token: accessToken});
+  return handleUserChanged(accessToken);
 }
 
 function* ensureInitialised() {
@@ -432,17 +417,19 @@ function* ensureInitialised() {
   yield initialisationPromise;
 }
 
-function* ensureInitialisedAndAuthorised() {
+function* ensureInitialisedAndAuthorised() { // called multiple times
   yield call(ensureInitialised);
-  // only call getToken if there is no token in gapi
-  console.log(gapi.client.getToken());
-  if (gapi.client.getToken() === null) {
-    yield getToken(true);
-    yield handleUserChanged(gapi.client.getToken().access_token);
-  } //TODO: fix after debugging
-  //if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-  //  yield gapi.auth2.getAuthInstance().signIn();
-  //}
+  const currToken = gapi.client.getToken();
+
+  if (currToken === null) {
+    yield call(getToken);
+  } else {
+    // check if loaded token is still valid
+    const isValid: boolean = yield call(isOAuthTokenValid, currToken.access_token);
+    if (!isValid) {
+      yield call(getToken);
+    }
+  }
 }
 
 type PickFileResult =
