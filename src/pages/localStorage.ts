@@ -74,7 +74,8 @@ export const saveState = (state: OverallState) => {
         assessmentConfigurations: state.session.assessmentConfigurations,
         notificationConfigs: state.session.notificationConfigs,
         configurableNotificationConfigs: state.session.configurableNotificationConfigs,
-        githubAccessToken: state.session.githubAccessToken
+        githubAccessToken: state.session.githubAccessToken,
+        googleAccessToken: state.session.googleAccessToken
       },
       achievements: state.achievement.achievements,
       playgroundIsFolderModeEnabled: state.workspaces.playground.isFolderModeEnabled,
