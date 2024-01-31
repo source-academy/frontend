@@ -20,6 +20,7 @@ import {
 import {
   loginGitHub,
   logoutGitHub,
+  loginGoogle,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
 import {
@@ -271,7 +272,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     googleUser: persistenceUser,
     githubOctokitObject
   } = useTypedSelector(state => state.session);
-
+  
   const dispatch = useDispatch();
   const {
     handleChangeExecTime,
@@ -596,6 +597,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSave={
           persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
+        onClickLogIn={() => dispatch(loginGoogle())}
         onClickLogOut={() => dispatch(logoutGoogle())}
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
