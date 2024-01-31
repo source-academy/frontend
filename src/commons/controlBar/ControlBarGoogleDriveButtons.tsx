@@ -16,6 +16,7 @@ export type ControlBarGoogleDriveButtonsProps = {
   onClickSave?: () => any;
   onClickSaveAs?: () => any;
   onClickLogOut?: () => any;
+  onClickLogIn?: () => any;
   onPopoverOpening?: () => any;
 };
 
@@ -41,7 +42,12 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
     />
   );
   const openButton = (
-    <ControlButton label="Open" icon={IconNames.DOCUMENT_OPEN} onClick={props.onClickOpen} />
+    <ControlButton 
+      label="Open" 
+      icon={IconNames.DOCUMENT_OPEN} 
+      onClick={props.onClickOpen} 
+      isDisabled={props.loggedInAs ? false : true}
+    />
   );
   const saveButton = (
     <ControlButton
@@ -53,13 +59,22 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
     />
   );
   const saveAsButton = (
-    <ControlButton label="Save as" icon={IconNames.SEND_TO} onClick={props.onClickSaveAs} />
+    <ControlButton 
+      label="Save as" 
+      icon={IconNames.SEND_TO}
+      onClick={props.onClickSaveAs}
+      isDisabled={props.loggedInAs ? false : true}
+    />
   );
-  const logoutButton = props.loggedInAs && (
+
+  const loginButton = props.loggedInAs ? (
     <Tooltip2 content={`Logged in as ${props.loggedInAs}`}>
-      <ControlButton label="Log out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
+      <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
     </Tooltip2>
+  ) : (
+    <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
+
   const tooltipContent = props.isFolderModeEnabled
     ? 'Currently unsupported in Folder mode'
     : undefined;
@@ -74,7 +89,7 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
               {openButton}
               {saveButton}
               {saveAsButton}
-              {logoutButton}
+              {loginButton}
             </ButtonGroup>
           </div>
         }

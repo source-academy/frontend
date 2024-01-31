@@ -40,6 +40,7 @@ import {
   LOGIN,
   LOGIN_GITHUB,
   LOGOUT_GITHUB,
+  LOGIN_GOOGLE,
   LOGOUT_GOOGLE,
   NotificationConfiguration,
   NotificationPreference,
@@ -54,6 +55,7 @@ import {
   SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
+  SET_GOOGLE_ACCESS_TOKEN,
   SET_GOOGLE_USER,
   SET_NOTIFICATION_CONFIGS,
   SET_TOKENS,
@@ -116,6 +118,8 @@ export const fetchGradingOverviews = (filterToGroup = true) =>
 
 export const login = (providerId: string) => action(LOGIN, providerId);
 
+export const loginGoogle = () => action(LOGIN_GOOGLE);
+
 export const logoutGoogle = () => action(LOGOUT_GOOGLE);
 
 export const loginGitHub = () => action(LOGIN_GITHUB);
@@ -151,6 +155,9 @@ export const setAdminPanelCourseRegistrations = (
 ) => action(SET_ADMIN_PANEL_COURSE_REGISTRATIONS, courseRegistrations);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
+
+export const setGoogleAccessToken = (accessToken?: string) => 
+  action(SET_GOOGLE_ACCESS_TOKEN, accessToken);
 
 export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
   action(SET_GITHUB_ASSESSMENT, missionRepoData);
