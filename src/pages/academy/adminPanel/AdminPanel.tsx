@@ -1,5 +1,5 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
