@@ -555,7 +555,7 @@ export class Layout {
                 ref={this.stageRef}
                 draggable
                 onWheel={Layout.zoomStage}
-                className={classes["draggable"]}
+                className={classes['draggable']}
               >
                 <Layer>
                   <Rect
