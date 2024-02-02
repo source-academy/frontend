@@ -24,13 +24,6 @@ export const dataVisualizerTab: SideContentTab = {
   id: SideContentType.dataVisualizer
 };
 
-export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
-  label: 'CSE Machine',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-  id: SideContentType.envVisualizer
-});
-
 export const makeHtmlDisplayTabFrom = (
   output: ResultOutput,
   handleError: (errorMsg: string) => void
@@ -62,6 +55,13 @@ export const makeRemoteExecutionTabFrom = (
     />
   ),
   id: SideContentType.remoteExecution
+});
+
+export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
+  label: 'CSE Machine',
+  iconName: IconNames.GLOBE,
+  body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
+  id: SideContentType.envVisualizer
 });
 
 export const makeSubstVisualizerTabFrom = (output: InterpreterOutput[]): SideContentTab => {
