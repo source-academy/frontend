@@ -228,7 +228,7 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     }
     EnvVisualizer.toggleControlStash();
     const context = createContext(4);
-    await runInContext(code, context, { executionMethod: 'ec-evaluator', envSteps: envSteps });
+    await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: envSteps });
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control!,
