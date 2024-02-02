@@ -2,7 +2,7 @@ import { runInContext } from 'js-slang/dist/';
 import createContext from 'js-slang/dist/createContext';
 import { Config } from 'src/features/envVisualizer/EnvVisualizerConfig';
 
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
+import { AgendaItemComponent } from '../compactComponents/AgendaItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { ArrayUnit } from '../components/ArrayUnit';
 import { ArrowFromArrayUnit } from '../components/arrows/ArrowFromArrayUnit';
@@ -87,7 +87,7 @@ codeSamples.forEach((code, idx) => {
     await runInContext(code, context);
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
-      context.runtime.control!,
+      context.runtime.agenda!,
       context.runtime.stash!
     );
 
@@ -174,7 +174,7 @@ codeSamples.forEach((code, idx) => {
   });
 });
 
-const codeSamplesControlStash = [
+const codeSamplesAgendaStash = [
   [
     'arrows from the environment instruction to the frame and arrows from the stash to closures',
     `
@@ -203,7 +203,7 @@ const codeSamplesControlStash = [
     7
   ],
   [
-    'Control is truncated properly',
+    'Agenda is truncated properly',
     `
       function fact(n) {
         return n <= 1 ? 1 : n * fact(n - 1);
@@ -215,8 +215,8 @@ const codeSamplesControlStash = [
   ]
 ];
 
-codeSamplesControlStash.forEach((codeSample, idx) => {
-  test('EnvVisualizer Control Stash correctly renders: ' + codeSample[0], async () => {
+codeSamplesAgendaStash.forEach((codeSample, idx) => {
+  test('EnvVisualizer Agenda Stash correctly renders: ' + codeSample[0], async () => {
     const code = codeSample[1] as string;
     const envSteps = codeSample[2] as number;
     const truncate = codeSample[3];
@@ -226,22 +226,22 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     if (truncate) {
       EnvVisualizer.toggleStackTruncated();
     }
-    EnvVisualizer.toggleControlStash();
+    EnvVisualizer.toggleAgendaStash();
     const context = createContext(4);
     await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: envSteps });
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
-      context.runtime.control!,
+      context.runtime.agenda!,
       context.runtime.stash!
     );
     Layout.draw();
-    const controlItemsToTest: ControlItemComponent[] = Layout.controlComponent.stackItemComponents;
+    const agendaItemsToTest: AgendaItemComponent[] = Layout.agendaComponent.stackItemComponents;
     const stashItemsToTest: StashItemComponent[] = Layout.stashComponent.stashItemComponents;
-    controlItemsToTest.forEach(item => {
+    agendaItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
       if (item.value === 'ENVIRONMENT') expect(item.arrow).toBeDefined();
     });
-    if (truncate) expect(controlItemsToTest.length).toBeLessThanOrEqual(10);
+    if (truncate) expect(agendaItemsToTest.length).toBeLessThanOrEqual(10);
     stashItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
     });

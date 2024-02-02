@@ -20,7 +20,7 @@ import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 import { OverallState } from '../application/ApplicationTypes';
 import { HighlightedLines } from '../editor/EditorTypes';
 import Constants, { Links } from '../utils/Constants';
-import { setEditorHighlightedLinesControl, updateEnvSteps } from '../workspace/WorkspaceActions';
+import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../workspace/WorkspaceActions';
 import { evalEditor } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
@@ -85,8 +85,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
         // This comment is copied over from workspace saga
         props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
       },
-      isControlEmpty => {
-        this.setState({ stepLimitExceeded: !isControlEmpty && this.state.lastStep });
+      isAgendaEmpty => {
+        this.setState({ stepLimitExceeded: !isAgendaEmpty && this.state.lastStep });
       }
     );
   }
@@ -201,7 +201,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization && EnvVisualizer.getCompactLayout()) {
-                      EnvVisualizer.toggleControlStash();
+                      EnvVisualizer.toggleAgendaStash();
                       EnvVisualizer.redraw();
                     }
                   }}
@@ -209,26 +209,26 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   disabled={!this.state.visualization || !EnvVisualizer.getCompactLayout()}
                 >
                   <Checkbox
-                    checked={EnvVisualizer.getControlStash()}
+                    checked={EnvVisualizer.getAgendaStash()}
                     disabled={!EnvVisualizer.getCompactLayout()}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
               </Tooltip2>
-              <Tooltip2 content="Truncate Control" compact>
+              <Tooltip2 content="Truncate Agenda" compact>
                 <AnchorButton
                   onMouseUp={() => {
-                    if (this.state.visualization && EnvVisualizer.getControlStash()) {
+                    if (this.state.visualization && EnvVisualizer.getAgendaStash()) {
                       EnvVisualizer.toggleStackTruncated();
                       EnvVisualizer.redraw();
                     }
                   }}
                   icon="minimize"
-                  disabled={!this.state.visualization || !EnvVisualizer.getControlStash()}
+                  disabled={!this.state.visualization || !EnvVisualizer.getAgendaStash()}
                 >
                   <Checkbox
                     checked={EnvVisualizer.getStackTruncated()}
-                    disabled={!EnvVisualizer.getControlStash()}
+                    disabled={!EnvVisualizer.getAgendaStash()}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -475,7 +475,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         workspaceLocation: WorkspaceLocation,
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[]
-      ) => setEditorHighlightedLinesControl(workspaceLocation, editorTabIndex, newHighlightedLines)
+      ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
     },
     dispatch
   );

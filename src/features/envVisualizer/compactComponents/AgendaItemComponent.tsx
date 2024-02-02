@@ -3,7 +3,7 @@ import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import { ControlStashConfig, ShapeDefaultProps } from '../EnvVisualizerControlStash';
+import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
@@ -15,14 +15,14 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../EnvVisualizerUtils';
-import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
+import { ArrowFromAgendaItemComponent } from './arrows/ArrowFromAgendaItemComponent';
 import { Frame } from './Frame';
 
-export class ControlItemComponent extends Visible implements IHoverable {
+export class AgendaItemComponent extends Visible implements IHoverable {
   /** text to display */
   readonly text: string;
   readonly tooltipRef: RefObject<any>;
-  readonly arrow?: ArrowFromControlItemComponent;
+  readonly arrow?: ArrowFromAgendaItemComponent;
 
   constructor(
     readonly value: any,
@@ -40,27 +40,27 @@ export class ControlItemComponent extends Visible implements IHoverable {
     super();
     this.text = truncateText(
       String(value),
-      ControlStashConfig.ControlMaxTextWidth,
-      ControlStashConfig.ControlMaxTextHeight
+      AgendaStashConfig.AgendaMaxTextWidth,
+      AgendaStashConfig.AgendaMaxTextHeight
     );
     this.tooltipRef = React.createRef();
     this.highlightOnHover = highlightOnHover;
     this.unhighlightOnHover = unhighlightOnHover;
-    this._x = ControlStashConfig.ControlPosX;
-    this._y = ControlStashConfig.ControlPosY + stackHeight;
-    this._width = ControlStashConfig.ControlItemWidth;
+    this._x = AgendaStashConfig.AgendaPosX;
+    this._y = AgendaStashConfig.AgendaPosY + stackHeight;
+    this._width = AgendaStashConfig.AgendaItemWidth;
     this._height =
       getTextHeight(
         this.text,
-        ControlStashConfig.ControlMaxTextWidth,
-        `${ControlStashConfig.FontStyle} ${ControlStashConfig.FontSize}px ${ControlStashConfig.FontFamily}`,
-        ControlStashConfig.FontSize
+        AgendaStashConfig.AgendaMaxTextWidth,
+        `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`,
+        AgendaStashConfig.FontSize
       ) +
-      ControlStashConfig.ControlItemTextPadding * 2;
+      AgendaStashConfig.AgendaItemTextPadding * 2;
     if (arrowTo) {
-      this.arrow = new ArrowFromControlItemComponent(this).to(
+      this.arrow = new ArrowFromAgendaItemComponent(this).to(
         arrowTo
-      ) as ArrowFromControlItemComponent;
+      ) as ArrowFromAgendaItemComponent;
     }
   }
 
@@ -84,16 +84,16 @@ export class ControlItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: ControlStashConfig.SA_WHITE.toString(),
-      padding: Number(ControlStashConfig.ControlItemTextPadding),
-      fontFamily: ControlStashConfig.FontFamily.toString(),
-      fontSize: Number(ControlStashConfig.FontSize),
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fill: AgendaStashConfig.SA_WHITE.toString(),
+      padding: Number(AgendaStashConfig.AgendaItemTextPadding),
+      fontFamily: AgendaStashConfig.FontFamily.toString(),
+      fontSize: Number(AgendaStashConfig.FontSize),
+      fontStyle: AgendaStashConfig.FontStyle.toString(),
+      fontVariant: AgendaStashConfig.FontVariant.toString()
     };
     const tagProps = {
       stroke: currentItemSAColor(this.topItem),
-      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
+      cornerRadius: Number(AgendaStashConfig.AgendaItemCornerRadius)
     };
     return (
       <React.Fragment key={Layout.key++}>
@@ -113,8 +113,8 @@ export class ControlItemComponent extends Visible implements IHoverable {
           />
         </Label>
         <Label
-          x={this.x() + this.width() + ControlStashConfig.TooltipMargin}
-          y={this.y() + ControlStashConfig.TooltipMargin}
+          x={this.x() + this.width() + AgendaStashConfig.TooltipMargin}
+          y={this.y() + AgendaStashConfig.TooltipMargin}
           visible={false}
           ref={this.tooltipRef}
         >
@@ -122,13 +122,13 @@ export class ControlItemComponent extends Visible implements IHoverable {
             {...ShapeDefaultProps}
             stroke="black"
             fill={'black'}
-            opacity={Number(ControlStashConfig.TooltipOpacity)}
+            opacity={Number(AgendaStashConfig.TooltipOpacity)}
           />
           <Text
             {...ShapeDefaultProps}
             {...textProps}
             text={this.tooltip}
-            padding={Number(ControlStashConfig.TooltipPadding)}
+            padding={Number(AgendaStashConfig.TooltipPadding)}
           />
         </Label>
         {this.arrow?.draw()}

@@ -44,7 +44,7 @@ import {
   DEBUG_RESET,
   DEBUG_RESUME,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
@@ -58,9 +58,9 @@ import {
   getRestoreExtraMethodsString,
   getStoreExtraMethodsString,
   highlightClean,
-  highlightCleanForControl,
+  highlightCleanForAgenda,
   highlightLine,
-  highlightLineForControl,
+  highlightLineForAgenda,
   makeElevatedContext,
   visualizeEnv
 } from '../utils/JsSlangHelper';
@@ -391,16 +391,16 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL,
+    UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA,
     function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
       const newHighlightedLines = action.payload.newHighlightedLines;
       if (newHighlightedLines.length === 0) {
-        highlightCleanForControl();
+        highlightCleanForAgenda();
       } else {
         try {
           newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
             for (let row = startRow; row <= endRow; row++) {
-              highlightLineForControl(row);
+              highlightLineForAgenda(row);
             }
           });
         } catch (e) {
@@ -1096,7 +1096,7 @@ export function* evalCode(
     : -1;
   const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
   if (envActiveAndCorrectChapter) {
-    context.executionMethod = 'cse-machine';
+    context.executionMethod = 'ec-evaluator';
   }
 
   const isFolderModeEnabled: boolean = yield select(
@@ -1300,7 +1300,7 @@ export function* evalCode(
 
   // The first time the code is executed using the explicit control evaluator,
   // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
-  if (context.executionMethod === 'cse-machine' && needUpdateEnv) {
+  if (context.executionMethod === 'ec-evaluator' && needUpdateEnv) {
     yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
     // `needUpdateEnv` implies `correctWorkspace`, which satisfies the type constraint.
     // But TS can't infer that yet, so we need a typecast here.
@@ -1308,7 +1308,7 @@ export function* evalCode(
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
-  if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
+  if (context.executionMethod === 'ec-evaluator' || context.executionMethod === 'interpreter') {
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
     introIcon && introIcon.classList.remove('side-content-tab-alert-error');
   }

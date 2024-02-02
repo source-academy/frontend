@@ -171,11 +171,7 @@ export class Frame extends Visible implements IHoverable {
     entries.push(...dummyEntries);
 
     for (const [key, data] of entries) {
-      // If the value is unassigned, retrieve declaration type from its description, otherwise, retrieve directly from the data's property
-      const constant = this.environment.head[key].description === "const declaration" || !data.writable;
-      console.log("description: ", this.environment.head[key].description);
-      console.log("constant: ", constant);
-      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant);
+      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
       if (
         this.bindings.findIndex(
           v =>

@@ -7,7 +7,7 @@ import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
 } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
@@ -217,12 +217,12 @@ export const setEditorHighlightedLines = (
     newHighlightedLines
   });
 
-export const setEditorHighlightedLinesControl = (
+export const setEditorHighlightedLinesAgenda = (
   workspaceLocation: WorkspaceLocation,
   editorTabIndex: number,
   newHighlightedLines: HighlightedLines[]
 ) =>
-  action(UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL, {
+  action(UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA, {
     workspaceLocation,
     editorTabIndex,
     newHighlightedLines
