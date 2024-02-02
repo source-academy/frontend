@@ -29,7 +29,7 @@
     }
   }
 
-  function highlightCleanForAgenda() {
+  function highlightCleanForControl() {
     var gutterCells = document.getElementsByClassName('ace_gutter-cell');
     var aceLines = document.getElementsByClassName('ace_line');
     if (gutterCells != undefined) {
@@ -44,7 +44,7 @@
     }
   }
 
-  function highlightLineForAgenda(number) {
+  function highlightLineForControl(number) {
     if (number == undefined) return;
     var gutterCells = document.getElementsByClassName('ace_gutter-cell');
     var aceLines = document.getElementsByClassName('ace_line');
@@ -69,8 +69,8 @@
   exports.Inspector = {
     highlightLine,
     highlightClean,
-    highlightCleanForAgenda,
-    highlightLineForAgenda
+    highlightCleanForControl,
+    highlightLineForControl
   };
   setTimeout(() => {}, 1000);
 })(window);

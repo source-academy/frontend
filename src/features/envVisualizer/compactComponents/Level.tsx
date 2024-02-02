@@ -3,7 +3,7 @@ import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
-import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
+import { ControlStashConfig } from '../EnvVisualizerControlStash';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode } from '../EnvVisualizerTypes';
@@ -21,15 +21,15 @@ export class Level extends Visible {
     readonly envTreeNodes: EnvTreeNode[]
   ) {
     super();
-    this._x = EnvVisualizer.getAgendaStash()
-      ? AgendaStashConfig.AgendaPosX +
-        AgendaStashConfig.AgendaItemWidth +
+    this._x = EnvVisualizer.getControlStash()
+      ? ControlStashConfig.ControlPosX +
+        ControlStashConfig.ControlItemWidth +
         CompactConfig.CanvasPaddingX
       : CompactConfig.CanvasPaddingX;
     this._y = CompactConfig.CanvasPaddingY;
-    EnvVisualizer.getAgendaStash() &&
+    EnvVisualizer.getControlStash() &&
       !this.parentLevel &&
-      (this._y += AgendaStashConfig.StashItemHeight + AgendaStashConfig.AgendaItemTextPadding * 3);
+      (this._y += ControlStashConfig.StashItemHeight + ControlStashConfig.ControlItemTextPadding * 3);
     this.parentLevel && (this._y += this.parentLevel.height() + this.parentLevel.y());
     let prevFrame: Frame | null = null;
     envTreeNodes.forEach(e => {
