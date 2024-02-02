@@ -3,11 +3,7 @@ import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
-<<<<<<< HEAD
 import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
-=======
-import { ControlStashConfig } from '../EnvVisualizerControlStash';
->>>>>>> parent of 9b32357b (Fix eslint errors)
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode } from '../EnvVisualizerTypes';
