@@ -2,15 +2,15 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 
 import { Visible } from '../../components/Visible';
-import { ArrayUnit } from '../ArrayUnit';
 import { ControlItemComponent } from '../ControlItemComponent';
+import { ArrayUnit } from '../ArrayUnit';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
 import { Text } from '../Text';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
-import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
 import { ArrowFromControlItemComponent } from './ArrowFromControlItemComponent';
+import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
 import { ArrowFromFn } from './ArrowFromFn';
 import { ArrowFromFrame } from './ArrowFromFrame';
 import { ArrowFromStashItemComponent } from './ArrowFromStashItemComponent';
