@@ -1,9 +1,9 @@
 import {
-  ControlItem,
   AppInstr,
   ArrLitInstr,
   AssmtInstr,
   BinOpInstr,
+  ControlItem,
   EnvInstr,
   Instr,
   InstrType,
@@ -27,9 +27,9 @@ import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { ControlStashConfig } from './EnvVisualizerControlStash';
 import { CompactConfig } from './EnvVisualizerCompactConfig';
 import { Config } from './EnvVisualizerConfig';
+import { ControlStashConfig } from './EnvVisualizerControlStash';
 import { Layout } from './EnvVisualizerLayout';
 import {
   CompactReferenceType,

@@ -3,8 +3,8 @@ import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
-import { ControlStashConfig } from '../EnvVisualizerControlStash';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
+import { ControlStashConfig } from '../EnvVisualizerControlStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { EnvTreeNode } from '../EnvVisualizerTypes';
 import { Frame } from './Frame';
