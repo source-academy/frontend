@@ -2,14 +2,22 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 
 import { Visible } from '../../components/Visible';
+<<<<<<< HEAD
 import { AgendaItemComponent } from '../AgendaItemComponent';
+=======
+import { ControlItemComponent } from '../ControlItemComponent';
+>>>>>>> parent of 9b32357b (Fix eslint errors)
 import { ArrayUnit } from '../ArrayUnit';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
 import { Text } from '../Text';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
+<<<<<<< HEAD
 import { ArrowFromAgendaItemComponent } from './ArrowFromAgendaItemComponent';
+=======
+import { ArrowFromControlItemComponent } from './ArrowFromControlItemComponent';
+>>>>>>> parent of 9b32357b (Fix eslint errors)
 import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
 import { ArrowFromFn } from './ArrowFromFn';
 import { ArrowFromFrame } from './ArrowFromFrame';
