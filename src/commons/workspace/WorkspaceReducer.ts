@@ -34,9 +34,9 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
+import { browseReplHistoryDown } from './WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
-  BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
@@ -130,7 +130,38 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   return state;
 };
 
-const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {});
+const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
+  builder
+    .addCase('TODO: REMOVE INDENTATION FIX', (state, action) => {})
+    .addCase(browseReplHistoryDown, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      if (state[workspaceLocation].replHistory.browseIndex === null) {
+        // Not yet started browsing history, nothing to do
+        return;
+      }
+      if (state[workspaceLocation].replHistory.browseIndex !== 0) {
+        // Browsing history, and still have earlier records to show
+        const newIndex = state[workspaceLocation].replHistory.browseIndex! - 1;
+        const newReplValue = state[workspaceLocation].replHistory.records[newIndex];
+
+        state[workspaceLocation].replValue = newReplValue;
+        state[workspaceLocation].replHistory.browseIndex = newIndex;
+        return;
+      }
+      // Browsing history, no earlier records to show; return replValue to
+      // the last value when user started browsing
+      const newIndex = null;
+      const newReplValue = state[workspaceLocation].replHistory.originalValue;
+      const newRecords = state[workspaceLocation].replHistory.records.slice();
+
+      state[workspaceLocation].replValue = newReplValue;
+      state[workspaceLocation].replHistory = {
+        browseIndex: newIndex,
+        records: newRecords,
+        originalValue: ''
+      };
+    });
+});
 
 const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
   state = defaultWorkspaceManager,
@@ -149,45 +180,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           tokenCount: action.payload.tokenCount
         }
       };
-
-    case BROWSE_REPL_HISTORY_DOWN:
-      if (state[workspaceLocation].replHistory.browseIndex === null) {
-        // Not yet started browsing history, nothing to do
-        return state;
-      } else if (state[workspaceLocation].replHistory.browseIndex !== 0) {
-        // Browsing history, and still have earlier records to show
-        const newIndex = state[workspaceLocation].replHistory.browseIndex! - 1;
-        const newReplValue = state[workspaceLocation].replHistory.records[newIndex];
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex
-            }
-          }
-        };
-      } else {
-        // Browsing history, no earlier records to show; return replValue to
-        // the last value when user started browsing
-        const newIndex = null;
-        const newReplValue = state[workspaceLocation].replHistory.originalValue;
-        const newRecords = state[workspaceLocation].replHistory.records.slice();
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              browseIndex: newIndex,
-              records: newRecords,
-              originalValue: ''
-            }
-          }
-        };
-      }
     case BROWSE_REPL_HISTORY_UP:
       const lastRecords = state[workspaceLocation].replHistory.records;
       const lastIndex = state[workspaceLocation].replHistory.browseIndex;
