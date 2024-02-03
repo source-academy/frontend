@@ -49,7 +49,6 @@ const MissionCreator: React.FC<MissionCreatorProps> = props => {
     const content = fileReader.result;
     if (content) {
       parseString(content, (err: any, result: any) => {
-        console.dir(file);
         try {
           const entireAssessment: [AssessmentOverview, Assessment] = makeEntireAssessment(result);
           entireAssessment[0].fileName = file.name.slice(0, -4);
@@ -60,7 +59,6 @@ const MissionCreator: React.FC<MissionCreatorProps> = props => {
           newAssessment(entireAssessment[1]);
           setFileInputText('Success!');
         } catch (err) {
-          console.log(err);
           setFileInputText('Invalid XML!');
         }
       });
