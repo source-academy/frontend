@@ -10,6 +10,7 @@ import {
   defaultWorkspaceManager,
   ErrorOutput,
   InterpreterOutput,
+  NotificationOutput,
   ResultOutput
 } from '../application/ApplicationTypes';
 import { LOG_OUT } from '../application/types/CommonsTypes';
@@ -360,10 +361,25 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
 
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
+        const newOutputEntryWithLogs = {
           consoleLogs: lastOutput.consoleLogs,
           ...newOutputEntry
-        } as ResultOutput);
+        } as ResultOutput;
+        const notificationOutputs: NotificationOutput[] = [];
+        if (state[workspaceLocation].hasTokenCounter) {
+          notificationOutputs.push({
+            consoleLog: "You have this ___ tokens in your code",
+            type: "notification"
+          });
+        }
+        const customNotif = state[workspaceLocation].customNotification;
+        if (customNotif !== '') {
+          notificationOutputs.push({
+            consoleLog: customNotif,
+            type: "notification"
+          });
+        }
+        newOutput = state[workspaceLocation].output.slice(0, -1).concat([...notificationOutputs, newOutputEntryWithLogs]);
       } else {
         newOutput = state[workspaceLocation].output.concat({
           consoleLogs: [],
