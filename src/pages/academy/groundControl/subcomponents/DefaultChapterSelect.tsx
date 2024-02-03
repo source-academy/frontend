@@ -2,7 +2,7 @@ import { Button, Classes, Dialog, Intent, Menu, MenuItem } from '@blueprintjs/co
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
   SALanguage,
@@ -11,7 +11,7 @@ import {
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
-export type DefaultChapterSelectProps = DispatchProps & StateProps;
+type Props = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleUpdateSublanguage: (sublang: SALanguage) => void;
@@ -22,36 +22,37 @@ export type StateProps = {
   sourceVariant: Variant;
 };
 
-const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> = props => {
-  const { handleUpdateSublanguage } = props;
-  const { sourceChapter, sourceVariant } = props;
+const DefaultChapterSelect: React.FC<Props> = ({
+  handleUpdateSublanguage,
+  sourceChapter,
+  sourceVariant
+}) => {
+  const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
+  const [isDialogOpen, setDialogState] = useState(false);
 
-  const [chosenSublang, setSublanguage] = React.useState<SALanguage>(sourceLanguages[0]);
-  const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
-
-  const handleOpenDialog = React.useCallback(
+  const handleOpenDialog = useCallback(
     (choice: SALanguage) => {
       setDialogState(true);
       setSublanguage(choice);
     },
     [setDialogState, setSublanguage]
   );
-  const handleCloseDialog = React.useCallback(() => {
+  const handleCloseDialog = useCallback(() => {
     setDialogState(false);
   }, [setDialogState]);
-  const handleConfirmDialog = React.useCallback(() => {
+  const handleConfirmDialog = useCallback(() => {
     setDialogState(false);
     handleUpdateSublanguage(chosenSublang);
   }, [chosenSublang, setDialogState, handleUpdateSublanguage]);
 
-  const chapterRenderer: ItemRenderer<SALanguage> = React.useCallback(
+  const chapterRenderer: ItemRenderer<SALanguage> = useCallback(
     (lang, { handleClick }) => (
       <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
     ),
     []
   );
 
-  const chapterListRenderer: ItemListRenderer<SALanguage> = React.useCallback(
+  const chapterListRenderer: ItemListRenderer<SALanguage> = useCallback(
     ({ itemsParentRef, renderItem, items }) => {
       const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
       const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
