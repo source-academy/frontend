@@ -115,7 +115,7 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import { Links } from '../../commons/utils/Constants';
+import Constants, { Links } from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
@@ -776,7 +776,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
     }
 
-    if (!isSicpEditor) {
+    if (!isSicpEditor && !Constants.playgroundOnly) {
       tabs.push(remoteExecutionTab);
     }
 

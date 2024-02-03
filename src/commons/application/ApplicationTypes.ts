@@ -26,17 +26,12 @@ export type OverallState = {
   readonly router: RouterState;
   readonly academy: AcademyState;
   readonly achievement: AchievementState;
-  readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
-};
-
-export type ApplicationState = {
-  readonly environment: ApplicationEnvironment;
 };
 
 export type Story = {
@@ -94,12 +89,6 @@ export type ErrorOutput = {
 };
 
 export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
-
-export enum ApplicationEnvironment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test'
-}
 
 export enum Role {
   Student = 'student',
@@ -288,25 +277,10 @@ export const getLanguageConfig = (
   return languageConfig;
 };
 
-const currentEnvironment = (): ApplicationEnvironment => {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return ApplicationEnvironment.Development;
-    case 'production':
-      return ApplicationEnvironment.Production;
-    default:
-      return ApplicationEnvironment.Test;
-  }
-};
-
 export const defaultRouter: RouterState = null;
 
 export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
-};
-
-export const defaultApplication: ApplicationState = {
-  environment: currentEnvironment()
 };
 
 export const defaultDashboard: DashboardState = {
@@ -550,7 +524,6 @@ export const defaultState: OverallState = {
   router: defaultRouter,
   academy: defaultAcademy,
   achievement: defaultAchievement,
-  application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
