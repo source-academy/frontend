@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 1`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -48,11 +48,11 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
       text="Perform * on top 2 stash values"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 2`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -97,11 +97,11 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
       text="10"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 3`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -146,11 +146,11 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
       text="362880"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 1`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -197,11 +197,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="Call function with 0 arguments"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 2`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -248,11 +248,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="Access array at given index"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 3`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -299,11 +299,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="1"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 4`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -376,11 +376,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       strokeEnabled={false}
     />
   </Group>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 5`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -427,11 +427,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="Mark return address"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 6`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -504,11 +504,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       strokeEnabled={false}
     />
   </Group>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 7`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -555,11 +555,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="return arr;"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 8`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -606,11 +606,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="Pop most recently pushed value from stash"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 9`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -657,11 +657,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="Keep executing while loop body if predicate holds"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 10`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -708,11 +708,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="x < n"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 11`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -759,11 +759,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="x = x + 1;"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -810,11 +810,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="Pop most recently pushed value from stash"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -861,11 +861,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="Assign new value to array at given index"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 14`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -912,11 +912,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="() => x"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -963,11 +963,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       text="x"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -1038,11 +1038,11 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       strokeEnabled={false}
     />
   </Group>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 1`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -1089,11 +1089,11 @@ exports[`EnvVisualizer Control Stash correctly renders: global environments are 
       text="math_sin(math_PI / 2);"
     />
   </Label>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 2`] = `
-<React.Fragment>
+<Group>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -1166,7 +1166,7 @@ exports[`EnvVisualizer Control Stash correctly renders: global environments are 
       strokeEnabled={false}
     />
   </Group>
-</React.Fragment>
+</Group>
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 0 1`] = `
