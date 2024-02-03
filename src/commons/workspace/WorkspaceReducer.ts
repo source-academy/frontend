@@ -34,10 +34,9 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
-import { browseReplHistoryDown } from './WorkspaceActions';
+import { browseReplHistoryDown, browseReplHistoryUp } from './WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
-  BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
@@ -132,7 +131,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
 
 const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   builder
-    .addCase('TODO: REMOVE INDENTATION FIX', (state, action) => {})
     .addCase(browseReplHistoryDown, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       if (state[workspaceLocation].replHistory.browseIndex === null) {
@@ -160,6 +158,38 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         records: newRecords,
         originalValue: ''
       };
+    })
+    .addCase(browseReplHistoryUp, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const lastRecords = state[workspaceLocation].replHistory.records;
+      const lastIndex = state[workspaceLocation].replHistory.browseIndex;
+      if (
+        lastRecords.length === 0 ||
+        (lastIndex !== null && lastRecords[lastIndex + 1] === undefined)
+      ) {
+        // There is no more later history to show
+        return;
+      }
+      if (lastIndex === null) {
+        // Not yet started browsing, initialise the index & array
+        const newIndex = 0;
+        const newRecords = lastRecords.slice();
+        const originalValue = state[workspaceLocation].replValue;
+        const newReplValue = newRecords[newIndex];
+
+        state[workspaceLocation].replValue = newReplValue;
+        state[workspaceLocation].replHistory = {
+          browseIndex: newIndex,
+          records: newRecords,
+          originalValue
+        };
+        return;
+      }
+      // Browsing history, and still have later history to show
+      const newIndex = lastIndex + 1;
+      const newReplValue = lastRecords[newIndex];
+      state[workspaceLocation].replValue = newReplValue;
+      state[workspaceLocation].replHistory.browseIndex = newIndex;
     });
 });
 
@@ -180,50 +210,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           tokenCount: action.payload.tokenCount
         }
       };
-    case BROWSE_REPL_HISTORY_UP:
-      const lastRecords = state[workspaceLocation].replHistory.records;
-      const lastIndex = state[workspaceLocation].replHistory.browseIndex;
-      if (
-        lastRecords.length === 0 ||
-        (lastIndex !== null && lastRecords[lastIndex + 1] === undefined)
-      ) {
-        // There is no more later history to show
-        return state;
-      } else if (lastIndex === null) {
-        // Not yet started browsing, initialise the index & array
-        const newIndex = 0;
-        const newRecords = lastRecords.slice();
-        const originalValue = state[workspaceLocation].replValue;
-        const newReplValue = newRecords[newIndex];
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex,
-              records: newRecords,
-              originalValue
-            }
-          }
-        };
-      } else {
-        // Browsing history, and still have later history to show
-        const newIndex = lastIndex + 1;
-        const newReplValue = lastRecords[newIndex];
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex
-            }
-          }
-        };
-      }
     case CHANGE_EXEC_TIME:
       return {
         ...state,
