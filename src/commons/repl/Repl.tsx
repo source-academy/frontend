@@ -122,6 +122,12 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
           </Card>
         );
       }
+    case 'notification':
+      return (
+        <Card>
+          <Pre className="notification-output">{"💡 " + props.output.consoleLog}</Pre>
+        </Card>
+      );
     default:
       return <Card>''</Card>;
   }
