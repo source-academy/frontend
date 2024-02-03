@@ -55,6 +55,7 @@ const NavigationBar: React.FC = () => {
     courseShortName,
     enableAchievements,
     enableSourcecast,
+    enableStories,
     assessmentConfigurations
   } = useSession();
   const assessmentTypes = useMemo(
@@ -180,14 +181,21 @@ const NavigationBar: React.FC = () => {
         disabled: !(isEnrolledInACourse && enableAchievements)
       },
       {
-        to: '/stories',
+        to: `/courses/${courseId}/stories`,
         icon: IconNames.GIT_REPO,
         text: 'Stories',
-        // TODO: Enable when stories are implemented
-        disabled: true && !isLoggedIn
+        // TODO: Enable for public deployment
+        disabled: !(isEnrolledInACourse && enableStories)
       }
     ];
-  }, [isLoggedIn, isEnrolledInACourse, courseId, enableSourcecast, enableAchievements]);
+  }, [
+    courseId,
+    isEnrolledInACourse,
+    enableSourcecast,
+    enableStories,
+    isLoggedIn,
+    enableAchievements
+  ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
     () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
@@ -359,14 +367,14 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     to: '/sicpjs',
     icon: IconNames.BOOK,
     text: 'SICP JS'
-  },
-  {
-    to: '/stories',
-    icon: IconNames.GIT_REPO,
-    text: 'Stories',
-    // TODO: Enable when stories are implemented
-    disabled: true
   }
+  // {
+  //   to: '/stories',
+  //   icon: IconNames.GIT_REPO,
+  //   text: 'Stories',
+  //   // TODO: Enable for public deployment
+  //   disabled: true
+  // }
 ];
 
 export const renderNavlinksFromInfo = (
