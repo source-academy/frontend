@@ -4,7 +4,6 @@ import {
   findDeclaration,
   getNames,
   interrupt,
-  parseError,
   Result,
   resume,
   runFilesInContext,
@@ -15,9 +14,7 @@ import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
@@ -1241,22 +1238,9 @@ export function* evalCode(
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
       yield put(actions.evalStoryError(context.errors, storyEnv!));
     }
-    // we need to parse again, but preserve the errors in context
-    const oldErrors = context.errors;
-    context.errors = [];
-    // Note: Type checking does not support multiple file programs.
-    const parsed = parse(entrypointCode, context);
-    const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
-    context.errors = oldErrors;
-    // for achievement event tracking
+
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
 
-    if (typeErrors && typeErrors.length > 0 && !isStoriesBlock) {
-      events.push(EventType.ERROR);
-      yield put(
-        actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
-      );
-    }
     yield put(actions.addEvent(events));
     return;
   } else if (result.status === 'suspended' || result.status === 'suspended-ec-eval') {
