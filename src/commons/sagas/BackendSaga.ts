@@ -217,8 +217,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (courseConfiguration.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
     }
     /**
      * NOTE: Navigation logic is now handled in <Login /> component.
@@ -263,8 +267,12 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.setCourseConfiguration(courseConfiguration));
         yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
 
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
+        if (courseConfiguration.enableStories) {
+          yield put(actions.getStoriesUser());
+          // TODO: Fetch associated stories group ID
+        } else {
+          yield put(actions.clearStoriesUserAndGroup());
+        }
       }
     }
   );
@@ -275,8 +283,12 @@ function* BackendSaga(): SagaIterator {
     if (config) {
       yield put(actions.setCourseConfiguration(config));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (config.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
     }
   });
 
@@ -897,8 +909,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield put(actions.setCourseRegistration(courseRegistration));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (courseConfiguration.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
 
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
     }
@@ -913,6 +929,13 @@ function* BackendSaga(): SagaIterator {
       const resp: Response | null = yield call(putCourseConfig, tokens, courseConfig);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
+      }
+
+      if (courseConfig.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
       }
 
       yield put(actions.setCourseConfiguration(courseConfig));
@@ -1117,6 +1140,13 @@ function* BackendSaga(): SagaIterator {
      */
     yield put(actions.setUser(user));
     yield put(actions.setCourseRegistration({ role: Role.Student }));
+
+    if (courseConfiguration.enableStories) {
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+    } else {
+      yield put(actions.clearStoriesUserAndGroup());
+    }
 
     const placeholderAssessmentConfig = [
       {
