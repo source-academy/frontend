@@ -15,11 +15,7 @@ import {
 import ControlButton from '../../../../commons/ControlButton';
 import { changeSublanguage } from '../../../../commons/workspace/WorkspaceActions';
 
-type Props = StateProps;
-
-export type StateProps = {};
-
-const DefaultChapterSelect: React.FC<Props> = () => {
+const DefaultChapterSelect: React.FC = () => {
   const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
   const [isDialogOpen, setDialogState] = useState(false);
 
