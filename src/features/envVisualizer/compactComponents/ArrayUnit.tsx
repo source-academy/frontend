@@ -8,10 +8,10 @@ import { Data } from '../EnvVisualizerTypes';
 import { defaultSAColor } from '../EnvVisualizerUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
+import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
-import { Text } from './Text';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */

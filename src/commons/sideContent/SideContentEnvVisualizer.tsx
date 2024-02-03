@@ -15,6 +15,7 @@ import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { EnvVisualizerAnimation } from 'src/features/envVisualizer/EnvVisualizerAnimation';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
 import { OverallState } from '../application/ApplicationTypes';
@@ -77,7 +78,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       stepLimitExceeded: false
     };
     EnvVisualizer.init(
-      visualization => this.setState({ visualization }),
+      visualization => this.setState({ visualization }, () => EnvVisualizerAnimation.startAnimation()),
       this.state.width,
       this.state.height,
       (segments: [number, number][]) => {
@@ -161,6 +162,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       EnvVisualizer.clearEnv();
     }
   }
+
+  
 
   public render() {
     const envVizHandlers = this.state.visualization
@@ -405,7 +408,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
-      EnvVisualizer.enableAnimation();
+      EnvVisualizerAnimation.enableAnimations();
     }
   };
 
