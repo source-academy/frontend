@@ -1,9 +1,11 @@
 import { Button, Classes, Dialog, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Variant } from 'js-slang/dist/types';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import Constants from 'src/commons/utils/Constants';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import {
   SALanguage,
@@ -15,14 +17,17 @@ import { changeSublanguage } from '../../../../commons/workspace/WorkspaceAction
 
 type Props = StateProps;
 
-export type StateProps = {
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
-};
+export type StateProps = {};
 
-const DefaultChapterSelect: React.FC<Props> = ({ sourceChapter, sourceVariant }) => {
+const DefaultChapterSelect: React.FC<Props> = () => {
   const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
   const [isDialogOpen, setDialogState] = useState(false);
+
+  const {
+    // Temporarily load the defaults when the course configuration fetch has yet to return
+    sourceChapter = Constants.defaultSourceChapter,
+    sourceVariant = Constants.defaultSourceVariant
+  } = useSession();
 
   const dispatch = useDispatch();
   const handleUpdateSublanguage = useCallback(
