@@ -1,5 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -13,22 +14,21 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import insertFakeAchievements from '../../../commons/achievement/utils/InsertFakeAchievements';
+import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
+import {
+  getAchievements,
+  getGoals,
+  getOwnGoals,
+  getUserAssessmentOverviews,
+  getUsers,
+  updateGoalProgress
+} from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import {
   AchievementUser,
   FilterStatus,
   GoalProgress
 } from '../../../features/achievement/AchievementTypes';
-
-export type DispatchProps = {
-  fetchAssessmentOverviews: () => void;
-  getAchievements: () => void;
-  getGoals: (studentCourseRegId: number) => void;
-  getOwnGoals: () => void;
-  getUserAssessmentOverviews: (studentCourseRegId: number) => void;
-  getUsers: () => void;
-  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
-};
 
 export type StateProps = {
   group: string | null;
@@ -63,49 +63,63 @@ export const generateAchievementTasks = (
     />
   ));
 
-type DashboardProps = DispatchProps & StateProps;
+type DashboardProps = StateProps;
 
-const AchievementDashboard: React.FC<DashboardProps> = props => {
-  const {
-    getAchievements,
-    getOwnGoals,
-    getGoals,
-    getUserAssessmentOverviews,
-    getUsers,
-    updateGoalProgress,
-    fetchAssessmentOverviews,
-    group,
-    inferencer,
-    name,
-    role,
-    assessmentConfigs,
-    assessmentOverviews,
-    achievementAssessmentOverviews,
-    users
-  } = props;
-
+const AchievementDashboard: React.FC<DashboardProps> = ({
+  group,
+  inferencer,
+  name,
+  role,
+  assessmentConfigs,
+  assessmentOverviews,
+  achievementAssessmentOverviews,
+  users
+}) => {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
+
+  const dispatch = useDispatch();
+  const {
+    handleFetchAssessmentOverviews,
+    handleGetAchievements,
+    handleGetGoals,
+    handleGetOwnGoals,
+    handleGetUserAssessmentOverviews,
+    handleGetUsers,
+    handleUpdateGoalProgress
+  } = useMemo(() => {
+    return {
+      handleFetchAssessmentOverviews: () => dispatch(fetchAssessmentOverviews()),
+      handleGetAchievements: () => dispatch(getAchievements()),
+      handleGetGoals: (studentCourseRegId: number) => dispatch(getGoals(studentCourseRegId)),
+      handleGetOwnGoals: () => dispatch(getOwnGoals()),
+      handleGetUserAssessmentOverviews: (studentCourseRegId: number) =>
+        dispatch(getUserAssessmentOverviews(studentCourseRegId)),
+      handleGetUsers: () => dispatch(getUsers()),
+      handleUpdateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) =>
+        dispatch(updateGoalProgress(studentCourseRegId, progress))
+    };
+  }, [dispatch]);
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    selectedUser ? getGoals(selectedUser.courseRegId) : getOwnGoals();
+    selectedUser ? handleGetGoals(selectedUser.courseRegId) : handleGetOwnGoals();
 
     selectedUser
-      ? getUserAssessmentOverviews(selectedUser.courseRegId)
-      : fetchAssessmentOverviews();
+      ? handleGetUserAssessmentOverviews(selectedUser.courseRegId)
+      : handleFetchAssessmentOverviews();
 
-    getAchievements();
+    handleGetAchievements();
   }, [
-    selectedUser,
-    getAchievements,
-    getGoals,
-    getOwnGoals,
-    getUserAssessmentOverviews,
-    fetchAssessmentOverviews
+    handleFetchAssessmentOverviews,
+    handleGetAchievements,
+    handleGetGoals,
+    handleGetOwnGoals,
+    handleGetUserAssessmentOverviews,
+    selectedUser
   ]);
 
   const userAssessmentOverviews = selectedUser
@@ -149,8 +163,8 @@ const AchievementDashboard: React.FC<DashboardProps> = props => {
             hiddenState={hiddenState}
             studio={group || 'Staff'}
             users={users}
-            getUsers={getUsers}
-            updateGoalProgress={updateGoalProgress}
+            getUsers={handleGetUsers}
+            updateGoalProgress={handleUpdateGoalProgress}
           />
         )}
 

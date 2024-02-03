@@ -2,17 +2,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
-import {
-  getAchievements,
-  getGoals,
-  getOwnGoals,
-  getUserAssessmentOverviews,
-  getUsers,
-  updateGoalProgress
-} from '../../../features/achievement/AchievementActions';
-import AchievementDashboard, { DispatchProps, StateProps } from './AchievementDashboard';
+import AchievementDashboard, { StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   group: state.session.group,
@@ -25,19 +16,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   assessmentConfigs: state.session.assessmentConfigurations
 });
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      fetchAssessmentOverviews,
-      getAchievements,
-      getGoals,
-      getOwnGoals,
-      getUserAssessmentOverviews,
-      getUsers,
-      updateGoalProgress
-    },
-    dispatch
-  );
+const mapDispatchToProps: MapDispatchToProps<{}, {}> = (dispatch: Dispatch) =>
+  bindActionCreators({}, dispatch);
 
 const DashboardContainer = connect(mapStateToProps, mapDispatchToProps)(AchievementDashboard);
 
