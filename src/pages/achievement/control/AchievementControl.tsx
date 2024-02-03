@@ -18,9 +18,7 @@ import {
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
-export type StateProps = {};
-
-const AchievementControl: React.FC<StateProps> = () => {
+const AchievementControl: React.FC = () => {
   const dispatch = useDispatch();
   const {
     handleBulkUpdateAchievements,

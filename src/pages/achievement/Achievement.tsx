@@ -4,7 +4,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import { Role } from '../../commons/application/ApplicationTypes';
 import NotFound from '../notFound/NotFound';
-import AchievementControl from './control/AchievementControlContainer';
+import AchievementControl from './control/AchievementControl';
 import AchievementDashboard from './subcomponents/AchievementDashboard';
 
 const Achievement: React.FC = () => {
