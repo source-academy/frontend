@@ -2,6 +2,8 @@ $code-color-code: #ced9e0;
 $code-color-log: #dd8c60;
 $code-color-result: #ffffff;
 $code-color-error: #ff4444;
+$code-background-color-notification: #f1b80f;
+$code-color-notification: #f9f0d7;
 
 .workspace {
   height: 100%;
@@ -766,6 +768,10 @@ $code-color-error: #ff4444;
     overflow-y: auto;
     margin: 0 0.5rem 0 0;
 
+    .#{$ns}-card:has(.notification-output) {
+      background-color: $code-background-color-notification;
+    }
+
     .#{$ns}-card {
       background-color: $cadet-color-2;
       padding: 0.4rem 0.6rem 0.4rem 0.6rem;
@@ -821,6 +827,10 @@ $code-color-error: #ff4444;
 
       .error-output {
         color: $code-color-error;
+      }
+
+      .notification-output {
+        color: $code-color-notification;
       }
     }
 
