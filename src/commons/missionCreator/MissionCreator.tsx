@@ -19,13 +19,11 @@ import {
   storeLocalAssessmentOverview
 } from '../XMLParser/XMLParserHelper';
 
-type MissionCreatorProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
 };
 
-const MissionCreator: React.FC<MissionCreatorProps> = props => {
+const MissionCreator: React.FC<Props> = props => {
   const [fileInputText, setFileInputText] = useState('Import XML');
   let fileReader: FileReader | undefined = undefined;
 
