@@ -30,8 +30,6 @@ import {
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
-type GradingEditorProps = OwnProps;
-
 type GradingSaveFunction = (
   submissionId: number,
   questionId: number,
@@ -39,7 +37,7 @@ type GradingSaveFunction = (
   comments?: string
 ) => void;
 
-type OwnProps = {
+type Props = {
   solution: number | string | null;
   questionId: number;
   submissionId: number;
@@ -55,25 +53,19 @@ type OwnProps = {
 
 const gradingEditorButtonClass = 'grading-editor-button';
 
-const GradingEditor: React.FC<GradingEditorProps> = props => {
+const GradingEditor: React.FC<Props> = props => {
   const dispatch = useDispatch();
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
-    () => ({
-      handleGradingSave: (
-        submissionId: number,
-        questionId: number,
-        xpAdjustment: number | undefined,
-        comments?: string
-      ) => dispatch(submitGrading(submissionId, questionId, xpAdjustment, comments)),
-      handleGradingSaveAndContinue: (
-        submissionId: number,
-        questionId: number,
-        xpAdjustment: number | undefined,
-        comments?: string
-      ) => dispatch(submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments)),
-      handleReautogradeAnswer: (submissionId: number, questionId: number) =>
-        dispatch(reautogradeAnswer(submissionId, questionId))
-    }),
+    () =>
+      ({
+        handleGradingSave: (...args) => dispatch(submitGrading(...args)),
+        handleGradingSaveAndContinue: (...args) => dispatch(submitGradingAndContinue(...args)),
+        handleReautogradeAnswer: (...args) => dispatch(reautogradeAnswer(...args))
+      }) satisfies {
+        handleGradingSave: GradingSaveFunction;
+        handleGradingSaveAndContinue: GradingSaveFunction;
+        handleReautogradeAnswer: (submissionId: number, questionId: number) => void;
+      },
     [dispatch]
   );
 
