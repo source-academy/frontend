@@ -924,13 +924,11 @@ export const uploadAssessment = async (
   file: File,
   tokens: Tokens,
   forceUpdate: boolean,
-  hasTokenCounter: boolean,
   assessmentConfigId: number
 ): Promise<Response | null> => {
   const formData = new FormData();
   formData.append('assessment[file]', file);
   formData.append('forceUpdate', String(forceUpdate));
-  formData.append('hasTokenCounter', String(hasTokenCounter));
   formData.append('assessmentConfigId', String(assessmentConfigId));
   const resp = await request(`${courseId()}/admin/assessments`, 'POST', {
     ...tokens,

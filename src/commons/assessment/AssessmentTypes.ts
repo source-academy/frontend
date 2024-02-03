@@ -95,6 +95,7 @@ export type AssessmentConfiguration = {
   isManuallyGraded: boolean;
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
+  hasTokenCounter: boolean;
   earlySubmissionXp: number;
 };
 
