@@ -2,10 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import {
-  AssessmentConfiguration,
-  AssessmentOverview
-} from 'src/commons/assessment/AssessmentTypes';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -31,15 +28,7 @@ import {
 } from '../../../features/achievement/AchievementTypes';
 
 export type StateProps = {
-  group: string | null;
-  inferencer: AchievementInferencer;
   id?: number;
-  name?: string;
-  role?: Role;
-  assessmentConfigs?: AssessmentConfiguration[];
-  assessmentOverviews?: AssessmentOverview[];
-  achievementAssessmentOverviews: AssessmentOverview[];
-  users: AchievementUser[];
 };
 
 /**
@@ -65,19 +54,25 @@ export const generateAchievementTasks = (
 
 type DashboardProps = StateProps;
 
-const AchievementDashboard: React.FC<DashboardProps> = ({
-  group,
-  inferencer,
-  name,
-  role,
-  assessmentConfigs,
-  assessmentOverviews,
-  achievementAssessmentOverviews,
-  users
-}) => {
+const AchievementDashboard: React.FC<DashboardProps> = () => {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
+
+  const {
+    group,
+    name,
+    role,
+    assessmentOverviews,
+    assessmentConfigurations: assessmentConfigs
+  } = useSession();
+
+  const { assessmentOverviews: achievementAssessmentOverviews, users } = useTypedSelector(
+    state => state.achievement
+  );
+  const inferencer = useTypedSelector(
+    state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
+  );
 
   const dispatch = useDispatch();
   const {
