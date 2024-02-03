@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import {
   SALanguage,
@@ -10,25 +11,24 @@ import {
   styliseSublanguage
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import { changeSublanguage } from '../../../../commons/workspace/WorkspaceActions';
 
-type Props = DispatchProps & StateProps;
-
-export type DispatchProps = {
-  handleUpdateSublanguage: (sublang: SALanguage) => void;
-};
+type Props = StateProps;
 
 export type StateProps = {
   sourceChapter: Chapter;
   sourceVariant: Variant;
 };
 
-const DefaultChapterSelect: React.FC<Props> = ({
-  handleUpdateSublanguage,
-  sourceChapter,
-  sourceVariant
-}) => {
+const DefaultChapterSelect: React.FC<Props> = ({ sourceChapter, sourceVariant }) => {
   const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
   const [isDialogOpen, setDialogState] = useState(false);
+
+  const dispatch = useDispatch();
+  const handleUpdateSublanguage = useCallback(
+    (sublang: SALanguage) => dispatch(changeSublanguage(sublang)),
+    [dispatch]
+  );
 
   const handleOpenDialog = useCallback(
     (choice: SALanguage) => {
