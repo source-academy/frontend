@@ -1,8 +1,10 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { parseString } from 'xml2js';
 
+import { updateAssessment } from '../application/actions/SessionActions';
 import {
   Assessment,
   AssessmentOverview,
@@ -17,11 +19,7 @@ import {
   storeLocalAssessmentOverview
 } from '../XMLParser/XMLParserHelper';
 
-type MissionCreatorProps = DispatchProps & OwnProps;
-
-export type DispatchProps = {
-  newAssessment: (assessment: Assessment) => void;
-};
+type MissionCreatorProps = OwnProps;
 
 type OwnProps = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
@@ -31,13 +29,18 @@ const MissionCreator: React.FC<MissionCreatorProps> = props => {
   const [fileInputText, setFileInputText] = useState('Import XML');
   let fileReader: FileReader | undefined = undefined;
 
+  const dispatch = useDispatch();
+  const newAssessment = useCallback(
+    (assessment: Assessment) => dispatch(updateAssessment(assessment)),
+    [dispatch]
+  );
+
   useEffect(() => {
     const assessment = retrieveLocalAssessment();
     if (assessment) {
-      props.newAssessment(assessment);
+      newAssessment(assessment);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.newAssessment]);
+  }, [newAssessment]);
 
   const handleFileRead = (file: any) => (e: any) => {
     if (!fileReader) {
@@ -54,7 +57,7 @@ const MissionCreator: React.FC<MissionCreatorProps> = props => {
           props.updateEditingOverview(entireAssessment[0]);
 
           storeLocalAssessment(entireAssessment[1]);
-          props.newAssessment(entireAssessment[1]);
+          newAssessment(entireAssessment[1]);
           setFileInputText('Success!');
         } catch (err) {
           console.log(err);
@@ -77,7 +80,7 @@ const MissionCreator: React.FC<MissionCreatorProps> = props => {
     storeLocalAssessmentOverview(overviewTemplate());
     props.updateEditingOverview(overviewTemplate());
     storeLocalAssessment(assessmentTemplate());
-    props.newAssessment(assessmentTemplate());
+    newAssessment(assessmentTemplate());
   };
 
   return (
