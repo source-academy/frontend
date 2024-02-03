@@ -39,6 +39,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
     enableGame,
     enableAchievements,
     enableSourcecast,
+    enableStories,
     moduleHelpText
   } = props.courseConfiguration;
 
@@ -174,6 +175,16 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableSourcecast: (e.target as HTMLInputElement).checked
+              })
+            }
+          />
+          <Switch
+            checked={enableStories}
+            label="Enable Stories"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableStories: (e.target as HTMLInputElement).checked
               })
             }
           />
