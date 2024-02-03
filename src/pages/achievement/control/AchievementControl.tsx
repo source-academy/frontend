@@ -21,17 +21,15 @@ export type StateProps = {
   inferencer: AchievementInferencer;
 };
 
-const AchievementControl: React.FC<DispatchProps & StateProps> = props => {
-  const {
-    bulkUpdateAchievements,
-    bulkUpdateGoals,
-    getAchievements,
-    getOwnGoals,
-    removeAchievement,
-    removeGoal,
-    inferencer
-  } = props;
-
+const AchievementControl: React.FC<DispatchProps & StateProps> = ({
+  bulkUpdateAchievements,
+  bulkUpdateGoals,
+  getAchievements,
+  getOwnGoals,
+  removeAchievement,
+  removeGoal,
+  inferencer
+}) => {
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
@@ -82,9 +80,7 @@ const AchievementControl: React.FC<DispatchProps & StateProps> = props => {
 
       <div className="AchievementControl">
         <AchievementPreview awaitPublish={awaitPublish} publishChanges={publishChanges} />
-
         <AchievementEditor requestPublish={requestPublish} />
-
         <GoalEditor requestPublish={requestPublish} />
       </div>
     </AchievementContext.Provider>
