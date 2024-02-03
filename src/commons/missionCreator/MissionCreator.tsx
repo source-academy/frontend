@@ -1,6 +1,6 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { parseString } from 'xml2js';
 
 import {
@@ -27,11 +27,11 @@ type OwnProps = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
 };
 
-function MissionCreator(props: MissionCreatorProps) {
-  const [fileInputText, setFileInputText] = React.useState('Import XML');
+const MissionCreator: React.FC<MissionCreatorProps> = props => {
+  const [fileInputText, setFileInputText] = useState('Import XML');
   let fileReader: FileReader | undefined = undefined;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const assessment = retrieveLocalAssessment();
     if (assessment) {
       props.newAssessment(assessment);
@@ -95,6 +95,6 @@ function MissionCreator(props: MissionCreatorProps) {
       </div>
     </div>
   );
-}
+};
 
 export default MissionCreator;
