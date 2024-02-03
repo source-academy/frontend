@@ -11,7 +11,7 @@ import { showWarningMessage } from '../../../../commons/utils/notifications/Noti
 export type DropzoneProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
+  handleUploadAssessment: (file: File, forceUpdate: boolean, hasTokenCounter: boolean, assessmentConfigId: number) => void;
 };
 
 type StateProps = {
@@ -48,11 +48,12 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
       return;
     }
     if (file) {
-      handleUploadAssessment(file, forceUpdate, assessmentConfigId);
+      handleUploadAssessment(file, forceUpdate, hasTokenCounter, assessmentConfigId);
       setForceUpdate(false);
+      setHasTokenCounter(false);
     }
     setFile(undefined);
-  }, [file, forceUpdate, handleUploadAssessment, assessmentConfigId]);
+  }, [file, forceUpdate, hasTokenCounter, handleUploadAssessment, assessmentConfigId]);
   const handleCancelUpload = React.useCallback(() => setFile(undefined), [setFile]);
 
   const handleDropAccepted = React.useCallback(
