@@ -136,6 +136,8 @@ export type WorkspaceState = {
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
+  readonly hasTokenCounter: boolean;
+  readonly customNotification: string;
   readonly sharedbConnected: boolean;
   readonly sideContentHeight?: number;
   readonly stepLimit: number;
