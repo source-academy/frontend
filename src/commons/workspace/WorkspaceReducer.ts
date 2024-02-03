@@ -1,3 +1,4 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 
@@ -84,6 +85,10 @@ import {
   WorkspaceManagerState
 } from './WorkspaceTypes';
 
+const getWorkspaceLocation = (action: any): WorkspaceLocation => {
+  return action.payload ? action.payload.workspaceLocation : 'assessment';
+};
+
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The
  * pre-conditions are that
@@ -96,12 +101,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   state = defaultWorkspaceManager,
   action: SourceActionType
 ) => {
-  const workspaceLocation: WorkspaceLocation = (action as any).payload
-    ? (action as any).payload.workspaceLocation
-    : 'assessment';
-  let newOutput: InterpreterOutput[];
-  let lastOutput: InterpreterOutput;
-
+  const workspaceLocation = getWorkspaceLocation(action);
   switch (workspaceLocation) {
     case 'sourcecast':
       const sourcecastState = SourcecastReducer(state.sourcecast, action);
@@ -124,6 +124,21 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     default:
       break;
   }
+
+  state = oldWorkspaceReducer(state, action);
+  state = newWorkspaceReducer(state, action);
+  return state;
+};
+
+const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {});
+
+const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
+  state = defaultWorkspaceManager,
+  action: SourceActionType
+) => {
+  const workspaceLocation = getWorkspaceLocation(action);
+  let newOutput: InterpreterOutput[];
+  let lastOutput: InterpreterOutput;
 
   switch (action.type) {
     case SET_TOKEN_COUNT:
