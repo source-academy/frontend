@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
@@ -17,11 +18,9 @@ import {
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
-export type StateProps = {
-  inferencer: AchievementInferencer;
-};
+export type StateProps = {};
 
-const AchievementControl: React.FC<StateProps> = ({ inferencer }) => {
+const AchievementControl: React.FC<StateProps> = () => {
   const dispatch = useDispatch();
   const {
     handleBulkUpdateAchievements,
@@ -41,6 +40,10 @@ const AchievementControl: React.FC<StateProps> = ({ inferencer }) => {
       handleRemoveGoal: (uuid: string) => dispatch(removeGoal(uuid))
     }),
     [dispatch]
+  );
+
+  const inferencer = useTypedSelector(
+    state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
   );
 
   /**
