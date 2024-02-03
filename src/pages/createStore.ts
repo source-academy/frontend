@@ -1,8 +1,8 @@
+import { configureStore } from '@reduxjs/toolkit';
 import { throttle } from 'lodash';
-import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import { defaultState } from '../commons/application/ApplicationTypes';
+import { defaultState, OverallState } from '../commons/application/ApplicationTypes';
 import createRootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
@@ -13,19 +13,16 @@ export const store = createStore();
 export function createStore() {
   const sagaMiddleware = createSagaMiddleware();
   const middleware = [sagaMiddleware];
-
-  const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        serialize: true,
-        maxAge: 300
-      }) || compose
-    : compose;
-
   const initialStore = loadStore(loadStoredState()) || defaultState;
 
-  const enhancers = composeEnhancers(applyMiddleware(...middleware));
-
-  const createdStore = _createStore(createRootReducer(), initialStore as any, enhancers);
+  const createdStore = configureStore<OverallState>({
+    reducer: createRootReducer(),
+    // Temporary fix for redux-saga types, pending #2757
+    // See also: https://github.com/reduxjs/redux-toolkit/issues/3950
+    middleware: middleware as any,
+    devTools: { serialize: true, maxAge: 300 },
+    preloadedState: initialStore as any
+  });
   sagaMiddleware.run(MainSaga);
 
   createdStore.subscribe(
