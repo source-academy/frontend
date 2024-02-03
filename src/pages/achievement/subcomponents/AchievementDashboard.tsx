@@ -27,10 +27,6 @@ import {
   GoalProgress
 } from '../../../features/achievement/AchievementTypes';
 
-export type StateProps = {
-  id?: number;
-};
-
 /**
  * Generates <AchievementTask /> components
  *
@@ -52,9 +48,7 @@ export const generateAchievementTasks = (
     />
   ));
 
-type DashboardProps = StateProps;
-
-const AchievementDashboard: React.FC<DashboardProps> = () => {
+const AchievementDashboard: React.FC = () => {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
