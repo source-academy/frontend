@@ -81,6 +81,7 @@ export type Assessment = {
   type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
+  hasTokenCounter?: boolean;
   id: number;
   longSummary: string;
   missionPDF: string;

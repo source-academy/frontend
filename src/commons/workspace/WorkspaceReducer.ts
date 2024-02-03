@@ -45,6 +45,7 @@ import {
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
   EditorTabState,
+  ENABLE_TOKEN_COUNTER,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
@@ -335,6 +336,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
       };
+    case ENABLE_TOKEN_COUNTER:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          hasTokenCounter: true
+        }
+      }
     case EVAL_EDITOR:
       return {
         ...state,
@@ -372,10 +381,10 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             type: "notification"
           });
         }
-        const customNotif = state[workspaceLocation].customNotification;
-        if (customNotif !== '') {
+        const customNotification = state[workspaceLocation].customNotification;
+        if (customNotification !== '') {
           notificationOutputs.push({
-            consoleLog: customNotif,
+            consoleLog: customNotification,
             type: "notification"
           });
         }

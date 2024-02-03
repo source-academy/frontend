@@ -76,6 +76,7 @@ import {
   changeExecTime,
   changeSideContentHeight,
   clearReplOutput,
+  enableTokenCounter,
   evalEditor,
   evalRepl,
   evalTestcase,
@@ -111,6 +112,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
+
   const [selectedTab, setSelectedTab] = useState(
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
@@ -149,7 +151,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleEditorUpdateBreakpoints,
     handleReplEval,
     handleSave,
-    handleUpdateHasUnsavedChanges
+    handleUpdateHasUnsavedChanges,
+    handleEnableTokenCounter
   } = useMemo(() => {
     return {
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
@@ -173,7 +176,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
         dispatch(submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
-        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges))
+        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+      handleEnableTokenCounter: () =>
+        dispatch(enableTokenCounter(workspaceLocation))
     };
   }, [dispatch]);
 
@@ -237,6 +242,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   useEffect(() => {
     checkWorkspaceReset();
   });
+
+  /**
+   * Handles toggling enabling token counter depending on assessment properties
+   */
+  useEffect(() => {
+    if (true) {
+      handleEnableTokenCounter();
+    }
+  }, [props, handleEnableTokenCounter]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -705,7 +719,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const workspaceHandlers = useMemo(() => {
     return {
       handleSideContentHeightChange: (heightChange: number) =>
-        dispatch(changeSideContentHeight(heightChange, workspaceLocation))
+        dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
     };
   }, [dispatch]);
 
@@ -839,7 +853,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
-
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
       {overlay}
