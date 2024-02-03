@@ -70,66 +70,20 @@ import {
   WorkspaceManagerState
 } from '../WorkspaceTypes';
 
-const assessmentWorkspace: WorkspaceLocation = 'assessment';
-const gradingWorkspace: WorkspaceLocation = 'grading';
 const playgroundWorkspace: WorkspaceLocation = 'playground';
-const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
-const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 const sicpWorkspace: WorkspaceLocation = 'sicp';
-const githubAssessmentWorkspace: WorkspaceLocation = 'githubAssessment';
+const locations: ReadonlyArray<WorkspaceLocation> = [
+  'assessment',
+  'grading',
+  'playground',
+  'sourcecast',
+  'sourcereel',
+  'sicp',
+  'githubAssessment'
+] as const;
 
 function generateActions(type: string, payload: any = {}): any[] {
-  return [
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: assessmentWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: gradingWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: playgroundWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: sourcecastWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: sourcereelWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: sicpWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: githubAssessmentWorkspace
-      }
-    }
-  ];
+  return locations.map(l => ({ type, payload: { ...payload, workspaceLocation: l } }));
 }
 
 // cloneDeep not required for proper redux
