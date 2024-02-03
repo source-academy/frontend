@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
@@ -21,7 +21,7 @@ export type StateProps = {
   inferencer: AchievementInferencer;
 };
 
-function AchievementControl(props: DispatchProps & StateProps) {
+const AchievementControl: React.FC<DispatchProps & StateProps> = props => {
   const {
     bulkUpdateAchievements,
     bulkUpdateGoals,
@@ -89,6 +89,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
       </div>
     </AchievementContext.Provider>
   );
-}
+};
 
 export default AchievementControl;
