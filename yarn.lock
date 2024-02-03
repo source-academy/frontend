@@ -2855,6 +2855,16 @@
   resolved "https://registry.yarnpkg.com/@redux-saga/types/-/types-1.2.1.tgz#9403f51c17cae37edf870c6bc0c81c1ece5ccef8"
   integrity sha512-1dgmkh+3so0+LlBWRhGA33ua4MYr7tUOj+a9Si28vUi0IUFNbff1T3sgpeDJI/LaC75bBYnQ0A3wXjn0OrRNBA==
 
+"@reduxjs/toolkit@^1.9.7":
+  version "1.9.7"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.9.7.tgz#7fc07c0b0ebec52043f8cb43510cf346405f78a6"
+  integrity sha512-t7v8ZPxhhKgOKtU+uyJT13lu4vL7az5aFi4IdoDs/eS548edn2M8Ik9h8fxgvMjGoAUVFSt6ZC1P5cWmQ014QQ==
+  dependencies:
+    immer "^9.0.21"
+    redux "^4.2.1"
+    redux-thunk "^2.4.2"
+    reselect "^4.1.8"
+
 "@remix-run/router@1.7.1":
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.7.1.tgz#fea7ac35ae4014637c130011f59428f618730498"
@@ -8182,6 +8192,11 @@ ignore@^5.2.0:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
+immer@^9.0.21:
+  version "9.0.21"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.21.tgz#1e025ea31a40f24fb064f1fef23e931496330176"
+  integrity sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==
+
 immer@^9.0.7:
   version "9.0.19"
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.19.tgz#67fb97310555690b5f9cd8380d38fc0aabb6b38b"
@@ -12219,6 +12234,11 @@ redux-saga@^1.2.3:
   dependencies:
     "@redux-saga/core" "^1.2.3"
 
+redux-thunk@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.4.2.tgz#b9d05d11994b99f7a91ea223e8b04cf0afa5ef3b"
+  integrity sha512-+P3TjtnP0k/FEjcBL5FZpoovtvrTNT/UXd4/sluaSyrURlSlhLSzEdfsTBW7WsKB6yPvgd7q/iZPICFjW4o57Q==
+
 redux@^4.0.0, redux@^4.0.4, redux@^4.0.5:
   version "4.1.2"
   resolved "https://registry.npmjs.org/redux/-/redux-4.1.2.tgz"
@@ -12402,6 +12422,11 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==
+
+reselect@^4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.1.8.tgz#3f5dc671ea168dccdeb3e141236f69f02eaec524"
+  integrity sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ==
 
 resize-observer-polyfill@^1.5.1:
   version "1.5.1"
