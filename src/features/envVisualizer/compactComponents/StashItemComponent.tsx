@@ -1,7 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import { Easings } from 'konva/lib/Tween';
 import React, { RefObject } from 'react';
-import { Label, Tag, Text } from 'react-konva';
+import { Group, Label, Tag, Text } from 'react-konva';
 
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
@@ -13,7 +12,6 @@ import {
   getTextWidth,
   isArray,
   isFn,
-  isNumber,
   isStashItemInDanger,
   setHoveredCursor,
   setHoveredStyle,
@@ -31,8 +29,6 @@ export class StashItemComponent extends Visible implements IHoverable {
   /** text to display on hover */
   readonly tooltip: string;
   readonly tooltipRef: RefObject<any>;
-  readonly shapeRef: RefObject<any>;
-  readonly textRef: RefObject<any>;
   readonly arrow?: ArrowFromStashItemComponent;
 
   constructor(
@@ -62,8 +58,6 @@ export class StashItemComponent extends Visible implements IHoverable {
     ).replace(/[\r\n]/gm, ' ');
     this.tooltip = valToStashRep(value);
     this.tooltipRef = React.createRef();
-    this.shapeRef = React.createRef();
-    this.textRef = React.createRef();
     this._width =
       AgendaStashConfig.StashItemTextPadding * 2 +
       getTextWidth(
@@ -108,16 +102,15 @@ export class StashItemComponent extends Visible implements IHoverable {
       cornerRadius: Number(AgendaStashConfig.StashItemCornerRadius)
     };
     return (
-      <React.Fragment key={Layout.key++}>
+      <Group key={Layout.key++} ref={this.ref}>
         <Label
-          ref = {this.shapeRef}
           x={this.x()}
           y={this.y()}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
           <Tag {...ShapeDefaultProps} {...tagProps} />
-          <Text {...ShapeDefaultProps} {...textProps} ref={this.textRef} text={this.text} />
+          <Text {...ShapeDefaultProps} {...textProps} text={this.text} />
         </Label>
         <Label
           x={this.x() + AgendaStashConfig.TooltipMargin}
@@ -139,24 +132,7 @@ export class StashItemComponent extends Visible implements IHoverable {
           />
         </Label>
         {this.arrow?.draw()}
-      </React.Fragment>
+      </Group>
     );
-  }
-
-  async animate() {
-    const delay = (time: number) => new Promise(resolve => setTimeout(resolve, time));
-    if (isNumber(this.value)) {
-      this.shapeRef.current.to({
-        opacity: 0,
-        duration: 0
-      })
-      await delay(100);
-
-      this.shapeRef.current.to({
-        opacity: 1,
-        easing: Easings.StrongEaseInOut,
-        duration: 1.5
-      })
-    }
   }
 }
