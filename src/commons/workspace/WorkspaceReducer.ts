@@ -34,16 +34,19 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
-import { browseReplHistoryDown, browseReplHistoryUp } from './WorkspaceActions';
+import {
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeExecTime,
+  changeSideContentHeight,
+  changeStepLimit,
+  clearReplInput,
+  clearReplOutput,
+  clearReplOutputLast
+} from './WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
-  CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
-  CHANGE_STEP_LIMIT,
-  CLEAR_REPL_INPUT,
-  CLEAR_REPL_OUTPUT,
-  CLEAR_REPL_OUTPUT_LAST,
   DISABLE_TOKEN_COUNTER,
   EditorTabState,
   ENABLE_TOKEN_COUNTER,
@@ -190,6 +193,30 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const newReplValue = lastRecords[newIndex];
       state[workspaceLocation].replValue = newReplValue;
       state[workspaceLocation].replHistory.browseIndex = newIndex;
+    })
+    .addCase(changeExecTime, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].execTime = action.payload.execTime;
+    })
+    .addCase(changeSideContentHeight, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].sideContentHeight = action.payload.height;
+    })
+    .addCase(changeStepLimit, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].stepLimit = action.payload.stepLimit;
+    })
+    .addCase(clearReplInput, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].replValue = '';
+    })
+    .addCase(clearReplOutputLast, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].output.pop();
+    })
+    .addCase(clearReplOutput, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].output = [];
     });
 });
 
@@ -208,54 +235,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           tokenCount: action.payload.tokenCount
-        }
-      };
-    case CHANGE_EXEC_TIME:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          execTime: action.payload.execTime
-        }
-      };
-    case CHANGE_SIDE_CONTENT_HEIGHT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContentHeight: action.payload.height
-        }
-      };
-    case CHANGE_STEP_LIMIT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          stepLimit: action.payload.stepLimit
-        }
-      };
-    case CLEAR_REPL_INPUT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          replValue: ''
-        }
-      };
-    case CLEAR_REPL_OUTPUT_LAST:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: state[workspaceLocation].output.slice(0, -1)
-        }
-      };
-    case CLEAR_REPL_OUTPUT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: []
         }
       };
     case END_CLEAR_CONTEXT:
