@@ -22,6 +22,7 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
   const [file, setFile] = React.useState<File | undefined>(undefined);
   const [isWarningShown, setPromptShown] = React.useState<boolean>(false);
   const [forceUpdate, setForceUpdate] = React.useState<boolean>(false);
+  const [hasTokenCounter, setHasTokenCounter] = React.useState<boolean>(false);
   const [assessmentConfigId, setAssessmentConfigId] = React.useState<number>(-1);
 
   React.useEffect(() => {
@@ -83,7 +84,7 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
     );
   }, [isFocused, isDragActive, isDragAccept, isDragReject]);
 
-  const handleSwitchOnChange = React.useCallback(() => {
+  const handleForceUpdateSwitchOnChange = React.useCallback(() => {
     if (!forceUpdate) {
       setPromptShown(true);
     } else {
@@ -91,13 +92,13 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
     }
   }, [forceUpdate, setPromptShown, setForceUpdate]);
 
-  const toggleButton = React.useMemo(
+  const forceUpdateToggleButton = React.useMemo(
     () => (
       <div className="toggle-button-wrapper">
-        <Switch checked={forceUpdate} onChange={handleSwitchOnChange} />
+        <Switch checked={forceUpdate} onChange={handleForceUpdateSwitchOnChange} />
       </div>
     ),
-    [forceUpdate, handleSwitchOnChange]
+    [forceUpdate, handleForceUpdateSwitchOnChange]
   );
 
   const handleConfirmForceUpdate = React.useCallback(() => {
@@ -107,6 +108,23 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
   const handleCancelForceUpdate = React.useCallback(() => {
     setPromptShown(false);
   }, [setPromptShown]);
+
+  const handleHasTokenCounterSwitchOnChange = React.useCallback(() => {
+    if (!hasTokenCounter) {
+      setHasTokenCounter(true);
+    } else {
+      setHasTokenCounter(false);
+    }
+  }, [hasTokenCounter, setHasTokenCounter]);
+
+  const tokenCounterToggleButton = React.useMemo(
+    () => (
+      <div className="toggle-button-wrapper">
+        <Switch checked={hasTokenCounter} onChange={handleHasTokenCounterSwitchOnChange} />
+      </div>
+    ),
+    [hasTokenCounter, handleHasTokenCounterSwitchOnChange]
+  );
 
   const confirmationPrompt = React.useMemo(
     () => (
@@ -160,9 +178,15 @@ const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
                   options={{ minimal: false }}
                 />
               </div>
-              <div className="dropzone-controls">
-                <p>Force update opened assessment</p>
-                {toggleButton}
+              <div className="toggle-buttons">
+                <div className="dropzone-controls">
+                  <p>Force update opened assessment</p>
+                  {forceUpdateToggleButton}
+                </div>
+                <div className="dropzone-controls">
+                  <p>Enable token counter notification&nbsp;</p>
+                  {tokenCounterToggleButton}
+                </div>
               </div>
             </>
           )}
