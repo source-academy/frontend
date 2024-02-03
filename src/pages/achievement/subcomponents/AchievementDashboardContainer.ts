@@ -12,7 +12,7 @@ import {
   getUsers,
   updateGoalProgress
 } from '../../../features/achievement/AchievementActions';
-import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
+import AchievementDashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   group: state.session.group,
@@ -39,6 +39,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const DashboardContainer = connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+const DashboardContainer = connect(mapStateToProps, mapDispatchToProps)(AchievementDashboard);
 
 export default DashboardContainer;

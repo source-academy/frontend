@@ -65,7 +65,7 @@ export const generateAchievementTasks = (
 
 type DashboardProps = DispatchProps & StateProps;
 
-const Dashboard: React.FC<DashboardProps> = props => {
+const AchievementDashboard: React.FC<DashboardProps> = props => {
   const {
     getAchievements,
     getOwnGoals,
@@ -192,4 +192,4 @@ const Dashboard: React.FC<DashboardProps> = props => {
   );
 };
 
-export default Dashboard;
+export default AchievementDashboard;
