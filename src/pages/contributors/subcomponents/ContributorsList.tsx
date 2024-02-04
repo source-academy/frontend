@@ -1,5 +1,6 @@
 import { Card, Elevation, H2, H3, H5 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
+import classes from 'src/styles/Contributors.module.scss';
 
 import { Contributor, Repo } from '../../../features/contributors/ContributorsTypes';
 import { fetchContributors, fetchRepos } from './ContributorsGithubApi';
@@ -34,12 +35,12 @@ const ContributorsList: React.FC = () => {
         );
       });
       return (
-        <Card key={repo.key} className="containerPermalink" elevation={Elevation.ONE}>
-          <div className="repoDetailsPermalink">
+        <Card key={repo.key} className={classes['containerPermalink']} elevation={Elevation.ONE}>
+          <div className={classes['repoDetailsPermalink']}>
             <H3>{repo.name}</H3>
             <H5>{repo.description}</H5>
           </div>
-          <div className="inPermalink">{arrayMapped}</div>
+          <div className={classes['inPermalink']}>{arrayMapped}</div>
         </Card>
       );
     })
