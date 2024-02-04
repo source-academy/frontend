@@ -40,9 +40,11 @@ const Grading: React.FC = () => {
     { value: true, label: 'all groups' }
   ];
 
+  const page = parseInt(new URL(window.location.href).searchParams.get("page") || '1');
+  const page_size = 10; //hardcode this for now
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchGradingOverviews(!showAllGroups));
+    dispatch(fetchGradingOverviews(!showAllGroups, page, page_size));
   }, [dispatch, role, showAllGroups]);
 
   const viewQuery = new URL(window.location.href).searchParams.get("view") === "all";

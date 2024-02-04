@@ -614,8 +614,10 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean,
+  page: number,
+  page_size: number,
 ): Promise<GradingOverview[] | null> => {
-  const resp = await request(`${courseId()}/admin/grading?group=${group}&offset=9&pageSize=5`, 'GET', {
+  const resp = await request(`${courseId()}/admin/grading?group=${group}&offset=${(page - 1) * page_size}&pageSize=${page_size}`, 'GET', {
     ...tokens
   });
   if (!resp) {

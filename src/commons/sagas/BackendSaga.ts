@@ -130,6 +130,7 @@ import {
   uploadAssessment
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
+import { pageBannerTextStyle } from 'src/features/game/dashboard/GameDashboardConstants';
 
 export function selectTokens() {
   return select((state: OverallState) => ({
@@ -409,12 +410,16 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
-      const filterToGroup = action.payload;
+      const filterToGroup = action.payload.filterToGroup;
+      const page = action.payload.page;
+      const page_size = action.payload.page_size;
 
       const gradingOverviews: GradingOverview[] | null = yield call(
         getGradingOverviews,
         tokens,
-        filterToGroup
+        filterToGroup,
+        page,
+        page_size,
       );
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));
