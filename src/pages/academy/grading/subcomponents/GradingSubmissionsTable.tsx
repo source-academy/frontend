@@ -130,7 +130,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
       pagination: {
         //short-circuit and use page query value if it exists, otherwise use 0. reduce by 1, as we are expecting 1-indexed querying.
         //Issue: naively accepts out of bound pages in either direction (negative number, 0, beyond max page), and non integers.
-        pageIndex: parseInt(new URL(window.location.href).searchParams.get("page") || '1') - 1
+        pageIndex: parseInt(new URL(window.location.href).searchParams.get("index") || '1') - 1
       }
     },
     onColumnFiltersChange: setColumnFilters,

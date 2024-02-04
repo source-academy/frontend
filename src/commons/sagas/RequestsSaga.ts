@@ -662,6 +662,60 @@ export const getGradingOverviews = async (
     );
 };
 
+/*
+ * GET /courses/{courseId}/admin/grading
+ */
+export const getPaginatedGradingOverviews = async (
+  tokens: Tokens,
+  group: boolean
+): Promise<GradingOverview[] | null> => {
+  const resp = await request(`${courseId()}/admin/grading?group=${group}`, 'GET', {
+    ...tokens
+  });
+  if (!resp) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const gradingOverviews = await resp.json();
+  return gradingOverviews
+    .map((overview: any) => {
+      const gradingOverview: GradingOverview = {
+        assessmentId: overview.assessment.id,
+        assessmentNumber: overview.assessment.assessmentNumber,
+        assessmentName: overview.assessment.title,
+        assessmentType: overview.assessment.type,
+        studentId: overview.student.id,
+        studentUsername: overview.student.username,
+        studentName: overview.student.name,
+        submissionId: overview.id,
+        submissionStatus: overview.status,
+        groupName: overview.student.groupName,
+        groupLeaderId: overview.student.groupLeaderId,
+        // Grading Status
+        gradingStatus: 'none',
+        questionCount: overview.assessment.questionCount,
+        gradedCount: overview.gradedCount,
+        // XP
+        initialXp: overview.xp,
+        xpAdjustment: overview.xpAdjustment,
+        currentXp: overview.xp + overview.xpAdjustment,
+        maxXp: overview.assessment.maxXp,
+        xpBonus: overview.xpBonus
+      };
+      gradingOverview.gradingStatus = computeGradingStatus(
+        overview.assessment.isManuallyGraded,
+        gradingOverview.submissionStatus,
+        gradingOverview.gradedCount,
+        gradingOverview.questionCount
+      );
+      return gradingOverview;
+    })
+    .sort((subX: GradingOverview, subY: GradingOverview) =>
+      subX.assessmentId !== subY.assessmentId
+        ? subY.assessmentId - subX.assessmentId
+        : subY.submissionId - subX.submissionId
+    );
+};
+
 /**
  * GET /courses/{courseId}/admin/grading/{submissionId}
  */
