@@ -584,6 +584,7 @@ export class Layout {
                     EnvVisualizer.getAgendaStash() &&
                     Layout.stashComponent.draw()}
                   {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getAgendaStash() &&
                     EnvVisualizerAnimation.getAnimationComponents().map(c => c.draw())}
                 </Layer>
               </Stage>
