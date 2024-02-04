@@ -2,6 +2,7 @@ import { InstrType } from "js-slang/dist/ec-evaluator/types";
 
 import { AgendaStack, isInstr } from "./compactComponents/AgendaStack";
 import { AnimationItemComponent } from "./compactComponents/AnimationItemComponent";
+import EnvVisualizer from './EnvVisualizer';
 
 export class EnvVisualizerAnimation {
   private static animationEnabled = false;
@@ -61,7 +62,8 @@ export class EnvVisualizerAnimation {
   }
 
   static startAnimation(): void {
-    if (!EnvVisualizerAnimation.enableAnimations) {
+    if (!EnvVisualizerAnimation.animationEnabled || !EnvVisualizer.getAgendaStash()) {
+      EnvVisualizerAnimation.disableAnimations();
       return;
     }
     EnvVisualizerAnimation.disableAnimations();
