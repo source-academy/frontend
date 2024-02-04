@@ -412,14 +412,14 @@ function* BackendSaga(): SagaIterator {
 
       const filterToGroup = action.payload.filterToGroup;
       const page = action.payload.page;
-      const page_size = action.payload.page_size;
+      const pageSize = action.payload.pageSize;
 
       const gradingOverviews: GradingOverview[] | null = yield call(
         getGradingOverviews,
         tokens,
         filterToGroup,
         page,
-        page_size,
+        pageSize,
       );
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));

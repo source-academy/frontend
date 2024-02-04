@@ -40,12 +40,17 @@ const Grading: React.FC = () => {
     { value: true, label: 'all groups' }
   ];
 
-  const pageQuery = new URL(window.location.href).searchParams.get("page");
-  const page = (pageQuery == null) || isNaN(parseInt(pageQuery)) ? 1 : Math.max(1, parseInt(pageQuery));
-  const page_size = 10; //hardcode this for now
+  //default page index with no offset = 1
+  const pageQuery = parseInt(new URL(window.location.href).searchParams.get("page") ?? '');
+  const page = isNaN(pageQuery) ? 1 : Math.max(1, pageQuery);
+
+  //default page size = 10
+  const pageSizeQuery = parseInt(new URL(window.location.href).searchParams.get("pageSize") ?? '');
+  const pageSize = isNaN(pageSizeQuery) ? 10 : Math.max(1, pageSizeQuery);
+
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchGradingOverviews(!showAllGroups, page, page_size));
+    dispatch(fetchGradingOverviews(!showAllGroups, page, pageSize));
   }, [dispatch, role, showAllGroups]);
 
   const viewQuery = new URL(window.location.href).searchParams.get("view") === "all";

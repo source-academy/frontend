@@ -615,9 +615,9 @@ export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean,
   page: number,
-  page_size: number,
+  pageSize: number,
 ): Promise<GradingOverview[] | null> => {
-  const resp = await request(`${courseId()}/admin/grading?group=${group}&offset=${(page - 1) * page_size}&pageSize=${page_size}`, 'GET', {
+  const resp = await request(`${courseId()}/admin/grading?group=${group}&offset=${(page - 1) * pageSize}&pageSize=${pageSize}`, 'GET', {
     ...tokens
   });
   if (!resp) {
