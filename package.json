@@ -31,7 +31,7 @@
     "@blueprintjs/icons": "^4.16.0",
     "@blueprintjs/popover2": "^1.14.11",
     "@blueprintjs/select": "^4.9.24",
-    "@octokit/rest": "^19.0.11",
+    "@octokit/rest": "^20.0.0",
     "@sentry/browser": "^7.57.0",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.1.0",
