@@ -70,15 +70,7 @@ const NavigationBar: React.FC = () => {
       <NavLink
         to={navbarEntry.to}
         className={({ isActive }) =>
-          classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE,
-            {
-              [Classes.ACTIVE]: isActive
-            }
-          )
+          classNames(Classes.BUTTON, Classes.MINIMAL, Classes.LARGE, { [Classes.ACTIVE]: isActive })
         }
         onClick={() => setMobileSideMenuOpen(false)}
         key={navbarEntry.text}
