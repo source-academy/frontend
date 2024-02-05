@@ -17,10 +17,12 @@ export function createStore() {
 
   const createdStore = configureStore<OverallState>({
     reducer: createRootReducer(),
-    // Temporary fix for redux-saga types, pending #2757
-    // See also: https://github.com/reduxjs/redux-toolkit/issues/3950
+    // Fix for redux-saga type incompatibility
+    // See: https://github.com/reduxjs/redux-toolkit/issues/3950
     middleware: middleware as any,
     devTools: { serialize: true, maxAge: 300 },
+    // We already provide the generic type argument, so we put
+    // `as any` to prevent excessively long type inference
     preloadedState: initialStore as any
   });
   sagaMiddleware.run(MainSaga);
