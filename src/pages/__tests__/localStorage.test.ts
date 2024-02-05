@@ -9,6 +9,7 @@ const mockShortDefaultState: SavedState = {
     refreshToken: defaultState.session.refreshToken,
     courseRegId: defaultState.session.courseRegId,
     role: defaultState.session.role,
+    group: defaultState.session.group,
     name: defaultState.session.name,
     userId: defaultState.session.userId,
     courses: defaultState.session.courses,
@@ -19,6 +20,7 @@ const mockShortDefaultState: SavedState = {
     enableGame: defaultState.session.enableGame,
     enableAchievements: defaultState.session.enableAchievements,
     enableSourcecast: defaultState.session.enableSourcecast,
+    enableStories: defaultState.session.enableStories,
     moduleHelpText: defaultState.session.moduleHelpText,
     assetsPrefix: defaultState.session.assetsPrefix,
     assessmentConfigurations: defaultState.session.assessmentConfigurations

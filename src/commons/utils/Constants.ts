@@ -1,5 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
+import { AuthProviderType } from './AuthHelper';
+
 function isTrue(value?: string, defaultTo?: boolean): boolean {
   return typeof value === 'undefined' && typeof defaultTo !== 'undefined'
     ? defaultTo
@@ -46,8 +48,10 @@ const caFulfillmentLevel = isTest
   ? 24
   : parseInt(process.env.REACT_APP_CA_FULFILLMENT_LEVEL || '0');
 
-const authProviders: Map<string, { name: string; endpoint: string; isDefault: boolean }> =
-  new Map();
+const authProviders: Map<
+  string,
+  { name: string; endpoint: string; isDefault: boolean; type: AuthProviderType }
+> = new Map();
 
 for (let i = 1; ; ++i) {
   const id = process.env[`REACT_APP_OAUTH2_PROVIDER${i}`];
@@ -58,7 +62,31 @@ for (let i = 1; ; ++i) {
   const name = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_NAME`] || 'Unnamed provider';
   const endpoint = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_ENDPOINT`] || '';
 
-  authProviders.set(id, { name, endpoint, isDefault: i === 1 });
+  authProviders.set(id, { name, endpoint, isDefault: i === 1, type: AuthProviderType.OAUTH2 });
+}
+
+for (let i = 1; ; ++i) {
+  const id = process.env[`REACT_APP_CAS_PROVIDER${i}`];
+  if (!id) {
+    break;
+  }
+
+  const name = process.env[`REACT_APP_CAS_PROVIDER${i}_NAME`] || 'Unnamed provider';
+  const endpoint = process.env[`REACT_APP_CAS_PROVIDER${i}_ENDPOINT`] || '';
+
+  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS });
+}
+
+for (let i = 1; ; ++i) {
+  const id = process.env[`REACT_APP_SAML_PROVIDER${i}`];
+  if (!id) {
+    break;
+  }
+
+  const name = process.env[`REACT_APP_SAML_PROVIDER${i}_NAME`] || 'Unnamed provider';
+  const endpoint = process.env[`REACT_APP_SAML_PROVIDER${i}_ENDPOINT`] || '';
+
+  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
 }
 
 export enum Links {

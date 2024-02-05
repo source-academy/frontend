@@ -24,7 +24,7 @@ import {
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
@@ -571,7 +571,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           isEditorAutorun: !state[workspaceLocation].isEditorAutorun
         }
       };
-    case TOGGLE_USING_SUBST:
+    case TOGGLE_USING_SUBST: {
+      const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
@@ -583,7 +584,9 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
-    case TOGGLE_USING_ENV:
+    }
+    case TOGGLE_USING_ENV: {
+      const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
@@ -595,7 +598,9 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
-    case TOGGLE_UPDATE_ENV:
+    }
+    case TOGGLE_UPDATE_ENV: {
+      const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
@@ -607,6 +612,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         return state;
       }
+    }
     case UPDATE_SUBMISSIONS_TABLE_FILTERS:
       return {
         ...state,
@@ -751,7 +757,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
-    case UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA: {
+    case UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL: {
       const { editorTabIndex, newHighlightedLines } = action.payload;
 
       if (editorTabIndex < 0) {

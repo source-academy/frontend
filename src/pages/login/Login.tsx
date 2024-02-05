@@ -3,6 +3,7 @@ import {
   ButtonGroup,
   Card,
   Classes,
+  Elevation,
   H4,
   Icon,
   NonIdealState,
@@ -11,10 +12,12 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { AuthProviderType } from 'src/commons/utils/AuthHelper';
 import { useSession } from 'src/commons/utils/Hooks';
+import classes from 'src/styles/Login.module.scss';
 
 import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
 import Constants from '../../commons/utils/Constants';
@@ -25,19 +28,21 @@ const providers = [...Constants.authProviders.entries()].map(([id, { name }]) =>
   name
 }));
 
-const Login: React.FunctionComponent<{}> = () => {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { isLoggedIn, courseId } = useSession();
   const navigate = useNavigate();
-  const { code, provider: providerId } = parseQuery(location.search);
+  const { code, ticket, provider: providerId } = parseQuery(location.search);
 
-  const handleLogin = React.useCallback(
-    (providerId: string) => dispatch(login(providerId)),
-    [dispatch]
-  );
+  // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
+  const authCode = code || ticket;
 
-  React.useEffect(() => {
+  const handleLogin = useCallback((providerId: string) => dispatch(login(providerId)), [dispatch]);
+
+  const isSaml = Constants.authProviders.get(providerId)?.type === AuthProviderType.SAML_SSO;
+
+  useEffect(() => {
     // If already logged in, navigate to relevant course page
     if (isLoggedIn) {
       if (courseId !== undefined) {
@@ -49,16 +54,17 @@ const Login: React.FunctionComponent<{}> = () => {
     }
 
     // Else fetch JWT tokens and user info from backend when auth provider code is present
-    if (code && !isLoggedIn) {
-      dispatch(fetchAuth(code, providerId));
+    // SAML does not require code, as relay is handled in backend
+    if ((authCode || isSaml) && !isLoggedIn) {
+      dispatch(fetchAuth(authCode, providerId));
     }
-  }, [code, providerId, dispatch, courseId, navigate, isLoggedIn]);
+  }, [authCode, isSaml, providerId, dispatch, courseId, navigate, isLoggedIn]);
 
-  if (code) {
+  if (authCode || isSaml) {
     return (
-      <div className={classNames('Login', Classes.DARK)}>
-        <Card className={classNames('login-card', Classes.ELEVATION_4)}>
-          <div className="login-body">
+      <div className={classNames(classes['Login'], Classes.DARK)}>
+        <Card elevation={Elevation.FOUR}>
+          <div>
             <NonIdealState
               description="Logging In..."
               icon={<Spinner size={SpinnerSize.LARGE} />}
@@ -70,15 +76,15 @@ const Login: React.FunctionComponent<{}> = () => {
   }
 
   return (
-    <div className={classNames('Login', Classes.DARK)}>
-      <Card className={classNames('login-card', Classes.ELEVATION_4)}>
-        <div className="login-header">
+    <div className={classNames(classes['Login'], Classes.DARK)}>
+      <Card elevation={Elevation.FOUR}>
+        <div className={classes['login-header']}>
           <H4>
-            <Icon icon={IconNames.LOCK} />
+            <Icon className={classes['login-icon']} icon={IconNames.LOCK} />
             LOGIN
           </H4>
         </div>
-        <div className="login-body">
+        <div>
           <ButtonGroup fill={true} vertical={true}>
             {providers.map(({ id, name }) => (
               <LoginButton handleClick={handleLogin} name={name} id={id} key={id} />
@@ -103,7 +109,7 @@ const LoginButton = ({
     <Button
       className={Classes.LARGE}
       rightIcon={IconNames.LOG_IN}
-      onClick={React.useCallback(() => handleClick(id), [handleClick, id])}
+      onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
       {`Log in with ${name}`}
     </Button>

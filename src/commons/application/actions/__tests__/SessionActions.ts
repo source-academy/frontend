@@ -126,7 +126,7 @@ test('fetchAssessment generates correct action object', () => {
   const action = fetchAssessment(id);
   expect(action).toEqual({
     type: FETCH_ASSESSMENT,
-    payload: id
+    payload: { assessmentId: id }
   });
 });
 
@@ -228,6 +228,7 @@ test('setCourseConfiguration generates correct action object', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
@@ -612,6 +613,7 @@ test('updateCourseConfig generates correct action object', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',

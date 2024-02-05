@@ -78,7 +78,7 @@ import {
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { computeRedirectUri } from '../../utils/AuthHelper';
+import { AuthProviderType, computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
@@ -173,6 +173,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableGame: true,
   enableAchievements: true,
   enableSourcecast: true,
+  enableStories: false,
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -203,6 +204,7 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableGame: true,
   enableAchievements: true,
   enableSourcecast: true,
+  enableStories: false,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -286,7 +288,8 @@ describe('Test FETCH_AUTH action', () => {
   Constants.authProviders.set(providerId, {
     name: providerId,
     endpoint: `https://test/?client_id=${clientId}`,
-    isDefault: true
+    isDefault: true,
+    type: AuthProviderType.OAUTH2
   });
   const redirectUrl = computeRedirectUri(providerId);
 
@@ -563,10 +566,10 @@ describe('Test FETCH_ASSESSMENT action', () => {
     const mockId = mockAssessment.id;
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens), mockAssessment]])
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
       .put(updateAssessment(mockAssessment))
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: FETCH_ASSESSMENT, payload: mockId })
+      .dispatch({ type: FETCH_ASSESSMENT, payload: { assessmentId: mockId } })
       .silentRun();
   });
 
@@ -574,11 +577,11 @@ describe('Test FETCH_ASSESSMENT action', () => {
     const mockId = mockAssessment.id;
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
-      .provide([[call(getAssessment, mockId, mockTokens), null]])
-      .call(getAssessment, mockId, mockTokens)
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), null]])
+      .call(getAssessment, mockId, mockTokens, undefined, undefined)
       .not.put.actionType(UPDATE_ASSESSMENT)
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: FETCH_ASSESSMENT, payload: mockId })
+      .dispatch({ type: FETCH_ASSESSMENT, payload: { assessmentId: mockId } })
       .silentRun();
   });
 });
@@ -886,6 +889,7 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableGame: false,
     enableAchievements: false,
     enableSourcecast: false,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
@@ -983,6 +987,7 @@ describe('Test CREATE_COURSE action', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text'

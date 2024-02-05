@@ -45,7 +45,7 @@ const AchievementView: React.FC<AchievementViewProps> = ({ focusUuid, userState 
       dispatch({ type: FETCH_ASSESSMENT_ADMIN, payload: { assessmentId, courseRegId } });
     } else {
       // If user is student, fetch assessment details from assessment route instead, as seen below
-      dispatch({ type: FETCH_ASSESSMENT, payload: assessmentId });
+      dispatch({ type: FETCH_ASSESSMENT, payload: { assessmentId } });
     }
   }, [dispatch, assessmentId, courseRegId, isAdminView]);
 

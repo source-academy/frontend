@@ -1,21 +1,24 @@
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
-import { AdminPanelStoriesUser } from './StoriesTypes';
 
+import { AdminPanelStoriesUser } from './StoriesTypes';
 import {
   ADD_STORY_ENV,
+  CLEAR_STORIES_USER_AND_GROUP,
   CLEAR_STORY_ENV,
   CREATE_STORY,
   DELETE_STORY,
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
+  FETCH_ADMIN_PANEL_STORIES_USERS,
   GET_STORIES_LIST,
   GET_STORIES_USER,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
+  SET_ADMIN_PANEL_STORIES_USERS,
   SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
@@ -24,10 +27,7 @@ import {
   StoryListView,
   StoryParams,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_LIST,
-  FETCH_ADMIN_PANEL_STORIES_USERS,
-  SET_ADMIN_PANEL_STORIES_USERS
-} from './StoriesTypes';
+  UPDATE_STORIES_LIST} from './StoriesTypes';
 
 export const addStoryEnv = (env: string, chapter: Chapter, variant: Variant) =>
   action(ADD_STORY_ENV, { env, chapter, variant });
@@ -81,5 +81,7 @@ export const setCurrentStoriesGroup = (
   name: string | undefined,
   role: StoriesRole | undefined
 ) => action(SET_CURRENT_STORIES_GROUP, { id, name, role });
+// Helper/wrapper actions
+export const clearStoriesUserAndGroup = () => action(CLEAR_STORIES_USER_AND_GROUP);
 export const fetchAdminPanelStoriesUsers = () => action(FETCH_ADMIN_PANEL_STORIES_USERS);
 export const setAdminPanelStoriesUsers = (users: AdminPanelStoriesUser[]) => action(SET_ADMIN_PANEL_STORIES_USERS, { users });

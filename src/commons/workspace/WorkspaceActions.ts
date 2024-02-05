@@ -7,7 +7,7 @@ import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
 } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
@@ -68,6 +68,7 @@ import {
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
+  WorkspaceLocationsWithTools,
   WorkspaceState
 } from './WorkspaceTypes';
 
@@ -216,12 +217,12 @@ export const setEditorHighlightedLines = (
     newHighlightedLines
   });
 
-export const setEditorHighlightedLinesAgenda = (
+export const setEditorHighlightedLinesControl = (
   workspaceLocation: WorkspaceLocation,
   editorTabIndex: number,
   newHighlightedLines: HighlightedLines[]
 ) =>
-  action(UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA, {
+  action(UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL, {
     workspaceLocation,
     editorTabIndex,
     newHighlightedLines
@@ -385,8 +386,10 @@ export const notifyProgramEvaluated = (
     workspaceLocation
   });
 
-export const toggleUsingSubst = (usingSubst: boolean, workspaceLocation: WorkspaceLocation) =>
-  action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
+export const toggleUsingSubst = (
+  usingSubst: boolean,
+  workspaceLocation: WorkspaceLocationsWithTools
+) => action(TOGGLE_USING_SUBST, { usingSubst, workspaceLocation });
 
 export const addHtmlConsoleError = (
   errorMsg: string,
@@ -394,11 +397,13 @@ export const addHtmlConsoleError = (
   storyEnv?: string
 ) => action(ADD_HTML_CONSOLE_ERROR, { errorMsg, workspaceLocation, storyEnv });
 
-export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocation) =>
+export const toggleUsingEnv = (usingEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) =>
   action(TOGGLE_USING_ENV, { usingEnv, workspaceLocation });
 
-export const toggleUpdateEnv = (updateEnv: boolean, workspaceLocation: WorkspaceLocation) =>
-  action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
+export const toggleUpdateEnv = (
+  updateEnv: boolean,
+  workspaceLocation: WorkspaceLocationsWithTools
+) => action(TOGGLE_UPDATE_ENV, { updateEnv, workspaceLocation });
 
 export const updateEnvSteps = (steps: number, workspaceLocation: WorkspaceLocation) =>
   action(UPDATE_ENVSTEPS, { steps, workspaceLocation });

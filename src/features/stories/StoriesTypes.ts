@@ -21,6 +21,7 @@ export const SAVE_STORY = 'SAVE_STORY';
 export const DELETE_STORY = 'DELETE_STORY';
 // Auth-related actions
 export const GET_STORIES_USER = 'GET_STORIES_USER';
+export const CLEAR_STORIES_USER_AND_GROUP = 'CLEAR_STORIES_USER_AND_GROUP';
 // TODO: Investigate possibility of combining the two actions
 export const SET_CURRENT_STORIES_USER = 'SET_CURRENT_STORIES_USER';
 export const SET_CURRENT_STORIES_GROUP = 'SET_CURRENT_STORIES_GROUP';
