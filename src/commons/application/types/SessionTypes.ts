@@ -73,9 +73,6 @@ export const UPDATE_NOTIFICATION_PREFERENCES = 'UPDATE_NOTIFICATION_PREFERENCES'
 export const DELETE_TIME_OPTIONS = 'DELETE_TIME_OPTIONS';
 export const UPDATE_TIME_OPTIONS = 'UPDATE_TIME_OPTIONS';
 
-export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
-export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
-
 export type SessionState = {
   // Tokens
   readonly accessToken?: string;
