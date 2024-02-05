@@ -36,7 +36,7 @@ const renderTab = (
   const tabTitle = (
     <Tooltip2 content={tab.label}>
       <div className={generateTabAlert(shouldAlert)}>
-        <Icon icon={tab.iconName} iconSize={iconSize} />
+        <Icon icon={tab.iconName} size={iconSize} />
       </div>
     </Tooltip2>
   );
