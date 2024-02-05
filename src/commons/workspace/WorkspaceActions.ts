@@ -256,7 +256,7 @@ export const setEditorHighlightedLines = createAction(
   ) => ({ payload: { workspaceLocation, editorTabIndex, newHighlightedLines } })
 );
 
-export const setEditorHighlightedLinesAgenda = createAction(
+export const setEditorHighlightedLinesControl = createAction(
   UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL,
   (
     workspaceLocation: WorkspaceLocation,
