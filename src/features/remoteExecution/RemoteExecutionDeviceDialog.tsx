@@ -3,6 +3,8 @@ import {
   Callout,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   FormGroup,
   HTMLSelect,
   InputGroup
@@ -23,12 +25,12 @@ import {
 } from '../../commons/utils/FormHelper';
 import { Device, deviceTypes } from './RemoteExecutionTypes';
 
-export interface RemoteExecutionDeviceDialogProps {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   deviceToEdit?: Device;
   defaultSecret?: string;
-}
+};
 
 const enum FACING_MODE {
   USER = 'user',
@@ -37,12 +39,12 @@ const enum FACING_MODE {
   RIGHT = 'right'
 }
 
-export default function RemoteExecutionDeviceDialog({
+const RemoteExecutionDeviceDialog: React.FC<Props> = ({
   isOpen,
   onClose,
   deviceToEdit,
   defaultSecret
-}: RemoteExecutionDeviceDialogProps) {
+}) => {
   const dispatch = useDispatch();
   const nameField = useField<HTMLInputElement>(validateNotEmpty);
   const typeField = useField<HTMLSelectElement>();
@@ -102,7 +104,7 @@ export default function RemoteExecutionDeviceDialog({
         secretField.setIsValid(true);
       }}
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <FormGroup
           label="Name"
           labelFor="sa-remote-execution-name"
@@ -199,21 +201,25 @@ export default function RemoteExecutionDeviceDialog({
         )}
 
         {errorMessage && <Callout intent="danger">{errorMessage}</Callout>}
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button onClick={onClose} disabled={isSubmitting}>
-            Cancel
-          </Button>
-          <Button
-            intent="primary"
-            onClick={onSubmit}
-            disabled={isSubmitting || !checkFieldValidity(nameField, secretField)}
-          >
-            {deviceToEdit ? 'Edit' : 'Add'}
-          </Button>
-        </div>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <Button onClick={onClose} disabled={isSubmitting}>
+              Cancel
+            </Button>
+            <Button
+              intent="primary"
+              onClick={onSubmit}
+              disabled={isSubmitting || !checkFieldValidity(nameField, secretField)}
+            >
+              {deviceToEdit ? 'Edit' : 'Add'}
+            </Button>
+          </>
+        }
+      />
     </Dialog>
   );
-}
+};
+
+export default RemoteExecutionDeviceDialog;
