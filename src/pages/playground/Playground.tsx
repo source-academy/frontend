@@ -19,8 +19,8 @@ import {
 } from 'src/commons/application/actions/InterpreterActions';
 import {
   loginGitHub,
-  logoutGitHub,
   loginGoogle,
+  logoutGitHub,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
 import {
@@ -274,7 +274,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     googleUser: persistenceUser,
     githubOctokitObject
   } = useTypedSelector(state => state.session);
-  
+
   const dispatch = useDispatch();
   const {
     handleChangeExecTime,

@@ -39,8 +39,8 @@ import {
   FETCH_USER_AND_COURSE,
   LOGIN,
   LOGIN_GITHUB,
-  LOGOUT_GITHUB,
   LOGIN_GOOGLE,
+  LOGOUT_GITHUB,
   LOGOUT_GOOGLE,
   NotificationConfiguration,
   NotificationPreference,
@@ -157,7 +157,7 @@ export const setAdminPanelCourseRegistrations = (
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
-export const setGoogleAccessToken = (accessToken?: string) => 
+export const setGoogleAccessToken = (accessToken?: string) =>
   action(SET_GOOGLE_ACCESS_TOKEN, accessToken);
 
 export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
@@ -172,8 +172,7 @@ export const setGitHubAccessToken = (authToken?: string) =>
 export const removeGitHubOctokitObjectAndAccessToken = () =>
   action(REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN);
 
-export const removeGoogleUserAndAccessToken = () =>
-  action(REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN);
+export const removeGoogleUserAndAccessToken = () => action(REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN);
 
 export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
   action(SUBMIT_ANSWER, {

@@ -2,8 +2,8 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 
 import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
-import { REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN } from '../../application/types/SessionTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
+import { REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN } from '../../application/types/SessionTypes';
 import { actions } from '../../utils/ActionsHelper';
 import {
   CHANGE_EXTERNAL_LIBRARY,
@@ -47,25 +47,25 @@ beforeAll(() => {
 
 test('LOGOUT_GOOGLE results in REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN being dispatched', async () => {
   await expectSaga(PersistenceSaga)
-  .put({
-    type: PLAYGROUND_UPDATE_PERSISTENCE_FILE,
-    payload: undefined,
-    meta: undefined,
-    error: undefined
-  })
-  .put({
-    type: REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
-    payload: undefined,
-    meta: undefined,
-    error: undefined
-  })
-  .provide({
-    call(effect, next) {
-      return;
-    }
-  })
-  .dispatch(actions.logoutGoogle())
-  .silentRun();
+    .put({
+      type: PLAYGROUND_UPDATE_PERSISTENCE_FILE,
+      payload: undefined,
+      meta: undefined,
+      error: undefined
+    })
+    .put({
+      type: REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
+      payload: undefined,
+      meta: undefined,
+      error: undefined
+    })
+    .provide({
+      call(effect, next) {
+        return;
+      }
+    })
+    .dispatch(actions.logoutGoogle())
+    .silentRun();
 });
 
 describe('PERSISTENCE_OPEN_PICKER', () => {

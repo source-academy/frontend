@@ -109,7 +109,7 @@ describe('createStore() function', () => {
 
     expect(received).toEqual(mockChangedState);
     expect(octokit).toBeDefined();
-    expect(googleUser).toEqual("placeholder");
+    expect(googleUser).toEqual('placeholder');
     localStorage.removeItem('storedState');
   });
 });

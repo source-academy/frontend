@@ -28,7 +28,8 @@ import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-const SCOPES = 'profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
+const SCOPES =
+  'profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
 const UPLOAD_PATH = 'https://www.googleapis.com/upload/drive/v3/files';
 
 // Special ID value for the Google Drive API.
@@ -58,7 +59,7 @@ export function* persistenceSaga(): SagaIterator {
     // check for stored token
     const accessToken = yield select((state: OverallState) => state.session.googleAccessToken);
     if (accessToken) {
-      yield call(gapi.client.setToken, {access_token: accessToken});
+      yield call(gapi.client.setToken, { access_token: accessToken });
       yield call(handleUserChanged, accessToken);
     }
   });
@@ -324,26 +325,27 @@ const initialisationPromise: Promise<void> = new Promise(res => {
   startInitialisation = res;
 }).then(initialise);
 
-async function initialise() { // only called once
+// only called once
+async function initialise() {
   // load GIS script
   // adapted from https://github.com/MomenSherif/react-oauth
-  await new Promise<void> ((resolve, reject) => {
+  await new Promise<void>((resolve, reject) => {
     const scriptTag = document.createElement('script');
     scriptTag.src = 'https://accounts.google.com/gsi/client';
     scriptTag.async = true;
     scriptTag.defer = true;
     scriptTag.onload = () => resolve();
-    scriptTag.onerror = (ev) => {
+    scriptTag.onerror = ev => {
       reject(ev);
     };
     document.body.appendChild(scriptTag);
   });
 
   // load and initialize gapi.client
-  await new Promise<void> ((resolve, reject) =>
-    gapi.load('client', { 
-      callback: resolve, 
-      onerror: reject 
+  await new Promise<void>((resolve, reject) =>
+    gapi.load('client', {
+      callback: resolve,
+      onerror: reject
     })
   );
   await gapi.client.init({
@@ -351,16 +353,17 @@ async function initialise() { // only called once
   });
 
   // initialize GIS client
-  await new Promise<google.accounts.oauth2.TokenClient> ((resolve, reject) => {
-    resolve(window.google.accounts.oauth2.initTokenClient({
-      client_id: Constants.googleClientId!,
-      scope: SCOPES,
-      callback: () => void 0 // will be updated in getToken()
-    }));
-  }).then((c) => {
-    tokenClient = c; 
-  }); 
-
+  await new Promise<google.accounts.oauth2.TokenClient>((resolve, reject) => {
+    resolve(
+      window.google.accounts.oauth2.initTokenClient({
+        client_id: Constants.googleClientId!,
+        scope: SCOPES,
+        callback: () => void 0 // will be updated in getToken()
+      })
+    );
+  }).then(c => {
+    tokenClient = c;
+  });
 }
 
 function* handleUserChanged(accessToken: string | null) {
@@ -386,7 +389,7 @@ function* getToken() {
         if (resp.error !== undefined) {
           reject(resp);
         }
-        // GIS has already automatically updated gapi.client 
+        // GIS has already automatically updated gapi.client
         // with the newly issued access token by this point
         resolve(resp);
       };
@@ -403,7 +406,8 @@ function* ensureInitialised() {
   yield initialisationPromise;
 }
 
-function* ensureInitialisedAndAuthorised() { // called multiple times
+// called multiple times
+function* ensureInitialisedAndAuthorised() {
   yield call(ensureInitialised);
   const currToken: GoogleApiOAuth2TokenObject = yield call(gapi.client.getToken);
 
