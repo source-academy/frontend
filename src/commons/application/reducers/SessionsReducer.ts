@@ -18,8 +18,8 @@ import {
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_OCTOKIT_OBJECT,
-  SET_GOOGLE_USER,
   SET_GOOGLE_ACCESS_TOKEN,
+  SET_GOOGLE_USER,
   SET_NOTIFICATION_CONFIGS,
   SET_TOKENS,
   SET_USER,
@@ -60,7 +60,7 @@ export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
       return {
         ...state,
         googleAccessToken: action.payload
-      }
+      };
     case SET_TOKENS:
       return {
         ...state,
