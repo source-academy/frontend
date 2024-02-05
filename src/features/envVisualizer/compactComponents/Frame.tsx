@@ -112,7 +112,10 @@ export class Frame extends Visible implements IHoverable {
     entries.push(...dummyEntries);
 
     for (const [key, data] of entries) {
-      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, !data.writable);
+      // If the value is unassigned, retrieve declaration type from its description, otherwise, retrieve directly from the data's property
+      const constant =
+        this.environment.head[key].description === 'const declaration' || !data.writable;
+      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant);
       this.bindings.push(currBinding);
       prevBinding = currBinding;
       totalWidth = Math.max(totalWidth, currBinding.width() + CompactConfig.FramePaddingX);
