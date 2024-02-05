@@ -15,6 +15,7 @@ import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
+import classes from 'src/styles/Draggable.module.scss';
 
 import { ControlItemComponent } from './compactComponents/ControlItemComponent';
 import { Frame } from './compactComponents/Frame';
@@ -253,16 +254,16 @@ export function getBodyText(data: () => any): string {
 export function setHoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
   if (container) {
-    container.classList.remove('draggable');
-    container.classList.add('clickable');
+    container.classList.remove(classes['draggable']);
+    container.classList.add(classes['clickable']);
   }
 }
 
 export function setUnhoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
   if (container) {
-    container.classList.remove('clickable');
-    container.classList.add('draggable');
+    container.classList.remove(classes['clickable']);
+    container.classList.add(classes['draggable']);
   }
 }
 
