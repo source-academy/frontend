@@ -38,6 +38,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
@@ -254,6 +255,18 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
                 setCourseConfig({
                   ...courseConfig,
                   enableSourcecast: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+
+            <Switch
+              checked={courseConfig.enableStories}
+              inline
+              label="Enable Stories"
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  enableStories: (e.target as HTMLInputElement).checked
                 })
               }
             />
