@@ -1,10 +1,10 @@
 import {
   Button,
-  ButtonGroup,
   Card,
-  Classes,
   Collapse,
   Dialog,
+  DialogBody,
+  DialogFooter,
   Elevation,
   H4,
   H6,
@@ -370,23 +370,25 @@ const Assessment: React.FC<AssessmentProps> = props => {
       onClose={setBetchaAssessmentNull}
       title="Finalise submission?"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Text>{betchaText}</Text>
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <ButtonGroup>
-          <ControlButton
-            label="Cancel"
-            onClick={setBetchaAssessmentNull}
-            options={{ minimal: false }}
-          />
-          <ControlButton
-            label="Finalise"
-            onClick={handleSubmitAssessment}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </ButtonGroup>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton
+              label="Cancel"
+              onClick={setBetchaAssessmentNull}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Finalise"
+              onClick={handleSubmitAssessment}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 
