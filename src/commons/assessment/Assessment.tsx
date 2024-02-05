@@ -42,7 +42,7 @@ import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
+import { useResponsive, useSession } from '../utils/Hooks';
 import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
@@ -65,14 +65,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const [showOpenedAssessments, setShowOpenedAssessments] = useState(true);
   const [showUpcomingAssessments, setShowUpcomingAssessments] = useState(true);
 
-  const assessmentOverviewsUnfiltered = useTypedSelector(
-    state => state.session.assessmentOverviews
-  );
-  const isStudent = useTypedSelector(state =>
-    state.session.role ? state.session.role === Role.Student : true
-  );
-  const courseId = useTypedSelector(state => state.session.courseId);
-
+  const { courseId, role, assessmentOverviews: assessmentOverviewsUnfiltered } = useSession();
   const dispatch = useDispatch();
 
   const toggleClosedAssessments = () => setShowClosedAssessments(!showClosedAssessments);
@@ -281,7 +274,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       notAttempted,
       needsPassword: !!overview.private && notAttempted,
       canSave:
-        !isStudent ||
+        role !== Role.Student ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
       assessmentConfiguration: props.assessmentConfiguration
     };
@@ -300,7 +293,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
 
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
-      (overview, index) => makeOverviewCard(overview, index, !isStudent, false)
+      (overview, index) => makeOverviewCard(overview, index, role !== Role.Student, false)
     );
 
     /** Opened assessments, that are released and can be attempted. */
