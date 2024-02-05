@@ -24,7 +24,7 @@ import {
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
 import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
@@ -757,7 +757,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
-    case UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA: {
+    case UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL: {
       const { editorTabIndex, newHighlightedLines } = action.payload;
 
       if (editorTabIndex < 0) {

@@ -114,17 +114,17 @@ export function highlightLine(line: number) {
   }
 }
 
-export function highlightCleanForAgenda() {
+export function highlightCleanForControl() {
   if ((window as any).Inspector) {
-    (window as any).Inspector.highlightCleanForAgenda();
+    (window as any).Inspector.highlightCleanForControl();
   } else {
     throw new Error('Inspector not loaded');
   }
 }
 
-export function highlightLineForAgenda(line: number) {
+export function highlightLineForControl(line: number) {
   if ((window as any).Inspector) {
-    (window as any).Inspector.highlightLineForAgenda(line);
+    (window as any).Inspector.highlightLineForControl(line);
   } else {
     throw new Error('Inspector not loaded');
   }
