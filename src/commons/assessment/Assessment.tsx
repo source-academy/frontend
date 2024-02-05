@@ -19,7 +19,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import { sortBy } from 'lodash';
-import * as React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
@@ -53,19 +53,17 @@ import {
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = OwnProps;
-
-export type OwnProps = {
+export type AssessmentProps = {
   assessmentConfiguration: AssessmentConfiguration;
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
   const params = useParams<AssessmentWorkspaceParams>();
   const { isMobileBreakpoint } = useResponsive();
-  const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
-  const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
-  const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);
-  const [showUpcomingAssessments, setShowUpcomingAssessments] = React.useState<boolean>(true);
+  const [betchaAssessment, setBetchaAssessment] = useState<AssessmentOverview | null>(null);
+  const [showClosedAssessments, setShowClosedAssessments] = useState(false);
+  const [showOpenedAssessments, setShowOpenedAssessments] = useState(true);
+  const [showUpcomingAssessments, setShowUpcomingAssessments] = useState(true);
 
   const assessmentOverviewsUnfiltered = useTypedSelector(
     state => state.session.assessmentOverviews
@@ -251,7 +249,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 
   // Rendering Logic
-  const assessmentOverviews = React.useMemo(
+  const assessmentOverviews = useMemo(
     () =>
       assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
     [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
