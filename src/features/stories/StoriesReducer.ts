@@ -27,7 +27,8 @@ import {
   SET_CURRENT_STORY_ID,
   StoriesState,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_LIST
+  UPDATE_STORIES_LIST,
+  SET_ADMIN_PANEL_STORIES_USERS
 } from './StoriesTypes';
 
 export const StoriesReducer: Reducer<StoriesState> = (
