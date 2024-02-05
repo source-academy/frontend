@@ -70,7 +70,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
           class="ControlBar_editor bp5-button-group"
         >
           <span
-            aria-expanded="false"
             class="bp5-popover-target"
           >
             <button
@@ -374,10 +373,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           tabindex="0"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
@@ -414,10 +413,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
@@ -454,10 +453,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="contest_voting-icon"
                               tabindex="0"
@@ -482,10 +481,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="contest_leaderboard-icon"
                               tabindex="0"
@@ -578,10 +577,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                   Contest Voting
                                 </span>
                                 <span
-                                  aria-expanded="false"
                                   class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
                                     class="bp5-icon bp5-icon-help"
                                     tabindex="0"
@@ -775,10 +774,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                   Contest Leaderboard
                                 </span>
                                 <span
-                                  aria-expanded="false"
                                   class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
                                     class="bp5-icon bp5-icon-help"
                                     tabindex="0"
@@ -1054,7 +1053,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                     class="bp5-button-group bp5-dark"
                   >
                     <span
-                      aria-expanded="false"
                       class="bp5-popover-target"
                     >
                       <button
@@ -1137,7 +1135,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
           class="ControlBar_editor bp5-button-group"
         >
           <span
-            aria-expanded="false"
             class="bp5-popover-target"
           >
             <button
@@ -1406,10 +1403,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                           tabindex="0"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
@@ -1446,10 +1443,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
@@ -1486,10 +1483,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
@@ -1594,10 +1591,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                                   Testcases
                                 </span>
                                 <span
-                                  aria-expanded="false"
                                   class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
                                     class="bp5-icon bp5-icon-help"
                                     tabindex="0"
@@ -1804,7 +1801,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                     class="bp5-button-group bp5-dark"
                   >
                     <span
-                      aria-expanded="false"
                       class="bp5-popover-target"
                     >
                       <button
@@ -1887,7 +1883,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
           class="ControlBar_editor bp5-button-group"
         >
           <span
-            aria-expanded="false"
             class="bp5-popover-target"
           >
             <button
@@ -2191,10 +2186,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                           tabindex="0"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
@@ -2231,10 +2226,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
@@ -2271,10 +2266,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
@@ -2391,10 +2386,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                                   Testcases
                                 </span>
                                 <span
-                                  aria-expanded="false"
                                   class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
                                     class="bp5-icon bp5-icon-help"
                                     tabindex="0"
@@ -2601,7 +2596,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                     class="bp5-button-group bp5-dark"
                   >
                     <span
-                      aria-expanded="false"
                       class="bp5-popover-target"
                     >
                       <button
@@ -2684,7 +2678,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
           class="ControlBar_editor bp5-button-group"
         >
           <span
-            aria-expanded="false"
             class="bp5-popover-target"
           >
             <button
@@ -2966,10 +2959,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                           tabindex="0"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
@@ -2994,10 +2987,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
@@ -3022,10 +3015,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
@@ -3118,10 +3111,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                                   Testcases
                                 </span>
                                 <span
-                                  aria-expanded="false"
                                   class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
                                     class="bp5-icon bp5-icon-standard bp5-icon-help"
                                     data-icon="help"
@@ -3304,7 +3297,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                     class="bp5-button-group bp5-dark"
                   >
                     <span
-                      aria-expanded="false"
                       class="bp5-popover-target"
                     >
                       <button
@@ -3363,7 +3355,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
           class="ControlBar_editor bp5-button-group"
         >
           <span
-            aria-expanded="false"
             class="bp5-popover-target"
           >
             <button
@@ -3693,10 +3684,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
@@ -3733,10 +3724,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
@@ -3773,10 +3764,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           tabindex="-1"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
@@ -3813,10 +3804,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           tabindex="0"
                         >
                           <span
-                            aria-expanded="false"
                             class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="grading-icon"
                               tabindex="0"
@@ -3909,10 +3900,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                                   Testcases
                                 </span>
                                 <span
-                                  aria-expanded="false"
                                   class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
                                     class="bp5-icon bp5-icon-help"
                                     tabindex="0"
@@ -4310,7 +4301,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                     class="bp5-button-group bp5-dark"
                   >
                     <span
-                      aria-expanded="false"
                       class="bp5-popover-target"
                     >
                       <button

@@ -810,7 +810,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
           >
             <span
               aria-hidden={true}
-              className="bp5-icon bp5-icon-flame"
+              className="bp5-icon bp5-icon-flame bp5-icon-muted"
               data-icon="flame"
               tabIndex={-1}
             />

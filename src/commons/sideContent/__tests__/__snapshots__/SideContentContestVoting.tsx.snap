@@ -25,7 +25,6 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         Contest Voting
       </span>
       <span
-        aria-expanded={false}
         className="bp5-popover-target"
         onBlur={[Function]}
         onContextMenu={[Function]}
@@ -34,6 +33,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         onMouseLeave={[Function]}
       >
         <span
+          aria-expanded={false}
           aria-hidden={true}
           className="bp5-icon bp5-icon-standard bp5-icon-help"
           data-icon="help"

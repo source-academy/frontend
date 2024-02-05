@@ -2,13 +2,13 @@
 
 exports[`NavigationBarLangSelectButton should render correctly 1`] = `
 <span
-  aria-expanded={false}
-  aria-haspopup="true"
   className="bp5-popover2-target bp5-popover-target"
   onClick={[Function]}
   onKeyDown={[Function]}
 >
   <button
+    aria-expanded={false}
+    aria-haspopup="menu"
     className="bp5-button"
     data-testid="NavigationBarLangSelectButton"
     disabled={false}

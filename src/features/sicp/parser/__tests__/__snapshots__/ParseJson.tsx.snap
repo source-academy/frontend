@@ -416,7 +416,7 @@ exports[`Parse heading SUBHEADING  successful 1`] = `
   className="sicp-anchor-link-container"
 >
   <h2
-    className="bp4-heading"
+    className="bp5-heading"
   >
     Mock Text
   </h2>
@@ -428,7 +428,7 @@ exports[`Parse heading SUBSUBHEADING  successful 1`] = `
   className="sicp-anchor-link-container"
 >
   <h4
-    className="bp4-heading"
+    className="bp5-heading"
   >
     <br />
     Mock Text

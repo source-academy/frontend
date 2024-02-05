@@ -91,7 +91,6 @@ exports[`EnvVisualizer component renders correctly 1`] = `
         className="bp5-button-group"
       >
         <span
-          aria-expanded={false}
           className="bp5-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
@@ -101,6 +100,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
+            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -140,7 +140,6 @@ exports[`EnvVisualizer component renders correctly 1`] = `
           </a>
         </span>
         <span
-          aria-expanded={false}
           className="bp5-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
@@ -150,6 +149,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
+            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -257,7 +257,6 @@ exports[`EnvVisualizer component renders correctly 1`] = `
         className="bp5-button-group"
       >
         <span
-          aria-expanded={false}
           className="bp5-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
@@ -267,6 +266,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
+            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -306,7 +306,6 @@ exports[`EnvVisualizer component renders correctly 1`] = `
           </a>
         </span>
         <span
-          aria-expanded={false}
           className="bp5-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
@@ -316,6 +315,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
+            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -355,7 +355,6 @@ exports[`EnvVisualizer component renders correctly 1`] = `
           </a>
         </span>
         <span
-          aria-expanded={false}
           className="bp5-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
@@ -365,6 +364,7 @@ exports[`EnvVisualizer component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
+            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
