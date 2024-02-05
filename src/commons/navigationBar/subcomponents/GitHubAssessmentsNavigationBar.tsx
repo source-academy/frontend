@@ -64,7 +64,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
               }
             >
               <Icon icon={idx < 5 ? icons[idx] : icons[0]} />
-              <div className="navbar-button-text hidden-xs hidden-sm">{type}</div>
+              <div className="hidden-xs hidden-sm">{type}</div>
             </NavLink>
           );
         })}

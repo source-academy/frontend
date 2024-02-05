@@ -5,7 +5,6 @@ import mockStore from 'redux-mock-store';
 import {
   defaultAcademy,
   defaultAchievement,
-  defaultApplication,
   defaultDashboard,
   defaultFileSystem,
   defaultPlayground,
@@ -22,7 +21,6 @@ export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<O
     router: defaultRouter,
     academy: defaultAcademy,
     achievement: defaultAchievement,
-    application: defaultApplication,
     dashboard: defaultDashboard,
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,

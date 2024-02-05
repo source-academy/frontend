@@ -2,13 +2,13 @@ import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { StepsArray } from '../../EnvVisualizerTypes';
-import { AgendaItemComponent } from '../AgendaItemComponent';
+import { ControlItemComponent } from '../ControlItemComponent';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
-export class ArrowFromAgendaItemComponent extends GenericArrow<
-  AgendaItemComponent,
+export class ArrowFromControlItemComponent extends GenericArrow<
+  ControlItemComponent,
   Frame | FnValue | GlobalFnValue
 > {
   protected calculateSteps() {

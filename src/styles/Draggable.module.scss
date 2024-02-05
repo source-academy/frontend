@@ -1,15 +1,15 @@
 .draggable {
   cursor: move;
-  cursor: grab;
-  cursor: -moz-grab;
   cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
 }
 
 /* During drag */
 .draggable:active {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
 }
 
 /* For clicking */

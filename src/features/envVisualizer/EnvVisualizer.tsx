@@ -1,5 +1,5 @@
 import { Context } from 'js-slang';
-import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
+import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
 import { Layout } from './EnvVisualizerLayout';
@@ -8,7 +8,7 @@ import { deepCopyTree, getEnvID } from './EnvVisualizerUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
-type SetisStepLimitExceeded = (isAgendaEmpty: boolean) => void;
+type SetisStepLimitExceeded = (isControlEmpty: boolean) => void;
 
 /** Environment Visualizer is exposed from this class */
 export default class EnvVisualizer {
@@ -20,11 +20,11 @@ export default class EnvVisualizer {
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
-  private static agendaStash: boolean = false;
+  private static controlStash: boolean = false;
   private static stackTruncated: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
-  private static agenda: Agenda | undefined;
+  private static control: Control | undefined;
   private static stash: Stash | undefined;
   public static togglePrintableMode(): void {
     EnvVisualizer.printableMode = !EnvVisualizer.printableMode;
@@ -32,8 +32,8 @@ export default class EnvVisualizer {
   public static toggleCompactLayout(): void {
     EnvVisualizer.compactLayout = !EnvVisualizer.compactLayout;
   }
-  public static toggleAgendaStash(): void {
-    EnvVisualizer.agendaStash = !EnvVisualizer.agendaStash;
+  public static toggleControlStash(): void {
+    EnvVisualizer.controlStash = !EnvVisualizer.controlStash;
   }
   public static toggleStackTruncated(): void {
     EnvVisualizer.stackTruncated = !EnvVisualizer.stackTruncated;
@@ -47,15 +47,15 @@ export default class EnvVisualizer {
   public static getCompactLayout(): boolean {
     return EnvVisualizer.compactLayout;
   }
-  public static getAgendaStash(): boolean {
-    return EnvVisualizer.agendaStash;
+  public static getControlStash(): boolean {
+    return EnvVisualizer.controlStash;
   }
   public static getStackTruncated(): boolean {
     return EnvVisualizer.stackTruncated;
   }
 
-  public static isAgenda(): boolean {
-    return this.agenda ? !this.agenda.isEmpty() : false;
+  public static isControl(): boolean {
+    return this.control ? !this.control.isEmpty() : false;
   }
 
   /** SideContentEnvVis initializes this onMount with the callback function */
@@ -84,18 +84,18 @@ export default class EnvVisualizer {
     // store environmentTree at last breakpoint.
     EnvVisualizer.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
     EnvVisualizer.currentEnvId = getEnvID(context.runtime.environments[0]);
-    if (!this.setVis || !context.runtime.agenda || !context.runtime.stash)
+    if (!this.setVis || !context.runtime.control || !context.runtime.stash)
       throw new Error('env visualizer not initialized');
-    EnvVisualizer.agenda = context.runtime.agenda;
+    EnvVisualizer.control = context.runtime.control;
     EnvVisualizer.stash = context.runtime.stash;
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
-      context.runtime.agenda,
+      context.runtime.control,
       context.runtime.stash
     );
     this.setVis(Layout.draw());
-    this.setIsStepLimitExceeded(context.runtime.agenda.isEmpty());
+    this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
 
     // icon to blink
@@ -104,12 +104,12 @@ export default class EnvVisualizer {
   }
 
   static redraw() {
-    if (EnvVisualizer.environmentTree && EnvVisualizer.agenda && EnvVisualizer.stash) {
+    if (EnvVisualizer.environmentTree && EnvVisualizer.control && EnvVisualizer.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
       if (
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
-        EnvVisualizer.getAgendaStash() &&
+        EnvVisualizer.getControlStash() &&
         EnvVisualizer.getStackTruncated() &&
         Layout.currentStackTruncLight !== undefined
       ) {
@@ -117,7 +117,7 @@ export default class EnvVisualizer {
       } else if (
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
-        EnvVisualizer.getAgendaStash() &&
+        EnvVisualizer.getControlStash() &&
         !EnvVisualizer.getStackTruncated() &&
         Layout.currentStackLight !== undefined
       ) {
@@ -125,7 +125,7 @@ export default class EnvVisualizer {
       } else if (
         EnvVisualizer.getCompactLayout() &&
         !EnvVisualizer.getPrintableMode() &&
-        EnvVisualizer.getAgendaStash() &&
+        EnvVisualizer.getControlStash() &&
         EnvVisualizer.getStackTruncated() &&
         Layout.currentStackTruncDark !== undefined
       ) {
@@ -133,7 +133,7 @@ export default class EnvVisualizer {
       } else if (
         EnvVisualizer.getCompactLayout() &&
         !EnvVisualizer.getPrintableMode() &&
-        EnvVisualizer.getAgendaStash() &&
+        EnvVisualizer.getControlStash() &&
         !EnvVisualizer.getStackTruncated() &&
         Layout.currentStackDark !== undefined
       ) {
@@ -141,33 +141,37 @@ export default class EnvVisualizer {
       } else if (
         EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
-        !EnvVisualizer.getAgendaStash() &&
+        !EnvVisualizer.getControlStash() &&
         Layout.currentCompactLight !== undefined
       ) {
         this.setVis(Layout.currentCompactLight);
       } else if (
         EnvVisualizer.getCompactLayout() &&
         !EnvVisualizer.getPrintableMode() &&
-        !EnvVisualizer.getAgendaStash() &&
+        !EnvVisualizer.getControlStash() &&
         Layout.currentCompactDark !== undefined
       ) {
         this.setVis(Layout.currentCompactDark);
       } else if (
         !EnvVisualizer.getCompactLayout() &&
         EnvVisualizer.getPrintableMode() &&
-        !EnvVisualizer.getAgendaStash() &&
+        !EnvVisualizer.getControlStash() &&
         Layout.currentLight !== undefined
       ) {
         this.setVis(Layout.currentLight);
       } else if (
         !EnvVisualizer.getCompactLayout() &&
         !EnvVisualizer.getPrintableMode() &&
-        !EnvVisualizer.getAgendaStash() &&
+        !EnvVisualizer.getControlStash() &&
         Layout.currentDark !== undefined
       ) {
         this.setVis(Layout.currentDark);
       } else {
-        Layout.setContext(EnvVisualizer.environmentTree, EnvVisualizer.agenda, EnvVisualizer.stash);
+        Layout.setContext(
+          EnvVisualizer.environmentTree,
+          EnvVisualizer.control,
+          EnvVisualizer.stash
+        );
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -184,7 +188,7 @@ export default class EnvVisualizer {
     if (this.setVis) {
       this.setVis(undefined);
       EnvVisualizer.environmentTree = undefined;
-      EnvVisualizer.agenda = undefined;
+      EnvVisualizer.control = undefined;
       EnvVisualizer.stash = undefined;
     }
     this.clear();

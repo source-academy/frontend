@@ -1,45 +1,45 @@
 import * as es from 'estree';
-import { Agenda } from 'js-slang/dist/ec-evaluator/interpreter';
-import { AgendaItem, Instr } from 'js-slang/dist/ec-evaluator/types';
+import { Control } from 'js-slang/dist/cse-machine/interpreter';
+import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
-import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
 import { CompactConfig } from '../EnvVisualizerCompactConfig';
+import { ControlStashConfig } from '../EnvVisualizerControlStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
   defaultSAColor,
-  getAgendaItemComponent,
+  getControlItemComponent,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle
 } from '../EnvVisualizerUtils';
-import { AgendaItemComponent } from './AgendaItemComponent';
+import { ControlItemComponent } from './ControlItemComponent';
 
-export class AgendaStack extends Visible implements IHoverable {
-  /** array of agenda item components */
-  readonly stackItemComponents: AgendaItemComponent[];
+export class ControlStack extends Visible implements IHoverable {
+  /** array of control item components */
+  readonly stackItemComponents: ControlItemComponent[];
 
   constructor(
-    /** the agenda object */
-    readonly agenda: Agenda
+    /** the control object */
+    readonly control: Control
   ) {
     super();
-    this._x = AgendaStashConfig.AgendaPosX;
-    this._y = AgendaStashConfig.AgendaPosY;
-    this._width = AgendaStashConfig.AgendaItemWidth;
-    this._height = AgendaStashConfig.StashItemHeight + AgendaStashConfig.StashItemTextPadding * 2;
-    this.agenda = agenda;
+    this._x = ControlStashConfig.ControlPosX;
+    this._y = ControlStashConfig.ControlPosY;
+    this._width = ControlStashConfig.ControlItemWidth;
+    this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
+    this.control = control;
 
     // Function to convert the stack items to their components
     let i = 0;
-    const agendaItemToComponent = (agendaItem: AgendaItem) => {
-      const node = isNode(agendaItem) ? agendaItem : agendaItem.srcNode;
+    const controlItemToComponent = (controlItem: ControlItem) => {
+      const node = isNode(controlItem) ? controlItem : controlItem.srcNode;
       let highlightOnHover = () => {};
       let unhighlightOnHover = () => {};
 
@@ -51,8 +51,8 @@ export class AgendaStack extends Visible implements IHoverable {
         }
       };
       unhighlightOnHover = () => EnvVisualizer.setEditorHighlightedLines([]);
-      const component = getAgendaItemComponent(
-        agendaItem,
+      const component = getControlItemComponent(
+        controlItem,
         this._height,
         i,
         highlightOnHover,
@@ -64,10 +64,10 @@ export class AgendaStack extends Visible implements IHoverable {
       return component;
     };
 
-    this.stackItemComponents = this.agenda
+    this.stackItemComponents = this.control
       .getStack()
       .slice(EnvVisualizer.getStackTruncated() ? -10 : 0)
-      .map(agendaItemToComponent);
+      .map(controlItemToComponent);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {
     setHoveredStyle(e.currentTarget);
@@ -84,17 +84,17 @@ export class AgendaStack extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fontFamily: AgendaStashConfig.FontFamily.toString(),
+      fontFamily: ControlStashConfig.FontFamily.toString(),
       fontSize: 12,
-      fontStyle: AgendaStashConfig.FontStyle.toString(),
-      fontVariant: AgendaStashConfig.FontVariant.toString()
+      fontStyle: ControlStashConfig.FontStyle.toString(),
+      fontVariant: ControlStashConfig.FontVariant.toString()
     };
     return (
       <Group key={Layout.key++} ref={this.ref}>
-        {EnvVisualizer.getStackTruncated() && Layout.agenda.size() > 10 && (
+        {EnvVisualizer.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
-            x={Number(AgendaStashConfig.ShowMoreButtonX)}
-            y={Number(AgendaStashConfig.ShowMoreButtonY)}
+            x={Number(ControlStashConfig.ShowMoreButtonX)}
+            y={Number(ControlStashConfig.ShowMoreButtonY)}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onMouseUp={() => {
@@ -104,15 +104,15 @@ export class AgendaStack extends Visible implements IHoverable {
           >
             <Tag
               stroke={defaultSAColor()}
-              cornerRadius={Number(AgendaStashConfig.AgendaItemCornerRadius)}
+              cornerRadius={Number(ControlStashConfig.ControlItemCornerRadius)}
             />
             <Text
               {...textProps}
               text={`${CompactConfig.Ellipsis}`}
               align="center"
               fill={defaultSAColor()}
-              width={Number(AgendaStashConfig.ShowMoreButtonWidth)}
-              height={Number(AgendaStashConfig.ShowMoreButtonHeight)}
+              width={Number(ControlStashConfig.ShowMoreButtonWidth)}
+              height={Number(ControlStashConfig.ShowMoreButtonHeight)}
             />
           </Label>
         )}
@@ -127,10 +127,10 @@ export class AgendaStack extends Visible implements IHoverable {
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
- * @param command An AgendaItem
- * @returns true if the AgendaItem is an instruction and false otherwise.
+ * @param command A ControlItem
+ * @returns true if the ControlItem is an instruction and false otherwise.
  */
-export const isInstr = (command: AgendaItem): command is Instr => {
+export const isInstr = (command: ControlItem): command is Instr => {
   return (command as Instr).instrType !== undefined;
 };
 
@@ -139,9 +139,9 @@ export const isInstr = (command: AgendaItem): command is Instr => {
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
- * @param command An AgendaItem
- * @returns true if the AgendaItem is an esNode and false if it is an instruction.
+ * @param command A ControlItem
+ * @returns true if the ControlItem is an esNode and false if it is an instruction.
  */
-export const isNode = (command: AgendaItem): command is es.Node => {
+export const isNode = (command: ControlItem): command is es.Node => {
   return (command as es.Node).type !== undefined;
 };

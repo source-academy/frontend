@@ -48,7 +48,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     {
       headerName: 'Role',
       field: 'role',
-      cellRendererFramework: RolesCell,
+      cellRenderer: RolesCell,
       cellRendererParams: {
         courseRegId: props.courseRegId,
         handleUpdateUserRole: props.handleUpdateUserRole
@@ -58,7 +58,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     {
       headerName: 'Actions',
       field: 'actions',
-      cellRendererFramework: UserActionsCell,
+      cellRenderer: UserActionsCell,
       cellRendererParams: {
         handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
       },
@@ -88,7 +88,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={userCourseRegistrations}
         rowHeight={36}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         pagination
       />

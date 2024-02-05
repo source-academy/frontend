@@ -157,20 +157,24 @@ export const getFullAcademyRouterConfig = ({
           lazy: MissionControl
         },
         {
-          path: 'stories/new',
-          lazy: EditStory
+          path: 'courses/:courseId/stories/new',
+          lazy: EditStory,
+          loader: ensureUserAndRole
         },
         {
-          path: 'stories/view/:id',
-          lazy: ViewStory
+          path: 'courses/:courseId/stories/view/:id',
+          lazy: ViewStory,
+          loader: ensureUserAndRole
         },
         {
-          path: 'stories/edit/:id',
-          lazy: EditStory
+          path: 'courses/:courseId/stories/edit/:id',
+          lazy: EditStory,
+          loader: ensureUserAndRole
         },
         {
-          path: 'stories',
-          lazy: Stories
+          path: 'courses/:courseId/stories',
+          lazy: Stories,
+          loader: ensureUserAndRole
         },
         ...commonChildrenRoutes,
         {

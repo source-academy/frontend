@@ -32,7 +32,7 @@ const Stories: React.FC = () => {
   const isStoriesDisabled = useTypedSelector(state => !state.stories.groupId);
   const isLoggedIn = !!storiesUserId;
 
-  const handleNewStory = useCallback(() => navigate('/stories/new'), [navigate]);
+  const handleNewStory = useCallback(() => navigate('./new'), [navigate]);
   const handleDeleteStory = useCallback(
     async (id: number) => {
       const confirm = await showSimpleConfirmDialog({

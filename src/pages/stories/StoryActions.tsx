@@ -32,7 +32,7 @@ const StoryActions: React.FC<Props> = ({
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-2">
       {canView && (
-        <Link to={`/stories/view/${storyId}`}>
+        <Link to={`./view/${storyId}`}>
           <Icon
             tooltip="View"
             icon={() => <BpIcon icon={IconNames.EyeOpen} />}
@@ -42,7 +42,7 @@ const StoryActions: React.FC<Props> = ({
         </Link>
       )}
       {canEdit && (
-        <Link to={`/stories/edit/${storyId}`}>
+        <Link to={`./edit/${storyId}`}>
           <Icon
             tooltip="Edit"
             icon={() => <BpIcon icon={IconNames.EDIT} />}

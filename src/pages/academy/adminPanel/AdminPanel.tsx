@@ -1,5 +1,5 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
@@ -45,6 +45,7 @@ const AdminPanel: React.FC = () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     moduleHelpText: ''
   });
 
@@ -84,6 +85,7 @@ const AdminPanel: React.FC = () => {
       enableGame: session.enableGame,
       enableAchievements: session.enableAchievements,
       enableSourcecast: session.enableSourcecast,
+      enableStories: session.enableStories,
       moduleHelpText: session.moduleHelpText
     });
 

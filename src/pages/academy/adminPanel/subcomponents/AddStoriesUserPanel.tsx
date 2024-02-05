@@ -72,7 +72,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={users}
         rowHeight={36}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         pagination
       />

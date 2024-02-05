@@ -347,20 +347,6 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
           Achievements
         </div>
       </NavLink>
-      <NavLink
-        className={[Function]}
-        title="Stories"
-        to="/stories"
-      >
-        <Blueprint4.Icon
-          icon="git-repo"
-        />
-        <div
-          className=""
-        >
-          Stories
-        </div>
-      </NavLink>
     </Blueprint4.NavbarGroup>
     <Blueprint4.NavbarGroup
       align="right"
@@ -516,20 +502,6 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
           className=""
         >
           SICP JS
-        </div>
-      </NavLink>
-      <NavLink
-        className={[Function]}
-        title="Stories"
-        to="/stories"
-      >
-        <Blueprint4.Icon
-          icon="git-repo"
-        />
-        <div
-          className=""
-        >
-          Stories
         </div>
       </NavLink>
     </Blueprint4.NavbarGroup>

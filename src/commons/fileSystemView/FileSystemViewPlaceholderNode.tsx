@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 export type FileSystemViewPlaceholderNodeProps = {
   processFileName: (fileName: string) => void;
@@ -29,7 +30,7 @@ const FileSystemViewPlaceholderNode: React.FC<FileSystemViewPlaceholderNodeProps
       type="text"
       autoFocus
       spellCheck={false}
-      className="file-system-view-input"
+      className={classes['file-system-view-input']}
       value={fileName}
       onChange={handleInputOnChange}
       onKeyDown={handleInputOnKeyDown}

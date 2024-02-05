@@ -4,6 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
@@ -90,7 +91,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
       rename={handleRenameFile}
       remove={handleRemoveFile}
     >
-      <div className="file-system-view-node-container" onClick={onClick}>
+      <div className={classes['file-system-view-node-container']} onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
         <Icon icon={IconNames.DOCUMENT} />
         <FileSystemViewFileName

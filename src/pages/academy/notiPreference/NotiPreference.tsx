@@ -1,5 +1,5 @@
 import { Button, H1, Intent } from '@blueprintjs/core';
-import { GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
@@ -87,7 +87,7 @@ const NotiPreference: React.FC = () => {
     return params.data!.notificationType.forStaff ? 'Staff' : 'Student';
   };
 
-  const columnDefs = [
+  const columnDefs: ColDef[] = [
     {
       headerName: 'Notification Type',
       field: 'notificationType.name',
@@ -106,7 +106,7 @@ const NotiPreference: React.FC = () => {
     {
       headerName: 'Reminder',
       field: 'timeOptions',
-      cellRendererFramework: SelectCell,
+      cellRenderer: SelectCell,
       cellRendererParams: {
         setStateHandler: setTimeOption,
         field: 'timeOptions'
@@ -115,7 +115,7 @@ const NotiPreference: React.FC = () => {
     {
       headerName: 'Enabled',
       field: 'notificationPreference.isEnabled',
-      cellRendererFramework: BooleanCell,
+      cellRenderer: BooleanCell,
       cellRendererParams: {
         setStateHandler: setIsEnabled,
         field: 'notificationPreference.isEnabled'
@@ -162,7 +162,7 @@ const NotiPreference: React.FC = () => {
           rowData={configurableNotificationConfigs.current}
           rowHeight={36}
           rowDragManaged={true}
-          suppressCellSelection={true}
+          suppressCellFocus={true}
           suppressMovableColumns={true}
           suppressPaginationPanel={true}
         />

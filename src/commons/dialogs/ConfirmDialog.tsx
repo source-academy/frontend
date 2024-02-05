@@ -8,7 +8,8 @@ import {
   Intent
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
+import classes from 'src/styles/ConfirmDialog.module.scss';
 
 export interface ConfirmDialogProps<T> {
   icon?: IconName;
@@ -31,7 +32,7 @@ export function ConfirmDialog<T>(
       onClick={() => props.onResponse && props.onResponse(choice.key)}
       intent={choice.intent}
       fill={props.largeButtons}
-      className={classNames(props.largeButtons && 'large-button')}
+      className={classNames(props.largeButtons && classes['large-button'])}
       {...choice.props}
     >
       {choice.label}
@@ -44,7 +45,7 @@ export function ConfirmDialog<T>(
       : () => props.onResponse && props.onResponse(escapeResponse);
   return (
     <Dialog
-      className={classNames(Classes.DARK, 'ConfirmDialog')}
+      className={classNames(Classes.DARK, classes['ConfirmDialog'])}
       title={props.title}
       isCloseButtonShown={typeof props.title === 'undefined' ? undefined : false}
       canEscapeKeyClose={!!escapeHandler}

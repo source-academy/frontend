@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 // Mock ResizeObserver in tests
 global.ResizeObserver = require('resize-observer-polyfill');

@@ -4,6 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 import { rmdirRecursively } from '../fileSystem/utils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
@@ -147,14 +148,14 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
   };
 
   return (
-    <div className="file-system-view-directory-node-container">
+    <div className={classes['file-system-view-directory-node-container']}>
       <FileSystemViewContextMenu
         createNewFile={handleCreateNewFile}
         createNewDirectory={handleCreateNewDirectory}
         rename={handleRenameDirectory}
         remove={handleRemoveDirectory}
       >
-        <div className="file-system-view-node-container" onClick={toggleIsExpanded}>
+        <div className={classes['file-system-view-node-container']} onClick={toggleIsExpanded}>
           <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
           {isExpanded && <Icon icon={IconNames.CHEVRON_DOWN} />}
           {!isExpanded && <Icon icon={IconNames.CHEVRON_RIGHT} />}
@@ -171,7 +172,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
         </div>
       </FileSystemViewContextMenu>
       {isAddingNewFile && (
-        <div className="file-system-view-node-container">
+        <div className={classes['file-system-view-node-container']}>
           <FileSystemViewIndentationPadding indentationLevel={indentationLevel + 1} />
           <Icon icon={IconNames.DOCUMENT} />
           <FileSystemViewPlaceholderNode
@@ -181,7 +182,7 @@ const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = 
         </div>
       )}
       {isAddingNewDirectory && (
-        <div className="file-system-view-node-container">
+        <div className={classes['file-system-view-node-container']}>
           <FileSystemViewIndentationPadding indentationLevel={indentationLevel + 1} />
           <Icon icon={IconNames.CHEVRON_RIGHT} />
           <FileSystemViewPlaceholderNode

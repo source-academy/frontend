@@ -1,5 +1,5 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
@@ -55,7 +55,7 @@ const Dashboard: React.FC<DashboardProps> = props => {
           onGridSizeChanged={resizeGrid}
           rowData={gradingSummary.rows}
           rowHeight={30}
-          suppressCellSelection={true}
+          suppressCellFocus={true}
           suppressMovableColumns={true}
         />
       </div>

@@ -8,7 +8,7 @@
  * See: https://github.com/remix-run/react-router/issues/8139#issuecomment-1382428200
  */
 import * as React from 'react';
-import { unstable_useBlocker as useBlocker, useBeforeUnload } from 'react-router-dom';
+import { useBeforeUnload, useBlocker } from 'react-router-dom';
 
 // You can abstract `useBlocker` to use the browser's `window.confirm` dialog to
 // determine whether or not the user should navigate within the current origin.

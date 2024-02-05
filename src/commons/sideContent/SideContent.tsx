@@ -51,7 +51,7 @@ const renderTab = (
   const tabTitle = (
     <Tooltip2 content={tab.label}>
       <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
-        <Icon icon={tab.iconName} iconSize={iconSize} />
+        <Icon icon={tab.iconName} size={iconSize} />
       </div>
     </Tooltip2>
   );

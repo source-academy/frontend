@@ -4,6 +4,7 @@ import { action } from 'typesafe-actions';
 
 import {
   ADD_STORY_ENV,
+  CLEAR_STORIES_USER_AND_GROUP,
   CLEAR_STORY_ENV,
   CREATE_STORY,
   DELETE_STORY,
@@ -78,3 +79,5 @@ export const setCurrentStoriesGroup = (
   name: string | undefined,
   role: StoriesRole | undefined
 ) => action(SET_CURRENT_STORIES_GROUP, { id, name, role });
+// Helper/wrapper actions
+export const clearStoriesUserAndGroup = () => action(CLEAR_STORIES_USER_AND_GROUP);

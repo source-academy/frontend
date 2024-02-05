@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -73,7 +74,7 @@ const MissionControl: React.FC = () => {
 
   // Finally, render the ContentDisplay.
   return (
-    <div className="Assessment Academy">
+    <div className={classNames('Assessment', academyClasses['Academy'])}>
       <ContentDisplay display={display} loadContentDispatch={nullFunction} />
     </div>
   );

@@ -1,4 +1,4 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-grid.css';
 
 import {
   Divider,
@@ -56,7 +56,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
-          cellRendererFramework: SourceRecorderSelectCell,
+          cellRenderer: SourceRecorderSelectCell,
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
@@ -96,7 +96,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         {
           headerName: 'Share',
           field: 'uid',
-          cellRendererFramework: SourceRecorderShareCell,
+          cellRenderer: SourceRecorderShareCell,
           cellRendererParams: {
             courseId: this.props.courseId
           },
@@ -107,7 +107,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         {
           headerName: 'Delete',
           field: '',
-          cellRendererFramework: SourcastDeleteCell,
+          cellRenderer: SourcastDeleteCell,
           cellRendererParams: {
             handleDeleteSourcecastEntry: this.props.handleDeleteSourcecastEntry
           },

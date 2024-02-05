@@ -1,5 +1,5 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { Button, Divider, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -201,7 +201,7 @@ const XpCalculation: React.FC = () => {
         rowHeight={30}
         pagination={true}
         paginationPageSize={20}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}
       />

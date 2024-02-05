@@ -413,8 +413,11 @@
         height: 100px;
         background-color: #f5f5f5;
         border-radius: 3px;
-        box-shadow: 0 0 0 0 rgb(19 124 189 / 0%), 0 0 0 0 rgb(19 124 189 / 0%),
-          inset 0 0 0 1px rgb(16 22 26 / 15%), inset 0 1px 1px rgb(16 22 26 / 20%);
+        box-shadow:
+          0 0 0 0 rgb(19 124 189 / 0%),
+          0 0 0 0 rgb(19 124 189 / 0%),
+          inset 0 0 0 1px rgb(16 22 26 / 15%),
+          inset 0 1px 1px rgb(16 22 26 / 20%);
         overflow: auto;
         text-align: left;
       }
