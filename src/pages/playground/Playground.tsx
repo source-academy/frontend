@@ -438,6 +438,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
         return;
       }
 
+      if (
+        prevTabId === SideContentType.envVisualizer &&
+        newTabId === SideContentType.mobileEditorRun
+      ) {
+        return;
+      }
+
       if (newTabId !== SideContentType.envVisualizer) {
         handleEnvVisualiserReset();
       }
