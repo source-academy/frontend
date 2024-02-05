@@ -3,6 +3,7 @@ import { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
+import classes from 'src/styles/Draggable.module.scss';
 
 import { ControlStack } from './compactComponents/ControlStack';
 import { Level as CompactLevel } from './compactComponents/Level';
@@ -554,7 +555,7 @@ export class Layout {
                 ref={this.stageRef}
                 draggable
                 onWheel={Layout.zoomStage}
-                className="draggable"
+                className={classes['draggable']}
               >
                 <Layer>
                   <Rect
