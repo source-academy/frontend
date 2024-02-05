@@ -1,4 +1,12 @@
-import { Button, Classes, Dialog, Intent, Menu, MenuItem } from '@blueprintjs/core';
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Intent,
+  Menu,
+  MenuItem
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
@@ -83,20 +91,26 @@ const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> =
       onClose={handleCloseDialog}
       title="Updating default Source sublanguage"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         Are you sure you want to update the <b>default Playground Source sublanguage</b> from{' '}
         {styliseSublanguage(sourceChapter, sourceVariant)} to <b>{chosenSublang.displayName}</b>?
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <ControlButton label="Cancel" onClick={handleCloseDialog} options={{ minimal: false }} />
-          <ControlButton
-            label="Confirm"
-            onClick={handleConfirmDialog}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </div>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton
+              label="Cancel"
+              onClick={handleCloseDialog}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Confirm"
+              onClick={handleConfirmDialog}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 
