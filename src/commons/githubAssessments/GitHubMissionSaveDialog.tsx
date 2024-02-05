@@ -1,6 +1,7 @@
 import { AnchorButton, Button, Classes, Dialog, InputGroup, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import classes from 'src/styles/GithubAssessments.module.scss';
 
 export type GitHubMissionSaveDialogResolution = {
   confirmSave: boolean;
@@ -23,7 +24,7 @@ export const GitHubMissionSaveDialog: React.FC<GitHubMissionSaveDialogProps> = p
   const [commitMessage, setCommitMessage] = useState('');
 
   return (
-    <Dialog className="missionBrowser" isOpen={true}>
+    <Dialog className={classes['missionBrowser']} isOpen={true}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Please confirm your save</h3>
       </div>

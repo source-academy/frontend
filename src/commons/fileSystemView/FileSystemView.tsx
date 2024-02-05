@@ -2,6 +2,7 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import path from 'path';
 import React from 'react';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import { useTypedSelector } from '../utils/Hooks';
@@ -32,7 +33,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
     setFileSystemViewListKey((fileSystemViewListKey + 1) % 2);
 
   if (fileSystem === null) {
-    return <div className="file-system-view-error">Unable to load file system.</div>;
+    return <div className={classes['file-system-view-error']}>Unable to load file system.</div>;
   }
 
   const createNewFile = (fileName: string) => {
@@ -93,7 +94,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
   };
 
   return (
-    <div className="file-system-view-container">
+    <div className={classes['file-system-view-container']}>
       <FileSystemViewList
         workspaceLocation={workspaceLocation}
         key={fileSystemViewListKey}
@@ -102,7 +103,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
         indentationLevel={0}
       />
       {isAddingNewFile && (
-        <div className="file-system-view-node-container">
+        <div className={classes['file-system-view-node-container']}>
           <FileSystemViewIndentationPadding indentationLevel={0} />
           <Icon icon={IconNames.DOCUMENT} />
           <FileSystemViewPlaceholderNode
@@ -112,7 +113,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
         </div>
       )}
       {isAddingNewDirectory && (
-        <div className="file-system-view-node-container">
+        <div className={classes['file-system-view-node-container']}>
           <FileSystemViewIndentationPadding indentationLevel={0} />
           <Icon icon={IconNames.CHEVRON_RIGHT} />
           <FileSystemViewPlaceholderNode
@@ -122,7 +123,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
         </div>
       )}
       <FileSystemViewContextMenu
-        className="file-system-view-empty-space"
+        className={classes['file-system-view-empty-space']}
         createNewFile={handleCreateNewFile}
         createNewDirectory={handleCreateNewDirectory}
       />

@@ -18,7 +18,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Missions
       </div>
@@ -38,7 +38,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Quests
       </div>
@@ -58,7 +58,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Paths
       </div>
@@ -78,7 +78,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Contests
       </div>
@@ -98,7 +98,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Others
       </div>
@@ -122,7 +122,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Ground Control
       </div>
@@ -138,7 +138,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Dashboard
       </div>
@@ -154,7 +154,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Sourcereel
       </div>
@@ -170,7 +170,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Grading
       </div>
@@ -190,7 +190,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Game Simulator
       </div>
@@ -206,7 +206,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
         Notifications
       </div>
@@ -233,7 +233,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Missions
       </div>
@@ -253,7 +253,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Quests
       </div>
@@ -273,7 +273,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Paths
       </div>
@@ -293,7 +293,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Contests
       </div>
@@ -313,7 +313,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Others
       </div>
@@ -337,7 +337,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
         Notifications
       </div>
@@ -364,7 +364,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Missions
       </div>
@@ -384,7 +384,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Quests
       </div>
@@ -404,7 +404,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Paths
       </div>
@@ -424,7 +424,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Contests
       </div>
@@ -444,7 +444,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Others
       </div>
@@ -468,7 +468,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Ground Control
       </div>
@@ -484,7 +484,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Dashboard
       </div>
@@ -500,7 +500,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Sourcereel
       </div>
@@ -516,7 +516,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Grading
       </div>
@@ -536,7 +536,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Game Simulator
       </div>
@@ -552,7 +552,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
         XP Calculation
       </div>
@@ -568,7 +568,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
         Admin Panel
       </div>
@@ -584,7 +584,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
         Notifications
       </div>

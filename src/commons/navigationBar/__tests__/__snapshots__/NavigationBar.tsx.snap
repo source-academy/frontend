@@ -2,35 +2,49 @@
 
 exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
 <React.Fragment>
-  <Blueprint5.Navbar
-    className="NavigationBar primary-navbar bp5-dark"
+  <Blueprint4.Navbar
+    className="NavigationBar primary-navbar primary-navbar bp4-dark"
   >
-    <Blueprint5.NavbarGroup
+    <Blueprint4.NavbarGroup
       align="left"
     >
-      <Popover2
+      <Blueprint4.Popover2
+        boundary="clippingParents"
+        captureDismiss={false}
         content={
-          <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup
+          <Blueprint4.Navbar>
+            <Blueprint4.NavbarGroup
               align="left"
             />
-          </Blueprint5.Navbar>
+          </Blueprint4.Navbar>
         }
+        defaultIsOpen={false}
         disabled={true}
+        fill={false}
+        hasBackdrop={false}
+        hoverCloseDelay={300}
+        hoverOpenDelay={150}
+        inheritDarkTheme={true}
         interactionKind="hover"
+        matchTargetWidth={false}
+        minimal={false}
+        openOnTargetFocus={true}
         popoverClassName="desktop-navbar-popover"
         position="bottom-right"
+        positioningStrategy="absolute"
+        shouldReturnFocusOnClose={false}
+        targetTagName="span"
+        transitionDuration={300}
+        usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link bp4-button bp4-minimal bp4-active"
           to="/welcome"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
+          <Blueprint4.Icon
             icon="symbol-diamond"
-            tagName="span"
           />
-          <Blueprint5.NavbarHeading
+          <Blueprint4.NavbarHeading
             style={
               Object {
                 "paddingBottom": "0px",
@@ -38,56 +52,52 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
             }
           >
             Source Academy @ NUS
-          </Blueprint5.NavbarHeading>
+          </Blueprint4.NavbarHeading>
         </NavLink>
-      </Popover2>
+      </Blueprint4.Popover2>
       <NavLink
         className={[Function]}
         title="Classroom"
         to="/githubassessments"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="briefcase"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Classroom
         </div>
       </NavLink>
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup
       align="right"
     >
       <NavLink
         className={[Function]}
         to="/contributors"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="heart"
-          tagName="span"
         />
       </NavLink>
       <div
         className="visible-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint4.NavbarDivider
           className="thin-divider"
         />
       </div>
       <div
         className="hidden-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint4.NavbarDivider
           className="default-divider"
         />
       </div>
       <Dropdown />
-    </Blueprint5.NavbarGroup>
-  </Blueprint5.Navbar>
+    </Blueprint4.NavbarGroup>
+  </Blueprint4.Navbar>
   <Routes>
     <Route
       element={null}
@@ -123,16 +133,18 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
 
 exports[`NavigationBar Renders correctly for student with course 1`] = `
 <React.Fragment>
-  <Blueprint5.Navbar
-    className="NavigationBar primary-navbar bp5-dark"
+  <Blueprint4.Navbar
+    className="NavigationBar primary-navbar primary-navbar bp4-dark"
   >
-    <Blueprint5.NavbarGroup
+    <Blueprint4.NavbarGroup
       align="left"
     >
-      <Popover2
+      <Blueprint4.Popover2
+        boundary="clippingParents"
+        captureDismiss={false}
         content={
-          <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup
+          <Blueprint4.Navbar>
+            <Blueprint4.NavbarGroup
               align="left"
             >
               <NavLink
@@ -140,13 +152,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 title="Missions"
                 to="/courses/1/missions"
               >
-                <Blueprint5.Icon
-                  autoLoad={true}
+                <Blueprint4.Icon
                   icon="flame"
-                  tagName="span"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Missions
                 </div>
@@ -160,13 +170,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 title="Quests"
                 to="/courses/1/quests"
               >
-                <Blueprint5.Icon
-                  autoLoad={true}
+                <Blueprint4.Icon
                   icon="lightbulb"
-                  tagName="span"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Quests
                 </div>
@@ -180,13 +188,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 title="Paths"
                 to="/courses/1/paths"
               >
-                <Blueprint5.Icon
-                  autoLoad={true}
+                <Blueprint4.Icon
                   icon="predictive-analysis"
-                  tagName="span"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Paths
                 </div>
@@ -200,13 +206,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 title="Contests"
                 to="/courses/1/contests"
               >
-                <Blueprint5.Icon
-                  autoLoad={true}
+                <Blueprint4.Icon
                   icon="comparison"
-                  tagName="span"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Contests
                 </div>
@@ -220,13 +224,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 title="Missions"
                 to="/courses/1/missions"
               >
-                <Blueprint5.Icon
-                  autoLoad={true}
+                <Blueprint4.Icon
                   icon="manual"
-                  tagName="span"
                 />
                 <div
-                  className="navbar-button-text hidden-xs hidden-sm"
+                  className="hidden-xs hidden-sm"
                 >
                   Missions
                 </div>
@@ -235,24 +237,36 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                   notificationFilter={[Function]}
                 />
               </NavLink>
-            </Blueprint5.NavbarGroup>
-          </Blueprint5.Navbar>
+            </Blueprint4.NavbarGroup>
+          </Blueprint4.Navbar>
         }
+        defaultIsOpen={false}
         disabled={true}
+        fill={false}
+        hasBackdrop={false}
+        hoverCloseDelay={300}
+        hoverOpenDelay={150}
+        inheritDarkTheme={true}
         interactionKind="hover"
+        matchTargetWidth={false}
+        minimal={false}
+        openOnTargetFocus={true}
         popoverClassName="desktop-navbar-popover"
         position="bottom-right"
+        positioningStrategy="absolute"
+        shouldReturnFocusOnClose={false}
+        targetTagName="span"
+        transitionDuration={300}
+        usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link bp4-button bp4-minimal bp4-active"
           to="/courses/1"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
+          <Blueprint4.Icon
             icon="symbol-diamond"
-            tagName="span"
           />
-          <Blueprint5.NavbarHeading
+          <Blueprint4.NavbarHeading
             style={
               Object {
                 "paddingBottom": "0px",
@@ -260,21 +274,19 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
             }
           >
             CS1101S
-          </Blueprint5.NavbarHeading>
+          </Blueprint4.NavbarHeading>
         </NavLink>
-      </Popover2>
+      </Blueprint4.Popover2>
       <NavLink
         className={[Function]}
         title="Sourcecast"
         to="/courses/1/sourcecast"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="music"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Sourcecast
         </div>
@@ -284,13 +296,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         title="Playground"
         to="/playground"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="code"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Playground
         </div>
@@ -300,13 +310,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         title="Classroom"
         to="/githubassessments"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="briefcase"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Classroom
         </div>
@@ -316,13 +324,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         title="SICP JS"
         to="/sicpjs"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="book"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           SICP JS
         </div>
@@ -332,64 +338,44 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         title="Achievements"
         to="/courses/1/achievements"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="mountain"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Achievements
         </div>
       </NavLink>
-      <NavLink
-        className={[Function]}
-        title="Stories"
-        to="/stories"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="git-repo"
-          tagName="span"
-        />
-        <div
-          className="navbar-button-text"
-        >
-          Stories
-        </div>
-      </NavLink>
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup
       align="right"
     >
       <NavLink
         className={[Function]}
         to="/contributors"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="heart"
-          tagName="span"
         />
       </NavLink>
       <div
         className="visible-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint4.NavbarDivider
           className="thin-divider"
         />
       </div>
       <div
         className="hidden-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint4.NavbarDivider
           className="default-divider"
         />
       </div>
       <Dropdown />
-    </Blueprint5.NavbarGroup>
-  </Blueprint5.Navbar>
+    </Blueprint4.NavbarGroup>
+  </Blueprint4.Navbar>
   <Routes>
     <Route
       element={null}
@@ -437,35 +423,49 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
 
 exports[`NavigationBar Renders correctly for student without course 1`] = `
 <React.Fragment>
-  <Blueprint5.Navbar
-    className="NavigationBar primary-navbar bp5-dark"
+  <Blueprint4.Navbar
+    className="NavigationBar primary-navbar primary-navbar bp4-dark"
   >
-    <Blueprint5.NavbarGroup
+    <Blueprint4.NavbarGroup
       align="left"
     >
-      <Popover2
+      <Blueprint4.Popover2
+        boundary="clippingParents"
+        captureDismiss={false}
         content={
-          <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup
+          <Blueprint4.Navbar>
+            <Blueprint4.NavbarGroup
               align="left"
             />
-          </Blueprint5.Navbar>
+          </Blueprint4.Navbar>
         }
+        defaultIsOpen={false}
         disabled={true}
+        fill={false}
+        hasBackdrop={false}
+        hoverCloseDelay={300}
+        hoverOpenDelay={150}
+        inheritDarkTheme={true}
         interactionKind="hover"
+        matchTargetWidth={false}
+        minimal={false}
+        openOnTargetFocus={true}
         popoverClassName="desktop-navbar-popover"
         position="bottom-right"
+        positioningStrategy="absolute"
+        shouldReturnFocusOnClose={false}
+        targetTagName="span"
+        transitionDuration={300}
+        usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link bp4-button bp4-minimal bp4-active"
           to="/welcome"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
+          <Blueprint4.Icon
             icon="symbol-diamond"
-            tagName="span"
           />
-          <Blueprint5.NavbarHeading
+          <Blueprint4.NavbarHeading
             style={
               Object {
                 "paddingBottom": "0px",
@@ -473,21 +473,19 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
             }
           >
             Source Academy @ NUS
-          </Blueprint5.NavbarHeading>
+          </Blueprint4.NavbarHeading>
         </NavLink>
-      </Popover2>
+      </Blueprint4.Popover2>
       <NavLink
         className={[Function]}
         title="Classroom"
         to="/githubassessments"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="briefcase"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           Classroom
         </div>
@@ -497,64 +495,44 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
         title="SICP JS"
         to="/sicpjs"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="book"
-          tagName="span"
         />
         <div
-          className="navbar-button-text"
+          className=""
         >
           SICP JS
         </div>
       </NavLink>
-      <NavLink
-        className={[Function]}
-        title="Stories"
-        to="/stories"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="git-repo"
-          tagName="span"
-        />
-        <div
-          className="navbar-button-text"
-        >
-          Stories
-        </div>
-      </NavLink>
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+    </Blueprint4.NavbarGroup>
+    <Blueprint4.NavbarGroup
       align="right"
     >
       <NavLink
         className={[Function]}
         to="/contributors"
       >
-        <Blueprint5.Icon
-          autoLoad={true}
+        <Blueprint4.Icon
           icon="heart"
-          tagName="span"
         />
       </NavLink>
       <div
         className="visible-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint4.NavbarDivider
           className="thin-divider"
         />
       </div>
       <div
         className="hidden-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint4.NavbarDivider
           className="default-divider"
         />
       </div>
       <Dropdown />
-    </Blueprint5.NavbarGroup>
-  </Blueprint5.Navbar>
+    </Blueprint4.NavbarGroup>
+  </Blueprint4.Navbar>
   <Routes>
     <Route
       element={null}

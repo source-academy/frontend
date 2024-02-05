@@ -24,7 +24,7 @@ exports[`Navbar renders correctly 1`] = `
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Missions
       </div>
@@ -46,7 +46,7 @@ exports[`Navbar renders correctly 1`] = `
         tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Quests
       </div>

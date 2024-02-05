@@ -5,7 +5,7 @@ import { Label, Tag, Text } from 'react-konva';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
-import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
+import { ControlStashConfig, ShapeDefaultProps } from '../EnvVisualizerControlStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import {
@@ -53,20 +53,20 @@ export class StashItemComponent extends Visible implements IHoverable {
     };
     this.text = truncateText(
       valToStashRep(value),
-      AgendaStashConfig.StashMaxTextWidth,
-      AgendaStashConfig.StashMaxTextHeight
+      ControlStashConfig.StashMaxTextWidth,
+      ControlStashConfig.StashMaxTextHeight
     ).replace(/[\r\n]/gm, ' ');
     this.tooltip = valToStashRep(value);
     this.tooltipRef = React.createRef();
     this._width =
-      AgendaStashConfig.StashItemTextPadding * 2 +
+      ControlStashConfig.StashItemTextPadding * 2 +
       getTextWidth(
         this.text,
-        `${AgendaStashConfig.FontStyle} ${AgendaStashConfig.FontSize}px ${AgendaStashConfig.FontFamily}`
+        `${ControlStashConfig.FontStyle} ${ControlStashConfig.FontSize}px ${ControlStashConfig.FontFamily}`
       );
-    this._height = AgendaStashConfig.StashItemHeight + AgendaStashConfig.StashItemTextPadding * 2;
-    this._x = AgendaStashConfig.StashPosX + stackWidth;
-    this._y = AgendaStashConfig.StashPosY;
+    this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
+    this._x = ControlStashConfig.StashPosX + stackWidth;
+    this._y = ControlStashConfig.StashPosY;
     if (arrowTo) {
       this.arrow = new ArrowFromStashItemComponent(this).to(arrowTo) as ArrowFromStashItemComponent;
     }
@@ -90,16 +90,16 @@ export class StashItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: AgendaStashConfig.SA_WHITE.toString(),
-      padding: Number(AgendaStashConfig.StashItemTextPadding),
-      fontFamily: AgendaStashConfig.FontFamily.toString(),
-      fontSize: Number(AgendaStashConfig.FontSize),
-      fontStyle: AgendaStashConfig.FontStyle.toString(),
-      fontVariant: AgendaStashConfig.FontVariant.toString()
+      fill: ControlStashConfig.SA_WHITE.toString(),
+      padding: Number(ControlStashConfig.StashItemTextPadding),
+      fontFamily: ControlStashConfig.FontFamily.toString(),
+      fontSize: Number(ControlStashConfig.FontSize),
+      fontStyle: ControlStashConfig.FontStyle.toString(),
+      fontVariant: ControlStashConfig.FontVariant.toString()
     };
     const tagProps = {
       stroke: stackItemSAColor(this.index),
-      cornerRadius: Number(AgendaStashConfig.StashItemCornerRadius)
+      cornerRadius: Number(ControlStashConfig.StashItemCornerRadius)
     };
     return (
       <React.Fragment key={Layout.key++}>
@@ -113,8 +113,8 @@ export class StashItemComponent extends Visible implements IHoverable {
           <Text {...ShapeDefaultProps} {...textProps} text={this.text} />
         </Label>
         <Label
-          x={this.x() + AgendaStashConfig.TooltipMargin}
-          y={this.y() + this.height() + AgendaStashConfig.TooltipMargin}
+          x={this.x() + ControlStashConfig.TooltipMargin}
+          y={this.y() + this.height() + ControlStashConfig.TooltipMargin}
           visible={false}
           ref={this.tooltipRef}
         >
@@ -122,13 +122,13 @@ export class StashItemComponent extends Visible implements IHoverable {
             {...ShapeDefaultProps}
             stroke="black"
             fill={'black'}
-            opacity={Number(AgendaStashConfig.TooltipOpacity)}
+            opacity={Number(ControlStashConfig.TooltipOpacity)}
           />
           <Text
             {...ShapeDefaultProps}
             {...textProps}
             text={this.tooltip}
-            padding={Number(AgendaStashConfig.TooltipPadding)}
+            padding={Number(ControlStashConfig.TooltipPadding)}
           />
         </Label>
         {this.arrow?.draw()}
