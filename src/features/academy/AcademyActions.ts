@@ -10,6 +10,7 @@ import {
   SAVE_CANVAS
 } from './AcademyTypes';
 
+// TODO: Does not seem to be used anywhere, perhaps we can remove this?
 export const saveCanvas = (canvas: HTMLCanvasElement) => action(SAVE_CANVAS, canvas);
 
 export const createCourse = (courseConfig: UpdateCourseConfiguration) =>

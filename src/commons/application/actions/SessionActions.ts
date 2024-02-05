@@ -152,6 +152,7 @@ export const setAdminPanelCourseRegistrations = (
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
+// TODO: Does not seem to be used anywhere, perhaps we can remove this?
 export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
   action(SET_GITHUB_ASSESSMENT, missionRepoData);
 
