@@ -127,7 +127,7 @@ export class ControlStack extends Visible implements IHoverable {
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
- * @param command An ControlItem
+ * @param command A ControlItem
  * @returns true if the ControlItem is an instruction and false otherwise.
  */
 export const isInstr = (command: ControlItem): command is Instr => {
@@ -139,7 +139,7 @@ export const isInstr = (command: ControlItem): command is Instr => {
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
- * @param command An ControlItem
+ * @param command A ControlItem
  * @returns true if the ControlItem is an esNode and false if it is an instruction.
  */
 export const isNode = (command: ControlItem): command is es.Node => {

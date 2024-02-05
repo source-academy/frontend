@@ -9,8 +9,7 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Value as StashValue } from 'js-slang/dist/types';
-import { Environment } from 'js-slang/dist/types';
+import { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
@@ -394,7 +393,7 @@ export const truncateText = (programStr: string, maxWidth: number, maxHeight: nu
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
- * @param command An ControlItem
+ * @param command A ControlItem
  * @returns true if the ControlItem is an instruction and false otherwise.
  */
 export const isInstr = (command: ControlItem): command is Instr => {
