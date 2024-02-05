@@ -42,10 +42,10 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     />
   );
   const openButton = (
-    <ControlButton 
-      label="Open" 
-      icon={IconNames.DOCUMENT_OPEN} 
-      onClick={props.onClickOpen} 
+    <ControlButton
+      label="Open"
+      icon={IconNames.DOCUMENT_OPEN}
+      onClick={props.onClickOpen}
       isDisabled={props.loggedInAs ? false : true}
     />
   );
@@ -59,8 +59,8 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     />
   );
   const saveAsButton = (
-    <ControlButton 
-      label="Save as" 
+    <ControlButton
+      label="Save as"
       icon={IconNames.SEND_TO}
       onClick={props.onClickSaveAs}
       isDisabled={props.loggedInAs ? false : true}

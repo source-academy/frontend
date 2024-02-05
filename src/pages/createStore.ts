@@ -54,7 +54,7 @@ function loadStore(loadedStore: SavedState | undefined) {
           ? generateOctokitInstance(loadedStore.session.githubAccessToken)
           : undefined
       },
-      googleUser: loadedStore.session.googleAccessToken 
+      googleUser: loadedStore.session.googleAccessToken
         ? 'placeholder' // updates in PersistenceSaga
         : undefined
     },
