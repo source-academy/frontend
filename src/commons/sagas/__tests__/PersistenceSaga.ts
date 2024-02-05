@@ -2,6 +2,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 
 import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
+import { REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN } from '../../application/types/SessionTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { actions } from '../../utils/ActionsHelper';
 import {
@@ -19,7 +20,6 @@ jest.mock('../../../pages/createStore');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const PersistenceSaga = require('../PersistenceSaga').default;
 
-const USER_EMAIL = 'test@email.com';
 const FILE_ID = '123';
 const FILE_NAME = 'file';
 const FILE_DATA = '// Hello world';
@@ -28,28 +28,12 @@ const SOURCE_VARIANT = Variant.LAZY;
 const SOURCE_LIBRARY = ExternalLibraryName.SOUNDS;
 
 beforeAll(() => {
-  // TODO: rewrite
-  const authInstance: gapi.auth2.GoogleAuth = {
-    signOut: () => {},
-    isSignedIn: {
-      get: () => true,
-      listen: () => {}
-    },
-    currentUser: {
-      listen: () => {},
-      get: () => ({
-        isSignedIn: () => true,
-        getBasicProfile: () => ({
-          getEmail: () => USER_EMAIL
-        })
-      })
-    }
-  } as any;
-
   window.gapi = {
     client: {
       request: () => {},
       init: () => Promise.resolve(),
+      getToken: () => {},
+      setToken: () => {},
       drive: {
         files: {
           get: () => {}
@@ -57,17 +41,31 @@ beforeAll(() => {
       }
     },
     load: (apiName: string, callbackOrConfig: gapi.CallbackOrConfig) =>
-      typeof callbackOrConfig === 'function' ? callbackOrConfig() : callbackOrConfig.callback(),
-    auth2: {
-      getAuthInstance: () => authInstance
-    }
+      typeof callbackOrConfig === 'function' ? callbackOrConfig() : callbackOrConfig.callback()
   } as any;
 });
-// TODO: rewrite test
-test('LOGOUT_GOOGLE causes logout', async () => {
-  const signOut = jest.spyOn(window.gapi.auth2.getAuthInstance(), 'signOut');
-  await expectSaga(PersistenceSaga).dispatch(actions.logoutGoogle()).silentRun();
-  expect(signOut).toBeCalled();
+
+test('LOGOUT_GOOGLE results in REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN being dispatched', async () => {
+  await expectSaga(PersistenceSaga)
+  .put({
+    type: PLAYGROUND_UPDATE_PERSISTENCE_FILE,
+    payload: undefined,
+    meta: undefined,
+    error: undefined
+  })
+  .put({
+    type: REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
+    payload: undefined,
+    meta: undefined,
+    error: undefined
+  })
+  .provide({
+    call(effect, next) {
+      return;
+    }
+  })
+  .dispatch(actions.logoutGoogle())
+  .silentRun();
 });
 
 describe('PERSISTENCE_OPEN_PICKER', () => {

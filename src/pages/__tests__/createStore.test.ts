@@ -20,7 +20,8 @@ const mockChangedStoredState: SavedState = {
     role: undefined,
     name: 'Jeff',
     userId: 1,
-    githubAccessToken: 'githubAccessToken'
+    githubAccessToken: 'githubAccessToken',
+    googleAccessToken: 'googleAccessToken'
   },
   playgroundIsFolderModeEnabled: true,
   playgroundActiveEditorTabIndex: {
@@ -57,7 +58,8 @@ const mockChangedState: OverallState = {
     role: undefined,
     name: 'Jeff',
     userId: 1,
-    githubAccessToken: 'githubAccessToken'
+    githubAccessToken: 'githubAccessToken',
+    googleAccessToken: 'googleAccessToken'
   },
   workspaces: {
     ...defaultState.workspaces,
@@ -102,8 +104,12 @@ describe('createStore() function', () => {
     const octokit = received.session.githubOctokitObject.octokit;
     delete received.session.githubOctokitObject.octokit;
 
+    const googleUser = received.session.googleUser;
+    delete received.session.googleUser;
+
     expect(received).toEqual(mockChangedState);
     expect(octokit).toBeDefined();
+    expect(googleUser).toEqual("placeholder");
     localStorage.removeItem('storedState');
   });
 });

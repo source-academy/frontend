@@ -47,6 +47,7 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
+  REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
@@ -170,6 +171,9 @@ export const setGitHubAccessToken = (authToken?: string) =>
 
 export const removeGitHubOctokitObjectAndAccessToken = () =>
   action(REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN);
+
+export const removeGoogleUserAndAccessToken = () =>
+  action(REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN);
 
 export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
   action(SUBMIT_ANSWER, {
