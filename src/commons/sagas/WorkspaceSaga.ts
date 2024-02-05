@@ -41,7 +41,7 @@ import {
   DEBUG_RESET,
   DEBUG_RESUME,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA
+  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
@@ -55,9 +55,9 @@ import {
   getRestoreExtraMethodsString,
   getStoreExtraMethodsString,
   highlightClean,
-  highlightCleanForAgenda,
+  highlightCleanForControl,
   highlightLine,
-  highlightLineForAgenda,
+  highlightLineForControl,
   makeElevatedContext,
   visualizeEnv
 } from '../utils/JsSlangHelper';
@@ -388,16 +388,16 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    UPDATE_EDITOR_HIGHLIGHTED_LINES_AGENDA,
+    UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL,
     function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
       const newHighlightedLines = action.payload.newHighlightedLines;
       if (newHighlightedLines.length === 0) {
-        highlightCleanForAgenda();
+        highlightCleanForControl();
       } else {
         try {
           newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
             for (let row = startRow; row <= endRow; row++) {
-              highlightLineForAgenda(row);
+              highlightLineForControl(row);
             }
           });
         } catch (e) {
