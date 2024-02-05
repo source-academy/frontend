@@ -1,10 +1,10 @@
-import { Agenda, Stash } from 'js-slang/dist/ec-evaluator/interpreter';
+import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
-import { AgendaStack } from './compactComponents/AgendaStack';
+import { ControlStack } from './compactComponents/ControlStack';
 import { Level as CompactLevel } from './compactComponents/Level';
 import { StashStack } from './compactComponents/StashStack';
 import { ArrayValue as CompactArrayValue } from './compactComponents/values/ArrayValue';
@@ -51,10 +51,10 @@ export class Layout {
   static compactWidth: number;
   /** the height of the compact stage */
   static compactHeight: number;
-  /** the width of the agendaStash stage */
-  static agendaStashWidth: number;
-  /** the height of the agendaStash stage */
-  static agendaStashHeight: number;
+  /** the width of the controlStash stage */
+  static controlStashWidth: number;
+  /** the height of the controlStash stage */
+  static controlStashHeight: number;
   /** the visible height of the stage */
   static visibleHeight: number = window.innerHeight;
   /** the visible width of the stage */
@@ -75,10 +75,10 @@ export class Layout {
   /** grid of frames */
   static grid: Grid;
   static compactLevels: CompactLevel[] = [];
-  /** the agenda and stash */
-  static agenda: Agenda;
+  /** the control and stash */
+  static control: Control;
   static stash: Stash;
-  static agendaComponent: AgendaStack;
+  static controlComponent: ControlStack;
   static stashComponent: StashStack;
 
   /** memoized values */
@@ -136,7 +136,7 @@ export class Layout {
   }
 
   /** processes the runtime context from JS Slang */
-  static setContext(envTree: EnvTree, agenda: Agenda, stash: Stash): void {
+  static setContext(envTree: EnvTree, control: Control, stash: Stash): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentCompactLight = undefined;
@@ -158,7 +158,7 @@ export class Layout {
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(envTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
-    Layout.agenda = agenda;
+    Layout.control = control;
     Layout.stash = stash;
 
     // remove program environment and merge bindings into global env
@@ -167,17 +167,17 @@ export class Layout {
     Layout.removeUnreferencedGlobalFns();
     // initialize levels and frames
     Layout.initializeGrid();
-    // initialize agenda and stash
-    Layout.initializeAgendaStash();
+    // initialize control and stash
+    Layout.initializeControlStash();
 
-    if (EnvVisualizer.getAgendaStash()) {
-      Layout.agendaStashHeight = Math.max(
+    if (EnvVisualizer.getControlStash()) {
+      Layout.controlStashHeight = Math.max(
         Config.CanvasMinHeight,
-        Layout.agendaComponent.y() + Layout.agendaComponent.height() + Config.CanvasPaddingY
+        Layout.controlComponent.y() + Layout.controlComponent.height() + Config.CanvasPaddingY
       );
-      Layout.agendaStashWidth = Math.max(
+      Layout.controlStashWidth = Math.max(
         Config.CanvasMinWidth,
-        Layout.agendaComponent.x() + Layout.agendaComponent.width() + Config.CanvasPaddingX,
+        Layout.controlComponent.x() + Layout.controlComponent.width() + Config.CanvasPaddingX,
         Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX
       );
     }
@@ -187,7 +187,7 @@ export class Layout {
       Layout.compactHeight = Math.max(
         Config.CanvasMinHeight,
         lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
-        Layout.agendaStashHeight
+        Layout.controlStashHeight
       );
 
       Layout.compactWidth = Math.max(
@@ -197,8 +197,8 @@ export class Layout {
           0
         ) +
           Config.CanvasPaddingX * 2 +
-          (EnvVisualizer.getAgendaStash()
-            ? Layout.agendaComponent.width() + Config.CanvasPaddingX * 2
+          (EnvVisualizer.getControlStash()
+            ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
             : 0)
       );
     } else {
@@ -213,8 +213,8 @@ export class Layout {
     }
   }
 
-  static initializeAgendaStash() {
-    this.agendaComponent = new AgendaStack(this.agenda);
+  static initializeControlStash() {
+    this.controlComponent = new ControlStack(this.control);
     this.stashComponent = new StashStack(this.stash);
   }
 
@@ -575,10 +575,10 @@ export class Layout {
                   {EnvVisualizer.getCompactLayout() &&
                     Layout.compactLevels.map(level => level.draw())}
                   {EnvVisualizer.getCompactLayout() &&
-                    EnvVisualizer.getAgendaStash() &&
-                    Layout.agendaComponent.draw()}
+                    EnvVisualizer.getControlStash() &&
+                    Layout.controlComponent.draw()}
                   {EnvVisualizer.getCompactLayout() &&
-                    EnvVisualizer.getAgendaStash() &&
+                    EnvVisualizer.getControlStash() &&
                     Layout.stashComponent.draw()}
                 </Layer>
               </Stage>
@@ -589,7 +589,7 @@ export class Layout {
       Layout.prevLayout = layout;
       if (EnvVisualizer.getCompactLayout()) {
         if (EnvVisualizer.getPrintableMode()) {
-          if (EnvVisualizer.getAgendaStash()) {
+          if (EnvVisualizer.getControlStash()) {
             if (EnvVisualizer.getStackTruncated()) {
               Layout.currentStackTruncLight = layout;
             } else {
@@ -599,7 +599,7 @@ export class Layout {
             Layout.currentCompactLight = layout;
           }
         } else {
-          if (EnvVisualizer.getAgendaStash()) {
+          if (EnvVisualizer.getControlStash()) {
             if (EnvVisualizer.getStackTruncated()) {
               Layout.currentStackTruncDark = layout;
             } else {
