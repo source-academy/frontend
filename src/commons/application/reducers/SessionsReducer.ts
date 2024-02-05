@@ -9,6 +9,7 @@ import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
+  REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
   SessionState,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
@@ -161,6 +162,12 @@ export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
         ...state,
         githubOctokitObject: { octokit: undefined },
         githubAccessToken: undefined
+      };
+    case REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN:
+      return {
+        ...state,
+        googleUser: undefined,
+        googleAccessToken: undefined
       };
     default:
       return state;

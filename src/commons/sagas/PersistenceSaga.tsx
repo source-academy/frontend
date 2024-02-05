@@ -10,6 +10,7 @@ import {
   PERSISTENCE_SAVE_FILE_AS,
   PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
+import { getUserProfileDataEmail } from '../../features/persistence/PersistenceUtils';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -40,16 +41,26 @@ const MIME_SOURCE = 'text/plain';
 let tokenClient: google.accounts.oauth2.TokenClient;
 
 export function* persistenceSaga(): SagaIterator {
-  yield takeLatest(LOGOUT_GOOGLE, function* () {
+  yield takeLatest(LOGOUT_GOOGLE, function* (): any {
     yield put(actions.playgroundUpdatePersistenceFile(undefined));
     yield call(ensureInitialised);
-    yield call([gapi.client, "setToken"], null);
-    yield call(handleUserChanged, null);
+    yield call(gapi.client.setToken, null);
+    yield put(actions.removeGoogleUserAndAccessToken());
   });
 
-  yield takeLatest(LOGIN_GOOGLE, function* () {
+  yield takeLatest(LOGIN_GOOGLE, function* (): any {
     yield call(ensureInitialised);
     yield call(getToken);
+  });
+
+  yield takeEvery(PERSISTENCE_INITIALISE, function* (): any {
+    yield call(ensureInitialised);
+    // check for stored token
+    const accessToken = yield select((state: OverallState) => state.session.googleAccessToken);
+    if (accessToken) {
+      yield call(gapi.client.setToken, {access_token: accessToken});
+      yield call(handleUserChanged, accessToken);
+    }
   });
 
   yield takeLatest(PERSISTENCE_OPEN_PICKER, function* (): any {
@@ -290,8 +301,6 @@ export function* persistenceSaga(): SagaIterator {
       }
     }
   );
-
-  yield takeEvery(PERSISTENCE_INITIALISE, ensureInitialised);
 }
 
 interface IPlaygroundConfig {
@@ -314,38 +323,6 @@ let startInitialisation: (_: void) => void;
 const initialisationPromise: Promise<void> = new Promise(res => {
   startInitialisation = res;
 }).then(initialise);
-
-/**
- * Calls Google useinfo API to get user's profile data, specifically email, using accessToken.
- * If email field does not exist in the JSON response (invalid access token), will return undefined.
- * Used with handleUserChanged to handle login/logout.
- * @param accessToken GIS access token
- * @returns string if email field exists in JSON response, undefined if not
- */
-async function getUserProfileDataEmail(accessToken: string): Promise<string | undefined> {
-  const headers = new Headers();
-  headers.append('Authorization', `Bearer ${accessToken}`);
-  const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-    headers
-  });
-  const data = await response.json();
-  return data.email;
-}
-
-// only function that updates store
-async function handleUserChanged(accessToken: string | null) {
-  // logs out if null
-  if (accessToken === null) { // clear store
-    store.dispatch(actions.setGoogleUser(undefined));
-    store.dispatch(actions.setGoogleAccessToken(undefined));
-  } else {
-    const email = await getUserProfileDataEmail(accessToken);
-    // if access token is invalid, const email will be undefined
-    // so stores will also be cleared here if it is invalid
-    store.dispatch(actions.setGoogleUser(email));
-    store.dispatch(actions.setGoogleAccessToken(accessToken));
-  }
-}
 
 async function initialise() { // only called once
   // load GIS script
@@ -384,11 +361,19 @@ async function initialise() { // only called once
     tokenClient = c; 
   }); 
 
-  // check for stored token
-  const accessToken = store.getState().session.googleAccessToken; 
-  if (accessToken) {
-    gapi.client.setToken({access_token: accessToken});
-    handleUserChanged(accessToken); // this also logs out user if stored token is invalid
+}
+
+function* handleUserChanged(accessToken: string | null) {
+  if (accessToken === null) {
+    yield put(actions.removeGoogleUserAndAccessToken());
+  } else {
+    const email: string | undefined = yield call(getUserProfileDataEmail, accessToken);
+    if (!email) {
+      yield put(actions.removeGoogleUserAndAccessToken());
+    } else {
+      yield put(store.dispatch(actions.setGoogleUser(email)));
+      yield put(store.dispatch(actions.setGoogleAccessToken(accessToken)));
+    }
   }
 }
 
@@ -403,7 +388,6 @@ function* getToken() {
         }
         // GIS has already automatically updated gapi.client 
         // with the newly issued access token by this point
-        handleUserChanged(gapi.client.getToken().access_token); 
         resolve(resp);
       };
       tokenClient.requestAccessToken();
@@ -411,6 +395,7 @@ function* getToken() {
       reject(err);
     }
   });
+  yield call(handleUserChanged, gapi.client.getToken().access_token);
 }
 
 function* ensureInitialised() {

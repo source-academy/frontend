@@ -55,7 +55,7 @@ function loadStore(loadedStore: SavedState | undefined) {
           : undefined
       },
       googleUser: loadedStore.session.googleAccessToken 
-        ? 'placeholder'
+        ? 'placeholder' // updates in PersistenceSaga
         : undefined
     },
     workspaces: {
