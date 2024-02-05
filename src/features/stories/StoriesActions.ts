@@ -27,7 +27,8 @@ import {
   StoryListView,
   StoryParams,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_LIST} from './StoriesTypes';
+  UPDATE_STORIES_LIST
+} from './StoriesTypes';
 
 export const addStoryEnv = (env: string, chapter: Chapter, variant: Variant) =>
   action(ADD_STORY_ENV, { env, chapter, variant });
@@ -84,4 +85,5 @@ export const setCurrentStoriesGroup = (
 // Helper/wrapper actions
 export const clearStoriesUserAndGroup = () => action(CLEAR_STORIES_USER_AND_GROUP);
 export const fetchAdminPanelStoriesUsers = () => action(FETCH_ADMIN_PANEL_STORIES_USERS);
-export const setAdminPanelStoriesUsers = (users: AdminPanelStoriesUser[]) => action(SET_ADMIN_PANEL_STORIES_USERS, { users });
+export const setAdminPanelStoriesUsers = (users: AdminPanelStoriesUser[]) =>
+  action(SET_ADMIN_PANEL_STORIES_USERS, { users });

@@ -11,6 +11,7 @@ import {
   addNewStoriesUsersToCourse,
   addNewUsersToCourse
 } from 'src/features/academy/AcademyActions';
+import { fetchAdminPanelStoriesUsers } from 'src/features/stories/StoriesActions';
 
 import {
   deleteAssessmentConfig,
@@ -24,9 +25,6 @@ import {
   updateCourseConfig,
   updateUserRole
 } from '../../../commons/application/actions/SessionActions';
-import {
-  fetchAdminPanelStoriesUsers,
-}  from 'src/features/stories/StoriesActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -57,7 +55,7 @@ const AdminPanel: React.FC = () => {
 
   const session = useTypedSelector(state => state.session);
 
-  const stories = useTypedSelector(state => state.stories)
+  const stories = useTypedSelector(state => state.stories);
 
   /**
    * Mutable ref to track the assessment configuration form state instead of useState. This is
@@ -142,8 +140,7 @@ const AdminPanel: React.FC = () => {
     storiesUsers: stories.storiesUsers,
     handleUpdateUserRole: (id: number, role: StoriesRole) =>
       dispatch(updateUserRole(id, role as unknown as Role)),
-    handleDeleteUserFromCourse: (id: number) =>
-      dispatch(deleteUserCourseRegistration(id))
+    handleDeleteUserFromCourse: (id: number) => dispatch(deleteUserCourseRegistration(id))
   };
 
   const addUserPanelProps = {
@@ -206,7 +203,11 @@ const AdminPanel: React.FC = () => {
           }
         />
         <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
-        <Tab id="stories-users" title="Stories Users" panel={<StoriesUserConfigPanel {...storiesUserConfigPanelProps} />} />
+        <Tab
+          id="stories-users"
+          title="Stories Users"
+          panel={<StoriesUserConfigPanel {...storiesUserConfigPanelProps} />}
+        />
         <Tab id="add-users" title="Add Users" panel={<AddUserPanel {...addUserPanelProps} />} />
         <Tab
           id="add-stories-users"

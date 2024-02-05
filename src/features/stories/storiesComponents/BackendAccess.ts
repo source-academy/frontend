@@ -151,7 +151,9 @@ export const deleteStory = async (tokens: Tokens, id: number): Promise<StoryView
   return story;
 };
 
-export const getAdminPanelStoriesUsers = async(tokens: Tokens): Promise<AdminPanelStoriesUser[] | null> => {
+export const getAdminPanelStoriesUsers = async (
+  tokens: Tokens
+): Promise<AdminPanelStoriesUser[] | null> => {
   const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/users`, 'GET', {
     ...tokens
   });
@@ -160,4 +162,4 @@ export const getAdminPanelStoriesUsers = async(tokens: Tokens): Promise<AdminPan
   }
   const users = await resp.json();
   return users;
-}
+};

@@ -3,10 +3,10 @@ import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
 import RolesCell from './RolesCell';
 import StoriesUserActionsCell from './StoriesUserActionsCell';
-import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
 export type StoriesUserConfigPanelProps = OwnProps;
 

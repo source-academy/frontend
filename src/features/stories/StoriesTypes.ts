@@ -77,6 +77,11 @@ export type AdminPanelStoriesUser = {
   readonly username: string;
   readonly provider: string;
   readonly role: string;
+  readonly created_at: string;
+  readonly updated_at: string;
+  readonly deleted_at: string;
+  readonly login_provider: string;
+  readonly full_name: string;
 };
 
 export type StoriesState = {

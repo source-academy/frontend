@@ -9,7 +9,7 @@ import {
   getStory,
   postNewStoriesUsers,
   postStory,
-  updateStory,
+  updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   CREATE_STORY,
@@ -160,7 +160,6 @@ export function* storiesSaga(): SagaIterator {
       if (storiesUsers) {
         yield put(actions.setAdminPanelStoriesUsers(storiesUsers));
       }
-
     }
   );
 }
