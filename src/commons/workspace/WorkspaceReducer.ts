@@ -35,6 +35,7 @@ import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
   ADD_EDITOR_TAB,
+  ADD_TOKEN_COUNT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
@@ -124,6 +125,16 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   }
 
   switch (action.type) {
+
+    case ADD_TOKEN_COUNT:
+      return {
+        ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            tokenCount: action.payload.tokenCount
+          }
+      }
+
     case BROWSE_REPL_HISTORY_DOWN:
       if (state[workspaceLocation].replHistory.browseIndex === null) {
         // Not yet started browsing history, nothing to do
@@ -363,6 +374,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       };
     case EVAL_INTERPRETER_SUCCESS:
       const execType = state[workspaceLocation].context.executionMethod;
+      const tokens = state[workspaceLocation].tokenCount;
       const newOutputEntry: Partial<ResultOutput> = {
         type: action.payload.type as 'result' | undefined,
         value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
@@ -377,7 +389,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         const notificationOutputs: NotificationOutput[] = [];
         if (state[workspaceLocation].hasTokenCounter) {
           notificationOutputs.push({
-            consoleLog: "You have this ___ tokens in your code",
+            consoleLog: `This program has ${tokens} tokens in your code`,
             type: "notification"
           });
         }

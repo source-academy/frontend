@@ -9,6 +9,7 @@ import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
+export const ADD_TOKEN_COUNT = 'ADD_TOKEN_COUNT';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
 export const BROWSE_REPL_HISTORY_DOWN = 'BROWSE_REPL_HISTORY_DOWN';
 export const BROWSE_REPL_HISTORY_UP = 'BROWSE_REPL_HISTORY_UP';
@@ -138,6 +139,7 @@ export type WorkspaceState = {
   readonly replHistory: ReplHistory;
   readonly replValue: string;
   readonly hasTokenCounter: boolean;
+  readonly tokenCount: integer;
   readonly customNotification: string;
   readonly sharedbConnected: boolean;
   readonly sideContentHeight?: number;

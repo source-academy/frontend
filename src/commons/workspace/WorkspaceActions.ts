@@ -15,6 +15,7 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   ADD_EDITOR_TAB,
   ADD_HTML_CONSOLE_ERROR,
+  ADD_TOKEN_COUNT,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -72,6 +73,9 @@ import {
   WorkspaceLocationsWithTools,
   WorkspaceState
 } from './WorkspaceTypes';
+
+export const addTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) => 
+  action(ADD_TOKEN_COUNT, { workspaceLocation, tokenCount });
 
 export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
   action(BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });

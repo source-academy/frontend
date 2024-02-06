@@ -1,3 +1,4 @@
+import { tokenizer } from 'acorn';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import {
   Context,
@@ -10,7 +11,7 @@ import {
   runFilesInContext,
   runInContext
 } from 'js-slang';
-import { TRY_AGAIN } from 'js-slang/dist/constants';
+import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
 import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
@@ -1272,6 +1273,14 @@ export function* evalCode(
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
 
+ // Change token count if its assessment and EVAL_EDITOR
+  if (actionType === EVAL_EDITOR && workspaceLocation === "assessment") {
+    let tokenCounter = 0;
+    const tokens = [...tokenizer(entrypointCode, ACORN_PARSE_OPTIONS)];
+    tokenCounter = tokens.length;
+    yield put(actions.addTokenCount(workspaceLocation, tokenCounter));
+  }
+  
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
     if (!isStoriesBlock) {
@@ -1282,6 +1291,7 @@ export function* evalCode(
     }
   }
 
+ 
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL || actionType === DEBUG_RESUME) {
     if (context.errors.length > 0) {

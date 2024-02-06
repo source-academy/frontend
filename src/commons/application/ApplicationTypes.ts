@@ -370,6 +370,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   },
   replValue: '',
   hasTokenCounter: false,
+  tokenCount: 0,
   customNotification: '',
   sharedbConnected: false,
   stepLimit: 1000,
