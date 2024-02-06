@@ -114,7 +114,6 @@ type GradingSubmissionTableProps = {
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
-  const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
@@ -157,10 +156,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
     setColumnFilters(newFilters);
   };
 
-
+  const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(fetchGradingOverviews(false, page, pageSize));
-  }, [page]);
+  }, [page, pageSize]);
 
   useEffect(() => {
     dispatch(

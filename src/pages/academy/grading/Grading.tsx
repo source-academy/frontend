@@ -40,9 +40,11 @@ const Grading: React.FC = () => {
     { value: true, label: 'all groups' }
   ];
 
+  
+  // why is this needed???
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchGradingOverviews(!showAllGroups, 1, 1));
+    dispatch(fetchGradingOverviews(!showAllGroups, 12345678, 999999999));
   }, [dispatch, role, showAllGroups]);
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(true);
