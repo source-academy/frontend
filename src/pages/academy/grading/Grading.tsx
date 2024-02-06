@@ -5,7 +5,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Button, Card, Col, ColGrid, Flex, Text, Title } from '@tremor/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams} from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
@@ -40,20 +40,15 @@ const Grading: React.FC = () => {
     { value: true, label: 'all groups' }
   ];
 
-  //default page index with no offset = 1
-  const pageQuery = parseInt(new URL(window.location.href).searchParams.get("page") ?? '');
-  const page = isNaN(pageQuery) ? 1 : Math.max(1, pageQuery);
+  // temporary implementation so i don't have to deal with filters for now.
+  const viewQuery = new URL(window.location.href).searchParams.get("view") === "all";
 
-  //default page size = 10
-  const pageSizeQuery = parseInt(new URL(window.location.href).searchParams.get("pageSize") ?? '');
-  const pageSize = isNaN(pageSizeQuery) ? 10 : Math.max(1, pageSizeQuery);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchGradingOverviews(!showAllGroups, page, pageSize));
+    dispatch(fetchGradingOverviews(!showAllGroups, 1, 1));
   }, [dispatch, role, showAllGroups]);
 
-  const viewQuery = new URL(window.location.href).searchParams.get("view") === "all";
   const [showAllSubmissions, setShowAllSubmissions] = useState(viewQuery);
   const showOptions = [
     { value: false, label: 'ungraded' },

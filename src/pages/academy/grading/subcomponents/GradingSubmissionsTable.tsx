@@ -36,6 +36,8 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
+import { useNavigate } from 'react-router';
+import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 
 const columnHelper = createColumnHelper<GradingOverview>();
 
@@ -111,6 +113,8 @@ type GradingSubmissionTableProps = {
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
@@ -125,13 +129,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
     state: {
       columnFilters,
       globalFilter
-    },
-    initialState: {
-      pagination: {
-        //short-circuit and use page query value if it exists, otherwise use 0. reduce by 1, as we are expecting 1-indexed querying.
-        //Issue: naively accepts out of bound pages in either direction (negative number, 0, beyond max page), and non integers.
-        pageIndex: parseInt(new URL(window.location.href).searchParams.get("index") || '1') - 1
-      }
     },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
@@ -152,7 +149,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
         globalFilter
       })
     );
-  }, [columnFilters, globalFilter, dispatch]);
+
+    // assumes data validation by onclick button
+    const queryParams = new URLSearchParams(window.location.search);
+    const page = parseInt(queryParams.get("page") || "");
+    const pageSize = queryParams.get("pageSize");
+    dispatch(fetchGradingOverviews(false, page, pageSize));
+  }, [columnFilters, globalFilter, location.search, dispatch]);
 
   return (
     <>
@@ -213,14 +216,28 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               disabled={!table.getCanPreviousPage()}
             />
             <Bold>
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              Page {new URLSearchParams(window.location.search).get("page") || "didn't set query parameter"} of {table.getPageCount()}
             </Bold>
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={() => {
+                const queryParams = new URLSearchParams(window.location.search);
+
+                // default page value = 1 (page is 1-indexed for UI purposes)
+                const currentPage = parseInt(queryParams.get("page") || "");
+                const nextPage = 1 + ((isNaN(currentPage) || currentPage < 1) ? 0 : currentPage);
+                queryParams.set("page", nextPage.toString());
+
+                // default page size = 10
+                const currentPageSize = parseInt(queryParams.get("pageSize") || "");
+                const nextPageSize = (isNaN(currentPageSize) || currentPageSize < 1) ? 10 : currentPageSize;
+                queryParams.set("pageSize", nextPageSize.toString());
+
+                navigate(`${window.location.pathname}?${queryParams.toString()}`);
+              }}
+              //disabled={!table.getCanNextPage()}
             />
           </Flex>
         </Footer>
