@@ -3,7 +3,7 @@ import React, { RefObject } from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import { AgendaStashConfig, ShapeDefaultProps } from '../EnvVisualizerAgendaStash';
+import { ControlStashConfig, ShapeDefaultProps } from '../EnvVisualizerControlStash';
 import { Layout } from '../EnvVisualizerLayout';
 import {
   currentItemSAColor,
@@ -25,8 +25,8 @@ export class AnimationItemComponent extends Visible {
     super();
     this.text = truncateText(
       String(value),
-      AgendaStashConfig.AgendaMaxTextWidth,
-      AgendaStashConfig.AgendaMaxTextHeight
+      ControlStashConfig.ControlMaxTextWidth,
+      ControlStashConfig.ControlMaxTextHeight
     );
     this.shapeRef = React.createRef();
     this.textRef = React.createRef();
@@ -42,16 +42,16 @@ export class AnimationItemComponent extends Visible {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: AgendaStashConfig.SA_WHITE.toString(),
-      padding: Number(AgendaStashConfig.AgendaItemTextPadding),
-      fontFamily: AgendaStashConfig.FontFamily.toString(),
-      fontSize: Number(AgendaStashConfig.FontSize),
-      fontStyle: AgendaStashConfig.FontStyle.toString(),
-      fontVariant: AgendaStashConfig.FontVariant.toString()
+      fill: ControlStashConfig.SA_WHITE.toString(),
+      padding: Number(ControlStashConfig.ControlItemTextPadding),
+      fontFamily: ControlStashConfig.FontFamily.toString(),
+      fontSize: Number(ControlStashConfig.FontSize),
+      fontStyle: ControlStashConfig.FontStyle.toString(),
+      fontVariant: ControlStashConfig.FontVariant.toString()
     };
     const tagProps = {
       stroke: currentItemSAColor(false),
-      cornerRadius: Number(AgendaStashConfig.AgendaItemCornerRadius)
+      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
     };
     return (
       <Group key={Layout.key++} ref={this.ref}>

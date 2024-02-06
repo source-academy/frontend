@@ -1,7 +1,7 @@
 import { InstrType } from "js-slang/dist/ec-evaluator/types";
 
-import { AgendaStack, isInstr } from "./compactComponents/AgendaStack";
 import { AnimationItemComponent } from "./compactComponents/AnimationItemComponent";
+import { ControlStack, isInstr } from "./compactComponents/ControlStack";
 import EnvVisualizer from './EnvVisualizer';
 
 export class EnvVisualizerAnimation {
@@ -24,21 +24,21 @@ export class EnvVisualizerAnimation {
     return EnvVisualizerAnimation.animationComponents;
   }
 
-  static updateAnimationComponents(agendaComponent: AgendaStack) {
+  static updateAnimationComponents(controlComponent: ControlStack) {
     EnvVisualizerAnimation.resetAnimationComponents();
-    if (!agendaComponent) return;
-    const lastAgendaItem = agendaComponent.agenda.peek();
-    const lastAgendaComponent = agendaComponent.stackItemComponents.at(-1);
-    if (!EnvVisualizerAnimation.animationEnabled || !lastAgendaItem || !lastAgendaComponent) {
+    if (!controlComponent) return;
+    const lastControlItem = controlComponent.control.peek();
+    const lastControlComponent = controlComponent.stackItemComponents.at(-1);
+    if (!EnvVisualizerAnimation.animationEnabled || !lastControlItem || !lastControlComponent) {
       return;
     }
-    if (!isInstr(lastAgendaItem)) {
-      if (lastAgendaItem.type === 'Literal') {
-        const animationComponent = new AnimationItemComponent(lastAgendaComponent.value, lastAgendaComponent);
+    if (!isInstr(lastControlItem)) {
+      if (lastControlItem.type === 'Literal') {
+        const animationComponent = new AnimationItemComponent(lastControlComponent.value, lastControlComponent);
         EnvVisualizerAnimation.animationComponents.push(animationComponent);
       }
     } else {
-      switch (lastAgendaItem.instrType) {
+      switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
         case InstrType.FOR:
@@ -62,7 +62,7 @@ export class EnvVisualizerAnimation {
   }
 
   static startAnimation(): void {
-    if (!EnvVisualizerAnimation.animationEnabled || !EnvVisualizer.getAgendaStash()) {
+    if (!EnvVisualizerAnimation.animationEnabled || !EnvVisualizer.getControlStash()) {
       EnvVisualizerAnimation.disableAnimations();
       return;
     }
