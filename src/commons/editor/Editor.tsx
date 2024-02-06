@@ -20,7 +20,6 @@ import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
-import useTypeInference from './UseTypeInference';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { IAceEditor } from 'react-ace/lib/types';
@@ -570,7 +569,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 });
 
 // don't create a new list every render.
-const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor];
+const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
   const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});

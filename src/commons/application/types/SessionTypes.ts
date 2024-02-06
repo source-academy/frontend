@@ -103,6 +103,7 @@ export type SessionState = {
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
+  readonly enableStories?: boolean;
   readonly sourceChapter?: number;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
@@ -168,6 +169,7 @@ export type CourseConfiguration = {
   enableGame: boolean;
   enableAchievements: boolean;
   enableSourcecast: boolean;
+  enableStories: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
