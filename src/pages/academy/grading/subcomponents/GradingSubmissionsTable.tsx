@@ -29,6 +29,8 @@ import {
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
@@ -36,15 +38,13 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
-import { useNavigate } from 'react-router';
-import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 
 const columnHelper = createColumnHelper<GradingOverview>();
 
 const columns = [
   columnHelper.accessor('assessmentName', {
     header: 'Name',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()}/>
   }),
   columnHelper.accessor('assessmentType', {
     header: 'Type',
@@ -152,10 +152,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
 
     // assumes data validation by onclick button
     const queryParams = new URLSearchParams(window.location.search);
-    const page = parseInt(queryParams.get("page") || "");
-    const pageSize = queryParams.get("pageSize");
+    const page = parseInt(queryParams.get("page") || "") || 1;
+    const pageSize = parseInt(queryParams.get("pageSize") || "") || 10;
     dispatch(fetchGradingOverviews(false, page, pageSize));
-  }, [columnFilters, globalFilter, location.search, dispatch]);
+  }, [columnFilters, globalFilter, dispatch]);
 
   return (
     <>
