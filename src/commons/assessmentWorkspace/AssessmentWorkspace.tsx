@@ -247,7 +247,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling enabling token counter depending on assessment properties
    */
   useEffect(() => {
-    if (true) {
+    if (props.assessmentConfiguration.hasTokenCounter) {
       handleEnableTokenCounter();
     }
   }, [props, handleEnableTokenCounter]);

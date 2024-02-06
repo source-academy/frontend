@@ -754,7 +754,7 @@ function* BackendSaga(): SagaIterator {
       getAssessmentConfigs,
       tokens
     );
-
+    console.log(assessmentConfigs);
     if (assessmentConfigs) {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
