@@ -13,6 +13,7 @@ import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 import {
   ADD_STORY_ENV,
+  CLEAR_STORIES_USER_AND_GROUP,
   CLEAR_STORY_ENV,
   EVAL_STORY,
   EVAL_STORY_ERROR,
@@ -211,6 +212,15 @@ export const StoriesReducer: Reducer<StoriesState> = (
       return {
         ...state,
         currentStory: action.payload
+      };
+    case CLEAR_STORIES_USER_AND_GROUP:
+      return {
+        ...state,
+        userId: undefined,
+        userName: undefined,
+        groupId: undefined,
+        groupName: undefined,
+        role: undefined
       };
     case SET_CURRENT_STORIES_USER:
       return {
