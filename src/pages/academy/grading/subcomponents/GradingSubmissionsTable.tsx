@@ -11,7 +11,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 import {
   Bold,
@@ -29,7 +29,7 @@ import {
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
@@ -38,6 +38,7 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
+
 
 const columnHelper = createColumnHelper<GradingOverview>();
 
@@ -113,8 +114,6 @@ type GradingSubmissionTableProps = {
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
-  const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
@@ -123,6 +122,17 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   ]);
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
+  const queryParams = new URLSearchParams(window.location.search);
+
+  // UI/UX feature: allow user to interact with page and pageSize via their own query parameters.
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pageQuery = parseInt(queryParams.get("page") || "");
+  const pageSizeQuery = parseInt(queryParams.get("pageSize") || "");
+
+  const [page, setPage] = useState(isNaN(pageQuery) || (pageQuery < 1) ? 1 : pageQuery);
+  const pageSize = isNaN(pageSizeQuery) || (pageSizeQuery < 1) ? 10 : pageSizeQuery;
+
   const table = useReactTable({
     data: submissions,
     columns,
@@ -130,17 +140,27 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
       columnFilters,
       globalFilter
     },
+    initialState: {
+      pagination: {
+        pageSize: pageSize
+      }
+    },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
     setColumnFilters(newFilters);
   };
+
+
+  useEffect(() => {
+    dispatch(fetchGradingOverviews(false, page, pageSize));
+  }, [page]);
 
   useEffect(() => {
     dispatch(
@@ -149,13 +169,18 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
         globalFilter
       })
     );
-
-    // assumes data validation by onclick button
-    const queryParams = new URLSearchParams(window.location.search);
-    const page = parseInt(queryParams.get("page") || "") || 1;
-    const pageSize = parseInt(queryParams.get("pageSize") || "") || 10;
-    dispatch(fetchGradingOverviews(false, page, pageSize));
   }, [columnFilters, globalFilter, dispatch]);
+
+  
+  const changePageTo = (newPage: number) => {
+    setPage(page => newPage)
+    // UI/UX feature for discoverability so that users know the possibility of navigation by query parameters.
+    // not needed for app function.
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("page", newPage.toString());
+    queryParams.set("pageSize", pageSize.toString());
+    navigate({ search: queryParams.toString() });
+  }
 
   return (
     <>
@@ -210,33 +235,26 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
           <Flex justifyContent="justify-center" spaceX="space-x-3">
             <Button
               size="xs"
+              icon={() => <BpIcon icon={IconNames.DoubleChevronLeft} />}
+              variant="light"
+              onClick={() => changePageTo(1)}
+              disabled={page <= 1}
+            />
+            <Button
+              size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={() => changePageTo(page - 1)}
+              disabled={page <= 1}
             />
             <Bold>
-              Page {new URLSearchParams(window.location.search).get("page") || "didn't set query parameter"} of {table.getPageCount()}
+              Page {page} of {table.getPageCount()}
             </Bold>
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => {
-                const queryParams = new URLSearchParams(window.location.search);
-
-                // default page value = 1 (page is 1-indexed for UI purposes)
-                const currentPage = parseInt(queryParams.get("page") || "");
-                const nextPage = 1 + ((isNaN(currentPage) || currentPage < 1) ? 0 : currentPage);
-                queryParams.set("page", nextPage.toString());
-
-                // default page size = 10
-                const currentPageSize = parseInt(queryParams.get("pageSize") || "");
-                const nextPageSize = (isNaN(currentPageSize) || currentPageSize < 1) ? 10 : currentPageSize;
-                queryParams.set("pageSize", nextPageSize.toString());
-
-                navigate(`${window.location.pathname}?${queryParams.toString()}`);
-              }}
+              onClick={() => changePageTo(page + 1)}
               //disabled={!table.getCanNextPage()}
             />
           </Flex>
