@@ -1,23 +1,23 @@
 import {
-  AgendaItem,
   AppInstr,
   ArrLitInstr,
   AssmtInstr,
   BinOpInstr,
+  ControlItem,
   EnvInstr,
   Instr,
   InstrType,
   UnOpInstr
-} from 'js-slang/dist/ec-evaluator/types';
-import { Value as StashValue } from 'js-slang/dist/types';
-import { Environment } from 'js-slang/dist/types';
+} from 'js-slang/dist/cse-machine/types';
+import { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
+import classes from 'src/styles/Draggable.module.scss';
 
-import { AgendaItemComponent } from './compactComponents/AgendaItemComponent';
+import { ControlItemComponent } from './compactComponents/ControlItemComponent';
 import { Frame } from './compactComponents/Frame';
 import { StashItemComponent } from './compactComponents/StashItemComponent';
 import { ArrayValue } from './compactComponents/values/ArrayValue';
@@ -27,9 +27,9 @@ import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { AgendaStashConfig } from './EnvVisualizerAgendaStash';
 import { CompactConfig } from './EnvVisualizerCompactConfig';
 import { Config } from './EnvVisualizerConfig';
+import { ControlStashConfig } from './EnvVisualizerControlStash';
 import { Layout } from './EnvVisualizerLayout';
 import {
   CompactReferenceType,
@@ -254,16 +254,16 @@ export function getBodyText(data: () => any): string {
 export function setHoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
   if (container) {
-    container.classList.remove('draggable');
-    container.classList.add('clickable');
+    container.classList.remove(classes['draggable']);
+    container.classList.add(classes['clickable']);
   }
 }
 
 export function setUnhoveredCursor(target: Node | Group) {
   const container = target.getStage()?.container();
   if (container) {
-    container.classList.remove('clickable');
-    container.classList.add('draggable');
+    container.classList.remove(classes['clickable']);
+    container.classList.add(classes['draggable']);
   }
 }
 
@@ -394,29 +394,29 @@ export const truncateText = (programStr: string, maxWidth: number, maxHeight: nu
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
- * @param command An AgendaItem
- * @returns true if the AgendaItem is an instruction and false otherwise.
+ * @param command A ControlItem
+ * @returns true if the ControlItem is an instruction and false otherwise.
  */
-export const isInstr = (command: AgendaItem): command is Instr => {
+export const isInstr = (command: ControlItem): command is Instr => {
   return (command as Instr).instrType !== undefined;
 };
 
-export function getAgendaItemComponent(
-  agendaItem: AgendaItem,
+export function getControlItemComponent(
+  controlItem: ControlItem,
   stackHeight: number,
   index: number,
   highlightOnHover: () => void,
   unhighlightOnHover: () => void
-): AgendaItemComponent {
+): ControlItemComponent {
   const topItem = EnvVisualizer.getStackTruncated()
-    ? index === Math.min(Layout.agenda.size() - 1, 9)
-    : index === Layout.agenda.size() - 1;
-  if (!isInstr(agendaItem)) {
-    switch (agendaItem.type) {
+    ? index === Math.min(Layout.control.size() - 1, 9)
+    : index === Layout.control.size() - 1;
+  if (!isInstr(controlItem)) {
+    switch (controlItem.type) {
       case 'Literal':
         const textL =
-          typeof agendaItem.value === 'string' ? `"${agendaItem.value}"` : agendaItem.value;
-        return new AgendaItemComponent(
+          typeof controlItem.value === 'string' ? `"${controlItem.value}"` : controlItem.value;
+        return new ControlItemComponent(
           textL,
           String(textL),
           stackHeight,
@@ -425,8 +425,8 @@ export function getAgendaItemComponent(
           topItem
         );
       default:
-        const text = astToString(agendaItem).trim();
-        return new AgendaItemComponent(
+        const text = astToString(controlItem).trim();
+        return new ControlItemComponent(
           text,
           text,
           stackHeight,
@@ -436,18 +436,18 @@ export function getAgendaItemComponent(
         );
     }
   } else {
-    switch (agendaItem.instrType) {
+    switch (controlItem.instrType) {
       case InstrType.RESET:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'return',
-          'Skip agenda items until marker instruction is reached',
+          'Skip control items until marker instruction is reached',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
           topItem
         );
       case InstrType.WHILE:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'while',
           'Keep executing while loop body if predicate holds',
           stackHeight,
@@ -456,7 +456,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.FOR:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'for',
           'Keep executing for loop body if predicate holds',
           stackHeight,
@@ -465,8 +465,8 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.ASSIGNMENT:
-        const assmtInstr = agendaItem as AssmtInstr;
-        return new AgendaItemComponent(
+        const assmtInstr = controlItem as AssmtInstr;
+        return new ControlItemComponent(
           `asgn ${assmtInstr.symbol}`,
           `Assign value on top of stash to ${assmtInstr.symbol}`,
           stackHeight,
@@ -475,8 +475,8 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.UNARY_OP:
-        const unOpInstr = agendaItem as UnOpInstr;
-        return new AgendaItemComponent(
+        const unOpInstr = controlItem as UnOpInstr;
+        return new ControlItemComponent(
           unOpInstr.symbol,
           `Perform ${unOpInstr.symbol} on top stash value`,
           stackHeight,
@@ -485,8 +485,8 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.BINARY_OP:
-        const binOpInstr = agendaItem as BinOpInstr;
-        return new AgendaItemComponent(
+        const binOpInstr = controlItem as BinOpInstr;
+        return new ControlItemComponent(
           binOpInstr.symbol,
           `Perform ${binOpInstr.symbol} on top 2 stash values`,
           stackHeight,
@@ -495,7 +495,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.POP:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'pop',
           'Pop most recently pushed value from stash',
           stackHeight,
@@ -504,8 +504,8 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.APPLICATION:
-        const appInstr = agendaItem as AppInstr;
-        return new AgendaItemComponent(
+        const appInstr = controlItem as AppInstr;
+        return new ControlItemComponent(
           `call ${appInstr.numOfArgs}`,
           `Call function with ${appInstr.numOfArgs} argument${appInstr.numOfArgs === 1 ? '' : 's'}`,
           stackHeight,
@@ -514,7 +514,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.BRANCH:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'branch',
           'Pop boolean value from stash and execute corresponding branch',
           stackHeight,
@@ -523,8 +523,8 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.ENVIRONMENT:
-        const envInstr = agendaItem as EnvInstr;
-        return new AgendaItemComponent(
+        const envInstr = controlItem as EnvInstr;
+        return new ControlItemComponent(
           'env',
           'Set current environment to this environment',
           stackHeight,
@@ -540,9 +540,9 @@ export function getAgendaItemComponent(
           )
         );
       case InstrType.ARRAY_LITERAL:
-        const arrayLiteralInstr = agendaItem as ArrLitInstr;
+        const arrayLiteralInstr = controlItem as ArrLitInstr;
         const arity = arrayLiteralInstr.arity;
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           `arr lit ${arity}`,
           `Create array using ${arity} value${arity === 1 ? '' : 's'} on stash`,
           stackHeight,
@@ -551,7 +551,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.ARRAY_ACCESS:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'arr acc',
           'Access array at given index',
           stackHeight,
@@ -560,7 +560,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.ARRAY_ASSIGNMENT:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'arr asgn',
           'Assign new value to array at given index',
           stackHeight,
@@ -569,7 +569,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.ARRAY_LENGTH:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'arr len',
           'Obtain array length',
           stackHeight,
@@ -578,7 +578,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.CONTINUE_MARKER:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'cont mark',
           'Mark end of loop body',
           stackHeight,
@@ -587,7 +587,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.BREAK:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'break',
           'Control items until break marker will be skipped',
           stackHeight,
@@ -596,7 +596,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.BREAK_MARKER:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'brk mark',
           'Mark end of all loop-associated statements and instructions',
           stackHeight,
@@ -605,7 +605,7 @@ export function getAgendaItemComponent(
           topItem
         );
       case InstrType.MARKER:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'mark',
           'Mark return address',
           stackHeight,
@@ -614,7 +614,7 @@ export function getAgendaItemComponent(
           topItem
         );
       default:
-        return new AgendaItemComponent(
+        return new ControlItemComponent(
           'INSTRUCTION',
           'INSTRUCTION',
           stackHeight,
@@ -663,9 +663,9 @@ export const getEnvID = (environment: Environment): string =>
 
 // Function that returns whether the stash item will be popped off in the next step
 export const isStashItemInDanger = (stashIndex: number): boolean => {
-  const agendaItem = Layout.agenda.peek();
-  if (agendaItem && isInstr(agendaItem)) {
-    switch (agendaItem.instrType) {
+  const controlItem = Layout.control.peek();
+  if (controlItem && isInstr(controlItem)) {
+    switch (controlItem.instrType) {
       case InstrType.WHILE:
       case InstrType.FOR:
       case InstrType.UNARY_OP:
@@ -680,12 +680,12 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
       case InstrType.APPLICATION:
         return (
           Layout.stashComponent.stashItemComponents.length - stashIndex <=
-          (agendaItem as AppInstr).numOfArgs + 1
+          (controlItem as AppInstr).numOfArgs + 1
         );
       case InstrType.ARRAY_LITERAL:
         return (
           Layout.stashComponent.stashItemComponents.length - stashIndex <=
-          (agendaItem as ArrLitInstr).arity
+          (controlItem as ArrLitInstr).arity
         );
     }
   }
@@ -699,13 +699,13 @@ export const defaultSAColor = () =>
 
 export const stackItemSAColor = (index: number) =>
   isStashItemInDanger(index)
-    ? AgendaStashConfig.STASH_DANGER_ITEM.toString()
+    ? ControlStashConfig.STASH_DANGER_ITEM.toString()
     : EnvVisualizer.getPrintableMode()
-    ? AgendaStashConfig.SA_BLUE.toString()
-    : AgendaStashConfig.SA_WHITE.toString();
+    ? ControlStashConfig.SA_BLUE.toString()
+    : ControlStashConfig.SA_WHITE.toString();
 export const currentItemSAColor = (test: boolean) =>
   test
     ? CompactConfig.SA_CURRENT_ITEM.toString()
     : EnvVisualizer.getPrintableMode()
-    ? AgendaStashConfig.SA_BLUE.toString()
-    : AgendaStashConfig.SA_WHITE.toString();
+    ? ControlStashConfig.SA_BLUE.toString()
+    : ControlStashConfig.SA_WHITE.toString();

@@ -6,7 +6,8 @@ import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
+import classes from 'src/styles/Academy.module.scss';
 
 import {
   fetchNotifications,
@@ -34,12 +35,7 @@ const Academy: React.FC<{}> = () => {
     dispatch(fetchNotifications());
   }, [dispatch]);
 
-  const agreedToResearch = useTypedSelector(state => state.session.agreedToResearch);
-  const assessmentConfigurations = useTypedSelector(
-    state => state.session.assessmentConfigurations
-  );
-  const enableGame = useTypedSelector(state => state.session.enableGame);
-  const role = useTypedSelector(state => state.session.role);
+  const { agreedToResearch, assessmentConfigurations, enableGame, role } = useSession();
 
   const staffRoutes =
     role !== Role.Student
@@ -53,7 +49,7 @@ const Academy: React.FC<{}> = () => {
         ]
       : null;
   return (
-    <div className="Academy">
+    <div className={classes['Academy']}>
       {/* agreedToResearch has a default value of undefined in the store.
             It will take on null/true/false when the backend returns. */}
       {Constants.showResearchPrompt && agreedToResearch === null && <ResearchAgreementPrompt />}
@@ -97,7 +93,7 @@ const Academy: React.FC<{}> = () => {
 const CourseSelectingAcademy: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const courseId = useTypedSelector(state => state.session.courseId);
+  const { courseId } = useSession();
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
@@ -117,7 +113,7 @@ const CourseSelectingAcademy: React.FC<{}> = () => {
   ) : routeCourseId === courseId ? (
     <Academy />
   ) : (
-    <div className={classNames('Academy-switching-courses', Classes.DARK)}>
+    <div className={classNames(classes['Academy-switching-courses'], Classes.DARK)}>
       <Card className={Classes.ELEVATION_4}>
         <NonIdealState
           description="Switching courses..."

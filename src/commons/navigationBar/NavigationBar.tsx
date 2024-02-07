@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
@@ -54,6 +55,7 @@ const NavigationBar: React.FC = () => {
     courseShortName,
     enableAchievements,
     enableSourcecast,
+    enableStories,
     assessmentConfigurations
   } = useSession();
   const assessmentTypes = useMemo(
@@ -68,15 +70,7 @@ const NavigationBar: React.FC = () => {
       <NavLink
         to={navbarEntry.to}
         className={({ isActive }) =>
-          classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE,
-            {
-              [Classes.ACTIVE]: isActive
-            }
-          )
+          classNames(Classes.BUTTON, Classes.MINIMAL, Classes.LARGE, { [Classes.ACTIVE]: isActive })
         }
         onClick={() => setMobileSideMenuOpen(false)}
         key={navbarEntry.text}
@@ -179,14 +173,21 @@ const NavigationBar: React.FC = () => {
         disabled: !(isEnrolledInACourse && enableAchievements)
       },
       {
-        to: '/stories',
+        to: `/courses/${courseId}/stories`,
         icon: IconNames.GIT_REPO,
         text: 'Stories',
-        // TODO: Enable when stories are implemented
-        disabled: true && !isLoggedIn
+        // TODO: Enable for public deployment
+        disabled: !(isEnrolledInACourse && enableStories)
       }
     ];
-  }, [isLoggedIn, isEnrolledInACourse, courseId, enableSourcecast, enableAchievements]);
+  }, [
+    courseId,
+    isEnrolledInACourse,
+    enableSourcecast,
+    enableStories,
+    isLoggedIn,
+    enableAchievements
+  ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
     () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
@@ -304,7 +305,14 @@ const NavigationBar: React.FC = () => {
 
   return (
     <>
-      <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
+      <Navbar
+        className={classNames(
+          'NavigationBar',
+          'primary-navbar',
+          classes['primary-navbar'],
+          Classes.DARK
+        )}
+      >
         {Constants.playgroundOnly
           ? isMobileBreakpoint
             ? renderPlaygroundOnlyNavbarLeftMobile()
@@ -351,14 +359,14 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     to: '/sicpjs',
     icon: IconNames.BOOK,
     text: 'SICP JS'
-  },
-  {
-    to: '/stories',
-    icon: IconNames.GIT_REPO,
-    text: 'Stories',
-    // TODO: Enable when stories are implemented
-    disabled: true
   }
+  // {
+  //   to: '/stories',
+  //   icon: IconNames.GIT_REPO,
+  //   text: 'Stories',
+  //   // TODO: Enable for public deployment
+  //   disabled: true
+  // }
 ];
 
 export const renderNavlinksFromInfo = (
@@ -376,7 +384,7 @@ export const renderNavlinksFromInfo = (
 export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   <NavLink
     className={({ isActive }) =>
-      classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+      classNames(Classes.BUTTON, Classes.MINIMAL, {
         [Classes.ACTIVE]: isActive
       })
     }
@@ -385,12 +393,7 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
     title={navbarEntry.text}
   >
     <Icon icon={navbarEntry.icon} />
-    <div
-      className={classNames(
-        'navbar-button-text',
-        navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`)
-      )}
-    >
+    <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
       {navbarEntry.text}
     </div>
     {navbarEntry.hasNotifications && (

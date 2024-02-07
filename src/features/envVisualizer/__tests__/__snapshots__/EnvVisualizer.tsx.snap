@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated properly 1`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 1`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -48,11 +48,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       text="Perform * on top 2 stash values"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated properly 2`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 2`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -97,11 +97,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       text="10"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated properly 3`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 3`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -146,11 +146,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: Agenda is truncated prope
       text="362880"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 1`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 1`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -197,11 +197,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="Call function with 0 arguments"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 2`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 2`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -248,11 +248,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="Access array at given index"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 3`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 3`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -299,11 +299,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="1"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 4`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 4`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -376,11 +376,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       strokeEnabled={false}
     />
   </Group>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 5`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 5`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -427,11 +427,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="Mark return address"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 6`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 6`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -504,11 +504,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       strokeEnabled={false}
     />
   </Group>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 7`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 7`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -555,11 +555,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="return arr;"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 8`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 8`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -606,11 +606,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="Pop most recently pushed value from stash"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 9`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 9`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -657,11 +657,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="Keep executing while loop body if predicate holds"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 10`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 10`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -708,11 +708,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="x < n"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 11`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 11`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -759,11 +759,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="x = x + 1;"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -810,11 +810,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="Pop most recently pushed value from stash"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -861,11 +861,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="Assign new value to array at given index"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 14`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 14`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -912,11 +912,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="() => x"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -963,11 +963,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       text="x"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -1038,11 +1038,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: arrows from the environme
       strokeEnabled={false}
     />
   </Group>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: global environments are treated correctly 1`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 1`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -1089,11 +1089,11 @@ exports[`EnvVisualizer Agenda Stash correctly renders: global environments are t
       text="math_sin(math_PI / 2);"
     />
   </Label>
-</Group>
+</React.Fragment>
 `;
 
-exports[`EnvVisualizer Agenda Stash correctly renders: global environments are treated correctly 2`] = `
-<Group>
+exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 2`] = `
+<React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
@@ -1166,7 +1166,7 @@ exports[`EnvVisualizer Agenda Stash correctly renders: global environments are t
       strokeEnabled={false}
     />
   </Group>
-</Group>
+</React.Fragment>
 `;
 
 exports[`EnvVisualizer calculates correct layout for code sample 0 1`] = `

@@ -15,13 +15,13 @@ import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
-import { EnvVisualizerAnimation } from 'src/features/envVisualizer/EnvVisualizerAnimation';
+import { CSEAnimation } from 'src/features/envVisualizer/EnvVisualizerAnimation';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { HighlightedLines } from '../editor/EditorTypes';
 import Constants, { Links } from '../utils/Constants';
-import { setEditorHighlightedLinesAgenda, updateEnvSteps } from '../workspace/WorkspaceActions';
+import { setEditorHighlightedLinesControl, updateEnvSteps } from '../workspace/WorkspaceActions';
 import { evalEditor } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
@@ -78,7 +78,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       stepLimitExceeded: false
     };
     EnvVisualizer.init(
-      visualization => this.setState({ visualization }, () => EnvVisualizerAnimation.startAnimation()),
+      visualization => this.setState({ visualization }, () => CSEAnimation.playAnimation()),
       this.state.width,
       this.state.height,
       (segments: [number, number][]) => {
@@ -86,8 +86,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
         // This comment is copied over from workspace saga
         props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
       },
-      isAgendaEmpty => {
-        this.setState({ stepLimitExceeded: !isAgendaEmpty && this.state.lastStep });
+      isControlEmpty => {
+        this.setState({ stepLimitExceeded: !isControlEmpty && this.state.lastStep });
       }
     );
   }
@@ -204,7 +204,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization && EnvVisualizer.getCompactLayout()) {
-                      EnvVisualizer.toggleAgendaStash();
+                      EnvVisualizer.toggleControlStash();
                       EnvVisualizer.redraw();
                     }
                   }}
@@ -212,26 +212,26 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                   disabled={!this.state.visualization || !EnvVisualizer.getCompactLayout()}
                 >
                   <Checkbox
-                    checked={EnvVisualizer.getAgendaStash()}
+                    checked={EnvVisualizer.getControlStash()}
                     disabled={!EnvVisualizer.getCompactLayout()}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
               </Tooltip2>
-              <Tooltip2 content="Truncate Agenda" compact>
+              <Tooltip2 content="Truncate Control" compact>
                 <AnchorButton
                   onMouseUp={() => {
-                    if (this.state.visualization && EnvVisualizer.getAgendaStash()) {
+                    if (this.state.visualization && EnvVisualizer.getControlStash()) {
                       EnvVisualizer.toggleStackTruncated();
                       EnvVisualizer.redraw();
                     }
                   }}
                   icon="minimize"
-                  disabled={!this.state.visualization || !EnvVisualizer.getAgendaStash()}
+                  disabled={!this.state.visualization || !EnvVisualizer.getControlStash()}
                 >
                   <Checkbox
                     checked={EnvVisualizer.getStackTruncated()}
-                    disabled={!EnvVisualizer.getAgendaStash()}
+                    disabled={!EnvVisualizer.getControlStash()}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -408,7 +408,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
-      EnvVisualizerAnimation.enableAnimations();
+      CSEAnimation.enableAnimations();
     }
   };
 
@@ -479,7 +479,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         workspaceLocation: WorkspaceLocation,
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[]
-      ) => setEditorHighlightedLinesAgenda(workspaceLocation, editorTabIndex, newHighlightedLines)
+      ) => setEditorHighlightedLinesControl(workspaceLocation, editorTabIndex, newHighlightedLines)
     },
     dispatch
   );
