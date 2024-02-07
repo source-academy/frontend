@@ -375,7 +375,7 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       preventDefault={false}
       strokeEnabled={false}
     />
-  </React.Fragment>
+  </Group>
 </React.Fragment>
 `;
 
