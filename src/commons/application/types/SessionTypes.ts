@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { GradingOverview, GradingQuery } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import {
   Assessment,
@@ -122,7 +122,7 @@ export type SessionState = {
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverview[];
-  readonly gradings: Map<number, Grading>;
+  readonly gradings: Map<number, GradingQuery>;
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubAssessment?: MissionRepoData;

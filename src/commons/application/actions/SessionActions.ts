@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { GradingOverview, GradingQuery } from '../../../features/grading/GradingTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -220,7 +220,7 @@ export const updateGradingOverviews = (overviews: GradingOverview[]) =>
  * An extra id parameter is included here because of
  * no id for Grading.
  */
-export const updateGrading = (submissionId: number, grading: Grading) =>
+export const updateGrading = (submissionId: number, grading: GradingQuery) =>
   action(UPDATE_GRADING, {
     submissionId,
     grading
