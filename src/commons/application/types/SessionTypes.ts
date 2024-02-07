@@ -104,7 +104,7 @@ export type SessionState = {
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
-  readonly sourceChapter?: number;
+  readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
   readonly assetsPrefix?: string;
