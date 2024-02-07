@@ -111,7 +111,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
   // isEditable is a placeholder for now. In the future, it should be set to be
   // based on whether it is the actual question being attempted. To enable read-only mode, set isEditable to false.
-  const isEditable = false;
+  const isEditable = true;
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const [selectedTab, setSelectedTab] = useState(
