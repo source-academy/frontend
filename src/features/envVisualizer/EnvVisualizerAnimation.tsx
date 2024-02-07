@@ -1,41 +1,50 @@
-import { InstrType } from "js-slang/dist/ec-evaluator/types";
+import { InstrType } from 'js-slang/dist/ec-evaluator/types';
 
-import { AnimationItemComponent } from "./compactComponents/AnimationItemComponent";
-import { ControlStack, isInstr } from "./compactComponents/ControlStack";
+import { Animatable } from './animationComponents/AnimationComponents';
+import { ControlStashItemAnimation } from './animationComponents/ControlStashItemAnimation';
+import { isInstr } from './compactComponents/ControlStack';
 import EnvVisualizer from './EnvVisualizer';
+import { Layout } from './EnvVisualizerLayout';
 
-export class EnvVisualizerAnimation {
+export class CSEAnimation {
   private static animationEnabled = false;
-  private static animationComponents: AnimationItemComponent[] = [];
+  static readonly animationComponents: Animatable[] = [];
+  static readonly defaultDuration = 0.3;
 
   static enableAnimations(): void {
-    EnvVisualizerAnimation.animationEnabled = true;
+    CSEAnimation.animationEnabled = true;
   }
 
   static disableAnimations(): void {
-    EnvVisualizerAnimation.animationEnabled = false;
+    CSEAnimation.animationEnabled = false;
   }
 
-  private static resetAnimationComponents(): void {
-    EnvVisualizerAnimation.animationComponents.length = 0;
+  private static clearAnimationComponents(): void {
+    CSEAnimation.animationComponents.length = 0;
   }
 
-  static getAnimationComponents(): AnimationItemComponent[] {
-    return EnvVisualizerAnimation.animationComponents;
-  }
+  static updateAnimation() {
+    CSEAnimation.animationComponents.forEach(a => a.destroy());
+    CSEAnimation.clearAnimationComponents();
 
-  static updateAnimationComponents(controlComponent: ControlStack) {
-    EnvVisualizerAnimation.resetAnimationComponents();
-    if (!controlComponent) return;
-    const lastControlItem = controlComponent.control.peek();
-    const lastControlComponent = controlComponent.stackItemComponents.at(-1);
-    if (!EnvVisualizerAnimation.animationEnabled || !lastControlItem || !lastControlComponent) {
+    if (!Layout.previousControlComponent) return;
+    const lastControlItem = Layout.previousControlComponent.control.peek();
+    const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
+    if (
+      !CSEAnimation.animationEnabled ||
+      !lastControlItem ||
+      !lastControlComponent ||
+      !EnvVisualizer.getControlStash() // TODO: handle cases where there are environment animations
+    ) {
       return;
     }
     if (!isInstr(lastControlItem)) {
       if (lastControlItem.type === 'Literal') {
-        const animationComponent = new AnimationItemComponent(lastControlComponent.value, lastControlComponent);
-        EnvVisualizerAnimation.animationComponents.push(animationComponent);
+        const animationComponent = new ControlStashItemAnimation(
+          lastControlComponent,
+          Layout.stashComponent.stashItemComponents.at(-1)!
+        );
+        CSEAnimation.animationComponents.push(animationComponent);
       }
     } else {
       switch (lastControlItem.instrType) {
@@ -61,20 +70,14 @@ export class EnvVisualizerAnimation {
     }
   }
 
-  static startAnimation(): void {
-    if (!EnvVisualizerAnimation.animationEnabled || !EnvVisualizer.getControlStash()) {
-      EnvVisualizerAnimation.disableAnimations();
+  static playAnimation(): void {
+    if (!CSEAnimation.animationEnabled) {
+      CSEAnimation.disableAnimations();
       return;
     }
-    EnvVisualizerAnimation.disableAnimations();
+    CSEAnimation.disableAnimations();
     for (const animationComponent of this.animationComponents) {
       animationComponent.animate();
-    }
-  }
-
-  static abortAnimation(): void {
-    for (const animationComponent of this.animationComponents) {
-      animationComponent.destroy();
     }
   }
 }

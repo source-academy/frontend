@@ -22,7 +22,7 @@ import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
-import { EnvVisualizerAnimation } from './EnvVisualizerAnimation';
+import { CSEAnimation } from './EnvVisualizerAnimation';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import {
   CompactReferenceType,
@@ -82,6 +82,9 @@ export class Layout {
   static stash: Stash;
   static controlComponent: ControlStack;
   static stashComponent: StashStack;
+
+  static previousControlComponent: ControlStack;
+  static previousStashComponent: StashStack;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -157,6 +160,7 @@ export class Layout {
     });
     Layout.compactValues.clear();
     Layout.key = 0;
+
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(envTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
@@ -169,8 +173,6 @@ export class Layout {
     Layout.removeUnreferencedGlobalFns();
     // initialize levels and frames
     Layout.initializeGrid();
-    // initialise animations
-    EnvVisualizerAnimation.updateAnimationComponents(Layout.controlComponent);
     // initialize control and stash
     Layout.initializeControlStash();
 
@@ -215,9 +217,13 @@ export class Layout {
         this.grid.width() + Config.CanvasPaddingX * 2
       );
     }
+    // initialise animations
+    CSEAnimation.updateAnimation();
   }
 
   static initializeControlStash() {
+    Layout.previousControlComponent = Layout.controlComponent;
+    Layout.previousStashComponent = Layout.stashComponent;
     this.controlComponent = new ControlStack(this.control);
     this.stashComponent = new StashStack(this.stash);
   }
@@ -586,7 +592,7 @@ export class Layout {
                     Layout.stashComponent.draw()}
                   {EnvVisualizer.getCompactLayout() &&
                     EnvVisualizer.getControlStash() &&
-                    EnvVisualizerAnimation.getAnimationComponents().map(c => c.draw())}
+                    CSEAnimation.animationComponents.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>
