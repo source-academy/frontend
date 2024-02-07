@@ -109,6 +109,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const { isMobileBreakpoint } = useResponsive();
+  // isEditable is a placeholder for now. In the future, it should be set to be
+  // based on whether it is the actual question being attempted. To enable read-only mode, set isEditable to false.
+  const isEditable = false;
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const [selectedTab, setSelectedTab] = useState(
@@ -247,6 +250,35 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
   }, [isMobileBreakpoint, props, selectedTab]);
 
+  useEffect(() => {
+    const handleReadOnlyMode = (event: KeyboardEvent) => {
+      // console.log(event.key);
+      if (
+        !event.ctrlKey &&
+        !event.altKey &&
+        !event.metaKey &&
+        event.key !== 'ArrowLeft' &&
+        event.key !== 'ArrowRight' &&
+        event.key !== 'ArrowUp' &&
+        event.key !== 'ArrowDown' // Allow Meta (Command) key combinations for navigation on macOS
+      ) {
+        // console.log("Preventing default behavior of key press");
+        event.stopPropagation();
+        // Prevent default behavior of the key press if they change the editor
+        event.preventDefault();
+      }
+    };
+
+    if (!isEditable) {
+      document.body.addEventListener('keydown', handleReadOnlyMode, true);
+    }
+
+    // Remove the event listener when the component unmounts
+    return () => {
+      document.body.removeEventListener('keydown', handleReadOnlyMode, true);
+    };
+  });
+
   /* ==================
      onChange handlers
      ================== */
@@ -256,7 +288,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleUpdateHasUnsavedChanges?.(true);
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorValueChange(0, newCode);
-
     const input: Input = {
       time: Date.now(),
       type: 'codeDelta',
