@@ -44,6 +44,20 @@ export type GradingOverviewWithNotifications = {
  */
 export type Grading = GradingQuestion[];
 
+export type GradingQuery = {
+  answers: Grading,
+  assessment: {
+    cover_picture: string;
+    id: number;
+    number: string;
+    reading: string;
+    story: string;
+    summary_long: string;
+    summary_short: string;
+    title: string;
+  }
+}
+
 /**
  * Encapsulates information regarding grading a
  * particular question in a submission.
