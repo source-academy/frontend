@@ -96,7 +96,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
       cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
     };
     return (
-      <Group key={Layout.key++} ref={this.ref}>
+      <React.Fragment key={Layout.key++}>
         <Label
           ref={this.ref}
           x={this.x()}
@@ -133,7 +133,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
           />
         </Label>
         {this.arrow?.draw()}
-      </Group>
+      </React.Fragment>
     );
   }
 }

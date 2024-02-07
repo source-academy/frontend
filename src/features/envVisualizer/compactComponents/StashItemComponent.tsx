@@ -1,6 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
-import { Group, Label, Tag, Text } from 'react-konva';
+import { Label, Tag, Text } from 'react-konva';
 
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
@@ -102,7 +102,7 @@ export class StashItemComponent extends Visible implements IHoverable {
       cornerRadius: Number(ControlStashConfig.StashItemCornerRadius)
     };
     return (
-      <Group key={Layout.key++} ref={this.ref}>
+      <React.Fragment key={Layout.key++}>
         <Label
           ref={this.ref}
           x={this.x()}
@@ -133,7 +133,7 @@ export class StashItemComponent extends Visible implements IHoverable {
           />
         </Label>
         {this.arrow?.draw()}
-      </Group>
+      </React.Fragment>
     );
   }
 }
