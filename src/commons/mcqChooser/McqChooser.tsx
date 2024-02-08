@@ -1,5 +1,5 @@
 import { Button, Card, Intent } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 
 import { IMCQQuestion } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
@@ -10,29 +10,7 @@ export type McqChooserProps = {
   handleMCQSubmit: (choiceId: number) => void;
 };
 
-class McqChooser extends React.PureComponent<McqChooserProps, {}> {
-  public render() {
-    const options = this.props.mcq.choices.map((choice, i) => (
-      <Button
-        key={i}
-        className="mcq-option col-xs-12"
-        active={i === this.props.mcq.answer}
-        intent={this.getButtonIntent(i, this.props.mcq.answer, this.props.mcq.solution)}
-        onClick={this.onButtonClickFactory(i)}
-        minimal={true}
-      >
-        <Markdown content={choice.content} />
-      </Button>
-    ));
-    return (
-      <div className="MCQChooser row" data-testid="MCQChooser">
-        <Card className="mcq-content-parent col-xs-12 middle-xs">
-          <div className="row mcq-options-parent between-xs">{options}</div>
-        </Card>
-      </div>
-    );
-  }
-
+export const McqChooser: React.FC<McqChooserProps> = ({ mcq, handleMCQSubmit }) => {
   /**
    * A function to generate an onClick function that causes
    * and mcq submission with a given answer id.
@@ -43,16 +21,16 @@ class McqChooser extends React.PureComponent<McqChooserProps, {}> {
    *
    * @param i the id of the answer
    */
-  private onButtonClickFactory = (i: number) => (e: any) => {
-    if (i !== this.props.mcq.answer) {
-      this.props.handleMCQSubmit(i);
+  const onButtonClickFactory = (i: number) => (e: any) => {
+    if (i !== mcq.answer) {
+      handleMCQSubmit(i);
     }
-    const shouldDisplayMessage = this.props.mcq.solution !== null && this.props.mcq.choices[i].hint;
+    const shouldDisplayMessage = mcq.solution !== null && mcq.choices[i].hint;
     if (shouldDisplayMessage) {
       const hintElement = (
-        <Markdown className="markdown-notification" content={this.props.mcq.choices[i].hint!} />
+        <Markdown className="markdown-notification" content={mcq.choices[i].hint!} />
       );
-      if (i === this.props.mcq.solution) {
+      if (i === mcq.solution) {
         showSuccessMessage(hintElement, 4000);
       } else {
         showWarningMessage(hintElement, 4000);
@@ -69,7 +47,7 @@ class McqChooser extends React.PureComponent<McqChooserProps, {}> {
    * @param chosenOption the mcq option that is chosen in the state, i.e what should show up as "selected"
    * @param solution the solution to the mcq, if any
    */
-  private getButtonIntent = (
+  const getButtonIntent = (
     currentOption: number,
     chosenOption: number | null,
     solution?: number
@@ -86,6 +64,26 @@ class McqChooser extends React.PureComponent<McqChooserProps, {}> {
       return Intent.NONE;
     }
   };
-}
+
+  const options = mcq.choices.map((choice, i) => (
+    <Button
+      key={i}
+      className="mcq-option col-xs-12"
+      active={i === mcq.answer}
+      intent={getButtonIntent(i, mcq.answer, mcq.solution)}
+      onClick={onButtonClickFactory(i)}
+      minimal
+    >
+      <Markdown content={choice.content} />
+    </Button>
+  ));
+  return (
+    <div className="MCQChooser row" data-testid="MCQChooser">
+      <Card className="mcq-content-parent col-xs-12 middle-xs">
+        <div className="row mcq-options-parent between-xs">{options}</div>
+      </Card>
+    </div>
+  );
+};
 
 export default McqChooser;
