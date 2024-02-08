@@ -7,6 +7,8 @@ import classes from 'src/styles/ContextMenu.module.scss';
 export type FileSystemViewContextMenuProps = {
   children?: JSX.Element;
   className?: string;
+  disableNewFile?: boolean;
+  disableNewFolder?: boolean;
   createNewFile?: () => void;
   createNewDirectory?: () => void;
   open?: () => void;
@@ -17,7 +19,7 @@ export type FileSystemViewContextMenuProps = {
 const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
   props: FileSystemViewContextMenuProps
 ) => {
-  const { children, className, createNewFile, createNewDirectory, open, rename, remove } = props;
+  const { children, className, createNewFile, createNewDirectory, open, rename, remove, disableNewFile, disableNewFolder } = props;
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = React.useState({ x: 0, y: 0 });
 
@@ -36,12 +38,12 @@ const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
         anchorPoint={anchorPoint}
         onClose={() => toggleMenu(false)}
       >
-        {createNewFile && (
+        {createNewFile && !disableNewFile && (
           <MenuItem className={classes['context-menu-item']} onClick={createNewFile}>
             New File
           </MenuItem>
         )}
-        {createNewDirectory && (
+        {createNewDirectory && !disableNewFolder && (
           <MenuItem className={classes['context-menu-item']} onClick={createNewDirectory}>
             New Directory
           </MenuItem>

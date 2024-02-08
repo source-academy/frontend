@@ -15,10 +15,12 @@ import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 export type FileSystemViewProps = {
   workspaceLocation: WorkspaceLocation;
   basePath: string;
+  disableNewFile?: boolean; // Disables creation of new files
+  disableNewFolder?: boolean; // Disables creation of new folders
 };
 
 const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProps) => {
-  const { workspaceLocation, basePath } = props;
+  const { workspaceLocation, basePath, disableNewFile, disableNewFolder } = props;
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
@@ -122,11 +124,16 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
           />
         </div>
       )}
+      
+      {(!disableNewFile || !disableNewFolder) && (
       <FileSystemViewContextMenu
         className={classes['file-system-view-empty-space']}
+        disableNewFile={disableNewFile}
+        disableNewFolder={disableNewFolder}
         createNewFile={handleCreateNewFile}
         createNewDirectory={handleCreateNewDirectory}
       />
+      )} 
     </div>
   );
 };
