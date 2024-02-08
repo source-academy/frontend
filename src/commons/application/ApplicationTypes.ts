@@ -232,7 +232,7 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
 
   // Enable Subst Visualizer only for default Source 1 & 2
   supportedFeatures.substVisualizer =
-    chapter <= Chapter.SOURCE_2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE);
+    chapter <= Chapter.SOURCE_2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
 
   // Enable Env Visualizer for Source Chapter 3 and above
   supportedFeatures.envVisualizer =
