@@ -1,6 +1,7 @@
 import { InstrType } from 'js-slang/dist/ec-evaluator/types';
 
 import { Animatable } from './animationComponents/AnimationComponents';
+import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { isInstr } from './compactComponents/ControlStack';
 import EnvVisualizer from './EnvVisualizer';
@@ -54,6 +55,14 @@ export class CSEAnimation {
         case InstrType.ASSIGNMENT:
         case InstrType.UNARY_OP:
         case InstrType.BINARY_OP:
+          const animationComponent = new BinaryOperationAnimation(
+            lastControlComponent,
+            Layout.previousStashComponent.stashItemComponents.at(-2)!,
+            Layout.previousStashComponent.stashItemComponents.at(-1)!,
+            Layout.stashComponent.stashItemComponents.at(-1)!
+          );
+          CSEAnimation.animationComponents.push(animationComponent);
+          break;
         case InstrType.POP:
         case InstrType.APPLICATION:
         case InstrType.BRANCH:

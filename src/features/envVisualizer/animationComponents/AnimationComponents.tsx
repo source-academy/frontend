@@ -51,6 +51,10 @@ abstract class AnimationComponent extends Animatable {
     this._height = from.height;
   }
 
+  public set_to(to: NodeConfig) {
+    this.to = to;
+  }
+
   private async delay(duration: number) {
     return new Promise(resolve => {
       setTimeout(resolve, duration);
@@ -164,6 +168,11 @@ export class AnimatedTextbox extends Animatable {
     this.textComponent = new AnimatedTextComponent(from, to, textProps);
   }
 
+  set_to(to: NodeConfig) {
+    this.rectComponent.set_to(to);
+    this.textComponent.set_to(to);
+  }
+
   draw(): React.ReactNode {
     Animatable.key++;
     return (
@@ -176,7 +185,6 @@ export class AnimatedTextbox extends Animatable {
 
   async animate() {
     await Promise.all([this.rectComponent.animate(), this.textComponent.animate()]);
-    this.ref.current?.hide();
   }
 
   destroy() {

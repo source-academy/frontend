@@ -36,8 +36,8 @@ export class LiteralAnimation extends Animatable {
   async animate() {
     this.stashItem.ref.current.hide();
     await Promise.all([this.animatedLiteral.animate()]);
-    this.ref.current?.hide();
-    this.stashItem.ref.current?.show();
+    this.ref.current.hide();
+    this.stashItem.ref.current.show();
   }
 
   destroy() {
