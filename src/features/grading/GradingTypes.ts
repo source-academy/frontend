@@ -47,13 +47,13 @@ export type Grading = GradingQuestion[];
 export type GradingQuery = {
   answers: Grading,
   assessment: {
-    cover_picture: string;
+    coverPicture: string;
     id: number;
     number: string;
     reading: string;
     story: string;
-    summary_long: string;
-    summary_short: string;
+    summaryLong: string;
+    summaryShort: string;
     title: string;
   }
 }

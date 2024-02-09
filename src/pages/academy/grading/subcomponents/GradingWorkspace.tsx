@@ -75,7 +75,6 @@ const unansweredPrependValue: string = `// This answer does not have significant
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
-  const [longSummary, setLongSummary] = useState("Briefing Unavailable. Try refreshing the page.");
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
@@ -167,11 +166,11 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     }
 
     let questionId = props.questionId;
-    if (props.questionId >= grading["answers"].length) {
-      questionId = grading["answers"].length - 1;
+    if (props.questionId >= grading.answers.length) {
+      questionId = grading.answers.length - 1;
     }
 
-    const question: AnsweredQuestion = grading["answers"][questionId].question;
+    const question: AnsweredQuestion = grading.answers[questionId].question;
     let answer: string = '';
 
     if (question.type === QuestionTypes.programming) {
@@ -198,7 +197,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     if (!grading) {
       return;
     }
-    setLongSummary(grading["assessment"]["summary_long"]);
+    // setLongSummary(grading.assessment.summaryLong);
   }, [grading]);
 
   /**
@@ -220,7 +219,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
      * as the function to move to the next question does not check
      * if that question exists
      */
-    if (grading["answers"][questionId] === undefined) {
+    if (grading.answers[questionId] === undefined) {
       navigate(`/courses/${courseId}/grading`);
     } else {
       checkWorkspaceReset(props);
@@ -241,7 +240,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     if (storedSubmissionId === submissionId && storedQuestionId === questionId) {
       return;
     }
-    const question = grading!["answers"][questionId].question as Question;
+    const question = grading!.answers[questionId].question as Question;
 
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
@@ -306,22 +305,22 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
-            solution={grading!["answers"][questionId].question.solution}
-            questionId={grading!["answers"][questionId].question.id}
+            solution={grading!.answers[questionId].question.solution}
+            questionId={grading!.answers[questionId].question.id}
             submissionId={props.submissionId}
-            initialXp={grading!["answers"][questionId].grade.xp}
-            xpAdjustment={grading!["answers"][questionId].grade.xpAdjustment}
-            maxXp={grading!["answers"][questionId].question.maxXp}
-            studentName={grading!["answers"][questionId].student.name}
-            studentUsername={grading!["answers"][questionId].student.username}
-            comments={grading!["answers"][questionId].grade.comments ?? ''}
+            initialXp={grading!.answers[questionId].grade.xp}
+            xpAdjustment={grading!.answers[questionId].grade.xpAdjustment}
+            maxXp={grading!.answers[questionId].question.maxXp}
+            studentName={grading!.answers[questionId].student.name}
+            studentUsername={grading!.answers[questionId].student.username}
+            comments={grading!.answers[questionId].grade.comments ?? ''}
             graderName={
-              grading!["answers"][questionId].grade.grader
-                ? grading!["answers"][questionId].grade.grader!.name
+              grading!.answers[questionId].grade.grader
+                ? grading!.answers[questionId].grade.grader!.name
                 : undefined
             }
             gradedAt={
-              grading!["answers"][questionId].grade.grader ? grading!["answers"][questionId].grade.gradedAt! : undefined
+              grading!.answers[questionId].grade.grader ? grading!.answers[questionId].grade.gradedAt! : undefined
             }
           />
         ),
@@ -330,7 +329,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       {
         label: `Question ${questionId + 1}`,
         iconName: IconNames.NINJA,
-        body: <Markdown content={grading!["answers"][questionId].question.content} />,
+        body: <Markdown content={grading!.answers[questionId].question.content} />,
         id: SideContentType.questionOverview
       },
       {
@@ -350,12 +349,12 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         label: `Briefing`,
         iconName: IconNames.BRIEFCASE,
         body: (
-          longSummary ? <Markdown content={longSummary} /> : <Markdown content="Briefing Unavailable. Try refreshing the page." />
+          grading ? <Markdown content={grading.assessment.summaryLong} /> : <Markdown content="Briefing Unavailable. Try refreshing the page." />
         ),
         id: SideContentType.briefing
       }
     ];
-    const externalLibrary = grading!["answers"][questionId].question.library.external;
+    const externalLibrary = grading!.answers[questionId].question.library.external;
     const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
@@ -391,7 +390,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const controlBarProps: (q: number) => ControlBarProps = (questionId: number) => {
     const listingPath = `/courses/${courseId}/grading`;
     const gradingWorkspacePath = listingPath + `/${props.submissionId}`;
-    const questionProgress: [number, number] = [questionId + 1, grading!["answers"].length];
+    const questionProgress: [number, number] = [questionId + 1, grading!.answers.length];
 
     const onClickPrevious = () =>
       navigate(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -466,9 +465,9 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   }
 
   /* If questionId is out of bounds, set it to the max. */
-  const questionId = props.questionId >= grading["answers"].length ? grading["answers"].length - 1 : props.questionId;
+  const questionId = props.questionId >= grading.answers.length ? grading.answers.length - 1 : props.questionId;
   /* Get the question to be graded */
-  const question = grading["answers"][questionId].question as Question;
+  const question = grading.answers[questionId].question as Question;
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
     editorContainerProps:
