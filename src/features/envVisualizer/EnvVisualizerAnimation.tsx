@@ -1,7 +1,7 @@
 import { InstrType } from 'js-slang/dist/ec-evaluator/types';
 
 import { Animatable } from './animationComponents/AnimationComponents';
-import { ControlStashItemAnimation } from './animationComponents/ControlStashItemAnimation';
+import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { isInstr } from './compactComponents/ControlStack';
 import EnvVisualizer from './EnvVisualizer';
 import { Layout } from './EnvVisualizerLayout';
@@ -40,7 +40,7 @@ export class CSEAnimation {
     }
     if (!isInstr(lastControlItem)) {
       if (lastControlItem.type === 'Literal') {
-        const animationComponent = new ControlStashItemAnimation(
+        const animationComponent = new LiteralAnimation(
           lastControlComponent,
           Layout.stashComponent.stashItemComponents.at(-1)!
         );

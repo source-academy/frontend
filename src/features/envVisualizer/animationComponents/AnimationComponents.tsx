@@ -3,10 +3,13 @@ import { RectConfig } from 'konva/lib/shapes/Rect';
 import { TextConfig } from 'konva/lib/shapes/Text';
 import { Easings, Tween } from 'konva/lib/Tween';
 import React from 'react';
-import { Rect, Text } from 'react-konva';
+import { Group, Rect, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import { CSEAnimation } from '../EnvVisualizerAnimation';
+import { ControlStashConfig } from '../EnvVisualizerControlStash';
+import { Layout } from '../EnvVisualizerLayout';
+import { currentItemSAColor } from '../EnvVisualizerUtils';
 
 /** Type that extends the NodeConfig type from Konva, making the x, y, width & height values required */
 type StrictNodeConfig = Omit<NodeConfig, 'x' | 'y' | 'width' | 'height'> & {
@@ -131,5 +134,53 @@ export class AnimatedRectComponent extends AnimationComponent {
         height={this.height()}
       />
     );
+  }
+}
+
+export class AnimatedTextbox extends Animatable {
+  readonly rectComponent: AnimatedRectComponent;
+  readonly textComponent: AnimatedTextComponent;
+
+  constructor(
+    from: StrictNodeConfig,
+    to: NodeConfig,
+    text: string
+  ) {
+    super();
+    const rectProps = {
+      stroke: currentItemSAColor(false),
+      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
+    };
+    const textProps = {
+      text,
+      fill: ControlStashConfig.SA_WHITE.toString(),
+      padding: Number(ControlStashConfig.ControlItemTextPadding),
+      fontFamily: ControlStashConfig.FontFamily.toString(),
+      fontSize: Number(ControlStashConfig.FontSize),
+      fontStyle: ControlStashConfig.FontStyle.toString(),
+      fontVariant: ControlStashConfig.FontVariant.toString()
+    };
+    this.rectComponent = new AnimatedRectComponent(from, to, rectProps);
+    this.textComponent = new AnimatedTextComponent(from, to, textProps);
+  }
+
+  draw(): React.ReactNode {
+    Animatable.key++;
+    return (
+      <Group key={Layout.key + Animatable.key} ref={this.ref}>
+        {this.rectComponent.draw()}
+        {this.textComponent.draw()}
+      </Group>
+    );
+  }
+
+  async animate() {
+    await Promise.all([this.rectComponent.animate(), this.textComponent.animate()]);
+    this.ref.current?.hide();
+  }
+
+  destroy() {
+    this.rectComponent.destroy();
+    this.textComponent.destroy();
   }
 }
