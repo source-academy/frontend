@@ -2,8 +2,10 @@ import { InstrType } from 'js-slang/dist/ec-evaluator/types';
 
 import { Animatable } from './animationComponents/AnimationComponents';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
+import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
+import { ControlItemComponent } from './compactComponents/ControlItemComponent';
 import { isInstr } from './compactComponents/ControlStack';
 import EnvVisualizer from './EnvVisualizer';
 import { Layout } from './EnvVisualizerLayout';
@@ -47,6 +49,23 @@ export class CSEAnimation {
           Layout.stashComponent.stashItemComponents.at(-1)!
         );
         CSEAnimation.animationComponents.push(animationComponent);
+      } else { // TODO: find a safer way to ensure this is a block separation action
+        // const numOfItems = Layout.controlComponent.stackItemComponents.length
+        //   - Layout.previousControlComponent.stackItemComponents.length;
+        const numOfItems = 1;
+        const resultantItems: ControlItemComponent[] = [];
+        for (let i = 0; i < numOfItems; i++) {
+          const stackItem = Layout.controlComponent.stackItemComponents.at(-i-1);
+          if (!stackItem) {
+            break;
+          }
+          resultantItems.push(stackItem);
+        }
+        const blockAnimation = new BlockAnimation(
+          lastControlComponent,
+          resultantItems
+        )
+        CSEAnimation.animationComponents.push(blockAnimation);
       }
     } else {
       switch (lastControlItem.instrType) {
