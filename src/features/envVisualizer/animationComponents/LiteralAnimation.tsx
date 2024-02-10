@@ -1,7 +1,7 @@
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { AnimatedTextboxComponent} from './AnimationComponents';
-import { getNodeValuesFromItem } from './AnimationUtils';
+import { getNodePositionFromItem } from './AnimationUtils';
 
 export class LiteralAnimation extends AnimatedTextboxComponent {
 
@@ -9,7 +9,7 @@ export class LiteralAnimation extends AnimatedTextboxComponent {
     controlItem: ControlItemComponent,
     private stashItem: StashItemComponent,
   ) {
-    super(getNodeValuesFromItem(controlItem), getNodeValuesFromItem(stashItem), controlItem.text);
+    super(getNodePositionFromItem(controlItem), getNodePositionFromItem(stashItem), controlItem.text);
   }
 
   async animate() {

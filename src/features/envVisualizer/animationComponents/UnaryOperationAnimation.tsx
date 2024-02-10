@@ -1,63 +1,74 @@
+import { NodeConfig } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
-import { Layout } from '../EnvVisualizerLayout';
-import { Animatable, AnimatedTextbox} from './AnimationComponents';
-import { getNodeValuesFromItem } from './AnimationUtils';
+import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
+import { getNodePositionFromItem } from './AnimationUtils';
 
 export class UnaryOperationAnimation extends Animatable {
-  unaryOperator: ControlItemComponent;
-  operand: StashItemComponent;
-  result: StashItemComponent;
-  animatedUnaryOp: AnimatedTextbox;
-  animatedOperand: AnimatedTextbox;
+  private operatorAnimation: AnimatedTextboxComponent;
+  private operandAnimation: AnimatedTextboxComponent;
+  private resultAnimation: AnimatedTextboxComponent;
+  private resultPosition: NodeConfig;
 
   constructor(
-    unaryOperator: ControlItemComponent,
+    operator: ControlItemComponent,
     operand: StashItemComponent,
-    result: StashItemComponent
+    private result: StashItemComponent
   ) {
     super();
-    this.unaryOperator = unaryOperator;
-    this.operand = operand;
-    this.result = result;
-    const uop_from = getNodeValuesFromItem(this.unaryOperator);
-    const uop_to = {
-      x: this.operand.x() + this.operand.width(),
-      y: this.operand.y(),
-      height: this.operand.height(),
-      width: this.operand.width()
-    }
-    const op_from = getNodeValuesFromItem(this.operand);
-    this.animatedUnaryOp = new AnimatedTextbox(uop_from, uop_to, this.unaryOperator.text);
-    this.animatedOperand = new AnimatedTextbox(op_from, {}, this.operand.text);
+    const operatorPosition = getNodePositionFromItem(operator);
+    const operandPosition = getNodePositionFromItem(operand);
+    const resultPosition = getNodePositionFromItem(result);
+    this.resultPosition = resultPosition;
+    this.operatorAnimation = new AnimatedTextboxComponent(
+      operatorPosition,
+      operandPosition,
+      operator.text
+    );
+    this.operandAnimation = new AnimatedTextboxComponent(
+      operandPosition,
+      { ...operandPosition, x: operandPosition.x + operandPosition.width },
+      operand.text
+    );
+    this.resultAnimation = new AnimatedTextboxComponent(
+      { ...resultPosition, x: operandPosition.x + operandPosition.width / 2, opacity: 0 },
+      { ...resultPosition, opacity: 1 },
+      result.text,
+      { delayMultiplier: 0.5 }
+    );
   }
- 
+
   draw(): React.ReactNode {
-    Animatable.key++;
     return (
-      // TODO: find out why things dont display if the +1 is removed
-      <Group key={Layout.key + Animatable.key + 1} ref={this.ref}>
-        {this.animatedUnaryOp.draw()}
-        {this.animatedOperand.draw()}
+      <Group key={Animatable.key--} ref={this.ref}>
+        {this.operatorAnimation.draw()}
+        {this.operandAnimation.draw()}
+        {this.resultAnimation.draw()}
       </Group>
     );
   }
 
   async animate() {
     this.result.ref.current.hide();
-    await Promise.all([this.animatedUnaryOp.animate()]);
-    const to = getNodeValuesFromItem(this.result);
-    this.animatedUnaryOp.set_to(to);
-    this.animatedOperand.set_to(to);
-    await Promise.all([this.animatedUnaryOp.animate(), this.animatedOperand.animate()]);
-    this.ref.current.hide();
-    this.result.ref.current.show();
+    await Promise.all([this.operatorAnimation.animate(), this.operandAnimation.animate()]);
+    const to = { ...this.resultPosition, opacity: 0 };
+    this.operatorAnimation.setDestination(to);
+    this.operandAnimation.setDestination(to);
+    await Promise.all([
+      this.operatorAnimation.animate(),
+      this.operandAnimation.animate(),
+      this.resultAnimation.animate()
+    ]);
+    this.ref.current?.hide();
+    this.result.ref.current?.show();
   }
 
   destroy() {
-    this.ref.current.destroy();
+    this.operatorAnimation.destroy();
+    this.operandAnimation.destroy();
+    this.resultAnimation.destroy();
   }
 }

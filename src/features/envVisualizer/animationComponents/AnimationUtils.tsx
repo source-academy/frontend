@@ -1,7 +1,7 @@
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 
-export function getNodeValuesFromItem(item: ControlItemComponent | StashItemComponent) {
+export function getNodePositionFromItem(item: ControlItemComponent | StashItemComponent) {
   return {
     x: item.x(),
     y: item.y(),

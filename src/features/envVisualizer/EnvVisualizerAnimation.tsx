@@ -6,7 +6,6 @@ import { BinaryOperationAnimation } from './animationComponents/BinaryOperationA
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
-import { ControlItemComponent } from './compactComponents/ControlItemComponent';
 import { isInstr } from './compactComponents/ControlStack';
 import EnvVisualizer from './EnvVisualizer';
 import { Layout } from './EnvVisualizerLayout';
@@ -44,53 +43,50 @@ export class CSEAnimation {
     ) {
       return;
     }
+    let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
-      if (lastControlItem.type === 'Literal') {
-        const animationComponent = new LiteralAnimation(
-          lastControlComponent,
-          Layout.stashComponent.stashItemComponents.at(-1)!
-        );
-        CSEAnimation.animationComponents.push(animationComponent);
-      } else { // TODO: find a safer way to ensure this is a block separation action
-        // const numOfItems = Layout.controlComponent.stackItemComponents.length
-        //   - Layout.previousControlComponent.stackItemComponents.length;
-        const numOfItems = 1;
-        const resultantItems: ControlItemComponent[] = [];
-        for (let i = 0; i < numOfItems; i++) {
-          const stackItem = Layout.controlComponent.stackItemComponents.at(-i-1);
-          if (!stackItem) {
-            break;
-          }
-          resultantItems.push(stackItem);
-        }
-        const blockAnimation = new BlockAnimation(
-          lastControlComponent,
-          resultantItems
-        )
-        CSEAnimation.animationComponents.push(blockAnimation);
+      console.log(lastControlItem.type);
+      switch (lastControlItem.type) {
+        case 'Literal':
+          animation = new LiteralAnimation(
+            lastControlComponent,
+            Layout.stashComponent.stashItemComponents.at(-1)!
+          );
+          break;
+        case 'Program':
+        case 'ExpressionStatement':
+        case 'VariableDeclaration':
+          const currentControlSize = Layout.controlComponent.control.size();
+          const previousControlSize = Layout.previousControlComponent.control.size();
+          const numOfItems = currentControlSize - previousControlSize + 1;
+          const targetItems = Array.from({ length: numOfItems }, (_, i) => {
+            return Layout.controlComponent.stackItemComponents[previousControlSize + i - 1];
+          });
+          animation = new BlockAnimation(lastControlComponent, targetItems);
+          break;
       }
     } else {
+      console.log(lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
         case InstrType.FOR:
         case InstrType.ASSIGNMENT:
+          break;
         case InstrType.UNARY_OP:
-          const unaryAnimation = new UnaryOperationAnimation(
+          animation = new UnaryOperationAnimation(
             lastControlComponent,
             Layout.previousStashComponent.stashItemComponents.at(-1)!,
             Layout.stashComponent.stashItemComponents.at(-1)!
           );
-          CSEAnimation.animationComponents.push(unaryAnimation);
           break;
         case InstrType.BINARY_OP:
-          const binaryAnimation = new BinaryOperationAnimation(
+          animation = new BinaryOperationAnimation(
             lastControlComponent,
             Layout.previousStashComponent.stashItemComponents.at(-2)!,
             Layout.previousStashComponent.stashItemComponents.at(-1)!,
             Layout.stashComponent.stashItemComponents.at(-1)!
           );
-          CSEAnimation.animationComponents.push(binaryAnimation);
           break;
         case InstrType.POP:
         case InstrType.APPLICATION:
@@ -106,6 +102,7 @@ export class CSEAnimation {
         case InstrType.MARKER:
       }
     }
+    if (animation) CSEAnimation.animationComponents.push(animation);
   }
 
   static playAnimation(): void {
