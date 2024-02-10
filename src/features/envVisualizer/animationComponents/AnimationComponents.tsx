@@ -8,7 +8,6 @@ import { Group, Rect, Text } from 'react-konva';
 import { Visible } from '../components/Visible';
 import { CSEAnimation } from '../EnvVisualizerAnimation';
 import { ControlStashConfig } from '../EnvVisualizerControlStash';
-import { Layout } from '../EnvVisualizerLayout';
 import { currentItemSAColor } from '../EnvVisualizerUtils';
 
 /** Type that extends the NodeConfig type from Konva, making the x, y, width & height values required */
@@ -21,38 +20,33 @@ type StrictNodeConfig = Omit<NodeConfig, 'x' | 'y' | 'width' | 'height'> & {
 
 type AnimationConfig = {
   durationMultiplier?: number;
-  delay?: number;
+  delayMultiplier?: number;
   easing?: typeof Easings.Linear;
 };
 
 export abstract class Animatable extends Visible {
-  static key = 0;
+  static key = -1;
   /** Plays the animation, and resolves after the animation is complete */
   abstract animate(): Promise<void>;
-  /** Cleans up the animation if it is still running, and properly dispose the component*/
+  /** Properly dispose of the current animation and ensures that subsequent calls to animate cannot be made */
   abstract destroy(): void;
 }
 
 abstract class AnimationComponent extends Animatable {
-  protected from: StrictNodeConfig;
   private isDestroyed = false;
   private tween?: Tween;
+  private resolve?: (value: void | PromiseLike<void>) => void;
 
   constructor(
-    from: StrictNodeConfig,
-    private to: NodeConfig,
-    private animationConfig?: AnimationConfig
+    protected from: StrictNodeConfig,
+    protected to?: NodeConfig,
+    protected animationConfig?: AnimationConfig
   ) {
     super();
-    this.from = from;
     this._x = from.x;
     this._y = from.y;
     this._width = from.width;
     this._height = from.height;
-  }
-
-  public set_to(to: NodeConfig) {
-    this.to = to;
   }
 
   private async delay(duration: number) {
@@ -61,22 +55,51 @@ abstract class AnimationComponent extends Animatable {
     });
   }
 
+  setDestination(to: NodeConfig) {
+    this.to = to;
+  }
+
   async animate(): Promise<void> {
     return new Promise(async (resolve, reject) => {
-      if (!this.ref.current) {
-        reject('Error: Current node reference is null, unable to play animation!');
-      }
-      if (this.animationConfig?.delay) await this.delay(this.animationConfig?.delay);
       if (this.isDestroyed) {
         resolve();
         return;
+      }
+      if (!this.ref.current || !this.to) {
+        const errorMsg = !this.ref.current
+          ? 'Current node reference is null, unable to play animation!'
+          : 'No destination value specified!';
+        reject('Animation error: ' + errorMsg);
+        return;
+      }
+      this.resolve = resolve;
+      if (this.animationConfig?.delayMultiplier) {
+        await this.delay(this.animationConfig.delayMultiplier * CSEAnimation.defaultDuration);
+      }
+      if (this.isDestroyed) {
+        return;
+      }
+      if (this.tween) {
+        this.tween.pause();
+        this.tween.destroy();
       }
       this.tween = new Tween({
         node: this.ref.current,
         ...this.to,
         duration: CSEAnimation.defaultDuration * (this.animationConfig?.durationMultiplier ?? 1),
-        easing: this.animationConfig?.easing ?? Easings.StrongEaseInOut,
-        onFinish: () => resolve()
+        easing: this.animationConfig?.easing ?? CSEAnimation.defaultEasing,
+        onFinish: () => {
+          if (this.to) {
+            if (this.to.x) this._x = this.to.x;
+            if (this.to.y) this._y = this.to.y;
+            if (this.to.width) this._width = this.to.width;
+            if (this.to.height) this._height = this.to.height;
+          }
+          this.resolve = undefined;
+          this.tween?.destroy();
+          this.tween = undefined;
+          resolve();
+        }
       });
       this.tween.play();
     });
@@ -84,7 +107,12 @@ abstract class AnimationComponent extends Animatable {
 
   destroy() {
     this.isDestroyed = true;
-    this.tween?.finish();
+    if (this.tween) {
+      this.tween.finish();
+    } else {
+      this.resolve?.();
+      this.resolve = undefined;
+    }
   }
 }
 
@@ -93,22 +121,22 @@ export class AnimatedTextComponent extends AnimationComponent {
 
   constructor(
     from: StrictNodeConfig,
-    to: NodeConfig,
-    private textProps: TextConfig,
+    to?: NodeConfig,
+    private textProps?: TextConfig,
     animationConfig?: AnimationConfig
   ) {
     super(from, to, animationConfig);
-    if (this.textProps.text === undefined) {
+    if (this.textProps?.text === undefined) {
       console.warn('AnimatedTextComponent has no text defined inside textProps.');
     }
-    this.text = this.textProps.text;
+    this.text = this.textProps?.text;
   }
 
   draw(): React.ReactNode {
     return (
       <Text
         ref={this.ref}
-        {...this.textProps}
+        {...(this.textProps ?? {})}
         {...this.from}
         text={this.text}
         width={this.width()}
@@ -121,8 +149,8 @@ export class AnimatedTextComponent extends AnimationComponent {
 export class AnimatedRectComponent extends AnimationComponent {
   constructor(
     from: StrictNodeConfig,
-    to: NodeConfig,
-    private rectProps: RectConfig,
+    to?: NodeConfig,
+    private rectProps?: RectConfig,
     animationConfig?: AnimationConfig
   ) {
     super(from, to, animationConfig);
@@ -132,7 +160,7 @@ export class AnimatedRectComponent extends AnimationComponent {
     return (
       <Rect
         ref={this.ref}
-        {...this.rectProps}
+        {...(this.rectProps ?? {})}
         {...this.from}
         width={this.width()}
         height={this.height()}
@@ -141,14 +169,15 @@ export class AnimatedRectComponent extends AnimationComponent {
   }
 }
 
-export class AnimatedTextbox extends Animatable {
-  readonly rectComponent: AnimatedRectComponent;
-  readonly textComponent: AnimatedTextComponent;
+export class AnimatedTextboxComponent extends Animatable {
+  private rectComponent: AnimatedRectComponent;
+  private textComponent: AnimatedTextComponent;
 
   constructor(
     from: StrictNodeConfig,
-    to: NodeConfig,
-    text: string
+    to?: NodeConfig,
+    text?: string,
+    animationConfig?: AnimationConfig
   ) {
     super();
     const rectProps = {
@@ -164,23 +193,22 @@ export class AnimatedTextbox extends Animatable {
       fontStyle: ControlStashConfig.FontStyle.toString(),
       fontVariant: ControlStashConfig.FontVariant.toString()
     };
-    this.rectComponent = new AnimatedRectComponent(from, to, rectProps);
-    this.textComponent = new AnimatedTextComponent(from, to, textProps);
-  }
-
-  set_to(to: NodeConfig) {
-    this.rectComponent.set_to(to);
-    this.textComponent.set_to(to);
+    this.rectComponent = new AnimatedRectComponent(from, to, rectProps, animationConfig);
+    this.textComponent = new AnimatedTextComponent(from, to, textProps, animationConfig);
   }
 
   draw(): React.ReactNode {
-    Animatable.key++;
     return (
-      <Group key={Layout.key + Animatable.key} ref={this.ref}>
+      <Group key={Animatable.key--} ref={this.ref}>
         {this.rectComponent.draw()}
         {this.textComponent.draw()}
       </Group>
     );
+  }
+
+  setDestination(to: NodeConfig) {
+    this.rectComponent.setDestination(to);
+    this.textComponent.setDestination(to);
   }
 
   async animate() {

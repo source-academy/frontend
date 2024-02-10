@@ -1,4 +1,5 @@
 import { InstrType } from 'js-slang/dist/ec-evaluator/types';
+import { Easings } from 'konva/lib/Tween';
 
 import { Animatable } from './animationComponents/AnimationComponents';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
@@ -11,6 +12,7 @@ export class CSEAnimation {
   private static animationEnabled = false;
   static readonly animationComponents: Animatable[] = [];
   static readonly defaultDuration = 0.3;
+  static readonly defaultEasing = Easings.StrongEaseInOut;
 
   static enableAnimations(): void {
     CSEAnimation.animationEnabled = true;
