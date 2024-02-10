@@ -8,10 +8,10 @@ import { Animatable, AnimatedTextbox} from './AnimationComponents';
 import { getNodeValuesFromItem } from './AnimationUtils';
 
 export class BinaryOperationAnimation extends Animatable {
-  binaryOperator: ControlItemComponent
-  operand1: StashItemComponent
-  operand2: StashItemComponent
-  result: StashItemComponent
+  binaryOperator: ControlItemComponent;
+  operand1: StashItemComponent;
+  operand2: StashItemComponent;
+  result: StashItemComponent;
   animatedBinaryOp: AnimatedTextbox;
   animatedOperand1: AnimatedTextbox;
   animatedOperand2: AnimatedTextbox;
@@ -24,7 +24,7 @@ export class BinaryOperationAnimation extends Animatable {
   ) {
     super();
     this.binaryOperator = binaryOperator;
-    this.operand1 = operand1
+    this.operand1 = operand1;
     this.operand2 = operand2;
     this.result = result;
     const bop_from = getNodeValuesFromItem(this.binaryOperator);
@@ -68,6 +68,6 @@ export class BinaryOperationAnimation extends Animatable {
   }
 
   destroy() {
-    this.animatedBinaryOp.destroy();
+    this.ref.current.destroy();
   }
 }
