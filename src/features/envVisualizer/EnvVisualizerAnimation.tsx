@@ -3,7 +3,10 @@ import { Easings } from 'konva/lib/Tween';
 
 import { Animatable } from './animationComponents/AnimationComponents';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
+import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
+import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
+import { ControlItemComponent } from './compactComponents/ControlItemComponent';
 import { isInstr } from './compactComponents/ControlStack';
 import EnvVisualizer from './EnvVisualizer';
 import { Layout } from './EnvVisualizerLayout';
@@ -48,6 +51,23 @@ export class CSEAnimation {
           Layout.stashComponent.stashItemComponents.at(-1)!
         );
         CSEAnimation.animationComponents.push(animationComponent);
+      } else { // TODO: find a safer way to ensure this is a block separation action
+        // const numOfItems = Layout.controlComponent.stackItemComponents.length
+        //   - Layout.previousControlComponent.stackItemComponents.length;
+        const numOfItems = 1;
+        const resultantItems: ControlItemComponent[] = [];
+        for (let i = 0; i < numOfItems; i++) {
+          const stackItem = Layout.controlComponent.stackItemComponents.at(-i-1);
+          if (!stackItem) {
+            break;
+          }
+          resultantItems.push(stackItem);
+        }
+        const blockAnimation = new BlockAnimation(
+          lastControlComponent,
+          resultantItems
+        )
+        CSEAnimation.animationComponents.push(blockAnimation);
       }
     } else {
       switch (lastControlItem.instrType) {
@@ -56,14 +76,21 @@ export class CSEAnimation {
         case InstrType.FOR:
         case InstrType.ASSIGNMENT:
         case InstrType.UNARY_OP:
+          const unaryAnimation = new UnaryOperationAnimation(
+            lastControlComponent,
+            Layout.previousStashComponent.stashItemComponents.at(-1)!,
+            Layout.stashComponent.stashItemComponents.at(-1)!
+          );
+          CSEAnimation.animationComponents.push(unaryAnimation);
+          break;
         case InstrType.BINARY_OP:
-          const animationComponent = new BinaryOperationAnimation(
+          const binaryAnimation = new BinaryOperationAnimation(
             lastControlComponent,
             Layout.previousStashComponent.stashItemComponents.at(-2)!,
             Layout.previousStashComponent.stashItemComponents.at(-1)!,
             Layout.stashComponent.stashItemComponents.at(-1)!
           );
-          CSEAnimation.animationComponents.push(animationComponent);
+          CSEAnimation.animationComponents.push(binaryAnimation);
           break;
         case InstrType.POP:
         case InstrType.APPLICATION:
