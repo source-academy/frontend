@@ -45,7 +45,6 @@ export class CSEAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
-      console.log(lastControlItem.type);
       switch (lastControlItem.type) {
         case 'Literal':
           animation = new LiteralAnimation(
@@ -53,9 +52,11 @@ export class CSEAnimation {
             Layout.stashComponent.stashItemComponents.at(-1)!
           );
           break;
-        case 'Program':
-        case 'ExpressionStatement':
-        case 'VariableDeclaration':
+        // TODO: find out if it is safe to use default instead of splitting by cases
+        // case 'Program':
+        // case 'ExpressionStatement':
+        // case 'VariableDeclaration':
+        default:
           const currentControlSize = Layout.controlComponent.control.size();
           const previousControlSize = Layout.previousControlComponent.control.size();
           const numOfItems = currentControlSize - previousControlSize + 1;
