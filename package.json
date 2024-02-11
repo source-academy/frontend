@@ -26,7 +26,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@blueprintjs/core": "^4.20.1",
+    "@blueprintjs/core": "^5.0.0",
     "@blueprintjs/datetime": "^4.4.37",
     "@blueprintjs/icons": "^4.16.0",
     "@blueprintjs/popover2": "^1.14.11",
