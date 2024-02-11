@@ -10,9 +10,15 @@ import {
   Pre
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
+import { useDispatch } from 'react-redux';
 
+import {
+  reautogradeAnswer,
+  submitGrading,
+  submitGradingAndContinue
+} from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
@@ -24,8 +30,6 @@ import {
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
-type GradingEditorProps = DispatchProps & OwnProps;
-
 type GradingSaveFunction = (
   submissionId: number,
   questionId: number,
@@ -33,13 +37,7 @@ type GradingSaveFunction = (
   comments?: string
 ) => void;
 
-export type DispatchProps = {
-  handleGradingSave: GradingSaveFunction;
-  handleGradingSaveAndContinue: GradingSaveFunction;
-  handleReautogradeAnswer: (submissionId: number, questionId: number) => void;
-};
-
-type OwnProps = {
+type Props = {
   solution: number | string | null;
   questionId: number;
   submissionId: number;
@@ -56,7 +54,22 @@ type OwnProps = {
 
 const gradingEditorButtonClass = 'grading-editor-button';
 
-const GradingEditor: React.FC<GradingEditorProps> = props => {
+const GradingEditor: React.FC<Props> = props => {
+  const dispatch = useDispatch();
+  const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
+    () =>
+      ({
+        handleGradingSave: (...args) => dispatch(submitGrading(...args)),
+        handleGradingSaveAndContinue: (...args) => dispatch(submitGradingAndContinue(...args)),
+        handleReautogradeAnswer: (...args) => dispatch(reautogradeAnswer(...args))
+      }) satisfies {
+        handleGradingSave: GradingSaveFunction;
+        handleGradingSaveAndContinue: GradingSaveFunction;
+        handleReautogradeAnswer: (submissionId: number, questionId: number) => void;
+      },
+    [dispatch]
+  );
+
   /**
    * A potentially null string which defines the
    * result for the number XP input. This property being null
@@ -141,7 +154,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
     comments?: string
   ) => {
     const callback = (): void => {
-      props.handleGradingSaveAndContinue(submissionId, questionId, xpAdjustment, comments!);
+      handleGradingSaveAndContinue(submissionId, questionId, xpAdjustment, comments!);
     };
     setCurrentlySaving(true);
     // TODO: Check (not sure how) if this results in a regression.
@@ -160,7 +173,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
       positiveIntent: 'danger'
     });
     if (confirm) {
-      props.handleReautogradeAnswer(props.submissionId, props.questionId);
+      handleReautogradeAnswer(props.submissionId, props.questionId);
     }
   };
 
@@ -301,7 +314,7 @@ const GradingEditor: React.FC<GradingEditorProps> = props => {
             <ControlButton
               label="Save Changes"
               icon={IconNames.FLOPPY_DISK}
-              onClick={validateXpBeforeSave(props.handleGradingSave)}
+              onClick={validateXpBeforeSave(handleGradingSave)}
               options={saveButtonOpts}
             />
           </div>
