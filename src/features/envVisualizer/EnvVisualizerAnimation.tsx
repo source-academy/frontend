@@ -5,6 +5,7 @@ import { Animatable } from './animationComponents/AnimationComponents';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
+import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
 import { isInstr } from './compactComponents/ControlStack';
 import EnvVisualizer from './EnvVisualizer';
@@ -52,11 +53,9 @@ export class CSEAnimation {
             Layout.stashComponent.stashItemComponents.at(-1)!
           );
           break;
-        // TODO: find out if it is safe to use default instead of splitting by cases
-        // case 'Program':
-        // case 'ExpressionStatement':
-        // case 'VariableDeclaration':
-        default:
+        case 'Program':
+        case 'ExpressionStatement':
+        case 'VariableDeclaration':
           const currentControlSize = Layout.controlComponent.control.size();
           const previousControlSize = Layout.previousControlComponent.control.size();
           const numOfItems = currentControlSize - previousControlSize + 1;
@@ -90,6 +89,11 @@ export class CSEAnimation {
           );
           break;
         case InstrType.POP:
+          animation = new PopAnimation(
+            lastControlComponent,
+            Layout.previousStashComponent.stashItemComponents.at(-1)!
+          );
+          break;
         case InstrType.APPLICATION:
         case InstrType.BRANCH:
         case InstrType.ENVIRONMENT:
