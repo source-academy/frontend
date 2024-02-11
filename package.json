@@ -30,7 +30,7 @@
     "@blueprintjs/datetime": "^4.4.37",
     "@blueprintjs/icons": "^4.16.0",
     "@blueprintjs/popover2": "^1.14.11",
-    "@blueprintjs/select": "^4.9.24",
+    "@blueprintjs/select": "^5.0.0",
     "@octokit/rest": "^20.0.0",
     "@sentry/browser": "^7.57.0",
     "@sourceacademy/sharedb-ace": "^2.0.2",
