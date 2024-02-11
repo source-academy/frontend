@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, H2, Intent } from '@blueprintjs/core';
-import { GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -98,7 +98,7 @@ const NotificationConfigPanel = () => {
     return String(id);
   };
 
-  const columnDefs = [
+  const columnDefs: ColDef[] = [
     {
       headerName: 'Assessment Type',
       field: 'assessmentConfig.type',
@@ -127,7 +127,7 @@ const NotificationConfigPanel = () => {
     {
       headerName: 'Default Reminder Time(hours)',
       field: 'timeOptions',
-      cellRendererFramework: TimeOptionCell,
+      cellRenderer: TimeOptionCell,
       cellRendererParams: {
         setStateHandler: setTimeOptions,
         setDelete: addTimeOptionsToDelete,
@@ -140,7 +140,7 @@ const NotificationConfigPanel = () => {
     {
       headerName: 'Default Reminder (hours)',
       field: 'timeOptions',
-      cellRendererFramework: SelectCell,
+      cellRenderer: SelectCell,
       cellRendererParams: {
         setStateHandler: setTimeOptions,
         field: 'timeOptions'
@@ -150,7 +150,7 @@ const NotificationConfigPanel = () => {
     {
       headerName: 'Enabled',
       field: 'isEnabled',
-      cellRendererFramework: BooleanCell,
+      cellRenderer: BooleanCell,
       cellRendererParams: {
         setStateHandler: setIsEnabled,
         field: 'isEnabled'
@@ -208,7 +208,7 @@ const NotificationConfigPanel = () => {
         rowData={notificationConfig.current}
         rowHeight={36}
         rowDragManaged={true}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}
       />
