@@ -12,7 +12,7 @@ import {
   AssessmentOverview
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
+import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
