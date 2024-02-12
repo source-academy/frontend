@@ -1,6 +1,5 @@
-import { Button } from '@blueprintjs/core';
+import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import {
   showSuccessMessage,
@@ -25,13 +24,13 @@ const ItemSaver: React.FC<ItemSaverProps> = ({ discardChanges, saveChanges }) =>
 
   return (
     <>
-      <Tooltip2 content="Save Changes">
+      <Tooltip content="Save Changes">
         <Button icon={IconNames.FLOPPY_DISK} intent="primary" onClick={handleSaveChanges} />
-      </Tooltip2>
+      </Tooltip>
 
-      <Tooltip2 content="Discard Changes">
+      <Tooltip content="Discard Changes">
         <Button icon={IconNames.CROSS} intent="danger" onClick={handleDiscardChanges} />
-      </Tooltip2>
+      </Tooltip>
     </>
   );
 };

@@ -1,6 +1,5 @@
-import { Button } from '@blueprintjs/core';
+import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
@@ -16,9 +15,9 @@ const AchievmenetUuidCopier: React.FC<AchievementUuidCopierProps> = ({ uuid }) =
   };
 
   return (
-    <Tooltip2 content={hoverText}>
+    <Tooltip content={hoverText}>
       <Button icon={IconNames.CLIPBOARD} onClick={copy} />
-    </Tooltip2>
+    </Tooltip>
   );
 };
 

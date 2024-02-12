@@ -1,6 +1,5 @@
-import { Button, Dialog } from '@blueprintjs/core';
+import { Button, Dialog, Tooltip } from '@blueprintjs/core';
 import { TimePicker } from '@blueprintjs/datetime';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
 import { prettifyTime } from 'src/commons/achievement/utils/DateHelper';
 
@@ -18,9 +17,9 @@ const EditableTime: React.FC<EditableTimeProps> = ({ type, time, changeTime }) =
 
   return (
     <>
-      <Tooltip2 content={hoverText}>
+      <Tooltip content={hoverText}>
         <Button minimal={true} onClick={toggleOpen} outlined={true}>{`${type}`}</Button>
-      </Tooltip2>
+      </Tooltip>
       <Dialog
         isCloseButtonShown={false}
         isOpen={isOpen}

@@ -1,6 +1,5 @@
-import { Button, MenuItem, NumericInput } from '@blueprintjs/core';
+import { Button, MenuItem, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 import { EventMeta, EventType, GoalMeta } from 'src/features/achievement/AchievementTypes';
@@ -54,7 +53,7 @@ const EditableEventMeta: React.FC<EditableEventMetaProps> = ({ changeMeta, event
 
   const generateEventNames = () => {
     return eventNames.map((eventName, index) => (
-      <Tooltip2 content={'Change event type ' + index} key={index}>
+      <Tooltip content={'Change event type ' + index} key={index}>
         <EventSelect
           filterable={false}
           items={Object.values(EventType)}
@@ -63,7 +62,7 @@ const EditableEventMeta: React.FC<EditableEventMetaProps> = ({ changeMeta, event
         >
           <Button outlined={true} text={eventName} />
         </EventSelect>
-      </Tooltip2>
+      </Tooltip>
     ));
   };
 
@@ -75,10 +74,10 @@ const EditableEventMeta: React.FC<EditableEventMetaProps> = ({ changeMeta, event
   return (
     <>
       {generateEventNames()}
-      <Tooltip2 content="Add Event">
+      <Tooltip content="Add Event">
         <Button outlined={true} text={'Add Event'} onClick={addEvent} />
-      </Tooltip2>
-      <Tooltip2 content="Target Count">
+      </Tooltip>
+      <Tooltip content="Target Count">
         <NumericInput
           allowNumericCharactersOnly={true}
           leftIcon={IconNames.LOCATE}
@@ -87,7 +86,7 @@ const EditableEventMeta: React.FC<EditableEventMetaProps> = ({ changeMeta, event
           placeholder="Enter target count here"
           value={targetCount}
         />
-      </Tooltip2>
+      </Tooltip>
       <br />
       <EditableDate type="Release" date={release} changeDate={changeRelease} />
       <EditableDate type="Deadline" date={deadline} changeDate={changeDeadline} />
