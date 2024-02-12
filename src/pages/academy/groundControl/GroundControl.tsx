@@ -1,8 +1,8 @@
 import {
-  Icon as BpIcon,
   Button,
   Collapse,
   Divider,
+  Icon as BpIcon,
   Intent,
   NonIdealState,
   Spinner,
