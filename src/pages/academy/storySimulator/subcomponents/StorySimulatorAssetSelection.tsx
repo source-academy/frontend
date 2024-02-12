@@ -1,4 +1,4 @@
-import { Icon, ITreeNode, Tree } from '@blueprintjs/core';
+import { Icon, Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
@@ -12,7 +12,7 @@ import { assetPathsToTree, treeMap } from './StorySimulatorAssetSelectionHelper'
 import StorySimulatorAssetViewer from './StorySimulatorAssetViewer';
 
 type TreeState = {
-  nodes: ITreeNode[];
+  nodes: TreeNodeInfo[];
 };
 
 /**
@@ -31,8 +31,8 @@ const StorySimulatorAssetSelection = () => {
     setAssetTree({ nodes: assetPathsToTree(assetPaths, toolIcons, s3AssetFolders) });
   }, [assetPaths]);
 
-  const handleNodeClick = (nodeData: ITreeNode) => {
-    treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
+  const handleNodeClick = (nodeData: TreeNodeInfo) => {
+    treeMap(assetTree.nodes, (node: TreeNodeInfo) => (node.isSelected = false));
     nodeData.isSelected = !nodeData.isSelected;
     nodeData.isExpanded = !nodeData.isExpanded;
     const selectedPath = nodeData.id.toString();
