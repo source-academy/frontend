@@ -45,6 +45,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  DISABLE_TOKEN_COUNTER,
   EditorTabState,
   ENABLE_TOKEN_COUNTER,
   END_CLEAR_CONTEXT,
@@ -354,7 +355,15 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state[workspaceLocation],
           hasTokenCounter: true
         }
-      }
+      };
+    case DISABLE_TOKEN_COUNTER:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          hasTokenCounter: false
+        }
+      };  
     case EVAL_EDITOR:
       return {
         ...state,

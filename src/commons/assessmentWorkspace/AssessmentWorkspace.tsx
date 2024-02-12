@@ -76,6 +76,7 @@ import {
   changeExecTime,
   changeSideContentHeight,
   clearReplOutput,
+  disableTokenCounter,
   enableTokenCounter,
   evalEditor,
   evalRepl,
@@ -152,7 +153,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleReplEval,
     handleSave,
     handleUpdateHasUnsavedChanges,
-    handleEnableTokenCounter
+    handleEnableTokenCounter,
+    handleDisableTokenCounter
   } = useMemo(() => {
     return {
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
@@ -178,7 +180,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
       handleEnableTokenCounter: () =>
-        dispatch(enableTokenCounter(workspaceLocation))
+        dispatch(enableTokenCounter(workspaceLocation)),
+      handleDisableTokenCounter: () =>
+        dispatch(disableTokenCounter(workspaceLocation))
     };
   }, [dispatch]);
 
@@ -244,13 +248,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   });
 
   /**
-   * Handles toggling enabling token counter depending on assessment properties
+   * Handles toggling enabling and disabling token counter depending on assessment properties
    */
   useEffect(() => {
     if (props.assessmentConfiguration.hasTokenCounter) {
       handleEnableTokenCounter();
+    } else {
+      handleDisableTokenCounter();
     }
-  }, [props, handleEnableTokenCounter]);
+  }, [props, handleEnableTokenCounter, handleDisableTokenCounter]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit

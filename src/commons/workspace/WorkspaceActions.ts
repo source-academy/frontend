@@ -28,6 +28,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  DISABLE_TOKEN_COUNTER,
   EditorTabState,
   ENABLE_TOKEN_COUNTER,
   END_CLEAR_CONTEXT,
@@ -185,6 +186,9 @@ export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
 
 export const enableTokenCounter = (workspaceLocation: WorkspaceLocation) => 
   action(ENABLE_TOKEN_COUNTER, { workspaceLocation });
+
+export const disableTokenCounter = (workspaceLocation: WorkspaceLocation) => 
+  action(DISABLE_TOKEN_COUNTER, { workspaceLocation });
 
 export const toggleFolderMode = (workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_FOLDER_MODE, { workspaceLocation });
