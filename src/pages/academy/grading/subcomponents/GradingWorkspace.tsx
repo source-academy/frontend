@@ -193,13 +193,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (!grading) {
-      return;
-    }
-    // setLongSummary(grading.assessment.summaryLong);
-  }, [grading]);
-
   /**
    * Once there is an update (due to the grading being fetched), check
    * if a workspace reset is needed.
