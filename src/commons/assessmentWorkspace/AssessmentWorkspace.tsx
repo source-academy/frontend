@@ -179,10 +179,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
-      handleEnableTokenCounter: () =>
-        dispatch(enableTokenCounter(workspaceLocation)),
-      handleDisableTokenCounter: () =>
-        dispatch(disableTokenCounter(workspaceLocation))
+      handleEnableTokenCounter: () => dispatch(enableTokenCounter(workspaceLocation)),
+      handleDisableTokenCounter: () => dispatch(disableTokenCounter(workspaceLocation))
     };
   }, [dispatch]);
 
@@ -725,7 +723,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const workspaceHandlers = useMemo(() => {
     return {
       handleSideContentHeightChange: (heightChange: number) =>
-        dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
+        dispatch(changeSideContentHeight(heightChange, workspaceLocation))
     };
   }, [dispatch]);
 

@@ -75,7 +75,7 @@ import {
   WorkspaceState
 } from './WorkspaceTypes';
 
-export const addTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) => 
+export const addTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) =>
   action(ADD_TOKEN_COUNT, { workspaceLocation, tokenCount });
 
 export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
@@ -184,10 +184,10 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
 
-export const enableTokenCounter = (workspaceLocation: WorkspaceLocation) => 
+export const enableTokenCounter = (workspaceLocation: WorkspaceLocation) =>
   action(ENABLE_TOKEN_COUNTER, { workspaceLocation });
 
-export const disableTokenCounter = (workspaceLocation: WorkspaceLocation) => 
+export const disableTokenCounter = (workspaceLocation: WorkspaceLocation) =>
   action(DISABLE_TOKEN_COUNTER, { workspaceLocation });
 
 export const toggleFolderMode = (workspaceLocation: WorkspaceLocation) =>

@@ -57,7 +57,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     };
     setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasTokenCounter', value);
-  }
+  };
 
   const setEarlyXp = (index: number, value: number) => {
     const temp = [...assessmentConfig.current];

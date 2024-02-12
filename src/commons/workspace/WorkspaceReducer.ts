@@ -126,15 +126,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   }
 
   switch (action.type) {
-
     case ADD_TOKEN_COUNT:
       return {
         ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            tokenCount: action.payload.tokenCount
-          }
-      }
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          tokenCount: action.payload.tokenCount
+        }
+      };
 
     case BROWSE_REPL_HISTORY_DOWN:
       if (state[workspaceLocation].replHistory.browseIndex === null) {
@@ -363,7 +362,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state[workspaceLocation],
           hasTokenCounter: false
         }
-      };  
+      };
     case EVAL_EDITOR:
       return {
         ...state,
@@ -399,17 +398,19 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         if (state[workspaceLocation].hasTokenCounter) {
           notificationOutputs.push({
             consoleLog: `This program has ${tokens} tokens in your code`,
-            type: "notification"
+            type: 'notification'
           });
         }
         const customNotification = state[workspaceLocation].customNotification;
         if (customNotification !== '') {
           notificationOutputs.push({
             consoleLog: customNotification,
-            type: "notification"
+            type: 'notification'
           });
         }
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat([...notificationOutputs, newOutputEntryWithLogs]);
+        newOutput = state[workspaceLocation].output
+          .slice(0, -1)
+          .concat([...notificationOutputs, newOutputEntryWithLogs]);
       } else {
         newOutput = state[workspaceLocation].output.concat({
           consoleLogs: [],
