@@ -1,6 +1,6 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';

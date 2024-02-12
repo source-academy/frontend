@@ -10,7 +10,7 @@ import {
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -20,8 +20,11 @@ import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 import { OverallState } from '../application/ApplicationTypes';
 import { HighlightedLines } from '../editor/EditorTypes';
 import Constants, { Links } from '../utils/Constants';
-import { setEditorHighlightedLinesControl, updateEnvSteps } from '../workspace/WorkspaceActions';
-import { evalEditor } from '../workspace/WorkspaceActions';
+import {
+  evalEditor,
+  setEditorHighlightedLinesControl,
+  updateEnvSteps
+} from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type State = {

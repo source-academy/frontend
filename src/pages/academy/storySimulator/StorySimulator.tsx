@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
