@@ -9,10 +9,10 @@ import {
   NavbarDivider,
   NavbarGroup,
   NavbarHeading,
+  Popover,
   Position
 } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
@@ -248,7 +248,7 @@ const NavigationBar: React.FC = () => {
 
     return (
       <NavbarGroup align={Alignment.LEFT}>
-        <Popover2
+        <Popover
           position={Position.BOTTOM_RIGHT}
           interactionKind="hover"
           content={desktopNavbarLeftPopoverContent}
@@ -266,7 +266,7 @@ const NavigationBar: React.FC = () => {
               {courseShortName || Constants.sourceAcademyDeploymentName}
             </NavbarHeading>
           </NavLink>
-        </Popover2>
+        </Popover>
         {renderNavlinksFromInfo(fullAcademyNavbarLeftCommonInfo, createDesktopNavlink)}
       </NavbarGroup>
     );

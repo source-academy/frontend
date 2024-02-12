@@ -1,5 +1,4 @@
-import { Intent, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -56,7 +55,7 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = props => {
     const notificationTags = <div className="col">{notifications.map(makeNotificationTag)}</div>;
 
     return (
-      <Popover2
+      <Popover
         className={props.className}
         content={notificationTags}
         interactionKind={PopoverInteractionKind.HOVER}
@@ -66,7 +65,7 @@ const NotificationBadge: React.FC<NotificationBadgeProps> = props => {
         lazy={true}
       >
         {notificationIcon}
-      </Popover2>
+      </Popover>
     );
   }
 

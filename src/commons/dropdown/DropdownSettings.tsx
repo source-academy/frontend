@@ -1,6 +1,13 @@
-import { Classes, Dialog, FormGroup, HTMLSelect, Icon, PopoverPosition } from '@blueprintjs/core';
+import {
+  Classes,
+  Dialog,
+  FormGroup,
+  HTMLSelect,
+  Icon,
+  PopoverPosition,
+  Tooltip
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import { useContext, useMemo } from 'react';
 
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
@@ -56,7 +63,7 @@ const DropdownSettings: React.FC<DialogProps> = props => {
             value={workspaceSettings.editorBinding}
             onChange={handleEditorBindingChange}
           />
-          <Tooltip2
+          <Tooltip
             position={PopoverPosition.TOP}
             className="form-field-help-text"
             content={
@@ -64,7 +71,7 @@ const DropdownSettings: React.FC<DialogProps> = props => {
             }
           >
             <Icon icon="help" />
-          </Tooltip2>
+          </Tooltip>
         </FormGroup>
       </div>
     </Dialog>

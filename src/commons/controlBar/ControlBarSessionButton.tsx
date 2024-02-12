@@ -1,6 +1,5 @@
-import { Classes, Colors, Menu } from '@blueprintjs/core';
+import { Classes, Colors, Menu, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -65,13 +64,13 @@ export class ControlBarSessionButtons extends React.PureComponent<
     );
 
     const inviteButton = (
-      <Popover2
+      <Popover
         popoverClassName="Popover-share"
         inheritDarkTheme={false}
         content={inviteButtonPopoverContent}
       >
         <ControlButton label="Invite" icon={IconNames.GRAPH} onClick={handleStartInvite} />
-      </Popover2>
+      </Popover>
     );
 
     const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
@@ -104,13 +103,13 @@ export class ControlBarSessionButtons extends React.PureComponent<
     );
 
     const joinButton = (
-      <Popover2
+      <Popover
         popoverClassName="Popover-share"
         inheritDarkTheme={false}
         content={joinButtonPopoverContent}
       >
         <ControlButton label="Join" icon={IconNames.LOG_IN} />
-      </Popover2>
+      </Popover>
     );
 
     const leaveButton = (
@@ -130,8 +129,8 @@ export class ControlBarSessionButtons extends React.PureComponent<
       : undefined;
 
     return (
-      <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
-        <Popover2
+      <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
+        <Popover
           content={
             <Menu large={true}>
               {inviteButton}
@@ -153,8 +152,8 @@ export class ControlBarSessionButtons extends React.PureComponent<
             }}
             isDisabled={this.props.isFolderModeEnabled}
           />
-        </Popover2>
-      </Tooltip2>
+        </Popover>
+      </Tooltip>
     );
   }
 

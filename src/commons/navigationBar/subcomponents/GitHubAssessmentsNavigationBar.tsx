@@ -7,10 +7,10 @@ import {
   Menu,
   MenuItem,
   Navbar,
-  NavbarGroup
+  NavbarGroup,
+  Popover
 } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
 import * as React from 'react';
@@ -75,7 +75,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
             key="courseselect"
             disabled={true}
             leftElement={
-              <Popover2
+              <Popover
                 content={
                   <Menu>
                     {props.courses?.map((course: string) => (
@@ -86,7 +86,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
                 placement={'bottom-end'}
               >
                 <Button minimal={true} rightIcon="caret-down" aria-label="choose" />
-              </Popover2>
+              </Popover>
             }
             placeholder={'Select Course'}
             onChange={props.changeCourseHandler}

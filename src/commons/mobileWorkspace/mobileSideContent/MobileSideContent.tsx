@@ -1,5 +1,4 @@
-import { Classes, Icon, Tab, Tabs } from '@blueprintjs/core';
-import { Tooltip2 } from '@blueprintjs/popover2';
+import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -31,7 +30,7 @@ const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: Work
   const iconSize = 20;
   const tabId = tab.id === undefined ? tab.label : tab.id;
   const tabTitle: JSX.Element = (
-    <Tooltip2
+    <Tooltip
       content={tab.label}
       onOpening={() => {
         // Handles iOS hover requiring double taps to press the button
@@ -43,7 +42,7 @@ const renderTab = (tab: SideContentTab, isIOS: boolean, workspaceLocation?: Work
       <div className="side-content-tooltip" id={generateIconId(tabId)}>
         <Icon icon={tab.iconName} iconSize={iconSize} />
       </div>
-    </Tooltip2>
+    </Tooltip>
   );
 
   return (

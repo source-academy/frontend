@@ -1,6 +1,5 @@
-import { Button, Collapse, Icon } from '@blueprintjs/core';
+import { Button, Collapse, Icon, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
@@ -80,9 +79,9 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
         <span>Contest Leaderboard</span>
-        <Tooltip2 content={contestLeaderboardTooltipContent}>
+        <Tooltip content={contestLeaderboardTooltipContent}>
           <Icon icon={IconNames.HELP} />
-        </Tooltip2>
+        </Tooltip>
       </Button>
       <Collapse isOpen={showLeaderboard} keepChildrenMounted>
         {contestEntryCards}
