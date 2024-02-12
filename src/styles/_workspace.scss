@@ -1339,11 +1339,11 @@ $code-color-notification: #f9f0d7;
 }
 
 .Popover-share {
-  .#{$ns}-popover2-arrow-fill {
+  .#{$ns}-popover-arrow-fill {
     fill: $cadet-color-4;
   }
 
-  .#{$ns}-popover2-content {
+  .#{$ns}-popover-content {
     background: $cadet-color-4;
     display: flex;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;
