@@ -397,7 +397,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         const notificationOutputs: NotificationOutput[] = [];
         if (state[workspaceLocation].hasTokenCounter) {
           notificationOutputs.push({
-            consoleLog: `This program has ${tokens} tokens in your code`,
+            consoleLog: `This program has ${tokens} tokens.`,
             type: 'notification'
           });
         }
