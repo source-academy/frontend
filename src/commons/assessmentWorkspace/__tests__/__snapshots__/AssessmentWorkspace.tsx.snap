@@ -2696,7 +2696,8 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
             </button>
           </span>
           <a
-            class="bp5-button bp4-disabled bp5-minimal"
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
             disabled=""
             role="button"
             tabindex="-1"
@@ -3388,7 +3389,8 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
             </button>
           </span>
           <a
-            class="bp5-button bp4-disabled bp5-minimal"
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
             disabled=""
             role="button"
             tabindex="-1"

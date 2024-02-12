@@ -231,7 +231,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                   </div>
                   <div>
                     <h6
-                      className="bp4-heading"
+                      className="bp5-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -420,7 +420,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                   </div>
                   <div>
                     <h6
-                      className="bp4-heading"
+                      className="bp5-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -636,7 +636,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-team_information"
                   >
                     <h6
-                      className="bp4-heading"
+                      className="bp5-heading"
                     >
                        This is a team assessment. 
                     </h6>
@@ -991,7 +991,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                   </div>
                   <div>
                     <h6
-                      className="bp4-heading"
+                      className="bp5-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -1179,7 +1179,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                   </div>
                   <div>
                     <h6
-                      className="bp4-heading"
+                      className="bp5-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -1347,7 +1347,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-team_information"
                   >
                     <h6
-                      className="bp4-heading"
+                      className="bp5-heading"
                     >
                        This is a team assessment. 
                     </h6>
