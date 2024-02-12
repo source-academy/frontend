@@ -9,7 +9,7 @@ import {
   getStory,
   postNewStoriesUsers,
   postStory,
-  updateStory,
+  updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   CREATE_STORY,

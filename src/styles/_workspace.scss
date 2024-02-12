@@ -458,7 +458,10 @@ $code-color-error: #ff4444;
                 * output. Taken from react-ace
                 * sourcecode, font size modified.
                 */
-              font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+              font:
+                16px / normal 'Inconsolata',
+                'Consolas',
+                monospace;
 
               .canvas-container {
                 display: -webkit-box;
@@ -786,7 +789,10 @@ $code-color-error: #ff4444;
           * output. Taken from react-ace
           * sourcecode, font size modified.
           */
-        font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+        font:
+          16px / normal 'Inconsolata',
+          'Consolas',
+          monospace;
       }
 
       .code-output {
@@ -1186,11 +1192,15 @@ $code-color-error: #ff4444;
     }
 
     &.correct.secret > .#{$ns}-card {
-      animation: 4s correct, 4s private-revert 4s forwards;
+      animation:
+        4s correct,
+        4s private-revert 4s forwards;
     }
 
     &.wrong.secret > .#{$ns}-card {
-      animation: 4s wrong, 4s private-revert 4s forwards;
+      animation:
+        4s wrong,
+        4s private-revert 4s forwards;
     }
   }
 
@@ -1265,11 +1275,15 @@ $code-color-error: #ff4444;
     }
 
     &.correct.secret > .#{$ns}-card {
-      animation: 4s correct, 4s private-revert 4s forwards;
+      animation:
+        4s correct,
+        4s private-revert 4s forwards;
     }
 
     &.wrong.secret > .#{$ns}-card {
-      animation: 4s wrong, 4s private-revert 4s forwards;
+      animation:
+        4s wrong,
+        4s private-revert 4s forwards;
     }
   }
 
