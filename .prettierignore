@@ -1,9 +1,0 @@
-*
-!src/pages/academy/grading/subcomponents/GradingWorkspace.tsx
-!src/features/grading/GradingTypes.ts
-!src/commons/application/ApplicationTypes.ts
-!src/commons/application/actions/SessionActions.ts
-!src/commons/application/types/SessionTypes.ts
-!src/commons/mocks/BackendMocks.ts
-!src/commons/sagas/RequestSaga.ts
-!src/commons/sagas/BackendSaga.ts
