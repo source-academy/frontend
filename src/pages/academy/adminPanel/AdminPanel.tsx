@@ -25,9 +25,6 @@ import {
   updateCourseConfig,
   updateUserRole
 } from '../../../commons/application/actions/SessionActions';
-import {
-  fetchAdminPanelStoriesUsers,
-}  from 'src/features/stories/StoriesActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';

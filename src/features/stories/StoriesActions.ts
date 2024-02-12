@@ -3,7 +3,6 @@ import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
 
 import { AdminPanelStoriesUser } from './StoriesTypes';
-import { AdminPanelStoriesUser } from './StoriesTypes';
 import {
   ADD_STORY_ENV,
   CLEAR_STORIES_USER_AND_GROUP,
@@ -14,13 +13,11 @@ import {
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
   FETCH_ADMIN_PANEL_STORIES_USERS,
-  FETCH_ADMIN_PANEL_STORIES_USERS,
   GET_STORIES_LIST,
   GET_STORIES_USER,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
-  SET_ADMIN_PANEL_STORIES_USERS,
   SET_ADMIN_PANEL_STORIES_USERS,
   SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,

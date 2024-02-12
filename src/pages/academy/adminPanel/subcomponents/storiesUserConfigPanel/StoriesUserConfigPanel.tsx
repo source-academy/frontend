@@ -48,7 +48,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
     {
       headerName: 'Role',
       field: 'role',
-      cellRendererFramework: RolesCell,
+      cellRenderer: RolesCell,
       cellRendererParams: {
         id: props.userId,
         handleUpdateUserRole: props.handleUpdateUserRole
@@ -58,7 +58,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
     {
       headerName: 'Actions',
       field: 'actions',
-      cellRendererFramework: StoriesUserActionsCell,
+      cellRenderer: StoriesUserActionsCell,
       cellRendererParams: {
         handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
       },
@@ -88,7 +88,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={storiesUsers}
         rowHeight={36}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         pagination
       />
