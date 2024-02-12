@@ -1179,7 +1179,7 @@
   dependencies:
     tslib "~2.6.2"
 
-"@blueprintjs/core@^5.7.0", "@blueprintjs/core@^5.9.1":
+"@blueprintjs/core@^5.9.0", "@blueprintjs/core@^5.9.1":
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-5.9.1.tgz#79e474aa063468aec4c2e82cd9b6e12d0b98b1bc"
   integrity sha512-/Cq6CAV/GyMhTOGrzgIBDsneduQCFWxzDwlX2f8MMAFZFO7FaeCONPvzbcxpTRAXR+RFkb4HpPdIsAslyZUMzA==
@@ -1195,7 +1195,7 @@
     tslib "~2.6.2"
     use-sync-external-store "^1.2.0"
 
-"@blueprintjs/datetime2@^2.2.7":
+"@blueprintjs/datetime2@^2.3.0":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/datetime2/-/datetime2-2.3.1.tgz#6f650998b8f94d8e0f725f3d4c68e5ed97ef7949"
   integrity sha512-9UsGE/fmGzqpJA1p5kciZJWQNJ6P2qZBFCnMy9XFzPtFUSmDtNrUevnkV4EBWOAi2bUcXykvZMBaKrFrLUcJHg==
@@ -1242,7 +1242,7 @@
     classnames "^2.3.1"
     tslib "~2.6.2"
 
-"@blueprintjs/select@^5.0.0", "@blueprintjs/select@^5.1.1":
+"@blueprintjs/select@^5.1.0", "@blueprintjs/select@^5.1.1":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/select/-/select-5.1.1.tgz#39bda2c1c73bfa96a395a42586a8583ca38f4173"
   integrity sha512-5BiYtYJvQmUuPHS/2g3ZYy8I3TgAmQtkO+ksqMXVWzRibW7CdggqvszeaSWA0+RHgYw3gJEUQk53yt+rqZCF6Q==
