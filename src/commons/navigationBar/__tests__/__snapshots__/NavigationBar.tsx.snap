@@ -8,7 +8,9 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
     <Blueprint5.NavbarGroup
       align="left"
     >
-      <Popover2
+      <Blueprint5.Popover
+        boundary="clippingParents"
+        captureDismiss={false}
         content={
           <Blueprint5.Navbar>
             <Blueprint5.NavbarGroup
@@ -16,10 +18,24 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
             />
           </Blueprint5.Navbar>
         }
+        defaultIsOpen={false}
         disabled={true}
+        fill={false}
+        hasBackdrop={false}
+        hoverCloseDelay={300}
+        hoverOpenDelay={150}
+        inheritDarkTheme={true}
         interactionKind="hover"
+        matchTargetWidth={false}
+        minimal={false}
+        openOnTargetFocus={true}
         popoverClassName="desktop-navbar-popover"
         position="bottom-right"
+        positioningStrategy="absolute"
+        shouldReturnFocusOnClose={false}
+        targetTagName="span"
+        transitionDuration={300}
+        usePortal={true}
       >
         <NavLink
           className="NavigationBar__link bp5-button bp5-minimal bp5-active"
@@ -40,7 +56,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
             Source Academy @ NUS
           </Blueprint5.NavbarHeading>
         </NavLink>
-      </Popover2>
+      </Blueprint5.Popover>
       <NavLink
         className={[Function]}
         title="Classroom"
@@ -129,7 +145,9 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
     <Blueprint5.NavbarGroup
       align="left"
     >
-      <Popover2
+      <Blueprint5.Popover
+        boundary="clippingParents"
+        captureDismiss={false}
         content={
           <Blueprint5.Navbar>
             <Blueprint5.NavbarGroup
@@ -238,10 +256,24 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
             </Blueprint5.NavbarGroup>
           </Blueprint5.Navbar>
         }
+        defaultIsOpen={false}
         disabled={true}
+        fill={false}
+        hasBackdrop={false}
+        hoverCloseDelay={300}
+        hoverOpenDelay={150}
+        inheritDarkTheme={true}
         interactionKind="hover"
+        matchTargetWidth={false}
+        minimal={false}
+        openOnTargetFocus={true}
         popoverClassName="desktop-navbar-popover"
         position="bottom-right"
+        positioningStrategy="absolute"
+        shouldReturnFocusOnClose={false}
+        targetTagName="span"
+        transitionDuration={300}
+        usePortal={true}
       >
         <NavLink
           className="NavigationBar__link bp5-button bp5-minimal bp5-active"
@@ -262,7 +294,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
             CS1101S
           </Blueprint5.NavbarHeading>
         </NavLink>
-      </Popover2>
+      </Blueprint5.Popover>
       <NavLink
         className={[Function]}
         title="Sourcecast"
@@ -427,7 +459,9 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
     <Blueprint5.NavbarGroup
       align="left"
     >
-      <Popover2
+      <Blueprint5.Popover
+        boundary="clippingParents"
+        captureDismiss={false}
         content={
           <Blueprint5.Navbar>
             <Blueprint5.NavbarGroup
@@ -435,10 +469,24 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
             />
           </Blueprint5.Navbar>
         }
+        defaultIsOpen={false}
         disabled={true}
+        fill={false}
+        hasBackdrop={false}
+        hoverCloseDelay={300}
+        hoverOpenDelay={150}
+        inheritDarkTheme={true}
         interactionKind="hover"
+        matchTargetWidth={false}
+        minimal={false}
+        openOnTargetFocus={true}
         popoverClassName="desktop-navbar-popover"
         position="bottom-right"
+        positioningStrategy="absolute"
+        shouldReturnFocusOnClose={false}
+        targetTagName="span"
+        transitionDuration={300}
+        usePortal={true}
       >
         <NavLink
           className="NavigationBar__link bp5-button bp5-minimal bp5-active"
@@ -459,7 +507,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
             Source Academy @ NUS
           </Blueprint5.NavbarHeading>
         </NavLink>
-      </Popover2>
+      </Blueprint5.Popover>
       <NavLink
         className={[Function]}
         title="Classroom"

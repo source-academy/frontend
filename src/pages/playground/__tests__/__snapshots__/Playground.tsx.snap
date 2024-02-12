@@ -48,7 +48,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             </button>
           </span>
           <span
-            class="bp5-popover2-target bp5-popover-target"
+            class="bp5-popover-target"
           >
             <span
               class="bp5-popover-target"
@@ -97,7 +97,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -137,7 +137,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -159,7 +159,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -1331,7 +1331,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             </button>
           </span>
           <span
-            class="bp5-popover2-target bp5-popover-target"
+            class="bp5-popover-target"
           >
             <span
               class="bp5-popover-target"
@@ -1404,7 +1404,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -1468,7 +1468,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -1502,7 +1502,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"

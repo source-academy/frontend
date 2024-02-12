@@ -2,7 +2,7 @@
 
 exports[`Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in 1`] = `
 <span
-  className="bp5-popover2-target bp5-popover-target"
+  className="bp5-popover-target"
   onClick={[Function]}
   onKeyDown={[Function]}
 >
@@ -36,7 +36,7 @@ exports[`Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateC
 
 exports[`Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses components when a user is not logged in 1`] = `
 <span
-  className="bp5-popover2-target bp5-popover-target"
+  className="bp5-popover-target"
   onClick={[Function]}
   onKeyDown={[Function]}
 >

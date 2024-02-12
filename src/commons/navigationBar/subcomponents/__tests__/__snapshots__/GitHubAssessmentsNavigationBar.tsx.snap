@@ -58,16 +58,34 @@ exports[`Navbar renders correctly 1`] = `
     <Blueprint5.InputGroup
       disabled={true}
       leftElement={
-        <Popover2
+        <Blueprint5.Popover
+          boundary="clippingParents"
+          captureDismiss={false}
           content={<Blueprint5.Menu />}
+          defaultIsOpen={false}
+          disabled={false}
+          fill={false}
+          hasBackdrop={false}
+          hoverCloseDelay={300}
+          hoverOpenDelay={150}
+          inheritDarkTheme={true}
+          interactionKind="click"
+          matchTargetWidth={false}
+          minimal={false}
+          openOnTargetFocus={true}
           placement="bottom-end"
+          positioningStrategy="absolute"
+          shouldReturnFocusOnClose={false}
+          targetTagName="span"
+          transitionDuration={300}
+          usePortal={true}
         >
           <Blueprint5.Button
             aria-label="choose"
             minimal={true}
             rightIcon="caret-down"
           />
-        </Popover2>
+        </Blueprint5.Popover>
       }
       onChange={[Function]}
       placeholder="Select Course"
