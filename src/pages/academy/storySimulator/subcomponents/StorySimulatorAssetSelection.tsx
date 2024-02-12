@@ -1,5 +1,4 @@
-import { Icon, Tree, TreeNodeInfo } from '@blueprintjs/core';
-import { Tooltip2 } from '@blueprintjs/popover2';
+import { Icon, Tooltip, Tree, TreeNodeInfo } from '@blueprintjs/core';
 import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import {
@@ -57,10 +56,10 @@ const StorySimulatorAssetSelection = () => {
  * @param filePath the path to asset you want to supply tools for
  * @returns {JSX.Element} A trash can that deletes the file given the asset path
  */
-const toolIcons = (filePath: string) => (
-  <Tooltip2 content="Delete">
+const toolIcons = (filePath: string): JSX.Element => (
+  <Tooltip content="Delete">
     <Icon icon="trash" onClick={deleteFile(filePath)} />
-  </Tooltip2>
+  </Tooltip>
 );
 
 /**

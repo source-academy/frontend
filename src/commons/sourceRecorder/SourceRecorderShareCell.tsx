@@ -1,5 +1,5 @@
+import { Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -29,24 +29,24 @@ const SourceRecorderShareCell: React.FC<SourceRecorderShareCellProps> = props =>
   const shareButtonPopoverContent = (
     <div key={shareURL}>
       <input defaultValue={shareURL} readOnly={true} ref={shareInputElem} />
-      <Tooltip2 content="Copy link to clipboard">
+      <Tooltip content="Copy link to clipboard">
         <CopyToClipboard text={shareURL}>
           <ControlButton icon={IconNames.DUPLICATE} onClick={selectShareInputText} />
         </CopyToClipboard>
-      </Tooltip2>
+      </Tooltip>
     </div>
   );
 
   return (
-    <Popover2
+    <Popover
       popoverClassName="Popover-share"
       inheritDarkTheme={false}
       content={shareButtonPopoverContent}
     >
-      <Tooltip2 content="Get shareable link">
+      <Tooltip content="Get shareable link">
         <ControlButton icon={IconNames.SHARE} />
-      </Tooltip2>
-    </Popover2>
+      </Tooltip>
+    </Popover>
   );
 };
 

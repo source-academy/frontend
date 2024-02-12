@@ -8,10 +8,10 @@ import {
   HTMLSelect,
   Icon,
   Intent,
+  Popover,
   Position
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
@@ -178,7 +178,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                 {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps }: any) => (
                   <>
                     <FileInput text="Upload CSV" inputProps={getRootProps()} />
-                    <Popover2
+                    <Popover
                       content={
                         <div>
                           <p>
@@ -226,7 +226,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                       popoverClassName="file-input-popover"
                     >
                       <Icon icon={IconNames.HELP} className="file-input-icon" />
-                    </Popover2>
+                    </Popover>
                   </>
                 )}
               </CSVReader>
@@ -237,14 +237,14 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
               label={
                 <div className="html-select-label">
                   <div>Authentication Provider</div>
-                  <Popover2
+                  <Popover
                     content="The authentication provider your learners will use to log in with"
                     interactionKind="hover-target"
                     position={Position.TOP}
                     popoverClassName="html-select-popover"
                   >
                     <Icon icon={IconNames.HELP} className="html-select-label-icon" />
-                  </Popover2>
+                  </Popover>
                 </div>
               }
               inline

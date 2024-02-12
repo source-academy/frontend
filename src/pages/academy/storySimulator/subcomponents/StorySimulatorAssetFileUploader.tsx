@@ -1,5 +1,4 @@
-import { Button, InputGroup, Menu, MenuItem, Position } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Button, InputGroup, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import React from 'react';
 import {
   s3AssetFolders,
@@ -65,9 +64,9 @@ const AssetFileUploader = () => {
   return (
     <div className="LeftAlign">
       <h4>Choose Folder</h4>
-      <Popover2 placement={Position.BOTTOM} content={uploadButtonPopoverContent}>
+      <Popover placement={Position.BOTTOM} content={uploadButtonPopoverContent}>
         <Button text={uploadFolder} />
-      </Popover2>
+      </Popover>
       {showfolderOverwrite && (
         <InputGroup
           placeholder={folderOverwritePlaceholder}

@@ -5,9 +5,9 @@ import {
   Dialog,
   FormGroup,
   HTMLSelect,
-  InputGroup
+  InputGroup,
+  Tooltip
 } from '@blueprintjs/core';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React from 'react';
 import { QrReader } from 'react-qr-reader';
@@ -81,9 +81,9 @@ export default function RemoteExecutionDeviceDialog({
   };
 
   const scanButton = (
-    <Tooltip2 content="Scan QR Code">
+    <Tooltip content="Scan QR Code">
       <Button minimal icon="clip" onClick={() => setShowScanner(() => !showScanner)} />
-    </Tooltip2>
+    </Tooltip>
   );
 
   return (

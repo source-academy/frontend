@@ -1,5 +1,4 @@
-import { HTMLSelect, Position } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import { HTMLSelect, Popover, Position } from '@blueprintjs/core';
 import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
@@ -38,7 +37,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
     }
   ];
   return (
-    <Popover2
+    <Popover
       content="You cannot downgrade yourself from an admin role!"
       interactionKind="click"
       position={Position.TOP}
@@ -53,7 +52,7 @@ const RolesCell: React.FC<RolesCellProps> = props => {
         value={data.role}
         disabled={props.courseRegId === data.courseRegId}
       />
-    </Popover2>
+    </Popover>
   );
 };
 

@@ -5,23 +5,26 @@ import {
   Checkbox,
   Classes,
   Divider,
-  Slider
+  Slider,
+  Tooltip
 } from '@blueprintjs/core';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { connect,MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators,Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { HighlightedLines } from '../editor/EditorTypes';
 import Constants, { Links } from '../utils/Constants';
-import { setEditorHighlightedLinesControl, updateEnvSteps } from '../workspace/WorkspaceActions';
-import { evalEditor } from '../workspace/WorkspaceActions';
+import {
+  evalEditor,
+  setEditorHighlightedLinesControl,
+  updateEnvSteps
+} from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type State = {
@@ -197,7 +200,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <ButtonGroup>
-              <Tooltip2 content="Control and Stash" compact>
+              <Tooltip content="Control and Stash" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization && EnvVisualizer.getCompactLayout()) {
@@ -214,8 +217,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
-              </Tooltip2>
-              <Tooltip2 content="Truncate Control" compact>
+              </Tooltip>
+              <Tooltip content="Truncate Control" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization && EnvVisualizer.getControlStash()) {
@@ -232,7 +235,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
-              </Tooltip2>
+              </Tooltip>
             </ButtonGroup>
             <ButtonGroup>
               <Button
@@ -257,7 +260,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
               />
             </ButtonGroup>
             <ButtonGroup>
-              <Tooltip2 content="Experimental" compact>
+              <Tooltip content="Experimental" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization) {
@@ -274,8 +277,8 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
-              </Tooltip2>
-              <Tooltip2 content="Print" compact>
+              </Tooltip>
+              <Tooltip content="Print" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization) {
@@ -292,14 +295,14 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
-              </Tooltip2>
-              <Tooltip2 content="Save" compact>
+              </Tooltip>
+              <Tooltip content="Save" compact>
                 <AnchorButton
                   icon="floppy-disk"
                   disabled={!this.state.visualization}
                   onClick={Layout.exportImage}
                 />
-              </Tooltip2>
+              </Tooltip>
             </ButtonGroup>
           </div>
         </div>{' '}
