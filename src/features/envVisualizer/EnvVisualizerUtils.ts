@@ -417,10 +417,10 @@ export function getControlItemComponent(
         // If the control item is the whole program
         // add {} to represent the implicit block
         const originalText = astToString(controlItem)
-        .trim()
-        .split("\n")
-        .map(line => `\t\t${line}`)
-        .join("\n");
+          .trim()
+          .split('\n')
+          .map(line => `\t\t${line}`)
+          .join('\n');
         const textP = `{\n${originalText}\n}`;
         return new ControlItemComponent(
           textP,
@@ -442,10 +442,7 @@ export function getControlItemComponent(
           topItem
         );
       default:
-        console.log("Im not a program");
-        console.log("Control item: ", controlItem);
         const text = astToString(controlItem).trim();
-        console.log("text: ", text);
         return new ControlItemComponent(
           text,
           text,
