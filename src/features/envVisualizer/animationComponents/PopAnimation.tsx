@@ -11,24 +11,27 @@ export class PopAnimation extends Animatable {
   private popItemAnimation: AnimatedTextboxComponent;
   private stashItemAnimation: AnimatedTextboxComponent;
 
-  constructor(
-    private popItem: ControlItemComponent,
-    private stashItem: StashItemComponent,
-  ) {
+  constructor(popItem: ControlItemComponent, stashItem: StashItemComponent) {
     super();
     const popItemPosition = getNodePositionFromItem(popItem);
     const stashItemPosition = getNodePositionFromItem(stashItem);
-    // TODO: make the travel path an arc instead of a straight line
+    // TODO: improve the animation make the travel path an arc
     this.popItemAnimation = new AnimatedTextboxComponent(
       popItemPosition,
-      { ...stashItemPosition, y: popItem.y() },
-      popItem.text,
+      { ...stashItemPosition, opacity: 0 },
+      popItem.text
     );
     this.stashItemAnimation = new AnimatedTextboxComponent(
-      stashItemPosition,
-      { ...stashItemPosition, y: stashItemPosition.y - stashItem.height(), opacity: 0},
+      {
+        ...stashItemPosition,
+        x: stashItemPosition.x + stashItemPosition.width / 2,
+        offsetX: stashItemPosition.width / 2,
+        y: stashItemPosition.y + stashItemPosition.height / 2,
+        offsetY: stashItemPosition.height / 2
+      },
+      { scaleX: 0.6, scaleY: 0.6 },
       stashItem.text,
-      { easing: Easings.StrongEaseOut }
+      { delayMultiplier: 0.3 }
     );
   }
 
@@ -42,21 +45,12 @@ export class PopAnimation extends Animatable {
   }
 
   async animate() {
-    await Promise.all([this.popItemAnimation.animate()]);
-    this.popItemAnimation.setDestination({
-      y: this.popItem.y() + this.popItem.height()
-    });
-    await Promise.all([this.popItemAnimation.animate()]);
-    this.popItemAnimation.setDestination({
-      y: this.stashItem.y() + this.stashItem.height(),
-      easing: Easings.StrongEaseOut
-    });
-    await Promise.all([this.popItemAnimation.animate()]);
-    this.popItemAnimation.setDestination({
-      opacity: 0,
-      easing: Easings.StrongEaseOut
-    })
     await Promise.all([this.popItemAnimation.animate(), this.stashItemAnimation.animate()]);
+    this.stashItemAnimation.setDestination(
+      { scaleX: 1.1, scaleY: 1.1, opacity: 0 },
+      { durationMultiplier: 0.5, easing: Easings.StrongEaseOut }
+    );
+    await this.stashItemAnimation.animate();
   }
 
   destroy() {

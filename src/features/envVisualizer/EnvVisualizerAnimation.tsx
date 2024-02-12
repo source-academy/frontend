@@ -59,6 +59,7 @@ export class CSEAnimation {
           const currentControlSize = Layout.controlComponent.control.size();
           const previousControlSize = Layout.previousControlComponent.control.size();
           const numOfItems = currentControlSize - previousControlSize + 1;
+          if (numOfItems <= 0) break;
           const targetItems = Array.from({ length: numOfItems }, (_, i) => {
             return Layout.controlComponent.stackItemComponents[previousControlSize + i - 1];
           });
@@ -66,7 +67,6 @@ export class CSEAnimation {
           break;
       }
     } else {
-      console.log(lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:

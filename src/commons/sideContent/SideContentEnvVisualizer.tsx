@@ -163,8 +163,6 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     }
   }
 
-  
-
   public render() {
     const envVizHandlers = this.state.visualization
       ? {

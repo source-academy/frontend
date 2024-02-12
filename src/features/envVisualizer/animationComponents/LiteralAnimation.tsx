@@ -1,15 +1,18 @@
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
-import { AnimatedTextboxComponent} from './AnimationComponents';
+import { AnimatedTextboxComponent } from './AnimationComponents';
 import { getNodePositionFromItem } from './AnimationUtils';
 
 export class LiteralAnimation extends AnimatedTextboxComponent {
-
   constructor(
     controlItem: ControlItemComponent,
-    private stashItem: StashItemComponent,
+    private stashItem: StashItemComponent
   ) {
-    super(getNodePositionFromItem(controlItem), getNodePositionFromItem(stashItem), controlItem.text);
+    super(
+      getNodePositionFromItem(controlItem),
+      getNodePositionFromItem(stashItem),
+      controlItem.text
+    );
   }
 
   async animate() {

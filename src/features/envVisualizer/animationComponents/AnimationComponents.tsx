@@ -55,8 +55,9 @@ abstract class AnimationComponent extends Animatable {
     });
   }
 
-  setDestination(to: NodeConfig) {
+  setDestination(to: NodeConfig, animationConfig?: AnimationConfig) {
     this.to = to;
+    if (animationConfig) this.animationConfig = animationConfig;
   }
 
   async animate(): Promise<void> {
@@ -206,9 +207,9 @@ export class AnimatedTextboxComponent extends Animatable {
     );
   }
 
-  setDestination(to: NodeConfig) {
-    this.rectComponent.setDestination(to);
-    this.textComponent.setDestination(to);
+  setDestination(to: NodeConfig, animationConfig?: AnimationConfig) {
+    this.rectComponent.setDestination(to, animationConfig);
+    this.textComponent.setDestination(to, animationConfig);
   }
 
   async animate() {

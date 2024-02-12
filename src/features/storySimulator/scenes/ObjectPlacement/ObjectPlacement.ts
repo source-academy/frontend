@@ -76,8 +76,8 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.transformManager.initialise(this);
     this.logManager.initialise(this);
 
-    this.openBracket = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET);
-    this.closedBracket = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET);
+    this.openBracket = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET);
+    this.closedBracket = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET);
   }
 
   public update() {
