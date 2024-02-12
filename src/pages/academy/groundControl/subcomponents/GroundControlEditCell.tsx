@@ -1,5 +1,5 @@
 import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
-import { DateInput } from '@blueprintjs/datetime';
+import { DateInput3 } from '@blueprintjs/datetime2';
 import { IconNames } from '@blueprintjs/icons';
 import * as moment from 'moment';
 import React, { useCallback, useState } from 'react';
@@ -52,7 +52,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
   const handleFormatDate = (date: Date) => moment(date).format(dateDisplayFormat);
 
   const handleDateChange = React.useCallback(
-    (selectedDate: Date | null) => setNewDate(moment(selectedDate)),
+    (selectedDate: string | null) => setNewDate(moment(selectedDate)),
     []
   );
   const handleDateError = React.useCallback(() => {
@@ -62,15 +62,16 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
   }, [currentDate]);
 
   const dateInput = (
-    <DateInput
+    <DateInput3
       formatDate={handleFormatDate}
       onChange={handleDateChange}
       onError={handleDateError}
       parseDate={handleParseDate}
       placeholder={`${dateDisplayFormat} or select a date`}
-      value={newDate?.toDate()}
-      timePrecision={'second'}
-      fill={true}
+      value={newDate?.toISOString()}
+      disableTimezoneSelect
+      timePrecision="second"
+      fill
       minDate={minDate}
       maxDate={maxDate}
       closeOnSelection={false}
