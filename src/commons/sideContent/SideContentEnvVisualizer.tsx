@@ -12,8 +12,8 @@ import classNames from 'classnames';
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { connect,MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators,Dispatch } from 'redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
