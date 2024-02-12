@@ -1,8 +1,8 @@
 import {
+  Icon as BpIcon,
   Button,
   Collapse,
   Divider,
-  Icon as BpIcon,
   Intent,
   NonIdealState,
   Spinner,
@@ -42,7 +42,7 @@ import {
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { AssessmentTypeBadge } from '../grading/subcomponents/GradingBadges';
 import GroundControlFilters from './GroundControlFilters';
-import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
+import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
