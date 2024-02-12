@@ -1,6 +1,5 @@
 import * as bp3core from '@blueprintjs/core';
 import * as bp3icons from '@blueprintjs/icons';
-import * as bp3popover from '@blueprintjs/popover2';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
 import React from 'react';
@@ -24,7 +23,6 @@ const requireProvider = (x: string) => {
     'react-dom': ReactDOM,
     '@blueprintjs/core': bp3core,
     '@blueprintjs/icons': bp3icons,
-    '@blueprintjs/popover2': bp3popover,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist
   };
