@@ -466,15 +466,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           id: SideContentType.contestVoting
         },
         {
-          label: 'Contest Leaderboard',
+          label: 'Score Leaderboard',
           iconName: IconNames.CROWN,
           body: (
             <SideContentContestLeaderboard
               handleContestEntryClick={handleContestEntryClick}
-              orderedContestEntries={(question as IContestVotingQuestion)?.contestLeaderboard ?? []}
+              orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
             />
           ),
-          id: SideContentType.contestLeaderboard
+          id: SideContentType.scoreLeaderboard
         }
       );
     } else {
