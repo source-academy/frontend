@@ -36,6 +36,7 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
+import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -109,7 +110,8 @@ const columns = [
 
 type GradingSubmissionTableProps = {
   submissions: GradingOverview[];
-  updateEntries: (page: number, pageSize: number) => void;
+  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
+  updateEntries: (group: boolean, pageParams: any) => void;
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions, updateEntries }) => {
@@ -158,11 +160,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   }, [columnFilters, globalFilter, dispatch]);
 
   /**Wraps prop argument from Gradings table with component pagination logic and conversion.*/
+  // USE ANY for now to avoid types. CHANGE THIS LATER.
   const changePage = (page: number, pageSize: number) => {
     setPage(page);
     setPageSize(pageSize);
-    const offset = page * pageSize;
-    updateEntries(offset, pageSize);
+    const entryOffset = page * pageSize;
+    updateEntries(false, {
+      offset: entryOffset,
+      pageSize: pageSize,
+    });
   }
 
   return (
@@ -231,7 +237,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               disabled={page <= 0}
             />
             <Bold>
-              Page {page} of {table.getPageCount()}
+              Page {page + 1} of {"WIP - total pages here."}
             </Bold>
             <Button
               size="xs"
@@ -266,7 +272,7 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
 
   return (
     <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
-      {children || value}
+      {children || value + "FILTERTEST"}
     </button>
   );
 };

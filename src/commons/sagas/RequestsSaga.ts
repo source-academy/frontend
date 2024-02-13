@@ -614,10 +614,12 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean,
-  offset: number,
-  pageSize: number,
+  pageParams: any,
 ): Promise<GradingOverview[] | null> => {
-  const resp = await request(`${courseId()}/admin/grading?group=${group}&offset=${offset}&pageSize=${pageSize}`, 'GET', {
+  // this converts the payload into a useable query string without a leading '?' via implicit toString().
+  const pageQuery = new URLSearchParams(pageParams);
+  console.log(pageQuery);
+  const resp = await request(`${courseId()}/admin/grading?group=${group}&${pageQuery}`, 'GET', {
     ...tokens
   });
   if (!resp) {

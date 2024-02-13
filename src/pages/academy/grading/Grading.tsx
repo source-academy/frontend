@@ -41,16 +41,21 @@ const Grading: React.FC = () => {
   ];
 
   const dispatch = useDispatch();
-  /**Passed as a prop to submissions table sub-component for sub-component to feed pagination logic.*/
-  const updateGradingOverviewsCallback = (offset: number, pageSize: number) => {
-    dispatch(fetchGradingOverviews(false, offset, pageSize));
+  /**Passed as a prop to submissions table sub-component for sub-component to feed pagination and filter logic.*/
+  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
+  const updateGradingOverviewsCallback = (group: boolean, pageParams: any) => {
+    dispatch(fetchGradingOverviews(false, pageParams));
   }
 
   /**Initializes grading submissions table with default values.
    * useEffect ensures that initialization is run only once component is mounted.
    */
+  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
   useEffect(() => {
-    dispatch(fetchGradingOverviews(false, 0, 10));
+    dispatch(fetchGradingOverviews(false, {
+      offset: 0,
+      pageSize: 10
+    }));
   }, [dispatch]);
 
 
