@@ -470,13 +470,13 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_contest_leaderboard"
+                          aria-controls="bp5-tab-panel_side-content-tabs_score_leaderboard"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
-                          data-tab-id="contest_leaderboard"
-                          id="bp5-tab-title_side-content-tabs_contest_leaderboard"
+                          data-tab-id="score_leaderboard"
+                          id="bp5-tab-title_side-content-tabs_score_leaderboard"
                           role="tab"
                           tabindex="-1"
                         >
@@ -486,7 +486,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="contest_leaderboard-icon"
+                              id="score_leaderboard-icon"
                               tabindex="0"
                             >
                               <span
@@ -735,9 +735,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_contest_leaderboard"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_score_leaderboard"
                         class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_contest_leaderboard"
+                        id="bp5-tab-panel_side-content-tabs_score_leaderboard"
                         role="tabpanel"
                       >
                         <div
@@ -771,7 +771,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                 class="bp5-button-text"
                               >
                                 <span>
-                                  Contest Leaderboard
+                                  Score Leaderboard
                                 </span>
                                 <span
                                   class="bp5-popover-target"

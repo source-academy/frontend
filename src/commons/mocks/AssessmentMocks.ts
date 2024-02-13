@@ -880,7 +880,7 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
         answer: { code: 'function voting_test() { return true; }' }
       }
     ],
-    contestLeaderboard: [
+    scoreLeaderboard: [
       {
         submission_id: 1,
         student_name: 'student_1',
