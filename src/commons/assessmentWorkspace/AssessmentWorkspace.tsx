@@ -210,16 +210,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
     if (!assessment) {
       return;
-    }
-    // Remove the event listener when the component unmounts
-    return () => {
-      document.body.removeEventListener('keydown', handleReadOnlyMode, true);
-    };
-
-    
+    } 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /*
   const handleReadOnlyMode = (event: KeyboardEvent) => {
     // console.log(event.key);
     if (
@@ -246,7 +241,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       document.body.removeEventListener('keydown', handleReadOnlyMode, true);
     }
   }, [isEditable])
-
+  */
 
   /**
    * Once there is an update (due to the assessment being fetched), check
@@ -272,9 +267,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const onEditorValueChange = React.useCallback(
     (editorTabIndex: number, newEditorValue: string) => {
-      handleEditorValueChange(editorTabIndex, newEditorValue);
-    },
-    [handleEditorValueChange]
+      if (isEditable) {
+        handleEditorValueChange(editorTabIndex, newEditorValue);
+      }
+    }, 
+    [handleEditorValueChange, isEditable]
   );
 
   const onChangeMethod = (newCode: string, delta: CodeDelta) => {
