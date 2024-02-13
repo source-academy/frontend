@@ -44,6 +44,7 @@ import { ControlBarProps } from '../controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
+import { ControlBarFileModeButton } from '../controlBar/ControlBarFileModeButton';
 import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
 import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
@@ -210,7 +211,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
     if (!assessment) {
       return;
-    } 
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -270,7 +271,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       if (isEditable) {
         handleEditorValueChange(editorTabIndex, newEditorValue);
       }
-    }, 
+    },
     [handleEditorValueChange, isEditable]
   );
 
@@ -332,14 +333,23 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   }, [handleEditorEval, handleRunAllTestcases, pushLog]);
 
   // Rewrites the file system with our desired file tree
-  const rewriteFilesWithContent = async (currentQuestionFilePath: string, newFileTree: Record<string, string>) => {
+  const rewriteFilesWithContent = async (
+    currentQuestionFilePath: string,
+    newFileTree: Record<string, string>
+  ) => {
     if (fileSystem) {
       await overwriteFilesInWorkspace(workspaceLocation, fileSystem, newFileTree);
-      dispatch(removeEditorTab(workspaceLocation, 0)) // remove the default tab which keeps appearing ;c
-      dispatch(addEditorTab(workspaceLocation, currentQuestionFilePath, newFileTree[currentQuestionFilePath] ?? ""))
+      dispatch(removeEditorTab(workspaceLocation, 0)); // remove the default tab which keeps appearing ;c
+      dispatch(
+        addEditorTab(
+          workspaceLocation,
+          currentQuestionFilePath,
+          newFileTree[currentQuestionFilePath] ?? ''
+        )
+      );
       dispatch(updateActiveEditorTabIndex(workspaceLocation, 0));
     }
-  }
+  };
 
   /* ================
      Helper Functions
@@ -378,24 +388,23 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         options.programPostpendValue = programmingQuestionData.postpend;
         options.editorTestcases = programmingQuestionData.testcases;
 
-
         // We use || not ?? to match both null and an empty string
         // Sets the current active tab to the current "question file" and also force re-writes the file system
-        const currentQuestionFilePath = `${workspaceLocation}/${questionId+1}.js`
-        rewriteFilesWithContent(
-          currentQuestionFilePath,
-          {
-          [currentQuestionFilePath]: programmingQuestionData.answer || programmingQuestionData.solutionTemplate
-        })
-          
+        const currentQuestionFilePath = `${workspaceLocation}/${questionId + 1}.js`;
+        rewriteFilesWithContent(currentQuestionFilePath, {
+          [currentQuestionFilePath]:
+            programmingQuestionData.answer || programmingQuestionData.solutionTemplate
+        });
+
         // Initialize session once the editorValue is known.
-        
+
         if (!sessionId) {
           setSessionId(
             initSession(`${(assessment as any).number}/${props.questionId}`, {
               chapter: question.library.chapter,
               externalLibrary: question?.library?.external?.name || 'NONE',
-              editorValue: programmingQuestionData.answer || programmingQuestionData.solutionTemplate
+              editorValue:
+                programmingQuestionData.answer || programmingQuestionData.solutionTemplate
             })
           );
         }
@@ -668,17 +677,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     const toggleFolderModeButton = (
-        <ControlBarToggleFolderModeButton
-          isFolderModeEnabled={isFolderModeEnabled}
-          isSessionActive={false}
-          isPersistenceActive={false}
-          toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
-          key="folder"
-        />
-      );
-    
-    const editorButtonsMobileBreakpoint = isEditable ? [runButton, saveButton, resetButton, toggleFolderModeButton, chapterSelect] 
-        : [toggleFolderModeButton, chapterSelect];
+      <ControlBarToggleFolderModeButton
+        isFolderModeEnabled={isFolderModeEnabled}
+        isSessionActive={false}
+        isPersistenceActive={false}
+        toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
+        key="folder"
+      />
+    );
+
+    const fileModeButton = <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} />;
+
+    const editorButtonsMobileBreakpoint = isEditable
+      ? [fileModeButton, runButton, saveButton, resetButton, toggleFolderModeButton, chapterSelect]
+      : [fileModeButton, toggleFolderModeButton, chapterSelect];
     const editorButtonsNotMobileBreakpoint = isEditable ? [saveButton, resetButton] : [];
     const flowButtons = isEditable ? [previousButton, questionView, nextButton] : [questionView];
     return {
@@ -877,8 +889,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               label: 'Folder',
               body: (
                 <FileSystemView
-                disableNewFile={true}
-                disableNewFolder={true}
+                  disableNewFile={true}
+                  disableNewFolder={true}
                   workspaceLocation={workspaceLocation}
                   basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
                 />
@@ -909,7 +921,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
-  console.log(workspaceProps.editorContainerProps?.editorTabs)
+  console.log(workspaceProps.editorContainerProps?.editorTabs);
 
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>

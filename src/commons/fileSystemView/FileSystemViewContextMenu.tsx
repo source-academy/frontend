@@ -19,7 +19,17 @@ export type FileSystemViewContextMenuProps = {
 const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
   props: FileSystemViewContextMenuProps
 ) => {
-  const { children, className, createNewFile, createNewDirectory, open, rename, remove, disableNewFile, disableNewFolder } = props;
+  const {
+    children,
+    className,
+    createNewFile,
+    createNewDirectory,
+    open,
+    rename,
+    remove,
+    disableNewFile,
+    disableNewFolder
+  } = props;
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = React.useState({ x: 0, y: 0 });
 

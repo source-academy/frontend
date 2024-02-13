@@ -124,16 +124,16 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
           />
         </div>
       )}
-      
+
       {(!disableNewFile || !disableNewFolder) && (
-      <FileSystemViewContextMenu
-        className={classes['file-system-view-empty-space']}
-        disableNewFile={disableNewFile}
-        disableNewFolder={disableNewFolder}
-        createNewFile={handleCreateNewFile}
-        createNewDirectory={handleCreateNewDirectory}
-      />
-      )} 
+        <FileSystemViewContextMenu
+          className={classes['file-system-view-empty-space']}
+          disableNewFile={disableNewFile}
+          disableNewFolder={disableNewFolder}
+          createNewFile={handleCreateNewFile}
+          createNewDirectory={handleCreateNewDirectory}
+        />
+      )}
     </div>
   );
 };
