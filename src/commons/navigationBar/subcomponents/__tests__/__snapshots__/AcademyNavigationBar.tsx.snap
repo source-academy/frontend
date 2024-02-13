@@ -346,7 +346,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
 </Blueprint5.Navbar>
 `;
 
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, XP Calculation and AdminPanel NavLinks render for Role.Admin 1`] = `
+exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin 1`] = `
 <Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
