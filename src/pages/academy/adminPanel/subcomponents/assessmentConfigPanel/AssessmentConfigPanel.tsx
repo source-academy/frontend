@@ -49,6 +49,16 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('displayInDashboard', value);
   };
 
+  const setHasTokenCounter = (index: number, value: boolean) => {
+    const temp = [...assessmentConfig.current];
+    temp[index] = {
+      ...temp[index],
+      hasTokenCounter: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasTokenCounter', value);
+  };
+
   const setEarlyXp = (index: number, value: number) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
@@ -82,6 +92,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
+      hasTokenCounter: false,
       earlySubmissionXp: 0
     });
     setAssessmentConfig(temp);
@@ -124,6 +135,15 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       cellRendererParams: {
         setStateHandler: setDisplayInDashboard,
         field: 'displayInDashboard'
+      }
+    },
+    {
+      headerName: 'Has Token Counter',
+      field: 'hasTokenCounter',
+      cellRenderer: BooleanCell,
+      cellRendererParams: {
+        setStateHandler: setHasTokenCounter,
+        field: 'hasTokenCounter'
       }
     },
     {
