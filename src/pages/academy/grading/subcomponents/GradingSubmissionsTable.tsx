@@ -159,17 +159,39 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
     );
   }, [columnFilters, globalFilter, dispatch]);
 
-  /**Wraps prop argument from Gradings table with component pagination logic and conversion.*/
-  // USE ANY for now to avoid types. CHANGE THIS LATER.
-  const changePage = (page: number, pageSize: number) => {
-    setPage(page);
-    setPageSize(pageSize);
-    const entryOffset = page * pageSize;
-    updateEntries(false, {
-      offset: entryOffset,
+  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a standardized filters type
+  const pageParamsBuilder = (): any => {
+    return {
+      offset: page * pageSize,
       pageSize: pageSize,
-    });
+    }
   }
+
+  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a standardized filters type
+  const filterParamsBuilder = (): any => {
+    // translates filter columns to backend query name
+    const shabbyenum = (val: string): string => {
+      switch (val) {
+        case "assessmentName":
+          return "title";
+        case "assessmentType":
+          return "type";
+        default:
+          return val;
+      }
+    }
+
+    // This restricts each column to have only 1 accepted filter. Could be improved?
+    const queryParams = {}
+    columnFilters.map(column => {queryParams[shabbyenum(column.id)] = column.value;});
+    return queryParams;
+  }
+
+  // handles re-rendering of component after update of filters or parameters.
+  useEffect(() => {
+    updateEntries(false, pageParamsBuilder(), filterParamsBuilder());
+  }, [columnFilters, page, pageSize])
+  
 
   return (
     <>
@@ -226,14 +248,20 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               size="xs"
               icon={() => <BpIcon icon={IconNames.DoubleChevronLeft} />}
               variant="light"
-              onClick={() => changePage(0, pageSize)}
+              onClick={() => {
+                setPage(0);
+                //updateSubmissionsTableView();
+              }}
               disabled={page <= 0}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
-              onClick={() => changePage(page - 1, pageSize)}
+              onClick={() => {
+                setPage(page - 1);
+                //updateSubmissionsTableView();
+              }}
               disabled={page <= 0}
             />
             <Bold>
@@ -243,7 +271,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => changePage(page + 1, pageSize)}
+              onClick={() => {
+                setPage(page + 1);
+                //updateSubmissionsTableView();
+              }}
               //disabled={!table.getCanNextPage()}
             />
             <Button

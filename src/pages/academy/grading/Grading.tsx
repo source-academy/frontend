@@ -43,8 +43,8 @@ const Grading: React.FC = () => {
   const dispatch = useDispatch();
   /**Passed as a prop to submissions table sub-component for sub-component to feed pagination and filter logic.*/
   // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
-  const updateGradingOverviewsCallback = (group: boolean, pageParams: any) => {
-    dispatch(fetchGradingOverviews(false, pageParams));
+  const updateGradingOverviewsCallback = (group: boolean, pageParams: any, filterParams: any) => {
+    dispatch(fetchGradingOverviews(false, pageParams, filterParams));
   }
 
   /**Initializes grading submissions table with default values.
@@ -52,10 +52,7 @@ const Grading: React.FC = () => {
    */
   // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
   useEffect(() => {
-    dispatch(fetchGradingOverviews(false, {
-      offset: 0,
-      pageSize: 10
-    }));
+    dispatch(fetchGradingOverviews(false, {offset: 0, pageSize: 10}, {}));
   }, [dispatch]);
 
 

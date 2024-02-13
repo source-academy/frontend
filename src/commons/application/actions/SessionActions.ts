@@ -112,10 +112,11 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  * of the grader
  */
 // TEMPORARY IMPLEMENTATION. Refactor into a filters type once proof of feature is complete.
-export const fetchGradingOverviews = (filterToGroup = true, pageParams: any) =>
+export const fetchGradingOverviews = (filterToGroup = true, pageParams: any, filterParams: any) =>
   action(FETCH_GRADING_OVERVIEWS, {
     filterToGroup,
-    pageParams
+    pageParams,
+    filterParams,
   });
 
 export const login = (providerId: string) => action(LOGIN, providerId);
