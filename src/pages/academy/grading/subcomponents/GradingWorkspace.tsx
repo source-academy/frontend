@@ -57,7 +57,7 @@ import { SideContentTab, SideContentType } from '../../../../commons/sideContent
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
-import GradingEditor from './GradingEditorContainer';
+import GradingEditor from './GradingEditor';
 
 type GradingWorkspaceProps = {
   submissionId: number;

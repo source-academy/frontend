@@ -8,7 +8,7 @@ exports[`ContentDisplay page renders correctly 1`] = `
     className="col-md-10 col-xs-11 contentdisplay-content-parent"
   >
     <div
-      className="bp4-card bp4-elevation-3 contentdisplay-content"
+      className="contentdisplay-content bp5-card bp5-elevation-3"
     >
       <div>
          Test Content 

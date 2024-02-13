@@ -34,9 +34,10 @@ exports[`GitHubClassroom renders correctly 1`] = `
       element={
         <ContentDisplay
           display={
-            <Blueprint4.NonIdealState
+            <Blueprint5.NonIdealState
               description="Loading..."
-              icon={<Blueprint4.Spinner />}
+              icon={<Blueprint5.Spinner />}
+              iconMuted={true}
               iconSize={48}
               layout="vertical"
             />

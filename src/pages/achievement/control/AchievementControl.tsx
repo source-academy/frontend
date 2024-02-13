@@ -1,44 +1,56 @@
-import { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { Prompt } from '../../../commons/ReactRouterPrompt';
+import {
+  bulkUpdateAchievements,
+  bulkUpdateGoals,
+  getAchievements,
+  getOwnGoals,
+  removeAchievement,
+  removeGoal
+} from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
-export type DispatchProps = {
-  bulkUpdateAchievements: (achievements: AchievementItem[]) => void;
-  bulkUpdateGoals: (goals: GoalDefinition[]) => void;
-  getAchievements: () => void;
-  getOwnGoals: () => void;
-  removeAchievement: (uuid: string) => void;
-  removeGoal: (uuid: string) => void;
-};
-
-export type StateProps = {
-  inferencer: AchievementInferencer;
-};
-
-function AchievementControl(props: DispatchProps & StateProps) {
+const AchievementControl: React.FC = () => {
+  const dispatch = useDispatch();
   const {
-    bulkUpdateAchievements,
-    bulkUpdateGoals,
-    getAchievements,
-    getOwnGoals,
-    removeAchievement,
-    removeGoal,
-    inferencer
-  } = props;
+    handleBulkUpdateAchievements,
+    handleBulkUpdateGoals,
+    handleGetAchievements,
+    handleGetOwnGoals,
+    handleRemoveAchievement,
+    handleRemoveGoal
+  } = useMemo(
+    () => ({
+      handleBulkUpdateAchievements: (achievement: AchievementItem[]) =>
+        dispatch(bulkUpdateAchievements(achievement)),
+      handleBulkUpdateGoals: (goals: GoalDefinition[]) => dispatch(bulkUpdateGoals(goals)),
+      handleGetAchievements: () => dispatch(getAchievements()),
+      handleGetOwnGoals: () => dispatch(getOwnGoals()),
+      handleRemoveAchievement: (uuid: string) => dispatch(removeAchievement(uuid)),
+      handleRemoveGoal: (uuid: string) => dispatch(removeGoal(uuid))
+    }),
+    [dispatch]
+  );
+
+  const inferencer = useTypedSelector(
+    state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
+  );
 
   /**
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    getAchievements();
-    getOwnGoals();
-  }, [getAchievements, getOwnGoals]);
+    handleGetAchievements();
+    handleGetOwnGoals();
+  }, [handleGetAchievements, handleGetOwnGoals]);
 
   /**
    * Monitors changes that are awaiting publish
@@ -46,10 +58,10 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const [awaitPublish, setAwaitPublish] = useState<boolean>(false);
   const publishChanges = () => {
     // NOTE: Goals and achievements must exist in the backend before the association can be built
-    bulkUpdateGoals(inferencer.getAllGoals());
-    bulkUpdateAchievements(inferencer.getAllAchievements());
-    inferencer.getGoalsToDelete().forEach(removeGoal);
-    inferencer.getAchievementsToDelete().forEach(removeAchievement);
+    handleBulkUpdateGoals(inferencer.getAllGoals());
+    handleBulkUpdateAchievements(inferencer.getAllAchievements());
+    inferencer.getGoalsToDelete().forEach(handleRemoveGoal);
+    inferencer.getAchievementsToDelete().forEach(handleRemoveAchievement);
     inferencer.resetToDelete();
     setAwaitPublish(false);
   };
@@ -82,13 +94,11 @@ function AchievementControl(props: DispatchProps & StateProps) {
 
       <div className="AchievementControl">
         <AchievementPreview awaitPublish={awaitPublish} publishChanges={publishChanges} />
-
         <AchievementEditor requestPublish={requestPublish} />
-
         <GoalEditor requestPublish={requestPublish} />
       </div>
     </AchievementContext.Provider>
   );
-}
+};
 
 export default AchievementControl;

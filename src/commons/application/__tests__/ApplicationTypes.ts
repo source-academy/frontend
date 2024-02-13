@@ -25,7 +25,7 @@ describe('available Source language configurations', () => {
     const expectedSourceConfigs = [
       // Source 1
       { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT, supports: { substVisualizer: true } },
-      { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
+      { chapter: Chapter.SOURCE_1, variant: Variant.TYPED, supports: { substVisualizer: true } },
       { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
       { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
       { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE, supports: { substVisualizer: true } },
@@ -35,7 +35,11 @@ describe('available Source language configurations', () => {
         variant: Variant.DEFAULT,
         supports: { dataVisualizer: true, substVisualizer: true }
       },
-      { chapter: Chapter.SOURCE_2, variant: Variant.TYPED, supports: { dataVisualizer: true } },
+      {
+        chapter: Chapter.SOURCE_2,
+        variant: Variant.TYPED,
+        supports: { dataVisualizer: true, substVisualizer: true }
+      },
       { chapter: Chapter.SOURCE_2, variant: Variant.LAZY, supports: { dataVisualizer: true } },
       {
         chapter: Chapter.SOURCE_2,

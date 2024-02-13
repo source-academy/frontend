@@ -1,4 +1,4 @@
-import { ITreeNode } from '@blueprintjs/core';
+import { TreeNodeInfo } from '@blueprintjs/core';
 import _ from 'lodash';
 
 /**
@@ -7,7 +7,7 @@ import _ from 'lodash';
  * @param nodes All parent nodes of the blueprint core tree
  * @param fn Function to apply to every element in the tree
  */
-export function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) => void) {
+export function treeMap(nodes: TreeNodeInfo[] | undefined, fn: (node: TreeNodeInfo) => void) {
   nodes &&
     nodes.forEach(node => {
       fn(node);
@@ -27,13 +27,13 @@ export function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) =>
  *                       all blueprint core nodes basded on the file path
  * @param rootFolders - a default list of parent folder names that you want to display regardless of
  *                      whether or not they have contents
- * @returns {ITreeNode[]} - a blueprint core tree parent nodes
+ * @returns {TreeNodeInfo[]} - a blueprint core tree parent nodes
  */
 export function assetPathsToTree(
   assetPaths: string[],
   iconRenderer: (pathName: string) => JSX.Element,
   rootFolders: string[] = []
-): ITreeNode[] {
+): TreeNodeInfo[] {
   const assetObj = {};
   assetPaths.forEach(assetPath => _.set(assetObj, assetPath.split('/'), 'FILE'));
   rootFolders.forEach(folder => {
@@ -42,7 +42,7 @@ export function assetPathsToTree(
     }
   });
 
-  function helper(parentFolders: string[], assetObj: object | Array<string>): ITreeNode[] {
+  function helper(parentFolders: string[], assetObj: object | Array<string>): TreeNodeInfo[] {
     return Object.keys(assetObj).map(file => {
       const shortPath = '/' + parentFolders.join('/') + '/' + file;
       return {

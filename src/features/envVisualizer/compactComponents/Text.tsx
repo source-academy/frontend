@@ -52,7 +52,6 @@ export class Text extends Visible implements IHoverable {
       ? JSON.stringify(data) || String(data)
       : String(data);
     this._height = fontSize;
-
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText = CompactConfig.Ellipsis.toString();

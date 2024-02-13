@@ -11,7 +11,7 @@ import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOv
 import EditingWorkspace, {
   EditingWorkspaceProps
 } from '../../commons/editingWorkspace/EditingWorkspace';
-import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
+import MissionCreator from '../../commons/missionCreator/MissionCreator';
 import Constants from '../../commons/utils/Constants';
 import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';

@@ -127,7 +127,7 @@ export default function RemoteExecutionDeviceDialog({
           <HTMLSelect
             id="sa-remote-execution-type"
             className={classNames(Classes.FILL)}
-            elementRef={element => void (typeField.ref.current = element)}
+            ref={element => void (typeField.ref.current = element)}
             disabled={isSubmitting || !!deviceToEdit}
             {...(deviceToEdit ? { value: deviceToEdit.type } : undefined)}
           >

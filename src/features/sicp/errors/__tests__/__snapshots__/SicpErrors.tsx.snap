@@ -2,10 +2,10 @@
 
 exports[`Sicp errors: page not found error renders correctly 1`] = `
 <div
-  className="bp4-non-ideal-state bp4-non-ideal-state-vertical"
+  className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
 >
   <div
-    className="bp4-non-ideal-state-visual"
+    className="bp5-non-ideal-state-visual"
     style={
       Object {
         "fontSize": "48px",
@@ -13,19 +13,22 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
       }
     }
   >
-    <Blueprint4.Icon
+    <Blueprint5.Icon
       aria-hidden={true}
+      autoLoad={true}
+      className="bp5-icon-muted"
       icon="error"
       size={48}
       tabIndex={-1}
+      tagName="span"
     />
   </div>
   <div
-    className="bp4-non-ideal-state-text"
+    className="bp5-non-ideal-state-text"
   >
-    <Unknown>
+    <ForwardRef>
       Something went wrong :(
-    </Unknown>
+    </ForwardRef>
     <div
       data-testid="sicp-page-not-found-error"
     >
@@ -44,10 +47,10 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
 
 exports[`Sicp errors: unexpected error renders correctly 1`] = `
 <div
-  className="bp4-non-ideal-state bp4-non-ideal-state-vertical"
+  className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
 >
   <div
-    className="bp4-non-ideal-state-visual"
+    className="bp5-non-ideal-state-visual"
     style={
       Object {
         "fontSize": "48px",
@@ -55,19 +58,22 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
       }
     }
   >
-    <Blueprint4.Icon
+    <Blueprint5.Icon
       aria-hidden={true}
+      autoLoad={true}
+      className="bp5-icon-muted"
       icon="error"
       size={48}
       tabIndex={-1}
+      tagName="span"
     />
   </div>
   <div
-    className="bp4-non-ideal-state-text"
+    className="bp5-non-ideal-state-text"
   >
-    <Unknown>
+    <ForwardRef>
       Something went wrong :(
-    </Unknown>
+    </ForwardRef>
     <div
       data-testid="sicp-unexpected-error"
     >
@@ -86,10 +92,10 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
 
 exports[`Sicp errors: unexpected error renders correctly 2`] = `
 <div
-  className="bp4-non-ideal-state bp4-non-ideal-state-vertical"
+  className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
 >
   <div
-    className="bp4-non-ideal-state-visual"
+    className="bp5-non-ideal-state-visual"
     style={
       Object {
         "fontSize": "48px",
@@ -97,19 +103,22 @@ exports[`Sicp errors: unexpected error renders correctly 2`] = `
       }
     }
   >
-    <Blueprint4.Icon
+    <Blueprint5.Icon
       aria-hidden={true}
+      autoLoad={true}
+      className="bp5-icon-muted"
       icon="error"
       size={48}
       tabIndex={-1}
+      tagName="span"
     />
   </div>
   <div
-    className="bp4-non-ideal-state-text"
+    className="bp5-non-ideal-state-text"
   >
-    <Unknown>
+    <ForwardRef>
       Something went wrong :(
-    </Unknown>
+    </ForwardRef>
     <div
       data-testid="sicp-parsing-error"
     >

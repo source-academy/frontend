@@ -79,7 +79,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         minimal={true}
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
-        <span>Contest Leaderboard</span>
+        <span>Score Leaderboard</span>
         <Tooltip2 content={contestLeaderboardTooltipContent}>
           <Icon icon={IconNames.HELP} />
         </Tooltip2>

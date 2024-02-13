@@ -4,7 +4,7 @@ exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
 <div
   className="sicp-code-snippet"
 >
-  <Blueprint4.Card
+  <Blueprint5.Card
     className="sicp-code-snippet-closed"
     elevation={2}
     interactive={true}
@@ -91,12 +91,12 @@ exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
       const a = 1;
 a+1;
     </SyntaxHighlighter>
-  </Blueprint4.Card>
-  <Unknown>
+  </Blueprint5.Card>
+  <ForwardRef>
     <em>
       2
     </em>
-  </Unknown>
+  </ForwardRef>
 </div>
 `;
 
@@ -104,7 +104,7 @@ exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
 <div
   className="sicp-code-snippet"
 >
-  <Blueprint4.Card
+  <Blueprint5.Card
     className="sicp-code-snippet-closed"
     elevation={2}
     interactive={true}
@@ -191,11 +191,11 @@ exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
       const a = 1;
 a+1;
     </SyntaxHighlighter>
-  </Blueprint4.Card>
-  <Unknown>
+  </Blueprint5.Card>
+  <ForwardRef>
     <em>
       2
     </em>
-  </Unknown>
+  </ForwardRef>
 </div>
 `;
