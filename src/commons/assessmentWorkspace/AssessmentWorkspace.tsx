@@ -676,12 +676,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           key="folder"
         />
       );
-
+    
+    const editorButtonsMobileBreakpoint = isEditable ? [runButton, saveButton, resetButton, toggleFolderModeButton, chapterSelect] 
+        : [toggleFolderModeButton, chapterSelect];
+    const editorButtonsNotMobileBreakpoint = isEditable ? [saveButton, resetButton] : [];
+    const flowButtons = isEditable ? [previousButton, questionView, nextButton] : [questionView];
     return {
       editorButtons: !isMobileBreakpoint
-        ? [runButton, saveButton, resetButton, toggleFolderModeButton, chapterSelect]
-        : [saveButton, resetButton],
-      flowButtons: [previousButton, questionView, nextButton]
+        ? editorButtonsMobileBreakpoint
+        : editorButtonsNotMobileBreakpoint,
+      flowButtons: flowButtons
     };
   };
 
