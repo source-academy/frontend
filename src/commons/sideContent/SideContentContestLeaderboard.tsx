@@ -5,6 +5,7 @@ import React, { useMemo, useState } from 'react';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
+import { SideContentType } from './SideContentTypes';
 
 export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
 
@@ -14,6 +15,7 @@ type DispatchProps = {
 
 type StateProps = {
   orderedContestEntries: ContestEntry[];
+  leaderboardType: SideContentType;
 };
 
 /*
@@ -26,15 +28,56 @@ const columnHeader = (colClass: string, colTitle: string) => (
   </div>
 );
 
-const contestEntryHeader = (
-  <div className="leaderboard-header">
-    {columnHeader('header-entryid', 'Student Name')}
-    {columnHeader('header-entryrank', 'Rank')}
-    {columnHeader('header-score', 'Score')}
-  </div>
-);
+const contestEntryHeader = (leaderboardType: SideContentType) => {
+  let leaderboardMetric = '';
+  switch (leaderboardType) {
+    case SideContentType.scoreLeaderboard:
+      leaderboardMetric = 'Score';
+      break;
+    case SideContentType.popularVotesLeaderboard:
+      leaderboardMetric = 'Votes';
+      break;
+    default:
+      leaderboardMetric = 'Metric';
+  }
+  return (
+    <div className="leaderboard-header">
+      {columnHeader('header-entryid', 'Student Name')}
+      {columnHeader('header-entryrank', 'Rank')}
+      {columnHeader('header-score', leaderboardMetric)}
+    </div>
+  );
+};
 
-const contestLeaderboardTooltipContent = 'View the top-rated contest entries!';
+const leaderboardTitle = (leaderboardType: SideContentType) => {
+  let leaderboardTitle = '';
+  switch (leaderboardType) {
+    case SideContentType.scoreLeaderboard:
+      leaderboardTitle = 'Score Leaderboard';
+      break;
+    case SideContentType.popularVotesLeaderboard:
+      leaderboardTitle = 'Popular Votes Leaderboard';
+      break;
+    default:
+      leaderboardTitle = 'Contest Leaderboard';
+  }
+  return leaderboardTitle;
+};
+
+const contestLeaderboardTooltipContent = (leaderboardType: SideContentType) => {
+  let leaderboardTooltipContent = '';
+  switch (leaderboardType) {
+    case SideContentType.scoreLeaderboard:
+      leaderboardTooltipContent = 'View the highest scoring contest entries!';
+      break;
+    case SideContentType.popularVotesLeaderboard:
+      leaderboardTooltipContent = 'View the most popular contest entries!';
+      break;
+    default:
+      leaderboardTooltipContent = 'View the top-rated contest entries!';
+  }
+  return leaderboardTooltipContent;
+};
 
 /**
  * Renders the contest leaderboard entries as a SideContentTab for Contest Voting questions.
@@ -47,13 +90,13 @@ const contestLeaderboardTooltipContent = 'View the top-rated contest entries!';
 const SideContentContestLeaderboard: React.FunctionComponent<
   SideContentContestLeaderboardProps
 > = props => {
-  const { orderedContestEntries, handleContestEntryClick } = props;
+  const { orderedContestEntries, handleContestEntryClick, leaderboardType } = props;
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(true);
 
   const contestEntryCards = useMemo(
     () => (
       <div>
-        {contestEntryHeader}
+        {contestEntryHeader(leaderboardType)}
         {orderedContestEntries.length > 0 ? (
           orderedContestEntries.map((contestEntry: ContestEntry, index: number) => (
             <SideContentLeaderboardCard
@@ -68,7 +111,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         )}
       </div>
     ),
-    [handleContestEntryClick, orderedContestEntries]
+    [handleContestEntryClick, orderedContestEntries, leaderboardType]
   );
 
   return (
@@ -79,8 +122,8 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         minimal={true}
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
-        <span>Score Leaderboard</span>
-        <Tooltip2 content={contestLeaderboardTooltipContent}>
+        <span>{leaderboardTitle(leaderboardType)}</span>
+        <Tooltip2 content={contestLeaderboardTooltipContent(leaderboardType)}>
           <Icon icon={IconNames.HELP} />
         </Tooltip2>
       </Button>

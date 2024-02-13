@@ -450,9 +450,22 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             <SideContentContestLeaderboard
               handleContestEntryClick={handleContestEntryClick}
               orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
+              leaderboardType={SideContentType.scoreLeaderboard}
             />
           ),
           id: SideContentType.scoreLeaderboard
+        },
+        {
+          label: 'Popular Votes Leaderboard',
+          iconName: IconNames.PEOPLE,
+          body: (
+            <SideContentContestLeaderboard
+              handleContestEntryClick={handleContestEntryClick}
+              orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
+              leaderboardType={SideContentType.popularVotesLeaderboard}
+            />
+          ),
+          id: SideContentType.popularVotesLeaderboard
         }
       );
     } else {
