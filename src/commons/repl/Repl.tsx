@@ -124,7 +124,7 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
       }
     case 'notification':
       return (
-        <Card>
+        <Card className="notification-output-container">
           <Pre className="notification-output">{'💡 ' + props.output.consoleLog}</Pre>
         </Card>
       );

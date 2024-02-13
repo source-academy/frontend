@@ -1259,10 +1259,9 @@ export function* evalCode(
 
   // Change token count if its assessment and EVAL_EDITOR
   if (actionType === EVAL_EDITOR && workspaceLocation === 'assessment') {
-    let tokenCounter = 0;
     const tokens = [...tokenizer(entrypointCode, ACORN_PARSE_OPTIONS)];
-    tokenCounter = tokens.length;
-    yield put(actions.addTokenCount(workspaceLocation, tokenCounter));
+    const tokenCounter = tokens.length;
+    yield put(actions.setTokenCount(workspaceLocation, tokenCounter));
   }
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)

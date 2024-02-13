@@ -768,10 +768,6 @@ $code-color-notification: #f9f0d7;
     overflow-y: auto;
     margin: 0 0.5rem 0 0;
 
-    .#{$ns}-card:has(.notification-output) {
-      background-color: $code-background-color-notification;
-    }
-
     .#{$ns}-card {
       background-color: $cadet-color-2;
       padding: 0.4rem 0.6rem 0.4rem 0.6rem;
@@ -832,6 +828,10 @@ $code-color-notification: #f9f0d7;
       .notification-output {
         color: $code-color-notification;
       }
+    }
+
+    .notification-output-container {
+      background-color: $code-background-color-notification;
     }
 
     /* flush to align with editor bottom */

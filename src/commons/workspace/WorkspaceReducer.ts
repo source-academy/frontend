@@ -35,7 +35,6 @@ import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
   ADD_EDITOR_TAB,
-  ADD_TOKEN_COUNT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
@@ -61,6 +60,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
+  SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_UPDATE_ENV,
@@ -126,7 +126,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   }
 
   switch (action.type) {
-    case ADD_TOKEN_COUNT:
+    case SET_TOKEN_COUNT:
       return {
         ...state,
         [workspaceLocation]: {

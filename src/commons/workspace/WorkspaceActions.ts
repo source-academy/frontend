@@ -15,7 +15,6 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   ADD_EDITOR_TAB,
   ADD_HTML_CONSOLE_ERROR,
-  ADD_TOKEN_COUNT,
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -49,6 +48,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
+  SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
@@ -75,8 +75,8 @@ import {
   WorkspaceState
 } from './WorkspaceTypes';
 
-export const addTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) =>
-  action(ADD_TOKEN_COUNT, { workspaceLocation, tokenCount });
+export const setTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) =>
+  action(SET_TOKEN_COUNT, { workspaceLocation, tokenCount });
 
 export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
   action(BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });

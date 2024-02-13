@@ -9,7 +9,6 @@ import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
-export const ADD_TOKEN_COUNT = 'ADD_TOKEN_COUNT';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
 export const BROWSE_REPL_HISTORY_DOWN = 'BROWSE_REPL_HISTORY_DOWN';
 export const BROWSE_REPL_HISTORY_UP = 'BROWSE_REPL_HISTORY_UP';
@@ -36,6 +35,7 @@ export const PLAYGROUND_EXTERNAL_SELECT = 'PLAYGROUND_EXTERNAL_SELECT ';
 export const RESET_TESTCASE = 'RESET_TESTCASE';
 export const RESET_WORKSPACE = 'RESET_WORKSPACE';
 export const SEND_REPL_INPUT_TO_OUTPUT = 'SEND_REPL_INPUT_TO_OUTPUT';
+export const SET_TOKEN_COUNT = 'SET_TOKEN_COUNT';
 export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const TOGGLE_USING_ENV = 'TOGGLE_USING_ENV';
