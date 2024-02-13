@@ -40,12 +40,19 @@ const Grading: React.FC = () => {
     { value: true, label: 'all groups' }
   ];
 
-  
-  // why is this needed???
   const dispatch = useDispatch();
+  /**Passed as a prop to submissions table sub-component for sub-component to feed pagination logic.*/
+  const updateGradingOverviewsCallback = (page: number, pageSize: number) => {
+    dispatch(fetchGradingOverviews(false, page, pageSize));
+  }
+
+  /**Initializes grading submissions table with default values.
+   * useEffect ensures that initialization is run only once component is mounted.
+   */
   useEffect(() => {
-    dispatch(fetchGradingOverviews(!showAllGroups, 12345678, 999999999));
-  }, [dispatch, role, showAllGroups]);
+    dispatch(fetchGradingOverviews(false, 1, 10));
+  }, []);
+
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(true);
   const showOptions = [
@@ -130,6 +137,7 @@ const Grading: React.FC = () => {
                   submissions={submissions.filter(
                     s => showAllSubmissions || isSubmissionUngraded(s)
                   )}
+                  updateEntries={updateGradingOverviewsCallback}
                 />
               </Card>
             </Col>

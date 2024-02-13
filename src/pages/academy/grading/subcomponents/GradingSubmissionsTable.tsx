@@ -29,8 +29,6 @@ import {
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router';
-import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
@@ -111,9 +109,10 @@ const columns = [
 
 type GradingSubmissionTableProps = {
   submissions: GradingOverview[];
+  updateEntries: (page: number, pageSize: number) => void;
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions, updateEntries }) => {
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
@@ -121,12 +120,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   ]);
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
-  const queryParams = new URLSearchParams(window.location.search);
-
-  // UI/UX feature: allow user to interact with page and pageSize via their own query parameters.
-
-  const [page, setPage] = useState(1);
-  const pageSize = 10;
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
 
   const table = useReactTable({
     data: submissions,
@@ -153,11 +148,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   };
 
   const dispatch = useDispatch();
-  
-  useEffect(() => {
-    dispatch(fetchGradingOverviews(false, page, pageSize));
-  }, [page, pageSize]);
-
   useEffect(() => {
     dispatch(
       updateSubmissionsTableFilters({
@@ -167,9 +157,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
     );
   }, [columnFilters, globalFilter, dispatch]);
 
-  
-  const changePageTo = (newPage: number) => {
-    setPage(page => newPage)
+  /**Wraps prop argument from Gradings table with component pagination logic and conversion.*/
+  const changePage = (page: number, pageSize: number) => {
+    setPage(page);
+    setPageSize(pageSize);
+    updateEntries(page, pageSize);
   }
 
   return (
@@ -227,14 +219,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               size="xs"
               icon={() => <BpIcon icon={IconNames.DoubleChevronLeft} />}
               variant="light"
-              onClick={() => changePageTo(1)}
+              onClick={() => changePage(1, pageSize)}
               disabled={page <= 1}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
-              onClick={() => changePageTo(page - 1)}
+              onClick={() => changePage(page - 1, pageSize)}
               disabled={page <= 1}
             />
             <Bold>
@@ -244,7 +236,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => changePageTo(page + 1)}
+              onClick={() => changePage(page + 1, pageSize)}
               //disabled={!table.getCanNextPage()}
             />
           </Flex>
