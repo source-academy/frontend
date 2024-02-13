@@ -218,7 +218,7 @@ export const updateAllUserXp = (allUserXp: string[][]) => action(UPDATE_ALL_USER
 
 export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 
-export const updateGradingOverviews = (overviews: GradingOverview[]) =>
+export const updateGradingOverviews = (overviews: {count: number, data: GradingOverview[]}) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);
 
 /**

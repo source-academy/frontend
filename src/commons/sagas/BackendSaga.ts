@@ -414,13 +414,14 @@ function* BackendSaga(): SagaIterator {
       const pageParams = action.payload.pageParams;
       const filterParams = action.payload.filterParams;
 
-      const gradingOverviews: GradingOverview[] | null = yield call(
+      const gradingOverviews: {count: number, data: GradingOverview[]} | null = yield call(
         getGradingOverviews,
         tokens,
         filterToGroup,
         pageParams,
         filterParams,
       );
+
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));
       }
@@ -452,7 +453,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews || []
+        (state: OverallState) => state.session.gradingOverviews?.data || []
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
@@ -461,8 +462,10 @@ function* BackendSaga(): SagaIterator {
         return overview;
       });
 
+      const totalPossibleEntries = yield select((state: OverallState) => state.session.gradingOverviews?.count);
+
       yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
+      yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
     }
   );
 

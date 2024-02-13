@@ -109,12 +109,14 @@ const columns = [
 ];
 
 type GradingSubmissionTableProps = {
+  totalRows: number;
   submissions: GradingOverview[];
-  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
-  updateEntries: (group: boolean, pageParams: any) => void;
+  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a unified type once proof of feature is complete.
+  updateEntries: (group: boolean, pageParams: any, filterParams: any) => void;
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions, updateEntries }) => {
+
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRows, submissions, updateEntries }) => {
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
@@ -246,42 +248,34 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
           <Flex justifyContent="justify-center" spaceX="space-x-3">
             <Button
               size="xs"
-              icon={() => <BpIcon icon={IconNames.DoubleChevronLeft} />}
+              icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_LEFT} />}
               variant="light"
-              onClick={() => {
-                setPage(0);
-                //updateSubmissionsTableView();
-              }}
+              onClick={() => setPage(0)}
               disabled={page <= 0}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
-              onClick={() => {
-                setPage(page - 1);
-                //updateSubmissionsTableView();
-              }}
+              onClick={() => setPage(page - 1)}
               disabled={page <= 0}
             />
             <Bold>
-              Page {page + 1} of {"WIP - total pages here."}
+              Page {page + 1} of {Math.ceil(totalRows / pageSize)}
             </Bold>
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => {
-                setPage(page + 1);
-                //updateSubmissionsTableView();
-              }}
-              //disabled={!table.getCanNextPage()}
+              onClick={() => setPage(page + 1)}
+              disabled={page >= (Math.ceil(totalRows / pageSize) - 1)}
             />
             <Button
               size="xs"
-              icon={() => <BpIcon icon={IconNames.AIRPLANE} />}
+              icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_RIGHT} />}
               variant="light"
-              value={1111}
+              onClick={() => setPage(Math.ceil(totalRows / pageSize) - 1)}
+              disabled={page >= (Math.ceil(totalRows / pageSize) - 1)}
             />
           </Flex>
         </Footer>
@@ -303,7 +297,7 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
 
   return (
     <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
-      {children || value + "FILTERTEST"}
+      {children || value}
     </button>
   );
 };

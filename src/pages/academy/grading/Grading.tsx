@@ -89,14 +89,14 @@ const Grading: React.FC = () => {
   );
 
   const submissions =
-    gradingOverviews?.map(e =>
+    gradingOverviews?.data?.map(e =>
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
 
   return (
     <ContentDisplay
       display={
-        gradingOverviews === undefined ? (
+        gradingOverviews?.data === undefined ? (
           loadingDisplay
         ) : (
           <ColGrid numColsLg={8} gapX="gap-x-4" gapY="gap-y-2">
@@ -111,7 +111,7 @@ const Grading: React.FC = () => {
                       icon={() => (
                         <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />
                       )}
-                      onClick={() => exportGradingCSV(gradingOverviews)}
+                      onClick={() => exportGradingCSV(gradingOverviews.data)}
                     >
                       Export to CSV
                     </Button>
@@ -136,6 +136,7 @@ const Grading: React.FC = () => {
                   />
                 </Flex>
                 <GradingSubmissionsTable
+                  totalRows={gradingOverviews.count}
                   submissions={submissions.filter(
                     s => showAllSubmissions || isSubmissionUngraded(s)
                   )}
