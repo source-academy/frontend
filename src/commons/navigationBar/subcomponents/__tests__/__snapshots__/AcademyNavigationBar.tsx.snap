@@ -543,22 +543,6 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
     </NavLink>
     <NavLink
       className={[Function]}
-      title="XP Calculation"
-      to="/courses/0/xpcalculation"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="calculator"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        XP Calculation
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
       title="Admin Panel"
       to="/courses/0/adminpanel"
     >
