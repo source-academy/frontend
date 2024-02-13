@@ -687,7 +687,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
-    const fileModeButton = <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} />;
+    const fileModeButton = (
+      <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} key="file_mode" />
+    );
 
     const editorButtonsMobileBreakpoint = isEditable
       ? [fileModeButton, runButton, saveButton, resetButton, toggleFolderModeButton, chapterSelect]
