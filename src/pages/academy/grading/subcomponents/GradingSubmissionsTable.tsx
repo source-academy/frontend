@@ -120,7 +120,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   ]);
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
 
   const table = useReactTable({
@@ -161,7 +161,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   const changePage = (page: number, pageSize: number) => {
     setPage(page);
     setPageSize(pageSize);
-    updateEntries(page, pageSize);
+    const offset = page * pageSize;
+    updateEntries(offset, pageSize);
   }
 
   return (
@@ -219,15 +220,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               size="xs"
               icon={() => <BpIcon icon={IconNames.DoubleChevronLeft} />}
               variant="light"
-              onClick={() => changePage(1, pageSize)}
-              disabled={page <= 1}
+              onClick={() => changePage(0, pageSize)}
+              disabled={page <= 0}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
               onClick={() => changePage(page - 1, pageSize)}
-              disabled={page <= 1}
+              disabled={page <= 0}
             />
             <Bold>
               Page {page} of {table.getPageCount()}
@@ -238,6 +239,12 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
               variant="light"
               onClick={() => changePage(page + 1, pageSize)}
               //disabled={!table.getCanNextPage()}
+            />
+            <Button
+              size="xs"
+              icon={() => <BpIcon icon={IconNames.AIRPLANE} />}
+              variant="light"
+              value={1111}
             />
           </Flex>
         </Footer>

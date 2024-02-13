@@ -111,10 +111,10 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  * @param filterToGroup - param when set to true, only shows submissions under the group
  * of the grader
  */
-export const fetchGradingOverviews = (filterToGroup = true, page: number, pageSize: number) =>
+export const fetchGradingOverviews = (filterToGroup = true, offset: number, pageSize: number) =>
   action(FETCH_GRADING_OVERVIEWS, {
     filterToGroup,
-    page,
+    offset,
     pageSize
   });
 
