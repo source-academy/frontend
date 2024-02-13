@@ -124,13 +124,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   const queryParams = new URLSearchParams(window.location.search);
 
   // UI/UX feature: allow user to interact with page and pageSize via their own query parameters.
-  const navigate = useNavigate();
-  const location = useLocation();
-  const pageQuery = parseInt(queryParams.get("page") || "");
-  const pageSizeQuery = parseInt(queryParams.get("pageSize") || "");
 
-  const [page, setPage] = useState(isNaN(pageQuery) || (pageQuery < 1) ? 1 : pageQuery);
-  const pageSize = isNaN(pageSizeQuery) || (pageSizeQuery < 1) ? 10 : pageSizeQuery;
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
 
   const table = useReactTable({
     data: submissions,
@@ -174,12 +170,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   
   const changePageTo = (newPage: number) => {
     setPage(page => newPage)
-    // UI/UX feature for discoverability so that users know the possibility of navigation by query parameters.
-    // not needed for app function.
-    const queryParams = new URLSearchParams(location.search);
-    queryParams.set("page", newPage.toString());
-    queryParams.set("pageSize", pageSize.toString());
-    navigate({ search: queryParams.toString() });
   }
 
   return (
