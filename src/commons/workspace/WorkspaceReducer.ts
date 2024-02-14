@@ -10,6 +10,7 @@ import {
   defaultWorkspaceManager,
   ErrorOutput,
   InterpreterOutput,
+  NotificationOutput,
   ResultOutput
 } from '../application/ApplicationTypes';
 import { LOG_OUT } from '../application/types/CommonsTypes';
@@ -43,7 +44,9 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  DISABLE_TOKEN_COUNTER,
   EditorTabState,
+  ENABLE_TOKEN_COUNTER,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
@@ -57,6 +60,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
+  SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_UPDATE_ENV,
@@ -122,6 +126,15 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   }
 
   switch (action.type) {
+    case SET_TOKEN_COUNT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          tokenCount: action.payload.tokenCount
+        }
+      };
+
     case BROWSE_REPL_HISTORY_DOWN:
       if (state[workspaceLocation].replHistory.browseIndex === null) {
         // Not yet started browsing history, nothing to do
@@ -334,6 +347,22 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
       };
+    case ENABLE_TOKEN_COUNTER:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          hasTokenCounter: true
+        }
+      };
+    case DISABLE_TOKEN_COUNTER:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          hasTokenCounter: false
+        }
+      };
     case EVAL_EDITOR:
       return {
         ...state,
@@ -353,6 +382,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       };
     case EVAL_INTERPRETER_SUCCESS:
       const execType = state[workspaceLocation].context.executionMethod;
+      const tokens = state[workspaceLocation].tokenCount;
       const newOutputEntry: Partial<ResultOutput> = {
         type: action.payload.type as 'result' | undefined,
         value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
@@ -360,10 +390,27 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
 
       lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
+        const newOutputEntryWithLogs = {
           consoleLogs: lastOutput.consoleLogs,
           ...newOutputEntry
-        } as ResultOutput);
+        } as ResultOutput;
+        const notificationOutputs: NotificationOutput[] = [];
+        if (state[workspaceLocation].hasTokenCounter) {
+          notificationOutputs.push({
+            consoleLog: `This program has ${tokens} tokens.`,
+            type: 'notification'
+          });
+        }
+        const customNotification = state[workspaceLocation].customNotification;
+        if (customNotification !== '') {
+          notificationOutputs.push({
+            consoleLog: customNotification,
+            type: 'notification'
+          });
+        }
+        newOutput = state[workspaceLocation].output
+          .slice(0, -1)
+          .concat([...notificationOutputs, newOutputEntryWithLogs]);
       } else {
         newOutput = state[workspaceLocation].output.concat({
           consoleLogs: [],
