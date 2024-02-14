@@ -2903,11 +2903,6 @@
   resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.44.tgz#f097f7a0f59d63a59098a08a62a560ca168426fb"
   integrity sha512-hsgJMfZ/pMwI15UlAYHMNwj8DRoigo1odhbPwEXdp19ZQwQAXbcRrpzaDsfc+9XM6RtGpvl4Ja7uW8A+KPCa7w==
 
-"@types/google.accounts@^0.0.14":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@types/google.accounts/-/google.accounts-0.0.14.tgz#ffc36c30c5107b9bdab115830c85f7e377bc0dea"
-  integrity sha512-HqIVkVzpiLWhlajhQQd4rIV7czanFvXblJI2J1fSrL+VKQuQwwZ63m35D/mI0flsqKE6p/hNrAG0Yn4FD6JvNA==
-
 "@types/google.picker@^0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/google.picker/-/google.picker-0.0.39.tgz#bb205ffb9736e8ec4a1af7cc87811d0fc5dc30fa"
