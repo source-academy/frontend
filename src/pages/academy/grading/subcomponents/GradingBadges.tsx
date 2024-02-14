@@ -81,7 +81,7 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   let filterValue = filter.value as string;
   filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
   return (
-    <button type="button" onClick={() => onRemove(filter)} style={{ padding: 0 }}>
+    <button type="button" className="grading-overview-filterable-btns" onClick={() => onRemove(filter)} style={{ padding: 0 }}>
       <Badge
         text={filterValue}
         icon={() => <Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}

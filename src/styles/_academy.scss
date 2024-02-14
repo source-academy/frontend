@@ -518,3 +518,24 @@
     margin-left: 3px;
   }
 }
+
+.grading-overview-filterable-btns {
+  // Invisible border for backgroundless buttons
+  &:not(:has(> div)) {
+    margin-top: 1px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+  }
+
+  &:hover {
+    // Buttons with bg
+    > div > span {
+      // Use of contrast due to unknown background color
+      filter: contrast(0.925);
+    }
+
+    // Backgroundless buttons
+    &:not(:has(> div)) {
+      border-bottom-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}
