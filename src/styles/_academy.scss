@@ -520,10 +520,11 @@
 }
 
 .grading-overview-filterable-btns {
+  padding: 0;
+
   // Invisible border for backgroundless buttons
   &:not(:has(> div)) {
-    margin-top: 1px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    text-decoration: none;
   }
 
   &:hover {
@@ -535,7 +536,7 @@
 
     // Backgroundless buttons
     &:not(:has(> div)) {
-      border-bottom-color: rgba(0, 0, 0, 0.5);
+      text-decoration: underline;
     }
   }
 }
