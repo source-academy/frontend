@@ -42,13 +42,14 @@ const MIME_SOURCE = 'text/plain';
 // GIS Token Client
 let googleProvider: GoogleOAuthProvider;
 // Login function
-const googleLogin = () => new Promise<SuccessTokenResponse> ((resolve, reject) => {
-  googleProvider.useGoogleLogin({
-    flow: 'implicit',
-    onSuccess: resolve,
-    scope: SCOPES,
-  })()
-});
+const googleLogin = () =>
+  new Promise<SuccessTokenResponse>((resolve, reject) => {
+    googleProvider.useGoogleLogin({
+      flow: 'implicit',
+      onSuccess: resolve,
+      scope: SCOPES
+    })();
+  });
 
 export function* persistenceSaga(): SagaIterator {
   yield takeLatest(LOGOUT_GOOGLE, function* (): any {
@@ -338,13 +339,14 @@ const initialisationPromise: Promise<void> = new Promise(res => {
 // only called once
 async function initialise() {
   // initialize GIS client
-  googleProvider = new GoogleOAuthProvider({
-    clientId: Constants.googleClientId!,
-    onScriptLoadError: () => console.log('onScriptLoadError'),
-    onScriptLoadSuccess: () => {
-      console.log('onScriptLoadSuccess');
-    },
-  });
+  await new Promise<void>(
+    (resolve, reject) =>
+      (googleProvider = new GoogleOAuthProvider({
+        clientId: Constants.googleClientId!,
+        onScriptLoadSuccess: resolve,
+        onScriptLoadError: reject
+      }))
+  );
 
   // load and initialize gapi.client
   await new Promise<void>((resolve, reject) =>
@@ -356,8 +358,6 @@ async function initialise() {
   await gapi.client.init({
     discoveryDocs: DISCOVERY_DOCS
   });
-
-
 }
 
 function* handleUserChanged(accessToken: string | null) {
