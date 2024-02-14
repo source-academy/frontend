@@ -12,7 +12,7 @@ const useSelectorMock = useSelector as jest.Mock;
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
 const staffRoutes = ['grading', 'groundcontrol', 'sourcereel', 'storysimulator', 'dashboard'];
-const adminRoutes = ['adminpanel', 'xpcalculation'];
+const adminRoutes = ['adminpanel'];
 const courseId = 0;
 const createCoursePath = (path: string) => `/courses/${courseId}/${path}`;
 
@@ -71,7 +71,7 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and G
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, XP Calculation and AdminPanel NavLinks render for Role.Admin', () => {
+test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Admin,
     courseId
