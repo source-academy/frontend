@@ -270,6 +270,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
+    googleAccessToken,
     githubOctokitObject
   } = useTypedSelector(state => state.session);
 
@@ -591,6 +592,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         currentFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
+        accessToken={googleAccessToken}
         key="googledrive"
         onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
         onClickOpen={() => dispatch(persistenceOpenPicker())}
@@ -602,7 +604,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [isFolderModeEnabled, persistenceFile, persistenceUser, persistenceIsDirty, dispatch]);
+  }, [
+    isFolderModeEnabled,
+    persistenceFile,
+    persistenceUser,
+    persistenceIsDirty,
+    dispatch,
+    googleAccessToken
+  ]);
 
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);

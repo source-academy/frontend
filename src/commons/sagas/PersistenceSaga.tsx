@@ -424,10 +424,12 @@ function* ensureInitialisedAndAuthorised() {
 }
 
 function getUserProfileDataEmail(): Promise<string | undefined> {
-  return gapi.client.request({
-    path: USER_INFO_PATH
-  }).then(r => r.result.email)
-  .catch(() => undefined);
+  return gapi.client
+    .request({
+      path: USER_INFO_PATH
+    })
+    .then(r => r.result.email)
+    .catch(() => undefined);
 }
 
 type PickFileResult =
