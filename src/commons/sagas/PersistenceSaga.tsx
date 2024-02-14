@@ -42,14 +42,23 @@ const MIME_SOURCE = 'text/plain';
 // GIS Token Client
 let googleProvider: GoogleOAuthProvider;
 // Login function
-const googleLogin = () =>
-  new Promise<SuccessTokenResponse>((resolve, reject) => {
-    googleProvider.useGoogleLogin({
-      flow: 'implicit',
-      onSuccess: resolve,
-      scope: SCOPES
-    })();
-  });
+function* googleLogin() {
+  try {
+    const tokenResp: SuccessTokenResponse = yield new Promise<SuccessTokenResponse>(
+      (resolve, reject) => {
+        googleProvider.useGoogleLogin({
+          flow: 'implicit',
+          onSuccess: resolve,
+          onError: reject,
+          scope: SCOPES
+        })();
+      }
+    );
+    yield call(handleUserChanged, tokenResp.access_token);
+  } catch (ex) {
+    console.error(ex);
+  }
+}
 
 export function* persistenceSaga(): SagaIterator {
   yield takeLatest(LOGOUT_GOOGLE, function* (): any {
@@ -62,7 +71,6 @@ export function* persistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GOOGLE, function* (): any {
     yield call(ensureInitialised);
     yield call(googleLogin);
-    yield call(handleUserChanged, gapi.client.getToken().access_token);
   });
 
   yield takeEvery(PERSISTENCE_INITIALISE, function* (): any {
@@ -386,14 +394,12 @@ function* ensureInitialisedAndAuthorised() {
 
   if (currToken === null) {
     yield call(googleLogin);
-    yield call(handleUserChanged, gapi.client.getToken().access_token);
   } else {
     // check if loaded token is still valid
     const email: string | undefined = yield call(getUserProfileDataEmail);
     const isValid = email ? true : false;
     if (!isValid) {
       yield call(googleLogin);
-      yield call(handleUserChanged, gapi.client.getToken().access_token);
     }
   }
 }
