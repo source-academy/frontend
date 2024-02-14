@@ -2879,13 +2879,6 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
-"@types/gapi.auth2@^0.0.57":
-  version "0.0.57"
-  resolved "https://registry.yarnpkg.com/@types/gapi.auth2/-/gapi.auth2-0.0.57.tgz#5544a696d97fc979044d48a8bf7de5e2b35899b5"
-  integrity sha512-2nYF2OZlEqWvF5rLk0nrQlAkk51Abe9zLHvA85NZqpIauYT/TluDNsPWkncI969BR/Ts5mdKrXgiWE/f4N6mMQ==
-  dependencies:
-    "@types/gapi" "*"
-
 "@types/gapi.client.discovery@*":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@types/gapi.client.discovery/-/gapi.client.discovery-1.0.9.tgz#e2472989baa01f2e32a2d5a80981da8513f875ae"
@@ -2905,7 +2898,7 @@
   resolved "https://registry.yarnpkg.com/@types/gapi.client/-/gapi.client-1.0.8.tgz#8e02c57493b014521f2fa3359166c01dc2861cd7"
   integrity sha512-qJQUmmumbYym3Amax0S8CVzuSngcXsC1fJdwRS2zeW5lM63zXkw4wJFP+bG0jzgi0R6EsJKoHnGNVTDbOyG1ng==
 
-"@types/gapi@*", "@types/gapi@^0.0.44":
+"@types/gapi@^0.0.44":
   version "0.0.44"
   resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.44.tgz#f097f7a0f59d63a59098a08a62a560ca168426fb"
   integrity sha512-hsgJMfZ/pMwI15UlAYHMNwj8DRoigo1odhbPwEXdp19ZQwQAXbcRrpzaDsfc+9XM6RtGpvl4Ja7uW8A+KPCa7w==

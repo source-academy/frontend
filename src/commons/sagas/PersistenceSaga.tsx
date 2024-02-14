@@ -10,7 +10,6 @@ import {
   PERSISTENCE_SAVE_FILE_AS,
   PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
-import { getUserProfileDataEmail } from '../../features/persistence/PersistenceUtils';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -31,6 +30,7 @@ const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/r
 const SCOPES =
   'profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
 const UPLOAD_PATH = 'https://www.googleapis.com/upload/drive/v3/files';
+const USER_INFO_PATH = 'https://www.googleapis.com/oauth2/v3/userinfo';
 
 // Special ID value for the Google Drive API.
 const ROOT_ID = 'root';
@@ -370,7 +370,7 @@ function* handleUserChanged(accessToken: string | null) {
   if (accessToken === null) {
     yield put(actions.removeGoogleUserAndAccessToken());
   } else {
-    const email: string | undefined = yield call(getUserProfileDataEmail, accessToken);
+    const email: string | undefined = yield call(getUserProfileDataEmail);
     if (!email) {
       yield put(actions.removeGoogleUserAndAccessToken());
     } else {
@@ -415,12 +415,19 @@ function* ensureInitialisedAndAuthorised() {
     yield call(getToken);
   } else {
     // check if loaded token is still valid
-    const email: string | undefined = yield call(getUserProfileDataEmail, currToken.access_token);
+    const email: string | undefined = yield call(getUserProfileDataEmail);
     const isValid = email ? true : false;
     if (!isValid) {
       yield call(getToken);
     }
   }
+}
+
+function getUserProfileDataEmail(): Promise<string | undefined> {
+  return gapi.client.request({
+    path: USER_INFO_PATH
+  }).then(r => r.result.email)
+  .catch(() => undefined);
 }
 
 type PickFileResult =
