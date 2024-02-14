@@ -7084,6 +7084,11 @@ glsl-tokenizer@^2.1.5:
   dependencies:
     through2 "^0.6.3"
 
+google-oauth-gsi@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/google-oauth-gsi/-/google-oauth-gsi-4.0.0.tgz#5564e97df5535af8c150909e0df9adcb32af2758"
+  integrity sha512-6A2QTSB4iPPfqd7spIOnHLhP4Iu8WeZ7REq+zM47nzIC805FwgOTFj5UsatKpMoNDsmb2xXG2GpKKVNBxbE9Pw==
+
 gopd@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/gopd/-/gopd-1.0.1.tgz#29ff76de69dac7489b7c0918a5788e56477c332c"
