@@ -88,7 +88,22 @@ export type ErrorOutput = {
   consoleLogs: string[];
 };
 
-export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
+/**
+ * An output which represents a message being displayed to the user. Not a true
+ * result from the program, but rather a customised notification meant to highlight
+ * events that occur outside execution of the program.
+ */
+export type NotificationOutput = {
+  type: 'notification';
+  consoleLog: string;
+};
+
+export type InterpreterOutput =
+  | RunningOutput
+  | CodeOutput
+  | ResultOutput
+  | ErrorOutput
+  | NotificationOutput;
 
 export enum Role {
   Student = 'student',
@@ -360,6 +375,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     originalValue: ''
   },
   replValue: '',
+  hasTokenCounter: false,
+  tokenCount: 0,
+  customNotification: '',
   sharedbConnected: false,
   stepLimit: 1000,
   globals: [],
