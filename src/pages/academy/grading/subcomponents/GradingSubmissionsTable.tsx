@@ -6,6 +6,7 @@ import {
   Column,
   ColumnFilter,
   ColumnFiltersState,
+  Pagination,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -154,10 +155,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     columns,
     state: {
       columnFilters,
-      globalFilter
-    },
-    initialState: {
+      globalFilter,
       pagination: {
+        // pagination is handled by server to fit exactly the pageSize. Thus, hardcode frontend pageIndex to 0.
+        pageIndex: 0,
         pageSize: pageSize
       }
     },
@@ -196,10 +197,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     // translates filter columns to backend query name
     const shabbyenum = (val: string): string => {
       switch (val) {
-        case "assessmentName":
-          return "title";
-        case "assessmentType":
-          return "type";
+        case "assessmentName": return "title";
+        case "assessmentType": return "type";
+        case "studentName": return "name";
+        case "studentUsername": return "username";
         default:
           return val;
       }

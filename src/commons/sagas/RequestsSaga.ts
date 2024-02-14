@@ -51,6 +51,7 @@ import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
+import GradingSubmissionFilters from 'src/pages/academy/grading/subcomponents/GradingSubmissionFilters';
 
 /**
  * GET /
@@ -630,6 +631,7 @@ export const getGradingOverviews = async (
   }
   const gradingOverviews = await resp.json();
 
+  console.log(gradingOverviews.data);
   return {
     count: gradingOverviews.count,
     data: gradingOverviews.data
