@@ -189,11 +189,11 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
   // Upon initial render, loads contest entries in the correct tier using saved score
   useEffect(() => {
     sortedContestEntries.forEach((entry, index) => {
-      if (entry.calculated_score !== null) {
+      if (entry.score !== null) {
         const savedTierIndex = TIERS.findIndex(tier =>
           // We are using <= instead of === for backwards
           // compatibiilty with legacy voting submisions.
-          entry.calculated_score ? tier.score <= entry.calculated_score : false
+          entry.score ? tier.score <= entry.score : false
         );
         if (savedTierIndex !== -1) {
           const tierContainer = tierContainerRefs.current[savedTierIndex];

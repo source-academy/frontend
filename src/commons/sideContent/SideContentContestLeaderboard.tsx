@@ -104,6 +104,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<
               handleContestEntryClick={handleContestEntryClick}
               contestEntry={contestEntry}
               rank={index + 1}
+              leaderboardType={leaderboardType}
             />
           ))
         ) : (
