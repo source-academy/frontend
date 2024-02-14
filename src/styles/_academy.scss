@@ -509,3 +509,25 @@
     margin-left: 3px;
   }
 }
+
+.grading-overview-filterable-btns {
+  padding: 0;
+
+  // Invisible border for backgroundless buttons
+  &:not(:has(> div)) {
+    text-decoration: none;
+  }
+
+  &:hover {
+    // Buttons with bg
+    > div > span {
+      // Use of contrast due to unknown background color
+      filter: contrast(0.9);
+    }
+
+    // Backgroundless buttons
+    &:not(:has(> div)) {
+      text-decoration: underline;
+    }
+  }
+}
