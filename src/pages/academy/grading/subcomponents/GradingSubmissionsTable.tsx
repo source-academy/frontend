@@ -234,7 +234,12 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
   };
 
   return (
-    <button type="button" className="grading-overview-filterable-btns" onClick={handleFilterChange} style={{ padding: 0 }}>
+    <button
+      type="button"
+      className="grading-overview-filterable-btns"
+      onClick={handleFilterChange}
+      style={{ padding: 0 }}
+    >
       {children || value}
     </button>
   );
