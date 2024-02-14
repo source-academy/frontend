@@ -16,6 +16,7 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 type Props = {
   isFolderModeEnabled: boolean;
   loggedInAs?: string;
+  accessToken?: string;
   currentFile?: PersistenceFile;
   isDirty?: boolean;
   onClickOpen?: () => any;
@@ -46,7 +47,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       label="Open"
       icon={IconNames.DOCUMENT_OPEN}
       onClick={props.onClickOpen}
-      isDisabled={props.loggedInAs ? false : true}
+      isDisabled={props.accessToken ? false : true}
     />
   );
   const saveButton = (
@@ -63,12 +64,12 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       label="Save as"
       icon={IconNames.SEND_TO}
       onClick={props.onClickSaveAs}
-      isDisabled={props.loggedInAs ? false : true}
+      isDisabled={props.accessToken ? false : true}
     />
   );
 
-  const loginButton = props.loggedInAs ? (
-    <Tooltip2 content={`Logged in as ${props.loggedInAs}`}>
+  const loginButton = props.accessToken ? (
+    <Tooltip2 content={`Logged in as ${props.loggedInAs}`} disabled={!props.loggedInAs}>
       <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
     </Tooltip2>
   ) : (

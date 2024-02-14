@@ -53,10 +53,7 @@ function loadStore(loadedStore: SavedState | undefined) {
         octokit: loadedStore.session.githubAccessToken
           ? generateOctokitInstance(loadedStore.session.githubAccessToken)
           : undefined
-      },
-      googleUser: loadedStore.session.googleAccessToken
-        ? 'placeholder' // updates in PersistenceSaga
-        : undefined
+      }
     },
     workspaces: {
       ...defaultState.workspaces,
