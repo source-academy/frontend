@@ -1,4 +1,5 @@
 import { Intent } from '@blueprintjs/core';
+import { GoogleOAuthProvider, SuccessTokenResponse } from 'google-oauth-gsi';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
@@ -39,7 +40,15 @@ const MIME_SOURCE = 'text/plain';
 // const MIME_FOLDER = 'application/vnd.google-apps.folder';
 
 // GIS Token Client
-let tokenClient: google.accounts.oauth2.TokenClient;
+let googleProvider: GoogleOAuthProvider;
+// Login function
+const googleLogin = () => new Promise<SuccessTokenResponse> ((resolve, reject) => {
+  googleProvider.useGoogleLogin({
+    flow: 'implicit',
+    onSuccess: resolve,
+    scope: SCOPES,
+  })()
+});
 
 export function* persistenceSaga(): SagaIterator {
   yield takeLatest(LOGOUT_GOOGLE, function* (): any {
@@ -51,7 +60,8 @@ export function* persistenceSaga(): SagaIterator {
 
   yield takeLatest(LOGIN_GOOGLE, function* (): any {
     yield call(ensureInitialised);
-    yield call(getToken);
+    yield call(googleLogin);
+    yield call(handleUserChanged, gapi.client.getToken().access_token);
   });
 
   yield takeEvery(PERSISTENCE_INITIALISE, function* (): any {
@@ -327,18 +337,13 @@ const initialisationPromise: Promise<void> = new Promise(res => {
 
 // only called once
 async function initialise() {
-  // load GIS script
-  // adapted from https://github.com/MomenSherif/react-oauth
-  await new Promise<void>((resolve, reject) => {
-    const scriptTag = document.createElement('script');
-    scriptTag.src = 'https://accounts.google.com/gsi/client';
-    scriptTag.async = true;
-    scriptTag.defer = true;
-    scriptTag.onload = () => resolve();
-    scriptTag.onerror = ev => {
-      reject(ev);
-    };
-    document.body.appendChild(scriptTag);
+  // initialize GIS client
+  googleProvider = new GoogleOAuthProvider({
+    clientId: Constants.googleClientId!,
+    onScriptLoadError: () => console.log('onScriptLoadError'),
+    onScriptLoadSuccess: () => {
+      console.log('onScriptLoadSuccess');
+    },
   });
 
   // load and initialize gapi.client
@@ -352,18 +357,7 @@ async function initialise() {
     discoveryDocs: DISCOVERY_DOCS
   });
 
-  // initialize GIS client
-  await new Promise<google.accounts.oauth2.TokenClient>((resolve, reject) => {
-    resolve(
-      window.google.accounts.oauth2.initTokenClient({
-        client_id: Constants.googleClientId!,
-        scope: SCOPES,
-        callback: () => void 0 // will be updated in getToken()
-      })
-    );
-  }).then(c => {
-    tokenClient = c;
-  });
+
 }
 
 function* handleUserChanged(accessToken: string | null) {
@@ -380,27 +374,6 @@ function* handleUserChanged(accessToken: string | null) {
   }
 }
 
-// adapted from https://developers.google.com/identity/oauth2/web/guides/migration-to-gis
-function* getToken() {
-  yield new Promise((resolve, reject) => {
-    try {
-      // Settle this promise in the response callback for requestAccessToken()
-      (tokenClient as any).callback = (resp: google.accounts.oauth2.TokenResponse) => {
-        if (resp.error !== undefined) {
-          reject(resp);
-        }
-        // GIS has already automatically updated gapi.client
-        // with the newly issued access token by this point
-        resolve(resp);
-      };
-      tokenClient.requestAccessToken();
-    } catch (err) {
-      reject(err);
-    }
-  });
-  yield call(handleUserChanged, gapi.client.getToken().access_token);
-}
-
 function* ensureInitialised() {
   startInitialisation();
   yield initialisationPromise;
@@ -412,13 +385,15 @@ function* ensureInitialisedAndAuthorised() {
   const currToken: GoogleApiOAuth2TokenObject = yield call(gapi.client.getToken);
 
   if (currToken === null) {
-    yield call(getToken);
+    yield call(googleLogin);
+    yield call(handleUserChanged, gapi.client.getToken().access_token);
   } else {
     // check if loaded token is still valid
     const email: string | undefined = yield call(getUserProfileDataEmail);
     const isValid = email ? true : false;
     if (!isValid) {
-      yield call(getToken);
+      yield call(googleLogin);
+      yield call(handleUserChanged, gapi.client.getToken().access_token);
     }
   }
 }
