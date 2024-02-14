@@ -1,6 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { action } from 'typesafe-actions';
 
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
@@ -27,7 +28,9 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  DISABLE_TOKEN_COUNTER,
   EditorTabState,
+  ENABLE_TOKEN_COUNTER,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_EDITOR_AND_TESTCASES,
@@ -46,6 +49,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
+  SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
@@ -71,6 +75,9 @@ import {
   WorkspaceLocationsWithTools,
   WorkspaceState
 } from './WorkspaceTypes';
+
+export const setTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) =>
+  action(SET_TOKEN_COUNT, { workspaceLocation, tokenCount });
 
 export const browseReplHistoryDown = createAction(
   BROWSE_REPL_HISTORY_DOWN,
@@ -211,6 +218,12 @@ export const toggleFolderMode = createAction(
   TOGGLE_FOLDER_MODE,
   (workspaceLocation: WorkspaceLocation) => ({ payload: { workspaceLocation } })
 );
+
+export const enableTokenCounter = (workspaceLocation: WorkspaceLocation) =>
+  action(ENABLE_TOKEN_COUNTER, { workspaceLocation });
+
+export const disableTokenCounter = (workspaceLocation: WorkspaceLocation) =>
+  action(DISABLE_TOKEN_COUNTER, { workspaceLocation });
 
 export const setFolderMode = createAction(
   SET_FOLDER_MODE,
