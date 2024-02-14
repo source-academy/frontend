@@ -18,19 +18,22 @@ import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
+const groupOptions = [
+  { value: false, label: 'my groups' },
+  { value: true, label: 'all groups' }
+];
+
+const showOptions = [
+  { value: false, label: 'ungraded' },
+  { value: true, label: 'all' }
+];
+
 const Grading: React.FC = () => {
   const { courseId, gradingOverviews, role, group } = useSession();
-  const params = useParams<{
-    submissionId: string;
-    questionId: string;
-  }>();
+  const params = useParams<{ submissionId: string; questionId: string }>();
 
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
-  const groupOptions = [
-    { value: false, label: 'my groups' },
-    { value: true, label: 'all groups' }
-  ];
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -38,10 +41,6 @@ const Grading: React.FC = () => {
   }, [dispatch, role, showAllGroups]);
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-  const showOptions = [
-    { value: false, label: 'ungraded' },
-    { value: true, label: 'all' }
-  ];
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
