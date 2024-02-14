@@ -313,7 +313,9 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
                 : undefined
             }
             gradedAt={
-              grading!.answers[questionId].grade.grader ? grading!.answers[questionId].grade.gradedAt! : undefined
+              grading!.answers[questionId].grade.grader
+                ? grading!.answers[questionId].grade.gradedAt!
+                : undefined
             }
           />
         ),
@@ -341,8 +343,10 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       {
         label: `Briefing`,
         iconName: IconNames.BRIEFCASE,
-        body: (
-          grading ? <Markdown content={grading.assessment.summaryLong} /> : <Markdown content="Briefing Unavailable. Try refreshing the page." />
+        body: grading ? (
+          <Markdown content={grading.assessment.summaryLong} />
+        ) : (
+          <Markdown content="Briefing Unavailable. Try refreshing the page." />
         ),
         id: SideContentType.briefing
       }
@@ -458,7 +462,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   }
 
   /* If questionId is out of bounds, set it to the max. */
-  const questionId = props.questionId >= grading.answers.length ? grading.answers.length - 1 : props.questionId;
+  const questionId =
+    props.questionId >= grading.answers.length ? grading.answers.length - 1 : props.questionId;
   /* Get the question to be graded */
   const question = grading.answers[questionId].question as Question;
   const workspaceProps: WorkspaceProps = {

@@ -8,7 +8,12 @@ import {
   GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuery, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  Grading,
+  GradingOverview,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   Device,
   WebSocketEndpointInformation
@@ -665,7 +670,10 @@ export const getGradingOverviews = async (
 /**
  * GET /courses/{courseId}/admin/grading/{submissionId}
  */
-export const getGrading = async (submissionId: number, tokens: Tokens): Promise<GradingQuery | null> => {
+export const getGrading = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<GradingQuery | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}`, 'GET', {
     ...tokens
   });
@@ -709,7 +717,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
     return result;
   });
 
-  return {"answers": grading, "assessment": gradingResult.assessment};
+  return { answers: grading, assessment: gradingResult.assessment };
 };
 
 /**

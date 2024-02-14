@@ -45,7 +45,7 @@ export type GradingOverviewWithNotifications = {
 export type Grading = GradingQuestion[];
 
 export type GradingQuery = {
-  answers: Grading,
+  answers: Grading;
   assessment: {
     coverPicture: string;
     id: number;
@@ -55,8 +55,8 @@ export type GradingQuery = {
     summaryLong: string;
     summaryShort: string;
     title: string;
-  }
-}
+  };
+};
 
 /**
  * Encapsulates information regarding grading a

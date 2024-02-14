@@ -2,7 +2,11 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
-import { GradingOverview, GradingQuery, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingOverview,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   OverallState,
   Role,
@@ -230,7 +234,9 @@ export function* mockBackendSaga(): SagaIterator {
       }
       return gradingQuestion;
     });
-    yield put(actions.updateGrading(submissionId, {"answers": newGrading, "assessment": grading.assessment}));
+    yield put(
+      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    );
     yield call(showSuccessMessage, 'Submitted!', 1000);
   };
 

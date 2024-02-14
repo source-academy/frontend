@@ -543,37 +543,37 @@ test('updateGradingOverviews generates correct action object', () => {
 test('updateGrading generates correct action object', () => {
   const submissionId = 3;
   const grading: GradingQuery = {
-  "answers": [
-    {
-      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
-      student: {
-        name: 'test student',
-        username: 'E0123456',
-        id: 234
-      },
-      grade: {
-        xp: 100,
-        xpAdjustment: 0,
-        comments: 'Well done.',
-        grader: {
-          name: 'HARTIN MENZ',
-          id: 100
+    answers: [
+      {
+        question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
+        student: {
+          name: 'test student',
+          username: 'E0123456',
+          id: 234
         },
-        gradedAt: '2019-08-16T13:26:32+00:00'
+        grade: {
+          xp: 100,
+          xpAdjustment: 0,
+          comments: 'Well done.',
+          grader: {
+            name: 'HARTIN MENZ',
+            id: 100
+          },
+          gradedAt: '2019-08-16T13:26:32+00:00'
+        }
       }
+    ],
+    assessment: {
+      coverPicture: '',
+      id: 1,
+      number: '',
+      reading: '',
+      story: '',
+      summaryLong: '',
+      summaryShort: '',
+      title: ''
     }
-  ],
-  "assessment": {
-    coverPicture: "",
-    id: 1,
-    number: "",
-    reading: "",
-    story: "",
-    summaryLong: "",
-    summaryShort: "",
-    title: "",
-  }
-};
+  };
 
   const action = updateGrading(submissionId, grading);
   expect(action).toEqual({

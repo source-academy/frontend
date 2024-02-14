@@ -220,7 +220,7 @@ export const updateGradingOverviews = (overviews: GradingOverview[]) =>
  * An extra id parameter is included here because of
  * no id for Grading.
  */
-export const updateGrading = (submissionId: number, grading: GradingQuery) => 
+export const updateGrading = (submissionId: number, grading: GradingQuery) =>
   action(UPDATE_GRADING, {
     submissionId,
     grading

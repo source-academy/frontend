@@ -9,7 +9,11 @@ import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
 } from '../../features/dashboard/DashboardTypes';
-import { GradingOverview, GradingQuery, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingOverview,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
   DELETE_ASSESSMENT,
@@ -514,7 +518,9 @@ function* BackendSaga(): SagaIterator {
       return gradingQuestion;
     });
 
-    yield put(actions.updateGrading(submissionId, {"answers": newGrading, "assessment": grading.assessment}));
+    yield put(
+      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    );
   };
 
   const sendGradeAndContinue = function* (

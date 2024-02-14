@@ -382,7 +382,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
 
 // Test data for UPDATE_GRADING
 const gradingTest1: GradingQuery = {
-  "answers": [
+  answers: [
     {
       question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
       student: {
@@ -397,7 +397,7 @@ const gradingTest1: GradingQuery = {
       }
     }
   ],
-  "assessment": {
+  assessment: {
     coverPicture: 'test string',
     id: 1,
     number: 'M1A',
@@ -410,7 +410,7 @@ const gradingTest1: GradingQuery = {
 };
 
 const gradingTest2: GradingQuery = {
-  "answers": [
+  answers: [
     {
       question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
       student: {
@@ -425,7 +425,7 @@ const gradingTest2: GradingQuery = {
       }
     }
   ],
-  "assessment": {
+  assessment: {
     coverPicture: 'another test string',
     id: 2,
     number: 'P2',
