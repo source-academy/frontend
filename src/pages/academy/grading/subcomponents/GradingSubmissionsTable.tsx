@@ -1,6 +1,6 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Icon as BpIcon, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
   Column,
@@ -25,7 +25,8 @@ import {
   TableHeaderCell,
   TableRow,
   Text,
-  TextInput
+  TextInput,
+  Dropdown
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -37,6 +38,7 @@ import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 import { FilterStatus } from 'src/features/achievement/AchievementTypes';
+import SimpleDropdown from 'src/commons/SimpleDropdown';
 
 
 type GradingSubmissionTableProps = {
@@ -215,6 +217,16 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   }, [columnFilters, page, pageSize])
   
 
+  // dropdown to select pageSize
+  const pageSizeOptions = [
+    { value: 1, label: '1' },
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
+  ];
+  
+
   return (
     <>
       <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
@@ -296,6 +308,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
               variant="light"
               onClick={() => setPage(Math.ceil(totalRows / pageSize) - 1)}
               disabled={page >= (Math.ceil(totalRows / pageSize) - 1)}
+            />
+            <SimpleDropdown
+              options={pageSizeOptions}
+              selectedValue={pageSize}
+              onClick={setPageSize}
+              popoverProps={{ position: Position.BOTTOM }}
+              //buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
             />
           </Flex>
         </Footer>
