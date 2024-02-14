@@ -32,10 +32,10 @@ const contestEntryHeader = (leaderboardType: SideContentType) => {
   let leaderboardMetric = '';
   switch (leaderboardType) {
     case SideContentType.scoreLeaderboard:
-      leaderboardMetric = 'Score';
+      leaderboardMetric = 'Calculated Score';
       break;
     case SideContentType.popularVoteLeaderboard:
-      leaderboardMetric = 'Votes';
+      leaderboardMetric = 'Popularity Score';
       break;
     default:
       leaderboardMetric = 'Metric';
