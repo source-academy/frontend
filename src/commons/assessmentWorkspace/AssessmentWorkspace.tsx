@@ -456,16 +456,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           id: SideContentType.scoreLeaderboard
         },
         {
-          label: 'Popular Votes Leaderboard',
+          label: 'Popular Vote Leaderboard',
           iconName: IconNames.PEOPLE,
           body: (
             <SideContentContestLeaderboard
               handleContestEntryClick={handleContestEntryClick}
               orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
-              leaderboardType={SideContentType.popularVotesLeaderboard}
+              leaderboardType={SideContentType.popularVoteLeaderboard}
             />
           ),
-          id: SideContentType.popularVotesLeaderboard
+          id: SideContentType.popularVoteLeaderboard
         }
       );
     } else {

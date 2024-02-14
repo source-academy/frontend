@@ -24,7 +24,7 @@ export enum SideContentType {
   grading = 'grading',
   introduction = 'introduction',
   module = 'module',
-  popularVotesLeaderboard = 'popular_votes_leaderboard',
+  popularVoteLeaderboard = 'popular_vote_leaderboard',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
   scoreLeaderboard = 'score_leaderboard',

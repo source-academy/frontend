@@ -34,7 +34,7 @@ const contestEntryHeader = (leaderboardType: SideContentType) => {
     case SideContentType.scoreLeaderboard:
       leaderboardMetric = 'Score';
       break;
-    case SideContentType.popularVotesLeaderboard:
+    case SideContentType.popularVoteLeaderboard:
       leaderboardMetric = 'Votes';
       break;
     default:
@@ -55,8 +55,8 @@ const leaderboardTitle = (leaderboardType: SideContentType) => {
     case SideContentType.scoreLeaderboard:
       leaderboardTitle = 'Score Leaderboard';
       break;
-    case SideContentType.popularVotesLeaderboard:
-      leaderboardTitle = 'Popular Votes Leaderboard';
+    case SideContentType.popularVoteLeaderboard:
+      leaderboardTitle = 'Popular Vote Leaderboard';
       break;
     default:
       leaderboardTitle = 'Contest Leaderboard';
@@ -70,7 +70,7 @@ const contestLeaderboardTooltipContent = (leaderboardType: SideContentType) => {
     case SideContentType.scoreLeaderboard:
       leaderboardTooltipContent = 'View the highest scoring contest entries!';
       break;
-    case SideContentType.popularVotesLeaderboard:
+    case SideContentType.popularVoteLeaderboard:
       leaderboardTooltipContent = 'View the most popular contest entries!';
       break;
     default:
