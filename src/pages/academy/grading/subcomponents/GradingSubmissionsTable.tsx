@@ -39,75 +39,6 @@ import GradingSubmissionFilters from './GradingSubmissionFilters';
 import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 
 
-const columnHelper = createColumnHelper<GradingOverview>();
-
-const columns = [
-  columnHelper.accessor('assessmentName', {
-    header: 'Name',
-    cell: info => <Filterable column={info.column} value={info.getValue()}/>
-  }),
-  columnHelper.accessor('assessmentType', {
-    header: 'Type',
-    cell: info => (
-      <Filterable column={info.column} value={info.getValue()}>
-        <AssessmentTypeBadge type={info.getValue()} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor('studentName', {
-    header: 'Student',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('studentUsername', {
-    header: 'Username',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('groupName', {
-    header: 'Group',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('submissionStatus', {
-    header: 'Progress',
-    cell: info => (
-      <Filterable column={info.column} value={info.getValue()}>
-        <SubmissionStatusBadge status={info.getValue()} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor('gradingStatus', {
-    header: 'Grading',
-    cell: info => (
-      <Filterable column={info.column} value={info.getValue()}>
-        <GradingStatusBadge status={info.getValue()} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
-    header: 'Raw XP (+Bonus)',
-    enableColumnFilter: false,
-    cell: info => {
-      const { currentXp, xpBonus, maxXp } = info.getValue();
-      return (
-        <Flex justifyContent="justify-start" spaceX="space-x-2">
-          <Text>
-            {currentXp} (+{xpBonus})
-          </Text>
-          <Text>/</Text>
-          <Text>{maxXp}</Text>
-        </Flex>
-      );
-    }
-  }),
-  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
-    header: 'Actions',
-    enableColumnFilter: false,
-    cell: info => {
-      const { submissionId } = info.getValue();
-      return <GradingActions submissionId={submissionId} />;
-    }
-  })
-];
-
 type GradingSubmissionTableProps = {
   totalRows: number;
   submissions: GradingOverview[];
@@ -115,8 +46,97 @@ type GradingSubmissionTableProps = {
   updateEntries: (group: boolean, pageParams: any, filterParams: any) => void;
 };
 
-
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRows, submissions, updateEntries }) => {
+  const columnHelper = createColumnHelper<GradingOverview>();
+
+  const columns = [
+    columnHelper.accessor('assessmentName', {
+      header: 'Name',
+      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}/>
+    }),
+    columnHelper.accessor('assessmentType', {
+      header: 'Type',
+      cell: info => (
+        <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}>
+          <AssessmentTypeBadge type={info.getValue()} />
+        </Filterable>
+      )
+    }),
+    columnHelper.accessor('studentName', {
+      header: 'Student',
+      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)} />
+    }),
+    columnHelper.accessor('studentUsername', {
+      header: 'Username',
+      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}/>
+    }),
+    columnHelper.accessor('groupName', {
+      header: 'Group',
+      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}/>
+    }),
+    columnHelper.accessor('submissionStatus', {
+      header: 'Progress',
+      cell: info => (
+        <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}>
+          <SubmissionStatusBadge status={info.getValue()} />
+        </Filterable>
+      )
+    }),
+    columnHelper.accessor('gradingStatus', {
+      header: 'Grading',
+      cell: info => (
+        <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}>
+          <GradingStatusBadge status={info.getValue()} />
+        </Filterable>
+      )
+    }),
+    columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
+      header: 'Raw XP (+Bonus)',
+      enableColumnFilter: false,
+      cell: info => {
+        const { currentXp, xpBonus, maxXp } = info.getValue();
+        return (
+          <Flex justifyContent="justify-start" spaceX="space-x-2">
+            <Text>
+              {currentXp} (+{xpBonus})
+            </Text>
+            <Text>/</Text>
+            <Text>{maxXp}</Text>
+          </Flex>
+        );
+      }
+    }),
+    columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
+      header: 'Actions',
+      enableColumnFilter: false,
+      cell: info => {
+        const { submissionId } = info.getValue();
+        return <GradingActions submissionId={submissionId} />;
+      }
+    })
+  ];
+
+  type FilterableProps = {
+    column: Column<any, unknown>;
+    value: string;
+    children?: React.ReactNode;
+    resetpage: () => void;
+  };
+  
+  const Filterable: React.FC<FilterableProps> = ({ column, value, children, resetpage }) => {
+    const handleFilterChange = () => {
+      column.setFilterValue(value);
+      resetpage();
+    };
+  
+    return (
+      <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+        {children || value}
+      </button>
+    );
+  };
+
+
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
@@ -281,24 +301,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
         </Footer>
       </Table>
     </>
-  );
-};
-
-type FilterableProps = {
-  column: Column<any, unknown>;
-  value: string;
-  children?: React.ReactNode;
-};
-
-const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
-  const handleFilterChange = () => {
-    column.setFilterValue(value);
-  };
-
-  return (
-    <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
-      {children || value}
-    </button>
   );
 };
 
