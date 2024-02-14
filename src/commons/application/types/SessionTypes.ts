@@ -18,7 +18,6 @@ export const FETCH_COURSE_CONFIG = 'FETCH_COURSE_CONFIG';
 export const FETCH_ASSESSMENT = 'FETCH_ASSESSMENT';
 export const FETCH_ASSESSMENT_ADMIN = 'FETCH_ASSESSMENT_ADMIN';
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
-export const FETCH_ALL_USER_XP = 'FETCH_ALL_USER_XP';
 export const FETCH_TOTAL_XP = 'FETCH_TOTAL_XP';
 export const FETCH_TOTAL_XP_ADMIN = 'FETCH_TOTAL_XP_ADMIN';
 export const FETCH_GRADING = 'FETCH_GRADING';
@@ -48,7 +47,6 @@ export const REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN =
 export const UNSUBMIT_SUBMISSION = 'UNSUBMIT_SUBMISSION';
 export const UPDATE_ASSESSMENT_OVERVIEWS = 'UPDATE_ASSESSMENT_OVERVIEWS';
 export const UPDATE_TOTAL_XP = 'UPDATE_TOTAL_XP';
-export const UPDATE_ALL_USER_XP = 'UPDATE_ALL_USER_XP';
 export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
 export const UPDATE_GRADING_OVERVIEWS = 'UPDATE_GRADING_OVERVIEWS';
 export const UPDATE_GRADING = 'UPDATE_GRADING';
@@ -90,7 +88,6 @@ export type SessionState = {
   readonly gameState: GameState;
   readonly courseId?: number;
   readonly xp: number;
-  readonly allUserXp: string[][] | undefined;
   readonly story: Story;
 
   // Course Configuration
