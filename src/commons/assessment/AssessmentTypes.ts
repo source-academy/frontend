@@ -122,6 +122,7 @@ export interface IContestVotingQuestion extends BaseQuestion {
   postpend: string;
   contestEntries: ContestEntry[];
   scoreLeaderboard: ContestEntry[];
+  popularVoteLeaderboard: ContestEntry[];
   type: 'voting';
 }
 
