@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
-import * as qs from 'query-string';
+import qs from 'query-string';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
