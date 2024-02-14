@@ -777,7 +777,6 @@ function* BackendSaga(): SagaIterator {
       getAssessmentConfigs,
       tokens
     );
-
     if (assessmentConfigs) {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
@@ -982,6 +981,7 @@ function* BackendSaga(): SagaIterator {
         isManuallyGraded: true,
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
+        hasTokenCounter: false,
         earlySubmissionXp: 0
       }
     ];

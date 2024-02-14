@@ -25,6 +25,7 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   type: c,
   isManuallyGraded: false,
   displayInDashboard: false,
+  hasTokenCounter: false,
   hoursBeforeEarlyXpDecay: 0,
   earlySubmissionXp: 0
 }));
