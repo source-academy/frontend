@@ -1,7 +1,7 @@
 import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as qs from 'query-string';
+import qs from 'query-string';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 
