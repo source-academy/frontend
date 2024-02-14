@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
+import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
@@ -539,7 +539,8 @@ test('updateGradingOverviews generates correct action object', () => {
 
 test('updateGrading generates correct action object', () => {
   const submissionId = 3;
-  const grading: Grading = [
+  const grading: GradingQuery = {
+  "answers": [
     {
       question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
       student: {
@@ -558,7 +559,18 @@ test('updateGrading generates correct action object', () => {
         gradedAt: '2019-08-16T13:26:32+00:00'
       }
     }
-  ];
+  ],
+  "assessment": {
+    coverPicture: "",
+    id: 1,
+    number: "",
+    reading: "",
+    story: "",
+    summaryLong: "",
+    summaryShort: "",
+    title: "",
+  }
+};
 
   const action = updateGrading(submissionId, grading);
   expect(action).toEqual({
