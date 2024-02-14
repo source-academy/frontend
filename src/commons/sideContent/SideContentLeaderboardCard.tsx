@@ -33,7 +33,7 @@ const SideContentLeaderboardCard: React.FunctionComponent<
         <Pre className="contestentry-entryid">{contestEntry.student_name}</Pre>
         <Pre className="contestentry-rank">{rank}</Pre>
         <Pre className="contestentry-score" data-testid="contestentry-score">
-          {contestEntry.final_score}
+          {contestEntry.final_calculated_score}
         </Pre>
       </Card>
     </div>
