@@ -104,12 +104,8 @@ describe('createStore() function', () => {
     const octokit = received.session.githubOctokitObject.octokit;
     delete received.session.githubOctokitObject.octokit;
 
-    const googleUser = received.session.googleUser;
-    delete received.session.googleUser;
-
     expect(received).toEqual(mockChangedState);
     expect(octokit).toBeDefined();
-    expect(googleUser).toEqual('placeholder');
     localStorage.removeItem('storedState');
   });
 });
