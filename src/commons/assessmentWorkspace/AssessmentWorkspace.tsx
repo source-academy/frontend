@@ -633,7 +633,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     const resetButton =
       question.type !== QuestionTypes.mcq ? (
-        <ControlBarResetButton onClick={onClickResetTemplate} disabled={!isEditable} key="reset_template" />
+        <ControlBarResetButton
+          onClick={onClickResetTemplate}
+          disabled={!isEditable}
+          key="reset_template"
+        />
       ) : null;
 
     const runButton = (
@@ -686,7 +690,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} key="file_mode" />
     );
 
-    const editorButtonsMobileBreakpoint = [fileModeButton, runButton, saveButton, resetButton, toggleFolderModeButton, chapterSelect];
+    const editorButtonsMobileBreakpoint = [
+      fileModeButton,
+      runButton,
+      saveButton,
+      resetButton,
+      toggleFolderModeButton,
+      chapterSelect
+    ];
     const editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
     const flowButtons = [previousButton, questionView, nextButton];
     return {

@@ -21,11 +21,9 @@ type StateProps = {
 
 export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props => {
   const tooltipContent = props.isEntrypointFileDefined
-    ? (
-        props.readOnly 
-            ? 'Evaluation is disabled in read-only mode'
-            : '...or press shift-enter in the editor'
-      )
+    ? props.readOnly
+      ? 'Evaluation is disabled in read-only mode'
+      : '...or press shift-enter in the editor'
     : 'Open a file to evaluate the program with the file as the entrypoint';
   return (
     <Tooltip2 content={tooltipContent} placement={Position.TOP}>
