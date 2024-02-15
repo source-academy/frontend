@@ -16,6 +16,7 @@ type StateProps = {
   isEntrypointFileDefined: boolean;
   color?: string;
   className?: string;
+  readOnly?: boolean;
 };
 
 export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props => {
@@ -29,7 +30,7 @@ export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props 
         icon={IconNames.PLAY}
         onClick={props.handleEditorEval}
         options={{ iconColor: props.color, className: props.className }}
-        isDisabled={!props.isEntrypointFileDefined}
+        isDisabled={!props.isEntrypointFileDefined || props.readOnly}
       />
     </Tooltip2>
   );
