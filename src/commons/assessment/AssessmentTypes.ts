@@ -176,10 +176,8 @@ export type Testcase = {
 export type ContestEntry = {
   submission_id: number;
   answer: ContestEntryCodeAnswer; //contest entry program to be input into editor
-  calculated_score?: number;
-  final_calculated_score?: number;
-  popularity_score?: number;
-  final_popularity_score?: number;
+  score?: number;
+  final_score?: number;
   student_name?: string;
 };
 
