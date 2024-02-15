@@ -12,7 +12,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { isEqual } from 'lodash';
+import { isEqual, isNull } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -112,17 +112,18 @@ export type AssessmentWorkspaceProps = {
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
+  const { assessmentId, questionId } = props;
   const [showOverlay, setShowOverlay] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const { isMobileBreakpoint } = useResponsive();
   // isEditable is a placeholder for now. In the future, it should be set to be
   // based on whether it is the actual question being attempted. To enable read-only mode, set isEditable to false.
-  const isEditable = true;
+  const [isEditable, setIsEditable] = useState(true);
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const [selectedTab, setSelectedTab] = useState(
-    assessment?.questions[props.questionId].grader !== undefined
+    assessment?.questions[questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
   );
@@ -187,6 +188,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges))
     };
   }, [dispatch]);
+  const currentQuestionFilePath = `/${workspaceLocation}/${questionId + 1}.js`;
 
   /**
    * After mounting (either an older copy of the assessment
@@ -206,7 +208,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
     handleAssessmentFetch(props.assessmentId, assessmentPassword || undefined);
 
-    if (props.questionId === 0 && props.notAttempted) {
+    if (questionId === 0 && props.notAttempted) {
       setShowOverlay(true);
     }
     if (!assessment) {
@@ -215,34 +217,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /*
-  const handleReadOnlyMode = (event: KeyboardEvent) => {
-    // console.log(event.key);
-    if (
-      !event.ctrlKey &&
-      !event.altKey &&
-      !event.metaKey &&
-      event.key !== 'ArrowLeft' &&
-      event.key !== 'ArrowRight' &&
-      event.key !== 'ArrowUp' &&
-      event.key !== 'ArrowDown' // Allow Meta (Command) key combinations for navigation on macOS
-    ) {
-      // console.log("Preventing default behavior of key press");
-      event.stopPropagation();
-      // Prevent default behavior of the key press if they change the editor
-      event.preventDefault();
-    }
-  };
-
   useEffect(() => {
-    if (!isEditable) {
-      document.body.addEventListener('keydown', handleReadOnlyMode, true);
+    if (!isNull(activeEditorTabIndex)) {
+      const currentFilePath = editorTabs[activeEditorTabIndex].filePath;
+      if (currentFilePath && currentFilePath === `/${workspaceLocation}/${questionId + 1}.js`) {
+        setIsEditable(true);
+        return;
+      }
     }
-    else {
-      document.body.removeEventListener('keydown', handleReadOnlyMode, true);
-    }
-  }, [isEditable])
-  */
+    setIsEditable(false);
+  }, [activeEditorTabIndex, editorTabs, questionId]);
 
   /**
    * Once there is an update (due to the assessment being fetched), check
@@ -283,7 +267,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       type: 'codeDelta',
       data: delta
     };
-    console.log(input);
     pushLog(input);
   };
 
@@ -361,15 +344,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    */
-  const checkWorkspaceReset = () => {
+  const checkWorkspaceReset = (forced = false) => {
     /* Don't reset workspace if assessment not fetched yet. */
     if (assessment === undefined) {
       return;
     }
 
     /* Reset assessment if it has changed.*/
-    const { assessmentId, questionId } = props;
-    if (storedAssessmentId === assessmentId && storedQuestionId === questionId) {
+
+    if (storedAssessmentId === assessmentId && storedQuestionId === questionId && !forced) {
       return;
     }
 
@@ -393,10 +376,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
         // We use || not ?? to match both null and an empty string
         // Sets the current active tab to the current "question file" and also force re-writes the file system
-        const currentQuestionFilePath = `${workspaceLocation}/${questionId + 1}.js`;
+        const someHardcodedFilesForTesting = {
+          '/assessment/test1.js': 'display("hello!");',
+          '/assessment/test2.js': '// just a comment here'
+        };
+        // The leading slash "/" at the front is VERY IMPORTANT! DO NOT DELETE
+
         rewriteFilesWithContent(currentQuestionFilePath, {
           [currentQuestionFilePath]:
-            programmingQuestionData.answer || programmingQuestionData.solutionTemplate
+            programmingQuestionData.answer || programmingQuestionData.solutionTemplate,
+          ...someHardcodedFilesForTesting
         });
 
         // Initialize session once the editorValue is known.
@@ -439,10 +428,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
-    if (options.editorValue) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      //handleEditorValueChange(0, options.editorValue);
-    }
   };
 
   /**
@@ -686,7 +671,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={false}
         isPersistenceActive={false}
-        toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
+        toggleFolderMode={() => {
+          dispatch(toggleFolderMode(workspaceLocation));
+          if (isFolderModeEnabled) {
+            // Set active tab back to default question if user disables folder mode
+            checkWorkspaceReset(true);
+          }
+        }}
         key="folder"
       />
     );
@@ -825,11 +816,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             label="Confirm"
             onClick={() => {
               closeOverlay();
-              // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-              /*handleEditorValueChange(
-                0,
-                (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
-              );*/
+              checkWorkspaceReset(true);
               handleUpdateHasUnsavedChanges(true);
             }}
             options={{ minimal: false, intent: Intent.DANGER }}
@@ -839,11 +826,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     </Dialog>
   );
 
-  /* If questionId is out of bounds, set it to the max. */
-  const questionId =
-    props.questionId >= assessment.questions.length
-      ? assessment.questions.length - 1
-      : props.questionId;
   const question = assessment.questions[questionId];
   const editorContainerProps: NormalEditorContainerProps | undefined =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
@@ -894,8 +876,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               label: 'Folder',
               body: (
                 <FileSystemView
-                  disableNewFile={true}
-                  disableNewFolder={true}
+                  disableEditing={true}
                   workspaceLocation={workspaceLocation}
                   basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
                 />
@@ -926,7 +907,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
-  console.log(workspaceProps.editorContainerProps?.editorTabs);
 
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>

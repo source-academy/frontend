@@ -19,14 +19,22 @@ export type FileSystemViewFileNodeProps = {
   basePath: string;
   fileName: string;
   indentationLevel: number;
+  disableEditing?: boolean;
   refreshDirectory: () => void;
 };
 
 const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   props: FileSystemViewFileNodeProps
 ) => {
-  const { workspaceLocation, fileSystem, basePath, fileName, indentationLevel, refreshDirectory } =
-    props;
+  const {
+    workspaceLocation,
+    fileSystem,
+    basePath,
+    fileName,
+    indentationLevel,
+    refreshDirectory,
+    disableEditing
+  } = props;
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const dispatch = useDispatch();
@@ -90,6 +98,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
       open={handleOpenFile}
       rename={handleRenameFile}
       remove={handleRemoveFile}
+      disableEditing={disableEditing}
     >
       <div className={classes['file-system-view-node-container']} onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
