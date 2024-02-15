@@ -1,5 +1,6 @@
 import { tokenizer } from 'acorn';
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import { compileAndRun as compileAndRunCCode } from 'ctowasm';
 import {
   Context,
   findDeclaration,
@@ -49,6 +50,7 @@ import { Documentation } from '../documentation/Documentation';
 import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/utils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
+import { makeCCompilerConfig } from '../utils/CToWasmHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
 import {
   getBlockExtraMethodsString,
@@ -1129,6 +1131,18 @@ export function* evalCode(
       throw new Error('Unknown variant: ' + variant);
     }
   }
+
+  async function cCompileAndRun(cCode: string, context: Context, isRepl: boolean) {
+    const cCompilerConfig = makeCCompilerConfig(context);
+    return compileAndRunCCode(cCode, cCompilerConfig).then(
+      (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
+      (e: any): Result => {
+        console.log(e);
+        return { status: 'error' };
+      }
+    );
+  }
+
   async function wasm_compile_and_run(
     wasmCode: string,
     wasmContext: Context,
@@ -1157,6 +1171,7 @@ export function* evalCode(
   const isNonDet: boolean = context.variant === Variant.NON_DET;
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
+  const isC: boolean = context.chapter === Chapter.FULL_C;
 
   // Handles `console.log` statements in fullJS
   const detachConsole: () => void =
@@ -1168,6 +1183,8 @@ export function* evalCode(
     result:
       actionType === DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
+        : isC
+        ? call(cCompileAndRun, entrypointCode, context, actionType === EVAL_REPL)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
         : call(
