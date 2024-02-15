@@ -36,6 +36,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
 
   const handleOpenFile = () => {
     fileSystem.readFile(fullPath, 'utf-8', (err, fileContents) => {
+      console.log(fileContents)
       if (err) {
         console.error(err);
       }

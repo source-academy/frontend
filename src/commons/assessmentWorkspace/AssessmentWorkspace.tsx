@@ -391,7 +391,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
         // We use || not ?? to match both null and an empty string
         // Sets the current active tab to the current "question file" and also force re-writes the file system
-        const currentQuestionFilePath = `${workspaceLocation}/${questionId + 1}.js`;
+        // The leading slash "/" at the front is VERY IMPORTANT! DO NOT DELETE
+        const currentQuestionFilePath = `/${workspaceLocation}/${questionId + 1}.js`;
         rewriteFilesWithContent(currentQuestionFilePath, {
           [currentQuestionFilePath]:
             programmingQuestionData.answer || programmingQuestionData.solutionTemplate

@@ -97,7 +97,7 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
   return (
     <div className={classes['file-system-view-container']}>
       <FileSystemViewList
-      disableEditing={disableEditing}
+        disableEditing={disableEditing}
         workspaceLocation={workspaceLocation}
         key={fileSystemViewListKey}
         fileSystem={fileSystem}
@@ -125,12 +125,12 @@ const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProp
         </div>
       )}
 
-        <FileSystemViewContextMenu
+      <FileSystemViewContextMenu
         disableEditing={disableEditing}
-          className={classes['file-system-view-empty-space']}
-          createNewFile={handleCreateNewFile}
-          createNewDirectory={handleCreateNewDirectory}
-        />
+        className={classes['file-system-view-empty-space']}
+        createNewFile={handleCreateNewFile}
+        createNewDirectory={handleCreateNewDirectory}
+      />
     </div>
   );
 };
