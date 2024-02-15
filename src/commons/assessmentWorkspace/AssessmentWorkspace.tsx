@@ -892,8 +892,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               label: 'Folder',
               body: (
                 <FileSystemView
-                  disableNewFile={true}
-                  disableNewFolder={true}
+                  disableEditing={true}
                   workspaceLocation={workspaceLocation}
                   basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
                 />
@@ -924,7 +923,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
-  console.log(workspaceProps.editorContainerProps?.editorTabs);
 
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>

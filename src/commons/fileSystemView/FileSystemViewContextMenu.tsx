@@ -7,13 +7,13 @@ import classes from 'src/styles/ContextMenu.module.scss';
 export type FileSystemViewContextMenuProps = {
   children?: JSX.Element;
   className?: string;
-  disableNewFile?: boolean;
-  disableNewFolder?: boolean;
+
   createNewFile?: () => void;
   createNewDirectory?: () => void;
   open?: () => void;
   rename?: () => void;
   remove?: () => void;
+  disableEditing?: boolean;
 };
 
 const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
@@ -27,8 +27,7 @@ const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
     open,
     rename,
     remove,
-    disableNewFile,
-    disableNewFolder
+    disableEditing
   } = props;
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = React.useState({ x: 0, y: 0 });
@@ -42,38 +41,36 @@ const FileSystemViewContextMenu: React.FC<FileSystemViewContextMenuProps> = (
   return (
     <div className={className} onContextMenu={onContextMenu}>
       {children}
-      <ControlledMenu
-        menuClassName={classNames(Classes.CARD, Classes.DARK, classes['context-menu'])}
-        {...menuProps}
-        anchorPoint={anchorPoint}
-        onClose={() => toggleMenu(false)}
-      >
-        {createNewFile && !disableNewFile && (
+      {!disableEditing && (
+        <ControlledMenu
+          menuClassName={classNames(Classes.CARD, Classes.DARK, classes['context-menu'])}
+          {...menuProps}
+          anchorPoint={anchorPoint}
+          onClose={() => toggleMenu(false)}
+        >
           <MenuItem className={classes['context-menu-item']} onClick={createNewFile}>
             New File
           </MenuItem>
-        )}
-        {createNewDirectory && !disableNewFolder && (
           <MenuItem className={classes['context-menu-item']} onClick={createNewDirectory}>
             New Directory
           </MenuItem>
-        )}
-        {open && (
-          <MenuItem className={classes['context-menu-item']} onClick={open}>
-            Open
-          </MenuItem>
-        )}
-        {rename && (
-          <MenuItem className={classes['context-menu-item']} onClick={rename}>
-            Rename
-          </MenuItem>
-        )}
-        {remove && (
-          <MenuItem className={classes['context-menu-item']} onClick={remove}>
-            Delete
-          </MenuItem>
-        )}
-      </ControlledMenu>
+          {open && (
+            <MenuItem className={classes['context-menu-item']} onClick={open}>
+              Open
+            </MenuItem>
+          )}
+          {rename && (
+            <MenuItem className={classes['context-menu-item']} onClick={rename}>
+              Rename
+            </MenuItem>
+          )}
+          {remove && (
+            <MenuItem className={classes['context-menu-item']} onClick={remove}>
+              Delete
+            </MenuItem>
+          )}
+        </ControlledMenu>
+      )}
     </div>
   );
 };
