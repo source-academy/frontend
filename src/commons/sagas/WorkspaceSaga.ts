@@ -1132,15 +1132,14 @@ export function* evalCode(
     }
   }
 
-  async function cCompileAndRun(cCode: string, context: Context, isRepl: boolean) {
+  async function cCompileAndRun(cCode: string, context: Context) {
     const cCompilerConfig = makeCCompilerConfig(context);
-    return compileAndRunCCode(cCode, cCompilerConfig).then(
-      (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
-      (e: any): Result => {
+    return compileAndRunCCode(cCode, cCompilerConfig)
+      .then(() => ({ status: 'finish' }))
+      .catch((e: any): Result => {
         console.log(e);
-        return { status: 'error' };
-      }
-    );
+        return { status: 'finished', context, value: e.message };
+      });
   }
 
   async function wasm_compile_and_run(
@@ -1184,7 +1183,7 @@ export function* evalCode(
       actionType === DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
         : isC
-        ? call(cCompileAndRun, entrypointCode, context, actionType === EVAL_REPL)
+        ? call(cCompileAndRun, entrypointCode, context)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
         : call(
