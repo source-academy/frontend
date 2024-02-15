@@ -130,7 +130,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const navigate = useNavigate();
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  
 
   const { courseId } = useTypedSelector(state => state.session);
   const {
@@ -221,14 +220,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   useEffect(() => {
     if (!isNull(activeEditorTabIndex)) {
       const currentFilePath = editorTabs[activeEditorTabIndex].filePath;
-      if (currentFilePath && 
-        currentFilePath === `/${workspaceLocation}/${questionId + 1}.js`) {
-        setIsEditable(true)
+      if (currentFilePath && currentFilePath === `/${workspaceLocation}/${questionId + 1}.js`) {
+        setIsEditable(true);
         return;
       }
     }
     setIsEditable(false);
-  }, [activeEditorTabIndex, editorTabs, questionId])
+  }, [activeEditorTabIndex, editorTabs, questionId]);
 
   /**
    * Once there is an update (due to the assessment being fetched), check
@@ -351,8 +349,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
 
     /* Reset assessment if it has changed.*/
-    
-    if ((storedAssessmentId === assessmentId && storedQuestionId === questionId) && !forced) {
+
+    if (storedAssessmentId === assessmentId && storedQuestionId === questionId && !forced) {
       return;
     }
 
@@ -377,17 +375,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         // We use || not ?? to match both null and an empty string
         // Sets the current active tab to the current "question file" and also force re-writes the file system
         const someHardcodedFilesForTesting = {
-          "/assessment/test1.js": 'display("hello!");',
-          "/assessment/test2.js": '// just a comment here'
-        }
+          '/assessment/test1.js': 'display("hello!");',
+          '/assessment/test2.js': '// just a comment here'
+        };
         // The leading slash "/" at the front is VERY IMPORTANT! DO NOT DELETE
-        
+
         rewriteFilesWithContent(currentQuestionFilePath, {
           [currentQuestionFilePath]:
             programmingQuestionData.answer || programmingQuestionData.solutionTemplate,
           ...someHardcodedFilesForTesting
-        }
-        );
+        });
 
         // Initialize session once the editorValue is known.
 
@@ -671,7 +668,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         isSessionActive={false}
         isPersistenceActive={false}
         toggleFolderMode={() => {
-          dispatch(toggleFolderMode(workspaceLocation))
+          dispatch(toggleFolderMode(workspaceLocation));
           if (isFolderModeEnabled) {
             // Set active tab back to default question if user disables folder mode
             checkWorkspaceReset(true);
@@ -680,7 +677,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         key="folder"
       />
     );
-    
+
     const fileModeButton = (
       <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} key="file_mode" />
     );

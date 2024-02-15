@@ -78,7 +78,7 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
       {dirNames.map(dirName => {
         return (
           <FileSystemViewDirectoryNode
-          disableEditing={disableEditing}
+            disableEditing={disableEditing}
             workspaceLocation={workspaceLocation}
             key={dirName}
             fileSystem={fileSystem}
@@ -92,7 +92,7 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
       {fileNames.map(fileName => {
         return (
           <FileSystemViewFileNode
-          disableEditing={disableEditing}
+            disableEditing={disableEditing}
             workspaceLocation={workspaceLocation}
             key={fileName}
             fileSystem={fileSystem}

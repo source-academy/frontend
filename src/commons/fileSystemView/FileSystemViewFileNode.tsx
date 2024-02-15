@@ -26,8 +26,15 @@ export type FileSystemViewFileNodeProps = {
 const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   props: FileSystemViewFileNodeProps
 ) => {
-  const { workspaceLocation, fileSystem, basePath, fileName, indentationLevel, refreshDirectory, disableEditing } =
-    props;
+  const {
+    workspaceLocation,
+    fileSystem,
+    basePath,
+    fileName,
+    indentationLevel,
+    refreshDirectory,
+    disableEditing
+  } = props;
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const dispatch = useDispatch();
