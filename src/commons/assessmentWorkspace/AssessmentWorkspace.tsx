@@ -189,6 +189,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges))
     };
   }, [dispatch]);
+  const currentQuestionFilePath = `/${workspaceLocation}/${questionId + 1}.js`;
 
   /**
    * After mounting (either an older copy of the assessment
@@ -225,13 +226,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         setIsEditable(true)
         return;
       }
-      
     }
     setIsEditable(false);
-    
-    
-    
-  }, [activeEditorTabIndex])
+  }, [activeEditorTabIndex, editorTabs, questionId])
 
   /**
    * Once there is an update (due to the assessment being fetched), check
@@ -347,7 +344,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    */
-  const checkWorkspaceReset = () => {
+  const checkWorkspaceReset = (forced = false) => {
     /* Don't reset workspace if assessment not fetched yet. */
     if (assessment === undefined) {
       return;
@@ -355,7 +352,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     /* Reset assessment if it has changed.*/
     
-    if (storedAssessmentId === assessmentId && storedQuestionId === questionId) {
+    if ((storedAssessmentId === assessmentId && storedQuestionId === questionId) && !forced) {
       return;
     }
 
@@ -384,7 +381,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           "/assessment/test2.js": '// just a comment here'
         }
         // The leading slash "/" at the front is VERY IMPORTANT! DO NOT DELETE
-        const currentQuestionFilePath = `/${workspaceLocation}/${questionId + 1}.js`;
+        
         rewriteFilesWithContent(currentQuestionFilePath, {
           [currentQuestionFilePath]:
             programmingQuestionData.answer || programmingQuestionData.solutionTemplate,
@@ -432,10 +429,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
-    if (options.editorValue) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      //handleEditorValueChange(0, options.editorValue);
-    }
   };
 
   /**
@@ -677,7 +670,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={false}
         isPersistenceActive={false}
-        toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
+        toggleFolderMode={() => {
+          dispatch(toggleFolderMode(workspaceLocation))
+          if (isFolderModeEnabled) {
+            // Set active tab back to default question if user disables folder mode
+            checkWorkspaceReset(true);
+          }
+        }}
         key="folder"
       />
     );
