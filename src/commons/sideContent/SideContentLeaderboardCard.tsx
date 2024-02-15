@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import React from 'react';
 
 import { ContestEntry } from '../assessment/AssessmentTypes';
-import { SideContentType } from './SideContentTypes';
 
 type SideContentLeaderboardCardProps = DispatchProps & StateProps;
 
@@ -14,25 +13,12 @@ type DispatchProps = {
 type StateProps = {
   contestEntry: ContestEntry;
   rank: number;
-  leaderboardType: SideContentType;
 };
 
 const SideContentLeaderboardCard: React.FunctionComponent<
   SideContentLeaderboardCardProps
 > = props => {
-  const { handleContestEntryClick, contestEntry, rank, leaderboardType } = props;
-
-  let score;
-  switch (leaderboardType) {
-    case SideContentType.scoreLeaderboard:
-      score = contestEntry.final_calculated_score;
-      break;
-    case SideContentType.popularVoteLeaderboard:
-      score = contestEntry.final_popularity_score;
-      break;
-    default:
-      score = 0;
-  }
+  const { handleContestEntryClick, contestEntry, rank } = props;
 
   return (
     <div className={classNames('LeaderboardCard')}>
@@ -47,7 +33,7 @@ const SideContentLeaderboardCard: React.FunctionComponent<
         <Pre className="contestentry-entryid">{contestEntry.student_name}</Pre>
         <Pre className="contestentry-rank">{rank}</Pre>
         <Pre className="contestentry-score" data-testid="contestentry-score">
-          {score}
+          {contestEntry.final_calculated_score}
         </Pre>
       </Card>
     </div>

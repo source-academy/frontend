@@ -33,7 +33,7 @@ const SideContentContestVotingContainer: React.FunctionComponent<
 
   const submissionHasNoNull = (votingSubmission: ContestEntry[]) => {
     return votingSubmission.reduce((noNull, vote) => {
-      return noNull && vote.score !== undefined && vote.score !== null;
+      return noNull && vote.calculated_score !== undefined && vote.calculated_score !== null;
     }, true);
   };
 
