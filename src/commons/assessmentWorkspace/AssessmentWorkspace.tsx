@@ -817,11 +817,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             label="Confirm"
             onClick={() => {
               closeOverlay();
-              // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-              /*handleEditorValueChange(
-                0,
-                (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
-              );*/
+              checkWorkspaceReset(true);
               handleUpdateHasUnsavedChanges(true);
             }}
             options={{ minimal: false, intent: Intent.DANGER }}
