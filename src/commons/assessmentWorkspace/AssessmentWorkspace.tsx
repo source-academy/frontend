@@ -118,7 +118,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
   // isEditable is a placeholder for now. In the future, it should be set to be
   // based on whether it is the actual question being attempted. To enable read-only mode, set isEditable to false.
-  const isEditable = true;
+  const isEditable = false;
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const [selectedTab, setSelectedTab] = useState(
@@ -318,19 +318,21 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = useCallback(() => {
-    // Run testcases when the autograder tab is selected
-    if (activeTab.current === SideContentType.autograder) {
-      handleRunAllTestcases();
-    } else {
-      handleEditorEval();
-    }
+    if (isEditable) {
+      // Run testcases when the autograder tab is selected
+      if (activeTab.current === SideContentType.autograder) {
+        handleRunAllTestcases();
+      } else {
+        handleEditorEval();
+      }
 
-    const input: Input = {
-      time: Date.now(),
-      type: 'keyboardCommand',
-      data: KeyboardCommand.run
-    };
-    pushLog(input);
+      const input: Input = {
+        time: Date.now(),
+        type: 'keyboardCommand',
+        data: KeyboardCommand.run
+      };
+      pushLog(input);
+    }
   }, [handleEditorEval, handleRunAllTestcases, pushLog]);
 
   // Rewrites the file system with our desired file tree
