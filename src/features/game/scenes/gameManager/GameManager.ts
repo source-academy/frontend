@@ -17,7 +17,6 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
-
 import { Layer } from '../../layer/GameLayerTypes';
 import { LocationId } from '../../location/GameMapTypes';
 import GameLogManager from '../../log/GameLogManager';
@@ -32,7 +31,6 @@ import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
-
 import { GameItemType } from '../../location/GameMapTypes';
 import { GameMode } from '../../mode/GameModeTypes';
 import { keyboardShortcuts } from '../../commons/CommonConstants';
@@ -77,7 +75,6 @@ class GameManager extends Phaser.Scene {
   private toolbarManager?: GameToolbarManager;
   private taskLogManager?: GameTaskLogManager;
   private dashboardManager?: GameDashboardManager;
- 
 
   constructor() {
     super('GameManager');
@@ -267,11 +264,9 @@ class GameManager extends Phaser.Scene {
   }
 
   /**
-   * Bind escape menu and dashboard to keyboard triggers.
+   * Bind escape menu, dashboard, and mode selections to keyboard triggers.
    */
-  
   private bindKeyboardTriggers() {
-
     this.getInputManager().registerKeyboardListener(
       keyboardShortcuts.escapeMenu,
       'up',
@@ -283,7 +278,6 @@ class GameManager extends Phaser.Scene {
         }
       }
     );
-
     this.getInputManager().registerKeyboardListener(
       keyboardShortcuts.dashboard,
       'up',
@@ -297,12 +291,14 @@ class GameManager extends Phaser.Scene {
         }
       }
     );
-    
     this.registerMenuKeyboardListener(keyboardShortcuts.explore, GameMode.Explore, GamePhaseType.Explore);
     this.registerMenuKeyboardListener(keyboardShortcuts.move, GameMode.Move, GamePhaseType.Move);
     this.registerMenuKeyboardListener(keyboardShortcuts.talk, GameMode.Talk, GamePhaseType.Talk);
   }
 
+  /**
+   * Helper function to register keyboard listeners for mode selections.
+   */
   private registerMenuKeyboardListener(shortcut: number, mode: GameMode, phase: GamePhaseType) {
     this.getInputManager().registerKeyboardListener(
       shortcut,
@@ -318,6 +314,7 @@ class GameManager extends Phaser.Scene {
       }
     );
   }
+
   /**
    * the same method from GameModeMenu to get the available modes under current location
    */

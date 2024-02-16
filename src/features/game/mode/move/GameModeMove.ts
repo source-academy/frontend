@@ -1,4 +1,3 @@
-//CYX: use keyboard shortcuts to navigate around different locations
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
@@ -25,6 +24,7 @@ import { keyboardShortcuts } from '../../commons/CommonConstants';
 class GameModeMove implements IGameUI {
   
   private uiContainer: Phaser.GameObjects.Container | undefined;
+
   /**
    * Set the location preview sprite to the given asset key.
    *
@@ -41,7 +41,7 @@ class GameModeMove implements IGameUI {
   /**
    * Fetches the navigations of the current location id.
    */
-  private getLatestNavigations() : ItemId[] {
+  private getLatestNavigations(): ItemId[] {
     return GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.navigation,
       GameGlobalAPI.getInstance().getCurrLocId()
@@ -80,6 +80,7 @@ class GameModeMove implements IGameUI {
       numItemLimit: 1,
       maxYSpace: MoveModeConstants.button.ySpace
     });
+
     let id = 0;
     moveMenuContainer.add(
       buttons.map((button, index) => {
@@ -168,7 +169,7 @@ class GameModeMove implements IGameUI {
   /**
    * Register keyboard listeners for location selection
    * This will only be called by activateUI function
-   * */ 
+   */ 
   private registerKeyboardListener() : void {
     //CYX: create new inputManager when the Game Move mode is activated
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
@@ -211,11 +212,9 @@ class GameModeMove implements IGameUI {
   }
 
   /**
-   * Remove keyboard listners for location selection 
-   * when Move mode is transitioned out
-   * 
-   * */
-  
+   * Remove keyboard listners for location selection
+   * when Move mode is transitioned out.
+   */
   private removeKeyboardListner() : void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
     inputManager.clearKeyboardListener(keyboardShortcuts.options);

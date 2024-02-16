@@ -130,12 +130,9 @@ class GameModeTalk implements IGameUI {
   }
 
   /**
-   * CYX
-   * Register keyboard listners for talk topic selection
-   * 
-   * This is called by the activeUI function
-   * */ 
-
+   * Register keyboard listners for talk topic selection.
+   * Called by the activeUI function.
+   */
   private registerKeyboardListner() : void {
     const talkTopics : ItemId[] = this.getLatestTalkTopics();
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
@@ -166,7 +163,6 @@ class GameModeTalk implements IGameUI {
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
     
-    //CYX: create new input manager when the Game talk topics is presented
     this.registerKeyboardListner();
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
@@ -179,9 +175,9 @@ class GameModeTalk implements IGameUI {
   }
 
   /**
-   * Remove keyboard listners for topic selection after a topic is selected
-   * 
-   * */ 
+   * Remove keyboard listners for topic selection.
+   * Called by the deactiveUI function.
+   */ 
   private removeKeyboardListner(): void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
     inputManager.clearKeyboardListener(keyboardShortcuts.options);

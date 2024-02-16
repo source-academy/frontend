@@ -1,4 +1,4 @@
-import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI'
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
@@ -6,7 +6,7 @@ import { IGameUI } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType } from '../../location/GameMapTypes';
-import { createButton} from '../../utils/ButtonUtils';
+import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
@@ -65,13 +65,13 @@ class GameModeMenu implements IGameUI {
     const lineList : Phaser.GameObjects.Line[] = buttons.map((button, index) => this.createLine(buttonPositions[index][0], buttonPositions[index][1] + MenuModeConstants.button.yOffset + 20, button)) 
     
     modeMenuContainer.add(
-      buttons.map((button, index) => {
-        return this.createModeButton(
+      buttons.map((button, index) => 
+        this.createModeButton(
           button.text,
           buttonPositions[index][0],
           buttonPositions[index][1] + MenuModeConstants.button.yOffset,
           button.callback
-        )}
+        )
       )
     );
     
@@ -81,10 +81,8 @@ class GameModeMenu implements IGameUI {
   }
 
   /**
-   * Create underline for each button
-   * 
-   * */
-  
+   * Create underline for each button.
+   */
   private createLine(xPos: number, yPos: number, button : {
     text: GameMode;
     callback: () => Promise<void>;}

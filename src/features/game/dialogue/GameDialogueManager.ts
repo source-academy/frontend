@@ -17,7 +17,6 @@ import { keyboardShortcuts } from '../commons/CommonConstants';
  * whenever players click on the dialogue box
  */
 
-
 export default class DialogueManager{
   private speakerRenderer?: DialogueSpeakerRenderer;
   private dialogueRenderer?: DialogueRenderer;

@@ -8,7 +8,7 @@ import { mandatory } from '../../utils/GameUtils';
 import { calcListFormatPos } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { BindingConstants, keyDescStyle, keyStyle } from './BindingsConstants';
-// test for git pushu
+
 /**
  * Displays various bindings of the game.
  * Static scene.
