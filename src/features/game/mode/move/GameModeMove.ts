@@ -167,11 +167,10 @@ class GameModeMove implements IGameUI {
   }
 
   /**
-   * Register keyboard listeners for location selection
-   * This will only be called by activateUI function
+   * Register keyboard listeners for location selection.
+   * Called by activateUI function.
    */ 
   private registerKeyboardListener() : void {
-    //CYX: create new inputManager when the Game Move mode is activated
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
     const navList2 : string[] = this.getLatestNavigations();
     
