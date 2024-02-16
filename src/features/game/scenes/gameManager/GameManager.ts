@@ -7,6 +7,7 @@ import GameBBoxManager from '../../boundingBoxes/GameBoundingBoxManager';
 import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
+import { keyboardShortcuts } from '../../commons/CommonConstants';
 import { AssetKey } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
 import { DashboardPage } from '../../dashboard/GameDashboardTypes';
@@ -19,7 +20,9 @@ import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { LocationId } from '../../location/GameMapTypes';
+import { GameItemType } from '../../location/GameMapTypes';
 import GameLogManager from '../../log/GameLogManager';
+import { GameMode } from '../../mode/GameModeTypes';
 import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -31,9 +34,6 @@ import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
-import { GameItemType } from '../../location/GameMapTypes';
-import { GameMode } from '../../mode/GameModeTypes';
-import { keyboardShortcuts } from '../../commons/CommonConstants';
 
 type GameManagerProps = {
   continueGame: boolean;

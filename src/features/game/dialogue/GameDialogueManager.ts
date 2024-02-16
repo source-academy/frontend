@@ -1,6 +1,8 @@
 import SoundAssets from '../assets/SoundAssets';
+import { keyboardShortcuts } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
+import GameInputManager from '../input/GameInputManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -8,8 +10,6 @@ import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
-import GameInputManager from '../input/GameInputManager';
-import { keyboardShortcuts } from '../commons/CommonConstants';
 
 /**
  * Given a dialogue Id, this manager renders the correct dialogue.

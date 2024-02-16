@@ -2,7 +2,9 @@ import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
+import { keyboardShortcuts } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
+import { ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -13,8 +15,6 @@ import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import MoveModeConstants, { moveButtonStyle } from './GameModeMoveConstants';
-import { ItemId } from '../../commons/CommonTypes';
-import { keyboardShortcuts } from '../../commons/CommonConstants';
 
 /**
  * The class in charge of showing the "Move" UI
