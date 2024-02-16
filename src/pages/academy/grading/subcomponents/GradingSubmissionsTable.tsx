@@ -195,12 +195,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here.
   const backendFilterParams = (columnFilters: ColumnFilter[]): any => {
     // translates filter columns to backend query name
-    const shabbyenum = (val: string): string => {
+    const backendNameOf = (val: string): string => {
       switch (val) {
         case "assessmentName": return "title";
         case "assessmentType": return "type";
         case "studentName": return "name";
         case "studentUsername": return "username";
+        case "submissionStatus": return "status";
         default:
           return val;
       }
@@ -210,7 +211,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     // This restricts each column to have only 1 accepted filter. Could be improved?
     const queryParams = {}
     console.log(columnFilters.entries());
-    columnFilters.map(column => {queryParams[shabbyenum(column.id)] = column.value;});
+    columnFilters.map(column => {queryParams[backendNameOf(column.id)] = column.value;});
     return queryParams;
   }
 
