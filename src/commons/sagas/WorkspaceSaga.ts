@@ -50,7 +50,7 @@ import { Documentation } from '../documentation/Documentation';
 import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/utils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
-import { makeCCompilerConfig } from '../utils/CToWasmHelper';
+import { makeCCompilerConfig, specialCReturnObject } from '../utils/CToWasmHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
 import {
   getBlockExtraMethodsString,
@@ -1133,12 +1133,22 @@ export function* evalCode(
   }
 
   async function cCompileAndRun(cCode: string, context: Context) {
-    const cCompilerConfig = makeCCompilerConfig(context);
-    return compileAndRunCCode(cCode, cCompilerConfig)
-      .then(() => ({ status: 'finish' }))
+    const cCompilerConfig = await makeCCompilerConfig(cCode, context);
+    return await compileAndRunCCode(cCode, cCompilerConfig)
+      .then(() => {
+        if (specialCReturnObject === null) {
+          return {
+            status: 'finished',
+            context,
+            value: { toReplString: () => 'Successfully compiled and run C program' }
+          };
+        }
+        return { status: 'finished', context, value: specialCReturnObject };
+      })
       .catch((e: any): Result => {
         console.log(e);
-        return { status: 'finished', context, value: e.message };
+        cCompilerConfig.printFunction(e.message);
+        return { status: 'error' };
       });
   }
 
