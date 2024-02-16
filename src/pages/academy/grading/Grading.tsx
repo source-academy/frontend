@@ -40,6 +40,15 @@ const Grading: React.FC = () => {
     { value: true, label: 'all groups' }
   ];
 
+  const [pageSize, setPageSize] = useState(10);
+  const pageSizeOptions = [
+    { value: 1, label: '1' },
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
+  ];
+
   const dispatch = useDispatch();
   /**Passed as a prop to submissions table sub-component for sub-component to feed pagination and filter logic.*/
   // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
@@ -126,11 +135,19 @@ const Grading: React.FC = () => {
                     popoverProps={{ position: Position.BOTTOM }}
                     buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
                   />
-                  <Text>submissions from</Text>
+                  <Text>Submissions from</Text>
                   <SimpleDropdown
                     options={groupOptions}
                     selectedValue={showAllGroups}
                     onClick={setShowAllGroups}
+                    popoverProps={{ position: Position.BOTTOM }}
+                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                  />
+                  <Text>Entries per page</Text>
+                  <SimpleDropdown
+                    options={pageSizeOptions}
+                    selectedValue={pageSize}
+                    onClick={setPageSize}
                     popoverProps={{ position: Position.BOTTOM }}
                     buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
                   />
