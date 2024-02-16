@@ -8,7 +8,7 @@ import { mandatory } from '../../utils/GameUtils';
 import { calcListFormatPos } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { BindingConstants, keyDescStyle, keyStyle } from './BindingsConstants';
-
+// test for git pushu
 /**
  * Displays various bindings of the game.
  * Static scene.
@@ -67,13 +67,18 @@ class Bindings extends Phaser.Scene {
     });
 
     bindingsContainer.add(
-      bindings.map((binding, index) =>
-        this.createBinding(
+      bindings.map((binding, index) => {
+        return this.createBinding(
           binding.key,
           binding.text,
-          bindingPositions[index][0],
-          bindingPositions[index][1] + BindingConstants.key.yStart
-        )
+          bindingPositions[index][1] < 450 
+            ? bindingPositions[index][0] - 400
+            : bindingPositions[index][0] + 400,
+          bindingPositions[index][1] <= 450
+            ? bindingPositions[index][1] + BindingConstants.key.yStart - 200
+            : bindingPositions[index][1] + BindingConstants.key.yStart - 775
+        );
+      }
       )
     );
     const backButton = new CommonBackButton(this, () => {
@@ -91,12 +96,33 @@ class Bindings extends Phaser.Scene {
   private getBindings() {
     return [
       {
-        key: 'Esc',
+        key: 'ESC',
         text: 'Escape Menu'
       },
       {
         key: 'Tab',
         text: 'Dashboard'
+      },
+      {
+        key: 'Space',
+        text: 'Next dialogue'
+      },
+      {
+        key: "<Number>",
+        text: "       Select topics/locations"
+   
+      },
+      {
+        key: "T",
+        text: "Enter the Talk mode"
+      },
+      {
+        key: "E",
+        text: "Enter the Explore mode"
+      },
+      {
+        key: 'V',
+        text: "Enter the Move mode"
       }
     ];
   }
@@ -122,6 +148,20 @@ class Bindings extends Phaser.Scene {
     );
     switch (key) {
       case 'Tab':
+        keyIcon.setTexture(ImageAssets.medKeyboardIcon.key);
+        break;
+      default:
+        break;
+    }
+    switch (key) {
+      case 'Space':
+        keyIcon.setTexture(ImageAssets.medKeyboardIcon.key);
+        break;
+      default:
+        break;
+    }
+    switch (key) {
+      case '<Number>':
         keyIcon.setTexture(ImageAssets.medKeyboardIcon.key);
         break;
       default:

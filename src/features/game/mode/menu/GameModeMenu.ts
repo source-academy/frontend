@@ -1,5 +1,4 @@
-import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI'
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
@@ -7,7 +6,7 @@ import { IGameUI } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType } from '../../location/GameMapTypes';
-import { createButton } from '../../utils/ButtonUtils';
+import { createButton} from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
@@ -63,19 +62,46 @@ class GameModeMenu implements IGameUI {
       numOfItems: buttons.length
     });
 
+    const lineList : Phaser.GameObjects.Line[] = buttons.map((button, index) => this.createLine(buttonPositions[index][0], buttonPositions[index][1] + MenuModeConstants.button.yOffset + 20, button)) 
+    
     modeMenuContainer.add(
-      buttons.map((button, index) =>
-        this.createModeButton(
+      buttons.map((button, index) => {
+        return this.createModeButton(
           button.text,
           buttonPositions[index][0],
           buttonPositions[index][1] + MenuModeConstants.button.yOffset,
           button.callback
-        )
+        )}
       )
     );
+    
+    modeMenuContainer.add(lineList);
+    
     return modeMenuContainer;
   }
 
+  /**
+   * Create underline for each button
+   * 
+   * */
+  
+  private createLine(xPos: number, yPos: number, button : {
+    text: GameMode;
+    callback: () => Promise<void>;}
+  ) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    if (button.text === GameMode.Explore) {
+      xPos -= 68;
+    } else if (button.text === GameMode.Move) {
+      xPos += 20;
+    } else {
+      xPos -= 30;
+    }
+    const line : Phaser.GameObjects.Line = gameManager.add.line(0, 15, xPos, yPos, xPos+20, yPos, 0xBCE7DA);
+    line.setLineWidth(4);
+    return line;
+  }
+ 
   /**
    * Get the mode buttons preset to be formatted later.
    * The preset includes the text to be displayed on the button and

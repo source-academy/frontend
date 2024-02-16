@@ -1,3 +1,4 @@
+//tutorial for keyboard navigation. 
 /**
  * Manager that keeps track of all the event listeners.
  * This manager allow clearing of all listeners at once,
@@ -73,13 +74,22 @@ class GameInputManager {
     const eventListener = this.scene.input.addListener(event, callback);
     this.eventListeners.concat(eventListener);
   }
-
+   
   /**
    * Clear all listeners, keyboard and event listeners.
    */
+ 
   public clearListeners() {
     this.keyboardListeners.forEach(keyboardListener => keyboardListener.removeAllListeners());
     this.eventListeners.forEach(eventListener => eventListener.removeAllListeners());
+  }
+  //CYX: this new method is created to remove a specific keyboard listener
+  public clearKeyboardListener(keycodes: number[]){
+    this.keyboardListeners.forEach(keyboardListener => {
+      if(keycodes.includes(keyboardListener.keyCode)){
+        keyboardListener.removeAllListeners();
+      }
+    })
   }
 }
 

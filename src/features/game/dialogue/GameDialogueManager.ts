@@ -8,16 +8,21 @@ import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
+import GameInputManager from '../input/GameInputManager';
+import { keyboardShortcuts } from '../commons/CommonConstants';
 
 /**
  * Given a dialogue Id, this manager renders the correct dialogue.
  * It displays the lines, speakers, and performs actions
  * whenever players click on the dialogue box
  */
-export default class DialogueManager {
+
+
+export default class DialogueManager{
   private speakerRenderer?: DialogueSpeakerRenderer;
   private dialogueRenderer?: DialogueRenderer;
   private dialogueGenerator?: DialogueGenerator;
+  private KeyBoardManager?: GameInputManager = new GameInputManager(GameGlobalAPI.getInstance().getGameManager());
 
   /**
    * @param dialogueId the dialogue Id of the dialogue you want to play
@@ -44,9 +49,21 @@ export default class DialogueManager {
 
   private async playWholeDialogue(resolve: () => void) {
     await this.showNextLine(resolve);
+    // add keyboard listener for dialogue box 
+    this.getKeyBoardManager().registerKeyboardListener(
+      keyboardShortcuts.nextDialogue,
+      'up',
+      async () => {
+        // show the next line if dashboard or escape menu are not displayed
+        if (!GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()) {
+          await this.showNextLine(resolve); 
+        }
+      });
     this.getDialogueRenderer()
       .getDialogueBox()
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => await this.showNextLine(resolve));
+      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+        await this.showNextLine(resolve);
+      });
   }
 
   private async showNextLine(resolve: () => void) {
@@ -62,23 +79,34 @@ export default class DialogueManager {
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
+    
+
     if (prompt) {
+      // disable keyboard input to prevent continue dialogue
+      this.getKeyBoardManager().enableKeyboardInput(false);
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         prompt.promptTitle,
         prompt.choices.map(choice => choice[0])
       );
+
+      this.getKeyBoardManager().enableKeyboardInput(true);
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);
     }
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), true);
 
-    if (!line) resolve();
+    if (!line) {
+      // clear keyboard listeners when dialogue ends
+      this.getKeyBoardManager().clearKeyboardListener([keyboardShortcuts.nextDialogue]);
+      resolve();
+    }
   }
 
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
   private getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
   private getSpeakerRenderer = () => this.speakerRenderer as DialogueSpeakerRenderer;
+  private getKeyBoardManager = () => this.KeyBoardManager as GameInputManager;
 
   public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
 }
