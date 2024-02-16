@@ -3,6 +3,7 @@ import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
+import { CSEAnimation } from '../EnvVisualizerAnimation';
 import { CompactConfig, ShapeDefaultProps } from '../EnvVisualizerCompactConfig';
 import { Layout } from '../EnvVisualizerLayout';
 import { Env, EnvTreeNode, IHoverable } from '../EnvVisualizerTypes';
@@ -135,6 +136,9 @@ export class Frame extends Visible implements IHoverable {
   onMouseLeave = () => {};
 
   draw(): React.ReactNode {
+    if (EnvVisualizer.getCurrentEnvId() === this.environment?.id) {
+      CSEAnimation.setCurrentFrame(this);
+    }
     return (
       <Group key={Layout.key++}>
         {this.name.draw()}

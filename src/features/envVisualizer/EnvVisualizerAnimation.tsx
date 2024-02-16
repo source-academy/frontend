@@ -2,12 +2,14 @@ import { InstrType } from 'js-slang/dist/ec-evaluator/types';
 import { Easings } from 'konva/lib/Tween';
 
 import { Animatable } from './animationComponents/AnimationComponents';
+import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
 import { isInstr } from './compactComponents/ControlStack';
+import { Frame } from './compactComponents/Frame';
 import EnvVisualizer from './EnvVisualizer';
 import { Layout } from './EnvVisualizerLayout';
 
@@ -16,6 +18,7 @@ export class CSEAnimation {
   static readonly animationComponents: Animatable[] = [];
   static readonly defaultDuration = 0.3;
   static readonly defaultEasing = Easings.StrongEaseInOut;
+  static currentFrame: Frame;
 
   static enableAnimations(): void {
     CSEAnimation.animationEnabled = true;
@@ -23,6 +26,10 @@ export class CSEAnimation {
 
   static disableAnimations(): void {
     CSEAnimation.animationEnabled = false;
+  }
+
+  static setCurrentFrame(frame: Frame) {
+    CSEAnimation.currentFrame = frame;
   }
 
   private static clearAnimationComponents(): void {
@@ -53,6 +60,8 @@ export class CSEAnimation {
             Layout.stashComponent.stashItemComponents.at(-1)!
           );
           break;
+        case 'UnaryExpression':
+        case 'BinaryExpression':
         case 'Program':
         case 'ExpressionStatement':
         case 'VariableDeclaration':
@@ -71,7 +80,14 @@ export class CSEAnimation {
         case InstrType.RESET:
         case InstrType.WHILE:
         case InstrType.FOR:
+          break;
         case InstrType.ASSIGNMENT:
+          animation = new AssignmentAnimation(
+            lastControlComponent,
+            Layout.stashComponent.stashItemComponents.at(-1)!,
+            this.currentFrame!,
+            this.currentFrame!
+          );
           break;
         case InstrType.UNARY_OP:
           animation = new UnaryOperationAnimation(
