@@ -12,12 +12,14 @@ import { isInstr } from './compactComponents/ControlStack';
 import { Frame } from './compactComponents/Frame';
 import EnvVisualizer from './EnvVisualizer';
 import { Layout } from './EnvVisualizerLayout';
+import { AssmtInstr } from 'js-slang/dist/cse-machine/types';
 
 export class CSEAnimation {
   private static animationEnabled = false;
   static readonly animationComponents: Animatable[] = [];
   static readonly defaultDuration = 0.3;
   static readonly defaultEasing = Easings.StrongEaseInOut;
+  static previousFrame: Frame;
   static currentFrame: Frame;
 
   static enableAnimations(): void {
@@ -29,6 +31,7 @@ export class CSEAnimation {
   }
 
   static setCurrentFrame(frame: Frame) {
+    CSEAnimation.previousFrame = CSEAnimation.currentFrame;
     CSEAnimation.currentFrame = frame;
   }
 
@@ -82,12 +85,14 @@ export class CSEAnimation {
         case InstrType.FOR:
           break;
         case InstrType.ASSIGNMENT:
+          /*
+          const assmtInstr = lastControlItem as AssmtInstr;
           animation = new AssignmentAnimation(
             lastControlComponent,
             Layout.stashComponent.stashItemComponents.at(-1)!,
-            this.currentFrame!,
-            this.currentFrame!
-          );
+            this.previousFrame!,
+            assmtInstr.symbol
+          );*/
           break;
         case InstrType.UNARY_OP:
           animation = new UnaryOperationAnimation(
