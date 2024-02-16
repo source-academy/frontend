@@ -10,6 +10,26 @@ type File = {
   contents: string;
 };
 
+export const handleReadFile = (
+  fileSystem: FSModule,
+  fullFilePath: string,
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    fileSystem.readFile(fullFilePath, 'utf-8', (err, fileContents) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      if (fileContents === undefined) {
+        return;
+      }
+  
+      resolve(fileContents);
+    });
+  })
+ 
+};
+
 /**
  * Retrieves the files in the specified workspace as a record that maps from
  * file path to file content. Because BrowserFS lacks an equivalent to Node.js's
