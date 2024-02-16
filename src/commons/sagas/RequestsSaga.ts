@@ -631,7 +631,6 @@ export const getGradingOverviews = async (
   }
   const gradingOverviews = await resp.json();
 
-  console.log(gradingOverviews.data);
   return {
     count: gradingOverviews.count,
     data: gradingOverviews.data

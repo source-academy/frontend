@@ -6,7 +6,6 @@ import {
   Column,
   ColumnFilter,
   ColumnFiltersState,
-  Pagination,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -27,7 +26,6 @@ import {
   TableRow,
   Text,
   TextInput,
-  Dropdown
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -184,16 +182,18 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     );
   }, [columnFilters, globalFilter, dispatch]);
 
-  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a standardized filters type
-  const pageParamsBuilder = (): any => {
+  // Adapts frontend page and pageSize state into useable offset for backend usage.
+  const pageParams = (): any => {
     return {
       offset: page * pageSize,
       pageSize: pageSize,
     }
   }
 
-  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a standardized filters type
-  const filterParamsBuilder = (): any => {
+  // Converts the columnFilters array into backend query parameters.
+  // TEMP IMPLEMENTATION. Values currently hardcoded.
+  // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here.
+  const backendFilterParams = (columnFilters: ColumnFilter[]): any => {
     // translates filter columns to backend query name
     const shabbyenum = (val: string): string => {
       switch (val) {
@@ -206,15 +206,17 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
       }
     }
 
+  
     // This restricts each column to have only 1 accepted filter. Could be improved?
     const queryParams = {}
+    console.log(columnFilters.entries());
     columnFilters.map(column => {queryParams[shabbyenum(column.id)] = column.value;});
     return queryParams;
   }
 
   // handles re-rendering of component after update of filters or parameters.
   useEffect(() => {
-    updateEntries(false, pageParamsBuilder(), filterParamsBuilder());
+    updateEntries(false, pageParams(), backendFilterParams(columnFilters));
   }, [columnFilters, page, pageSize])
   
 
