@@ -7,9 +7,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams} from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
-import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/GradingUtils';
@@ -24,8 +21,6 @@ const Grading: React.FC = () => {
   const {
     courseId,
     gradingOverviews,
-    role,
-    group,
     assessmentOverviews: assessments = []
   } = useSession();
   const params = useParams<{
@@ -33,43 +28,16 @@ const Grading: React.FC = () => {
     questionId: string;
   }>();
 
-  const isAdmin = role === Role.Admin;
-  const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
-  const groupOptions = [
-    { value: false, label: 'my groups' },
-    { value: true, label: 'all groups' }
-  ];
-
-  const [pageSize, setPageSize] = useState(10);
-  const pageSizeOptions = [
-    { value: 1, label: '1' },
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 50, label: '50' }
-  ];
 
   const dispatch = useDispatch();
-  /**Passed as a prop to submissions table sub-component for sub-component to feed pagination and filter logic.*/
-  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
-  const updateGradingOverviewsCallback = (group: boolean, pageParams: any, filterParams: any) => {
-    dispatch(fetchGradingOverviews(false, pageParams, filterParams));
-  }
+  const updateGradingOverviewsCallback = (group: boolean, pageParams: {offset: number, pageSize: number}, filterParams: Object) => {
+    dispatch(fetchGradingOverviews(group, pageParams, filterParams));
+  };
 
-  /**Initializes grading submissions table with default values.
-   * useEffect ensures that initialization is run only once component is mounted.
-   */
-  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
+  // Default value initializer
   useEffect(() => {
-    dispatch(fetchGradingOverviews(false, {offset: 0, pageSize: 10}, {}));
-  }, [dispatch]);
-
-
-  const [showAllSubmissions, setShowAllSubmissions] = useState(true);
-  const showOptions = [
-    { value: false, label: 'ungraded' },
-    { value: true, label: 'all' }
-  ];
+    dispatch(fetchGradingOverviews());
+  }, []);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -126,37 +94,9 @@ const Grading: React.FC = () => {
                     </Button>
                   </Flex>
                 </Flex>
-                <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
-                  <Text>Viewing</Text>
-                  <SimpleDropdown
-                    options={showOptions}
-                    selectedValue={showAllSubmissions}
-                    onClick={setShowAllSubmissions}
-                    popoverProps={{ position: Position.BOTTOM }}
-                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-                  />
-                  <Text>Submissions from</Text>
-                  <SimpleDropdown
-                    options={groupOptions}
-                    selectedValue={showAllGroups}
-                    onClick={setShowAllGroups}
-                    popoverProps={{ position: Position.BOTTOM }}
-                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-                  />
-                  <Text>Entries per page</Text>
-                  <SimpleDropdown
-                    options={pageSizeOptions}
-                    selectedValue={pageSize}
-                    onClick={setPageSize}
-                    popoverProps={{ position: Position.BOTTOM }}
-                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-                  />
-                </Flex>
                 <GradingSubmissionsTable
                   totalRows={gradingOverviews.count}
-                  submissions={submissions.filter(
-                    s => showAllSubmissions || isSubmissionUngraded(s)
-                  )}
+                  submissions={submissions}
                   updateEntries={updateGradingOverviewsCallback}
                 />
               </Card>
@@ -165,11 +105,7 @@ const Grading: React.FC = () => {
             <Col numColSpanLg={2}>
               <Card hFull>
                 <GradingSummary
-                  // Only include submissions from the same group in the summary
-                  submissions={submissions.filter(
-                    ({ groupName, gradingStatus }) =>
-                      groupName === group && gradingStatus !== GradingStatuses.excluded
-                  )}
+                  submissions={submissions}
                   assessments={assessments}
                 />
               </Card>

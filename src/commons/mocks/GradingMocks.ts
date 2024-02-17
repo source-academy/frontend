@@ -74,10 +74,14 @@ export const mockGradingOverviews: GradingOverview[] = [
  *
  * @param accessToken a valid access token for the cadet backend.
  * @param group a boolean if true, only fetches submissions from the grader's group
+ * @param pageParams contains pagination details on offset and page index.
+ * @param backendParams contains filters to set conditions in SQL query.
  */
 export const mockFetchGradingOverview = (
   accessToken: string,
-  group: boolean
+  group: boolean,
+  pageParams: {offset: number, pageSize: number},
+  backendParams: Object
 ): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];

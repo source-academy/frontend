@@ -163,11 +163,13 @@ export function* mockBackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
       const filterToGroup = action.payload.filterToGroup;
+      const pageParams = action.payload.pageParams;
+      const backendParams = action.payload.filterParams;
       const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup)
+        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, backendParams)
       );
       if (gradingOverviews !== null) {
-        yield put(actions.updateGradingOverviews([...gradingOverviews]));
+        yield put(actions.updateGradingOverviews(gradingOverviews));
       }
     }
   );
@@ -196,14 +198,17 @@ export function* mockBackendSaga(): SagaIterator {
         yield call(showWarningMessage, '400: Bad Request');
         return;
       }
-      const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      const newEntries = {
+        count: Object.keys(overviews).length,
+        data: (overviews as GradingOverview[]).map(overview => {
         if (overview.submissionId === submissionId) {
           return { ...overview, submissionStatus: 'attempted' };
         }
         return overview;
-      });
+        })
+      };
       yield call(showSuccessMessage, 'Unsubmit successful!', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
+      yield put(actions.updateGradingOverviews(newEntries));
     }
   );
 

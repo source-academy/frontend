@@ -110,9 +110,13 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
 /**
  * @param filterToGroup - param when set to true, only shows submissions under the group
  * of the grader
+ * @param pageParams - param that contains offset and pageSize, informing backend about how
+ * many entries, starting from what offset, to get
+ * @param filterParams - param that contains columnFilters converted into JSON for 
+ * processing into query parameters
  */
-// TEMPORARY IMPLEMENTATION. Refactor into a filters type once proof of feature is complete.
-export const fetchGradingOverviews = (filterToGroup = true, pageParams: any, filterParams: any) =>
+// TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
+export const fetchGradingOverviews = (filterToGroup = true, pageParams = { offset: 0, pageSize: 10 }, filterParams = {}) =>
   action(FETCH_GRADING_OVERVIEWS, {
     filterToGroup,
     pageParams,

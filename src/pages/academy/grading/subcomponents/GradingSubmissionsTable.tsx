@@ -29,25 +29,28 @@ import {
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import SimpleDropdown from 'src/commons/SimpleDropdown';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
-import { FilterStatus } from 'src/features/achievement/AchievementTypes';
-import SimpleDropdown from 'src/commons/SimpleDropdown';
+import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 
 
 type GradingSubmissionTableProps = {
   totalRows: number;
   submissions: GradingOverview[];
   // TEMPORARY IMPLEMENTATION. TODO: Refactor into a unified type once proof of feature is complete.
-  updateEntries: (group: boolean, pageParams: any, filterParams: any) => void;
+  updateEntries: (group: boolean, pageParams: {offset: number, pageSize: number}, filterParams: any) => void;
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRows, submissions, updateEntries }) => {
+  const {
+    group
+  } = useSession();
   const columnHelper = createColumnHelper<GradingOverview>();
 
   const columns = [
@@ -191,37 +194,52 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   }
 
   // Converts the columnFilters array into backend query parameters.
-  // TEMP IMPLEMENTATION. Values currently hardcoded.
-  // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here.
-  const backendFilterParams = (columnFilters: ColumnFilter[]): any => {
-    // translates filter columns to backend query name
-    const backendNameOf = (val: string): string => {
-      switch (val) {
-        case "assessmentName": return "title";
-        case "assessmentType": return "type";
-        case "studentName": return "name";
-        case "studentUsername": return "username";
-        case "submissionStatus": return "status";
-        default:
-          return val;
-      }
-    }
-
-  
-    // This restricts each column to have only 1 accepted filter. Could be improved?
-    const queryParams = {}
-    console.log(columnFilters.entries());
-    columnFilters.map(column => {queryParams[backendNameOf(column.id)] = column.value;});
-    return queryParams;
+  // TEMP IMPLEMENTATION. Values currently hardcoded with knowledge of what a ColumnFilter is.
+  // TODO: remove hardcoding conversion of all submissions to column filter. it is a hacky workaround.
+  // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here, remove hardcode.
+  const backendFilterParams = (columnFilters: ColumnFilter[], showAllSubmissions: boolean): any => {
+    return columnFilters
+        .concat([{ id: (showAllSubmissions ? "paramIgnoredByBackend" : "gradingStatus"), value: GradingStatuses.none}])
+        .map((column: ColumnFilter) => {
+          // TODO: change all references to column properties in backend saga to backend name to reduce 
+          // un-needed hardcode conversion, ensuring that places that reference it are updated.
+          switch (column.id) {
+            case "assessmentName": 
+              return {"title": column.value};
+            case "assessmentType":
+              return {"type": column.value};
+            case "studentName":
+              return {"name": column.value};
+            case "studentUsername":
+              return {"username": column.value};
+            case "submissionStatus":
+              return {"status": column.value};
+            case "gradingStatus":
+              if (column.value === GradingStatuses.none) {
+                return {
+                  "isManuallyGraded": true,
+                  "status": "submitted",
+                  "numGraded": 0,
+                };
+              } else if (column.value === GradingStatuses.graded) {
+                // TODO: coordinate with backend on subquerying to implement the third query
+                // currently ignored by backend as of 16 Feb 24 commit
+                return {
+                  "isManuallyGraded": true,
+                  "status": "submitted",
+                  "numGradedEqualToTotal": true,  
+                };
+              } else {
+                // case: excluded or grading. Not implemented yet.
+                return {};
+              }
+            default:
+              return column;
+          }
+        })
+        .reduce(Object.assign, {});
   }
-
-  // handles re-rendering of component after update of filters or parameters.
-  useEffect(() => {
-    updateEntries(false, pageParams(), backendFilterParams(columnFilters));
-  }, [columnFilters, page, pageSize])
   
-
-  // dropdown to select pageSize
   const pageSizeOptions = [
     { value: 1, label: '1' },
     { value: 5, label: '5' },
@@ -229,10 +247,54 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     { value: 20, label: '20' },
     { value: 50, label: '50' }
   ];
-  
+
+  // TODO: implement isAdmin functionality
+  const [showAllGroups, setShowAllGroups] = useState(false);
+  const groupOptions = [
+    { value: false, label: 'my groups' },
+    { value: true, label: 'all groups' }
+  ];
+
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const showSubmissionOptions = [
+    { value: false, label: 'ungraded' },
+    { value: true, label: 'all' }
+  ];
+
+  // tells page to ask for new entries from main page when its state changes.
+  useEffect(() => {
+    updateEntries(showAllGroups, pageParams(), backendFilterParams(columnFilters, showAllSubmissions));
+  }, [showAllGroups, page, pageSize, columnFilters, showAllSubmissions]);
+
 
   return (
     <>
+      <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
+        <Text>Viewing</Text>
+        <SimpleDropdown
+          options={showSubmissionOptions}
+          selectedValue={showAllSubmissions}
+          onClick={setShowAllSubmissions}
+          popoverProps={{ position: Position.BOTTOM }}
+          buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+        />
+        <Text>Submissions from</Text>
+        <SimpleDropdown
+          options={groupOptions}
+          selectedValue={showAllGroups}
+          onClick={setShowAllGroups}
+          popoverProps={{ position: Position.BOTTOM }}
+          buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+        />
+        <Text>Entries per page</Text>
+        <SimpleDropdown
+          options={pageSizeOptions}
+          selectedValue={pageSize}
+          onClick={setPageSize}
+          popoverProps={{ position: Position.BOTTOM }}
+          buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+        />
+      </Flex>
       <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
         <Flex alignItems="items-center" spaceX="space-x-2">
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
@@ -313,13 +375,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
               onClick={() => setPage(Math.ceil(totalRows / pageSize) - 1)}
               disabled={page >= (Math.ceil(totalRows / pageSize) - 1)}
             />
-            <SimpleDropdown
-              options={pageSizeOptions}
-              selectedValue={pageSize}
-              onClick={setPageSize}
-              popoverProps={{ position: Position.BOTTOM }}
-              //buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-            />
+
           </Flex>
         </Footer>
       </Table>

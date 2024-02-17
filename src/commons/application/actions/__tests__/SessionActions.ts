@@ -150,16 +150,26 @@ test('fetchGradingOverviews generates correct default action object', () => {
   const action = fetchGradingOverviews();
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
-    payload: true
+    payload: {
+      filterToGroup: true,
+      pageParams: {},
+      filterParams: {}
+    }
   });
 });
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const action = fetchGradingOverviews(filterToGroup);
+  const pageParams = { offset: 12, pageSize: 3 };
+  const filterParams = { abc: "xxx", def: "yyy" };
+  const action = fetchGradingOverviews(filterToGroup, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
-    payload: filterToGroup
+    payload: {
+      filterToGroup: filterToGroup,
+      pageParams: pageParams,
+      filterParams: filterParams
+    }
   });
 });
 
@@ -506,7 +516,9 @@ test('updateAssessment generates correct action object', () => {
 });
 
 test('updateGradingOverviews generates correct action object', () => {
-  const overviews: GradingOverview[] = [
+  const overviews: { count: number; data: GradingOverview[]} = {
+    count: 1,
+    data: [
     {
       assessmentId: 1,
       assessmentNumber: 'M1A',
@@ -527,7 +539,8 @@ test('updateGradingOverviews generates correct action object', () => {
       questionCount: 6,
       gradedCount: 0
     }
-  ];
+    ]
+  };
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
