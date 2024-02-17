@@ -11,7 +11,11 @@ export class PopAnimation extends Animatable {
   private popItemAnimation: AnimatedTextboxComponent;
   private stashItemAnimation: AnimatedTextboxComponent;
 
-  constructor(popItem: ControlItemComponent, stashItem: StashItemComponent) {
+  constructor(
+    popItem: ControlItemComponent,
+    stashItem: StashItemComponent,
+    private undefinedStashItem?: StashItemComponent
+  ) {
     super();
     const popItemPosition = getNodePositionFromItem(popItem);
     const stashItemPosition = getNodePositionFromItem(stashItem);
@@ -45,12 +49,15 @@ export class PopAnimation extends Animatable {
   }
 
   async animate() {
+    this.undefinedStashItem?.ref?.current?.hide();
     await Promise.all([this.popItemAnimation.animate(), this.stashItemAnimation.animate()]);
     this.stashItemAnimation.setDestination(
       { scaleX: 1.1, scaleY: 1.1, opacity: 0 },
       { durationMultiplier: 0.5, easing: Easings.StrongEaseOut }
     );
     await this.stashItemAnimation.animate();
+    this.ref.current?.hide();
+    this.undefinedStashItem?.ref?.current?.show();
   }
 
   destroy() {

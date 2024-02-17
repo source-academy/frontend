@@ -35,6 +35,7 @@ export class Text extends Visible implements IHoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
+  readonly labelRef: React.RefObject<any> = React.createRef();
 
   constructor(
     readonly data: Data,
@@ -70,14 +71,14 @@ export class Text extends Visible implements IHoverable {
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredCursor(currentTarget);
-    this.ref.current.moveToTop();
-    this.ref.current.show();
+    this.labelRef.current.moveToTop();
+    this.labelRef.current.show();
     currentTarget.getLayer()?.draw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setUnhoveredCursor(currentTarget);
-    this.ref.current.hide();
+    this.labelRef.current.hide();
     currentTarget.getLayer()?.draw();
   };
 
@@ -96,12 +97,18 @@ export class Text extends Visible implements IHoverable {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
+          <KonvaText
+            {...ShapeDefaultProps}
+            key={Layout.key++}
+            ref={this.ref}
+            text={this.partialStr}
+            {...props}
+          />
         </KonvaLabel>
         <KonvaLabel
           x={this.x()}
           y={this.y()}
-          ref={this.ref}
+          ref={this.labelRef}
           visible={false}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}

@@ -44,6 +44,7 @@ export class PrimitiveValue extends Value {
 
     this._width = this.text.width();
     this._height = this.text.height();
+    this.ref = this.text.ref;
   }
   updatePosition(): void {}
   draw(): React.ReactNode {

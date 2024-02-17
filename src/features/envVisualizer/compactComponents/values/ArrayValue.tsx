@@ -1,4 +1,5 @@
 import React from 'react';
+import { Group } from 'react-konva';
 
 import { CompactConfig } from '../../EnvVisualizerCompactConfig';
 import { Layout } from '../../EnvVisualizerLayout';
@@ -80,11 +81,11 @@ export class ArrayValue extends Value {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
     return (
-      <React.Fragment key={Layout.key++}>
+      <Group key={Layout.key++} ref={this.ref}>
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
           : new ArrayEmptyUnit(this).draw()}
-      </React.Fragment>
+      </Group>
     );
   }
 }

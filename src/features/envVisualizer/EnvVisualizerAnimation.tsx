@@ -1,7 +1,9 @@
+import { AssmtInstr } from 'js-slang/dist/cse-machine/types';
 import { InstrType } from 'js-slang/dist/ec-evaluator/types';
 import { Easings } from 'konva/lib/Tween';
 
 import { Animatable } from './animationComponents/AnimationComponents';
+import { lookupBinding } from './animationComponents/AnimationUtils';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
@@ -12,15 +14,13 @@ import { isInstr } from './compactComponents/ControlStack';
 import { Frame } from './compactComponents/Frame';
 import EnvVisualizer from './EnvVisualizer';
 import { Layout } from './EnvVisualizerLayout';
-import { AssmtInstr } from 'js-slang/dist/cse-machine/types';
 
 export class CSEAnimation {
   private static animationEnabled = false;
   static readonly animationComponents: Animatable[] = [];
   static readonly defaultDuration = 0.3;
   static readonly defaultEasing = Easings.StrongEaseInOut;
-  static previousFrame: Frame;
-  static currentFrame: Frame;
+  private static currentFrame: Frame;
 
   static enableAnimations(): void {
     CSEAnimation.animationEnabled = true;
@@ -31,7 +31,6 @@ export class CSEAnimation {
   }
 
   static setCurrentFrame(frame: Frame) {
-    CSEAnimation.previousFrame = CSEAnimation.currentFrame;
     CSEAnimation.currentFrame = frame;
   }
 
@@ -85,14 +84,11 @@ export class CSEAnimation {
         case InstrType.FOR:
           break;
         case InstrType.ASSIGNMENT:
-          /*
-          const assmtInstr = lastControlItem as AssmtInstr;
           animation = new AssignmentAnimation(
             lastControlComponent,
             Layout.stashComponent.stashItemComponents.at(-1)!,
-            this.previousFrame!,
-            assmtInstr.symbol
-          );*/
+            ...lookupBinding(CSEAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
+          );
           break;
         case InstrType.UNARY_OP:
           animation = new UnaryOperationAnimation(
@@ -110,9 +106,14 @@ export class CSEAnimation {
           );
           break;
         case InstrType.POP:
+          const currentStashSize = Layout.stashComponent.stash.size();
+          const previousStashSize = Layout.previousStashComponent.stash.size();
+          const lastStashIsUndefined =
+            currentStashSize === 1 && currentStashSize === previousStashSize;
           animation = new PopAnimation(
             lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!
+            Layout.previousStashComponent.stashItemComponents.at(-1)!,
+            lastStashIsUndefined ? Layout.stashComponent.stashItemComponents.at(-1)! : undefined
           );
           break;
         case InstrType.APPLICATION:

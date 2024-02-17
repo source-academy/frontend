@@ -1,9 +1,8 @@
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { Binding } from '../compactComponents/Binding';
 import { Frame } from '../compactComponents/Frame';
-import { StashItemComponent } from '../compactComponents/StashItemComponent';
+import { Visible } from '../components/Visible';
 
-export function getNodePositionFromItem(item: ControlItemComponent | StashItemComponent | Frame) {
+export function getNodePositionFromItem(item: Visible) {
   return {
     x: item.x(),
     y: item.y(),
@@ -13,11 +12,16 @@ export function getNodePositionFromItem(item: ControlItemComponent | StashItemCo
 }
 
 // Given a current frame, find a binding by traversing the enclosing environments (frames).
-export function lookup(currFrame: Frame, bindingName: string): Binding | undefined {
-  while (currFrame.parentFrame !== undefined) {
-    const binding = currFrame.bindings.find(b => b.keyString === bindingName);
-    if (binding != undefined || currFrame.parentFrame === undefined) {
-      return binding;
+export function lookupBinding(currFrame: Frame, bindingName: string): [Frame, Binding] {
+  let frame: Frame | undefined = currFrame;
+  while (frame !== undefined) {
+    const binding = frame.bindings.find(b => b.keyString.split(':')[0] === bindingName);
+    if (binding) {
+      return [frame, binding];
     }
+    frame = frame.parentFrame;
   }
+  throw new Error(
+    `Error: Binding with name "${bindingName}" cannot be found within the environment!`
+  );
 }

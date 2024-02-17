@@ -38,6 +38,7 @@ export class UnassignedValue extends Value {
 
     this._width = this.text.width();
     this._height = this.text.height();
+    this.ref = this.text.ref;
   }
 
   reset(): void {

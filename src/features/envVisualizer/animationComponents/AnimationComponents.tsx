@@ -118,30 +118,41 @@ abstract class AnimationComponent extends Animatable {
 }
 
 export class AnimatedTextComponent extends AnimationComponent {
-  readonly text?: string;
-
   constructor(
     from: StrictNodeConfig,
     to?: NodeConfig,
-    private textProps?: TextConfig,
-    animationConfig?: AnimationConfig
+    readonly text?: string,
+    animationConfig?: AnimationConfig,
+    private textProps?: TextConfig
   ) {
     super(from, to, animationConfig);
-    if (this.textProps?.text === undefined) {
-      console.warn('AnimatedTextComponent has no text defined inside textProps.');
+    if (this.text === undefined) {
+      if (this.textProps?.text === undefined) {
+        console.warn('AnimatedTextComponent has no text defined inside textProps.');
+      }
+      this.text = this.textProps?.text;
     }
-    this.text = this.textProps?.text;
   }
 
   draw(): React.ReactNode {
+    const textProps = {
+      fill: ControlStashConfig.SA_WHITE.toString(),
+      padding: Number(ControlStashConfig.ControlItemTextPadding),
+      fontFamily: ControlStashConfig.FontFamily.toString(),
+      fontSize: Number(ControlStashConfig.FontSize),
+      fontStyle: ControlStashConfig.FontStyle.toString(),
+      fontVariant: ControlStashConfig.FontVariant.toString()
+    };
     return (
       <Text
         ref={this.ref}
-        {...(this.textProps ?? {})}
+        {...(this.textProps ?? textProps)}
         {...this.from}
         text={this.text}
         width={this.width()}
         height={this.height()}
+        listening={false}
+        preventDefault={true}
       />
     );
   }
@@ -151,20 +162,26 @@ export class AnimatedRectComponent extends AnimationComponent {
   constructor(
     from: StrictNodeConfig,
     to?: NodeConfig,
-    private rectProps?: RectConfig,
-    animationConfig?: AnimationConfig
+    animationConfig?: AnimationConfig,
+    private rectProps?: RectConfig
   ) {
     super(from, to, animationConfig);
   }
 
   draw(): React.ReactNode {
+    const rectProps = {
+      stroke: currentItemSAColor(false),
+      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
+    };
     return (
       <Rect
         ref={this.ref}
-        {...(this.rectProps ?? {})}
+        {...(this.rectProps ?? rectProps)}
         {...this.from}
         width={this.width()}
         height={this.height()}
+        listening={false}
+        preventDefault={true}
       />
     );
   }
@@ -181,21 +198,12 @@ export class AnimatedTextboxComponent extends Animatable {
     animationConfig?: AnimationConfig
   ) {
     super();
-    const rectProps = {
-      stroke: currentItemSAColor(false),
-      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
-    };
-    const textProps = {
-      text,
-      fill: ControlStashConfig.SA_WHITE.toString(),
-      padding: Number(ControlStashConfig.ControlItemTextPadding),
-      fontFamily: ControlStashConfig.FontFamily.toString(),
-      fontSize: Number(ControlStashConfig.FontSize),
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
-    };
-    this.rectComponent = new AnimatedRectComponent(from, to, rectProps, animationConfig);
-    this.textComponent = new AnimatedTextComponent(from, to, textProps, animationConfig);
+    this._x = from.x;
+    this._y = from.y;
+    this._width = from.width;
+    this._height = from.height;
+    this.rectComponent = new AnimatedRectComponent(from, to, animationConfig);
+    this.textComponent = new AnimatedTextComponent(from, to, text, animationConfig);
   }
 
   draw(): React.ReactNode {
@@ -214,6 +222,10 @@ export class AnimatedTextboxComponent extends Animatable {
 
   async animate() {
     await Promise.all([this.rectComponent.animate(), this.textComponent.animate()]);
+    this._x = this.rectComponent.x();
+    this._y = this.rectComponent.y();
+    this._width = this.rectComponent.width();
+    this._height = this.rectComponent.height();
   }
 
   destroy() {

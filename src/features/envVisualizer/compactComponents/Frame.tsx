@@ -129,6 +129,10 @@ export class Frame extends Visible implements IHoverable {
       : CompactConfig.FramePaddingY * 2;
 
     this.totalHeight = this.height() + this.name.height() + CompactConfig.TextPaddingY / 2;
+    
+    if (EnvVisualizer.getCurrentEnvId() === this.environment.id) {
+      CSEAnimation.setCurrentFrame(this);
+    }
   }
 
   onMouseEnter = () => {};
@@ -136,9 +140,6 @@ export class Frame extends Visible implements IHoverable {
   onMouseLeave = () => {};
 
   draw(): React.ReactNode {
-    if (EnvVisualizer.getCurrentEnvId() === this.environment?.id) {
-      CSEAnimation.setCurrentFrame(this);
-    }
     return (
       <Group key={Layout.key++}>
         {this.name.draw()}

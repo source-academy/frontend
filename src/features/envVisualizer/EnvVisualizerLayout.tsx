@@ -42,6 +42,7 @@ import {
   isPrimitiveData,
   isUnassigned
 } from './EnvVisualizerUtils';
+// import { Column } from './experimental';
 
 /** this class encapsulates the logic for calculating the layout */
 export class Layout {
@@ -593,6 +594,11 @@ export class Layout {
                   {EnvVisualizer.getCompactLayout() &&
                     EnvVisualizer.getControlStash() &&
                     CSEAnimation.animationComponents.map(c => c.draw())}
+                  {/* <Column gap={8} x={50} y={50}>
+                    <Rect width={100} height={50} fill="#333" />
+                    <Rect width={100} height={100} fill="#333" />
+                    <Rect width={100} height={150} fill="#333" />
+                  </Column> */}
                 </Layer>
               </Stage>
             </div>
