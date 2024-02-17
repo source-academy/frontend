@@ -53,37 +53,72 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     group
   } = useSession();
   */
+
+  // Nesting of Filterable here allows for mutual re-rendering with the dropdown options tab if either of them update.
+  // This is needed because a filter change is accompanied with a page reset.
+  type FilterableProps = {
+    column: Column<any, unknown>;
+    value: string;
+    children?: React.ReactNode;
+  };
+
+  const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    ...tableFilters.columnFilters
+  ]);
+  const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
+
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(10);
+
+
   const columnHelper = createColumnHelper<GradingOverview>();
+
+  
+  const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
+    const handleFilterChange = () => {
+      column.setFilterValue(value);
+      setPage(0);
+    };
+  
+    return (
+      <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+        {children || value}
+      </button>
+    );
+  };
+
 
   const columns = [
     columnHelper.accessor('assessmentName', {
       header: 'Name',
-      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}/>
+      cell: info => <Filterable column={info.column} value={info.getValue()}/>
     }),
     columnHelper.accessor('assessmentType', {
       header: 'Type',
       cell: info => (
-        <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}>
+        <Filterable column={info.column} value={info.getValue()}>
           <AssessmentTypeBadge type={info.getValue()} />
         </Filterable>
       )
     }),
     columnHelper.accessor('studentName', {
       header: 'Student',
-      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)} />
+      cell: info => <Filterable column={info.column} value={info.getValue()}/>
     }),
     columnHelper.accessor('studentUsername', {
       header: 'Username',
-      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}/>
+      cell: info => <Filterable column={info.column} value={info.getValue()}/>
     }),
     columnHelper.accessor('groupName', {
       header: 'Group',
-      cell: info => <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}/>
+      cell: info => <Filterable column={info.column} value={info.getValue()}/>
     }),
     columnHelper.accessor('submissionStatus', {
       header: 'Progress',
       cell: info => (
-        <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}>
+        <Filterable column={info.column} value={info.getValue()}>
           <SubmissionStatusBadge status={info.getValue()} />
         </Filterable>
       )
@@ -91,7 +126,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     columnHelper.accessor('gradingStatus', {
       header: 'Grading',
       cell: info => (
-        <Filterable column={info.column} value={info.getValue()} resetpage={() => setPage(0)}>
+        <Filterable column={info.column} value={info.getValue()} >
           <GradingStatusBadge status={info.getValue()} />
         </Filterable>
       )
@@ -121,37 +156,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
       }
     })
   ];
-
-  type FilterableProps = {
-    column: Column<any, unknown>;
-    value: string;
-    children?: React.ReactNode;
-    resetpage: () => void;
-  };
-  
-  const Filterable: React.FC<FilterableProps> = ({ column, value, children, resetpage }) => {
-    const handleFilterChange = () => {
-      column.setFilterValue(value);
-      resetpage();
-    };
-  
-    return (
-      <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
-        {children || value}
-      </button>
-    );
-  };
-
-
-  const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters
-  ]);
-  const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
-
-  const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(10);
 
   const table = useReactTable({
     data: submissions,
