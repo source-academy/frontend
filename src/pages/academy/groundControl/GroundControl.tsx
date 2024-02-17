@@ -1,5 +1,5 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -12,7 +12,7 @@ import {
   AssessmentOverview
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
+import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
@@ -75,7 +75,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           inRangeInclusive: true
         },
         sortingOrder: ['desc', 'asc', null],
-        cellRendererFramework: EditCell,
+        cellRenderer: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: true
@@ -91,7 +91,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           inRangeInclusive: true
         },
         sortingOrder: ['desc', 'asc', null],
-        cellRendererFramework: EditCell,
+        cellRenderer: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: false
@@ -101,7 +101,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       {
         headerName: 'Publish',
         field: '',
-        cellRendererFramework: PublishCell,
+        cellRenderer: PublishCell,
         cellRendererParams: {
           handlePublishAssessment: this.props.handlePublishAssessment
         },
@@ -116,7 +116,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       {
         headerName: 'Delete',
         field: '',
-        cellRendererFramework: DeleteCell,
+        cellRenderer: DeleteCell,
         cellRendererParams: {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
@@ -174,7 +174,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           onGridSizeChanged={this.resizeGrid}
           rowData={this.props.assessmentOverviews}
           rowHeight={30}
-          suppressCellSelection={true}
+          suppressCellFocus={true}
           suppressMovableColumns={true}
           suppressPaginationPanel={true}
         />

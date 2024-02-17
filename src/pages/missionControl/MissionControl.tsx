@@ -1,7 +1,9 @@
+import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import academyClasses from 'src/styles/Academy.module.scss';
 
 import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
@@ -9,7 +11,7 @@ import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOv
 import EditingWorkspace, {
   EditingWorkspaceProps
 } from '../../commons/editingWorkspace/EditingWorkspace';
-import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
+import MissionCreator from '../../commons/missionCreator/MissionCreator';
 import Constants from '../../commons/utils/Constants';
 import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
@@ -17,7 +19,7 @@ import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLPars
 const nullFunction = () => {};
 
 const MissionControl: React.FC = () => {
-  const { assessmentConfigurations } = useTypedSelector(state => state.session);
+  const { assessmentConfigurations } = useSession();
   const assessmentTypes = assessmentConfigurations?.map(e => e.type) || [];
 
   const [editingOverview, setEditingOverview] = useState(retrieveLocalAssessmentOverview());
@@ -50,7 +52,7 @@ const MissionControl: React.FC = () => {
       closeDate: overview.closeAt
     };
     return (
-      <div className="Academy">
+      <div className={academyClasses['Academy']}>
         <EditingWorkspace {...assessmentProps} />
       </div>
     );
@@ -72,7 +74,7 @@ const MissionControl: React.FC = () => {
 
   // Finally, render the ContentDisplay.
   return (
-    <div className="Assessment Academy">
+    <div className={classNames('Assessment', academyClasses['Academy'])}>
       <ContentDisplay display={display} loadContentDispatch={nullFunction} />
     </div>
   );

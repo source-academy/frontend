@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import academyClasses from 'src/styles/Academy.module.scss';
 
 import ContentDisplay from '../../commons/ContentDisplay';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
@@ -101,7 +102,7 @@ const GitHubClassroom: React.FC = () => {
   );
 
   return (
-    <div className="Academy" style={{ overflow: 'hidden' }}>
+    <div className={academyClasses['Academy']} style={{ overflow: 'hidden' }}>
       <GitHubAssessmentsNavigationBar
         changeCourseHandler={changeCourseHandler}
         handleGitHubLogIn={handleGitHubLogIn}

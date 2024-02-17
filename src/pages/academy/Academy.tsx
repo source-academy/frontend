@@ -6,7 +6,8 @@ import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
+import classes from 'src/styles/Academy.module.scss';
 
 import {
   fetchNotifications,
@@ -26,7 +27,6 @@ import GroundControl from './groundControl/GroundControlContainer';
 import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/Sourcereel';
 import StorySimulator from './storySimulator/StorySimulator';
-import XpCalculation from './xpCalculation/XpCalculation';
 
 const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();
@@ -34,26 +34,20 @@ const Academy: React.FC<{}> = () => {
     dispatch(fetchNotifications());
   }, [dispatch]);
 
-  const agreedToResearch = useTypedSelector(state => state.session.agreedToResearch);
-  const assessmentConfigurations = useTypedSelector(
-    state => state.session.assessmentConfigurations
-  );
-  const enableGame = useTypedSelector(state => state.session.enableGame);
-  const role = useTypedSelector(state => state.session.role);
+  const { agreedToResearch, assessmentConfigurations, enableGame, role } = useSession();
 
   const staffRoutes =
     role !== Role.Student
       ? [
           <Route path="groundcontrol" element={<GroundControl />} key={0} />,
           <Route path={`grading/${gradingRegExp}`} element={<Grading />} key={1} />,
-          <Route path="xpcalculation" element={<XpCalculation />} key={2} />,
-          <Route path="sourcereel" element={<Sourcereel />} key={3} />,
-          <Route path="storysimulator" element={<StorySimulator />} key={4} />,
-          <Route path="dashboard" element={<Dashboard />} key={5} />
+          <Route path="sourcereel" element={<Sourcereel />} key={2} />,
+          <Route path="storysimulator" element={<StorySimulator />} key={3} />,
+          <Route path="dashboard" element={<Dashboard />} key={4} />
         ]
       : null;
   return (
-    <div className="Academy">
+    <div className={classes['Academy']}>
       {/* agreedToResearch has a default value of undefined in the store.
             It will take on null/true/false when the backend returns. */}
       {Constants.showResearchPrompt && agreedToResearch === null && <ResearchAgreementPrompt />}
@@ -97,7 +91,7 @@ const Academy: React.FC<{}> = () => {
 const CourseSelectingAcademy: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const courseId = useTypedSelector(state => state.session.courseId);
+  const { courseId } = useSession();
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
@@ -117,7 +111,7 @@ const CourseSelectingAcademy: React.FC<{}> = () => {
   ) : routeCourseId === courseId ? (
     <Academy />
   ) : (
-    <div className={classNames('Academy-switching-courses', Classes.DARK)}>
+    <div className={classNames(classes['Academy-switching-courses'], Classes.DARK)}>
       <Card className={Classes.ELEVATION_4}>
         <NonIdealState
           description="Switching courses..."

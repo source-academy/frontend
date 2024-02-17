@@ -67,9 +67,8 @@ const SelectCell: React.FC<SelectCellProps> = props => {
       noResults={<MenuItem disabled={true} text="No results." roleStructure="listoption" />}
     >
       <Button
-        text={selectedOption ? getUserFriendlyText(selectedOption) : 'NA'}
+        text={selectedOption ? getUserFriendlyText(selectedOption) : 'Choose default'}
         rightIcon="caret-down"
-        placeholder="Choose default"
       />
     </Select2>
   );

@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Navbar renders correctly 1`] = `
-<Blueprint4.Navbar
+<Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
-  <Blueprint4.NavbarGroup
+  <Blueprint5.NavbarGroup
     align="left"
   >
     <NavLink
@@ -18,11 +18,13 @@ exports[`Navbar renders correctly 1`] = `
       }
       to="/githubassessments/missions"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="flame"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Missions
       </div>
@@ -38,50 +40,34 @@ exports[`Navbar renders correctly 1`] = `
       }
       to="/githubassessments/quests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="lightbulb"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Quests
       </div>
     </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup
+  </Blueprint5.NavbarGroup>
+  <Blueprint5.NavbarGroup
     align="right"
   >
-    <Blueprint4.InputGroup
+    <Blueprint5.InputGroup
       disabled={true}
       leftElement={
-        <Blueprint4.Popover2
-          boundary="clippingParents"
-          captureDismiss={false}
-          content={<Blueprint4.Menu />}
-          defaultIsOpen={false}
-          disabled={false}
-          fill={false}
-          hasBackdrop={false}
-          hoverCloseDelay={300}
-          hoverOpenDelay={150}
-          inheritDarkTheme={true}
-          interactionKind="click"
-          matchTargetWidth={false}
-          minimal={false}
-          openOnTargetFocus={true}
+        <Popover2
+          content={<Blueprint5.Menu />}
           placement="bottom-end"
-          positioningStrategy="absolute"
-          shouldReturnFocusOnClose={false}
-          targetTagName="span"
-          transitionDuration={300}
-          usePortal={true}
         >
-          <Blueprint4.Button
+          <Blueprint5.Button
             aria-label="choose"
             minimal={true}
             rightIcon="caret-down"
           />
-        </Blueprint4.Popover2>
+        </Popover2>
       }
       onChange={[Function]}
       placeholder="Select Course"
@@ -91,6 +77,6 @@ exports[`Navbar renders correctly 1`] = `
       onClickLogIn={[Function]}
       onClickLogOut={[Function]}
     />
-  </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>
+  </Blueprint5.NavbarGroup>
+</Blueprint5.Navbar>
 `;

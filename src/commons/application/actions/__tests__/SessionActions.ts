@@ -238,6 +238,7 @@ test('setCourseConfiguration generates correct action object', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
@@ -283,6 +284,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission1',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -291,6 +293,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission2',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -299,6 +302,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission3',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -625,6 +629,7 @@ test('updateCourseConfig generates correct action object', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
@@ -651,6 +656,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Missions',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -659,6 +665,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Quests',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -667,6 +674,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Paths',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -675,6 +683,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Contests',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -683,6 +692,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Others',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -700,6 +710,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
     type: 'Mission1',
     isManuallyGraded: true,
     displayInDashboard: true,
+    hasTokenCounter: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   };

@@ -22,7 +22,6 @@ import {
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
@@ -65,7 +64,6 @@ import {
   TimeOption,
   Tokens,
   UNSUBMIT_SUBMISSION,
-  UPDATE_ALL_USER_XP,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
@@ -102,8 +100,6 @@ export const fetchAssessmentOverviews = () => action(FETCH_ASSESSMENT_OVERVIEWS)
 export const fetchTotalXp = () => action(FETCH_TOTAL_XP);
 
 export const fetchTotalXpAdmin = (courseRegId: number) => action(FETCH_TOTAL_XP_ADMIN, courseRegId);
-
-export const fetchAllUserXp = () => action(FETCH_ALL_USER_XP);
 
 export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, submissionId);
 
@@ -217,8 +213,6 @@ export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
   action(UPDATE_ASSESSMENT_OVERVIEWS, overviews);
 
 export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalXp);
-
-export const updateAllUserXp = (allUserXp: string[][]) => action(UPDATE_ALL_USER_XP, allUserXp);
 
 export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 
