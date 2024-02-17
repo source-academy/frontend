@@ -1,15 +1,15 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { Icon as BpIcon, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Button, Card, Col, ColGrid, Flex, Text, Title } from '@tremor/react';
-import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, ColGrid, Flex, Title } from '@tremor/react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams} from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/GradingUtils';
+import { exportGradingCSV } from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';

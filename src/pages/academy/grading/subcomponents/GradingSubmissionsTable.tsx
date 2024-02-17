@@ -29,28 +29,30 @@ import {
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 
 
 type GradingSubmissionTableProps = {
   totalRows: number;
   submissions: GradingOverview[];
-  // TEMPORARY IMPLEMENTATION. TODO: Refactor into a unified type once proof of feature is complete.
+  // TODO: Abstract pageParams object into a useable type.
   updateEntries: (group: boolean, pageParams: {offset: number, pageSize: number}, filterParams: any) => void;
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRows, submissions, updateEntries }) => {
+  /* TODO: implement functionality for submission filtering by groups using the following state.
   const {
     group
   } = useSession();
+  */
   const columnHelper = createColumnHelper<GradingOverview>();
 
   const columns = [
@@ -197,6 +199,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   // TEMP IMPLEMENTATION. Values currently hardcoded with knowledge of what a ColumnFilter is.
   // TODO: remove hardcoding conversion of all submissions to column filter. it is a hacky workaround.
   // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here, remove hardcode.
+  // TODO: make a controller component, like in the achievements page, to handle conversion of page state into JSON.
   const backendFilterParams = (columnFilters: ColumnFilter[], showAllSubmissions: boolean): any => {
     return columnFilters
         .concat([{ id: (showAllSubmissions ? "paramIgnoredByBackend" : "gradingStatus"), value: GradingStatuses.none}])
