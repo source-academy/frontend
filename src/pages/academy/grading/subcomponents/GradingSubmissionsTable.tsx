@@ -72,7 +72,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
 
-
   const columnHelper = createColumnHelper<GradingOverview>();
 
   
@@ -247,6 +246,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
         .reduce(Object.assign, {});
   }
   
+  // Dropdown tab options, which contains some external state. 
+  // This can be a candidate for its own component once backend feature implementation is complete.
   const pageSizeOptions = [
     { value: 1, label: '1' },
     { value: 5, label: '5' },
@@ -256,10 +257,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   ];
 
   // TODO: implement isAdmin functionality
-  const [showAllGroups, setShowAllGroups] = useState(false);
+  const [limitGroup, setLimitGroup] = useState(true);
   const groupOptions = [
-    { value: false, label: 'my groups' },
-    { value: true, label: 'all groups' }
+    { value: true, label: 'my groups' },
+    { value: false, label: 'all groups' },
   ];
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
@@ -270,8 +271,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
 
   // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
-    updateEntries(showAllGroups, pageParams(), backendFilterParams(columnFilters, showAllSubmissions));
-  }, [showAllGroups, page, pageSize, columnFilters, showAllSubmissions]);
+    updateEntries(limitGroup, pageParams(), backendFilterParams(columnFilters, showAllSubmissions));
+  }, [limitGroup, page, pageSize, columnFilters, showAllSubmissions]);
 
 
   return (
@@ -288,8 +289,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
         <Text>Submissions from</Text>
         <SimpleDropdown
           options={groupOptions}
-          selectedValue={showAllGroups}
-          onClick={setShowAllGroups}
+          selectedValue={limitGroup}
+          onClick={setLimitGroup}
           popoverProps={{ position: Position.BOTTOM }}
           buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
         />
