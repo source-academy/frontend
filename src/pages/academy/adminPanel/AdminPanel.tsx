@@ -11,9 +11,7 @@ import {
   addNewStoriesUsersToCourse,
   addNewUsersToCourse
 } from 'src/features/academy/AcademyActions';
-import {
-  fetchAdminPanelStoriesUsers,
-}  from 'src/features/stories/StoriesActions';
+import { fetchAdminPanelStoriesUsers } from 'src/features/stories/StoriesActions';
 
 import {
   deleteAssessmentConfig,

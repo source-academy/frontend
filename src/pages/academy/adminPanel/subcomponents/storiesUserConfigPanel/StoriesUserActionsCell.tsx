@@ -61,8 +61,6 @@ const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
             </i>
             ?
           </p>
-          <p>
-          </p>
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>

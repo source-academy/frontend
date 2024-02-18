@@ -169,28 +169,39 @@ export const putStoriesUserRole = async (
   userId: number,
   role: StoriesRole
 ): Promise<Response | null> => {
-  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/users/${userId}/role`, 'PUT', {
-    ...tokens,
-    body: { role },
-  });
+  const resp = await requestStoryBackend(
+    `/groups/${getStoriesGroupId()}/users/${userId}/role`,
+    'PUT',
+    {
+      ...tokens,
+      body: { role }
+    }
+  );
 
   if (!resp) {
-    showWarningMessage('Failed to update stories user\'s role');
+    showWarningMessage("Failed to update stories user's role");
     return null;
   }
-  const user = await resp.json()
+  const user = await resp.json();
   return user;
 };
 
-export const deleteUserUserGroups = async (tokens: Tokens, userId: number): Promise<Response | null> => {
-  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/users/${userId}`, 'DELETE', {
-    ...tokens,
-  });
+export const deleteUserUserGroups = async (
+  tokens: Tokens,
+  userId: number
+): Promise<Response | null> => {
+  const resp = await requestStoryBackend(
+    `/groups/${getStoriesGroupId()}/users/${userId}`,
+    'DELETE',
+    {
+      ...tokens
+    }
+  );
 
   if (!resp) {
     showWarningMessage('Failed to delete stories user');
     return null;
   }
-  const user = await resp.json()
+  const user = await resp.json();
   return user;
 };

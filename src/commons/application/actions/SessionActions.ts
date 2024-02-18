@@ -81,7 +81,8 @@ import {
   UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
-  User} from '../types/SessionTypes';
+  User
+} from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
   action(FETCH_AUTH, { code, providerId });

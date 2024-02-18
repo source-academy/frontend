@@ -27,7 +27,11 @@ import {
 } from 'src/features/stories/StoriesTypes';
 
 import { OverallState, StoriesRole } from '../application/ApplicationTypes';
-import { DELETE_STORIES_USER_USER_GROUPS, Tokens, UPDATE_STORIES_USER_ROLE } from '../application/types/SessionTypes';
+import {
+  DELETE_STORIES_USER_USER_GROUPS,
+  Tokens,
+  UPDATE_STORIES_USER_ROLE
+} from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
@@ -172,13 +176,13 @@ export function* storiesSaga(): SagaIterator {
       const { userId, role }: { userId: number; role: StoriesRole } = action.payload;
 
       const resp: Response | null = yield call(putStoriesUserRole, tokens, userId, role);
-      
+
       if (resp) {
-        yield put(actions.fetchAdminPanelStoriesUsers());        
+        yield put(actions.fetchAdminPanelStoriesUsers());
         yield call(showSuccessMessage, 'Role updated!');
       }
     }
-  )
+  );
 
   yield takeEvery(
     DELETE_STORIES_USER_USER_GROUPS,
@@ -192,7 +196,7 @@ export function* storiesSaga(): SagaIterator {
         yield call(showSuccessMessage, 'Stories user deleted!');
       }
     }
-  )
+  );
 }
 
 export default storiesSaga;
