@@ -11,7 +11,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
     onClick={[Function]}
   >
     <span>
-      Contest Leaderboard
+      Score Leaderboard
     </span>
     <Blueprint5.Tooltip
       compact={false}
