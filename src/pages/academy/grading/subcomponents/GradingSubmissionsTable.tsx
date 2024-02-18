@@ -27,7 +27,7 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
-import { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
@@ -61,14 +61,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   } = useSession();
   */
 
-  // Nesting of Filterable here allows for mutual re-rendering with the dropdown options tab if either of them update.
-  // This is needed because a filter change is accompanied with a page reset.
-  type FilterableProps = {
-    column: Column<any, unknown>;
-    value: string;
-    children?: React.ReactNode;
-  };
-
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
@@ -79,50 +71,40 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
 
+  // This is needed because a filter change is accompanied with a page reset.
+  const resetPage = useCallback(() => setPage(0), [setPage]);
+
   const columnHelper = createColumnHelper<GradingOverview>();
-
-  const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
-    const handleFilterChange = () => {
-      column.setFilterValue(value);
-      setPage(0);
-    };
-
-    return (
-      <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
-        {children || value}
-      </button>
-    );
-  };
 
   const columns = [
     columnHelper.accessor('assessmentName', {
       header: 'Name',
-      cell: info => <Filterable column={info.column} value={info.getValue()} />
+      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('assessmentType', {
       header: 'Type',
       cell: info => (
-        <Filterable column={info.column} value={info.getValue()}>
+        <Filterable onClick={resetPage} column={info.column} value={info.getValue()}>
           <AssessmentTypeBadge type={info.getValue()} />
         </Filterable>
       )
     }),
     columnHelper.accessor('studentName', {
       header: 'Student',
-      cell: info => <Filterable column={info.column} value={info.getValue()} />
+      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('studentUsername', {
       header: 'Username',
-      cell: info => <Filterable column={info.column} value={info.getValue()} />
+      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('groupName', {
       header: 'Group',
-      cell: info => <Filterable column={info.column} value={info.getValue()} />
+      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('submissionStatus', {
       header: 'Progress',
       cell: info => (
-        <Filterable column={info.column} value={info.getValue()}>
+        <Filterable onClick={resetPage} column={info.column} value={info.getValue()}>
           <SubmissionStatusBadge status={info.getValue()} />
         </Filterable>
       )
@@ -130,7 +112,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     columnHelper.accessor('gradingStatus', {
       header: 'Grading',
       cell: info => (
-        <Filterable column={info.column} value={info.getValue()}>
+        <Filterable onClick={resetPage} column={info.column} value={info.getValue()}>
           <GradingStatusBadge status={info.getValue()} />
         </Filterable>
       )
@@ -400,3 +382,22 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 };
 
 export default GradingSubmissionTable;
+
+type FilterableProps = {
+  column: Column<any, unknown>;
+  value: string;
+  children?: React.ReactNode;
+  onClick?: () => void;
+};
+const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClick }) => {
+  const handleFilterChange = () => {
+    column.setFilterValue(value);
+    onClick?.();
+  };
+
+  return (
+    <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+      {children || value}
+    </button>
+  );
+};
