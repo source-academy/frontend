@@ -18,67 +18,6 @@ type StateProps = {
   leaderboardType: SideContentType;
 };
 
-/*
-Contest Leaderboard inner components
-*/
-const columnHeader = (colClass: string, colTitle: string) => (
-  <div className={colClass}>
-    {colTitle}
-    <Icon icon={IconNames.CARET_DOWN} />
-  </div>
-);
-
-const contestEntryHeader = (leaderboardType: SideContentType) => {
-  let leaderboardMetric = '';
-  switch (leaderboardType) {
-    case SideContentType.scoreLeaderboard:
-      leaderboardMetric = 'Calculated Score';
-      break;
-    case SideContentType.popularVoteLeaderboard:
-      leaderboardMetric = 'Popularity Score';
-      break;
-    default:
-      leaderboardMetric = 'Metric';
-  }
-  return (
-    <div className="leaderboard-header">
-      {columnHeader('header-entryid', 'Student Name')}
-      {columnHeader('header-entryrank', 'Rank')}
-      {columnHeader('header-score', leaderboardMetric)}
-    </div>
-  );
-};
-
-const leaderboardTitle = (leaderboardType: SideContentType) => {
-  let leaderboardTitle = '';
-  switch (leaderboardType) {
-    case SideContentType.scoreLeaderboard:
-      leaderboardTitle = 'Score Leaderboard';
-      break;
-    case SideContentType.popularVoteLeaderboard:
-      leaderboardTitle = 'Popular Vote Leaderboard';
-      break;
-    default:
-      leaderboardTitle = 'Contest Leaderboard';
-  }
-  return leaderboardTitle;
-};
-
-const contestLeaderboardTooltipContent = (leaderboardType: SideContentType) => {
-  let leaderboardTooltipContent = '';
-  switch (leaderboardType) {
-    case SideContentType.scoreLeaderboard:
-      leaderboardTooltipContent = 'View the highest scoring contest entries!';
-      break;
-    case SideContentType.popularVoteLeaderboard:
-      leaderboardTooltipContent = 'View the most popular contest entries!';
-      break;
-    default:
-      leaderboardTooltipContent = 'View the top-rated contest entries!';
-  }
-  return leaderboardTooltipContent;
-};
-
 /**
  * Renders the contest leaderboard entries as a SideContentTab for Contest Voting questions.
  * Note that the prop is named 'orderedContestEntries' as the responsibility to sort
@@ -93,10 +32,54 @@ const SideContentContestLeaderboard: React.FunctionComponent<
   const { orderedContestEntries, handleContestEntryClick, leaderboardType } = props;
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(true);
 
+  /**
+   * Contest Leaderboard inner components
+   */
+
+  const leaderboardTitle = useMemo(() => {
+    return leaderboardType === SideContentType.scoreLeaderboard
+      ? 'Score Leaderboard'
+      : leaderboardType === SideContentType.popularVoteLeaderboard
+      ? 'Popular Vote Leaderboard'
+      : 'Contest Leaderboard';
+  }, [leaderboardType]);
+
+  const contestLeaderboardTooltipContent = useMemo(() => {
+    return leaderboardType === SideContentType.scoreLeaderboard
+      ? 'View the highest scoring contest entries!'
+      : leaderboardType === SideContentType.popularVoteLeaderboard
+      ? 'View the most popular contest entries!'
+      : 'View the top-rated contest entries!';
+  }, [leaderboardType]);
+
+  const columnHeader = (colClass: string, colTitle: string) => (
+    <div className={colClass}>
+      {colTitle}
+      <Icon icon={IconNames.CARET_DOWN} />
+    </div>
+  );
+
+  const contestEntryHeader = useMemo(() => {
+    return (
+      <div className="leaderboard-header">
+        {columnHeader('header-entryid', 'Student Name')}
+        {columnHeader('header-entryrank', 'Rank')}
+        {columnHeader(
+          'header-score',
+          leaderboardType === SideContentType.scoreLeaderboard
+            ? 'Calculated Score'
+            : leaderboardType === SideContentType.popularVoteLeaderboard
+            ? 'Vote Score'
+            : 'Metric'
+        )}
+      </div>
+    );
+  }, [leaderboardType]);
+
   const contestEntryCards = useMemo(
     () => (
       <div>
-        {contestEntryHeader(leaderboardType)}
+        {contestEntryHeader}
         {orderedContestEntries.length > 0 ? (
           orderedContestEntries.map((contestEntry: ContestEntry, index: number) => (
             <SideContentLeaderboardCard
@@ -111,7 +94,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         )}
       </div>
     ),
-    [handleContestEntryClick, orderedContestEntries, leaderboardType]
+    [handleContestEntryClick, orderedContestEntries, contestEntryHeader]
   );
 
   return (
@@ -122,8 +105,8 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         minimal={true}
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
-        <span>{leaderboardTitle(leaderboardType)}</span>
-        <Tooltip2 content={contestLeaderboardTooltipContent(leaderboardType)}>
+        <span>{leaderboardTitle}</span>
+        <Tooltip2 content={contestLeaderboardTooltipContent}>
           <Icon icon={IconNames.HELP} />
         </Tooltip2>
       </Button>

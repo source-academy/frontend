@@ -483,7 +483,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           body: (
             <SideContentContestLeaderboard
               handleContestEntryClick={handleContestEntryClick}
-              orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
+              orderedContestEntries={
+                (question as IContestVotingQuestion)?.popularVoteLeaderboard ?? []
+              }
               leaderboardType={SideContentType.popularVoteLeaderboard}
             />
           ),
