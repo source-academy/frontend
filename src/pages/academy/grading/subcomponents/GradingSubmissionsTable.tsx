@@ -381,8 +381,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   );
 };
 
-export default GradingSubmissionTable;
-
 type FilterableProps = {
   column: Column<any, unknown>;
   value: string;
@@ -396,8 +394,9 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClic
   };
 
   return (
-    <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+    <button type="button" className="grading-overview-filterable-btns" onClick={handleFilterChange}>
       {children || value}
     </button>
   );
 };
+export default GradingSubmissionTable;

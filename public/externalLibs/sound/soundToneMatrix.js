@@ -36,7 +36,7 @@ var timeout_matrix;
 // for coloring the matrix accordingly while it's being played
 var timeout_color;
 
-var timeout_objects = [];
+var timeout_objects = new Array();
 
 // vector_to_list returns a list that contains the elements of the argument vector
 // in the given order.
@@ -54,7 +54,7 @@ function vector_to_list(vector) {
 function x_y_to_row_column(x, y) {
   var row = Math.floor((y - margin_length) / (square_side_length + distance_between_squares));
   var column = Math.floor((x - margin_length) / (square_side_length + distance_between_squares));
-  return [row, column];
+  return Array(row, column);
 }
 
 // given the row number of a square, return the leftmost coordinate
@@ -365,5 +365,5 @@ function clear_all_timeout() {
     clearTimeout(timeout_objects[i]);
   }
 
-  timeout_objects = [];
+  timeout_objects = new Array();
 }
