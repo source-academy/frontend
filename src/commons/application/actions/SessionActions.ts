@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { Grading, GradingOverviews } from '../../../features/grading/GradingTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -220,7 +220,7 @@ export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalX
 
 export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 
-export const updateGradingOverviews = (overviews: { count: number; data: GradingOverview[] }) =>
+export const updateGradingOverviews = (overviews: GradingOverviews) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);
 
 /**
