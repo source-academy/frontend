@@ -8,6 +8,7 @@ import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
+import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
 import { isInstr } from './compactComponents/ControlStack';
@@ -55,7 +56,15 @@ export class CSEAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
+      // console.log("TYPE: " + lastControlItem.type);
       switch (lastControlItem.type) {
+        case 'Identifier':
+          animation = new LookupAnimation(
+            lastControlComponent,
+            Layout.stashComponent.stashItemComponents.at(-1)!,
+            ...lookupBinding(CSEAnimation.currentFrame, lastControlItem.name)
+          );
+          break;
         case 'Literal':
           animation = new LiteralAnimation(
             lastControlComponent,
@@ -78,6 +87,7 @@ export class CSEAnimation {
           break;
       }
     } else {
+      // console.log("INSTRTYPE: " + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
