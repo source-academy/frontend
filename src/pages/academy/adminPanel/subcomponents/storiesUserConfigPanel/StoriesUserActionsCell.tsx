@@ -50,7 +50,7 @@ const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
-        title="Deleting User From Course"
+        title="Deleting Stories User"
         canOutsideClickClose
       >
         <div className={Classes.DIALOG_BODY}>
@@ -62,7 +62,6 @@ const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
             ?
           </p>
           <p>
-            <b>All their assessment answers will be deleted as well.</b>
           </p>
         </div>
         <div className={Classes.DIALOG_FOOTER}>

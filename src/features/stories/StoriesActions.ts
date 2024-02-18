@@ -27,8 +27,7 @@ import {
   StoryListView,
   StoryParams,
   TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_LIST
-} from './StoriesTypes';
+  UPDATE_STORIES_LIST} from './StoriesTypes';
 
 export const addStoryEnv = (env: string, chapter: Chapter, variant: Variant) =>
   action(ADD_STORY_ENV, { env, chapter, variant });
