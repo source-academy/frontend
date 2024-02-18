@@ -2,11 +2,11 @@ import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { keyboardShortcuts } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
 import { ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { keyboardShortcuts } from '../../input/GameInputConstants';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType, LocationId } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -80,12 +80,10 @@ class GameModeMove implements IGameUI {
       maxYSpace: MoveModeConstants.button.ySpace
     });
 
-    let id = 0;
     moveMenuContainer.add(
       buttons.map((button, index) => {
-        id++;
         return this.createMoveButton(
-          '[ ' + id + ' ]  ' + button.text,
+          '[ ' + (index + 1) + ' ]  ' + button.text,
           buttonPositions[index][0] + MoveModeConstants.button.xOffSet,
           buttonPositions[index][1],
           button.callback,
@@ -171,15 +169,13 @@ class GameModeMove implements IGameUI {
    */
   private registerKeyboardListener(): void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
-    const navList2: string[] = this.getLatestNavigations();
+    const navList: string[] = this.getLatestNavigations();
 
-    let count = 0;
-    navList2.forEach(nav => {
-      inputManager.registerKeyboardListener(keyboardShortcuts.options[count], 'up', async () => {
+    navList.forEach((nav, index) => {
+      inputManager.registerKeyboardListener(keyboardShortcuts.Options[index], 'up', async () => {
         await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Sequence);
         await GameGlobalAPI.getInstance().changeLocationTo(nav);
       });
-      count += 1;
     });
   }
 
@@ -208,9 +204,9 @@ class GameModeMove implements IGameUI {
    * Remove keyboard listners for location selection
    * when Move mode is transitioned out.
    */
-  private removeKeyboardListner(): void {
+  private removeKeyboardListener(): void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
-    inputManager.clearKeyboardListener(keyboardShortcuts.options);
+    inputManager.clearKeyboardListeners(keyboardShortcuts.Options);
   }
 
   /**
@@ -221,7 +217,7 @@ class GameModeMove implements IGameUI {
    */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    this.removeKeyboardListner();
+    this.removeKeyboardListener();
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 

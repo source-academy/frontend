@@ -7,7 +7,6 @@ import GameBBoxManager from '../../boundingBoxes/GameBoundingBoxManager';
 import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
-import { keyboardShortcuts } from '../../commons/CommonConstants';
 import { AssetKey } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
 import { DashboardPage } from '../../dashboard/GameDashboardTypes';
@@ -16,6 +15,7 @@ import GameDialogueStorageManager from '../../dialogue/GameDialogueStorageManage
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
+import { keyboardShortcuts } from '../../input/GameInputConstants';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -268,7 +268,7 @@ class GameManager extends Phaser.Scene {
    */
   private bindKeyboardTriggers() {
     this.getInputManager().registerKeyboardListener(
-      keyboardShortcuts.escapeMenu,
+      keyboardShortcuts.Menu,
       'up',
       async () => {
         if (this.getPhaseManager().isCurrentPhaseTerminal()) {
@@ -278,7 +278,7 @@ class GameManager extends Phaser.Scene {
         }
       }
     );
-    this.getInputManager().registerKeyboardListener(keyboardShortcuts.dashboard, 'up', async () => {
+    this.getInputManager().registerKeyboardListener(keyboardShortcuts.Dashboard, 'up', async () => {
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
         await this.getPhaseManager().popPhase();
       } else if (this.getPhaseManager().isCurrentPhaseTerminal()) {
@@ -288,12 +288,12 @@ class GameManager extends Phaser.Scene {
       }
     });
     this.registerMenuKeyboardListener(
-      keyboardShortcuts.explore,
+      keyboardShortcuts.Explore,
       GameMode.Explore,
       GamePhaseType.Explore
     );
-    this.registerMenuKeyboardListener(keyboardShortcuts.move, GameMode.Move, GamePhaseType.Move);
-    this.registerMenuKeyboardListener(keyboardShortcuts.talk, GameMode.Talk, GamePhaseType.Talk);
+    this.registerMenuKeyboardListener(keyboardShortcuts.Move, GameMode.Move, GamePhaseType.Move);
+    this.registerMenuKeyboardListener(keyboardShortcuts.Talk, GameMode.Talk, GamePhaseType.Talk);
   }
 
   /**

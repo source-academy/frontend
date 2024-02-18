@@ -1,7 +1,7 @@
 import SoundAssets from '../assets/SoundAssets';
-import { keyboardShortcuts } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
+import { keyboardShortcuts } from '../input/GameInputConstants';
 import GameInputManager from '../input/GameInputManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -21,7 +21,7 @@ export default class DialogueManager {
   private speakerRenderer?: DialogueSpeakerRenderer;
   private dialogueRenderer?: DialogueRenderer;
   private dialogueGenerator?: DialogueGenerator;
-  private KeyBoardManager?: GameInputManager = new GameInputManager(
+  private gameInputManager?: GameInputManager = new GameInputManager(
     GameGlobalAPI.getInstance().getGameManager()
   );
 
@@ -51,14 +51,12 @@ export default class DialogueManager {
   private async playWholeDialogue(resolve: () => void) {
     await this.showNextLine(resolve);
     // add keyboard listener for dialogue box
-    this.getKeyBoardManager().registerKeyboardListener(
-      keyboardShortcuts.nextDialogue,
+    this.getInputManager().registerKeyboardListener(
+      keyboardShortcuts.Next,
       'up',
       async () => {
         // show the next line if dashboard or escape menu are not displayed
-        if (
-          !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
-        ) {
+        if (!GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()) {
           await this.showNextLine(resolve);
         }
       }
@@ -86,14 +84,14 @@ export default class DialogueManager {
 
     if (prompt) {
       // disable keyboard input to prevent continue dialogue
-      this.getKeyBoardManager().enableKeyboardInput(false);
+      this.getInputManager().enableKeyboardInput(false);
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         prompt.promptTitle,
         prompt.choices.map(choice => choice[0])
       );
 
-      this.getKeyBoardManager().enableKeyboardInput(true);
+      this.getInputManager().enableKeyboardInput(true);
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);
     }
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
@@ -101,7 +99,7 @@ export default class DialogueManager {
 
     if (!line) {
       // clear keyboard listeners when dialogue ends
-      this.getKeyBoardManager().clearKeyboardListener([keyboardShortcuts.nextDialogue]);
+      this.getInputManager().clearKeyboardListeners([keyboardShortcuts.Next]);
       resolve();
     }
   }
@@ -109,7 +107,7 @@ export default class DialogueManager {
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
   private getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
   private getSpeakerRenderer = () => this.speakerRenderer as DialogueSpeakerRenderer;
-  private getKeyBoardManager = () => this.KeyBoardManager as GameInputManager;
+  private getInputManager = () => this.gameInputManager as GameInputManager;
 
   public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
 }

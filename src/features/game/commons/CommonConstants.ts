@@ -27,19 +27,3 @@ export const screenCenter = {
   x: screenSize.x / 2,
   y: screenSize.y / 2
 };
-
-export const keyboardShortcuts = {
-  dashboard: Phaser.Input.Keyboard.KeyCodes.TAB,
-  escapeMenu: Phaser.Input.Keyboard.KeyCodes.ESC,
-  nextDialogue: Phaser.Input.Keyboard.KeyCodes.SPACE,
-  dissolveNotification: Phaser.Input.Keyboard.KeyCodes.SPACE,
-  explore: Phaser.Input.Keyboard.KeyCodes.E,
-  move: Phaser.Input.Keyboard.KeyCodes.V,
-  talk: Phaser.Input.Keyboard.KeyCodes.T,
-  options: [
-    Phaser.Input.Keyboard.KeyCodes.ONE,
-    Phaser.Input.Keyboard.KeyCodes.TWO,
-    Phaser.Input.Keyboard.KeyCodes.THREE,
-    Phaser.Input.Keyboard.KeyCodes.FOUR
-  ]
-};

@@ -2,10 +2,10 @@ import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenSize } from '../../commons/CommonConstants';
-import { keyboardShortcuts } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { keyboardShortcuts } from '../../input/GameInputConstants';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -51,11 +51,10 @@ class GameModeTalk implements IGameUI {
       maxYSpace: TalkModeConstants.button.ySpace
     });
 
-    let topicId = 0;
     talkMenuContainer.add(
       buttons.map((button, index) =>
         this.createTalkTopicButton(
-          '[ ' + (topicId++ + 1) + ' ]  ' + button.text,
+          '[ ' + (index + 1) + ' ]  ' + button.text,
           buttonPositions[index][0],
           buttonPositions[index][1],
           button.callback
@@ -133,16 +132,14 @@ class GameModeTalk implements IGameUI {
    * Register keyboard listners for talk topic selection.
    * Called by the activeUI function.
    */
-  private registerKeyboardListner(): void {
+  private registerKeyboardListener(): void {
     const talkTopics: ItemId[] = this.getLatestTalkTopics();
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
-    let count = 0;
-    talkTopics.forEach((dialogueId: ItemId) => {
-      inputManager.registerKeyboardListener(keyboardShortcuts.options[count], 'up', async () => {
+    talkTopics.forEach((dialogueId: ItemId, index) => {
+      inputManager.registerKeyboardListener(keyboardShortcuts.Options[index], 'up', async () => {
         GameGlobalAPI.getInstance().triggerInteraction(dialogueId);
         await GameGlobalAPI.getInstance().showDialogue(dialogueId);
       });
-      count += 1;
     });
   }
 
@@ -157,7 +154,7 @@ class GameModeTalk implements IGameUI {
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
-    this.registerKeyboardListner();
+    this.registerKeyboardListener();
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
@@ -172,9 +169,9 @@ class GameModeTalk implements IGameUI {
    * Remove keyboard listners for topic selection.
    * Called by the deactiveUI function.
    */
-  private removeKeyboardListner(): void {
+  private removeKeyboardListener(): void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
-    inputManager.clearKeyboardListener(keyboardShortcuts.options);
+    inputManager.clearKeyboardListeners(keyboardShortcuts.Options);
   }
 
   /**
@@ -185,7 +182,7 @@ class GameModeTalk implements IGameUI {
    */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    this.removeKeyboardListner();
+    this.removeKeyboardListener();
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 

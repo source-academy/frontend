@@ -1,10 +1,10 @@
 import FontAssets from '../assets/FontAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenCenter } from '../commons/CommonConstants';
-import { keyboardShortcuts } from '../commons/CommonConstants';
 import { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
 import dialogueConstants from '../dialogue/GameDialogueConstants';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
+import { keyboardShortcuts } from '../input/GameInputConstants';
 import GameInputManager from '../input/GameInputManager';
 import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -48,7 +48,7 @@ export async function displayNotification(scene: IBaseScene, message: string): P
   // Wait for fade in to finish
   await sleep(Constants.fadeDuration * 2);
 
-  const KeyBoardManager = new GameInputManager(scene);
+  const gameInputManager = new GameInputManager(scene);
 
   const dissolveNotification = () => {
     SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
@@ -58,11 +58,11 @@ export async function displayNotification(scene: IBaseScene, message: string): P
 
   const showNotification = new Promise<void>(resolve => {
     // using the same binding as dialogue shortcut
-    KeyBoardManager.registerKeyboardListener(
-      keyboardShortcuts.dissolveNotification,
+    gameInputManager.registerKeyboardListener(
+      keyboardShortcuts.Notif,
       'up',
       async () => {
-        KeyBoardManager.clearKeyboardListener([keyboardShortcuts.dissolveNotification]);
+        gameInputManager.clearKeyboardListeners([keyboardShortcuts.Notif]);
         dissolveNotification();
         resolve();
       }

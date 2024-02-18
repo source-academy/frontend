@@ -11,7 +11,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
-import MenuModeConstants, { modeButtonStyle } from './GameModeMenuConstants';
+import MenuModeConstants, { MenuLineConstants,modeButtonStyle } from './GameModeMenuConstants';
 
 /**
  * The class in charge of showing the "Menu" mode UI
@@ -66,7 +66,7 @@ class GameModeMenu implements IGameUI {
     const lineList: Phaser.GameObjects.Line[] = buttons.map((button, index) =>
       this.createLine(
         buttonPositions[index][0],
-        buttonPositions[index][1] + MenuModeConstants.button.yOffset + 20,
+        buttonPositions[index][1] + MenuModeConstants.button.yOffset + MenuLineConstants.yOffset,
         button
       )
     );
@@ -100,22 +100,22 @@ class GameModeMenu implements IGameUI {
   ) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     if (button.text === GameMode.Explore) {
-      xPos -= 68;
+      xPos += MenuLineConstants.exploreOffset;
     } else if (button.text === GameMode.Move) {
-      xPos += 20;
+      xPos += MenuLineConstants.moveOffset;
     } else {
-      xPos -= 30;
+      xPos += MenuLineConstants.talkOffset;
     }
     const line: Phaser.GameObjects.Line = gameManager.add.line(
-      0,
-      15,
+      MenuLineConstants.x,
+      MenuLineConstants.y,
       xPos,
       yPos,
-      xPos + 20,
+      xPos + MenuLineConstants.lineLength,
       yPos,
-      0xbce7da
+      MenuLineConstants.color
     );
-    line.setLineWidth(4);
+    line.setLineWidth(MenuLineConstants.lineWidth);
     return line;
   }
 
