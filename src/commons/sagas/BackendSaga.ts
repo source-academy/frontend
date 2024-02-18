@@ -128,7 +128,6 @@ import {
   uploadAssessment
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
-// import { pageBannerTextStyle } from 'src/features/game/dashboard/GameDashboardConstants';
 
 export function selectTokens() {
   return select((state: OverallState) => ({
