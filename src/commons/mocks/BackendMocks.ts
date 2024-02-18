@@ -2,7 +2,7 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import { Grading, GradingOverviews, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
   OverallState,
   Role,
@@ -185,10 +185,14 @@ export function* mockBackendSaga(): SagaIterator {
     UNSUBMIT_SUBMISSION,
     function* (action: ReturnType<typeof actions.unsubmitSubmission>) {
       const { submissionId } = action.payload;
-      const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews || []
+      const overviews: GradingOverviews = yield select(
+        (state: OverallState) =>
+          state.session.gradingOverviews || {
+            count: 0,
+            data: []
+          }
       );
-      const index = overviews.findIndex(
+      const index = overviews.data.findIndex(
         overview =>
           overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
       );
@@ -196,17 +200,14 @@ export function* mockBackendSaga(): SagaIterator {
         yield call(showWarningMessage, '400: Bad Request');
         return;
       }
-      const newEntries = {
-        count: Object.keys(overviews).length,
-        data: (overviews as GradingOverview[]).map(overview => {
-          if (overview.submissionId === submissionId) {
-            return { ...overview, submissionStatus: 'attempted' };
-          }
-          return overview;
-        })
-      };
+      const newOverviews = overviews.data.map(overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, submissionStatus: 'attempted' };
+        }
+        return overview;
+      });
       yield call(showSuccessMessage, 'Unsubmit successful!', 1000);
-      yield put(actions.updateGradingOverviews(newEntries));
+      yield put(actions.updateGradingOverviews({ ...overviews, data: newOverviews }));
     }
   );
 
