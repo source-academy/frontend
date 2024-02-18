@@ -611,9 +611,7 @@ export const getGradingOverviews = async (
   const resp = await request(
     `${courseId()}/admin/grading?group=${group}&${pageQuery}&${filterQuery}`,
     'GET',
-    {
-      ...tokens
-    }
+    { ...tokens }
   );
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
