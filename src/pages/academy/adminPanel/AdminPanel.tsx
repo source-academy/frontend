@@ -15,6 +15,7 @@ import { fetchAdminPanelStoriesUsers } from 'src/features/stories/StoriesActions
 
 import {
   deleteAssessmentConfig,
+  deleteStoriesUserUserGroups,
   deleteUserCourseRegistration,
   fetchAdminPanelCourseRegistrations,
   fetchAssessmentConfigs,
@@ -23,6 +24,7 @@ import {
   setAssessmentConfigurations,
   updateAssessmentConfigs,
   updateCourseConfig,
+  updateStoriesUserRole,
   updateUserRole
 } from '../../../commons/application/actions/SessionActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
@@ -138,9 +140,9 @@ const AdminPanel: React.FC = () => {
   const storiesUserConfigPanelProps = {
     userId: stories.userId,
     storiesUsers: stories.storiesUsers,
-    handleUpdateUserRole: (id: number, role: StoriesRole) =>
-      dispatch(updateUserRole(id, role as unknown as Role)),
-    handleDeleteUserFromCourse: (id: number) => dispatch(deleteUserCourseRegistration(id))
+    handleUpdateStoriesUserRole: (id: number, role: StoriesRole) =>
+      dispatch(updateStoriesUserRole(id, role as unknown as StoriesRole)),
+    handleDeleteStoriesUserFromUserGroup: (id: number) => dispatch(deleteStoriesUserUserGroups(id))
   };
 
   const addUserPanelProps = {

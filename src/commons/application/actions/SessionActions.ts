@@ -13,12 +13,13 @@ import {
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
-import { Role } from '../ApplicationTypes';
+import { Role, StoriesRole } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
   CourseRegistration,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_STORIES_USER_USER_GROUPS,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
@@ -77,12 +78,12 @@ import {
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_NOTIFICATIONS,
+  UPDATE_STORIES_USER_ROLE,
   UPDATE_TIME_OPTIONS,
   UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
-  User
-} from '../types/SessionTypes';
+  User} from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
   action(FETCH_AUTH, { code, providerId });
@@ -293,3 +294,9 @@ export const deleteUserCourseRegistration = (courseRegId: number) =>
 
 export const updateCourseResearchAgreement = (agreedToResearch: boolean) =>
   action(UPDATE_COURSE_RESEARCH_AGREEMENT, { agreedToResearch });
+
+export const updateStoriesUserRole = (userId: number, role: StoriesRole) =>
+  action(UPDATE_STORIES_USER_ROLE, { userId, role });
+
+export const deleteStoriesUserUserGroups = (userId: number) =>
+  action(DELETE_STORIES_USER_USER_GROUPS, { userId });

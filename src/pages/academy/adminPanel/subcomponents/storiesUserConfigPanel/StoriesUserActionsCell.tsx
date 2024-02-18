@@ -12,7 +12,7 @@ type DeleteStoriesUserCellProps = OwnProps;
 type OwnProps = {
   data: AdminPanelStoriesUser;
   rowIndex: number;
-  handleDeleteUserFromCourse: (id: number) => void;
+  handleDeleteStoriesUserFromUserGroup: (id: number) => void;
 };
 
 const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
@@ -27,7 +27,7 @@ const DeleteStoriesUserCell: React.FC<DeleteStoriesUserCellProps> = props => {
   };
 
   const handleDelete = React.useCallback(() => {
-    props.handleDeleteUserFromCourse(props.data.id);
+    props.handleDeleteStoriesUserFromUserGroup(props.data.id);
     setIsDialogOpen(false);
   }, [props]);
 

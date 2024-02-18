@@ -13,8 +13,8 @@ export type StoriesUserConfigPanelProps = OwnProps;
 type OwnProps = {
   userId?: number;
   storiesUsers?: AdminPanelStoriesUser[];
-  handleUpdateUserRole: (id: number, role: StoriesRole) => void;
-  handleDeleteUserFromCourse: (id: number) => void;
+  handleUpdateStoriesUserRole: (id: number, role: StoriesRole) => void;
+  handleDeleteStoriesUserFromUserGroup: (id: number) => void;
 };
 
 /**
@@ -51,7 +51,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
       cellRenderer: RolesCell,
       cellRendererParams: {
         id: props.userId,
-        handleUpdateUserRole: props.handleUpdateUserRole
+        handleUpdateStoriesUserRole: props.handleUpdateStoriesUserRole
       },
       width: 110
     },
@@ -60,7 +60,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
       field: 'actions',
       cellRenderer: StoriesUserActionsCell,
       cellRendererParams: {
-        handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
+        handleDeleteStoriesUserFromUserGroup: props.handleDeleteStoriesUserFromUserGroup
       },
       width: 120,
       filter: false,

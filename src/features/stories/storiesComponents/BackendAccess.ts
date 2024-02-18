@@ -163,3 +163,34 @@ export const getAdminPanelStoriesUsers = async (
   const users = await resp.json();
   return users;
 };
+
+export const putStoriesUserRole = async (
+  tokens: Tokens,
+  userId: number,
+  role: StoriesRole
+): Promise<Response | null> => {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/users/${userId}/role`, 'PUT', {
+    ...tokens,
+    body: { role },
+  });
+
+  if (!resp) {
+    showWarningMessage('Failed to update stories user\'s role');
+    return null;
+  }
+  const user = await resp.json()
+  return user;
+};
+
+export const deleteUserUserGroups = async (tokens: Tokens, userId: number): Promise<Response | null> => {
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/users/${userId}`, 'DELETE', {
+    ...tokens,
+  });
+
+  if (!resp) {
+    showWarningMessage('Failed to delete stories user');
+    return null;
+  }
+  const user = await resp.json()
+  return user;
+};
