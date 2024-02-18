@@ -201,10 +201,10 @@ export function* mockBackendSaga(): SagaIterator {
       const newEntries = {
         count: Object.keys(overviews).length,
         data: (overviews as GradingOverview[]).map(overview => {
-        if (overview.submissionId === submissionId) {
-          return { ...overview, submissionStatus: 'attempted' };
-        }
-        return overview;
+          if (overview.submissionId === submissionId) {
+            return { ...overview, submissionStatus: 'attempted' };
+          }
+          return overview;
         })
       };
       yield call(showSuccessMessage, 'Unsubmit successful!', 1000);

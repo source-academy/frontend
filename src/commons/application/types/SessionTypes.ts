@@ -118,7 +118,7 @@ export type SessionState = {
 
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
-  readonly gradingOverviews?: { count: number, data: GradingOverview[] };
+  readonly gradingOverviews?: { count: number; data: GradingOverview[] };
   readonly gradings: Map<number, Grading>;
   readonly notifications: Notification[];
   readonly googleUser?: string;

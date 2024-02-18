@@ -5,7 +5,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Button, Card, Col, ColGrid, Flex, Title } from '@tremor/react';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, useParams} from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -18,19 +18,18 @@ import GradingSummary from './subcomponents/GradingSummary';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
-  const {
-    courseId,
-    gradingOverviews,
-    assessmentOverviews: assessments = []
-  } = useSession();
+  const { courseId, gradingOverviews, assessmentOverviews: assessments = [] } = useSession();
   const params = useParams<{
     submissionId: string;
     questionId: string;
   }>();
 
-
   const dispatch = useDispatch();
-  const updateGradingOverviewsCallback = (group: boolean, pageParams: {offset: number, pageSize: number}, filterParams: Object) => {
+  const updateGradingOverviewsCallback = (
+    group: boolean,
+    pageParams: { offset: number; pageSize: number },
+    filterParams: Object
+  ) => {
     dispatch(fetchGradingOverviews(group, pageParams, filterParams));
   };
 
@@ -104,10 +103,7 @@ const Grading: React.FC = () => {
 
             <Col numColSpanLg={2}>
               <Card hFull>
-                <GradingSummary
-                  submissions={submissions}
-                  assessments={assessments}
-                />
+                <GradingSummary submissions={submissions} assessments={assessments} />
               </Card>
             </Col>
           </ColGrid>

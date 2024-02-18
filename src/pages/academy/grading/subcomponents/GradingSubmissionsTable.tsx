@@ -11,7 +11,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable,
+  useReactTable
 } from '@tanstack/react-table';
 import {
   Bold,
@@ -25,7 +25,7 @@ import {
   TableHeaderCell,
   TableRow,
   Text,
-  TextInput,
+  TextInput
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -39,15 +39,22 @@ import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
-
 type GradingSubmissionTableProps = {
   totalRows: number;
   submissions: GradingOverview[];
   // TODO: Abstract pageParams object into a useable type.
-  updateEntries: (group: boolean, pageParams: {offset: number, pageSize: number}, filterParams: any) => void;
+  updateEntries: (
+    group: boolean,
+    pageParams: { offset: number; pageSize: number },
+    filterParams: any
+  ) => void;
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRows, submissions, updateEntries }) => {
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
+  totalRows,
+  submissions,
+  updateEntries
+}) => {
   /* TODO: implement functionality for submission filtering by groups using the following state.
   const {
     group
@@ -74,13 +81,12 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
 
   const columnHelper = createColumnHelper<GradingOverview>();
 
-  
   const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
     const handleFilterChange = () => {
       column.setFilterValue(value);
       setPage(0);
     };
-  
+
     return (
       <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
         {children || value}
@@ -88,11 +94,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     );
   };
 
-
   const columns = [
     columnHelper.accessor('assessmentName', {
       header: 'Name',
-      cell: info => <Filterable column={info.column} value={info.getValue()}/>
+      cell: info => <Filterable column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('assessmentType', {
       header: 'Type',
@@ -104,15 +109,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     }),
     columnHelper.accessor('studentName', {
       header: 'Student',
-      cell: info => <Filterable column={info.column} value={info.getValue()}/>
+      cell: info => <Filterable column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('studentUsername', {
       header: 'Username',
-      cell: info => <Filterable column={info.column} value={info.getValue()}/>
+      cell: info => <Filterable column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('groupName', {
       header: 'Group',
-      cell: info => <Filterable column={info.column} value={info.getValue()}/>
+      cell: info => <Filterable column={info.column} value={info.getValue()} />
     }),
     columnHelper.accessor('submissionStatus', {
       header: 'Progress',
@@ -125,7 +130,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     columnHelper.accessor('gradingStatus', {
       header: 'Grading',
       cell: info => (
-        <Filterable column={info.column} value={info.getValue()} >
+        <Filterable column={info.column} value={info.getValue()}>
           <GradingStatusBadge status={info.getValue()} />
         </Filterable>
       )
@@ -172,7 +177,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: getPaginationRowModel()
   });
 
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
@@ -194,9 +199,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   const pageParams = (): any => {
     return {
       offset: page * pageSize,
-      pageSize: pageSize,
-    }
-  }
+      pageSize: pageSize
+    };
+  };
 
   // Converts the columnFilters array into backend query parameters.
   // TEMP IMPLEMENTATION. Values currently hardcoded with knowledge of what a ColumnFilter is.
@@ -205,48 +210,53 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   // TODO: make a controller component, like in the achievements page, to handle conversion of page state into JSON.
   const backendFilterParams = (columnFilters: ColumnFilter[], showAllSubmissions: boolean): any => {
     return columnFilters
-        .concat([{ id: (showAllSubmissions ? "paramIgnoredByBackend" : "gradingStatus"), value: GradingStatuses.none}])
-        .map((column: ColumnFilter) => {
-          // TODO: change all references to column properties in backend saga to backend name to reduce 
-          // un-needed hardcode conversion, ensuring that places that reference it are updated.
-          switch (column.id) {
-            case "assessmentName": 
-              return {"title": column.value};
-            case "assessmentType":
-              return {"type": column.value};
-            case "studentName":
-              return {"name": column.value};
-            case "studentUsername":
-              return {"username": column.value};
-            case "submissionStatus":
-              return {"status": column.value};
-            case "gradingStatus":
-              if (column.value === GradingStatuses.none) {
-                return {
-                  "isManuallyGraded": true,
-                  "status": "submitted",
-                  "numGraded": 0,
-                };
-              } else if (column.value === GradingStatuses.graded) {
-                // TODO: coordinate with backend on subquerying to implement the third query
-                // currently ignored by backend as of 16 Feb 24 commit
-                return {
-                  "isManuallyGraded": true,
-                  "status": "submitted",
-                  "numGradedEqualToTotal": true,  
-                };
-              } else {
-                // case: excluded or grading. Not implemented yet.
-                return {};
-              }
-            default:
-              return column;
-          }
-        })
-        .reduce(Object.assign, {});
-  }
-  
-  // Dropdown tab options, which contains some external state. 
+      .concat([
+        {
+          id: showAllSubmissions ? 'paramIgnoredByBackend' : 'gradingStatus',
+          value: GradingStatuses.none
+        }
+      ])
+      .map((column: ColumnFilter) => {
+        // TODO: change all references to column properties in backend saga to backend name to reduce
+        // un-needed hardcode conversion, ensuring that places that reference it are updated.
+        switch (column.id) {
+          case 'assessmentName':
+            return { title: column.value };
+          case 'assessmentType':
+            return { type: column.value };
+          case 'studentName':
+            return { name: column.value };
+          case 'studentUsername':
+            return { username: column.value };
+          case 'submissionStatus':
+            return { status: column.value };
+          case 'gradingStatus':
+            if (column.value === GradingStatuses.none) {
+              return {
+                isManuallyGraded: true,
+                status: 'submitted',
+                numGraded: 0
+              };
+            } else if (column.value === GradingStatuses.graded) {
+              // TODO: coordinate with backend on subquerying to implement the third query
+              // currently ignored by backend as of 16 Feb 24 commit
+              return {
+                isManuallyGraded: true,
+                status: 'submitted',
+                numGradedEqualToTotal: true
+              };
+            } else {
+              // case: excluded or grading. Not implemented yet.
+              return {};
+            }
+          default:
+            return column;
+        }
+      })
+      .reduce(Object.assign, {});
+  };
+
+  // Dropdown tab options, which contains some external state.
   // This can be a candidate for its own component once backend feature implementation is complete.
   const pageSizeOptions = [
     { value: 1, label: '1' },
@@ -260,7 +270,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   const [limitGroup, setLimitGroup] = useState(true);
   const groupOptions = [
     { value: true, label: 'my groups' },
-    { value: false, label: 'all groups' },
+    { value: false, label: 'all groups' }
   ];
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
@@ -273,7 +283,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
   useEffect(() => {
     updateEntries(limitGroup, pageParams(), backendFilterParams(columnFilters, showAllSubmissions));
   }, [limitGroup, page, pageSize, columnFilters, showAllSubmissions]);
-
 
   return (
     <>
@@ -374,16 +383,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ totalRo
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
               onClick={() => setPage(page + 1)}
-              disabled={page >= (Math.ceil(totalRows / pageSize) - 1)}
+              disabled={page >= Math.ceil(totalRows / pageSize) - 1}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_RIGHT} />}
               variant="light"
               onClick={() => setPage(Math.ceil(totalRows / pageSize) - 1)}
-              disabled={page >= (Math.ceil(totalRows / pageSize) - 1)}
+              disabled={page >= Math.ceil(totalRows / pageSize) - 1}
             />
-
           </Flex>
         </Footer>
       </Table>

@@ -80,7 +80,7 @@ export const mockGradingOverviews: GradingOverview[] = [
 export const mockFetchGradingOverview = (
   accessToken: string,
   group: boolean,
-  pageParams: {offset: number, pageSize: number},
+  pageParams: { offset: number; pageSize: number },
   backendParams: Object
 ): GradingOverview[] | null => {
   // mocks backend role fetching

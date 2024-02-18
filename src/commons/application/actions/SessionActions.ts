@@ -108,15 +108,19 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  * of the grader
  * @param pageParams - param that contains offset and pageSize, informing backend about how
  * many entries, starting from what offset, to get
- * @param filterParams - param that contains columnFilters converted into JSON for 
+ * @param filterParams - param that contains columnFilters converted into JSON for
  * processing into query parameters
  */
 // TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
-export const fetchGradingOverviews = (filterToGroup = true, pageParams = { offset: 0, pageSize: 10 }, filterParams = {}) =>
+export const fetchGradingOverviews = (
+  filterToGroup = true,
+  pageParams = { offset: 0, pageSize: 10 },
+  filterParams = {}
+) =>
   action(FETCH_GRADING_OVERVIEWS, {
     filterToGroup,
     pageParams,
-    filterParams,
+    filterParams
   });
 
 export const login = (providerId: string) => action(LOGIN, providerId);
@@ -216,7 +220,7 @@ export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalX
 
 export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 
-export const updateGradingOverviews = (overviews: {count: number, data: GradingOverview[]}) =>
+export const updateGradingOverviews = (overviews: { count: number; data: GradingOverview[] }) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);
 
 /**

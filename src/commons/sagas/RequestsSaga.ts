@@ -603,14 +603,18 @@ export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean,
   pageParams: any,
-  filterParams: any,
-): Promise<{count: number, data: GradingOverview[]} | null> => {
+  filterParams: any
+): Promise<{ count: number; data: GradingOverview[] } | null> => {
   // this converts the payload into a useable query string without a leading '?' via implicit toString().
   const pageQuery = new URLSearchParams(pageParams);
   const filterQuery = new URLSearchParams(filterParams);
-  const resp = await request(`${courseId()}/admin/grading?group=${group}&${pageQuery}&${filterQuery}`, 'GET', {
-    ...tokens
-  });
+  const resp = await request(
+    `${courseId()}/admin/grading?group=${group}&${pageQuery}&${filterQuery}`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
   }
@@ -655,8 +659,8 @@ export const getGradingOverviews = async (
         subX.assessmentId !== subY.assessmentId
           ? subY.assessmentId - subX.assessmentId
           : subY.submissionId - subX.submissionId
-      ),
-  }
+      )
+  };
 };
 
 /**

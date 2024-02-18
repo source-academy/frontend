@@ -161,7 +161,7 @@ test('fetchGradingOverviews generates correct default action object', () => {
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
   const pageParams = { offset: 12, pageSize: 3 };
-  const filterParams = { abc: "xxx", def: "yyy" };
+  const filterParams = { abc: 'xxx', def: 'yyy' };
   const action = fetchGradingOverviews(filterToGroup, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
@@ -520,29 +520,29 @@ test('updateAssessment generates correct action object', () => {
 });
 
 test('updateGradingOverviews generates correct action object', () => {
-  const overviews: { count: number; data: GradingOverview[]} = {
+  const overviews: { count: number; data: GradingOverview[] } = {
     count: 1,
     data: [
-    {
-      assessmentId: 1,
-      assessmentNumber: 'M1A',
-      assessmentName: 'test assessment',
-      assessmentType: 'Contests',
-      initialXp: 0,
-      xpBonus: 100,
-      xpAdjustment: 50,
-      currentXp: 50,
-      maxXp: 500,
-      studentId: 100,
-      studentName: 'test student',
-      studentUsername: 'E0123456',
-      submissionId: 1,
-      submissionStatus: 'attempting',
-      groupName: 'group',
-      gradingStatus: 'excluded',
-      questionCount: 6,
-      gradedCount: 0
-    }
+      {
+        assessmentId: 1,
+        assessmentNumber: 'M1A',
+        assessmentName: 'test assessment',
+        assessmentType: 'Contests',
+        initialXp: 0,
+        xpBonus: 100,
+        xpAdjustment: 50,
+        currentXp: 50,
+        maxXp: 500,
+        studentId: 100,
+        studentName: 'test student',
+        studentUsername: 'E0123456',
+        submissionId: 1,
+        submissionStatus: 'attempting',
+        groupName: 'group',
+        gradingStatus: 'excluded',
+        questionCount: 6,
+        gradedCount: 0
+      }
     ]
   };
 
