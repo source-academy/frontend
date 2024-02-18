@@ -232,7 +232,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       const clonedNode = Object.assign({}, node);
       await allNodesCallback(clonedNode);
 
-      if (treeNodeToEdit === node) {
+      if (treeNodeToEdit.id === node.id) {
         await specificNodeCallback(clonedNode);
       }
 

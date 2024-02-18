@@ -413,6 +413,23 @@ export function getControlItemComponent(
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
     switch (controlItem.type) {
+      case 'Program':
+        // If the control item is the whole program
+        // add {} to represent the implicit block
+        const originalText = astToString(controlItem)
+          .trim()
+          .split('\n')
+          .map(line => `\t\t${line}`)
+          .join('\n');
+        const textP = `{\n${originalText}\n}`;
+        return new ControlItemComponent(
+          textP,
+          textP,
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
       case 'Literal':
         const textL =
           typeof controlItem.value === 'string' ? `"${controlItem.value}"` : controlItem.value;
