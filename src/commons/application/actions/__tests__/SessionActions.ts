@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
+import { Grading, GradingOverviews } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
@@ -520,7 +520,7 @@ test('updateAssessment generates correct action object', () => {
 });
 
 test('updateGradingOverviews generates correct action object', () => {
-  const overviews: { count: number; data: GradingOverview[] } = {
+  const overviews: GradingOverviews = {
     count: 1,
     data: [
       {
