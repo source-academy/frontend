@@ -17,11 +17,13 @@ import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
  * whenever players click on the dialogue box
  */
 
-export default class DialogueManager{
+export default class DialogueManager {
   private speakerRenderer?: DialogueSpeakerRenderer;
   private dialogueRenderer?: DialogueRenderer;
   private dialogueGenerator?: DialogueGenerator;
-  private KeyBoardManager?: GameInputManager = new GameInputManager(GameGlobalAPI.getInstance().getGameManager());
+  private KeyBoardManager?: GameInputManager = new GameInputManager(
+    GameGlobalAPI.getInstance().getGameManager()
+  );
 
   /**
    * @param dialogueId the dialogue Id of the dialogue you want to play
@@ -48,16 +50,19 @@ export default class DialogueManager{
 
   private async playWholeDialogue(resolve: () => void) {
     await this.showNextLine(resolve);
-    // add keyboard listener for dialogue box 
+    // add keyboard listener for dialogue box
     this.getKeyBoardManager().registerKeyboardListener(
       keyboardShortcuts.nextDialogue,
       'up',
       async () => {
         // show the next line if dashboard or escape menu are not displayed
-        if (!GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()) {
-          await this.showNextLine(resolve); 
+        if (
+          !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
+        ) {
+          await this.showNextLine(resolve);
         }
-      });
+      }
+    );
     this.getDialogueRenderer()
       .getDialogueBox()
       .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
@@ -78,7 +83,6 @@ export default class DialogueManager{
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
-    
 
     if (prompt) {
       // disable keyboard input to prevent continue dialogue

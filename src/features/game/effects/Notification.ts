@@ -1,16 +1,16 @@
-import { Layer } from '../layer/GameLayerTypes';
 import FontAssets from '../assets/FontAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenCenter } from '../commons/CommonConstants';
+import { keyboardShortcuts } from '../commons/CommonConstants';
 import { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
 import dialogueConstants from '../dialogue/GameDialogueConstants';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
+import GameInputManager from '../input/GameInputManager';
+import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { fadeAndDestroy, fadeIn } from './FadeEffect';
-import GameInputManager from '../input/GameInputManager';
-import { keyboardShortcuts } from '../commons/CommonConstants';
 
 const notifStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
@@ -35,7 +35,7 @@ const notifTextConfig = {
 export async function displayNotification(scene: IBaseScene, message: string): Promise<void> {
   const dialogueRenderer = new DialogueRenderer({});
   const container = dialogueRenderer.getDialogueContainer();
-  
+
   scene.getLayerManager().addToLayer(Layer.Effects, container);
   scene.getLayerManager().fadeInLayer(Layer.Effects);
 
@@ -49,7 +49,7 @@ export async function displayNotification(scene: IBaseScene, message: string): P
   await sleep(Constants.fadeDuration * 2);
 
   const KeyBoardManager = new GameInputManager(scene);
-  
+
   const dissolveNotification = () => {
     SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
     fadeAndDestroy(scene, notifText, { fadeDuration: Constants.fadeDuration / 4 });
@@ -65,7 +65,8 @@ export async function displayNotification(scene: IBaseScene, message: string): P
         KeyBoardManager.clearKeyboardListener([keyboardShortcuts.dissolveNotification]);
         dissolveNotification();
         resolve();
-    });
+      }
+    );
 
     dialogueRenderer.getDialogueBox().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       dissolveNotification();

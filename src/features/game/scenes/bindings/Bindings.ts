@@ -71,15 +71,14 @@ class Bindings extends Phaser.Scene {
         return this.createBinding(
           binding.key,
           binding.text,
-          bindingPositions[index][1] < 450 
+          bindingPositions[index][1] < 450
             ? bindingPositions[index][0] - 400
             : bindingPositions[index][0] + 400,
           bindingPositions[index][1] <= 450
             ? bindingPositions[index][1] + BindingConstants.key.yStart - 200
             : bindingPositions[index][1] + BindingConstants.key.yStart - 775
         );
-      }
-      )
+      })
     );
     const backButton = new CommonBackButton(this, () => {
       this.getLayerManager().clearAllLayers();
@@ -108,21 +107,20 @@ class Bindings extends Phaser.Scene {
         text: 'Next dialogue'
       },
       {
-        key: "<Number>",
-        text: "       Select topics/locations"
-   
+        key: '<Number>',
+        text: '       Select topics/locations'
       },
       {
-        key: "T",
-        text: "Enter the Talk mode"
+        key: 'T',
+        text: 'Enter the Talk mode'
       },
       {
-        key: "E",
-        text: "Enter the Explore mode"
+        key: 'E',
+        text: 'Enter the Explore mode'
       },
       {
         key: 'V',
-        text: "Enter the Move mode"
+        text: 'Enter the Move mode'
       }
     ];
   }

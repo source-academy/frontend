@@ -73,7 +73,7 @@ class GameInputManager {
     const eventListener = this.scene.input.addListener(event, callback);
     this.eventListeners.concat(eventListener);
   }
-   
+
   /**
    * Clear all listeners, keyboard and event listeners.
    */
@@ -85,12 +85,12 @@ class GameInputManager {
   /**
    * Clear specific keyboard listeners.
    */
-  public clearKeyboardListener(keycodes: number[]){
+  public clearKeyboardListener(keycodes: number[]) {
     this.keyboardListeners.forEach(keyboardListener => {
-      if(keycodes.includes(keyboardListener.keyCode)){
+      if (keycodes.includes(keyboardListener.keyCode)) {
         keyboardListener.removeAllListeners();
       }
-    })
+    });
   }
 }
 

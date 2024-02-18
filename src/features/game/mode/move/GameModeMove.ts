@@ -22,7 +22,6 @@ import MoveModeConstants, { moveButtonStyle } from './GameModeMoveConstants';
  * locations from one location
  */
 class GameModeMove implements IGameUI {
-  
   private uiContainer: Phaser.GameObjects.Container | undefined;
 
   /**
@@ -86,14 +85,14 @@ class GameModeMove implements IGameUI {
       buttons.map((button, index) => {
         id++;
         return this.createMoveButton(
-          "[ " + id + " ]  " + button.text,
+          '[ ' + id + ' ]  ' + button.text,
           buttonPositions[index][0] + MoveModeConstants.button.xOffSet,
           buttonPositions[index][1],
           button.callback,
           button.onHover,
           button.onOut
-        ); }
-      )
+        );
+      })
     );
 
     const backButton = new CommonBackButton(
@@ -169,24 +168,19 @@ class GameModeMove implements IGameUI {
   /**
    * Register keyboard listeners for location selection.
    * Called by activateUI function.
-   */ 
-  private registerKeyboardListener() : void {
+   */
+  private registerKeyboardListener(): void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
-    const navList2 : string[] = this.getLatestNavigations();
-    
+    const navList2: string[] = this.getLatestNavigations();
+
     let count = 0;
     navList2.forEach(nav => {
-      inputManager.registerKeyboardListener(
-        keyboardShortcuts.options[count],
-        'up',
-        async () => {
-          await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Sequence);
-          await GameGlobalAPI.getInstance().changeLocationTo(nav);
-        }
-      );
+      inputManager.registerKeyboardListener(keyboardShortcuts.options[count], 'up', async () => {
+        await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Sequence);
+        await GameGlobalAPI.getInstance().changeLocationTo(nav);
+      });
       count += 1;
-    }
-    )
+    });
   }
 
   /**
@@ -214,7 +208,7 @@ class GameModeMove implements IGameUI {
    * Remove keyboard listners for location selection
    * when Move mode is transitioned out.
    */
-  private removeKeyboardListner() : void {
+  private removeKeyboardListner(): void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
     inputManager.clearKeyboardListener(keyboardShortcuts.options);
   }

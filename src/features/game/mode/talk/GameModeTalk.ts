@@ -51,11 +51,11 @@ class GameModeTalk implements IGameUI {
       maxYSpace: TalkModeConstants.button.ySpace
     });
 
-    let topicId = 0; 
+    let topicId = 0;
     talkMenuContainer.add(
       buttons.map((button, index) =>
         this.createTalkTopicButton(
-          "[ " + ((topicId++) + 1) + " ]  " + button.text,
+          '[ ' + (topicId++ + 1) + ' ]  ' + button.text,
           buttonPositions[index][0],
           buttonPositions[index][1],
           button.callback
@@ -133,23 +133,17 @@ class GameModeTalk implements IGameUI {
    * Register keyboard listners for talk topic selection.
    * Called by the activeUI function.
    */
-  private registerKeyboardListner() : void {
-    const talkTopics : ItemId[] = this.getLatestTalkTopics();
+  private registerKeyboardListner(): void {
+    const talkTopics: ItemId[] = this.getLatestTalkTopics();
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
     let count = 0;
-    talkTopics.forEach(
-      (dialogueId : ItemId) => {
-        inputManager.registerKeyboardListener(
-          keyboardShortcuts.options[count],
-          "up",
-          async () => {
-            GameGlobalAPI.getInstance().triggerInteraction(dialogueId);
-            await GameGlobalAPI.getInstance().showDialogue(dialogueId);
-          }
-        );
-        count += 1;
-      }
-    );
+    talkTopics.forEach((dialogueId: ItemId) => {
+      inputManager.registerKeyboardListener(keyboardShortcuts.options[count], 'up', async () => {
+        GameGlobalAPI.getInstance().triggerInteraction(dialogueId);
+        await GameGlobalAPI.getInstance().showDialogue(dialogueId);
+      });
+      count += 1;
+    });
   }
 
   /**
@@ -162,7 +156,7 @@ class GameModeTalk implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
-    
+
     this.registerKeyboardListner();
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
@@ -177,7 +171,7 @@ class GameModeTalk implements IGameUI {
   /**
    * Remove keyboard listners for topic selection.
    * Called by the deactiveUI function.
-   */ 
+   */
   private removeKeyboardListner(): void {
     const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
     inputManager.clearKeyboardListener(keyboardShortcuts.options);
@@ -199,10 +193,9 @@ class GameModeTalk implements IGameUI {
         targets: this.uiContainer,
         ...exitTweenProps
       });
-      
+
       await sleep(500);
       fadeAndDestroy(gameManager, this.uiContainer);
-      
     }
   }
 }
