@@ -564,14 +564,14 @@ test('updateGrading generates correct action object', () => {
       }
     ],
     assessment: {
-      coverPicture: '',
+      coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
       id: 1,
-      number: '',
-      reading: '',
-      story: '',
-      summaryLong: '',
-      summaryShort: '',
-      title: ''
+      number: '5',
+      reading: 'reading here',
+      story: 'story here',
+      summaryLong: 'long summary here',
+      summaryShort: 'short summary here',
+      title: 'assessment title here'
     }
   };
 

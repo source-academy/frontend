@@ -9,7 +9,7 @@ import {
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
-  Grading,
+  GradingAnswer,
   GradingOverview,
   GradingQuery,
   GradingQuestion
@@ -669,7 +669,7 @@ export const getGrading = async (
   }
 
   const gradingResult = await resp.json();
-  const grading: Grading = gradingResult.answers.map((gradingQuestion: any) => {
+  const grading: GradingAnswer = gradingResult.answers.map((gradingQuestion: any) => {
     const { student, question, grade } = gradingQuestion;
     const result = {
       question: {

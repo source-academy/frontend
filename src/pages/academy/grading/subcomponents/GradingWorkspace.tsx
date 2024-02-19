@@ -343,10 +343,14 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
       {
         label: `Briefing`,
         iconName: IconNames.BRIEFCASE,
-        body: grading ? (
-          <Markdown content={grading.assessment.summaryLong} />
-        ) : (
-          <Markdown content="Briefing Unavailable. Try refreshing the page." />
+        body: (
+          <Markdown
+            content={
+              grading
+                ? grading.assessment.summaryLong
+                : 'Briefing Unavailable. Try refreshing the page.'
+            }
+          />
         ),
         id: SideContentType.briefing
       }
