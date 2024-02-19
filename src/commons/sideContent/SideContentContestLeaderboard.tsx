@@ -69,7 +69,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<
           leaderboardType === SideContentType.scoreLeaderboard
             ? 'Calculated Score'
             : leaderboardType === SideContentType.popularVoteLeaderboard
-            ? 'Vote Score'
+            ? 'Popularity Score'
             : 'Metric'
         )}
       </div>
