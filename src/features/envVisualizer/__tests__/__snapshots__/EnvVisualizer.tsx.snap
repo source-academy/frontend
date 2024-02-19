@@ -105,7 +105,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={183.060546875}
+    x={178.060546875}
     y={5}
   >
     <Tag
