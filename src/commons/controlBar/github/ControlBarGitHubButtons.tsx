@@ -48,7 +48,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
       label={mainButtonDisplayText}
       icon={IconNames.GIT_BRANCH}
       options={{ intent: mainButtonIntent }}
-      isDisabled={props.isFolderModeEnabled}
+      //isDisabled={props.isFolderModeEnabled}
     />
   );
 
@@ -79,18 +79,28 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     />
   );
 
+  const saveAllButton = (
+    <ControlButton
+      label="Save All"
+      icon={IconNames.DOUBLE_CHEVRON_UP}
+      onClick={props.onClickSaveAs}
+      isDisabled={shouldDisableButtons}
+    />
+  );
+
   const loginButton = isLoggedIn ? (
     <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
   ) : (
     <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
 
-  const tooltipContent = props.isFolderModeEnabled
-    ? 'Currently unsupported in Folder mode'
-    : undefined;
+  //const tooltipContent = props.isFolderModeEnabled
+  //  ? 'Currently unsupported in Folder mode'
+  //  : undefined;
+  const tooltipContent = undefined;
 
   return (
-    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
+    <Tooltip2 content={tooltipContent} disabled={false}>
       <Popover2
         autoFocus={false}
         content={
@@ -99,12 +109,13 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
               {openButton}
               {saveButton}
               {saveAsButton}
+              {saveAllButton}
               {loginButton}
             </ButtonGroup>
           </div>
         }
         popoverClassName={Classes.POPOVER_DISMISS}
-        disabled={props.isFolderModeEnabled}
+        //disabled={props.isFolderModeEnabled}
       >
         {mainButton}
       </Popover2>

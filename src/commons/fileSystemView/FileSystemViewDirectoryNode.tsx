@@ -6,7 +6,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
-import { rmdirRecursively } from '../fileSystem/utils';
+import { rmdirRecursively } from '../fileSystem/FileSystemUtils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';

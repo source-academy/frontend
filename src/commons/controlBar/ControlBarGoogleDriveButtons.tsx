@@ -39,7 +39,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       label={(props.currentFile && props.currentFile.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
       options={{ intent: stateToIntent[state] }}
-      isDisabled={props.isFolderModeEnabled}
+      //isDisabled={props.isFolderModeEnabled}
     />
   );
   const openButton = (
@@ -61,8 +61,16 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   );
   const saveAsButton = (
     <ControlButton
-      label="Save as"
+      label="Save As"
       icon={IconNames.SEND_TO}
+      onClick={props.onClickSaveAs}
+      isDisabled={props.accessToken ? false : true}
+    />
+  );
+  const saveAllButton = (
+    <ControlButton
+      label="Save All"
+      icon={IconNames.DOUBLE_CHEVRON_UP}
       onClick={props.onClickSaveAs}
       isDisabled={props.accessToken ? false : true}
     />
@@ -76,12 +84,13 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
 
-  const tooltipContent = props.isFolderModeEnabled
-    ? 'Currently unsupported in Folder mode'
-    : undefined;
+  //const tooltipContent = props.isFolderModeEnabled
+  //  ? 'Currently unsupported in Folder mode'
+  //  : undefined;
+  const tooltipContent = undefined;
 
   return (
-    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
+    <Tooltip2 content={tooltipContent} disabled={false}>
       <Popover2
         autoFocus={false}
         content={
@@ -90,13 +99,14 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
               {openButton}
               {saveButton}
               {saveAsButton}
+              {saveAllButton}
               {loginButton}
             </ButtonGroup>
           </div>
         }
         onOpening={props.onPopoverOpening}
         popoverClassName={Classes.POPOVER_DISMISS}
-        disabled={props.isFolderModeEnabled}
+        //disabled={props.isFolderModeEnabled}
       >
         {mainButton}
       </Popover2>

@@ -14,7 +14,7 @@ import {
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
 import { isSourceLanguage, OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
+import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/FileSystemUtils';
 import { visitSideContent } from '../sideContent/SideContentActions';
 import { SideContentType, VISIT_SIDE_CONTENT } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';

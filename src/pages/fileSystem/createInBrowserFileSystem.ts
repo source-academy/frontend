@@ -5,7 +5,7 @@ import { Store } from 'redux';
 
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
-import { writeFileRecursively } from '../../commons/fileSystem/utils';
+import { writeFileRecursively } from '../../commons/fileSystem/FileSystemUtils';
 import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
 
 /**

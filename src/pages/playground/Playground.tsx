@@ -110,7 +110,7 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
-import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
+import { overwriteFilesInWorkspace } from '../../commons/fileSystem/FileSystemUtils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   MobileWorkspaceProps
