@@ -99,6 +99,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     return (
       <KonvaGroup
         key={Layout.key++}
+        ref={this.ref}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >

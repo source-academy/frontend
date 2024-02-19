@@ -56,7 +56,11 @@ export class LookupAnimation extends Animatable {
   }
 
   async animate() {
+    console.log(this.stashItem);
     this.stashItem.ref.current.hide();
+    if (this.stashItem.arrow) {
+      this.stashItem.arrow.ref.current?.hide();
+    }
     // move name item next to binding
     await Promise.all([this.nameItemAnimation.animate()]);
     // the name item 'pulls' the stash item out of the binding
@@ -77,6 +81,9 @@ export class LookupAnimation extends Animatable {
     await Promise.all([this.nameItemAnimation.animate(), this.stashItemAnimation.animate()]);
     this.ref.current?.hide();
     this.stashItem.ref.current?.show();
+    if (this.stashItem.arrow) {
+      this.stashItem.arrow.ref.current?.show();
+    }
   }
 
   destroy() {
