@@ -194,9 +194,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         <span
                           className="bp5-button-text"
                         >
-                          <span
-                            className="custom-hidden-xxxs"
-                          >
+                          <span>
                             Finalize
                           </span>
                           <span
@@ -376,9 +374,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         <span
                           className="bp5-button-text"
                         >
-                          <span
-                            className="custom-hidden-xxxs"
-                          >
+                          <span>
                             Finalize
                           </span>
                           <span
@@ -498,13 +494,12 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             className="bp5-button-text"
                           >
                             <span
-                              className="custom-hidden-xxxs"
                               data-testid="Assessment-Attempt-Button"
                             >
                               Continue
                             </span>
                             <span
-                              className="custom-hidden-xxs"
+                              className="custom-hidden-xxxs"
                             >
                                Attempt
                             </span>
@@ -576,9 +571,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         <span
                           className="bp5-button-text"
                         >
-                          <span
-                            className="custom-hidden-xxxs"
-                          >
+                          <span>
                             Finalize
                           </span>
                           <span
@@ -705,13 +698,12 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             className="bp5-button-text"
                           >
                             <span
-                              className="custom-hidden-xxxs"
                               data-testid="Assessment-Attempt-Button"
                             >
                               Review
                             </span>
                             <span
-                              className="custom-hidden-xxs"
+                              className="custom-hidden-xxxs"
                             >
                                Attempt
                             </span>
@@ -931,9 +923,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         <span
                           className="bp5-button-text"
                         >
-                          <span
-                            className="custom-hidden-xxxs"
-                          >
+                          <span>
                             Finalize
                           </span>
                           <span
@@ -1007,13 +997,12 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             className="bp5-button-text"
                           >
                             <span
-                              className="custom-hidden-xxxs"
                               data-testid="Assessment-Attempt-Button"
                             >
                               Attempt
                             </span>
                             <span
-                              className="custom-hidden-xxs"
+                              className="custom-hidden-xxxs"
                             />
                           </span>
                         </button>
@@ -1112,9 +1101,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         <span
                           className="bp5-button-text"
                         >
-                          <span
-                            className="custom-hidden-xxxs"
-                          >
+                          <span>
                             Finalize
                           </span>
                           <span
@@ -1198,13 +1185,12 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             className="bp5-button-text"
                           >
                             <span
-                              className="custom-hidden-xxxs"
                               data-testid="Assessment-Attempt-Button"
                             >
                               Continue
                             </span>
                             <span
-                              className="custom-hidden-xxs"
+                              className="custom-hidden-xxxs"
                             >
                                Attempt
                             </span>
@@ -1264,9 +1250,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         <span
                           className="bp5-button-text"
                         >
-                          <span
-                            className="custom-hidden-xxxs"
-                          >
+                          <span>
                             Finalize
                           </span>
                           <span
@@ -1357,13 +1341,12 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             className="bp5-button-text"
                           >
                             <span
-                              className="custom-hidden-xxxs"
                               data-testid="Assessment-Attempt-Button"
                             >
                               Review
                             </span>
                             <span
-                              className="custom-hidden-xxs"
+                              className="custom-hidden-xxxs"
                             >
                                Attempt
                             </span>
