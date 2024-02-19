@@ -66,7 +66,8 @@ const mockSecretTestcases: Testcase[] = [
 
 const secretTestcaseCardClasses = publicTestcaseCardClasses.map(classes => `${classes} secret`);
 
-const mockAutogradingResults: AutogradingResult[] = mockGradingAnswer[0].question.autogradingResults;
+const mockAutogradingResults: AutogradingResult[] =
+  mockGradingAnswer[0].question.autogradingResults;
 
 const resultCardClasses = [
   'ResultCard correct',
