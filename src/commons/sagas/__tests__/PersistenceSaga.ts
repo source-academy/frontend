@@ -189,7 +189,7 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
         }
       }
     })
-    .dispatch(actions.persistenceSaveFile({ id: FILE_ID, name: FILE_NAME }))
+    .dispatch(actions.persistenceSaveFile({ id: FILE_ID, name: FILE_NAME}))
     .provide({
       call(effect, next) {
         switch (effect.fn.name) {

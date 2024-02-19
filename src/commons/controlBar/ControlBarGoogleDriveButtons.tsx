@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 
-import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
+import { PersistenceObject, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
 
@@ -11,7 +11,7 @@ export type ControlBarGoogleDriveButtonsProps = {
   isFolderModeEnabled: boolean;
   loggedInAs?: string;
   accessToken?: string;
-  currentFile?: PersistenceFile;
+  currentObject?: PersistenceObject;
   isDirty?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
@@ -30,14 +30,14 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 
 export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
-  const state: PersistenceState = props.currentFile
+  const state: PersistenceState = props.currentObject
     ? props.isDirty
       ? 'DIRTY'
       : 'SAVED'
     : 'INACTIVE';
   const mainButton = (
     <ControlButton
-      label={(props.currentFile && props.currentFile.name) || 'Google Drive'}
+      label={(props.currentObject && props.currentObject.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
       options={{ intent: stateToIntent[state] }}
       //isDisabled={props.isFolderModeEnabled}

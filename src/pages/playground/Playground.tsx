@@ -266,7 +266,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
+  const { queryString, shortURL, persistenceObject, githubSaveInfo } = useTypedSelector(
     state => state.playground
   );
   const {
@@ -602,12 +602,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   // Compute this here to avoid re-rendering the button every keystroke 
   const persistenceIsDirty =
-    persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
+    persistenceObject && (!persistenceObject.lastSaved || persistenceObject.lastSaved < lastEdit);
   const persistenceButtons = useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
         isFolderModeEnabled={isFolderModeEnabled}
-        currentFile={persistenceFile}
+        currentObject={persistenceObject}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
         accessToken={googleAccessToken}
@@ -616,7 +616,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSaveAll={() => dispatch(persistenceSaveAll())}
         onClickOpen={() => dispatch(persistenceOpenPicker())}
         onClickSave={
-          persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
+          persistenceObject ? () => dispatch(persistenceSaveFile(persistenceObject)) : undefined
         }
         onClickLogIn={() => dispatch(loginGoogle())}
         onClickLogOut={() => dispatch(logoutGoogle())}
@@ -625,7 +625,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [
     isFolderModeEnabled,
-    persistenceFile,
+    persistenceObject,
     persistenceUser,
     persistenceIsDirty,
     dispatch,
@@ -736,7 +736,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={editorSessionId !== ''}
-        isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
+        isPersistenceActive={persistenceObject !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
@@ -745,7 +745,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch,
     githubSaveInfo.repoName,
     isFolderModeEnabled,
-    persistenceFile,
+    persistenceObject,
     editorSessionId,
     workspaceLocation
   ]);

@@ -6,14 +6,14 @@ import {
   PERSISTENCE_SAVE_ALL,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
-  PersistenceFile
+  PersistenceObject
 } from './PersistenceTypes';
 
 export const persistenceOpenPicker = () => action(PERSISTENCE_OPEN_PICKER);
 
 export const persistenceSaveAll = () => action(PERSISTENCE_SAVE_ALL);
 
-export const persistenceSaveFile = (file: PersistenceFile) => action(PERSISTENCE_SAVE_FILE, file);
+export const persistenceSaveFile = (file: PersistenceObject) => action(PERSISTENCE_SAVE_FILE, file);
 
 export const persistenceSaveFileAs = () => action(PERSISTENCE_SAVE_FILE_AS);
 

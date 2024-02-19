@@ -1,13 +1,14 @@
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
 import { action } from 'typesafe-actions';
 
-import { PersistenceFile } from '../persistence/PersistenceTypes';
+import { PersistenceObject } from '../persistence/PersistenceTypes';
 import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
+  PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
   SHORTEN_URL,
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
@@ -20,8 +21,11 @@ export const updateShortURL = (shortURL: string) => action(UPDATE_SHORT_URL, sho
 
 export const changeQueryString = (queryString: string) => action(CHANGE_QUERY_STRING, queryString);
 
-export const playgroundUpdatePersistenceFile = (file?: PersistenceFile) =>
+export const playgroundUpdatePersistenceFile = (file?: PersistenceObject) =>
   action(PLAYGROUND_UPDATE_PERSISTENCE_FILE, file);
+
+export const playgroundUpdatePersistenceFolder = (folder?: PersistenceObject) =>
+  action(PLAYGROUND_UPDATE_PERSISTENCE_FOLDER, folder ? {...folder, isFolder: true} : undefined);
 
 export const playgroundUpdateGitHubSaveInfo = (
   repoName: string,
