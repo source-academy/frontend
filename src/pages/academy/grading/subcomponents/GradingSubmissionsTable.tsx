@@ -50,6 +50,75 @@ type GradingSubmissionTableProps = {
   ) => void;
 };
 
+const columnHelper = createColumnHelper<GradingOverview>();
+
+const makeColumns = (handleClick: () => void) => [
+  columnHelper.accessor('assessmentName', {
+    header: 'Name',
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+  }),
+  columnHelper.accessor('assessmentType', {
+    header: 'Type',
+    cell: info => (
+      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+        <AssessmentTypeBadge type={info.getValue()} />
+      </Filterable>
+    )
+  }),
+  columnHelper.accessor('studentName', {
+    header: 'Student',
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+  }),
+  columnHelper.accessor('studentUsername', {
+    header: 'Username',
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+  }),
+  columnHelper.accessor('groupName', {
+    header: 'Group',
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+  }),
+  columnHelper.accessor('submissionStatus', {
+    header: 'Progress',
+    cell: info => (
+      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+        <SubmissionStatusBadge status={info.getValue()} />
+      </Filterable>
+    )
+  }),
+  columnHelper.accessor('gradingStatus', {
+    header: 'Grading',
+    cell: info => (
+      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+        <GradingStatusBadge status={info.getValue()} />
+      </Filterable>
+    )
+  }),
+  columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
+    header: 'Raw XP (+Bonus)',
+    enableColumnFilter: false,
+    cell: info => {
+      const { currentXp, xpBonus, maxXp } = info.getValue();
+      return (
+        <Flex justifyContent="justify-start" spaceX="space-x-2">
+          <Text>
+            {currentXp} (+{xpBonus})
+          </Text>
+          <Text>/</Text>
+          <Text>{maxXp}</Text>
+        </Flex>
+      );
+    }
+  }),
+  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
+    header: 'Actions',
+    enableColumnFilter: false,
+    cell: info => {
+      const { submissionId } = info.getValue();
+      return <GradingActions submissionId={submissionId} />;
+    }
+  })
+];
+
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   totalRows,
   submissions,
@@ -169,75 +238,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     };
   }, [page, pageSize]);
 
-  const columnHelper = createColumnHelper<GradingOverview>();
-
-  const columns = [
-    columnHelper.accessor('assessmentName', {
-      header: 'Name',
-      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
-    }),
-    columnHelper.accessor('assessmentType', {
-      header: 'Type',
-      cell: info => (
-        <Filterable onClick={resetPage} column={info.column} value={info.getValue()}>
-          <AssessmentTypeBadge type={info.getValue()} />
-        </Filterable>
-      )
-    }),
-    columnHelper.accessor('studentName', {
-      header: 'Student',
-      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
-    }),
-    columnHelper.accessor('studentUsername', {
-      header: 'Username',
-      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
-    }),
-    columnHelper.accessor('groupName', {
-      header: 'Group',
-      cell: info => <Filterable onClick={resetPage} column={info.column} value={info.getValue()} />
-    }),
-    columnHelper.accessor('submissionStatus', {
-      header: 'Progress',
-      cell: info => (
-        <Filterable onClick={resetPage} column={info.column} value={info.getValue()}>
-          <SubmissionStatusBadge status={info.getValue()} />
-        </Filterable>
-      )
-    }),
-    columnHelper.accessor('gradingStatus', {
-      header: 'Grading',
-      cell: info => (
-        <Filterable onClick={resetPage} column={info.column} value={info.getValue()}>
-          <GradingStatusBadge status={info.getValue()} />
-        </Filterable>
-      )
-    }),
-    columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
-      header: 'Raw XP (+Bonus)',
-      enableColumnFilter: false,
-      cell: info => {
-        const { currentXp, xpBonus, maxXp } = info.getValue();
-        return (
-          <Flex justifyContent="justify-start" spaceX="space-x-2">
-            <Text>
-              {currentXp} (+{xpBonus})
-            </Text>
-            <Text>/</Text>
-            <Text>{maxXp}</Text>
-          </Flex>
-        );
-      }
-    }),
-    columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
-      header: 'Actions',
-      enableColumnFilter: false,
-      cell: info => {
-        const { submissionId } = info.getValue();
-        return <GradingActions submissionId={submissionId} />;
-      }
-    })
-  ];
-
+  const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
   const table = useReactTable({
     data: submissions,
     columns,
