@@ -264,11 +264,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   ];
 
   // modifies state setters to reset page as well.
-  function setStateAndReset<T>(stateChanger: React.Dispatch<T>): React.Dispatch<T>{
+  function setStateAndReset<T>(stateChanger: React.Dispatch<T>): React.Dispatch<T> {
     return (value: T) => {
       stateChanger(value);
       resetPage();
-    }
+    };
   }
 
   // tells page to ask for new entries from main page when its state changes.

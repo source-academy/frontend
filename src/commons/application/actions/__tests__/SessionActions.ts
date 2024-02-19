@@ -152,7 +152,7 @@ test('fetchGradingOverviews generates correct default action object', () => {
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: true,
-      pageParams: {},
+      pageParams: { 'offset': 0, 'pageSize': 10 },
       filterParams: {}
     }
   });
