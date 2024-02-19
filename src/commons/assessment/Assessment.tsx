@@ -149,9 +149,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
             dispatch(acknowledgeNotifications(filterNotificationsByAssessment(overview.id)))
           }
         >
-          <span data-testid="Assessment-Attempt-Button">
-            {label}
-          </span>
+          <span data-testid="Assessment-Attempt-Button">{label}</span>
           <span className="custom-hidden-xxxs">{optionalLabel}</span>
         </Button>
       </NavLink>
@@ -178,7 +176,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     return (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
-          <div className={isMobileBreakpoint ? "listing-picture" : `col-xs-3 listing-picture`}> 
+          <div className={isMobileBreakpoint ? 'listing-picture' : `col-xs-3 listing-picture`}>
             <NotificationBadge
               className="badge"
               notificationFilter={filterNotificationsByAssessment(overview.id)}
@@ -190,7 +188,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
               src={overview.coverImage ? overview.coverImage : defaultCoverImage}
             />
           </div>
-          <div className={isMobileBreakpoint ? "listing-text" : `col-xs-9 listing-text`}>
+          <div className={isMobileBreakpoint ? 'listing-text' : `col-xs-9 listing-text`}>
             {makeOverviewCardTitle(overview, index, renderGradingStatus)}
             <div className="listing-xp">
               <H6>
