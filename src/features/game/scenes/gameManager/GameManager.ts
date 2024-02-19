@@ -267,17 +267,13 @@ class GameManager extends Phaser.Scene {
    * Bind escape menu, dashboard, and mode selections to keyboard triggers.
    */
   private bindKeyboardTriggers() {
-    this.getInputManager().registerKeyboardListener(
-      keyboardShortcuts.Menu,
-      'up',
-      async () => {
-        if (this.getPhaseManager().isCurrentPhaseTerminal()) {
-          await this.getPhaseManager().popPhase();
-        } else {
-          await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
-        }
+    this.getInputManager().registerKeyboardListener(keyboardShortcuts.Menu, 'up', async () => {
+      if (this.getPhaseManager().isCurrentPhaseTerminal()) {
+        await this.getPhaseManager().popPhase();
+      } else {
+        await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
       }
-    );
+    });
     this.getInputManager().registerKeyboardListener(keyboardShortcuts.Dashboard, 'up', async () => {
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
         await this.getPhaseManager().popPhase();

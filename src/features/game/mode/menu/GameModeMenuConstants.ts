@@ -34,4 +34,4 @@ export const MenuLineConstants = {
   talkOffset: -30,
   yOffset: 20,
   color: 0xbce7da
-}
+};

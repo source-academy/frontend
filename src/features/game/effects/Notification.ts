@@ -58,15 +58,11 @@ export async function displayNotification(scene: IBaseScene, message: string): P
 
   const showNotification = new Promise<void>(resolve => {
     // using the same binding as dialogue shortcut
-    gameInputManager.registerKeyboardListener(
-      keyboardShortcuts.Notif,
-      'up',
-      async () => {
-        gameInputManager.clearKeyboardListeners([keyboardShortcuts.Notif]);
-        dissolveNotification();
-        resolve();
-      }
-    );
+    gameInputManager.registerKeyboardListener(keyboardShortcuts.Notif, 'up', async () => {
+      gameInputManager.clearKeyboardListeners([keyboardShortcuts.Notif]);
+      dissolveNotification();
+      resolve();
+    });
 
     dialogueRenderer.getDialogueBox().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       dissolveNotification();

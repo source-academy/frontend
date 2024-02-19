@@ -51,16 +51,14 @@ export default class DialogueManager {
   private async playWholeDialogue(resolve: () => void) {
     await this.showNextLine(resolve);
     // add keyboard listener for dialogue box
-    this.getInputManager().registerKeyboardListener(
-      keyboardShortcuts.Next,
-      'up',
-      async () => {
-        // show the next line if dashboard or escape menu are not displayed
-        if (!GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()) {
-          await this.showNextLine(resolve);
-        }
+    this.getInputManager().registerKeyboardListener(keyboardShortcuts.Next, 'up', async () => {
+      // show the next line if dashboard or escape menu are not displayed
+      if (
+        !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
+      ) {
+        await this.showNextLine(resolve);
       }
-    );
+    });
     this.getDialogueRenderer()
       .getDialogueBox()
       .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {

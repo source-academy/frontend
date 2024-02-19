@@ -13,4 +13,3 @@ export const keyboardShortcuts = {
     Phaser.Input.Keyboard.KeyCodes.FOUR
   ]
 };
-  
