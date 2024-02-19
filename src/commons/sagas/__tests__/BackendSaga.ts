@@ -173,6 +173,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableGame: true,
   enableAchievements: true,
   enableSourcecast: true,
+  enableStories: false,
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -203,6 +204,7 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableGame: true,
   enableAchievements: true,
   enableSourcecast: true,
+  enableStories: false,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -216,6 +218,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: true,
     displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
+    hasTokenCounter: false,
     earlySubmissionXp: 200
   },
   {
@@ -224,6 +227,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: true,
     displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
+    hasTokenCounter: false,
     earlySubmissionXp: 200
   },
   {
@@ -232,6 +236,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: false,
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
+    hasTokenCounter: false,
     earlySubmissionXp: 200
   },
   {
@@ -240,6 +245,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: false,
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
+    hasTokenCounter: true,
     earlySubmissionXp: 200
   },
   {
@@ -248,6 +254,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: true,
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
+    hasTokenCounter: false,
     earlySubmissionXp: 200
   }
 ];
@@ -887,6 +894,7 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableGame: false,
     enableAchievements: false,
     enableSourcecast: false,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
@@ -984,6 +992,7 @@ describe('Test CREATE_COURSE action', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text'
@@ -998,6 +1007,7 @@ describe('Test CREATE_COURSE action', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
+      hasTokenCounter: false,
       earlySubmissionXp: 0
     }
   ];

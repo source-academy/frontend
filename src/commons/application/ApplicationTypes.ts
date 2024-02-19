@@ -26,17 +26,12 @@ export type OverallState = {
   readonly router: RouterState;
   readonly academy: AcademyState;
   readonly achievement: AchievementState;
-  readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
-};
-
-export type ApplicationState = {
-  readonly environment: ApplicationEnvironment;
 };
 
 export type Story = {
@@ -93,13 +88,22 @@ export type ErrorOutput = {
   consoleLogs: string[];
 };
 
-export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
+/**
+ * An output which represents a message being displayed to the user. Not a true
+ * result from the program, but rather a customised notification meant to highlight
+ * events that occur outside execution of the program.
+ */
+export type NotificationOutput = {
+  type: 'notification';
+  consoleLog: string;
+};
 
-export enum ApplicationEnvironment {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test'
-}
+export type InterpreterOutput =
+  | RunningOutput
+  | CodeOutput
+  | ResultOutput
+  | ErrorOutput
+  | NotificationOutput;
 
 export enum Role {
   Student = 'student',
@@ -243,7 +247,8 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
 
   // Enable Subst Visualizer only for default Source 1 & 2
   supportedFeatures.substVisualizer =
-    chapter <= Chapter.SOURCE_2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE);
+    chapter <= Chapter.SOURCE_2 &&
+    (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
 
   // Enable Env Visualizer for Source Chapter 3 and above
   supportedFeatures.envVisualizer =
@@ -288,25 +293,10 @@ export const getLanguageConfig = (
   return languageConfig;
 };
 
-const currentEnvironment = (): ApplicationEnvironment => {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return ApplicationEnvironment.Development;
-    case 'production':
-      return ApplicationEnvironment.Production;
-    default:
-      return ApplicationEnvironment.Test;
-  }
-};
-
 export const defaultRouter: RouterState = null;
 
 export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
-};
-
-export const defaultApplication: ApplicationState = {
-  environment: currentEnvironment()
 };
 
 export const defaultDashboard: DashboardState = {
@@ -385,6 +375,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     originalValue: ''
   },
   replValue: '',
+  hasTokenCounter: false,
+  tokenCount: 0,
+  customNotification: '',
   sharedbConnected: false,
   stepLimit: 1000,
   globals: [],
@@ -505,7 +498,6 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  allUserXp: undefined,
   story: {
     story: '',
     playStory: false
@@ -550,7 +542,6 @@ export const defaultState: OverallState = {
   router: defaultRouter,
   academy: defaultAcademy,
   achievement: defaultAchievement,
-  application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,

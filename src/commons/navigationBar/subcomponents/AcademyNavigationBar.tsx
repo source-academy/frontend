@@ -2,7 +2,7 @@ import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
@@ -13,7 +13,7 @@ type OwnProps = {
 };
 
 const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTypes }) => {
-  const { role, courseId } = useTypedSelector(state => state.session);
+  const { role, courseId } = useSession();
   const isEnrolledInACourse = !!role;
 
   const academyNavbarRightInfo = React.useMemo<NavbarEntryInfo[]>(
@@ -119,13 +119,6 @@ const getStaffNavlinkInfo = ({
       text: 'Game Simulator',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
-    },
-    {
-      to: `/courses/${courseId}/xpcalculation`,
-      icon: IconNames.CALCULATOR,
-      text: 'XP Calculation',
-      disabled: !isAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
     },
     {
       to: `/courses/${courseId}/adminpanel`,

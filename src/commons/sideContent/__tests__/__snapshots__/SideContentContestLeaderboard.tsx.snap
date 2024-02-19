@@ -4,16 +4,16 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
 <div
   className="ContestLeaderboard"
 >
-  <Blueprint4.Button
+  <Blueprint5.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
     onClick={[Function]}
   >
     <span>
-      Contest Leaderboard
+      Score Leaderboard
     </span>
-    <Blueprint4.Tooltip2
+    <Blueprint5.Tooltip
       compact={false}
       content="View the top-rated contest entries!"
       hoverCloseDelay={0}
@@ -22,12 +22,14 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
       minimal={false}
       transitionDuration={100}
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="help"
+        tagName="span"
       />
-    </Blueprint4.Tooltip2>
-  </Blueprint4.Button>
-  <Blueprint4.Collapse
+    </Blueprint5.Tooltip>
+  </Blueprint5.Button>
+  <Blueprint5.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -41,24 +43,30 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
           className="header-entryid"
         >
           Student Name
-          <Blueprint4.Icon
+          <Blueprint5.Icon
+            autoLoad={true}
             icon="caret-down"
+            tagName="span"
           />
         </div>
         <div
           className="header-entryrank"
         >
           Rank
-          <Blueprint4.Icon
+          <Blueprint5.Icon
+            autoLoad={true}
             icon="caret-down"
+            tagName="span"
           />
         </div>
         <div
           className="header-score"
         >
           Score
-          <Blueprint4.Icon
+          <Blueprint5.Icon
+            autoLoad={true}
             icon="caret-down"
+            tagName="span"
           />
         </div>
       </div>
@@ -105,6 +113,6 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
         rank={3}
       />
     </div>
-  </Blueprint4.Collapse>
+  </Blueprint5.Collapse>
 </div>
 `;

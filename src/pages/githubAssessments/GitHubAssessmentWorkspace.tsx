@@ -35,6 +35,7 @@ import {
   updateReplValue,
   updateWorkspace
 } from 'src/commons/workspace/WorkspaceActions';
+import classes from 'src/styles/GithubAssessments.module.scss';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Testcase } from '../../commons/assessment/AssessmentTypes';
@@ -1139,7 +1140,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className={classNames('missionLoading', Classes.DARK)}>
+      <div className={classNames(classes['missionLoading'], Classes.DARK)}>
         <NonIdealState description="Loading" icon={<Spinner size={SpinnerSize.LARGE} />} />
       </div>
     );

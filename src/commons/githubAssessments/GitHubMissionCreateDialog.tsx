@@ -1,6 +1,7 @@
 import { AnchorButton, Button, Classes, Dialog, InputGroup, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useState } from 'react';
+import classes from 'src/styles/GithubAssessments.module.scss';
 
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
@@ -19,7 +20,7 @@ export const GitHubMissionCreateDialog: React.FC<GitHubMissionCreateDialogProps>
   const [repositoryName, setrepositoryName] = useState('sa-new-mission-repository');
 
   return (
-    <Dialog className="missionBrowser" isOpen={true}>
+    <Dialog className={classes['missionBrowser']} isOpen={true}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Please confirm your save</h3>
       </div>

@@ -33,7 +33,6 @@ import {
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
@@ -87,7 +86,6 @@ import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTyp
 import {
   deleteAssessment,
   deleteSourcecastEntry,
-  getAllUserXp,
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
@@ -199,8 +197,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (courseConfiguration.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
     }
     /**
      * NOTE: Navigation logic is now handled in <Login /> component.
@@ -245,8 +247,12 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.setCourseConfiguration(courseConfiguration));
         yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
 
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
+        if (courseConfiguration.enableStories) {
+          yield put(actions.getStoriesUser());
+          // TODO: Fetch associated stories group ID
+        } else {
+          yield put(actions.clearStoriesUserAndGroup());
+        }
       }
     }
   );
@@ -257,8 +263,12 @@ function* BackendSaga(): SagaIterator {
     if (config) {
       yield put(actions.setCourseConfiguration(config));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (config.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
     }
   });
 
@@ -271,15 +281,6 @@ function* BackendSaga(): SagaIterator {
     );
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
-    }
-  });
-
-  yield takeEvery(FETCH_ALL_USER_XP, function* () {
-    const tokens: Tokens = yield selectTokens();
-
-    const res: { all_users_xp: string[][] } = yield call(getAllUserXp, tokens);
-    if (res) {
-      yield put(actions.updateAllUserXp(res.all_users_xp));
     }
   });
 
@@ -724,8 +725,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield put(actions.setCourseRegistration(courseRegistration));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (courseConfiguration.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
 
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
     }
@@ -742,6 +747,13 @@ function* BackendSaga(): SagaIterator {
         return yield handleResponseError(resp);
       }
 
+      if (courseConfig.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
+
       yield put(actions.setCourseConfiguration(courseConfig));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
@@ -754,7 +766,6 @@ function* BackendSaga(): SagaIterator {
       getAssessmentConfigs,
       tokens
     );
-
     if (assessmentConfigs) {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
@@ -945,6 +956,13 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.setUser(user));
     yield put(actions.setCourseRegistration({ role: Role.Student }));
 
+    if (courseConfiguration.enableStories) {
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+    } else {
+      yield put(actions.clearStoriesUserAndGroup());
+    }
+
     const placeholderAssessmentConfig = [
       {
         type: 'Missions',
@@ -952,6 +970,7 @@ function* BackendSaga(): SagaIterator {
         isManuallyGraded: true,
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
+        hasTokenCounter: false,
         earlySubmissionXp: 0
       }
     ];

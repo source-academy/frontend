@@ -96,6 +96,7 @@ test('SET_COURSE_CONFIGURATION works correctly', () => {
     enableGame: true,
     enableAchievements: true,
     enableSourcecast: true,
+    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',

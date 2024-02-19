@@ -19,7 +19,7 @@ $sicp-content-lr-padding: 6em;
   font-size: 16pt;
   line-height: 2;
 
-  .bp4-non-ideal-state {
+  .#{$ns}-non-ideal-state {
     font-size: 13pt;
   }
 
@@ -27,21 +27,21 @@ $sicp-content-lr-padding: 6em;
     overflow-x: scroll;
   }
 
-  .bp4-blockquote {
+  .#{$ns}-blockquote {
     margin: 10px 0;
   }
 
-  .bp4-heading {
+  .#{$ns}-heading {
     margin-top: 10px;
   }
 
-  .bp4-code {
+  .#{$ns}-code {
     color: $sicp-text-color;
     background-color: inherit;
     box-shadow: none;
   }
 
-  .bp4-code-block {
+  .#{$ns}-code-block {
     font-size: 14pt;
     padding: 0;
     margin: 10px 0;
@@ -94,13 +94,13 @@ $sicp-content-lr-padding: 6em;
       flex-flow: row nowrap;
       justify-content: space-between;
 
-      .bp4-button {
+      .#{$ns}-button {
         background-color: $cadet-color-3;
         width: 80px;
         padding: 10px 15px;
       }
 
-      .bp4-button:hover {
+      .#{$ns}-button:hover {
         background-color: $cadet-color-1;
       }
     }
@@ -114,7 +114,7 @@ $sicp-content-lr-padding: 6em;
     }
   }
 
-  .bp4-heading {
+  .#{$ns}-heading {
     color: $sicp-text-color;
   }
 
@@ -292,7 +292,7 @@ $sicp-content-lr-padding: 6em;
       flex-direction: column;
       align-items: flex-end;
 
-      > .bp4-button {
+      > .#{$ns}-button {
         margin: 5px;
       }
     }
@@ -308,26 +308,26 @@ $sicp-content-lr-padding: 6em;
   overflow-y: auto;
   text-align: left;
 
-  .bp4-tree-node-content {
+  .#{$ns}-tree-node-content {
     height: fit-content;
   }
 
-  .bp4-tree-node-list {
+  .#{$ns}-tree-node-list {
     padding: 0;
   }
 
-  .bp4-tree-node-label {
+  .#{$ns}-tree-node-label {
     padding-left: 7px;
     white-space: normal;
     text-overflow: clip;
   }
 
-  .bp4-tree-node-caret {
+  .#{$ns}-tree-node-caret {
     color: #777777 !important;
     scale: 1.25;
   }
 
-  .bp4-tree-node-caret:hover {
+  .#{$ns}-tree-node-caret:hover {
     color: $sicp-text-color !important;
   }
 }
@@ -339,7 +339,7 @@ $sicp-content-lr-padding: 6em;
     color: $sicp-text-color;
     font-size: larger;
 
-    .bp4-tree-node-content {
+    .#{$ns}-tree-node-content {
       padding-top: 10px;
       padding-bottom: 10px;
     }

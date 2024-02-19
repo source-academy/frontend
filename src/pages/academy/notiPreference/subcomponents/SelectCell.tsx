@@ -83,9 +83,8 @@ const SelectCell: React.FC<SelectCellProps> = props => {
       disabled={!systemEnabled}
     >
       <Button
-        text={selectedOption ? getUserFriendlyText(selectedOption) : 'NA'}
+        text={selectedOption ? getUserFriendlyText(selectedOption) : 'Choose default'}
         rightIcon="caret-down"
-        placeholder="Choose default"
         disabled={!systemEnabled}
       />
     </Select2>

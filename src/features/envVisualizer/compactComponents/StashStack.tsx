@@ -1,4 +1,4 @@
-import { Stash } from 'js-slang/dist/ec-evaluator/interpreter';
+import { Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Value } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
@@ -6,7 +6,7 @@ import { Group } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import EnvVisualizer from '../EnvVisualizer';
-import { AgendaStashConfig } from '../EnvVisualizerAgendaStash';
+import { ControlStashConfig } from '../EnvVisualizerControlStash';
 import { Layout } from '../EnvVisualizerLayout';
 import { IHoverable } from '../EnvVisualizerTypes';
 import { getStashItemComponent } from '../EnvVisualizerUtils';
@@ -21,8 +21,8 @@ export class StashStack extends Visible implements IHoverable {
     readonly stash: Stash
   ) {
     super();
-    this._x = AgendaStashConfig.StashPosX;
-    this._y = AgendaStashConfig.StashPosY;
+    this._x = ControlStashConfig.StashPosX;
+    this._y = ControlStashConfig.StashPosY;
     this._width = 0;
     this._height = 0;
 
