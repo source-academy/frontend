@@ -55,11 +55,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   submissions,
   updateEntries
 }) => {
-  /* TODO: implement functionality for submission filtering by groups using the following state.
-  const {
-    group
-  } = useSession();
-  */
+  // TODO: implement functionality for submission filtering by groups using the group state from useSession.
 
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
@@ -79,7 +75,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     { value: false, label: 'ungraded' },
     { value: true, label: 'all' }
   ];
-  
+
   // TODO: implement isAdmin functionality
   const [limitGroup, setLimitGroup] = useState(true);
   const groupOptions = [
@@ -280,7 +276,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   useEffect(() => {
     updateEntries(limitGroup, pageParams, backendFilterParams);
     // updateEntries seems to change between renders as a reference?
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
   }, [limitGroup, pageParams, backendFilterParams]);
 
   return (
