@@ -74,6 +74,19 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   // This is needed because a filter change is accompanied with a page reset.
   const resetPage = useCallback(() => setPage(0), [setPage]);
 
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const showSubmissionOptions = [
+    { value: false, label: 'ungraded' },
+    { value: true, label: 'all' }
+  ];
+  
+  // TODO: implement isAdmin functionality
+  const [limitGroup, setLimitGroup] = useState(true);
+  const groupOptions = [
+    { value: true, label: 'my groups' },
+    { value: false, label: 'all groups' }
+  ];
+
   // Dropdown tab options, which contains some external state.
   // This can be a candidate for its own component once backend feature implementation is complete.
   const pageSizeOptions = [
@@ -82,19 +95,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     { value: 10, label: '10' },
     { value: 20, label: '20' },
     { value: 50, label: '50' }
-  ];
-
-  // TODO: implement isAdmin functionality
-  const [limitGroup, setLimitGroup] = useState(true);
-  const groupOptions = [
-    { value: true, label: 'my groups' },
-    { value: false, label: 'all groups' }
-  ];
-
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-  const showSubmissionOptions = [
-    { value: false, label: 'ungraded' },
-    { value: true, label: 'all' }
   ];
 
   // modifies state setters to reset page as well.
@@ -279,7 +279,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
     updateEntries(limitGroup, pageParams, backendFilterParams);
-  }, [updateEntries, limitGroup, pageParams, backendFilterParams]);
+    // updateEntries seems to change between renders as a reference?
+    // eslint-disable-next-line 
+  }, [limitGroup, pageParams, backendFilterParams]);
 
   return (
     <>
