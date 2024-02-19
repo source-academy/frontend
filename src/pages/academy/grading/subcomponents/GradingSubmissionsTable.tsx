@@ -27,7 +27,7 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
@@ -73,6 +73,105 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   // This is needed because a filter change is accompanied with a page reset.
   const resetPage = useCallback(() => setPage(0), [setPage]);
+
+  // Dropdown tab options, which contains some external state.
+  // This can be a candidate for its own component once backend feature implementation is complete.
+  const pageSizeOptions = [
+    { value: 1, label: '1' },
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
+  ];
+
+  // TODO: implement isAdmin functionality
+  const [limitGroup, setLimitGroup] = useState(true);
+  const groupOptions = [
+    { value: true, label: 'my groups' },
+    { value: false, label: 'all groups' }
+  ];
+
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const showSubmissionOptions = [
+    { value: false, label: 'ungraded' },
+    { value: true, label: 'all' }
+  ];
+
+  // modifies state setters to reset page as well.
+  function setStateAndReset<T>(stateChanger: React.Dispatch<T>): React.Dispatch<T> {
+    return (value: T) => {
+      stateChanger(value);
+      resetPage();
+    };
+  }
+
+  // Converts the columnFilters array into backend query parameters.
+  // Memoized as derived data to prevent infinite re-rendering.
+  // TEMP IMPLEMENTATION. Values currently hardcoded with knowledge of what a ColumnFilter is.
+  // TODO: remove hardcoding conversion of all submissions to column filter. it is a hacky workaround.
+  // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here, remove hardcode.
+  // TODO: make a controller component, like in the achievements page, to handle conversion of page state into JSON.
+  const backendFilterParams = useMemo(() => {
+    return columnFilters
+      .concat(
+        showAllSubmissions
+          ? []
+          : [
+              {
+                id: 'gradingStatus',
+                value: GradingStatuses.none
+              }
+            ]
+      )
+      .map((column: ColumnFilter) => {
+        // TODO: change all references to column properties in backend saga to backend name to reduce
+        // un-needed hardcode conversion, ensuring that places that reference it are updated.
+        switch (column.id) {
+          case 'assessmentName':
+            return { title: column.value };
+          case 'assessmentType':
+            return { type: column.value };
+          case 'studentName':
+            return { name: column.value };
+          case 'studentUsername':
+            return { username: column.value };
+          case 'submissionStatus':
+            return { status: column.value };
+          case 'groupName':
+            return { groupName: column.value };
+          case 'gradingStatus':
+            if (column.value === GradingStatuses.none) {
+              return {
+                isManuallyGraded: true,
+                status: 'submitted',
+                numGraded: 0
+              };
+            } else if (column.value === GradingStatuses.graded) {
+              // TODO: coordinate with backend on subquerying to implement the third query
+              // currently ignored by backend as of 16 Feb 24 commit
+              return {
+                isManuallyGraded: true,
+                status: 'submitted',
+                numGradedEqualToTotal: true
+              };
+            } else {
+              // case: excluded or grading. Not implemented yet.
+              return {};
+            }
+          default:
+            return column;
+        }
+      })
+      .reduce(Object.assign, {});
+  }, [columnFilters, showAllSubmissions]);
+
+  // Adapts frontend page and pageSize state into useable offset for backend usage.
+  const pageParams = useMemo(() => {
+    return {
+      offset: page * pageSize,
+      pageSize: pageSize
+    };
+  }, [page, pageSize]);
 
   const columnHelper = createColumnHelper<GradingOverview>();
 
@@ -177,104 +276,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     );
   }, [columnFilters, globalFilter, dispatch]);
 
-  // Adapts frontend page and pageSize state into useable offset for backend usage.
-  const pageParams = (): any => {
-    return {
-      offset: page * pageSize,
-      pageSize: pageSize
-    };
-  };
-
-  // Converts the columnFilters array into backend query parameters.
-  // TEMP IMPLEMENTATION. Values currently hardcoded with knowledge of what a ColumnFilter is.
-  // TODO: remove hardcoding conversion of all submissions to column filter. it is a hacky workaround.
-  // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here, remove hardcode.
-  // TODO: make a controller component, like in the achievements page, to handle conversion of page state into JSON.
-  const backendFilterParams = (columnFilters: ColumnFilter[], showAllSubmissions: boolean): any => {
-    return columnFilters
-      .concat([
-        {
-          id: showAllSubmissions ? 'paramIgnoredByBackend' : 'gradingStatus',
-          value: GradingStatuses.none
-        }
-      ])
-      .map((column: ColumnFilter) => {
-        // TODO: change all references to column properties in backend saga to backend name to reduce
-        // un-needed hardcode conversion, ensuring that places that reference it are updated.
-        switch (column.id) {
-          case 'assessmentName':
-            return { title: column.value };
-          case 'assessmentType':
-            return { type: column.value };
-          case 'studentName':
-            return { name: column.value };
-          case 'studentUsername':
-            return { username: column.value };
-          case 'submissionStatus':
-            return { status: column.value };
-          case 'groupName':
-            return { groupName: column.value };
-          case 'gradingStatus':
-            if (column.value === GradingStatuses.none) {
-              return {
-                isManuallyGraded: true,
-                status: 'submitted',
-                numGraded: 0
-              };
-            } else if (column.value === GradingStatuses.graded) {
-              // TODO: coordinate with backend on subquerying to implement the third query
-              // currently ignored by backend as of 16 Feb 24 commit
-              return {
-                isManuallyGraded: true,
-                status: 'submitted',
-                numGradedEqualToTotal: true
-              };
-            } else {
-              // case: excluded or grading. Not implemented yet.
-              return {};
-            }
-          default:
-            return column;
-        }
-      })
-      .reduce(Object.assign, {});
-  };
-
-  // Dropdown tab options, which contains some external state.
-  // This can be a candidate for its own component once backend feature implementation is complete.
-  const pageSizeOptions = [
-    { value: 1, label: '1' },
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 50, label: '50' }
-  ];
-
-  // TODO: implement isAdmin functionality
-  const [limitGroup, setLimitGroup] = useState(true);
-  const groupOptions = [
-    { value: true, label: 'my groups' },
-    { value: false, label: 'all groups' }
-  ];
-
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-  const showSubmissionOptions = [
-    { value: false, label: 'ungraded' },
-    { value: true, label: 'all' }
-  ];
-
-  // modifies state setters to reset page as well.
-  function setStateAndReset<T>(stateChanger: React.Dispatch<T>): React.Dispatch<T> {
-    return (value: T) => {
-      stateChanger(value);
-      resetPage();
-    };
-  }
-
   // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
-    updateEntries(limitGroup, pageParams(), backendFilterParams(columnFilters, showAllSubmissions));
-  }, [limitGroup, page, pageSize, columnFilters, showAllSubmissions]);
+    updateEntries(limitGroup, pageParams, backendFilterParams);
+  }, [updateEntries, limitGroup, pageParams, backendFilterParams]);
 
   return (
     <>
@@ -283,7 +288,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <SimpleDropdown
           options={showSubmissionOptions}
           selectedValue={showAllSubmissions}
-          onClick={setStateAndReset<boolean>(setShowAllSubmissions)}
+          onClick={setStateAndReset(setShowAllSubmissions)}
           popoverProps={{ position: Position.BOTTOM }}
           buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
         />
@@ -291,7 +296,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <SimpleDropdown
           options={groupOptions}
           selectedValue={limitGroup}
-          onClick={setStateAndReset<boolean>(setLimitGroup)}
+          onClick={setStateAndReset(setLimitGroup)}
           popoverProps={{ position: Position.BOTTOM }}
           buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
         />
@@ -299,7 +304,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <SimpleDropdown
           options={pageSizeOptions}
           selectedValue={pageSize}
-          onClick={setStateAndReset<number>(setPageSize)}
+          onClick={setStateAndReset(setPageSize)}
           popoverProps={{ position: Position.BOTTOM }}
           buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
         />

@@ -36,7 +36,7 @@ const Grading: React.FC = () => {
   // Default value initializer
   useEffect(() => {
     dispatch(fetchGradingOverviews());
-  }, []);
+  }, [dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
