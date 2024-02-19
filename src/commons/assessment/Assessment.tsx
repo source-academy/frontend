@@ -18,6 +18,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import classNames from 'classnames';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
@@ -176,7 +177,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     return (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
-          <div className={isMobileBreakpoint ? 'listing-picture' : `col-xs-3 listing-picture`}>
+          <div className={classNames('listing-picture', !isMobileBreakpoint && 'col-xs-3')}>
             <NotificationBadge
               className="badge"
               notificationFilter={filterNotificationsByAssessment(overview.id)}
@@ -188,7 +189,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
               src={overview.coverImage ? overview.coverImage : defaultCoverImage}
             />
           </div>
-          <div className={isMobileBreakpoint ? 'listing-text' : `col-xs-9 listing-text`}>
+          <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
             {makeOverviewCardTitle(overview, index, renderGradingStatus)}
             <div className="listing-xp">
               <H6>
