@@ -212,6 +212,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
             return { username: column.value };
           case 'submissionStatus':
             return { status: column.value };
+          case 'groupName':
+            return { groupName: column.value };
           case 'gradingStatus':
             if (column.value === GradingStatuses.none) {
               return {
