@@ -16,11 +16,16 @@ export function lookupBinding(currFrame: Frame, bindingName: string): [Frame, Bi
   let frame: Frame | undefined = currFrame;
   while (frame !== undefined) {
     const binding = frame.bindings.find(b => b.keyString.split(':')[0] === bindingName);
+    // return the top most global frame if we have reached the top of the tree
+    if (frame?.environment?.id === "-1") {
+      return [frame, frame.bindings[0]];
+    }
     if (binding) {
       return [frame, binding];
     }
     frame = frame.parentFrame;
   }
+  // this line should never be reached as long as the interpreter works correctly
   throw new Error(
     `Error: Binding with name "${bindingName}" cannot be found within the environment!`
   );

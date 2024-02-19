@@ -29,23 +29,19 @@ export class LookupAnimation extends Animatable {
       nameItemPosition,
       {
         x: frame.x() - minNameItemWidth,
-        y: binding.y() - binding.height() / 2,
+        y: binding.y() + binding.height() / 2 - nameItemPosition.height / 2,
         width: minNameItemWidth
       },
       nameItem.text
     );
     this.stashItemAnimation = new AnimatedTextboxComponent(
       {
+        ...stashItemPosition,
         x: frame.x(),
-        y: binding.y() - binding.height() / 2,
-        width: stashItemPosition.width,
-        height: stashItemPosition.height,
+        y: binding.y() + binding.height() / 2 - stashItemPosition.height / 2,
         opacity: 0
       },
-      {
-        x: frame.x() - stashItemPosition.width,
-        opacity: 1
-      },
+      { x: frame.x() - stashItemPosition.width, opacity: 1 },
       stashItem.text
     );
   }
@@ -68,22 +64,18 @@ export class LookupAnimation extends Animatable {
       x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
     });
     await Promise.all([this.nameItemAnimation.animate(), this.stashItemAnimation.animate()]);
-    // move both name item and stash item to the stash
+    // move both name item and stash item to the stash, while fading out the name item
     this.nameItemAnimation.setDestination({
       x: this.stashItem.x() - this.nameItemAnimation.width(),
-      y: this.stashItem.y()
+      y: this.stashItem.y(),
+      opacity: 0
     });
     this.stashItemAnimation.setDestination({
       x: this.stashItem.x(),
       y: this.stashItem.y()
     });
     await Promise.all([this.nameItemAnimation.animate(), this.stashItemAnimation.animate()]);
-    // make the name item disappear
-    this.nameItemAnimation.setDestination({
-      opacity: 0
-    });
-    await Promise.all([this.nameItemAnimation.animate()]);
-    this.stashItemAnimation.ref.current.hide();
+    this.ref.current?.hide();
     this.stashItem.ref.current?.show();
   }
 

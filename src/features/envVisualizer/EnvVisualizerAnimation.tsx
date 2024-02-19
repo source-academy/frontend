@@ -71,9 +71,10 @@ export class CSEAnimation {
             Layout.stashComponent.stashItemComponents.at(-1)!
           );
           break;
+        case 'Program':
         case 'UnaryExpression':
         case 'BinaryExpression':
-        case 'Program':
+        case 'CallExpression':
         case 'ExpressionStatement':
         case 'VariableDeclaration':
           const currentControlSize = Layout.controlComponent.control.size();
