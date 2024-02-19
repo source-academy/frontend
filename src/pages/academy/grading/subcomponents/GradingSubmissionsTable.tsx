@@ -133,8 +133,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   ]);
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
-  const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(10);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   // This is needed because a filter change is accompanied with a page reset.
   const resetPage = useCallback(() => setPage(0), [setPage]);
