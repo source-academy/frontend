@@ -746,6 +746,11 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         throw new Error('Editor tab index must be non-negative!');
       }
       if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
+        // TODO WHY DOES THIS GET CALLED????????????????????? its from Playground.tsx onChange?
+        if (editorTabIndex === 0) {
+          console.log("Warning: editorTabIndex = 0");
+          return {...state};
+        }
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
 
