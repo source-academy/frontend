@@ -39,17 +39,6 @@ import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
-type GradingSubmissionTableProps = {
-  totalRows: number;
-  submissions: GradingOverview[];
-  // TODO: Abstract pageParams object into a useable type.
-  updateEntries: (
-    group: boolean,
-    pageParams: { offset: number; pageSize: number },
-    filterParams: any
-  ) => void;
-};
-
 const columnHelper = createColumnHelper<GradingOverview>();
 
 const makeColumns = (handleClick: () => void) => [
@@ -118,6 +107,17 @@ const makeColumns = (handleClick: () => void) => [
     }
   })
 ];
+
+type GradingSubmissionTableProps = {
+  totalRows: number;
+  submissions: GradingOverview[];
+  // TODO: Abstract pageParams object into a useable type.
+  updateEntries: (
+    group: boolean,
+    pageParams: { offset: number; pageSize: number },
+    filterParams: any
+  ) => void;
+};
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   totalRows,
