@@ -299,7 +299,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <SimpleDropdown
           options={pageSizeOptions}
           selectedValue={pageSize}
-          onClick={setPageSize}
+          onClick={setStateAndReset<number>(setPageSize)}
           popoverProps={{ position: Position.BOTTOM }}
           buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
         />
