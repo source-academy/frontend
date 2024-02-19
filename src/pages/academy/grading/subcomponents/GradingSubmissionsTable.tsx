@@ -263,6 +263,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     { value: true, label: 'all' }
   ];
 
+  // modifies state setters to reset page as well.
+  function setStateAndReset<T>(stateChanger: React.Dispatch<T>): React.Dispatch<T>{
+    return (value: T) => {
+      stateChanger(value);
+      resetPage();
+    }
+  }
+
   // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
     updateEntries(limitGroup, pageParams(), backendFilterParams(columnFilters, showAllSubmissions));
@@ -275,7 +283,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <SimpleDropdown
           options={showSubmissionOptions}
           selectedValue={showAllSubmissions}
-          onClick={setShowAllSubmissions}
+          onClick={setStateAndReset<boolean>(setShowAllSubmissions)}
           popoverProps={{ position: Position.BOTTOM }}
           buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
         />
@@ -283,7 +291,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <SimpleDropdown
           options={groupOptions}
           selectedValue={limitGroup}
-          onClick={setLimitGroup}
+          onClick={setStateAndReset<boolean>(setLimitGroup)}
           popoverProps={{ position: Position.BOTTOM }}
           buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
         />
@@ -349,7 +357,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               size="xs"
               icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_LEFT} />}
               variant="light"
-              onClick={() => setPage(0)}
+              onClick={() => resetPage()}
               disabled={page <= 0}
             />
             <Button

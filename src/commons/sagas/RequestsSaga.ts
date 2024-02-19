@@ -704,7 +704,6 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
       result.grade.grader = gradingQuestion.grade.grader;
       result.grade.gradedAt = gradingQuestion.grade.gradedAt;
     }
-
     return result;
   });
 
