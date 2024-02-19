@@ -278,28 +278,30 @@ const NavigationBar: React.FC = () => {
     );
 
   const commonNavbarRight = (
-    <NavbarGroup align={Alignment.RIGHT}>
-      {location.pathname.startsWith('/playground') && <NavigationBarLangSelectButton />}
-      <NavLink
-        className={({ isActive }) =>
-          classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-            [Classes.ACTIVE]: isActive
-          })
-        }
-        to="/contributors"
-      >
-        <Icon icon={IconNames.HEART} />
-      </NavLink>
+    <div style={{ position: 'absolute', top: 0, right: 0, zIndex: 10 }}>
+      <NavbarGroup align={Alignment.RIGHT}>
+        {location.pathname.startsWith('/playground') && <NavigationBarLangSelectButton />}
+        <NavLink
+          className={({ isActive }) =>
+            classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+              [Classes.ACTIVE]: isActive
+            })
+          }
+          to="/contributors"
+        >
+          <Icon icon={IconNames.HEART} />
+        </NavLink>
 
-      <div className="visible-xs">
-        <NavbarDivider className="thin-divider" />
-      </div>
-      <div className="hidden-xs">
-        <NavbarDivider className="default-divider" />
-      </div>
+        <div className="visible-xs">
+          <NavbarDivider className="thin-divider" />
+        </div>
+        <div className="hidden-xs">
+          <NavbarDivider className="default-divider" />
+        </div>
 
-      <Dropdown />
-    </NavbarGroup>
+        <Dropdown />
+      </NavbarGroup>
+    </div>
   );
 
   return (
@@ -317,8 +319,8 @@ const NavigationBar: React.FC = () => {
             ? renderPlaygroundOnlyNavbarLeftMobile()
             : renderPlaygroundOnlyNavbarLeftDesktop()
           : isMobileBreakpoint
-          ? renderFullAcademyNavbarLeftMobile()
-          : renderFullAcademyNavbarLeftDesktop()}
+            ? renderFullAcademyNavbarLeftMobile()
+            : renderFullAcademyNavbarLeftDesktop()}
         {commonNavbarRight}
       </Navbar>
 
