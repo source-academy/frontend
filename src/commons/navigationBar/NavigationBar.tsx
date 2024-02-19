@@ -319,8 +319,8 @@ const NavigationBar: React.FC = () => {
             ? renderPlaygroundOnlyNavbarLeftMobile()
             : renderPlaygroundOnlyNavbarLeftDesktop()
           : isMobileBreakpoint
-            ? renderFullAcademyNavbarLeftMobile()
-            : renderFullAcademyNavbarLeftDesktop()}
+          ? renderFullAcademyNavbarLeftMobile()
+          : renderFullAcademyNavbarLeftDesktop()}
         {commonNavbarRight}
       </Navbar>
 
