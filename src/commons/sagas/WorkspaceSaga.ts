@@ -46,7 +46,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
-import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/utils';
+import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/FileSystemUtils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';

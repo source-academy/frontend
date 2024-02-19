@@ -16,6 +16,8 @@ export type FileSystemViewListProps = {
   indentationLevel: number;
 };
 
+export let refreshFileView: () => any;
+
 const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystemViewListProps) => {
   const { workspaceLocation, fileSystem, basePath, indentationLevel } = props;
 
@@ -61,6 +63,8 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
       setDirNames(directories.sort());
     });
   };
+
+  refreshFileView = readDirectory;
 
   React.useEffect(readDirectory, [fileSystem, basePath]);
 

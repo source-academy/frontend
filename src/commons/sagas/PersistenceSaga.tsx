@@ -26,10 +26,13 @@ import {
 } from '../utils/notifications/NotificationsHelper';
 import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
+import { FSModule } from 'browserfs/dist/node/core/FS';
+import { rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
+import { refreshFileView } from '../fileSystemView/FileSystemViewList';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const SCOPES =
-  'profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
+  'profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive';
 const UPLOAD_PATH = 'https://www.googleapis.com/upload/drive/v3/files';
 const USER_INFO_PATH = 'https://www.googleapis.com/oauth2/v3/userinfo';
 
@@ -87,10 +90,67 @@ export function* persistenceSaga(): SagaIterator {
     let toastKey: string | undefined;
     try {
       yield call(ensureInitialisedAndAuthorised);
-      const { id, name, picked } = yield call(pickFile, 'Pick a file to open');
+      const { id, name, mimeType, picked } = yield call(pickFile, 
+        'Pick a file/folder to open', 
+        {
+          pickFolders: true
+        }
+        ); // id, name, picked gotten here
       if (!picked) {
         return;
       }
+
+      // Note: for mimeType, text/plain -> file, application/vnd.google-apps.folder -> folder
+
+      if (mimeType === "application/vnd.google-apps.folder") { // handle folders
+        yield call(console.log, "is folder");
+        
+        const fileList = yield call(getFilesOfFolder, id, name); // this needed the extra scope mimetypes to have every file
+        // TODO: add type for each resp?
+        yield call(console.log, "fileList", fileList);
+
+
+
+        const fileSystem: FSModule | null = yield select(
+          (state: OverallState) => state.fileSystem.inBrowserFileSystem
+        );
+        // If the file system is not initialised, do nothing.
+        if (fileSystem === null) {
+          yield call(console.log, "no filesystem!");
+          return;
+        }
+        yield call(console.log, "there is a filesystem");
+
+        // rmdir everything TODO replace everything hardcoded with playground?
+        yield call(rmFilesInDirRecursively, fileSystem, "/playground");
+
+
+        for (const currFile of fileList) {
+          // TODO add code to actually load contents here
+          const contents = yield call([gapi.client.drive.files, 'get'], { fileId: currFile.id, alt: 'media' });
+          yield call(writeFileRecursively, fileSystem, "/playground" + currFile.path, contents.body);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // refresh needed
+        yield put(store.dispatch(actions.removeEditorTabsForDirectory("playground", "/"))); // deletes all active tabs
+        yield call(refreshFileView); // refreshes folder view TODO super jank
+
+        return;
+      }
+
+
       const confirmOpen: boolean = yield call(showSimpleConfirmDialog, {
         title: 'Opening from Google Drive',
         contents: (
@@ -112,7 +172,7 @@ export function* persistenceSaga(): SagaIterator {
         intent: Intent.PRIMARY
       });
 
-      const { result: meta } = yield call([gapi.client.drive.files, 'get'], {
+      const { result: meta } = yield call([gapi.client.drive.files, 'get'], { // get fileid here using gapi.client.drive.files
         fileId: id,
         fields: 'appProperties'
       });
@@ -123,12 +183,12 @@ export function* persistenceSaga(): SagaIterator {
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');
       }
-      yield put(actions.updateEditorValue('playground', activeEditorTabIndex, contents.body));
+      yield put(actions.updateEditorValue('playground', activeEditorTabIndex, contents.body)); // CONTENTS OF SELECTED FILE LOADED HERE
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
       if (meta && meta.appProperties) {
         yield put(
           actions.chapterSelect(
-            parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
+            parseInt(meta.appProperties.chapter || '4', 10) as Chapter, // how does this work??
             meta.appProperties.variant || Variant.DEFAULT,
             'playground'
           )
@@ -452,6 +512,7 @@ function pickFile(
         .setCallback((data: any) => {
           switch (data[google.picker.Response.ACTION]) {
             case google.picker.Action.PICKED: {
+              console.log("data", data);
               const { id, name, mimeType, parentId } = data.docs[0];
               res({ id, name, mimeType, parentId, picked: true });
               break;
@@ -466,6 +527,53 @@ function pickFile(
       picker.setVisible(true);
     });
   });
+}
+
+async function getFilesOfFolder( // recursively get files
+  folderId: string,
+  currFolderName: string,
+  currPath: string = '' // pass in name of folder picked
+) {
+  console.log(folderId, currPath, currFolderName);
+  let fileList: gapi.client.drive.File[] | undefined;
+  
+  await gapi.client.drive.files.list({
+    q: '\'' + folderId + '\'' + ' in parents and trashed = false',
+  }).then(res => {
+    fileList = res.result.files
+  });
+
+  console.log("fileList", fileList);
+
+  if (!fileList || fileList.length === 0) {
+    return [{
+      name: currFolderName,
+      id: folderId,
+      path: currPath + '/' + currFolderName,
+      isFile: false
+    }];
+  }
+
+
+  let ans: any[] = []; // TODO: add type for each resp?
+  for (const currFile of fileList) {
+    if (currFile.mimeType === "application/vnd.google-apps.folder") { // folder
+      ans = ans.concat(await 
+        getFilesOfFolder(currFile.id!, currFile.name!, currPath + '/' + currFolderName)
+      );
+    } 
+    else { // file
+      console.log("found file " + currFile.name);
+      ans.push({
+        name: currFile.name,
+        id: currFile.id,
+        path: currPath + '/' + currFolderName + '/' + currFile.name,
+        isFile: true
+      });
+    } 
+  }
+
+  return ans;
 }
 
 function createFile(
