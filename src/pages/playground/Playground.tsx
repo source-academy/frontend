@@ -75,6 +75,7 @@ import {
   persistenceInitialise,
   persistenceOpenPicker,
   persistenceSaveFile,
+  persistenceSaveAll,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
 import {
@@ -599,7 +600,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleReplEval, isRunning, selectedTab]
   );
 
-  // Compute this here to avoid re-rendering the button every keystroke
+  // Compute this here to avoid re-rendering the button every keystroke 
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
   const persistenceButtons = useMemo(() => {
@@ -612,6 +613,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         accessToken={googleAccessToken}
         key="googledrive"
         onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
+        onClickSaveAll={() => dispatch(persistenceSaveAll())}
         onClickOpen={() => dispatch(persistenceOpenPicker())}
         onClickSave={
           persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
@@ -838,7 +840,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       pushLog(input);
       dispatch(toggleUpdateEnv(true, workspaceLocation));
-      dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
+      dispatch(setEditorHighlightedLines(workspaceLocation, 0, [])); // TODO this breaks if there are no editor tabs, eg, loading folder
     },
     [pushLog, dispatch, workspaceLocation]
   );

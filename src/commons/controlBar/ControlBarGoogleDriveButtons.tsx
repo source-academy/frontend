@@ -15,6 +15,7 @@ export type ControlBarGoogleDriveButtonsProps = {
   isDirty?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
+  onClickSaveAll?: () => any;
   onClickSaveAs?: () => any;
   onClickLogOut?: () => any;
   onClickLogIn?: () => any;
@@ -71,7 +72,7 @@ export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtons
     <ControlButton
       label="Save All"
       icon={IconNames.DOUBLE_CHEVRON_UP}
-      onClick={props.onClickSaveAs}
+      onClick={props.onClickSaveAll}
       isDisabled={props.accessToken ? false : true}
     />
   );

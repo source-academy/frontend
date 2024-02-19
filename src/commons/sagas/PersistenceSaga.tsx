@@ -7,6 +7,7 @@ import { call, put, select } from 'redux-saga/effects';
 import {
   PERSISTENCE_INITIALISE,
   PERSISTENCE_OPEN_PICKER,
+  PERSISTENCE_SAVE_ALL,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
   PersistenceFile
@@ -100,10 +101,30 @@ export function* persistenceSaga(): SagaIterator {
         return;
       }
 
+
+      const confirmOpen: boolean = yield call(showSimpleConfirmDialog, {
+        title: 'Opening from Google Drive',
+        contents: (
+          <p>
+            Opening <strong>{name}</strong> will overwrite the current contents of your workspace.
+            Are you sure?
+          </p>
+        ),
+        positiveLabel: 'Open',
+        negativeLabel: 'Cancel'
+      });
+      if (!confirmOpen) {
+        return;
+      }
+
       // Note: for mimeType, text/plain -> file, application/vnd.google-apps.folder -> folder
 
       if (mimeType === "application/vnd.google-apps.folder") { // handle folders
-        yield call(console.log, "is folder");
+        toastKey = yield call(showMessage, {
+          message: 'Opening folder...',
+          timeout: 0,
+          intent: Intent.PRIMARY
+        });
         
         const fileList = yield call(getFilesOfFolder, id, name); // this needed the extra scope mimetypes to have every file
         // TODO: add type for each resp?
@@ -126,43 +147,30 @@ export function* persistenceSaga(): SagaIterator {
 
 
         for (const currFile of fileList) {
-          // TODO add code to actually load contents here
           const contents = yield call([gapi.client.drive.files, 'get'], { fileId: currFile.id, alt: 'media' });
           yield call(writeFileRecursively, fileSystem, "/playground" + currFile.path, contents.body);
         }
 
-
-
-
-
-
-
-
-
-
-
-
+        // set source to chapter 4 TODO is there a better way of handling this
+        yield put(
+          actions.chapterSelect(
+            parseInt('4', 10) as Chapter, 
+            Variant.DEFAULT,
+            'playground'
+          )
+        );
+        // open folder mode
+        yield call(store.dispatch, actions.setFolderMode("playground", true));
 
         // refresh needed
-        yield put(store.dispatch(actions.removeEditorTabsForDirectory("playground", "/"))); // deletes all active tabs
-        yield call(refreshFileView); // refreshes folder view TODO super jank
+        yield call(store.dispatch, actions.removeEditorTabsForDirectory("playground", "/")); // deletes all active tabs
+        // TODO find a file to open instead of deleting all active tabs?
+        // TODO without modifying WorkspaceReducer in one function this would cause errors - called by onChange of Playground.tsx?
+        // TODO change behaviour of WorkspaceReducer to not create program.js every time folder mode changes with 0 tabs existing?
+        yield call(refreshFileView); // refreshes folder view TODO super jank?
 
-        return;
-      }
+        yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
 
-
-      const confirmOpen: boolean = yield call(showSimpleConfirmDialog, {
-        title: 'Opening from Google Drive',
-        contents: (
-          <p>
-            Opening <strong>{name}</strong> will overwrite the current contents of your workspace.
-            Are you sure?
-          </p>
-        ),
-        positiveLabel: 'Open',
-        negativeLabel: 'Cancel'
-      });
-      if (!confirmOpen) {
         return;
       }
 
@@ -334,6 +342,13 @@ export function* persistenceSaga(): SagaIterator {
       }
     }
   });
+
+  yield takeEvery(
+    PERSISTENCE_SAVE_ALL,
+    function* () {
+      yield console.log("pers save all!");
+    }
+  );
 
   yield takeEvery(
     PERSISTENCE_SAVE_FILE,
