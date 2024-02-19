@@ -11,7 +11,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
-import MenuModeConstants, { MenuLineConstants,modeButtonStyle } from './GameModeMenuConstants';
+import MenuModeConstants, { MenuLineConstants, modeButtonStyle } from './GameModeMenuConstants';
 
 /**
  * The class in charge of showing the "Menu" mode UI
