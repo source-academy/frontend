@@ -128,6 +128,7 @@ export type WorkspaceState = {
   readonly programPrependValue: string;
   readonly programPostpendValue: string;
   readonly editorSessionId: string;
+  readonly sessionDetails: { docId: string; readOnly: boolean } | null;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
   readonly isRunning: boolean;

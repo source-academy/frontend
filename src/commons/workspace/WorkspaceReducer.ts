@@ -28,7 +28,11 @@ import {
   UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
-import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
+import {
+  SET_EDITOR_SESSION_ID,
+  SET_SESSION_DETAILS,
+  SET_SHAREDB_CONNECTED
+} from '../collabEditing/CollabEditingTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -593,7 +597,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           editorSessionId: action.payload.editorSessionId
         }
       };
-
+    case SET_SESSION_DETAILS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sessionDetails: action.payload.sessionDetails
+        }
+      };
     case SET_IS_EDITOR_READONLY:
       return {
         ...state,

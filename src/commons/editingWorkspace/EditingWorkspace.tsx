@@ -680,6 +680,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
                 };
               }),
             editorSessionId: '',
+            sessionDetails: null,
             handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEditorEval,
             handleEditorValueChange: handleEditorValueChange,

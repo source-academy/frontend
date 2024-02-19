@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import * as React from 'react';
 
-import { checkSessionIdExists, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { EditorHook } from './Editor';
 
 // EditorHook structure:
@@ -18,21 +18,25 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   const propsRef = React.useRef(inProps);
   propsRef.current = inProps;
 
-  const { editorSessionId } = inProps;
+  const { editorSessionId, sessionDetails } = inProps;
 
   React.useEffect(() => {
-    if (!editorSessionId) {
+    if (!editorSessionId || !sessionDetails) {
       return;
     }
 
+    console.log(sessionDetails);
+
     const editor = reactAceRef.current!.editor;
-    const ShareAce = new sharedbAce(editorSessionId, {
+    const ShareAce = new sharedbAce(sessionDetails.docId, {
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
-      namespace: 'sa'
+      namespace: 'sa',
+      readOnly: sessionDetails.readOnly
     });
+
     ShareAce.on('ready', () => {
-      ShareAce.add(editor, [], []);
+      ShareAce.add(editor, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
     });
     ShareAce.on('error', (path: string, error: any) => {
@@ -50,8 +54,8 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         return;
       }
       try {
-        const exists = await checkSessionIdExists(editorSessionId);
-        if (!exists) {
+        const docInfo = await getDocInfoFromSessionId(editorSessionId);
+        if (docInfo === null) {
           clearInterval(interval);
           WS.close();
         }
@@ -76,7 +80,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       }
       ShareAce.WS.close();
     };
-  }, [editorSessionId, reactAceRef]);
+  }, [editorSessionId, sessionDetails, reactAceRef]);
 };
 
 export default useShareAce;

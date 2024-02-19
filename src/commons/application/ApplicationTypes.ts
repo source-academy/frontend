@@ -364,6 +364,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   programPrependValue: '',
   programPostpendValue: '',
   editorSessionId: '',
+  sessionDetails: null,
   isEditorReadonly: false,
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,

@@ -465,6 +465,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             removeEditorTabByIndex: handleRemoveEditorTabByIndex,
             editorTabs: editorTabs.map(convertEditorTabStateToProps),
             editorSessionId: '',
+            sessionDetails: null,
             handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEval,
             handleEditorValueChange: handleEditorValueChange,

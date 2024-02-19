@@ -1,12 +1,25 @@
 import { action } from 'typesafe-actions'; // EDITING
 
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from './CollabEditingTypes';
+import {
+  SET_EDITOR_SESSION_ID,
+  SET_SESSION_DETAILS,
+  SET_SHAREDB_CONNECTED
+} from './CollabEditingTypes';
 
 export const setEditorSessionId = (workspaceLocation: WorkspaceLocation, editorSessionId: string) =>
   action(SET_EDITOR_SESSION_ID, {
     workspaceLocation,
     editorSessionId
+  });
+
+export const setSessionDetails = (
+  workspaceLocation: WorkspaceLocation,
+  sessionDetails: { docId: string; readOnly: boolean } | null
+) =>
+  action(SET_SESSION_DETAILS, {
+    workspaceLocation,
+    sessionDetails
   });
 
 /**

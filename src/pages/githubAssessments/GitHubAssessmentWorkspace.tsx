@@ -1090,6 +1090,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
     editorSessionId: '',
+    sessionDetails: null,
     handleDeclarationNavigate: (cursorPosition: Position) =>
       dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
     handleEditorEval: handleEval,

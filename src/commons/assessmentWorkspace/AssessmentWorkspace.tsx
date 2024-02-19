@@ -808,6 +808,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
+          sessionDetails: null,
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibraryName: question.library.external.name || 'NONE',
