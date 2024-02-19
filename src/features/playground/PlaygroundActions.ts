@@ -1,13 +1,14 @@
 import { createAction } from '@reduxjs/toolkit';
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
 
-import { PersistenceFile } from '../persistence/PersistenceTypes';
+import { PersistenceObject } from '../persistence/PersistenceTypes';
 import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
+  PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
   SHORTEN_URL,
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
@@ -27,6 +28,11 @@ export const changeQueryString = createAction(CHANGE_QUERY_STRING, (queryString:
 export const playgroundUpdatePersistenceFile = createAction(
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   (file?: PersistenceFile) => ({ payload: file })
+);
+
+export const playgroundUpdatePersistenceFolder = createAction(
+  PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
+  (file?: PersistenceFile) => ({ payload: file ? {...file, isFolder: true} : undefined})
 );
 
 export const playgroundUpdateGitHubSaveInfo = createAction(

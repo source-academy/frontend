@@ -6,8 +6,9 @@ export const PERSISTENCE_INITIALISE = 'PERSISTENCE_INITIALISE';
 
 export type PersistenceState = 'INACTIVE' | 'SAVED' | 'DIRTY';
 
-export type PersistenceFile = {
+export type PersistenceObject = {
   id: string;
   name: string;
   lastSaved?: Date;
+  isFolder?: boolean;
 };

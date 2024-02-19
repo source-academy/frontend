@@ -10,7 +10,7 @@ import {
   PERSISTENCE_SAVE_ALL,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
-  PersistenceFile
+  PersistenceObject
 } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
@@ -142,6 +142,8 @@ export function* persistenceSaga(): SagaIterator {
         }
         yield call(console.log, "there is a filesystem");
 
+        yield put(actions.playgroundUpdatePersistenceFolder({ id, name, lastSaved: new Date() }));
+
         // rmdir everything TODO replace everything hardcoded with playground?
         yield call(rmFilesInDirRecursively, fileSystem, "/playground");
 
@@ -171,6 +173,8 @@ export function* persistenceSaga(): SagaIterator {
 
         yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
 
+        // TODO the Google Drive button isn't blue even after loading stuff
+
         return;
       }
 
@@ -196,7 +200,7 @@ export function* persistenceSaga(): SagaIterator {
       if (meta && meta.appProperties) {
         yield put(
           actions.chapterSelect(
-            parseInt(meta.appProperties.chapter || '4', 10) as Chapter, // how does this work??
+            parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
             meta.appProperties.variant || Variant.DEFAULT,
             'playground'
           )
@@ -251,9 +255,9 @@ export function* persistenceSaga(): SagaIterator {
         }
       );
 
-      const saveToDir: PersistenceFile = pickedDir.picked
-        ? pickedDir
-        : { id: ROOT_ID, name: 'My Drive' };
+      const saveToDir: PersistenceObject = pickedDir.picked // TODO is there a better way?
+        ? {...pickedDir}
+        : { id: ROOT_ID, name: 'My Drive'};
 
       const pickedFile: PickFileResult = yield call(
         pickFile,
@@ -597,7 +601,7 @@ function createFile(
   mimeType: string,
   contents: string = '',
   config: IPlaygroundConfig | {}
-): Promise<PersistenceFile> {
+): Promise<PersistenceObject> {
   const name = filename;
   const meta = {
     name,
@@ -621,7 +625,7 @@ function createFile(
       headers,
       body
     })
-    .then(({ result }) => ({ id: result.id, name: result.name }));
+    .then(({ result }) => ({ id: result.id, name: result.name, isFile: true }));
 }
 
 function updateFile(
