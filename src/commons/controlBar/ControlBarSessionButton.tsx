@@ -60,7 +60,6 @@ export class ControlBarSessionButtons extends React.PureComponent<
             sessionEditingId: resp.sessionEditingId,
             sessionViewingId: resp.sessionViewingId
           });
-          console.log(this.state);
           this.props.handleSetEditorSessionId!(resp.sessionEditingId);
           this.props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false });
         }, handleError);
@@ -73,46 +72,61 @@ export class ControlBarSessionButtons extends React.PureComponent<
           <ControlButton label={'Create'} icon={IconNames.ADD} onClick={handleStartInvite} />
         ) : (
           <>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Text>Invite as editor:</Text>
-              <div style={{ marginLeft: '10px' }}>
-                <input
-                  value={this.state.sessionEditingId}
-                  readOnly={true}
-                  ref={this.sessionEditingIdInputElem}
-                />
-                <CopyToClipboard text={'' + this.state.sessionEditingId}>
-                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionEditingId} />
-                </CopyToClipboard>
+            {this.state.sessionEditingId ? (
+              <Text>This session is editable.</Text>
+            ) : (
+              <Text>This session is read-only.</Text>
+            )}
+            {this.state.sessionEditingId && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Text>Invite as editor:</Text>
+                <div style={{ marginLeft: '10px' }}>
+                  <input
+                    value={this.state.sessionEditingId}
+                    readOnly={true}
+                    ref={this.sessionEditingIdInputElem}
+                  />
+                  <CopyToClipboard text={'' + this.state.sessionEditingId}>
+                    <ControlButton
+                      icon={IconNames.DUPLICATE}
+                      onClick={this.selectSessionEditingId}
+                    />
+                  </CopyToClipboard>
+                </div>
               </div>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Text>Invite as viewer:</Text>
-              <div style={{ marginLeft: '10px' }}>
-                <input
-                  value={this.state.sessionViewingId}
-                  readOnly={true}
-                  ref={this.sessionViewingIdInputElem}
-                />
-                <CopyToClipboard text={'' + this.state.sessionViewingId}>
-                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionViewingId} />
-                </CopyToClipboard>
+            )}
+            {this.state.sessionViewingId && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Text>Invite as viewer:</Text>
+                <div style={{ marginLeft: '10px' }}>
+                  <input
+                    value={this.state.sessionViewingId}
+                    readOnly={true}
+                    ref={this.sessionViewingIdInputElem}
+                  />
+                  <CopyToClipboard text={'' + this.state.sessionViewingId}>
+                    <ControlButton
+                      icon={IconNames.DUPLICATE}
+                      onClick={this.selectSessionViewingId}
+                    />
+                  </CopyToClipboard>
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
       </div>
@@ -136,9 +150,20 @@ export class ControlBarSessionButtons extends React.PureComponent<
           if (docInfo !== null) {
             this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
             this.props.handleSetSessionDetails!(docInfo);
+            if (docInfo.readOnly) {
+              this.setState({
+                sessionEditingId: '',
+                sessionViewingId: this.state.joinElemValue
+              });
+            } else {
+              this.setState({
+                sessionEditingId: this.state.joinElemValue,
+                sessionViewingId: ''
+              });
+            }
           } else {
             this.props.handleSetEditorSessionId!('');
-            this.props.handleSetSessionDetails!({ docId: '', readOnly: false });
+            this.props.handleSetSessionDetails!(null);
             showWarningMessage('Could not find a session with that ID.');
           }
         },
@@ -176,8 +201,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
         onClick={() => {
           // FIXME: this handler should be a Saga action or at least in a controller
           this.props.handleSetEditorSessionId!('');
-          this.setState({ joinElemValue: '' });
-          console.log(this.state);
+          this.setState({ joinElemValue: '', sessionEditingId: '', sessionViewingId: '' });
         }}
       />
     );
@@ -231,6 +255,5 @@ export class ControlBarSessionButtons extends React.PureComponent<
 
   private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ joinElemValue: event.target.value });
-    console.log(this.state);
   }
 }
