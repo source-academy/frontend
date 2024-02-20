@@ -366,7 +366,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
-              onClick={() => setPage(page - 1)}
+              onClick={() => setPage(p => p - 1)}
               disabled={page <= 0}
             />
             <Bold>
