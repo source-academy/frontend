@@ -104,6 +104,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     return (
       <React.Fragment key={Layout.key++}>
         <Label
+          ref={this.ref}
           x={this.x()}
           y={this.y()}
           onMouseEnter={this.onMouseEnter}
