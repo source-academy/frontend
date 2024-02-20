@@ -6,12 +6,8 @@ import { action } from 'typesafe-actions';
 import {
   ADD_NEW_STORIES_USERS_TO_COURSE,
   ADD_NEW_USERS_TO_COURSE,
-  CREATE_COURSE,
-  SAVE_CANVAS
+  CREATE_COURSE
 } from './AcademyTypes';
-
-// TODO: Does not seem to be used anywhere, perhaps we can remove this?
-export const saveCanvas = (canvas: HTMLCanvasElement) => action(SAVE_CANVAS, canvas);
 
 export const createCourse = (courseConfig: UpdateCourseConfiguration) =>
   action(CREATE_COURSE, courseConfig);
