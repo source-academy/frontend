@@ -655,7 +655,7 @@ export function getStashItemComponent(stashItem: StashValue, stackHeight: number
               return binding.data?.toString() === stashItem.toString();
             }
             return false;
-          })?.value as FnValue | GlobalFnValue;
+          })?.value as unknown as FnValue | GlobalFnValue;
           if (fn) return new StashItemComponent(stashItem, stackHeight, index, fn);
         } else {
           const ar: ArrayValue | undefined = frame.bindings.find(binding => {
