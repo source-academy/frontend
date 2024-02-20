@@ -276,7 +276,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
     updateEntries(limitGroup, pageParams, backendFilterParams);
-  }, [updateEntries, limitGroup, pageParams, backendFilterParams]);
+    // updateEntries seems to change between renders as a reference?
+    // eslint-disable-next-line
+  }, [limitGroup, pageParams, backendFilterParams]);
 
   return (
     <>

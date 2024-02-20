@@ -11,7 +11,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#030fff"
+      stroke="#999999"
     />
     <Text
       fill="#999999"
@@ -22,7 +22,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
       height={35}
       padding={10}
       preventDefault={false}
-      text="*"
+      text="env"
       width={120}
     />
   </Label>
@@ -45,13 +45,602 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
       fontVariant="normal"
       padding={5}
       preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 57.5 L 170 390 L 170 390 M 140 57.5 L 170 390 L 170 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          57.5,
+          170,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
       text="Perform * on top 2 stash values"
     />
   </Label>
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 2`] = `
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 127.5 L 486.12109375 390 L 486.12109375 390 M 140 127.5 L 486.12109375 390 L 486.12109375 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          127.5,
+          486.12109375,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 197.5 L 802.2421875 390 L 802.2421875 390 M 140 197.5 L 802.2421875 390 L 802.2421875 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          197.5,
+          802.2421875,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 6`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 7`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          267.5,
+          1118.36328125,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 8`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 9`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 337.5 L 1434.484375 390 L 1434.484375 390 M 140 337.5 L 1434.484375 390 L 1434.484375 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          337.5,
+          1434.484375,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 10`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 11`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -62,7 +651,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#ff0000"
+      stroke="#999999"
     />
     <Text
       fill="#999999"
@@ -100,18 +689,18 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
 </React.Fragment>
 `;
 
-exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 3`] = `
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 12`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={178.00390625}
+    x={178.060546875}
     y={5}
   >
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#ff0000"
+      stroke="#999999"
     />
     <Text
       fill="#999999"
@@ -121,12 +710,12 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
       fontVariant="normal"
       padding={10}
       preventDefault={false}
-      text="362880"
+      text="9"
     />
   </Label>
   <Label
     visible={false}
-    x={183.00390625}
+    x={183.060546875}
     y={45}
   >
     <Tag
@@ -143,7 +732,252 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="362880"
+      text="9"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 13`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={207.0908203125}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="8"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={212.0908203125}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="8"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 14`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={236.12109375}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={241.12109375}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 15`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={265.1513671875}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={270.1513671875}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 16`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={294.181640625}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff0000"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={299.181640625}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: Control is truncated properly 17`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={323.2119140625}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff0000"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="24"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={328.2119140625}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="24"
     />
   </Label>
 </React.Fragment>
@@ -824,7 +1658,7 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#030fff"
     />
     <Text
       fill="#999999"
@@ -835,7 +1669,7 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       height={35}
       padding={10}
       preventDefault={false}
-      text="arr asgn"
+      text="arr[x] = …"
       width={120}
     />
   </Label>
@@ -858,186 +1692,9 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Assign new value to array at given index"
+      text="arr[x] = () => x;"
     />
   </Label>
-</React.Fragment>
-`;
-
-exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 14`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={495}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999999"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="() => x"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={500}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="() => x"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={530}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#030fff"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="x"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={535}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="x"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={140}
-    y={5}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999999"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={10}
-      preventDefault={false}
-      text="pair/array"
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={45}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="pair/array"
-    />
-  </Label>
-  <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <Path
-      data="M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 "
-      hitStrokeWidth={5}
-      preventDefault={false}
-      stroke="#999999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999999"
-      pointerWidth={10}
-      points={
-        Array [
-          195.009765625,
-          40,
-          316.0078125,
-          555,
-        ]
-      }
-      preventDefault={false}
-      strokeEnabled={false}
-    />
-  </Group>
 </React.Fragment>
 `;
 
@@ -1103,7 +1760,7 @@ exports[`EnvVisualizer Control Stash correctly renders: global environments are 
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#030fff"
+      stroke="#999999"
     />
     <Text
       fill="#999999"
@@ -1166,6 +1823,157 @@ exports[`EnvVisualizer Control Stash correctly renders: global environments are 
       strokeEnabled={false}
     />
   </Group>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="asgn math…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Assign value on top of stash to math_sin"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
 </React.Fragment>
 `;
 
