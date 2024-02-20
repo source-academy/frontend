@@ -3,7 +3,7 @@ import '@tremor/react/dist/esm/tremor.css';
 import { Icon as BpIcon, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Button, Card, Col, ColGrid, Flex, Title } from '@tremor/react';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
@@ -25,13 +25,12 @@ const Grading: React.FC = () => {
   }>();
 
   const dispatch = useDispatch();
-  const updateGradingOverviewsCallback = (
-    group: boolean,
-    pageParams: { offset: number; pageSize: number },
-    filterParams: Object
-  ) => {
-    dispatch(fetchGradingOverviews(group, pageParams, filterParams));
-  };
+  const updateGradingOverviewsCallback = useCallback(
+    (group: boolean, pageParams: { offset: number; pageSize: number }, filterParams: Object) => {
+      dispatch(fetchGradingOverviews(group, pageParams, filterParams));
+    },
+    [dispatch]
+  );
 
   // Default value initializer
   useEffect(() => {
