@@ -162,6 +162,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     { value: 50, label: '50' }
   ];
 
+  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
+
   // modifies state setters to reset page as well.
   function setStateAndReset<T>(stateChanger: React.Dispatch<T>): React.Dispatch<T> {
     return (value: T) => {
@@ -359,7 +361,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               size="xs"
               icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_LEFT} />}
               variant="light"
-              onClick={() => resetPage()}
+              onClick={() => setPage(0)}
               disabled={page <= 0}
             />
             <Button
@@ -370,21 +372,21 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               disabled={page <= 0}
             />
             <Bold>
-              Page {page + 1} of {Math.ceil(totalRows / pageSize)}
+              Page {page + 1} of {maxPage + 1}
             </Bold>
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => setPage(page + 1)}
-              disabled={page >= Math.ceil(totalRows / pageSize) - 1}
+              onClick={() => setPage(p => p + 1)}
+              disabled={page >= maxPage}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_RIGHT} />}
               variant="light"
-              onClick={() => setPage(Math.ceil(totalRows / pageSize) - 1)}
-              disabled={page >= Math.ceil(totalRows / pageSize) - 1}
+              onClick={() => setPage(maxPage)}
+              disabled={page >= maxPage}
             />
           </Flex>
         </Footer>

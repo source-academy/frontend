@@ -1698,6 +1698,183 @@ exports[`EnvVisualizer Control Stash correctly renders: arrows from the environm
 </React.Fragment>
 `;
 
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 14`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={495}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="() => x"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={500}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="() => x"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 15`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={530}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={535}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`EnvVisualizer Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 16`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="pair/array"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="pair/array"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          195.009765625,
+          40,
+          316.0078125,
+          555,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
 exports[`EnvVisualizer Control Stash correctly renders: global environments are treated correctly 1`] = `
 <React.Fragment>
   <Label
