@@ -22,6 +22,7 @@ import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
 import EnvVisualizer from './EnvVisualizer';
+import { CSEAnimation } from './EnvVisualizerAnimation';
 import { Config, ShapeDefaultProps } from './EnvVisualizerConfig';
 import {
   CompactReferenceType,
@@ -81,6 +82,9 @@ export class Layout {
   static stash: Stash;
   static controlComponent: ControlStack;
   static stashComponent: StashStack;
+
+  static previousControlComponent: ControlStack;
+  static previousStashComponent: StashStack;
 
   /** memoized values */
   static values = new Map<Data, Value>();
@@ -156,6 +160,7 @@ export class Layout {
     });
     Layout.compactValues.clear();
     Layout.key = 0;
+
     // deep copy so we don't mutate the context
     Layout.environmentTree = deepCopyTree(envTree);
     Layout.globalEnvNode = Layout.environmentTree.root;
@@ -212,9 +217,13 @@ export class Layout {
         this.grid.width() + Config.CanvasPaddingX * 2
       );
     }
+    // initialise animations
+    CSEAnimation.updateAnimation();
   }
 
   static initializeControlStash() {
+    Layout.previousControlComponent = Layout.controlComponent;
+    Layout.previousStashComponent = Layout.stashComponent;
     this.controlComponent = new ControlStack(this.control);
     this.stashComponent = new StashStack(this.stash);
   }
@@ -581,6 +590,9 @@ export class Layout {
                   {EnvVisualizer.getCompactLayout() &&
                     EnvVisualizer.getControlStash() &&
                     Layout.stashComponent.draw()}
+                  {EnvVisualizer.getCompactLayout() &&
+                    EnvVisualizer.getControlStash() &&
+                    CSEAnimation.animationComponents.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>
