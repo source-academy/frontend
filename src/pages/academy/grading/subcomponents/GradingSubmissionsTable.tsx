@@ -112,11 +112,7 @@ type GradingSubmissionTableProps = {
   pageSize: number;
   submissions: GradingOverview[];
   // TODO: Abstract pageParams object into a useable type.
-  updateEntries: (
-
-    pageParams: { offset: number; pageSize: number },
-    filterParams: any
-  ) => void;
+  updateEntries: (pageParams: { offset: number; pageSize: number }, filterParams: any) => void;
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
@@ -148,9 +144,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here, remove hardcode.
   // TODO: make a controller component, like in the achievements page, to handle conversion of page state into JSON.
   const backendFilterParams = useMemo(() => {
-    return columnFilters
-      .map(convertFilterToBackendParams)
-      .reduce(Object.assign, {});
+    return columnFilters.map(convertFilterToBackendParams).reduce(Object.assign, {});
   }, [columnFilters]);
 
   // Adapts frontend page and pageSize state into useable offset for backend usage.
