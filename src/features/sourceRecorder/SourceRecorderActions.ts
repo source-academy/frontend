@@ -36,24 +36,28 @@ export const saveSourcecastData = createAction(
     }
   })
 );
+
 export const setCurrentPlayerTime = createAction(
   SET_CURRENT_PLAYER_TIME,
   (playerTime: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { playerTime, workspaceLocation }
   })
 );
+
 export const setCodeDeltasToApply = createAction(
   SET_CODE_DELTAS_TO_APPLY,
   (deltas: CodeDelta[], workspaceLocation: WorkspaceLocation) => ({
     payload: { deltas, workspaceLocation }
   })
 );
+
 export const setInputToApply = createAction(
   SET_INPUT_TO_APPLY,
   (inputToApply: Input, workspaceLocation: WorkspaceLocation) => ({
     payload: { inputToApply, workspaceLocation }
   })
 );
+
 export const setSourcecastData = createAction(
   SET_SOURCECAST_DATA,
   (
@@ -65,12 +69,14 @@ export const setSourcecastData = createAction(
     workspaceLocation: WorkspaceLocation
   ) => ({ payload: { title, description, uid, audioUrl, playbackData, workspaceLocation } })
 );
+
 export const setSourcecastDuration = createAction(
   SET_SOURCECAST_PLAYBACK_DURATION,
   (duration: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { duration, workspaceLocation }
   })
 );
+
 export const setSourcecastStatus = createAction(
   SET_SOURCECAST_PLAYBACK_STATUS,
   (playbackStatus: PlaybackStatus, workspaceLocation: WorkspaceLocation) => ({
