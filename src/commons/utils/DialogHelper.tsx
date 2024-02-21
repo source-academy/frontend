@@ -1,5 +1,5 @@
 import { IconName, Intent } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';

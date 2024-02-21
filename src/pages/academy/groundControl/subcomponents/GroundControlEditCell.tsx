@@ -1,43 +1,35 @@
-import { Classes, Dialog, Intent } from '@blueprintjs/core';
+import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { DateInput3 } from '@blueprintjs/datetime2';
 import { IconNames } from '@blueprintjs/icons';
 import * as moment from 'moment';
-import * as React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
 
-export type EditCellProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
-};
-
-type StateProps = {
   data: AssessmentOverview;
   forOpenDate: boolean;
 };
 
 const dateDisplayFormat = 'YYYY-MM-DD HH:mm:ss ZZ';
 
-const EditCell: React.FunctionComponent<EditCellProps> = props => {
+const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDate }) => {
   const minDate = new Date(2010, 0, 0);
   const maxDate = new Date(2030, 11, 31);
 
-  const { data, forOpenDate } = props;
   const currentDateString = forOpenDate ? data.openAt : data.closeAt;
   const currentDate = moment(currentDateString, moment.ISO_8601, true);
 
-  const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
-  const [newDate, setNewDate] = React.useState<moment.Moment | null>(currentDate);
+  const [isDialogOpen, setDialogState] = useState(false);
+  const [newDate, setNewDate] = useState<moment.Moment | null>(currentDate);
 
-  const handleOpenDialog = React.useCallback(() => setDialogState(true), []);
-  const handleCloseDialog = React.useCallback(() => setDialogState(false), []);
+  const handleOpenDialog = useCallback(() => setDialogState(true), []);
+  const handleCloseDialog = useCallback(() => setDialogState(false), []);
 
-  const { handleAssessmentChangeDate } = props;
-
-  const handleUpdateDate = React.useCallback(() => {
+  const handleUpdateDate = useCallback(() => {
     if (!newDate) {
       // Reset date to current date if no date is selected (null date) in the date input
       showWarningMessage('No date and time selected!', 2000);
@@ -97,26 +89,28 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
         title="Updating assessment settings"
         canOutsideClickClose={true}
       >
-        <div className={Classes.DIALOG_BODY}>
+        <DialogBody>
           <p>{forOpenDate ? 'Opening' : 'Closing'} date and time:</p>
           {dateInput}
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <ControlButton
-              label="Cancel"
-              icon={IconNames.CROSS}
-              onClick={handleCloseDialog}
-              options={{ minimal: false }}
-            />
-            <ControlButton
-              label="Confirm"
-              icon={IconNames.TICK}
-              onClick={handleUpdateDate}
-              options={{ minimal: false, intent: Intent.DANGER }}
-            />
-          </div>
-        </div>
+        </DialogBody>
+        <DialogFooter
+          actions={
+            <>
+              <ControlButton
+                label="Cancel"
+                icon={IconNames.CROSS}
+                onClick={handleCloseDialog}
+                options={{ minimal: false }}
+              />
+              <ControlButton
+                label="Confirm"
+                icon={IconNames.TICK}
+                onClick={handleUpdateDate}
+                options={{ minimal: false, intent: Intent.DANGER }}
+              />
+            </>
+          }
+        />
       </Dialog>
     </>
   );

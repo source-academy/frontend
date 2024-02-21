@@ -4,8 +4,6 @@ import { v4 as uuid } from 'uuid';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Input as RecorderInput } from '../sourceRecorder/SourceRecorderTypes';
 
-export const playgroundQuestionId: number = -1;
-
 type PlaybackInitial = {
   chapter: Chapter;
   externalLibrary?: ExternalLibraryName;
