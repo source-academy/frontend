@@ -3,7 +3,6 @@ import { DeepPartial, Store } from 'redux';
 import mockStore from 'redux-mock-store';
 
 import {
-  defaultAcademy,
   defaultAchievement,
   defaultDashboard,
   defaultFileSystem,
@@ -19,7 +18,6 @@ export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<O
   const createStore = (mockStore as any)();
   const state: OverallState = {
     router: defaultRouter,
-    academy: defaultAcademy,
     achievement: defaultAchievement,
     dashboard: defaultDashboard,
     playground: defaultPlayground,

@@ -1,6 +1,5 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 
-import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { GradingQuery } from '../../features/grading/GradingTypes';
@@ -24,7 +23,6 @@ import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
   readonly router: RouterState;
-  readonly academy: AcademyState;
   readonly achievement: AchievementState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
@@ -295,10 +293,6 @@ export const getLanguageConfig = (
 
 export const defaultRouter: RouterState = null;
 
-export const defaultAcademy: AcademyState = {
-  gameCanvas: undefined
-};
-
 export const defaultDashboard: DashboardState = {
   gradingSummary: {
     cols: [],
@@ -540,7 +534,6 @@ export const defaultFileSystem: FileSystemState = {
 
 export const defaultState: OverallState = {
   router: defaultRouter,
-  academy: defaultAcademy,
   achievement: defaultAchievement,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
