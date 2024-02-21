@@ -23,7 +23,7 @@ Array [
     "supports": Object {
       "repl": true,
     },
-    "variant": "default",
+    "variant": "explicit-control",
   },
   Object {
     "chapter": -10,
@@ -32,7 +32,7 @@ Array [
     "supports": Object {
       "repl": true,
     },
-    "variant": "default",
+    "variant": "explicit-control",
   },
   Object {
     "chapter": -11,
@@ -41,7 +41,7 @@ Array [
     "supports": Object {
       "repl": true,
     },
-    "variant": "default",
+    "variant": "explicit-control",
   },
   Object {
     "chapter": -12,
@@ -50,7 +50,7 @@ Array [
     "supports": Object {
       "repl": true,
     },
-    "variant": "default",
+    "variant": "explicit-control",
   },
   Object {
     "chapter": -13,
@@ -59,7 +59,7 @@ Array [
     "supports": Object {
       "repl": true,
     },
-    "variant": "default",
+    "variant": "explicit-control",
   },
 ]
 `;
