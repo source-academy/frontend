@@ -18,7 +18,9 @@ import {
   checkIfFileCanBeSavedAndGetSaveType,
   checkIfUserAgreesToOverwriteEditorData,
   checkIfUserAgreesToPerformOverwritingSave,
+  checkIsFile,
   openFileInEditor,
+  openFolderInFolderMode,
   performCreatingSave,
   performOverwritingSave
 } from '../../features/github/GitHubUtils';
@@ -106,7 +108,11 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     if (props.pickerType === 'Open') {
       if (await checkIfFileCanBeOpened(props.octokit, githubLoginID, props.repoName, filePath)) {
         if (await checkIfUserAgreesToOverwriteEditorData()) {
-          openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath);
+          if (await checkIsFile(props.octokit, githubLoginID, props.repoName, filePath)) {
+            openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath);
+          } else {
+            openFolderInFolderMode(props.octokit, githubLoginID, props.repoName, filePath);
+          }
         }
       }
     }
