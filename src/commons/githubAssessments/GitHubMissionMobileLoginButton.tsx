@@ -1,6 +1,6 @@
 import { ButtonGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 
 import ControlButton from '../ControlButton';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';

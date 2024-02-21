@@ -14,7 +14,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Omnibar } from '@blueprintjs/select';
-import * as React from 'react';
+import React from 'react';
 import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';

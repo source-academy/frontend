@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
@@ -21,7 +21,7 @@ import { Frame } from './Frame';
 export class ControlItemComponent extends Visible implements IHoverable {
   /** text to display */
   readonly text: string;
-  readonly tooltipRef: RefObject<any>;
+  readonly tooltipRef: React.RefObject<any>;
   readonly arrow?: ArrowFromControlItemComponent;
 
   constructor(
@@ -98,6 +98,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
     return (
       <React.Fragment key={Layout.key++}>
         <Label
+          ref={this.ref}
           x={this.x()}
           y={this.y()}
           onMouseEnter={this.onMouseEnter}
