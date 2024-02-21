@@ -1,12 +1,13 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Icon as BpIcon, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Button, Card, Flex, Title } from '@tremor/react';
-import React, { useCallback, useEffect } from 'react';
+import { Button, Card, Flex, Text, Title } from '@tremor/react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
+import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { exportGradingCSV } from 'src/features/grading/GradingUtils';
@@ -23,12 +24,34 @@ const Grading: React.FC = () => {
     questionId: string;
   }>();
 
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const showSubmissionOptions = [
+    { value: false, label: 'ungraded' },
+    { value: true, label: 'all' }
+  ];
+
+  // TODO: implement isAdmin functionality
+  const [limitGroup, setLimitGroup] = useState(true);
+  const groupOptions = [
+    { value: true, label: 'my groups' },
+    { value: false, label: 'all groups' }
+  ];
+
+  // Dropdown tab options, which contains some external state.
+  // This can be a candidate for its own component once backend feature implementation is complete.
+  const [pageSize, setPageSize] = useState(10);
+  const pageSizeOptions = [
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 50, label: '50' }
+  ];
+
   const dispatch = useDispatch();
   const updateGradingOverviewsCallback = useCallback(
-    (group: boolean, pageParams: { offset: number; pageSize: number }, filterParams: Object) => {
-      dispatch(fetchGradingOverviews(group, pageParams, filterParams));
+    (pageParams: { offset: number; pageSize: number }, filterParams: Object) => {
+      dispatch(fetchGradingOverviews(limitGroup, pageParams, filterParams));
     },
-    [dispatch]
+    [dispatch, limitGroup]
   );
 
   // Default value initializer
@@ -87,8 +110,35 @@ const Grading: React.FC = () => {
                 </Button>
               </Flex>
             </Flex>
+            <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
+              <Text>Viewing</Text>
+              <SimpleDropdown
+                options={showSubmissionOptions}
+                selectedValue={showAllSubmissions}
+                onClick={setShowAllSubmissions}
+                popoverProps={{ position: Position.BOTTOM }}
+                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+              />
+              <Text>submissions from</Text>
+              <SimpleDropdown
+                options={groupOptions}
+                selectedValue={limitGroup}
+                onClick={setLimitGroup}
+                popoverProps={{ position: Position.BOTTOM }}
+                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+              />
+              <Text>Entries per page</Text>
+              <SimpleDropdown
+                options={pageSizeOptions}
+                selectedValue={pageSize}
+                onClick={setPageSize}
+                popoverProps={{ position: Position.BOTTOM }}
+                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+              />
+            </Flex>
             <GradingSubmissionsTable
               totalRows={gradingOverviews.count}
+              pageSize={pageSize}
               submissions={submissions}
               updateEntries={updateGradingOverviewsCallback}
             />

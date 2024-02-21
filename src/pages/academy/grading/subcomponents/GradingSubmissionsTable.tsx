@@ -1,6 +1,6 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Icon as BpIcon, Position } from '@blueprintjs/core';
+import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
   Column,
@@ -30,7 +30,6 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
-import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
@@ -110,10 +109,11 @@ const makeColumns = (handleClick: () => void) => [
 
 type GradingSubmissionTableProps = {
   totalRows: number;
+  pageSize: number;
   submissions: GradingOverview[];
   // TODO: Abstract pageParams object into a useable type.
   updateEntries: (
-    group: boolean,
+
     pageParams: { offset: number; pageSize: number },
     filterParams: any
   ) => void;
@@ -121,6 +121,7 @@ type GradingSubmissionTableProps = {
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   totalRows,
+  pageSize,
   submissions,
   updateEntries
 }) => {
@@ -134,43 +135,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
 
-  // This is needed because a filter change is accompanied with a page reset.
+  // This is needed because a filter change, or a change in pageSize prop, is accompanied with a page reset.
   const resetPage = useCallback(() => setPage(0), [setPage]);
 
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-  const showSubmissionOptions = [
-    { value: false, label: 'ungraded' },
-    { value: true, label: 'all' }
-  ];
-
-  // TODO: implement isAdmin functionality
-  const [limitGroup, setLimitGroup] = useState(true);
-  const groupOptions = [
-    { value: true, label: 'my groups' },
-    { value: false, label: 'all groups' }
-  ];
-
-  // Dropdown tab options, which contains some external state.
-  // This can be a candidate for its own component once backend feature implementation is complete.
-  const pageSizeOptions = [
-    { value: 1, label: '1' },
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 50, label: '50' }
-  ];
-
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-
-  // modifies state setters to reset page as well.
-  function setStateAndReset<T>(stateChanger: React.Dispatch<T>): React.Dispatch<T> {
-    return (value: T) => {
-      stateChanger(value);
-      resetPage();
-    };
-  }
 
   // Converts the columnFilters array into backend query parameters.
   // Memoized as derived data to prevent infinite re-rendering.
@@ -180,19 +149,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   // TODO: make a controller component, like in the achievements page, to handle conversion of page state into JSON.
   const backendFilterParams = useMemo(() => {
     return columnFilters
-      .concat(
-        showAllSubmissions
-          ? []
-          : [
-              {
-                id: 'gradingStatus',
-                value: GradingStatuses.none
-              }
-            ]
-      )
       .map(convertFilterToBackendParams)
-      .reduce(Object.assign, {})
-  }, [columnFilters, showAllSubmissions]);
+      .reduce(Object.assign, {});
+  }, [columnFilters]);
 
   // Adapts frontend page and pageSize state into useable offset for backend usage.
   const pageParams = useMemo(() => {
@@ -203,6 +162,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   }, [page, pageSize]);
 
   const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
+
+  useEffect(() => resetPage(), [pageSize]);
+
   const table = useReactTable({
     data: submissions,
     columns,
@@ -239,37 +201,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
-    updateEntries(limitGroup, pageParams, backendFilterParams);
-  }, [updateEntries, limitGroup, pageParams, backendFilterParams]);
+    updateEntries(pageParams, backendFilterParams);
+  }, [updateEntries, pageParams, backendFilterParams]);
 
   return (
     <>
-      <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
-        <Text>Viewing</Text>
-        <SimpleDropdown
-          options={showSubmissionOptions}
-          selectedValue={showAllSubmissions}
-          onClick={setStateAndReset(setShowAllSubmissions)}
-          popoverProps={{ position: Position.BOTTOM }}
-          buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-        />
-        <Text>Submissions from</Text>
-        <SimpleDropdown
-          options={groupOptions}
-          selectedValue={limitGroup}
-          onClick={setStateAndReset(setLimitGroup)}
-          popoverProps={{ position: Position.BOTTOM }}
-          buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-        />
-        <Text>Entries per page</Text>
-        <SimpleDropdown
-          options={pageSizeOptions}
-          selectedValue={pageSize}
-          onClick={setStateAndReset(setPageSize)}
-          popoverProps={{ position: Position.BOTTOM }}
-          buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-        />
-      </Flex>
       <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
         <Flex alignItems="items-center" spaceX="space-x-2">
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
@@ -282,7 +218,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           </div>
           <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
         </Flex>
-
         <TextInput
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
@@ -397,7 +332,6 @@ const convertFilterToBackendParams = (column: ColumnFilter) => {
       return column;
   }
 };
-
 
 type FilterableProps = {
   column: Column<any, unknown>;
