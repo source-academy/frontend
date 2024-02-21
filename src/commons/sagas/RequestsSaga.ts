@@ -8,7 +8,12 @@ import {
   GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingAnswer,
+  GradingOverview,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   Device,
   WebSocketEndpointInformation
@@ -651,7 +656,10 @@ export const getGradingOverviews = async (
 /**
  * GET /courses/{courseId}/admin/grading/{submissionId}
  */
-export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
+export const getGrading = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<GradingQuery | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}`, 'GET', {
     ...tokens
   });
@@ -661,7 +669,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
   }
 
   const gradingResult = await resp.json();
-  const grading: Grading = gradingResult.map((gradingQuestion: any) => {
+  const grading: GradingAnswer = gradingResult.answers.map((gradingQuestion: any) => {
     const { student, question, grade } = gradingQuestion;
     const result = {
       question: {
@@ -695,7 +703,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
     return result;
   });
 
-  return grading;
+  return { answers: grading, assessment: gradingResult.assessment };
 };
 
 /**
