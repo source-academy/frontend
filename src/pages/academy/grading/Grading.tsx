@@ -18,6 +18,23 @@ import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
+const showSubmissionOptions = [
+  { value: false, label: 'ungraded' },
+  { value: true, label: 'all' }
+];
+
+const groupOptions = [
+  { value: true, label: 'my groups' },
+  { value: false, label: 'all groups' }
+];
+
+const pageSizeOptions = [
+  { value: 10, label: '10' },
+  { value: 15, label: '15' },
+  { value: 25, label: '25' },
+  { value: 50, label: '50' }
+];
+
 const Grading: React.FC = () => {
   const { courseId, gradingOverviews, role, group } = useSession();
   const params = useParams<{
@@ -26,26 +43,11 @@ const Grading: React.FC = () => {
   }>();
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-  const showSubmissionOptions = [
-    { value: false, label: 'ungraded' },
-    { value: true, label: 'all' }
-  ];
 
   const [limitGroup, setLimitGroup] = useState(role !== Role.Admin && group !== null);
-  const groupOptions = [
-    { value: true, label: 'my groups' },
-    { value: false, label: 'all groups' }
-  ];
 
-  // Dropdown tab options, which contains some external state.
-  // This can be a candidate for its own component once backend feature implementation is complete.
   const [pageSize, setPageSize] = useState(10);
-  const pageSizeOptions = [
-    { value: 10, label: '10' },
-    { value: 15, label: '15' },
-    { value: 25, label: '25' },
-    { value: 50, label: '50' }
-  ];
+
 
   const dispatch = useDispatch();
   const updateGradingOverviewsCallback = useCallback(
