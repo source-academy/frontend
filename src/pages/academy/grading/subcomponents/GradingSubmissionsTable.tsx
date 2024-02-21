@@ -29,10 +29,10 @@ import {
 } from '@tremor/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
+import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
@@ -284,47 +284,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       </Table>
     </>
   );
-};
-
-// Cleanup work: change all references to column properties in backend saga to backend name to reduce
-// un-needed hardcode conversion, ensuring that places that reference it are updated. A two-way conversion
-// function would be good to implement in GradingUtils.
-const convertFilterToBackendParams = (column: ColumnFilter) => {
-  switch (column.id) {
-    case 'assessmentName':
-      return { title: column.value };
-    case 'assessmentType':
-      return { type: column.value };
-    case 'studentName':
-      return { name: column.value };
-    case 'studentUsername':
-      return { username: column.value };
-    case 'submissionStatus':
-      return { status: column.value };
-    case 'groupName':
-      return { groupName: column.value };
-    case 'gradingStatus':
-      if (column.value === GradingStatuses.none) {
-        return {
-          isManuallyGraded: true,
-          status: 'submitted',
-          numGraded: 0
-        };
-      } else if (column.value === GradingStatuses.graded) {
-        // TODO: coordinate with backend on subquerying to implement the third query
-        // currently ignored by backend as of 16 Feb 24 commit
-        return {
-          isManuallyGraded: true,
-          status: 'submitted',
-          numGradedEqualToTotal: true
-        };
-      } else {
-        // case: excluded or grading. Not implemented yet.
-        return {};
-      }
-    default:
-      return column;
-  }
 };
 
 type FilterableProps = {
