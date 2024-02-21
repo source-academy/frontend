@@ -11,4 +11,9 @@ export type PersistenceObject = {
   name: string;
   lastSaved?: Date;
   isFolder?: boolean;
+  modifiedFiles?: string[];
+  addedFiles?: string[];
+  removedFiles?: string[];
+  addedFolders?: string[];
+  removedFolders?: string[];
 };
