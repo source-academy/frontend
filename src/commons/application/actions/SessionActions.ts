@@ -1,7 +1,7 @@
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 import { action } from 'typesafe-actions'; // EDITED
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { GradingOverview, GradingQuery } from '../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
@@ -9,7 +9,6 @@ import {
   AssessmentOverview,
   ContestEntry
 } from '../../assessment/AssessmentTypes';
-import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -60,7 +59,6 @@ import {
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
   SET_NOTIFICATION_CONFIGS,
@@ -166,9 +164,6 @@ export const setAdminPanelCourseRegistrations = (
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
-export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
-  action(SET_GITHUB_ASSESSMENT, missionRepoData);
-
 export const setGitHubOctokitObject = (authToken?: string) =>
   action(SET_GITHUB_OCTOKIT_OBJECT, generateOctokitInstance(authToken || ''));
 
@@ -268,7 +263,7 @@ export const updateStudents = (students: User[]) => action(UPDATE_STUDENTS, stud
  * An extra id parameter is included here because of
  * no id for Grading.
  */
-export const updateGrading = (submissionId: number, grading: Grading) =>
+export const updateGrading = (submissionId: number, grading: GradingQuery) =>
   action(UPDATE_GRADING, {
     submissionId,
     grading

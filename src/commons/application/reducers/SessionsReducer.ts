@@ -16,7 +16,6 @@ import {
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
   SET_NOTIFICATION_CONFIGS,
@@ -40,11 +39,6 @@ export const SessionsReducer: Reducer<SessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
-    case SET_GITHUB_ASSESSMENT:
-      return {
-        ...state,
-        githubAssessment: action.payload
-      };
     case SET_GITHUB_OCTOKIT_OBJECT:
       return {
         ...state,

@@ -1,7 +1,7 @@
 import { Card, Elevation, HTMLSelect, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 

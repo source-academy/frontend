@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
+import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -383,37 +383,61 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
 });
 
 // Test data for UPDATE_GRADING
-const gradingTest1: Grading = [
-  {
-    question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
-    student: {
-      name: 'test student',
-      username: 'E0123456',
-      id: 234
-    },
-    grade: {
-      xp: 100,
-      xpAdjustment: 0,
-      comments: 'Well done. Please try the quest!'
+const gradingTest1: GradingQuery = {
+  answers: [
+    {
+      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
+      student: {
+        name: 'test student',
+        username: 'E0123456',
+        id: 234
+      },
+      grade: {
+        xp: 100,
+        xpAdjustment: 0,
+        comments: 'Well done. Please try the quest!'
+      }
     }
+  ],
+  assessment: {
+    coverPicture: 'test string',
+    id: 1,
+    number: 'M1A',
+    reading: 'test string',
+    story: 'test string',
+    summaryLong: 'test string',
+    summaryShort: 'test string',
+    title: 'test string'
   }
-];
+};
 
-const gradingTest2: Grading = [
-  {
-    question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
-    student: {
-      name: 'another test student',
-      username: 'E0000000',
-      id: 345
-    },
-    grade: {
-      xp: 500,
-      xpAdjustment: 20,
-      comments: 'Good job! All the best for the finals.'
+const gradingTest2: GradingQuery = {
+  answers: [
+    {
+      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
+      student: {
+        name: 'another test student',
+        username: 'E0000000',
+        id: 345
+      },
+      grade: {
+        xp: 500,
+        xpAdjustment: 20,
+        comments: 'Good job! All the best for the finals.'
+      }
     }
+  ],
+  assessment: {
+    coverPicture: 'another test string',
+    id: 2,
+    number: 'P2',
+    reading: 'another test string',
+    story: 'another test string',
+    summaryLong: 'another test string',
+    summaryShort: 'another test string',
+    title: 'another test string'
   }
-];
+};
 
 test('UPDATE_GRADING works correctly in inserting gradings', () => {
   const submissionId = 23;
@@ -425,14 +449,14 @@ test('UPDATE_GRADING works correctly in inserting gradings', () => {
     }
   };
 
-  const gradingMap: Map<number, Grading> = SessionsReducer(defaultSession, action).gradings;
+  const gradingMap: Map<number, GradingQuery> = SessionsReducer(defaultSession, action).gradings;
   expect(gradingMap.get(submissionId)).toEqual(gradingTest1);
 });
 
 test('UPDATE_GRADING works correctly in inserting gradings and retains old data', () => {
   const submissionId1 = 45;
   const submissionId2 = 56;
-  const gradings = new Map<number, Grading>();
+  const gradings = new Map<number, GradingQuery>();
   gradings.set(submissionId1, gradingTest1);
 
   const newDefaultSession = {
@@ -448,14 +472,14 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
     }
   };
 
-  const gradingMap: Map<number, Grading> = SessionsReducer(newDefaultSession, action).gradings;
+  const gradingMap: Map<number, GradingQuery> = SessionsReducer(newDefaultSession, action).gradings;
   expect(gradingMap.get(submissionId1)).toEqual(gradingTest1);
   expect(gradingMap.get(submissionId2)).toEqual(gradingTest2);
 });
 
 test('UPDATE_GRADING works correctly in updating gradings', () => {
   const submissionId = 23;
-  const gradings = new Map<number, Grading>();
+  const gradings = new Map<number, GradingQuery>();
   gradings.set(submissionId, gradingTest1);
   const newDefaultSession = {
     ...defaultSession,
@@ -470,7 +494,7 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
     }
   };
 
-  const gradingMap: Map<number, Grading> = SessionsReducer(newDefaultSession, action).gradings;
+  const gradingMap: Map<number, GradingQuery> = SessionsReducer(newDefaultSession, action).gradings;
   expect(gradingMap.get(submissionId)).toEqual(gradingTest2);
 });
 
