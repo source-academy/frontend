@@ -1,13 +1,13 @@
 /* eslint-disable simple-import-sort/imports */
-import { Card, Classes, Divider, Pre, Slider, Button, ButtonGroup } from '@blueprintjs/core';
-import * as React from 'react';
+import { Button, ButtonGroup, Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
+import React from 'react';
 import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
+import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
-import classNames from 'classnames';
 
 const SubstDefaultText = () => {
   return (
