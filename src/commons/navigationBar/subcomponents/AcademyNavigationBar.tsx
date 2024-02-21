@@ -1,6 +1,6 @@
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
@@ -119,13 +119,6 @@ const getStaffNavlinkInfo = ({
       text: 'Game Simulator',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
-    },
-    {
-      to: `/courses/${courseId}/xpcalculation`,
-      icon: IconNames.CALCULATOR,
-      text: 'XP Calculation',
-      disabled: !isAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
     },
     {
       to: `/courses/${courseId}/adminpanel`,

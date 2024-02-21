@@ -4,7 +4,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 
 import { Ace } from 'ace-builds';
 import { isEqual } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 

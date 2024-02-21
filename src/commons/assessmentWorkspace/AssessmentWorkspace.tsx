@@ -1,9 +1,10 @@
 import {
   Button,
-  ButtonGroup,
   Card,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   Intent,
   NonIdealState,
   Spinner,
@@ -76,6 +77,8 @@ import {
   changeExecTime,
   changeSideContentHeight,
   clearReplOutput,
+  disableTokenCounter,
+  enableTokenCounter,
   evalEditor,
   evalRepl,
   evalTestcase,
@@ -111,6 +114,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
+
   const [selectedTab, setSelectedTab] = useState(
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
@@ -149,7 +153,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleEditorUpdateBreakpoints,
     handleReplEval,
     handleSave,
-    handleUpdateHasUnsavedChanges
+    handleUpdateHasUnsavedChanges,
+    handleEnableTokenCounter,
+    handleDisableTokenCounter
   } = useMemo(() => {
     return {
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
@@ -173,7 +179,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
         dispatch(submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
-        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges))
+        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+      handleEnableTokenCounter: () => dispatch(enableTokenCounter(workspaceLocation)),
+      handleDisableTokenCounter: () => dispatch(disableTokenCounter(workspaceLocation))
     };
   }, [dispatch]);
 
@@ -237,6 +245,21 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   useEffect(() => {
     checkWorkspaceReset();
   });
+
+  /**
+   * Handles toggling enabling and disabling token counter depending on assessment properties
+   */
+  useEffect(() => {
+    if (props.assessmentConfiguration.hasTokenCounter) {
+      handleEnableTokenCounter();
+    } else {
+      handleDisableTokenCounter();
+    }
+  }, [
+    props.assessmentConfiguration.hasTokenCounter,
+    handleEnableTokenCounter,
+    handleDisableTokenCounter
+  ]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -745,28 +768,30 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       onClose={closeOverlay}
       title="Confirmation: Reset editor?"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Markdown content="Are you sure you want to reset the template?" />
         <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <ButtonGroup>
-          <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
-          <ControlButton
-            label="Confirm"
-            onClick={() => {
-              closeOverlay();
-              // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-              handleEditorValueChange(
-                0,
-                (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
-              );
-              handleUpdateHasUnsavedChanges(true);
-            }}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </ButtonGroup>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
+            <ControlButton
+              label="Confirm"
+              onClick={() => {
+                closeOverlay();
+                // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+                handleEditorValueChange(
+                  0,
+                  (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+                );
+                handleUpdateHasUnsavedChanges(true);
+              }}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 
@@ -839,7 +864,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
-
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
       {overlay}

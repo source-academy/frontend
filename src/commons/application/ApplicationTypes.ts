@@ -88,7 +88,22 @@ export type ErrorOutput = {
   consoleLogs: string[];
 };
 
-export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
+/**
+ * An output which represents a message being displayed to the user. Not a true
+ * result from the program, but rather a customised notification meant to highlight
+ * events that occur outside execution of the program.
+ */
+export type NotificationOutput = {
+  type: 'notification';
+  consoleLog: string;
+};
+
+export type InterpreterOutput =
+  | RunningOutput
+  | CodeOutput
+  | ResultOutput
+  | ErrorOutput
+  | NotificationOutput;
 
 export enum Role {
   Student = 'student',
@@ -171,11 +186,11 @@ export const htmlLanguage: SALanguage = {
 };
 
 const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
-  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
-  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
-  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
-  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
-  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
+  { chapter: Chapter.SCHEME_1, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa71' },
+  { chapter: Chapter.SCHEME_2, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa72' },
+  { chapter: Chapter.SCHEME_3, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa73' },
+  { chapter: Chapter.SCHEME_4, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa74' },
+  { chapter: Chapter.FULL_SCHEME, variant: Variant.EXPLICIT_CONTROL, displayName: 'Full Scheme' }
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
@@ -360,6 +375,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     originalValue: ''
   },
   replValue: '',
+  hasTokenCounter: false,
+  tokenCount: 0,
+  customNotification: '',
   sharedbConnected: false,
   stepLimit: 1000,
   globals: [],
@@ -480,7 +498,6 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  allUserXp: undefined,
   story: {
     story: '',
     playStory: false

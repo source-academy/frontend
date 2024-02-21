@@ -10,18 +10,22 @@ import {
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { CSEAnimation } from 'src/features/envVisualizer/EnvVisualizerAnimation';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { HighlightedLines } from '../editor/EditorTypes';
 import Constants, { Links } from '../utils/Constants';
-import { setEditorHighlightedLinesControl, updateEnvSteps } from '../workspace/WorkspaceActions';
-import { evalEditor } from '../workspace/WorkspaceActions';
+import {
+  evalEditor,
+  setEditorHighlightedLinesControl,
+  updateEnvSteps
+} from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type State = {
@@ -77,7 +81,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       stepLimitExceeded: false
     };
     EnvVisualizer.init(
-      visualization => this.setState({ visualization }),
+      visualization => this.setState({ visualization }, () => CSEAnimation.playAnimation()),
       this.state.width,
       this.state.height,
       (segments: [number, number][]) => {
@@ -405,6 +409,7 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
+      CSEAnimation.enableAnimations();
     }
   };
 

@@ -16,13 +16,11 @@ import {
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
   SET_NOTIFICATION_CONFIGS,
   SET_TOKENS,
   SET_USER,
-  UPDATE_ALL_USER_XP,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
@@ -38,11 +36,6 @@ export const SessionsReducer: Reducer<SessionState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultSession;
-    case SET_GITHUB_ASSESSMENT:
-      return {
-        ...state,
-        githubAssessment: action.payload
-      };
     case SET_GITHUB_OCTOKIT_OBJECT:
       return {
         ...state,
@@ -112,8 +105,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       };
     case UPDATE_TOTAL_XP:
       return { ...state, xp: action.payload };
-    case UPDATE_ALL_USER_XP:
-      return { ...state, allUserXp: action.payload };
     case UPDATE_GRADING:
       const newGradings = new Map(state.gradings);
       newGradings.set(action.payload.submissionId, action.payload.grading);

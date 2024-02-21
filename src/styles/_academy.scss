@@ -265,15 +265,6 @@
     font-weight: bold;
     color: firebrick;
   }
-
-  div.#{$ns}-dialog-body {
-    margin: 15px 20px 15px 20px;
-  }
-
-  div.#{$ns}-dialog-footer {
-    // align the div.#{$ns}-button-group right
-    text-align: right;
-  }
 }
 
 .WorkspaceParent {
@@ -516,5 +507,27 @@
 .file-input-popover {
   .#{$ns}-popover2-arrow {
     margin-left: 3px;
+  }
+}
+
+.grading-overview-filterable-btns {
+  padding: 0;
+
+  // Invisible border for backgroundless buttons
+  &:not(:has(> div)) {
+    text-decoration: none;
+  }
+
+  &:hover {
+    // Buttons with bg
+    > div > span {
+      // Use of contrast due to unknown background color
+      filter: contrast(0.9);
+    }
+
+    // Backgroundless buttons
+    &:not(:has(> div)) {
+      text-decoration: underline;
+    }
   }
 }
