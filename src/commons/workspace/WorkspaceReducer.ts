@@ -42,7 +42,8 @@ import {
   changeStepLimit,
   clearReplInput,
   clearReplOutput,
-  clearReplOutputLast
+  clearReplOutputLast,
+  setTokenCount
 } from './WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
@@ -63,7 +64,6 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
-  SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_UPDATE_ENV,
@@ -134,6 +134,10 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
 
 const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   builder
+    .addCase(setTokenCount, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].tokenCount = action.payload.tokenCount;
+    })
     .addCase(browseReplHistoryDown, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       if (state[workspaceLocation].replHistory.browseIndex === null) {
@@ -229,14 +233,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
   let lastOutput: InterpreterOutput;
 
   switch (action.type) {
-    case SET_TOKEN_COUNT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          tokenCount: action.payload.tokenCount
-        }
-      };
     case END_CLEAR_CONTEXT:
       return {
         ...state,
