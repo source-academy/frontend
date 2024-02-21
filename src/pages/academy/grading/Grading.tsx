@@ -42,8 +42,6 @@ const Grading: React.FC = () => {
     questionId: string;
   }>();
 
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
 
@@ -61,6 +59,8 @@ const Grading: React.FC = () => {
   useEffect(() => {
     dispatch(fetchGradingOverviews());
   }, [dispatch]);
+
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
