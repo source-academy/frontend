@@ -24,8 +24,8 @@ const showSubmissionOptions = [
 ];
 
 const groupOptions = [
-  { value: true, label: 'my groups' },
-  { value: false, label: 'all groups' }
+  { value: false, label: 'my groups' },
+  { value: true, label: 'all groups' }
 ];
 
 const pageSizeOptions = [
@@ -44,17 +44,17 @@ const Grading: React.FC = () => {
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
-  const [limitGroup, setLimitGroup] = useState(role !== Role.Admin && group !== null);
+  const isAdmin = role === Role.Admin;
+  const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
 
   const [pageSize, setPageSize] = useState(10);
-
 
   const dispatch = useDispatch();
   const updateGradingOverviewsCallback = useCallback(
     (pageParams: { offset: number; pageSize: number }, filterParams: Object) => {
-      dispatch(fetchGradingOverviews(limitGroup, pageParams, filterParams));
+      dispatch(fetchGradingOverviews(!showAllGroups, pageParams, filterParams));
     },
-    [dispatch, limitGroup]
+    [dispatch, showAllGroups]
   );
 
   // Default value initializer
@@ -125,8 +125,8 @@ const Grading: React.FC = () => {
               <Text>submissions from</Text>
               <SimpleDropdown
                 options={groupOptions}
-                selectedValue={limitGroup}
-                onClick={setLimitGroup}
+                selectedValue={showAllGroups}
+                onClick={setShowAllGroups}
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
