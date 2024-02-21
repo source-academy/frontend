@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { fork } from 'redux-saga/effects';
+import { all, fork } from 'redux-saga/effects';
 
 import { mockBackendSaga } from '../mocks/BackendMocks';
 import Constants from '../utils/Constants';
@@ -14,13 +14,15 @@ import StoriesSaga from './StoriesSaga';
 import WorkspaceSaga from './WorkspaceSaga';
 
 export default function* MainSaga(): SagaIterator {
-  yield fork(Constants.useBackend ? BackendSaga : mockBackendSaga);
-  yield fork(WorkspaceSaga);
-  yield fork(LoginSaga);
-  yield fork(PlaygroundSaga);
-  yield fork(AchievementSaga);
-  yield fork(PersistenceSaga);
-  yield fork(GitHubPersistenceSaga);
-  yield fork(RemoteExecutionSaga);
-  yield fork(StoriesSaga);
+  yield all([
+    fork(Constants.useBackend ? BackendSaga : mockBackendSaga),
+    fork(WorkspaceSaga),
+    fork(LoginSaga),
+    fork(PlaygroundSaga),
+    fork(AchievementSaga),
+    fork(PersistenceSaga),
+    fork(GitHubPersistenceSaga),
+    fork(RemoteExecutionSaga),
+    fork(StoriesSaga)
+  ]);
 }
