@@ -408,6 +408,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const onEditorValueChange = React.useCallback(
     (editorTabIndex: number, newEditorValue: string) => {
       setLastEdit(new Date());
+      // TODO change editor tab label to reflect path of opened file?
       handleEditorValueChange(editorTabIndex, newEditorValue);
     },
     [handleEditorValueChange]

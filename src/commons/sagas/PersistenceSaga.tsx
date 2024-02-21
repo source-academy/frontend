@@ -28,7 +28,7 @@ import {
 import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
+import { retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
 import { refreshFileView } from '../fileSystemView/FileSystemViewList';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
@@ -172,8 +172,6 @@ export function* persistenceSaga(): SagaIterator {
         yield call(refreshFileView); // refreshes folder view TODO super jank?
 
         yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
-
-        // TODO the Google Drive button isn't blue even after loading stuff
 
         return;
       }
@@ -347,10 +345,80 @@ export function* persistenceSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(
+  yield takeEvery( // TODO work on this
     PERSISTENCE_SAVE_ALL,
     function* () {
-      yield console.log("pers save all!");
+      // Case init: Don't care, delete everything in remote and save again
+      // Callable only if persistenceObject isFolder
+
+      const [currFolderObject] = yield select(
+        (state: OverallState) => [
+          state.playground.persistenceObject
+        ]
+      );
+      if (!currFolderObject) {
+        yield call(console.log, "no obj!");
+        return;
+      }
+
+      console.log("currFolderObj", currFolderObject);
+
+      const fileSystem: FSModule | null = yield select(
+        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+      );
+      // If the file system is not initialised, do nothing.
+      if (fileSystem === null) {
+        yield call(console.log, "no filesystem!");
+        return;
+      }
+      yield call(console.log, "there is a filesystem");
+
+      const currFiles: Record<string, string> = yield call(retrieveFilesInWorkspaceAsRecord, "playground", fileSystem);
+      // TODO this does not get bare folders, is it a necessity?
+      // behaviour of open folder for GDrive loads even empty folders
+      yield call(console.log, "currfiles", currFiles);
+
+      //const fileNameRegex = new RegExp('@"[^\\]+$"');
+      for (const currFullFilePath of Object.keys(currFiles)) {
+        const currFileContent = currFiles[currFullFilePath];
+        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(currFullFilePath);
+        if (regexResult === null) {
+          yield call(console.log, "Regex null!");
+          continue;
+        }
+        const currFileName = regexResult[2] + regexResult[3];
+        const currFileParentFolders: string[] = regexResult[1].slice(
+          ("/playground/" + currFolderObject.name + "/").length, -1)
+          .split("/");
+
+        // /fold1/ becomes ["fold1"]
+        // /fold1/fold2/ becomes ["fold1", "fold2"]
+        // If in top level folder, becomes [""]
+
+        yield call(getContainingFolderIdRecursively, currFileParentFolders,
+          currFolderObject.id);
+
+        // yield call(
+        //   createFile,
+        //   fileName,
+        //   currFolderObject.id,
+
+        // );
+
+        yield call (console.log, "name", currFileName, "content", currFileContent
+        , "path", currFileParentFolders);
+      }
+
+      
+      // Case 1: Open picker to select location for saving, similar to save all
+      // 1a No folder exists on remote, simple save
+      // 1b Folder exists, popup confirmation to destroy remote folder and replace
+
+      // Case 2: Location already decided (PersistenceObject exists with isFolder === true)
+      // TODO: Modify functions here to update string[] in persistenceObject for Folder
+      // 2a No changes to folder/file structure, only content needs updating
+      // TODO Maybe update the colors of the side view as well to reflect which have been modified?
+      // 2b Changes to folder/file structure -> Delete and replace changed files
     }
   );
 
@@ -595,6 +663,52 @@ async function getFilesOfFolder( // recursively get files
   return ans;
 }
 
+async function getContainingFolderIdRecursively( // TODO memoize?
+  parentFolders: string[],
+  topFolderId: string,
+  currDepth: integer = 0
+): Promise<string> {
+  if (parentFolders[0] === '' || currDepth === parentFolders.length) {
+    return topFolderId;
+  }
+  const currFolderName = parentFolders[parentFolders.length - 1 - currDepth];
+
+  const immediateParentFolderId = await getContainingFolderIdRecursively(
+    parentFolders,
+    topFolderId,
+    currDepth + 1
+    );
+
+  let folderList: gapi.client.drive.File[] | undefined;
+
+  await gapi.client.drive.files.list({
+    q: '\'' + immediateParentFolderId + '\'' + ' in parents and trashed = false and mimeType = \''
+       + "application/vnd.google-apps.folder" + '\'',
+  }).then(res => {
+    folderList = res.result.files
+  });
+
+  if (!folderList) {
+    console.log("create!", currFolderName);
+    const newId = await createFolderAndReturnId(immediateParentFolderId, currFolderName);
+    return newId;
+  }
+
+  console.log("folderList gcfir", folderList);
+
+  for (const currFolder of folderList) {
+    if (currFolder.name === currFolderName) {
+      console.log("found ", currFolder.name, " and id is ", currFolder.id);
+      return currFolder.id!;
+    }
+  }
+  
+  console.log("create!", currFolderName);
+  const newId = await createFolderAndReturnId(immediateParentFolderId, currFolderName);
+  return newId;
+  
+}
+
 function createFile(
   filename: string,
   parent: string,
@@ -606,12 +720,14 @@ function createFile(
   const meta = {
     name,
     mimeType,
-    parents: [parent],
+    parents: [parent], //[id of the parent folder as a string]
     appProperties: {
       source: true,
       ...config
     }
   };
+
+  console.log("METATAAAAAA", meta);
 
   const { body, headers } = createMultipartBody(meta, contents, mimeType);
 
@@ -644,6 +760,8 @@ function updateFile(
     }
   };
 
+  console.log("META", meta);
+
   const { body, headers } = createMultipartBody(meta, contents, mimeType);
 
   return gapi.client.request({
@@ -656,6 +774,32 @@ function updateFile(
     body
   });
 }
+
+function createFolderAndReturnId(
+  parentFolderId: string,
+  folderName: string
+): Promise<string> {
+  const name = folderName;
+  const mimeType = 'application/vnd.google-apps.folder';
+  const meta = {
+    name,
+    mimeType,
+    parents: [parentFolderId], //[id of the parent folder as a string]
+  }
+
+  const { body, headers } = createMultipartBody(meta, '', mimeType);
+  
+  return gapi.client
+  .request({
+    path: UPLOAD_PATH,
+    method: 'POST',
+    params: {
+      uploadType: 'multipart'
+    },
+    headers,
+    body
+  }).then(res => res.result.id)
+};
 
 function createMultipartBody(
   meta: any,

@@ -16,7 +16,7 @@ type Props = {
   indentationLevel: number;
 };
 
-export let refreshFileView: () => any;
+export let refreshFileView: () => any; // TODO jank
 
 const FileSystemViewList: React.FC<Props> = ({
   workspaceLocation,
