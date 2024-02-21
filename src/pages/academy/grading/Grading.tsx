@@ -18,14 +18,14 @@ import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
-const showSubmissionOptions = [
-  { value: false, label: 'ungraded' },
-  { value: true, label: 'all' }
-];
-
 const groupOptions = [
   { value: false, label: 'my groups' },
   { value: true, label: 'all groups' }
+];
+
+const showOptions = [
+  { value: false, label: 'ungraded' },
+  { value: true, label: 'all' }
 ];
 
 const pageSizeOptions = [
@@ -116,7 +116,7 @@ const Grading: React.FC = () => {
             <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
               <Text>Viewing</Text>
               <SimpleDropdown
-                options={showSubmissionOptions}
+                options={showOptions}
                 selectedValue={showAllSubmissions}
                 onClick={setShowAllSubmissions}
                 popoverProps={{ position: Position.BOTTOM }}
