@@ -100,7 +100,7 @@ export type AssessmentConfiguration = {
 
 export interface IProgrammingQuestion extends BaseQuestion {
   answer: string | null;
-  lastModifiedAt?: string;
+  lastModifiedAt: string;
   autogradingResults: AutogradingResult[];
   graderTemplate?: string;
   prepend: string;
