@@ -31,7 +31,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     !e.name ? { ...e, name: '(user has yet to log in)' } : e
   );
 
-  const columnDefs: ColDef[] = [
+  const columnDefs: ColDef<AdminPanelCourseRegistration>[] = [
     {
       headerName: 'Name',
       field: 'name',
@@ -57,7 +57,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     },
     {
       headerName: 'Actions',
-      field: 'actions',
+      field: 'actions' as any,
       cellRenderer: UserActionsCell,
       cellRendererParams: {
         handleDeleteUserFromCourse: props.handleDeleteUserFromCourse

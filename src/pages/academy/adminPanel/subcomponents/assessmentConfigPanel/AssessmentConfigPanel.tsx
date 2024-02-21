@@ -112,7 +112,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     setAssessmentConfigsToDelete(deleted[0]);
   };
 
-  const columnDefs: ColDef[] = [
+  const columnDefs: ColDef<AssessmentConfiguration>[] = [
     {
       headerName: 'Assessment Type',
       field: 'type',
@@ -166,7 +166,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     },
     {
       headerName: 'Delete Row',
-      field: 'placeholderToPreventColumnRerender',
+      field: 'placeholderToPreventColumnRerender' as any,
       cellRenderer: DeleteRowCell,
       cellRendererParams: {
         deleteRowHandler: deleteRowHandler

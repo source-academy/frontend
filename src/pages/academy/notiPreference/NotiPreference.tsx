@@ -87,7 +87,7 @@ const NotiPreference: React.FC = () => {
     return params.data!.notificationType.forStaff ? 'Staff' : 'Student';
   };
 
-  const columnDefs: ColDef[] = [
+  const columnDefs: ColDef<NotificationConfiguration>[] = [
     {
       headerName: 'Notification Type',
       field: 'notificationType.name',
