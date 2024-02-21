@@ -105,16 +105,3 @@ type Answer = {
   solutionTemplate?: string;
   choices?: MCQChoice[];
 };
-
-export type GradingWorkspaceParams = {
-  submissionId?: string;
-  questionId?: string;
-};
-
-export type GradingNavLinkProps = {
-  data: GradingOverviewWithNotifications;
-};
-
-export type GradingCellProps = {
-  data: GradingOverview;
-};
