@@ -129,11 +129,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
   const [page, setPage] = useState(0);
-
+  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
   // This is needed because a filter change, or a change in pageSize prop, is accompanied with a page reset.
   const resetPage = useCallback(() => setPage(0), [setPage]);
-
-  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
 
   // Converts the columnFilters array into backend query parameters.
   // Memoized as derived data to prevent infinite re-rendering.
@@ -216,6 +214,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           </div>
           <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
         </Flex>
+
         <TextInput
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
@@ -296,6 +295,7 @@ type FilterableProps = {
   children?: React.ReactNode;
   onClick?: () => void;
 };
+
 const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClick }) => {
   const handleFilterChange = () => {
     column.setFilterValue(value);
@@ -308,4 +308,5 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClic
     </button>
   );
 };
+
 export default GradingSubmissionTable;
