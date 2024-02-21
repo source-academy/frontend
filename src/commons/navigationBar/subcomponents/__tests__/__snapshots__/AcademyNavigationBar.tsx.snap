@@ -131,7 +131,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
 </Blueprint5.Navbar>
 `;
 
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, Team Formation, XP Calculation and AdminPanel NavLinks render for Role.Admin 1`] = `
+exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin 1`] = `
 <Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
@@ -340,22 +340,6 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         className="hidden-xs hidden-sm hidden-md"
       >
         Game Simulator
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="XP Calculation"
-      to="/courses/0/xpcalculation"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="calculator"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        XP Calculation
       </div>
     </NavLink>
     <NavLink
