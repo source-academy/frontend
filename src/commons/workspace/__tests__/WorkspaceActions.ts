@@ -120,7 +120,7 @@ test('browseReplHistoryUp generates correct action object', () => {
 });
 
 test('changeExternalLibrary generates correct action object', () => {
-  const newExternal = 'new-external-test';
+  const newExternal = 'new-external-test' as ExternalLibraryName;
   const action = changeExternalLibrary(newExternal, playgroundWorkspace);
   expect(action).toEqual({
     type: CHANGE_EXTERNAL_LIBRARY,
