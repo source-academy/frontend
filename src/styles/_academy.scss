@@ -264,15 +264,6 @@
     font-weight: bold;
     color: firebrick;
   }
-
-  div.#{$ns}-dialog-body {
-    margin: 15px 20px 15px 20px;
-  }
-
-  div.#{$ns}-dialog-footer {
-    // align the div.#{$ns}-button-group right
-    text-align: right;
-  }
 }
 
 .WorkspaceParent {

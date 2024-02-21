@@ -1,27 +1,25 @@
-import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
+import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import ControlButton from 'src/commons/ControlButton';
 
-type DeleteRowCellProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   data: AssessmentConfiguration;
   rowIndex: number;
   deleteRowHandler: (index: number) => void;
 };
 
-const DeleteRowCell: React.FC<DeleteRowCellProps> = props => {
-  const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
+const DeleteRowCell: React.FC<Props> = ({ data, rowIndex, deleteRowHandler }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const clickHandler = () => {
     setIsDialogOpen(true);
   };
-  const handleDelete = React.useCallback(() => {
-    props.deleteRowHandler(props.rowIndex);
+  const handleDelete = useCallback(() => {
+    deleteRowHandler(rowIndex);
     setIsDialogOpen(false);
-  }, [props]);
+  }, [deleteRowHandler, rowIndex]);
 
   return (
     <>
@@ -32,9 +30,9 @@ const DeleteRowCell: React.FC<DeleteRowCellProps> = props => {
         onClose={() => setIsDialogOpen(false)}
         title="Warning"
       >
-        <div className={Classes.DIALOG_BODY}>
+        <DialogBody>
           <p>
-            Are you sure you want to <b>delete</b> the assessment type <i>{props.data.type}</i>?
+            Are you sure you want to <b>delete</b> the assessment type <i>{data.type}</i>?
           </p>
           <p>
             <b>
@@ -42,23 +40,25 @@ const DeleteRowCell: React.FC<DeleteRowCellProps> = props => {
               the main save button.
             </b>
           </p>
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <ControlButton
-              label="Cancel"
-              icon={IconNames.CROSS}
-              onClick={() => setIsDialogOpen(false)}
-              options={{ minimal: false }}
-            />
-            <ControlButton
-              label="Ok"
-              icon={IconNames.TICK}
-              onClick={handleDelete}
-              options={{ minimal: false, intent: Intent.WARNING }}
-            />
-          </div>
-        </div>
+        </DialogBody>
+        <DialogFooter
+          actions={
+            <>
+              <ControlButton
+                label="Cancel"
+                icon={IconNames.CROSS}
+                onClick={() => setIsDialogOpen(false)}
+                options={{ minimal: false }}
+              />
+              <ControlButton
+                label="Ok"
+                icon={IconNames.TICK}
+                onClick={handleDelete}
+                options={{ minimal: false, intent: Intent.WARNING }}
+              />
+            </>
+          }
+        />
       </Dialog>
     </>
   );
