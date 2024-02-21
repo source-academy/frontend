@@ -126,7 +126,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
   return (
     <>
       <h4>
-        Title: <input className="bp4-input" type="text" {...titleProps} />
+        Title: <input className="bp5-input" type="text" {...titleProps} />
       </h4>
       <b>Open date: </b>
       {openDate && getStandardDateTime(openDate.toISOString())}
@@ -136,7 +136,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
         }}
       />
       <h4>
-        Image url: <input className="bp4-input" type="text" {...imageUrlProps} />
+        Image url: <input className="bp5-input" type="text" {...imageUrlProps} />
         <Button onClick={(_: any) => window.open(toS3Path(imageUrl, true))}>View</Button>
       </h4>
       <b>Checkpoint Txt Files</b>
