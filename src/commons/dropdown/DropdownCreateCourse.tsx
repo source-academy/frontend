@@ -1,8 +1,9 @@
 import {
   Button,
-  Classes,
   Dialog,
+  DialogBody,
   FormGroup,
+  H6,
   HTMLSelect,
   InputGroup,
   Switch,
@@ -13,7 +14,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { createCourse } from 'src/features/academy/AcademyActions';
 
@@ -98,10 +99,8 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
       onClose={props.onClose}
       title="Create Course"
     >
-      <div className={Classes.DIALOG_BODY}>
-        <div>
-          <b>Create your own Source Academy course and manage your own learners!</b>
-        </div>
+      <DialogBody>
+        <H6>Create your own Source Academy course and manage your own learners!</H6>
         <br />
         <FormGroup
           helperText="Please enter the course name that will be used for course selection"
@@ -278,7 +277,7 @@ const DropdownCreateCourse: React.FC<DialogProps> = props => {
         <div className="create-course-button-container">
           <Button text="Create Course" onClick={submitHandler} />
         </div>
-      </div>
+      </DialogBody>
     </Dialog>
   );
 };

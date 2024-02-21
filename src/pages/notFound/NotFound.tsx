@@ -1,7 +1,7 @@
 import { Classes, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 
 const NotFound: React.FC = () => (
   <div className={classNames('NoPage', Classes.DARK)} data-testid="NotFound-Component">

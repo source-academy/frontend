@@ -3,7 +3,7 @@ import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { Grading } from '../../features/grading/GradingTypes';
+import { GradingQuery } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
@@ -186,11 +186,11 @@ export const htmlLanguage: SALanguage = {
 };
 
 const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
-  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
-  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
-  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
-  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
-  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
+  { chapter: Chapter.SCHEME_1, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa71' },
+  { chapter: Chapter.SCHEME_2, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa72' },
+  { chapter: Chapter.SCHEME_3, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa73' },
+  { chapter: Chapter.SCHEME_4, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa74' },
+  { chapter: Chapter.FULL_SCHEME, variant: Variant.EXPLICIT_CONTROL, displayName: 'Full Scheme' }
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
@@ -508,7 +508,7 @@ export const defaultSession: SessionState = {
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
-  gradings: new Map<number, Grading>(),
+  gradings: new Map<number, GradingQuery>(),
   notifications: []
 };
 

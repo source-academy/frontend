@@ -37,10 +37,7 @@ const pageSizeOptions = [
 
 const Grading: React.FC = () => {
   const { courseId, gradingOverviews, role, group } = useSession();
-  const params = useParams<{
-    submissionId: string;
-    questionId: string;
-  }>();
+  const params = useParams<{ submissionId: string; questionId: string }>();
 
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
