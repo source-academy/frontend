@@ -563,7 +563,7 @@ test('updateSubmissionsTableFilters generates correct action object', () => {
     type: UPDATE_SUBMISSIONS_TABLE_FILTERS,
     payload: {
       filters: {
-        columnFilters,
+        columnFilters
       }
     }
   });
