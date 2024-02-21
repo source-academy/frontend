@@ -1,4 +1,4 @@
-import ReactRouter from 'react-router';
+import * as ReactRouter from 'react-router';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import SicpNavigationBar from '../SicpNavigationBar';
