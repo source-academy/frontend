@@ -27,7 +27,7 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
@@ -121,8 +121,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   submissions,
   updateEntries
 }) => {
-  // TODO: implement functionality for submission filtering by groups using the group state from useSession.
-
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
@@ -157,7 +155,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
 
-  useEffect(() => resetPage(), [pageSize]);
+  useEffect(() => resetPage(), [resetPage,pageSize]);
 
   const table = useReactTable({
     data: submissions,
@@ -193,9 +191,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     );
   }, [columnFilters, globalFilter, dispatch]);
 
+  // initialization is done by the main page.
+  const isFirstRender = useRef(true);
   // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
-    updateEntries(pageParams, backendFilterParams);
+    if (isFirstRender.current === true) {
+      isFirstRender.current = false;
+    } else {
+      updateEntries(pageParams, backendFilterParams);
+    }
   }, [updateEntries, pageParams, backendFilterParams]);
 
   return (
