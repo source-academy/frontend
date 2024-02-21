@@ -22,7 +22,6 @@ import {
   SET_NOTIFICATION_CONFIGS,
   SET_TOKENS,
   SET_USER,
-  UPDATE_ALL_USER_XP,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
@@ -115,8 +114,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       };
     case UPDATE_TOTAL_XP:
       return { ...state, xp: action.payload };
-    case UPDATE_ALL_USER_XP:
-      return { ...state, allUserXp: action.payload };
     case UPDATE_GRADING:
       const newGradings = new Map(state.gradings);
       newGradings.set(action.payload.submissionId, action.payload.grading);

@@ -129,13 +129,6 @@ const getStaffNavlinkInfo = ({
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
-      to: `/courses/${courseId}/xpcalculation`,
-      icon: IconNames.CALCULATOR,
-      text: 'XP Calculation',
-      disabled: !isAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
-    },
-    {
       to: `/courses/${courseId}/adminpanel`,
       icon: IconNames.SETTINGS,
       text: 'Admin Panel',

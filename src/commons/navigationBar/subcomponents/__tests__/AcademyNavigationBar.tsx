@@ -19,7 +19,7 @@ const staffRoutes = [
   'dashboard',
   'teamformation'
 ];
-const adminRoutes = ['adminpanel', 'xpcalculation'];
+const adminRoutes = ['adminpanel'];
 const courseId = 0;
 const createCoursePath = (path: string) => `/courses/${courseId}/${path}`;
 
@@ -78,7 +78,7 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Team
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, Team Formation, XP Calculation and AdminPanel NavLinks render for Role.Admin', () => {
+test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Admin,
     courseId

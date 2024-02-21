@@ -38,7 +38,6 @@ import StorySimulator from './storySimulator/StorySimulator';
 import TeamFormationForm from './teamFormation/subcomponents/TeamFormationForm';
 import TeamFormationImport from './teamFormation/subcomponents/TeamFormationImport';
 import TeamFormation from './teamFormation/TeamFormation';
-import XpCalculation from './xpCalculation/XpCalculation';
 
 const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();
@@ -56,11 +55,10 @@ const Academy: React.FC<{}> = () => {
       ? [
           <Route path="groundcontrol" element={<GroundControl />} key={0} />,
           <Route path={`grading/${gradingRegExp}`} element={<Grading />} key={1} />,
-          <Route path="xpcalculation" element={<XpCalculation />} key={2} />,
-          <Route path="sourcereel" element={<Sourcereel />} key={3} />,
-          <Route path="storysimulator" element={<StorySimulator />} key={4} />,
-          <Route path="teamformation" element={<TeamFormation />} key={5} />,
-          <Route path="teamformation/create" element={<TeamFormationForm />} key={6} />,
+          <Route path="sourcereel" element={<Sourcereel />} key={2} />,
+          <Route path="storysimulator" element={<StorySimulator />} key={3} />,
+          <Route path="teamformation" element={<TeamFormation />} key={4} />,
+          <Route path="teamformation/create" element={<TeamFormationForm />} key={5} />,
           <Route
             path={`teamformation/edit/${teamRegExp}`}
             element={<TeamFormationForm />}

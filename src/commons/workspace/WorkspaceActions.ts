@@ -27,7 +27,9 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  DISABLE_TOKEN_COUNTER,
   EditorTabState,
+  ENABLE_TOKEN_COUNTER,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_EDITOR_AND_TESTCASES,
@@ -47,6 +49,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
+  SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   SubmissionsTableFilters,
   TeamFormationsTableFilters,
@@ -75,6 +78,9 @@ import {
   WorkspaceLocationsWithTools,
   WorkspaceState
 } from './WorkspaceTypes';
+
+export const setTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) =>
+  action(SET_TOKEN_COUNT, { workspaceLocation, tokenCount });
 
 export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
   action(BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });
@@ -181,6 +187,12 @@ export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: n
 
 export const runAllTestcases = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR_AND_TESTCASES, { workspaceLocation });
+
+export const enableTokenCounter = (workspaceLocation: WorkspaceLocation) =>
+  action(ENABLE_TOKEN_COUNTER, { workspaceLocation });
+
+export const disableTokenCounter = (workspaceLocation: WorkspaceLocation) =>
+  action(DISABLE_TOKEN_COUNTER, { workspaceLocation });
 
 export const toggleFolderMode = (workspaceLocation: WorkspaceLocation) =>
   action(TOGGLE_FOLDER_MODE, { workspaceLocation });
