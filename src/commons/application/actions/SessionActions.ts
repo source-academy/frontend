@@ -114,12 +114,7 @@ export const fetchGradingOverviews = (
   filterToGroup = true,
   pageParams = { offset: 0, pageSize: 10 },
   filterParams = {}
-) =>
-  action(FETCH_GRADING_OVERVIEWS, {
-    filterToGroup,
-    pageParams,
-    filterParams
-  });
+) => action(FETCH_GRADING_OVERVIEWS, { filterToGroup, pageParams, filterParams });
 
 export const login = (providerId: string) => action(LOGIN, providerId);
 
