@@ -6,13 +6,9 @@ import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/Ad
 import {
   ADD_NEW_STORIES_USERS_TO_COURSE,
   ADD_NEW_USERS_TO_COURSE,
-  CREATE_COURSE,
-  SAVE_CANVAS
+  CREATE_COURSE
 } from './AcademyTypes';
 
-export const saveCanvas = createAction(SAVE_CANVAS, (canvas: HTMLCanvasElement) => ({
-  payload: canvas
-}));
 export const createCourse = createAction(
   CREATE_COURSE,
   (courseConfig: UpdateCourseConfiguration) => ({ payload: courseConfig })
