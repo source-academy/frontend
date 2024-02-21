@@ -11,6 +11,9 @@ import {
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
+import { writeFileRecursively, rmFilesInDirRecursively } from '../../commons/fileSystem/FileSystemUtils';
+import { FSModule } from 'browserfs/dist/node/core/FS';
+import { refreshFileView } from '../../commons/fileSystemView/FileSystemViewList';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -81,8 +84,7 @@ export async function checkIfFileCanBeOpened(
   }
 
   if (Array.isArray(files)) {
-    showWarningMessage("Can't open folder as a file!", 2000);
-    return false;
+    true;
   }
 
   return true;
@@ -176,6 +178,29 @@ export async function checkIfUserAgreesToPerformOverwritingSave() {
   });
 }
 
+export async function checkIsFile(
+  octokit: Octokit,
+  repoOwner: string,
+  repoName: string,
+  filePath: string
+) {
+  const results = await octokit.repos.getContent({
+    owner: repoOwner,
+    repo: repoName,
+    path: filePath
+  })
+
+  const files = results.data;
+
+  if (Array.isArray(files)) {
+    console.log("folder detected");
+    return false;
+  }
+  
+  console.log("file detected");
+  return true;
+}
+
 export async function openFileInEditor(
   octokit: Octokit,
   repoOwner: string,
@@ -203,6 +228,91 @@ export async function openFileInEditor(
     store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully loaded file!', 1000);
   }
+}
+
+export async function openFolderInFolderMode(
+  octokit: Octokit,
+  repoOwner: string,
+  repoName: string,
+  filePath: string
+) {
+  if (octokit === undefined) return;
+
+  //In order to get the file paths recursively, we require the tree_sha, 
+  // which is obtained from the most recent commit(any commit works but the most recent)
+  // is the easiest
+
+  const requests = await octokit.request('GET /repos/{owner}/{repo}/branches/master', {
+    owner: repoOwner,
+    repo: repoName
+  });
+
+  const tree_sha = requests.data.commit.commit.tree.sha;
+
+  const results = await octokit.request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}?recursive=1', {
+    owner: repoOwner,
+    repo: repoName,
+    tree_sha: tree_sha
+  });
+
+  const files_and_folders = results.data.tree;
+  const files: any[] = [];
+
+
+  //Filters out the files only since the tree returns both file and folder paths
+  for (let index = 0; index < files_and_folders.length; index++) {
+    if (files_and_folders[index].type === "blob") {
+      files[files.length] = files_and_folders[index].path;
+    }
+  }
+
+  console.log(files);
+
+  store.dispatch(actions.setFolderMode('playground', true)); //automatically opens folder mode
+  const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
+  if (fileSystem === null) {
+    console.log("no filesystem!");
+    return;
+  }
+
+  // This is a helper function to asynchronously clear the current folder system, then get each
+  // file and its contents one by one, then finally refresh the file system after all files
+  // have been recursively created. There may be extra asyncs or promises but this is what works.
+  const readFile = async (files: Array<string>) => {
+    console.log(files);
+    console.log(filePath);
+    rmFilesInDirRecursively(fileSystem, "/playground");
+    let promise = Promise.resolve();
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    files.forEach((file: string) => {
+      console.log(file);
+      promise = promise.then(async () => {
+        let results = {} as GetContentResponse;
+        if (file.startsWith(filePath)) {
+          results = await octokit.repos.getContent({
+            owner: repoOwner,
+            repo: repoName,
+            path: file
+          });
+          console.log(results);
+          const content = (results.data as any)?.content;
+        
+          if (content) {
+            const fileContent = Buffer.from(content, 'base64').toString();
+            console.log(file);
+            writeFileRecursively(fileSystem, "/playground/" + file, fileContent)
+            console.log("wrote one file");
+          }
+        }
+      })
+    })
+    promise.then(() => {
+      console.log("promises fulfilled");
+      refreshFileView();
+    })
+  }
+
+  readFile(files);
 }
 
 export async function performOverwritingSave(
