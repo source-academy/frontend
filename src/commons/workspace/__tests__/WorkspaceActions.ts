@@ -558,14 +558,12 @@ test('updateSubmissionsTableFilters generates correct action object', () => {
       value: 'Missions'
     }
   ];
-  const globalFilter = 'runes';
   const action = updateSubmissionsTableFilters({ columnFilters });
   expect(action).toEqual({
     type: UPDATE_SUBMISSIONS_TABLE_FILTERS,
     payload: {
       filters: {
         columnFilters,
-        globalFilter
       }
     }
   });
