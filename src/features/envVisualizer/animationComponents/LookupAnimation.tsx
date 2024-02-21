@@ -32,7 +32,8 @@ export class LookupAnimation extends Animatable {
         y: binding.y() + binding.height() / 2 - nameItemPosition.height / 2,
         width: minNameItemWidth
       },
-      nameItem.text
+      nameItem.text,
+      { durationMultiplier: 2 }
     );
     this.stashItemAnimation = new AnimatedTextboxComponent(
       {
@@ -64,9 +65,12 @@ export class LookupAnimation extends Animatable {
     // move name item next to binding
     await Promise.all([this.nameItemAnimation.animate()]);
     // the name item 'pulls' the stash item out of the binding
-    this.nameItemAnimation.setDestination({
-      x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
-    });
+    this.nameItemAnimation.setDestination(
+      {
+        x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
+      },
+      { durationMultiplier: 1 }
+    );
     await Promise.all([this.nameItemAnimation.animate(), this.stashItemAnimation.animate()]);
     // move both name item and stash item to the stash, while fading out the name item
     this.nameItemAnimation.setDestination({
