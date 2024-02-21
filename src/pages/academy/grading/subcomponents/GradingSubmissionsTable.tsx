@@ -111,7 +111,6 @@ type GradingSubmissionTableProps = {
   totalRows: number;
   pageSize: number;
   submissions: GradingOverview[];
-  // TODO: Abstract pageParams object into a useable type.
   updateEntries: (pageParams: { offset: number; pageSize: number }, filterParams: any) => void;
 };
 
@@ -126,22 +125,26 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters
   ]);
-  const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
+
+  // Polish: debounce this search, or have a onClick event listener search instead.
+  // Polish: if search value does not change content of submissions, do not reset page.
+  // not as easy as i thought it was with setTimeout.
+  const [searchValue, setSearchValue] = useState('');
 
   const [page, setPage] = useState(0);
+
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
   // This is needed because a filter change, or a change in pageSize prop, is accompanied with a page reset.
   const resetPage = useCallback(() => setPage(0), [setPage]);
 
   // Converts the columnFilters array into backend query parameters.
-  // Memoized as derived data to prevent infinite re-rendering.
-  // TEMP IMPLEMENTATION. Values currently hardcoded with knowledge of what a ColumnFilter is.
-  // TODO: remove hardcoding conversion of all submissions to column filter. it is a hacky workaround.
-  // TODO: implement reversible backend-frontend name conversion for use in RequestsSaga and here, remove hardcode.
-  // TODO: make a controller component, like in the achievements page, to handle conversion of page state into JSON.
+  // Concat search params override filter.
   const backendFilterParams = useMemo(() => {
-    return columnFilters.map(convertFilterToBackendParams).reduce(Object.assign, {});
-  }, [columnFilters]);
+    return columnFilters
+      .map(convertFilterToBackendParams)
+      .concat([{ title: searchValue }])
+      .reduce(Object.assign, {});
+  }, [columnFilters, searchValue]);
 
   // Adapts frontend page and pageSize state into useable offset for backend usage.
   const pageParams = useMemo(() => {
@@ -153,14 +156,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
 
-  useEffect(() => resetPage(), [resetPage, pageSize]);
+  useEffect(() => resetPage(), [resetPage, pageSize, searchValue]);
 
   const table = useReactTable({
     data: submissions,
     columns,
     state: {
       columnFilters,
-      globalFilter,
       pagination: {
         // pagination is handled by server to fit exactly the pageSize. Thus, hardcode frontend pageIndex to 0.
         pageIndex: 0,
@@ -168,7 +170,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       }
     },
     onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel()
@@ -183,11 +184,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   useEffect(() => {
     dispatch(
       updateSubmissionsTableFilters({
-        columnFilters,
-        globalFilter
+        columnFilters
       })
     );
-  }, [columnFilters, globalFilter, dispatch]);
+  }, [columnFilters, dispatch]);
 
   // initialization is done by the main page.
   const isFirstRender = useRef(true);
@@ -219,8 +219,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
           placeholder="Search for any value here..."
-          value={globalFilter ?? ''}
-          onChange={e => setGlobalFilter(e.target.value)}
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
         />
       </Flex>
       <Table marginTop="mt-2">
