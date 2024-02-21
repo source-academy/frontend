@@ -155,7 +155,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
 
-  useEffect(() => resetPage(), [resetPage,pageSize]);
+  useEffect(() => resetPage(), [resetPage, pageSize]);
 
   const table = useReactTable({
     data: submissions,

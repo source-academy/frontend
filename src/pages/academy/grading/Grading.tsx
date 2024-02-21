@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -18,7 +19,7 @@ import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const Grading: React.FC = () => {
-  const { courseId, gradingOverviews } = useSession();
+  const { courseId, gradingOverviews, role, group } = useSession();
   const params = useParams<{
     submissionId: string;
     questionId: string;
@@ -30,8 +31,7 @@ const Grading: React.FC = () => {
     { value: true, label: 'all' }
   ];
 
-  // TODO: implement isAdmin functionality
-  const [limitGroup, setLimitGroup] = useState(true);
+  const [limitGroup, setLimitGroup] = useState(role !== Role.Admin && group !== null);
   const groupOptions = [
     { value: true, label: 'my groups' },
     { value: false, label: 'all groups' }
