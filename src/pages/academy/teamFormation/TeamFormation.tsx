@@ -1,11 +1,12 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import React from 'react';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import TeamFormationDashboard from './subcomponents/TeamFormationDashboard';
 
 const TeamFormation: React.FC = () => {
-  const { teamFormationOverviews } = useTypedSelector(state => state.session);
+  const { teamFormationOverviews } = useSession();
   const data =
     teamFormationOverviews?.map(e =>
       !e.studentNames ? { ...e, studentName: '(user has yet to log in)' } : e

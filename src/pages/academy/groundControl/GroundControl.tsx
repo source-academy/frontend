@@ -69,7 +69,7 @@ export type StateProps = {
 const columnHelper = createColumnHelper<AssessmentOverview>();
 
 const GroundControl: React.FC<GroundControlProps> = props => {
-  const [showDropzone, setShowDropzone] = React.useState(false);
+  const [showDropzone, setShowDropzone] = useState(false);
 
   const dispatch = useDispatch();
 
