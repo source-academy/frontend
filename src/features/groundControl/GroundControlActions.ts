@@ -1,3 +1,4 @@
+import { createAction } from '@reduxjs/toolkit';
 import { action } from 'typesafe-actions';
 
 import {
@@ -8,16 +9,24 @@ import {
   UPLOAD_ASSESSMENT
 } from './GroundControlTypes';
 
-export const changeDateAssessment = (id: number, openAt: string, closeAt: string) =>
-  action(CHANGE_DATE_ASSESSMENT, { id, openAt, closeAt });
+export const changeDateAssessment = createAction(
+  CHANGE_DATE_ASSESSMENT,
+  (id: number, openAt: string, closeAt: string) => ({ payload: { id, openAt, closeAt } })
+);
 
 export const changeTeamSizeAssessment = (id: number, maxTeamSize: number) =>
   action(CHANGE_TEAM_SIZE_ASSESSMENT, { id, maxTeamSize });
 
-export const deleteAssessment = (id: number) => action(DELETE_ASSESSMENT, id);
+export const deleteAssessment = createAction(DELETE_ASSESSMENT, (id: number) => ({ payload: id }));
 
-export const publishAssessment = (togglePublishTo: boolean, id: number) =>
-  action(PUBLISH_ASSESSMENT, { id, togglePublishTo });
+export const publishAssessment = createAction(
+  PUBLISH_ASSESSMENT,
+  (togglePublishTo: boolean, id: number) => ({ payload: { id, togglePublishTo } })
+);
 
-export const uploadAssessment = (file: File, forceUpdate: boolean, assessmentConfigId: number) =>
-  action(UPLOAD_ASSESSMENT, { file, forceUpdate, assessmentConfigId });
+export const uploadAssessment = createAction(
+  UPLOAD_ASSESSMENT,
+  (file: File, forceUpdate: boolean, assessmentConfigId: number) => ({
+    payload: { file, forceUpdate, assessmentConfigId }
+  })
+);
