@@ -326,22 +326,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = useCallback(() => {
-<<<<<<< HEAD
-    // Run testcases when the autograder tab is selected
-    if (activeTab.current === SideContentType.autograder) {
-      handleRunAllTestcases();
-    } else {
-      handleEditorEval();
-    }
-
-    const input: Input = {
-      time: Date.now(),
-      type: 'keyboardCommand',
-      data: KeyboardCommand.run
-    };
-    pushLog(input);
-  }, [handleEditorEval, handleRunAllTestcases, pushLog, isEditable]);
-=======
       // Run testcases when the autograder tab is selected
       if (activeTab.current === SideContentType.autograder) {
         handleRunAllTestcases();
@@ -356,7 +340,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       };
       pushLog(input);
   }, [handleEditorEval, handleRunAllTestcases, pushLog]);
->>>>>>> 79604d349fc9eb522d279cc449a57617251ea693
 
   /**
    * Rewrites the file with our desired file tree
