@@ -98,7 +98,8 @@ import {
   updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateTabReadOnly
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
@@ -229,10 +230,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       const currentFilePath = editorTabs[activeEditorTabIndex].filePath;
       if (currentFilePath && currentFilePath === `/${workspaceLocation}/${questionId + 1}.js`) {
         setIsEditable(true);
+        dispatch(updateTabReadOnly(workspaceLocation, activeEditorTabIndex, false));
         return;
       }
     }
     setIsEditable(false);
+    dispatch(updateTabReadOnly(workspaceLocation, activeEditorTabIndex, true));
   }, [activeEditorTabIndex, editorTabs, questionId]);
 
   /**
@@ -725,9 +728,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     if (!isEditable) {
       editorButtonsMobileBreakpoint = editorButtonsMobileBreakpoint.filter(x => x !== saveButton);
-      editorButtonsNotMobileBreakpoint = editorButtonsNotMobileBreakpoint.filter(x => x !== saveButton);
+      editorButtonsNotMobileBreakpoint = editorButtonsNotMobileBreakpoint.filter(
+        x => x !== saveButton
+      );
     }
-    
+
     return {
       editorButtons: !isMobileBreakpoint
         ? editorButtonsMobileBreakpoint
@@ -865,6 +870,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     </Dialog>
   );
 
+  console.log(editorTabs.map(convertEditorTabStateToProps));
   const question = assessment.questions[questionId];
   const editorContainerProps: NormalEditorContainerProps | undefined =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting

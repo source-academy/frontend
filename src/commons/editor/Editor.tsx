@@ -62,6 +62,7 @@ export type EditorTabStateProps = {
   highlightedLines: HighlightedLines[];
   breakpoints: string[];
   newCursorPosition?: Position;
+  readOnly?: boolean;
 };
 
 type LocalStateProps = {
