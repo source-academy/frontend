@@ -76,9 +76,9 @@ const makeColumns = (handleClick: () => void) => [
   columnHelper.accessor('gradingStatus', {
     header: 'Grading',
     cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+      <Flex justifyContent="justify-start" spaceX="space-x-2">
         <GradingStatusBadge status={info.getValue()} />
-      </Filterable>
+      </Flex>
     )
   }),
   columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {

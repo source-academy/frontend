@@ -88,26 +88,7 @@ export const convertFilterToBackendParams = (column: ColumnFilter) => {
       return { status: column.value };
     case 'groupName':
       return { groupName: column.value };
-    case 'gradingStatus':
-      if (column.value === GradingStatuses.none) {
-        return {
-          isManuallyGraded: true,
-          status: 'submitted',
-          numGraded: 0
-        };
-      } else if (column.value === GradingStatuses.graded) {
-        // TODO: coordinate with backend on subquerying to implement the third query
-        // currently ignored by backend as of 16 Feb 24 commit
-        return {
-          isManuallyGraded: true,
-          status: 'submitted',
-          numGradedEqualToTotal: true
-        };
-      } else {
-        // case: excluded or grading. Not implemented yet.
-        return {};
-      }
     default:
-      return column;
+      return {};
   }
 };
