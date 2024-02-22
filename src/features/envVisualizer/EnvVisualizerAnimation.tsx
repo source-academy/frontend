@@ -1,4 +1,4 @@
-import { InstrType } from 'js-slang/dist/ec-evaluator/types';
+import { InstrType } from 'js-slang/dist/cse-machine/types';
 import { Easings } from 'konva/lib/Tween';
 
 import { Animatable } from './animationComponents/AnimationComponents';
