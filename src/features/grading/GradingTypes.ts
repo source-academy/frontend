@@ -42,7 +42,23 @@ export type GradingOverviewWithNotifications = {
  * The information fetched before
  * grading a submission.
  */
-export type Grading = GradingQuestion[];
+export type GradingAnswer = GradingQuestion[];
+
+export type GradingAssessment = {
+  coverPicture: string;
+  id: number;
+  number: string;
+  reading: string;
+  story: string;
+  summaryLong: string;
+  summaryShort: string;
+  title: string;
+};
+
+export type GradingQuery = {
+  answers: GradingAnswer;
+  assessment: GradingAssessment;
+};
 
 /**
  * Encapsulates information regarding grading a
