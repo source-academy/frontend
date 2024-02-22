@@ -6,6 +6,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
+import { handleReadFile } from '../fileSystem/utils';
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -41,17 +42,10 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
 
   const fullPath = path.join(basePath, fileName);
 
-  const handleOpenFile = () => {
-    fileSystem.readFile(fullPath, 'utf-8', (err, fileContents) => {
-      if (err) {
-        console.error(err);
-      }
-      if (fileContents === undefined) {
-        throw new Error('File contents are undefined.');
-      }
+  const handleOpenFile = async () => {
+    const fileContents = await handleReadFile(fileSystem, fullPath);
 
-      dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
-    });
+    dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
   };
 
   const handleRenameFile = () => setIsEditing(true);
