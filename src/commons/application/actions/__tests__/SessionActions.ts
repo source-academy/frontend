@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
+import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
@@ -274,6 +274,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission1',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -282,6 +283,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission2',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -290,6 +292,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission3',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -539,26 +542,38 @@ test('updateGradingOverviews generates correct action object', () => {
 
 test('updateGrading generates correct action object', () => {
   const submissionId = 3;
-  const grading: Grading = [
-    {
-      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
-      student: {
-        name: 'test student',
-        username: 'E0123456',
-        id: 234
-      },
-      grade: {
-        xp: 100,
-        xpAdjustment: 0,
-        comments: 'Well done.',
-        grader: {
-          name: 'HARTIN MENZ',
-          id: 100
+  const grading: GradingQuery = {
+    answers: [
+      {
+        question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
+        student: {
+          name: 'test student',
+          username: 'E0123456',
+          id: 234
         },
-        gradedAt: '2019-08-16T13:26:32+00:00'
+        grade: {
+          xp: 100,
+          xpAdjustment: 0,
+          comments: 'Well done.',
+          grader: {
+            name: 'HARTIN MENZ',
+            id: 100
+          },
+          gradedAt: '2019-08-16T13:26:32+00:00'
+        }
       }
+    ],
+    assessment: {
+      coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
+      id: 1,
+      number: '5',
+      reading: 'reading here',
+      story: 'story here',
+      summaryLong: 'long summary here',
+      summaryShort: 'short summary here',
+      title: 'assessment title here'
     }
-  ];
+  };
 
   const action = updateGrading(submissionId, grading);
   expect(action).toEqual({
@@ -640,6 +655,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Missions',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -648,6 +664,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Quests',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -656,6 +673,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Paths',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -664,6 +682,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Contests',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -672,6 +691,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Others',
       isManuallyGraded: true,
       displayInDashboard: true,
+      hasTokenCounter: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -689,6 +709,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
     type: 'Mission1',
     isManuallyGraded: true,
     displayInDashboard: true,
+    hasTokenCounter: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   };

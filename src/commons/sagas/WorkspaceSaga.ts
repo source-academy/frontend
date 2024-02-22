@@ -1,3 +1,4 @@
+import { tokenizer } from 'acorn';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import {
   Context,
@@ -9,7 +10,7 @@ import {
   runFilesInContext,
   runInContext
 } from 'js-slang';
-import { TRY_AGAIN } from 'js-slang/dist/constants';
+import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
 import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
@@ -1229,7 +1230,7 @@ export function* evalCode(
     result.status !== 'suspended' &&
     result.status !== 'finished' &&
     result.status !== 'suspended-non-det' &&
-    result.status !== 'suspended-ec-eval'
+    result.status !== 'suspended-cse-eval'
   ) {
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
@@ -1243,7 +1244,7 @@ export function* evalCode(
 
     yield put(actions.addEvent(events));
     return;
-  } else if (result.status === 'suspended' || result.status === 'suspended-ec-eval') {
+  } else if (result.status === 'suspended' || result.status === 'suspended-cse-eval') {
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
@@ -1255,6 +1256,13 @@ export function* evalCode(
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
+
+  // Change token count if its assessment and EVAL_EDITOR
+  if (actionType === EVAL_EDITOR && workspaceLocation === 'assessment') {
+    const tokens = [...tokenizer(entrypointCode, ACORN_PARSE_OPTIONS)];
+    const tokenCounter = tokens.length;
+    yield put(actions.setTokenCount(workspaceLocation, tokenCounter));
+  }
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
