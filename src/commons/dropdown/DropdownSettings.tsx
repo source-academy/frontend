@@ -1,6 +1,6 @@
 import {
-  Classes,
   Dialog,
+  DialogBody,
   FormGroup,
   HTMLSelect,
   Icon,
@@ -8,35 +8,23 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 
-type DialogProps = {
+const options = [
+  { label: 'None', value: EditorBinding.NONE },
+  { label: 'Vim', value: EditorBinding.VIM },
+  { label: 'Emacs', value: EditorBinding.EMACS }
+] as const;
+
+type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const DropdownSettings: React.FC<DialogProps> = props => {
+const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
   const [workspaceSettings, setWorkspaceSettings] = useContext(WorkspaceSettingsContext)!;
-
-  const options = useMemo(
-    () => [
-      {
-        label: 'None',
-        value: EditorBinding.NONE
-      },
-      {
-        label: 'Vim',
-        value: EditorBinding.VIM
-      },
-      {
-        label: 'Emacs',
-        value: EditorBinding.EMACS
-      }
-    ],
-    []
-  );
 
   const handleEditorBindingChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
     setWorkspaceSettings({
@@ -50,12 +38,12 @@ const DropdownSettings: React.FC<DialogProps> = props => {
     <Dialog
       className="settings"
       icon={IconNames.COG}
-      isCloseButtonShown={true}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isCloseButtonShown
+      isOpen={isOpen}
+      onClose={onClose}
       title="Settings"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <FormGroup label="Editor Binding: " labelFor="editor-binding" inline>
           <HTMLSelect
             id="editor-binding"
@@ -66,14 +54,12 @@ const DropdownSettings: React.FC<DialogProps> = props => {
           <Tooltip
             position={PopoverPosition.TOP}
             className="form-field-help-text"
-            content={
-              "Optional editor bindings for advanced users. Set to 'None' for default text editor behaviour."
-            }
+            content="Optional editor bindings for advanced users. Set to 'None' for default text editor behaviour."
           >
-            <Icon icon="help" />
+            <Icon icon={IconNames.Help} />
           </Tooltip>
         </FormGroup>
-      </div>
+      </DialogBody>
     </Dialog>
   );
 };

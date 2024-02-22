@@ -1,5 +1,5 @@
 import { Card, Icon, Tab, TabProps, Tabs, Tooltip } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 
 import GenericSideContent, {
   generateIconId,

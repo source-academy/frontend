@@ -8,7 +8,7 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import ControlButton from '../ControlButton';

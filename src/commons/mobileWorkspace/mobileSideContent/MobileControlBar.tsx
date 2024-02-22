@@ -1,6 +1,5 @@
-import { Button, Classes, Popover } from '@blueprintjs/core';
+import { Button, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
 
 import { ControlBarProps } from '../../controlBar/ControlBar';
 
@@ -15,10 +14,7 @@ const MobileControlBar: React.FC<ControlBarProps> = props => {
 
   return (
     <Popover content={controlBarMenu} autoFocus={false}>
-      <Button
-        icon={IconNames.COG}
-        className={classNames(Classes.MINIMAL, 'mobile-control-bar-button')}
-      />
+      <Button minimal icon={IconNames.COG} className="mobile-control-bar-button" />
     </Popover>
   );
 };

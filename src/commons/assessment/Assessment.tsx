@@ -1,10 +1,10 @@
 import {
   Button,
-  ButtonGroup,
   Card,
-  Classes,
   Collapse,
   Dialog,
+  DialogBody,
+  DialogFooter,
   Elevation,
   H4,
   H6,
@@ -19,7 +19,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { sortBy } from 'lodash';
-import * as React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
@@ -42,7 +42,7 @@ import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
+import { useResponsive, useSession } from '../utils/Hooks';
 import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
@@ -53,28 +53,19 @@ import {
   GradingStatuses
 } from './AssessmentTypes';
 
-export type AssessmentProps = OwnProps;
-
-export type OwnProps = {
+export type AssessmentProps = {
   assessmentConfiguration: AssessmentConfiguration;
 };
 
 const Assessment: React.FC<AssessmentProps> = props => {
   const params = useParams<AssessmentWorkspaceParams>();
   const { isMobileBreakpoint } = useResponsive();
-  const [betchaAssessment, setBetchaAssessment] = React.useState<AssessmentOverview | null>(null);
-  const [showClosedAssessments, setShowClosedAssessments] = React.useState<boolean>(false);
-  const [showOpenedAssessments, setShowOpenedAssessments] = React.useState<boolean>(true);
-  const [showUpcomingAssessments, setShowUpcomingAssessments] = React.useState<boolean>(true);
+  const [betchaAssessment, setBetchaAssessment] = useState<AssessmentOverview | null>(null);
+  const [showClosedAssessments, setShowClosedAssessments] = useState(false);
+  const [showOpenedAssessments, setShowOpenedAssessments] = useState(true);
+  const [showUpcomingAssessments, setShowUpcomingAssessments] = useState(true);
 
-  const assessmentOverviewsUnfiltered = useTypedSelector(
-    state => state.session.assessmentOverviews
-  );
-  const isStudent = useTypedSelector(state =>
-    state.session.role ? state.session.role === Role.Student : true
-  );
-  const courseId = useTypedSelector(state => state.session.courseId);
-
+  const { courseId, role, assessmentOverviews: assessmentOverviewsUnfiltered } = useSession();
   const dispatch = useDispatch();
 
   const toggleClosedAssessments = () => setShowClosedAssessments(!showClosedAssessments);
@@ -251,7 +242,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 
   // Rendering Logic
-  const assessmentOverviews = React.useMemo(
+  const assessmentOverviews = useMemo(
     () =>
       assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
     [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
@@ -283,7 +274,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       notAttempted,
       needsPassword: !!overview.private && notAttempted,
       canSave:
-        !isStudent ||
+        role !== Role.Student ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
       assessmentConfiguration: props.assessmentConfiguration
     };
@@ -302,7 +293,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
 
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
-      (overview, index) => makeOverviewCard(overview, index, !isStudent, false)
+      (overview, index) => makeOverviewCard(overview, index, role !== Role.Student, false)
     );
 
     /** Opened assessments, that are released and can be attempted. */
@@ -379,23 +370,25 @@ const Assessment: React.FC<AssessmentProps> = props => {
       onClose={setBetchaAssessmentNull}
       title="Finalise submission?"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Text>{betchaText}</Text>
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <ButtonGroup>
-          <ControlButton
-            label="Cancel"
-            onClick={setBetchaAssessmentNull}
-            options={{ minimal: false }}
-          />
-          <ControlButton
-            label="Finalise"
-            onClick={handleSubmitAssessment}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </ButtonGroup>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton
+              label="Cancel"
+              onClick={setBetchaAssessmentNull}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Finalise"
+              onClick={handleSubmitAssessment}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 

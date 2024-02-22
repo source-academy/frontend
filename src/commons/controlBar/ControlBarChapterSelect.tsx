@@ -1,4 +1,4 @@
-import { Button, Classes, Menu, MenuItem, Tooltip } from '@blueprintjs/core';
+import { Button, Menu, MenuItem, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
@@ -99,7 +99,7 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
       disabled={disabled}
     >
       <Button
-        className={Classes.MINIMAL}
+        minimal
         text={styliseSublanguage(sourceChapter, sourceVariant)}
         rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
         disabled={disabled}
