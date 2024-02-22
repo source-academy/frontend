@@ -30,7 +30,7 @@ const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
     >
       {' '}
       {readOnly !== undefined && (
-        <Icon className="file-mode-button" icon={readOnly ? IconNames.UNLOCK : IconNames.LOCK} />
+        <Icon className="file-mode-button" icon={readOnly ? IconNames.LOCK : IconNames.UNLOCK} />
       )}
       {filePath}
       <Icon className="remove-button" icon={IconNames.SMALL_CROSS} onClick={onClick} />
