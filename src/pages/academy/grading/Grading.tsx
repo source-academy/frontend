@@ -11,7 +11,11 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import { exportGradingCSV } from 'src/features/grading/GradingUtils';
+import {
+  exportGradingCSV,
+  paginationToBackendParams,
+  ungradedToBackendParams
+} from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
@@ -42,22 +46,32 @@ const Grading: React.FC = () => {
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
 
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+
+  const [page, setPage] = useState(0);
+
   const [pageSize, setPageSize] = useState(10);
 
   const dispatch = useDispatch();
   const updateGradingOverviewsCallback = useCallback(
-    (pageParams: { offset: number; pageSize: number }, filterParams: Object) => {
-      dispatch(fetchGradingOverviews(!showAllGroups, pageParams, filterParams));
+    (filterParams: Object, changeTo = 0) => {
+      setPage(p => changeTo);
+      dispatch(
+        fetchGradingOverviews(
+          showAllGroups,
+          ungradedToBackendParams(showAllSubmissions),
+          paginationToBackendParams(changeTo, pageSize),
+          filterParams
+        )
+      );
     },
-    [dispatch, showAllGroups]
+    [dispatch, showAllGroups, showAllSubmissions, pageSize]
   );
 
-  // Default value initializer
+  // Default value initializer, runs once only
   useEffect(() => {
-    dispatch(fetchGradingOverviews());
+    dispatch(fetchGradingOverviews(showAllGroups));
   }, [dispatch]);
-
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -138,6 +152,7 @@ const Grading: React.FC = () => {
             </Flex>
             <GradingSubmissionsTable
               totalRows={gradingOverviews.count}
+              page={page}
               pageSize={pageSize}
               submissions={submissions}
               updateEntries={updateGradingOverviewsCallback}

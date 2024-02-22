@@ -40,35 +40,35 @@ import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
 
-const makeColumns = (handleClick: () => void) => [
+const columns = [
   columnHelper.accessor('assessmentName', {
     header: 'Name',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('assessmentType', {
     header: 'Type',
     cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+      <Filterable column={info.column} value={info.getValue()}>
         <AssessmentTypeBadge type={info.getValue()} />
       </Filterable>
     )
   }),
   columnHelper.accessor('studentName', {
     header: 'Student',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('studentUsername', {
     header: 'Username',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('groupName', {
     header: 'Group',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('submissionStatus', {
     header: 'Progress',
     cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+      <Filterable column={info.column} value={info.getValue()}>
         <SubmissionStatusBadge status={info.getValue()} />
       </Filterable>
     )
@@ -109,13 +109,15 @@ const makeColumns = (handleClick: () => void) => [
 
 type GradingSubmissionTableProps = {
   totalRows: number;
+  page: number;
   pageSize: number;
   submissions: GradingOverview[];
-  updateEntries: (pageParams: { offset: number; pageSize: number }, filterParams: any) => void;
+  updateEntries: (filterParams: Object, pageChange?: any) => void;
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   totalRows,
+  page,
   pageSize,
   submissions,
   updateEntries
@@ -131,32 +133,22 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   // not as easy as i thought it was with setTimeout.
   const [searchValue, setSearchValue] = useState('');
 
-  const [page, setPage] = useState(0);
+  // masquerade search value as a column filter.
+  const searchFilter: ColumnFilter[] = useMemo(
+    () => [{ id: 'assessmentName', value: searchValue }],
+    [searchValue]
+  );
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-  // This is needed because a filter change, or a change in pageSize prop, is accompanied with a page reset.
-  const resetPage = useCallback(() => setPage(0), [setPage]);
 
   // Converts the columnFilters array into backend query parameters.
-  // Concat search params override filter.
   const backendFilterParams = useMemo(() => {
-    return columnFilters
+    // allow column filters to override search bar filter.
+    return searchFilter
+      .concat(columnFilters)
       .map(convertFilterToBackendParams)
-      .concat([{ title: searchValue }])
       .reduce(Object.assign, {});
-  }, [columnFilters, searchValue]);
-
-  // Adapts frontend page and pageSize state into useable offset for backend usage.
-  const pageParams = useMemo(() => {
-    return {
-      offset: page * pageSize,
-      pageSize: pageSize
-    };
-  }, [page, pageSize]);
-
-  const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
-
-  useEffect(() => resetPage(), [resetPage, pageSize, searchValue]);
+  }, [searchFilter, columnFilters]);
 
   const table = useReactTable({
     data: submissions,
@@ -189,16 +181,24 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     );
   }, [columnFilters, dispatch]);
 
-  // initialization is done by the main page.
+  // for operations that do not need a page reset, i.e. page change.
+  const changePage = useCallback(
+    (change: any) => {
+      updateEntries(backendFilterParams, change);
+    },
+    [updateEntries, backendFilterParams]
+  );
+
+  // for operations that require a page reset (indirectly).
+  // also initializes the table when dropdown filters change, affecting updateEntries
   const isFirstRender = useRef(true);
-  // tells page to ask for new entries from main page when its state changes.
   useEffect(() => {
     if (isFirstRender.current === true) {
       isFirstRender.current = false;
     } else {
-      updateEntries(pageParams, backendFilterParams);
+      updateEntries(backendFilterParams);
     }
-  }, [updateEntries, pageParams, backendFilterParams]);
+  }, [updateEntries, backendFilterParams]);
 
   return (
     <>
@@ -218,7 +218,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <TextInput
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-          placeholder="Search for any value here..."
+          placeholder="assessment name search"
           value={searchValue}
           onChange={e => setSearchValue(e.target.value)}
         />
@@ -255,14 +255,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               size="xs"
               icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_LEFT} />}
               variant="light"
-              onClick={() => setPage(0)}
+              onClick={() => changePage(0)}
               disabled={page <= 0}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
-              onClick={() => setPage(p => p - 1)}
+              onClick={() => changePage(page - 1)}
               disabled={page <= 0}
             />
             <Bold>
@@ -272,14 +272,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => setPage(p => p + 1)}
+              onClick={() => changePage(page + 1)}
               disabled={page >= maxPage}
             />
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_RIGHT} />}
               variant="light"
-              onClick={() => setPage(maxPage)}
+              onClick={() => changePage(maxPage)}
               disabled={page >= maxPage}
             />
           </Flex>

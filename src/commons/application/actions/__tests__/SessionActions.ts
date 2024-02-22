@@ -1,4 +1,8 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import {
+  paginationToBackendParams,
+  ungradedToBackendParams
+} from 'src/features/grading/GradingUtils';
 
 import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
@@ -152,7 +156,8 @@ test('fetchGradingOverviews generates correct default action object', () => {
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: true,
-      pageParams: { offset: 0, pageSize: 10 },
+      gradedFilter: ungradedToBackendParams(false),
+      pageParams: paginationToBackendParams(0, 10),
       filterParams: {}
     }
   });
@@ -160,13 +165,15 @@ test('fetchGradingOverviews generates correct default action object', () => {
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const pageParams = { offset: 12, pageSize: 3 };
+  const gradedFilter = ungradedToBackendParams(true);
+  const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
-  const action = fetchGradingOverviews(filterToGroup, pageParams, filterParams);
+  const action = fetchGradingOverviews(filterToGroup, gradedFilter, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: filterToGroup,
+      gradedFilter: gradedFilter,
       pageParams: pageParams,
       filterParams: filterParams
     }

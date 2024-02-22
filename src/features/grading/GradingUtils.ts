@@ -92,3 +92,16 @@ export const convertFilterToBackendParams = (column: ColumnFilter) => {
       return {};
   }
 };
+
+export const paginationToBackendParams = (page: number, pageSize: number) => {
+  return { offset: page * pageSize, pageSize: pageSize };
+};
+
+export const ungradedToBackendParams = (showAll: boolean) => {
+  return showAll
+    ? {}
+    : {
+        status: 'submitted',
+        isManuallyGraded: true
+      };
+};

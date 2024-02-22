@@ -414,12 +414,13 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
-      const { filterToGroup, pageParams, filterParams } = action.payload;
+      const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
 
       const gradingOverviews: { count: number; data: GradingOverview[] } | null = yield call(
         getGradingOverviews,
         tokens,
         filterToGroup,
+        gradedFilter,
         pageParams,
         filterParams
       );

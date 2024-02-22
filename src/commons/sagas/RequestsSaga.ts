@@ -602,19 +602,21 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 /*
  * GET /courses/{courseId}/admin/grading
  */
-
-// TEMPORARY IMPLEMENTATION. TODO: Refactor into a filters type once proof of feature is complete.
 export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean,
+  graded: any,
   pageParams: any,
   filterParams: any
 ): Promise<{ count: number; data: GradingOverview[] } | null> => {
-  // this converts the payload into a useable query string without a leading '?' via implicit toString().
+  // this converts the payload into a useable query string without a leading '?'
+  const gradedQuery = new URLSearchParams(graded);
   const pageQuery = new URLSearchParams(pageParams);
   const filterQuery = new URLSearchParams(filterParams);
+
+  // gradedQuery placed behind filterQuery to override progress filter if any
   const resp = await request(
-    `${courseId()}/admin/grading?group=${group}&${pageQuery}&${filterQuery}`,
+    `${courseId()}/admin/grading?group=${group}&${pageQuery}&${filterQuery}&${gradedQuery}`,
     'GET',
     { ...tokens }
   );
