@@ -1,7 +1,7 @@
 import { Button, Collapse, Icon, PopoverPosition } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';

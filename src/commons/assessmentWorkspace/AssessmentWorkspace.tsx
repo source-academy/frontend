@@ -1,9 +1,10 @@
 import {
   Button,
-  ButtonGroup,
   Card,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   Intent,
   NonIdealState,
   Spinner,
@@ -838,9 +839,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       onClose={closeOverlay}
       title="Confirmation: Reset editor?"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Markdown content="Are you sure you want to reset the template?" />
         <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
+<<<<<<< HEAD
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <ButtonGroup>
@@ -856,6 +858,29 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           />
         </ButtonGroup>
       </div>
+=======
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
+            <ControlButton
+              label="Confirm"
+              onClick={() => {
+                closeOverlay();
+                // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+                handleEditorValueChange(
+                  0,
+                  (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+                );
+                handleUpdateHasUnsavedChanges(true);
+              }}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
+>>>>>>> f9c94503c89ff2b0ae05b216d5e23a28b9eb4d50
     </Dialog>
   );
 

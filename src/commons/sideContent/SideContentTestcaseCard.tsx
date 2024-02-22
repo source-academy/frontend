@@ -2,7 +2,7 @@ import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import * as React from 'react';
+import React from 'react';
 
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
