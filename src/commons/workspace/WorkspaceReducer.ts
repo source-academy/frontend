@@ -1071,7 +1071,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
     }
     case UPDATE_EDITOR_TAB_READ_ONLY: {
       const { editorTabIndex, isReadOnly } = action.payload;
-      console.log(editorTabIndex, isReadOnly);
       if (isNull(editorTabIndex) || editorTabIndex < 0) {
         return state;
       }

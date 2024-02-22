@@ -13,7 +13,6 @@ export type EditorTabProps = {
 
 const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
   const { filePath, isActive, setActive, remove, readOnly } = props;
-  console.log(readOnly);
 
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     // Stop the click event from propagating to the parent component.

@@ -44,7 +44,7 @@ import { ControlBarProps } from '../controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
-import { ControlBarFileModeButton } from '../controlBar/ControlBarFileModeButton';
+// import { ControlBarFileModeButton } from '../controlBar/ControlBarFileModeButton';
 import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
 import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
@@ -707,13 +707,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         key="folder"
       />
     );
-
+    
+    // Moved to tabs
+    /*
     const fileModeButton = (
       <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} key="file_mode" />
     );
+    */
 
     let editorButtonsMobileBreakpoint = [
-      fileModeButton,
+      // fileModeButton,
       runButton,
       saveButton,
       resetButton,
@@ -867,7 +870,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     </Dialog>
   );
 
-  console.log(editorTabs.map(convertEditorTabStateToProps));
   const question = assessment.questions[questionId];
   const editorContainerProps: NormalEditorContainerProps | undefined =
     question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
