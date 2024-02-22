@@ -380,8 +380,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
 
     const question = assessment.questions[questionId];
-    // HARD CODED TO USE >= CHAPTER 2 FOR NOW [PLEASE REMOVE AFTER TESTING]
-    question.library.chapter =  question.library.chapter === Chapter.SOURCE_1 ? Chapter.SOURCE_2 : question.library.chapter;
+ 
 
     const options: {
       autogradingResults?: AutogradingResult[];
@@ -689,7 +688,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       <ControlBarChapterSelect
         handleChapterSelect={() => {}}
         isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={Chapter.SOURCE_2}
+        sourceChapter={question.library.chapter}
         sourceVariant={question.library.variant ?? Constants.defaultSourceVariant}
         disabled
         key="chapter"
@@ -741,9 +740,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       runButton,
       saveButton,
       resetButton,
-      toggleFolderModeButton,
       chapterSelect
     ];
+
+    // Only allow folder mode to be enabled if chapter >= 2
+    if (question.library.chapter >= 2) editorButtonsMobileBreakpoint.push(toggleFolderModeButton)
     const editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
     const flowButtons = [previousButton, questionView, nextButton];
     return {
