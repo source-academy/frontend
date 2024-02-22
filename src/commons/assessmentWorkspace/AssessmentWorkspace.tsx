@@ -82,6 +82,8 @@ import {
   changeExecTime,
   changeSideContentHeight,
   clearReplOutput,
+  disableTokenCounter,
+  enableTokenCounter,
   evalEditor,
   evalRepl,
   evalTestcase,
@@ -122,6 +124,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [isEditable, setIsEditable] = useState(true);
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
+
   const [selectedTab, setSelectedTab] = useState(
     assessment?.questions[questionId].grader !== undefined
       ? SideContentType.grading
@@ -161,7 +164,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleEditorUpdateBreakpoints,
     handleReplEval,
     handleSave,
-    handleUpdateHasUnsavedChanges
+    handleUpdateHasUnsavedChanges,
+    handleEnableTokenCounter,
+    handleDisableTokenCounter
   } = useMemo(() => {
     return {
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
@@ -185,7 +190,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
         dispatch(submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
-        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges))
+        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+      handleEnableTokenCounter: () => dispatch(enableTokenCounter(workspaceLocation)),
+      handleDisableTokenCounter: () => dispatch(disableTokenCounter(workspaceLocation))
     };
   }, [dispatch]);
   const currentQuestionFilePath = `/${workspaceLocation}/${questionId + 1}.js`;
@@ -235,6 +242,21 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   useEffect(() => {
     checkWorkspaceReset();
   });
+
+  /**
+   * Handles toggling enabling and disabling token counter depending on assessment properties
+   */
+  useEffect(() => {
+    if (props.assessmentConfiguration.hasTokenCounter) {
+      handleEnableTokenCounter();
+    } else {
+      handleDisableTokenCounter();
+    }
+  }, [
+    props.assessmentConfiguration.hasTokenCounter,
+    handleEnableTokenCounter,
+    handleDisableTokenCounter
+  ]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -483,15 +505,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           id: SideContentType.contestVoting
         },
         {
-          label: 'Contest Leaderboard',
+          label: 'Score Leaderboard',
           iconName: IconNames.CROWN,
           body: (
             <SideContentContestLeaderboard
               handleContestEntryClick={handleContestEntryClick}
-              orderedContestEntries={(question as IContestVotingQuestion)?.contestLeaderboard ?? []}
+              orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
             />
           ),
-          id: SideContentType.contestLeaderboard
+          id: SideContentType.scoreLeaderboard
         }
       );
     } else {
@@ -942,7 +964,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     sideBarProps: sideBarProps,
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
-
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
       {overlay}

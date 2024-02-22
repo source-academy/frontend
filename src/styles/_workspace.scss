@@ -2,6 +2,8 @@ $code-color-code: #ced9e0;
 $code-color-log: #dd8c60;
 $code-color-result: #ffffff;
 $code-color-error: #ff4444;
+$code-background-color-notification: #f1b80f;
+$code-color-notification: #f9f0d7;
 
 .workspace {
   height: 100%;
@@ -822,6 +824,14 @@ $code-color-error: #ff4444;
       .error-output {
         color: $code-color-error;
       }
+
+      .notification-output {
+        color: $code-color-notification;
+      }
+    }
+
+    .notification-output-container {
+      background-color: $code-background-color-notification;
     }
 
     /* flush to align with editor bottom */
@@ -1329,11 +1339,11 @@ $code-color-error: #ff4444;
 }
 
 .Popover-share {
-  .#{$ns}-popover2-arrow-fill {
+  .#{$ns}-popover-arrow-fill {
     fill: $cadet-color-4;
   }
 
-  .#{$ns}-popover2-content {
+  .#{$ns}-popover-content {
     background: $cadet-color-4;
     display: flex;
     padding: 0.4rem 0.8rem 0.4rem 0.8rem;
