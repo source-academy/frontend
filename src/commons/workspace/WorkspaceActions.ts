@@ -1,7 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { action } from 'typesafe-actions';
 
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
@@ -411,11 +410,15 @@ export const updateSubmissionsTableFilters = createAction(
   (filters: SubmissionsTableFilters) => ({ payload: { filters } })
 );
 
-export const updateTeamFormationsTableFilters = (filters: TeamFormationsTableFilters) =>
-  action(UPDATE_TEAM_FORMATIONS_TABLE_FILTERS, { filters });
+export const updateTeamFormationsTableFilters = createAction(
+  UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
+  (filters: TeamFormationsTableFilters) => ({ payload: { filters } })
+);
 
-export const updateGroundControlTableFilters = (filters: GroundControlTableFilters) =>
-  action(UPDATE_GROUND_CONTROL_TABLE_FILTERS, { filters });
+export const updateGroundControlTableFilters = createAction(
+  UPDATE_GROUND_CONTROL_TABLE_FILTERS,
+  (filters: GroundControlTableFilters) => ({ payload: { filters } })
+);
 
 export const updateCurrentAssessmentId = createAction(
   UPDATE_CURRENT_ASSESSMENT_ID,
