@@ -10,7 +10,6 @@ import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Academy.module.scss';
 
 import {
-  fetchGradingOverviews,
   fetchNotifications,
   fetchStudents,
   fetchTeamFormationOverviews,
@@ -44,7 +43,6 @@ const Academy: React.FC<{}> = () => {
   React.useEffect(() => {
     dispatch(fetchStudents());
     dispatch(fetchNotifications());
-    dispatch(fetchGradingOverviews(false));
     dispatch(fetchTeamFormationOverviews(false));
   }, [dispatch]);
 
