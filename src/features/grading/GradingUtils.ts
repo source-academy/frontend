@@ -102,6 +102,7 @@ export const ungradedToBackendParams = (showAll: boolean) => {
     ? {}
     : {
         status: 'submitted',
-        isManuallyGraded: true
+        isManuallyGraded: true,
+        notFullyGraded: true
       };
 };
