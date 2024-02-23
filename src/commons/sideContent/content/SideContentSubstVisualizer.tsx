@@ -3,11 +3,15 @@ import { Button, ButtonGroup, Card, Classes, Divider, Pre, Slider } from '@bluep
 import React from 'react';
 import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
+import { MapDispatchToProps, connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
+import { SideContentLocation, SideContentType } from '../SideContentTypes';
+import { beginAlertSideContent } from '../SideContentActions';
 
 const SubstDefaultText = () => {
   return (
@@ -61,17 +65,22 @@ const SubstCodeDisplay = (props: { content: string }) => {
   );
 };
 
-type SubstVisualizerProps = StateProps;
+type SubstVisualizerProps = OwnProps & DispatchProps;
 
-type StateProps = {
+type OwnProps = {
   content: IStepperPropContents[];
+  workspaceLocation: SideContentLocation;
 };
 
 type State = {
   value: number;
 };
 
-class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, State> {
+type DispatchProps = {
+  alertSideContent: () => void;
+};
+
+class SideContentSubstVisualizerBase extends React.Component<SubstVisualizerProps, State> {
   constructor(props: SubstVisualizerProps) {
     super(props);
     this.state = {
@@ -83,11 +92,15 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     ModeSelector(2);
   }
 
-  componentDidUpdate(prevProps: StateProps, prevState: State) {
+  componentDidUpdate(prevProps: OwnProps, prevState: State) {
     if (prevProps.content !== this.props.content) {
       this.setState((state: State) => {
         return { value: 1 };
       });
+
+      if (this.props.content.length > 0) {
+        this.props.alertSideContent();
+      }
     }
   }
 
@@ -351,4 +364,15 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
   };
 }
 
-export default SideContentSubstVisualizer;
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (
+  dispatch,
+  { workspaceLocation }
+) =>
+  bindActionCreators(
+    {
+      alertSideContent: () =>
+        beginAlertSideContent(SideContentType.substVisualizer, workspaceLocation)
+    },
+    dispatch
+  );
+export default connect(null, mapDispatchToProps)(SideContentSubstVisualizerBase);

@@ -20,7 +20,6 @@ import {
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CHANGE_STEP_LIMIT,
   CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
@@ -103,13 +102,6 @@ export const changeExecTime = createAction(
   CHANGE_EXEC_TIME,
   (execTime: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { execTime, workspaceLocation }
-  })
-);
-
-export const changeSideContentHeight = createAction(
-  CHANGE_SIDE_CONTENT_HEIGHT,
-  (height: number, workspaceLocation: WorkspaceLocation) => ({
-    payload: { height, workspaceLocation }
   })
 );
 

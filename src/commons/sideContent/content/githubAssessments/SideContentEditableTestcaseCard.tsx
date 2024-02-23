@@ -5,7 +5,7 @@ import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import React from 'react';
 
-import { Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import { Testcase, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 
 type SideContentEditableTestcaseCardProps = DispatchProps & StateProps;
 
