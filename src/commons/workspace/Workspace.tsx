@@ -1,7 +1,7 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
-import * as React from 'react';
+import React from 'react';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';

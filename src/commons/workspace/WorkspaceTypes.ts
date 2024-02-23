@@ -21,6 +21,8 @@ export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT';
 export const CLEAR_REPL_OUTPUT = 'CLEAR_REPL_OUTPUT';
 export const CLEAR_REPL_OUTPUT_LAST = 'CLEAR_REPL_OUTPUT_LAST';
 export const END_CLEAR_CONTEXT = 'END_CLEAR_CONTEXT';
+export const ENABLE_TOKEN_COUNTER = 'ENABLE_TOKEN_COUNTER';
+export const DISABLE_TOKEN_COUNTER = 'DISABLE_TOKEN_COUNTER';
 export const EVAL_EDITOR = 'EVAL_EDITOR';
 export const EVAL_REPL = 'EVAL_REPL';
 export const PROMPT_AUTOCOMPLETE = 'PROMPT_AUTOCOMPLETE';
@@ -33,6 +35,7 @@ export const PLAYGROUND_EXTERNAL_SELECT = 'PLAYGROUND_EXTERNAL_SELECT ';
 export const RESET_TESTCASE = 'RESET_TESTCASE';
 export const RESET_WORKSPACE = 'RESET_WORKSPACE';
 export const SEND_REPL_INPUT_TO_OUTPUT = 'SEND_REPL_INPUT_TO_OUTPUT';
+export const SET_TOKEN_COUNT = 'SET_TOKEN_COUNT';
 export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const TOGGLE_USING_ENV = 'TOGGLE_USING_ENV';
@@ -136,6 +139,9 @@ export type WorkspaceState = {
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
+  readonly hasTokenCounter: boolean;
+  readonly tokenCount: integer;
+  readonly customNotification: string;
   readonly sharedbConnected: boolean;
   readonly sideContentHeight?: number;
   readonly stepLimit: number;
@@ -159,5 +165,4 @@ export type DebuggerContext = {
 
 export type SubmissionsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
-  globalFilter: string | null;
 };

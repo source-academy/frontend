@@ -1,0 +1,18 @@
+.draggable {
+  cursor: move;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+}
+
+/* During drag */
+.draggable:active {
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: grabbing;
+}
+
+/* For clicking */
+.clickable {
+  cursor: pointer;
+}

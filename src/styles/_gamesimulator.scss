@@ -1,0 +1,35 @@
+#simulator-display {
+  width: 200px;
+  align-self: flex-start;
+
+  #game-display > canvas {
+    width: 600px;
+  }
+}
+
+.GameSimulatorWrapper {
+  display: flex;
+  flex-direction: row;
+  margin: 30px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#asset-display {
+  width: 200px;
+  align-self: flex-end;
+  background-color: white;
+}
+
+.LeftAlign {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.GameSimulatorPanel {
+  background-color: white;
+  width: 800px;
+  height: 100%;
+  overflow: scroll;
+  padding: 20px;
+}

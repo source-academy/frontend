@@ -9,7 +9,7 @@ import {
   Tabs,
   TextArea
 } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
@@ -39,6 +39,7 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
     enableGame,
     enableAchievements,
     enableSourcecast,
+    enableStories,
     moduleHelpText
   } = props.courseConfiguration;
 
@@ -174,6 +175,16 @@ const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableSourcecast: (e.target as HTMLInputElement).checked
+              })
+            }
+          />
+          <Switch
+            checked={enableStories}
+            label="Enable Stories"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableStories: (e.target as HTMLInputElement).checked
               })
             }
           />

@@ -2,6 +2,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import {
@@ -104,7 +105,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           type="text"
           autoFocus
           spellCheck={false}
-          className="file-system-view-input"
+          className={classes['file-system-view-input']}
           value={editedFileName}
           onChange={handleInputOnChange}
           onKeyDown={handleInputOnKeyDown}
@@ -112,7 +113,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           onBlur={handleInputOnBlur}
         />
       )}
-      {!isEditing && <div className="file-system-view-file-name">{fileName}</div>}
+      {!isEditing && <div className={classes['file-system-view-file-name']}>{fileName}</div>}
     </>
   );
 };

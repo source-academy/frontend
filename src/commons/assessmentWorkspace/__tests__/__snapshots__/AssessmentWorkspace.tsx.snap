@@ -2,10 +2,10 @@
 
 exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders correctly 1`] = `
 <div
-  className="bp4-non-ideal-state bp4-non-ideal-state-vertical WorkspaceParent bp4-dark"
+  className="bp5-non-ideal-state bp5-non-ideal-state-vertical WorkspaceParent bp5-dark"
 >
   <div
-    className="bp4-non-ideal-state-visual"
+    className="bp5-non-ideal-state-visual"
     style={
       Object {
         "fontSize": "48px",
@@ -14,14 +14,15 @@ exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders 
     }
   >
     <div
+      aria-label="loading"
       aria-valuemax={100}
       aria-valuemin={0}
-      className="bp4-spinner"
+      className="bp5-spinner"
       role="progressbar"
       size={100}
     >
       <div
-        className="bp4-spinner-animation"
+        className="bp5-spinner-animation"
       >
         <svg
           height={100}
@@ -30,11 +31,11 @@ exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders 
           width={100}
         >
           <path
-            className="bp4-spinner-track"
+            className="bp5-spinner-track"
             d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
           />
           <path
-            className="bp4-spinner-head"
+            className="bp5-spinner-head"
             d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
             pathLength={280}
             strokeDasharray="280 280"
@@ -45,7 +46,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders 
     </div>
   </div>
   <div
-    className="bp4-non-ideal-state-text"
+    className="bp5-non-ideal-state-text"
   >
     <div>
       Getting mission ready...
@@ -57,7 +58,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders 
 exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting question renders correctly 1`] = `
 <div>
   <div
-    class="WorkspaceParent bp4-dark"
+    class="WorkspaceParent bp5-dark"
   >
     <div
       class="workspace"
@@ -66,18 +67,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
         class="ControlBar"
       >
         <div
-          class="ControlBar_editor bp4-button-group"
+          class="ControlBar_editor bp5-button-group"
         >
           <span
-            class="bp4-popover2-target"
+            class="bp5-popover-target"
           >
             <button
-              class="bp4-button bp4-minimal"
+              class="bp5-button bp5-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp4-icon bp4-icon-play"
-                icon="play"
+                class="bp5-icon bp5-icon-play"
               >
                 <svg
                   data-icon="play"
@@ -93,19 +93,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                 </svg>
               </span>
               <span
-                class="bp4-button-text"
+                class="bp5-button-text"
               >
                 Run
               </span>
             </button>
           </span>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-repeat"
-              icon="repeat"
+              class="bp5-icon bp5-icon-repeat"
             >
               <svg
                 data-icon="repeat"
@@ -121,64 +120,60 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
               </svg>
             </span>
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Reset
             </span>
           </button>
-          <span
-            class="bp4-popover-wrapper"
+          <div
+            aria-controls="listbox-3"
+            aria-disabled="true"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="bp5-popover-target"
+            role="combobox"
           >
-            <span
-              aria-haspopup="true"
-              class="bp4-popover-target"
+            <button
+              class="bp5-button bp5-disabled bp5-minimal"
+              disabled=""
+              tabindex="-1"
+              type="button"
             >
-              <div
-                class=""
+              <span
+                class="bp5-button-text"
               >
-                <button
-                  class="bp4-button bp4-disabled bp4-minimal"
-                  disabled=""
-                  tabindex="-1"
-                  type="button"
-                >
-                  <span
-                    class="bp4-button-text"
-                  >
-                    Source §1
-                  </span>
-                </button>
-              </div>
-            </span>
-          </span>
+                Source §1
+              </span>
+            </button>
+          </div>
         </div>
         <div
-          class="ControlBar_flow bp4-button-group"
+          class="ControlBar_flow bp5-button-group"
         >
           <a
-            class="bp4-button bp4-disabled bp4-minimal"
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
             disabled=""
             role="button"
             tabindex="-1"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Question 1 of 1  
             </span>
           </a>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Return to Academy
             </span>
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-arrow-right"
-              icon="arrow-right"
+              class="bp5-icon bp5-icon-arrow-right"
             >
               <svg
                 data-icon="arrow-right"
@@ -196,7 +191,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
           </button>
         </div>
         <div
-          class="ControlBar_editingWorkspace bp4-button-group"
+          class="ControlBar_editingWorkspace bp5-button-group"
         />
       </div>
       <div
@@ -346,49 +341,49 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                 class="side-content"
               >
                 <div
-                  class="bp4-card bp4-elevation-0"
+                  class="bp5-card bp5-elevation-0"
                 >
                   <div
                     class="side-content-tabs"
                   >
                     <div
-                      class="bp4-tabs"
+                      class="bp5-tabs"
                     >
                       <div
-                        class="bp4-tab-list"
+                        class="bp5-tab-list"
                         role="tablist"
                       >
                         <div
-                          class="bp4-tab-indicator-wrapper"
+                          class="bp5-tab-indicator-wrapper"
                           style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
-                            class="bp4-tab-indicator"
+                            class="bp5-tab-indicator"
                           />
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_question_overview"
+                          aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
                           aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="question_overview"
-                          id="bp4-tab-title_side-content-tabs_question_overview"
+                          id="bp5-tab-title_side-content-tabs_question_overview"
                           role="tab"
                           tabindex="0"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-ninja"
-                                icon="ninja"
+                                class="bp5-icon bp5-icon-ninja"
                               >
                                 <svg
                                   data-icon="ninja"
@@ -407,28 +402,28 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_briefing"
+                          aria-controls="bp5-tab-panel_side-content-tabs_briefing"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="briefing"
-                          id="bp4-tab-title_side-content-tabs_briefing"
+                          id="bp5-tab-title_side-content-tabs_briefing"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-briefcase"
-                                icon="briefcase"
+                                class="bp5-icon bp5-icon-briefcase"
                               >
                                 <svg
                                   data-icon="briefcase"
@@ -447,98 +442,74 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_contest_voting"
+                          aria-controls="bp5-tab-panel_side-content-tabs_contest_voting"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="contest_voting"
-                          id="bp4-tab-title_side-content-tabs_contest_voting"
+                          id="bp5-tab-title_side-content-tabs_contest_voting"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="contest_voting-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-new-layers"
-                                icon="new-layers"
-                              >
-                                <svg
-                                  data-icon="new-layers"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M17 3h2a1 1 0 010 2h-2v2a1 1 0 01-2 0V5h-2a1 1 0 010-2h2V1a1 1 0 012 0v2zm-1.252 5.984L10.5 11.9c-.2.1-.3.1-.5.1s-.3 0-.5-.1l-9-5C.2 6.7 0 6.4 0 6s.2-.7.5-.9l9-5c.2-.1.3-.1.5-.1s.3 0 .5.1L13.92 2H13a2 2 0 100 4h1v1a2 2 0 001.748 1.984zm2.07-1.15C17.935 7.58 18 7.298 18 7V6h1c.353 0 .684-.091.972-.251.018.078.028.162.028.251 0 .4-.2.7-.5.9l-1.682.934zM19 9c.6 0 1 .4 1 1 0 .4-.2.7-.5.9l-9 5c-.2.1-.3.1-.5.1s-.3 0-.5-.1l-9-5c-.3-.2-.5-.5-.5-.9 0-.6.4-1 1-1 .2 0 .3 0 .5.1l8.5 4.8 8.5-4.8c.2-.1.3-.1.5-.1zm0 4c.6 0 1 .4 1 1 0 .4-.2.7-.5.9l-9 5c-.2.1-.3.1-.5.1s-.3 0-.5-.1l-9-5c-.3-.2-.5-.5-.5-.9 0-.6.4-1 1-1 .2 0 .3 0 .5.2l8.5 4.7 8.5-4.8c.2-.1.3-.1.5-.1z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-large bp5-icon-new-layers"
+                                data-icon="new-layers"
+                              />
                             </div>
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_contest_leaderboard"
+                          aria-controls="bp5-tab-panel_side-content-tabs_score_leaderboard"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
-                          data-tab-id="contest_leaderboard"
-                          id="bp4-tab-title_side-content-tabs_contest_leaderboard"
+                          class="bp5-tab side-content-tab"
+                          data-tab-id="score_leaderboard"
+                          id="bp5-tab-title_side-content-tabs_score_leaderboard"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
-                              id="contest_leaderboard-icon"
+                              id="score_leaderboard-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-crown"
-                                icon="crown"
-                              >
-                                <svg
-                                  data-icon="crown"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M2 8l4 2 4-5 4 5 4-2-1 7H3L2 8zm8-6a1 1 0 110 2 1 1 0 010-2zM1 5a1 1 0 110 2 1 1 0 010-2zm18 0a1 1 0 110 2 1 1 0 010-2zM3 16h14v2H3v-2z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-large bp5-icon-crown"
+                                data-icon="crown"
+                              />
                             </div>
                           </span>
                         </div>
                       </div>
                       <div
                         aria-hidden="false"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_question_overview"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_question_overview"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_question_overview"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_question_overview"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp4-running-text"
+                            class="md bp5-running-text"
                           >
                             <p>
                               Sample Contest Voting Question
@@ -548,16 +519,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_briefing"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_briefing"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_briefing"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_briefing"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp4-running-text"
+                            class="md bp5-running-text"
                           >
                             <p>
                               Vote for your favourite contest entries here!
@@ -567,9 +538,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_contest_voting"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_contest_voting"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_contest_voting"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_contest_voting"
                         role="tabpanel"
                       >
                         <div
@@ -579,13 +550,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             class="ContestEntryVoting"
                           >
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                               type="button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -601,18 +571,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 <span>
                                   Contest Voting
                                 </span>
                                 <span
-                                  class="bp4-popover2-target"
+                                  class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
-                                    class="bp4-icon bp4-icon-help"
-                                    icon="help"
+                                    class="bp5-icon bp5-icon-help"
                                     tabindex="0"
                                   >
                                     <svg
@@ -632,12 +602,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -730,10 +700,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                         id="item-1"
                                       >
                                         <div
-                                          class="bp4-card bp4-elevation-1 bp4-interactive"
+                                          class="bp5-interactive bp5-card bp5-elevation-1"
                                         >
                                           <pre
-                                            class="bp4-code-block contestentry-entryid"
+                                            class="bp5-code-block contestentry-entryid"
                                           >
                                             1
                                           </pre>
@@ -746,10 +716,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                         id="item-2"
                                       >
                                         <div
-                                          class="bp4-card bp4-elevation-1 bp4-interactive"
+                                          class="bp5-interactive bp5-card bp5-elevation-1"
                                         >
                                           <pre
-                                            class="bp4-code-block contestentry-entryid"
+                                            class="bp5-code-block contestentry-entryid"
                                           >
                                             2
                                           </pre>
@@ -765,9 +735,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_contest_leaderboard"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_contest_leaderboard"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_score_leaderboard"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_score_leaderboard"
                         role="tabpanel"
                       >
                         <div
@@ -777,13 +747,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             class="ContestLeaderboard"
                           >
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                               type="button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -799,18 +768,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 <span>
-                                  Contest Leaderboard
+                                  Score Leaderboard
                                 </span>
                                 <span
-                                  class="bp4-popover2-target"
+                                  class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
-                                    class="bp4-icon bp4-icon-help"
-                                    icon="help"
+                                    class="bp5-icon bp5-icon-help"
                                     tabindex="0"
                                   >
                                     <svg
@@ -830,12 +799,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div>
@@ -848,8 +817,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                       Student Name
                                       <span
                                         aria-hidden="true"
-                                        class="bp4-icon bp4-icon-caret-down"
-                                        icon="caret-down"
+                                        class="bp5-icon bp5-icon-caret-down"
                                       >
                                         <svg
                                           data-icon="caret-down"
@@ -871,8 +839,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                       Rank
                                       <span
                                         aria-hidden="true"
-                                        class="bp4-icon bp4-icon-caret-down"
-                                        icon="caret-down"
+                                        class="bp5-icon bp5-icon-caret-down"
                                       >
                                         <svg
                                           data-icon="caret-down"
@@ -894,8 +861,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                       Score
                                       <span
                                         aria-hidden="true"
-                                        class="bp4-icon bp4-icon-caret-down"
-                                        icon="caret-down"
+                                        class="bp5-icon bp5-icon-caret-down"
                                       >
                                         <svg
                                           data-icon="caret-down"
@@ -916,21 +882,21 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                     class="LeaderboardCard"
                                   >
                                     <div
-                                      class="bp4-card bp4-elevation-1 bp4-interactive"
+                                      class="bp5-interactive bp5-card bp5-elevation-1"
                                       data-testid="SideContentLeaderboardCard"
                                     >
                                       <pre
-                                        class="bp4-code-block contestentry-entryid"
+                                        class="bp5-code-block contestentry-entryid"
                                       >
                                         student_1
                                       </pre>
                                       <pre
-                                        class="bp4-code-block contestentry-rank"
+                                        class="bp5-code-block contestentry-rank"
                                       >
                                         1
                                       </pre>
                                       <pre
-                                        class="bp4-code-block contestentry-score"
+                                        class="bp5-code-block contestentry-score"
                                         data-testid="contestentry-score"
                                       />
                                     </div>
@@ -939,21 +905,21 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                     class="LeaderboardCard"
                                   >
                                     <div
-                                      class="bp4-card bp4-elevation-1 bp4-interactive"
+                                      class="bp5-interactive bp5-card bp5-elevation-1"
                                       data-testid="SideContentLeaderboardCard"
                                     >
                                       <pre
-                                        class="bp4-code-block contestentry-entryid"
+                                        class="bp5-code-block contestentry-entryid"
                                       >
                                         student_2
                                       </pre>
                                       <pre
-                                        class="bp4-code-block contestentry-rank"
+                                        class="bp5-code-block contestentry-rank"
                                       >
                                         2
                                       </pre>
                                       <pre
-                                        class="bp4-code-block contestentry-score"
+                                        class="bp5-code-block contestentry-score"
                                         data-testid="contestentry-score"
                                       />
                                     </div>
@@ -985,7 +951,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                 class="repl-output-parent"
               >
                 <div
-                  class="repl-input-parent row bp4-card bp4-elevation-0"
+                  class="repl-input-parent row bp5-card bp5-elevation-0"
                   tabindex="-1"
                 >
                   <div
@@ -1084,18 +1050,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                     </div>
                   </div>
                   <div
-                    class="bp4-button-group bp4-dark"
+                    class="bp5-button-group bp5-dark"
                   >
                     <span
-                      class="bp4-popover2-target"
+                      class="bp5-popover-target"
                     >
                       <button
-                        class="bp4-button bp4-minimal"
+                        class="bp5-button bp5-minimal"
                       >
                         <span
                           aria-hidden="true"
-                          class="bp4-icon bp4-icon-code"
-                          icon="code"
+                          class="bp5-icon bp5-icon-code"
                         >
                           <svg
                             data-icon="code"
@@ -1111,19 +1076,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                           </svg>
                         </span>
                         <span
-                          class="bp4-button-text"
+                          class="bp5-button-text"
                         >
                           Eval
                         </span>
                       </button>
                     </span>
                     <button
-                      class="bp4-button bp4-minimal"
+                      class="bp5-button bp5-minimal"
                     >
                       <span
                         aria-hidden="true"
-                        class="bp4-icon bp4-icon-remove"
-                        icon="remove"
+                        class="bp5-icon bp5-icon-remove"
                       >
                         <svg
                           data-icon="remove"
@@ -1139,7 +1103,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                         </svg>
                       </span>
                       <span
-                        class="bp4-button-text"
+                        class="bp5-button-text"
                       >
                         Clear
                       </span>
@@ -1159,7 +1123,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
 exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders correctly 1`] = `
 <div>
   <div
-    class="WorkspaceParent bp4-dark"
+    class="WorkspaceParent bp5-dark"
   >
     <div
       class="workspace"
@@ -1168,18 +1132,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
         class="ControlBar"
       >
         <div
-          class="ControlBar_editor bp4-button-group"
+          class="ControlBar_editor bp5-button-group"
         >
           <span
-            class="bp4-popover2-target"
+            class="bp5-popover-target"
           >
             <button
-              class="bp4-button bp4-minimal"
+              class="bp5-button bp5-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp4-icon bp4-icon-play"
-                icon="play"
+                class="bp5-icon bp5-icon-play"
               >
                 <svg
                   data-icon="play"
@@ -1195,92 +1158,75 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                 </svg>
               </span>
               <span
-                class="bp4-button-text"
+                class="bp5-button-text"
               >
                 Run
               </span>
             </button>
           </span>
-          <span
-            class="bp4-popover-wrapper"
+          <div
+            aria-controls="listbox-2"
+            aria-disabled="true"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="bp5-popover-target"
+            role="combobox"
           >
-            <span
-              aria-haspopup="true"
-              class="bp4-popover-target"
+            <button
+              class="bp5-button bp5-disabled bp5-minimal"
+              disabled=""
+              tabindex="-1"
+              type="button"
             >
-              <div
-                class=""
+              <span
+                class="bp5-button-text"
               >
-                <button
-                  class="bp4-button bp4-disabled bp4-minimal"
-                  disabled=""
-                  tabindex="-1"
-                  type="button"
-                >
-                  <span
-                    class="bp4-button-text"
-                  >
-                    Source §1
-                  </span>
-                </button>
-              </div>
-            </span>
-          </span>
+                Source §1
+              </span>
+            </button>
+          </div>
         </div>
         <div
-          class="ControlBar_flow bp4-button-group"
+          class="ControlBar_flow bp5-button-group"
         >
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-arrow-left"
-              icon="arrow-left"
-            >
-              <svg
-                data-icon="arrow-left"
-                height="16"
-                role="img"
-                viewBox="0 0 16 16"
-                width="16"
-              >
-                <path
-                  d="M13.99 6.99H4.41L7.7 3.7a1.003 1.003 0 00-1.42-1.42l-5 5a1.014 1.014 0 000 1.42l5 5a1.003 1.003 0 001.42-1.42L4.41 8.99H14c.55 0 1-.45 1-1s-.46-1-1.01-1z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+              class="bp5-icon bp5-icon-standard bp5-icon-arrow-left"
+              data-icon="arrow-left"
+            />
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Previous
             </span>
           </button>
           <a
-            class="bp4-button bp4-disabled bp4-minimal"
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
             disabled=""
             role="button"
             tabindex="-1"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Question 3 of 5  
             </span>
           </a>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Next
             </span>
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-arrow-right"
-              icon="arrow-right"
+              class="bp5-icon bp5-icon-arrow-right"
             >
               <svg
                 data-icon="arrow-right"
@@ -1298,7 +1244,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
           </button>
         </div>
         <div
-          class="ControlBar_editingWorkspace bp4-button-group"
+          class="ControlBar_editingWorkspace bp5-button-group"
         />
       </div>
       <div
@@ -1327,20 +1273,20 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
               data-testid="MCQChooser"
             >
               <div
-                class="bp4-card bp4-elevation-0 mcq-content-parent col-xs-12 middle-xs"
+                class="mcq-content-parent col-xs-12 middle-xs bp5-card bp5-elevation-0"
               >
                 <div
                   class="row mcq-options-parent between-xs"
                 >
                   <button
-                    class="bp4-button bp4-minimal mcq-option col-xs-12"
+                    class="bp5-button bp5-minimal mcq-option col-xs-12"
                     type="button"
                   >
                     <span
-                      class="bp4-button-text"
+                      class="bp5-button-text"
                     >
                       <div
-                        class="md bp4-running-text"
+                        class="md bp5-running-text"
                       >
                         <p>
                           <strong>
@@ -1355,14 +1301,14 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                     </span>
                   </button>
                   <button
-                    class="bp4-button bp4-minimal mcq-option col-xs-12"
+                    class="bp5-button bp5-minimal mcq-option col-xs-12"
                     type="button"
                   >
                     <span
-                      class="bp4-button-text"
+                      class="bp5-button-text"
                     >
                       <div
-                        class="md bp4-running-text"
+                        class="md bp5-running-text"
                       >
                         <h3
                           id="b"
@@ -1373,14 +1319,14 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                     </span>
                   </button>
                   <button
-                    class="bp4-button bp4-minimal mcq-option col-xs-12"
+                    class="bp5-button bp5-minimal mcq-option col-xs-12"
                     type="button"
                   >
                     <span
-                      class="bp4-button-text"
+                      class="bp5-button-text"
                     >
                       <div
-                        class="md bp4-running-text"
+                        class="md bp5-running-text"
                       >
                         <p>
                           C
@@ -1389,14 +1335,14 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                     </span>
                   </button>
                   <button
-                    class="bp4-button bp4-active bp4-minimal bp4-intent-danger mcq-option col-xs-12"
+                    class="bp5-button bp5-active bp5-minimal bp5-intent-danger mcq-option col-xs-12"
                     type="button"
                   >
                     <span
-                      class="bp4-button-text"
+                      class="bp5-button-text"
                     >
                       <div
-                        class="md bp4-running-text"
+                        class="md bp5-running-text"
                       >
                         <p>
                           D
@@ -1425,49 +1371,49 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                 class="side-content"
               >
                 <div
-                  class="bp4-card bp4-elevation-0"
+                  class="bp5-card bp5-elevation-0"
                 >
                   <div
                     class="side-content-tabs"
                   >
                     <div
-                      class="bp4-tabs"
+                      class="bp5-tabs"
                     >
                       <div
-                        class="bp4-tab-list"
+                        class="bp5-tab-list"
                         role="tablist"
                       >
                         <div
-                          class="bp4-tab-indicator-wrapper"
+                          class="bp5-tab-indicator-wrapper"
                           style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
-                            class="bp4-tab-indicator"
+                            class="bp5-tab-indicator"
                           />
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_question_overview"
+                          aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
                           aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="question_overview"
-                          id="bp4-tab-title_side-content-tabs_question_overview"
+                          id="bp5-tab-title_side-content-tabs_question_overview"
                           role="tab"
                           tabindex="0"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-ninja"
-                                icon="ninja"
+                                class="bp5-icon bp5-icon-ninja"
                               >
                                 <svg
                                   data-icon="ninja"
@@ -1486,28 +1432,28 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_briefing"
+                          aria-controls="bp5-tab-panel_side-content-tabs_briefing"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="briefing"
-                          id="bp4-tab-title_side-content-tabs_briefing"
+                          id="bp5-tab-title_side-content-tabs_briefing"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-briefcase"
-                                icon="briefcase"
+                                class="bp5-icon bp5-icon-briefcase"
                               >
                                 <svg
                                   data-icon="briefcase"
@@ -1526,28 +1472,28 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_autograder"
+                          aria-controls="bp5-tab-panel_side-content-tabs_autograder"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="autograder"
-                          id="bp4-tab-title_side-content-tabs_autograder"
+                          id="bp5-tab-title_side-content-tabs_autograder"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-airplane"
-                                icon="airplane"
+                                class="bp5-icon bp5-icon-airplane"
                               >
                                 <svg
                                   data-icon="airplane"
@@ -1568,16 +1514,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                       </div>
                       <div
                         aria-hidden="false"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_question_overview"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_question_overview"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_question_overview"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_question_overview"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp4-running-text"
+                            class="md bp5-running-text"
                           >
                             <p>
                               This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the binary tree library! Option C has a null hint!
@@ -1587,16 +1533,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_briefing"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_briefing"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_briefing"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_briefing"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="sidecontent-overview bp4-running-text"
+                            class="sidecontent-overview bp5-running-text"
                           >
                             <p>
                               This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
@@ -1606,9 +1552,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_autograder"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_autograder"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_autograder"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_autograder"
                         role="tabpanel"
                       >
                         <div
@@ -1618,13 +1564,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                             class="Autograder"
                           >
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                               type="button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -1640,18 +1585,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 <span>
                                   Testcases
                                 </span>
                                 <span
-                                  class="bp4-popover2-target"
+                                  class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
-                                    class="bp4-icon bp4-icon-help"
-                                    icon="help"
+                                    class="bp5-icon bp5-icon-help"
                                     tabindex="0"
                                   >
                                     <svg
@@ -1671,12 +1616,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -1688,12 +1633,11 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                               </div>
                             </div>
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -1709,18 +1653,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 Autograder Results
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -1755,7 +1699,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                 class="repl-output-parent"
               >
                 <div
-                  class="repl-input-parent row bp4-card bp4-elevation-0"
+                  class="repl-input-parent row bp5-card bp5-elevation-0"
                   tabindex="-1"
                 >
                   <div
@@ -1854,18 +1798,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                     </div>
                   </div>
                   <div
-                    class="bp4-button-group bp4-dark"
+                    class="bp5-button-group bp5-dark"
                   >
                     <span
-                      class="bp4-popover2-target"
+                      class="bp5-popover-target"
                     >
                       <button
-                        class="bp4-button bp4-minimal"
+                        class="bp5-button bp5-minimal"
                       >
                         <span
                           aria-hidden="true"
-                          class="bp4-icon bp4-icon-code"
-                          icon="code"
+                          class="bp5-icon bp5-icon-code"
                         >
                           <svg
                             data-icon="code"
@@ -1881,19 +1824,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                           </svg>
                         </span>
                         <span
-                          class="bp4-button-text"
+                          class="bp5-button-text"
                         >
                           Eval
                         </span>
                       </button>
                     </span>
                     <button
-                      class="bp4-button bp4-minimal"
+                      class="bp5-button bp5-minimal"
                     >
                       <span
                         aria-hidden="true"
-                        class="bp4-icon bp4-icon-remove"
-                        icon="remove"
+                        class="bp5-icon bp5-icon-remove"
                       >
                         <svg
                           data-icon="remove"
@@ -1909,7 +1851,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                         </svg>
                       </span>
                       <span
-                        class="bp4-button-text"
+                        class="bp5-button-text"
                       >
                         Clear
                       </span>
@@ -1929,7 +1871,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
 exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment renders correctly 1`] = `
 <div>
   <div
-    class="WorkspaceParent bp4-dark"
+    class="WorkspaceParent bp5-dark"
   >
     <div
       class="workspace"
@@ -1938,18 +1880,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
         class="ControlBar"
       >
         <div
-          class="ControlBar_editor bp4-button-group"
+          class="ControlBar_editor bp5-button-group"
         >
           <span
-            class="bp4-popover2-target"
+            class="bp5-popover-target"
           >
             <button
-              class="bp4-button bp4-minimal"
+              class="bp5-button bp5-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp4-icon bp4-icon-play"
-                icon="play"
+                class="bp5-icon bp5-icon-play"
               >
                 <svg
                   data-icon="play"
@@ -1965,19 +1906,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                 </svg>
               </span>
               <span
-                class="bp4-button-text"
+                class="bp5-button-text"
               >
                 Run
               </span>
             </button>
           </span>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-repeat"
-              icon="repeat"
+              class="bp5-icon bp5-icon-repeat"
             >
               <svg
                 data-icon="repeat"
@@ -1993,64 +1933,60 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
               </svg>
             </span>
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Reset
             </span>
           </button>
-          <span
-            class="bp4-popover-wrapper"
+          <div
+            aria-controls="listbox-1"
+            aria-disabled="true"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="bp5-popover-target"
+            role="combobox"
           >
-            <span
-              aria-haspopup="true"
-              class="bp4-popover-target"
+            <button
+              class="bp5-button bp5-disabled bp5-minimal"
+              disabled=""
+              tabindex="-1"
+              type="button"
             >
-              <div
-                class=""
+              <span
+                class="bp5-button-text"
               >
-                <button
-                  class="bp4-button bp4-disabled bp4-minimal"
-                  disabled=""
-                  tabindex="-1"
-                  type="button"
-                >
-                  <span
-                    class="bp4-button-text"
-                  >
-                    Source §1
-                  </span>
-                </button>
-              </div>
-            </span>
-          </span>
+                Source §1
+              </span>
+            </button>
+          </div>
         </div>
         <div
-          class="ControlBar_flow bp4-button-group"
+          class="ControlBar_flow bp5-button-group"
         >
           <a
-            class="bp4-button bp4-disabled bp4-minimal"
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
             disabled=""
             role="button"
             tabindex="-1"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Question 1 of 5  
             </span>
           </a>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Next
             </span>
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-arrow-right"
-              icon="arrow-right"
+              class="bp5-icon bp5-icon-arrow-right"
             >
               <svg
                 data-icon="arrow-right"
@@ -2068,7 +2004,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
           </button>
         </div>
         <div
-          class="ControlBar_editingWorkspace bp4-button-group"
+          class="ControlBar_editingWorkspace bp5-button-group"
         />
       </div>
       <div
@@ -2218,49 +2154,49 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                 class="side-content"
               >
                 <div
-                  class="bp4-card bp4-elevation-0"
+                  class="bp5-card bp5-elevation-0"
                 >
                   <div
                     class="side-content-tabs"
                   >
                     <div
-                      class="bp4-tabs"
+                      class="bp5-tabs"
                     >
                       <div
-                        class="bp4-tab-list"
+                        class="bp5-tab-list"
                         role="tablist"
                       >
                         <div
-                          class="bp4-tab-indicator-wrapper"
+                          class="bp5-tab-indicator-wrapper"
                           style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
-                            class="bp4-tab-indicator"
+                            class="bp5-tab-indicator"
                           />
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_question_overview"
+                          aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
                           aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="question_overview"
-                          id="bp4-tab-title_side-content-tabs_question_overview"
+                          id="bp5-tab-title_side-content-tabs_question_overview"
                           role="tab"
                           tabindex="0"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-ninja"
-                                icon="ninja"
+                                class="bp5-icon bp5-icon-ninja"
                               >
                                 <svg
                                   data-icon="ninja"
@@ -2279,28 +2215,28 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_briefing"
+                          aria-controls="bp5-tab-panel_side-content-tabs_briefing"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="briefing"
-                          id="bp4-tab-title_side-content-tabs_briefing"
+                          id="bp5-tab-title_side-content-tabs_briefing"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-briefcase"
-                                icon="briefcase"
+                                class="bp5-icon bp5-icon-briefcase"
                               >
                                 <svg
                                   data-icon="briefcase"
@@ -2319,28 +2255,28 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_autograder"
+                          aria-controls="bp5-tab-panel_side-content-tabs_autograder"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="autograder"
-                          id="bp4-tab-title_side-content-tabs_autograder"
+                          id="bp5-tab-title_side-content-tabs_autograder"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-airplane"
-                                icon="airplane"
+                                class="bp5-icon bp5-icon-airplane"
                               >
                                 <svg
                                   data-icon="airplane"
@@ -2361,16 +2297,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                       </div>
                       <div
                         aria-hidden="false"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_question_overview"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_question_overview"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_question_overview"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_question_overview"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp4-running-text"
+                            class="md bp5-running-text"
                           >
                             <p>
                               This question has an id of 
@@ -2392,16 +2328,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_briefing"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_briefing"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_briefing"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_briefing"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="sidecontent-overview bp4-running-text"
+                            class="sidecontent-overview bp5-running-text"
                           >
                             <p>
                               This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
@@ -2411,9 +2347,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_autograder"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_autograder"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_autograder"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_autograder"
                         role="tabpanel"
                       >
                         <div
@@ -2423,13 +2359,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                             class="Autograder"
                           >
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                               type="button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -2445,18 +2380,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 <span>
                                   Testcases
                                 </span>
                                 <span
-                                  class="bp4-popover2-target"
+                                  class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
-                                    class="bp4-icon bp4-icon-help"
-                                    icon="help"
+                                    class="bp5-icon bp5-icon-help"
                                     tabindex="0"
                                   >
                                     <svg
@@ -2476,12 +2411,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -2493,12 +2428,11 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                               </div>
                             </div>
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -2514,18 +2448,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 Autograder Results
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -2560,7 +2494,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                 class="repl-output-parent"
               >
                 <div
-                  class="repl-input-parent row bp4-card bp4-elevation-0"
+                  class="repl-input-parent row bp5-card bp5-elevation-0"
                   tabindex="-1"
                 >
                   <div
@@ -2659,18 +2593,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                     </div>
                   </div>
                   <div
-                    class="bp4-button-group bp4-dark"
+                    class="bp5-button-group bp5-dark"
                   >
                     <span
-                      class="bp4-popover2-target"
+                      class="bp5-popover-target"
                     >
                       <button
-                        class="bp4-button bp4-minimal"
+                        class="bp5-button bp5-minimal"
                       >
                         <span
                           aria-hidden="true"
-                          class="bp4-icon bp4-icon-code"
-                          icon="code"
+                          class="bp5-icon bp5-icon-code"
                         >
                           <svg
                             data-icon="code"
@@ -2686,19 +2619,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                           </svg>
                         </span>
                         <span
-                          class="bp4-button-text"
+                          class="bp5-button-text"
                         >
                           Eval
                         </span>
                       </button>
                     </span>
                     <button
-                      class="bp4-button bp4-minimal"
+                      class="bp5-button bp5-minimal"
                     >
                       <span
                         aria-hidden="true"
-                        class="bp4-icon bp4-icon-remove"
-                        icon="remove"
+                        class="bp5-icon bp5-icon-remove"
                       >
                         <svg
                           data-icon="remove"
@@ -2714,7 +2646,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                         </svg>
                       </span>
                       <span
-                        class="bp4-button-text"
+                        class="bp5-button-text"
                       >
                         Clear
                       </span>
@@ -2734,7 +2666,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
 exports[`AssessmentWorkspace AssessmentWorkspace page with programming question renders correctly 1`] = `
 <div>
   <div
-    class="WorkspaceParent bp4-dark"
+    class="WorkspaceParent bp5-dark"
   >
     <div
       class="workspace"
@@ -2743,164 +2675,109 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
         class="ControlBar"
       >
         <div
-          class="ControlBar_editor bp4-button-group"
+          class="ControlBar_editor bp5-button-group"
         >
           <span
-            class="bp4-popover2-target"
+            class="bp5-popover-target"
           >
             <button
-              class="bp4-button bp4-minimal"
+              class="bp5-button bp5-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp4-icon bp4-icon-play"
-                icon="play"
-              >
-                <svg
-                  data-icon="play"
-                  height="16"
-                  role="img"
-                  viewBox="0 0 16 16"
-                  width="16"
-                >
-                  <path
-                    d="M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-              </span>
+                class="bp5-icon bp5-icon-standard bp5-icon-play"
+                data-icon="play"
+              />
               <span
-                class="bp4-button-text"
+                class="bp5-button-text"
               >
                 Run
               </span>
             </button>
           </span>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-floppy-disk"
-              icon="floppy-disk"
-            >
-              <svg
-                data-icon="floppy-disk"
-                height="16"
-                role="img"
-                viewBox="0 0 16 16"
-                width="16"
-              >
-                <path
-                  d="M15.71 2.29l-2-2A.997.997 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71zM14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v6zM11 1H9v4h2V1z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+              class="bp5-icon bp5-icon-standard bp5-icon-floppy-disk"
+              data-icon="floppy-disk"
+            />
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Save
             </span>
           </button>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-repeat"
-              icon="repeat"
-            >
-              <svg
-                data-icon="repeat"
-                height="16"
-                role="img"
-                viewBox="0 0 16 16"
-                width="16"
-              >
-                <path
-                  d="M10 5c0 .55.45 1 1 1h4c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1s-1 .45-1 1v1.74A7.95 7.95 0 008 0C3.58 0 0 3.58 0 8c0 4.06 3.02 7.4 6.94 7.92.02 0 .04.01.06.01.33.04.66.07 1 .07 4.42 0 8-3.58 8-8 0-.55-.45-1-1-1s-1 .45-1 1c0 3.31-2.69 6-6 6-.71 0-1.37-.15-2-.38v.01C3.67 12.81 2 10.61 2 8c0-3.31 2.69-6 6-6 1.77 0 3.36.78 4.46 2H11c-.55 0-1 .45-1 1z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+              class="bp5-icon bp5-icon-standard bp5-icon-repeat"
+              data-icon="repeat"
+            />
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Reset
             </span>
           </button>
-          <span
-            class="bp4-popover-wrapper"
+          <div
+            aria-controls="listbox-0"
+            aria-disabled="true"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="bp5-popover-target"
+            role="combobox"
           >
-            <span
-              aria-haspopup="true"
-              class="bp4-popover-target"
+            <button
+              class="bp5-button bp5-disabled bp5-minimal"
+              disabled=""
+              tabindex="-1"
+              type="button"
             >
-              <div
-                class=""
+              <span
+                class="bp5-button-text"
               >
-                <button
-                  class="bp4-button bp4-disabled bp4-minimal"
-                  disabled=""
-                  tabindex="-1"
-                  type="button"
-                >
-                  <span
-                    class="bp4-button-text"
-                  >
-                    Source §1
-                  </span>
-                </button>
-              </div>
-            </span>
-          </span>
+                Source §1
+              </span>
+            </button>
+          </div>
         </div>
         <div
-          class="ControlBar_flow bp4-button-group"
+          class="ControlBar_flow bp5-button-group"
         >
           <a
-            class="bp4-button bp4-disabled bp4-minimal"
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
             disabled=""
             role="button"
             tabindex="-1"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Question 1 of 5  
             </span>
           </a>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Next
             </span>
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-arrow-right"
-              icon="arrow-right"
-            >
-              <svg
-                data-icon="arrow-right"
-                height="16"
-                role="img"
-                viewBox="0 0 16 16"
-                width="16"
-              >
-                <path
-                  d="M14.7 7.29l-5-5a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l3.29 3.29H1.99c-.55 0-1 .45-1 1s.45 1 1 1h9.59l-3.29 3.29a1.003 1.003 0 001.42 1.42l5-5c.18-.18.29-.43.29-.71s-.12-.52-.3-.7z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+              class="bp5-icon bp5-icon-standard bp5-icon-arrow-right"
+              data-icon="arrow-right"
+            />
           </button>
         </div>
         <div
-          class="ControlBar_editingWorkspace bp4-button-group"
+          class="ControlBar_editingWorkspace bp5-button-group"
         />
       </div>
       <div
@@ -3050,159 +2927,123 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                 class="side-content"
               >
                 <div
-                  class="bp4-card bp4-elevation-0"
+                  class="bp5-card bp5-elevation-0"
                 >
                   <div
                     class="side-content-tabs"
                   >
                     <div
-                      class="bp4-tabs"
+                      class="bp5-tabs"
                     >
                       <div
-                        class="bp4-tab-list"
+                        class="bp5-tab-list"
                         role="tablist"
                       >
                         <div
-                          class="bp4-tab-indicator-wrapper"
+                          class="bp5-tab-indicator-wrapper"
                           style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
-                            class="bp4-tab-indicator"
+                            class="bp5-tab-indicator"
                           />
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_question_overview"
+                          aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
                           aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="question_overview"
-                          id="bp4-tab-title_side-content-tabs_question_overview"
+                          id="bp5-tab-title_side-content-tabs_question_overview"
                           role="tab"
                           tabindex="0"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-ninja"
-                                icon="ninja"
-                              >
-                                <svg
-                                  data-icon="ninja"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M20 6s-2.98 2.43-6.12 2.19C13.52 5.31 12.05 0 6 0c0 0 2.41 2.99 2.16 6.12C5.27 6.49 0 7.97 0 14c0 0 2.98-2.43 6.11-2.19C6.47 14.69 7.94 20 14 20c0 0-2.42-2.99-2.16-6.13C14.73 13.51 20 12.02 20 6zm-10 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-large bp5-icon-ninja"
+                                data-icon="ninja"
+                              />
                             </div>
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_briefing"
+                          aria-controls="bp5-tab-panel_side-content-tabs_briefing"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="briefing"
-                          id="bp4-tab-title_side-content-tabs_briefing"
+                          id="bp5-tab-title_side-content-tabs_briefing"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-briefcase"
-                                icon="briefcase"
-                              >
-                                <svg
-                                  data-icon="briefcase"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M19 5h-4V2c0-.55-.45-1-1-1H6c-.55 0-1 .45-1 1v3H1c-.55 0-1 .45-1 1v5h4v-1h2v1h8v-1h2v1h4V6c0-.55-.45-1-1-1zm-6 0H7V3h6v2zm3 8h-2v-1H6v1H4v-1H0v6c0 .55.45 1 1 1h18c.55 0 1-.45 1-1v-6h-4v1z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-large bp5-icon-briefcase"
+                                data-icon="briefcase"
+                              />
                             </div>
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_autograder"
+                          aria-controls="bp5-tab-panel_side-content-tabs_autograder"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="autograder"
-                          id="bp4-tab-title_side-content-tabs_autograder"
+                          id="bp5-tab-title_side-content-tabs_autograder"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-airplane"
-                                icon="airplane"
-                              >
-                                <svg
-                                  data-icon="airplane"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M20 2c0-1.1-.9-2-2-2-.55 0-1.05.22-1.41.59l-4.84 4.84L2 1 1 3l7.53 5.64L4.17 13H1l-1 1 4 2 2 4 1-1v-3.17l4.36-4.36L17 19l2-1-4.43-9.74 4.84-4.84c.37-.37.59-.87.59-1.42z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-large bp5-icon-airplane"
+                                data-icon="airplane"
+                              />
                             </div>
                           </span>
                         </div>
                       </div>
                       <div
                         aria-hidden="false"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_question_overview"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_question_overview"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_question_overview"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_question_overview"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp4-running-text"
+                            class="md bp5-running-text"
                           >
                             <p>
                               This question has an id of 
@@ -3224,16 +3065,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_briefing"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_briefing"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_briefing"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_briefing"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="sidecontent-overview bp4-running-text"
+                            class="sidecontent-overview bp5-running-text"
                           >
                             <p>
                               This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
@@ -3243,9 +3084,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_autograder"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_autograder"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_autograder"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_autograder"
                         role="tabpanel"
                       >
                         <div
@@ -3255,65 +3096,40 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                             class="Autograder"
                           >
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                               type="button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
-                              >
-                                <svg
-                                  data-icon="caret-down"
-                                  height="16"
-                                  role="img"
-                                  viewBox="0 0 16 16"
-                                  width="16"
-                                >
-                                  <path
-                                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-standard bp5-icon-caret-down"
+                                data-icon="caret-down"
+                              />
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 <span>
                                   Testcases
                                 </span>
                                 <span
-                                  class="bp4-popover2-target"
+                                  class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
-                                    class="bp4-icon bp4-icon-help"
-                                    icon="help"
+                                    class="bp5-icon bp5-icon-standard bp5-icon-help"
+                                    data-icon="help"
                                     tabindex="0"
-                                  >
-                                    <svg
-                                      data-icon="help"
-                                      height="16"
-                                      role="img"
-                                      viewBox="0 0 16 16"
-                                      width="16"
-                                    >
-                                      <path
-                                        d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z"
-                                        fill-rule="evenodd"
-                                      />
-                                    </svg>
-                                  </span>
+                                  />
                                 </span>
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -3325,39 +3141,26 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                               </div>
                             </div>
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
-                              >
-                                <svg
-                                  data-icon="caret-down"
-                                  height="16"
-                                  role="img"
-                                  viewBox="0 0 16 16"
-                                  width="16"
-                                >
-                                  <path
-                                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-standard bp5-icon-caret-down"
+                                data-icon="caret-down"
+                              />
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 Autograder Results
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -3392,7 +3195,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                 class="repl-output-parent"
               >
                 <div
-                  class="repl-input-parent row bp4-card bp4-elevation-0"
+                  class="repl-input-parent row bp5-card bp5-elevation-0"
                   tabindex="-1"
                 >
                   <div
@@ -3491,62 +3294,36 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                     </div>
                   </div>
                   <div
-                    class="bp4-button-group bp4-dark"
+                    class="bp5-button-group bp5-dark"
                   >
                     <span
-                      class="bp4-popover2-target"
+                      class="bp5-popover-target"
                     >
                       <button
-                        class="bp4-button bp4-minimal"
+                        class="bp5-button bp5-minimal"
                       >
                         <span
                           aria-hidden="true"
-                          class="bp4-icon bp4-icon-code"
-                          icon="code"
-                        >
-                          <svg
-                            data-icon="code"
-                            height="16"
-                            role="img"
-                            viewBox="0 0 16 16"
-                            width="16"
-                          >
-                            <path
-                              d="M15.71 7.29l-3-3a1.003 1.003 0 00-1.42 1.42L13.59 8l-2.29 2.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l3-3c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71zM5 5a1.003 1.003 0 00-1.71-.71l-3 3C.11 7.47 0 7.72 0 8c0 .28.11.53.29.71l3 3a1.003 1.003 0 001.42-1.42L2.41 8 4.7 5.71c.19-.18.3-.43.3-.71zm4-3c-.48 0-.87.35-.96.81l-2 10c-.01.06-.04.12-.04.19 0 .55.45 1 1 1 .48 0 .87-.35.96-.81l2-10c.01-.06.04-.12.04-.19 0-.55-.45-1-1-1z"
-                              fill-rule="evenodd"
-                            />
-                          </svg>
-                        </span>
+                          class="bp5-icon bp5-icon-standard bp5-icon-code"
+                          data-icon="code"
+                        />
                         <span
-                          class="bp4-button-text"
+                          class="bp5-button-text"
                         >
                           Eval
                         </span>
                       </button>
                     </span>
                     <button
-                      class="bp4-button bp4-minimal"
+                      class="bp5-button bp5-minimal"
                     >
                       <span
                         aria-hidden="true"
-                        class="bp4-icon bp4-icon-remove"
-                        icon="remove"
-                      >
-                        <svg
-                          data-icon="remove"
-                          height="16"
-                          role="img"
-                          viewBox="0 0 16 16"
-                          width="16"
-                        >
-                          <path
-                            d="M10.99 6.99h-6c-.55 0-1 .45-1 1s.45 1 1 1h6c.55 0 1-.45 1-1s-.45-1-1-1zm-3-7c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.68 6-6 6z"
-                            fill-rule="evenodd"
-                          />
-                        </svg>
-                      </span>
+                        class="bp5-icon bp5-icon-standard bp5-icon-remove"
+                        data-icon="remove"
+                      />
                       <span
-                        class="bp4-button-text"
+                        class="bp5-button-text"
                       >
                         Clear
                       </span>
@@ -3566,7 +3343,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
 exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly if the question has been graded 1`] = `
 <div>
   <div
-    class="WorkspaceParent bp4-dark"
+    class="WorkspaceParent bp5-dark"
   >
     <div
       class="workspace"
@@ -3575,18 +3352,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
         class="ControlBar"
       >
         <div
-          class="ControlBar_editor bp4-button-group"
+          class="ControlBar_editor bp5-button-group"
         >
           <span
-            class="bp4-popover2-target"
+            class="bp5-popover-target"
           >
             <button
-              class="bp4-button bp4-minimal"
+              class="bp5-button bp5-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp4-icon bp4-icon-play"
-                icon="play"
+                class="bp5-icon bp5-icon-play"
               >
                 <svg
                   data-icon="play"
@@ -3602,19 +3378,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                 </svg>
               </span>
               <span
-                class="bp4-button-text"
+                class="bp5-button-text"
               >
                 Run
               </span>
             </button>
           </span>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-floppy-disk"
-              icon="floppy-disk"
+              class="bp5-icon bp5-icon-floppy-disk"
             >
               <svg
                 data-icon="floppy-disk"
@@ -3630,18 +3405,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
               </svg>
             </span>
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Save
             </span>
           </button>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-repeat"
-              icon="repeat"
+              class="bp5-icon bp5-icon-repeat"
             >
               <svg
                 data-icon="repeat"
@@ -3657,64 +3431,60 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
               </svg>
             </span>
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Reset
             </span>
           </button>
-          <span
-            class="bp4-popover-wrapper"
+          <div
+            aria-controls="listbox-4"
+            aria-disabled="true"
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="bp5-popover-target"
+            role="combobox"
           >
-            <span
-              aria-haspopup="true"
-              class="bp4-popover-target"
+            <button
+              class="bp5-button bp5-disabled bp5-minimal"
+              disabled=""
+              tabindex="-1"
+              type="button"
             >
-              <div
-                class=""
+              <span
+                class="bp5-button-text"
               >
-                <button
-                  class="bp4-button bp4-disabled bp4-minimal"
-                  disabled=""
-                  tabindex="-1"
-                  type="button"
-                >
-                  <span
-                    class="bp4-button-text"
-                  >
-                    Source §1
-                  </span>
-                </button>
-              </div>
-            </span>
-          </span>
+                Source §1
+              </span>
+            </button>
+          </div>
         </div>
         <div
-          class="ControlBar_flow bp4-button-group"
+          class="ControlBar_flow bp5-button-group"
         >
           <a
-            class="bp4-button bp4-disabled bp4-minimal"
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
             disabled=""
             role="button"
             tabindex="-1"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Question 1 of 2  
             </span>
           </a>
           <button
-            class="bp4-button bp4-minimal"
+            class="bp5-button bp5-minimal"
           >
             <span
-              class="bp4-button-text"
+              class="bp5-button-text"
             >
               Next
             </span>
             <span
               aria-hidden="true"
-              class="bp4-icon bp4-icon-arrow-right"
-              icon="arrow-right"
+              class="bp5-icon bp5-icon-arrow-right"
             >
               <svg
                 data-icon="arrow-right"
@@ -3732,7 +3502,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
           </button>
         </div>
         <div
-          class="ControlBar_editingWorkspace bp4-button-group"
+          class="ControlBar_editingWorkspace bp5-button-group"
         />
       </div>
       <div
@@ -3882,49 +3652,49 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                 class="side-content"
               >
                 <div
-                  class="bp4-card bp4-elevation-0"
+                  class="bp5-card bp5-elevation-0"
                 >
                   <div
                     class="side-content-tabs"
                   >
                     <div
-                      class="bp4-tabs"
+                      class="bp5-tabs"
                     >
                       <div
-                        class="bp4-tab-list"
+                        class="bp5-tab-list"
                         role="tablist"
                       >
                         <div
-                          class="bp4-tab-indicator-wrapper"
+                          class="bp5-tab-indicator-wrapper"
                           style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
-                            class="bp4-tab-indicator"
+                            class="bp5-tab-indicator"
                           />
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_question_overview"
+                          aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="question_overview"
-                          id="bp4-tab-title_side-content-tabs_question_overview"
+                          id="bp5-tab-title_side-content-tabs_question_overview"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-ninja"
-                                icon="ninja"
+                                class="bp5-icon bp5-icon-ninja"
                               >
                                 <svg
                                   data-icon="ninja"
@@ -3943,28 +3713,28 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_briefing"
+                          aria-controls="bp5-tab-panel_side-content-tabs_briefing"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="briefing"
-                          id="bp4-tab-title_side-content-tabs_briefing"
+                          id="bp5-tab-title_side-content-tabs_briefing"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="briefing-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-briefcase"
-                                icon="briefcase"
+                                class="bp5-icon bp5-icon-briefcase"
                               >
                                 <svg
                                   data-icon="briefcase"
@@ -3983,28 +3753,28 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_autograder"
+                          aria-controls="bp5-tab-panel_side-content-tabs_autograder"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="autograder"
-                          id="bp4-tab-title_side-content-tabs_autograder"
+                          id="bp5-tab-title_side-content-tabs_autograder"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="autograder-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-airplane"
-                                icon="airplane"
+                                class="bp5-icon bp5-icon-airplane"
                               >
                                 <svg
                                   data-icon="airplane"
@@ -4023,58 +3793,46 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           </span>
                         </div>
                         <div
-                          aria-controls="bp4-tab-panel_side-content-tabs_grading"
+                          aria-controls="bp5-tab-panel_side-content-tabs_grading"
                           aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp4-tab side-content-tab"
+                          class="bp5-tab side-content-tab"
                           data-tab-id="grading"
-                          id="bp4-tab-title_side-content-tabs_grading"
+                          id="bp5-tab-title_side-content-tabs_grading"
                           role="tab"
                           tabindex="0"
                         >
                           <span
-                            class="bp4-popover2-target"
+                            class="bp5-popover-target"
                           >
                             <div
+                              aria-expanded="false"
                               class="side-content-tooltip"
                               id="grading-icon"
                               tabindex="0"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-tick"
-                                icon="tick"
-                              >
-                                <svg
-                                  data-icon="tick"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M17 4c-.28 0-.53.11-.71.29L7 13.59 3.71 10.3A.965.965 0 003 10a1.003 1.003 0 00-.71 1.71l4 4c.18.18.43.29.71.29s.53-.11.71-.29l10-10A1.003 1.003 0 0017 4z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
+                                class="bp5-icon bp5-icon-large bp5-icon-tick"
+                                data-icon="tick"
+                              />
                             </div>
                           </span>
                         </div>
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_question_overview"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_question_overview"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_question_overview"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_question_overview"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp4-running-text"
+                            class="md bp5-running-text"
                           >
                             <p>
                               You can see autograding results!!!
@@ -4084,16 +3842,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_briefing"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_briefing"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_briefing"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_briefing"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="sidecontent-overview bp4-running-text"
+                            class="sidecontent-overview bp5-running-text"
                           >
                             <p>
                               This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
@@ -4103,9 +3861,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_autograder"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_autograder"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_autograder"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_autograder"
                         role="tabpanel"
                       >
                         <div
@@ -4115,13 +3873,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                             class="Autograder"
                           >
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                               type="button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -4137,18 +3894,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 <span>
                                   Testcases
                                 </span>
                                 <span
-                                  class="bp4-popover2-target"
+                                  class="bp5-popover-target"
                                 >
                                   <span
+                                    aria-expanded="false"
                                     aria-hidden="true"
-                                    class="bp4-icon bp4-icon-help"
-                                    icon="help"
+                                    class="bp5-icon bp5-icon-help"
                                     tabindex="0"
                                   >
                                     <svg
@@ -4168,12 +3925,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -4185,12 +3942,11 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                               </div>
                             </div>
                             <button
-                              class="bp4-button bp4-minimal collapse-button"
+                              class="bp5-button bp5-minimal collapse-button"
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp4-icon bp4-icon-caret-down"
-                                icon="caret-down"
+                                class="bp5-icon bp5-icon-caret-down"
                               >
                                 <svg
                                   data-icon="caret-down"
@@ -4206,18 +3962,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                                 </svg>
                               </span>
                               <span
-                                class="bp4-button-text"
+                                class="bp5-button-text"
                               >
                                 Autograder Results
                               </span>
                             </button>
                             <div
-                              class="bp4-collapse"
+                              class="bp5-collapse"
                               style="height: auto; overflow-y: visible; transition: none;"
                             >
                               <div
                                 aria-hidden="false"
-                                class="bp4-collapse-body"
+                                class="bp5-collapse-body"
                                 style="transform: translateY(0); transition: none;"
                               >
                                 <div
@@ -4233,9 +3989,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                       </div>
                       <div
                         aria-hidden="false"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_grading"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_grading"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_grading"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_grading"
                         role="tabpanel"
                       >
                         <div
@@ -4248,7 +4004,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                               class="grading-result-table"
                             >
                               <table
-                                class="bp4-html-table"
+                                class="bp5-html-table"
                               >
                                 <tbody>
                                   <tr>
@@ -4274,16 +4030,16 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                                 </tbody>
                               </table>
                               <table
-                                class="bp4-html-table"
+                                class="bp5-html-table"
                               >
                                 <tbody>
                                   <tr>
                                     <td>
                                       <div
-                                        class="bp4-divider"
+                                        class="bp5-divider"
                                       />
                                       <div
-                                        class="md bp4-running-text"
+                                        class="md bp5-running-text"
                                       >
                                         <p>
                                           Good job. You are awarded the full marks!
@@ -4397,7 +4153,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                                         </p>
                                       </div>
                                       <div
-                                        class="bp4-divider"
+                                        class="bp5-divider"
                                       />
                                     </td>
                                   </tr>
@@ -4443,7 +4199,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                 class="repl-output-parent"
               >
                 <div
-                  class="repl-input-parent row bp4-card bp4-elevation-0"
+                  class="repl-input-parent row bp5-card bp5-elevation-0"
                   tabindex="-1"
                 >
                   <div
@@ -4542,18 +4298,17 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                     </div>
                   </div>
                   <div
-                    class="bp4-button-group bp4-dark"
+                    class="bp5-button-group bp5-dark"
                   >
                     <span
-                      class="bp4-popover2-target"
+                      class="bp5-popover-target"
                     >
                       <button
-                        class="bp4-button bp4-minimal"
+                        class="bp5-button bp5-minimal"
                       >
                         <span
                           aria-hidden="true"
-                          class="bp4-icon bp4-icon-code"
-                          icon="code"
+                          class="bp5-icon bp5-icon-code"
                         >
                           <svg
                             data-icon="code"
@@ -4569,19 +4324,18 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                           </svg>
                         </span>
                         <span
-                          class="bp4-button-text"
+                          class="bp5-button-text"
                         >
                           Eval
                         </span>
                       </button>
                     </span>
                     <button
-                      class="bp4-button bp4-minimal"
+                      class="bp5-button bp5-minimal"
                     >
                       <span
                         aria-hidden="true"
-                        class="bp4-icon bp4-icon-remove"
-                        icon="remove"
+                        class="bp5-icon bp5-icon-remove"
                       >
                         <svg
                           data-icon="remove"
@@ -4597,7 +4351,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </svg>
                       </span>
                       <span
-                        class="bp4-button-text"
+                        class="bp5-button-text"
                       >
                         Clear
                       </span>

@@ -1,8 +1,19 @@
-import { Button, Classes, Dialog, Intent, Menu, MenuItem } from '@blueprintjs/core';
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Intent,
+  Menu,
+  MenuItem
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import { Variant } from 'js-slang/dist/types';
+import React, { useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Constants from 'src/commons/utils/Constants';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import {
   SALanguage,
@@ -10,48 +21,47 @@ import {
   styliseSublanguage
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import { changeSublanguage } from '../../../../commons/workspace/WorkspaceActions';
 
-export type DefaultChapterSelectProps = DispatchProps & StateProps;
+const DefaultChapterSelect: React.FC = () => {
+  const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
+  const [isDialogOpen, setDialogState] = useState(false);
 
-export type DispatchProps = {
-  handleUpdateSublanguage: (sublang: SALanguage) => void;
-};
+  const {
+    // Temporarily load the defaults when the course configuration fetch has yet to return
+    sourceChapter = Constants.defaultSourceChapter,
+    sourceVariant = Constants.defaultSourceVariant
+  } = useSession();
 
-export type StateProps = {
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
-};
+  const dispatch = useDispatch();
+  const handleUpdateSublanguage = useCallback(
+    (sublang: SALanguage) => dispatch(changeSublanguage(sublang)),
+    [dispatch]
+  );
 
-const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> = props => {
-  const { handleUpdateSublanguage } = props;
-  const { sourceChapter, sourceVariant } = props;
-
-  const [chosenSublang, setSublanguage] = React.useState<SALanguage>(sourceLanguages[0]);
-  const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
-
-  const handleOpenDialog = React.useCallback(
+  const handleOpenDialog = useCallback(
     (choice: SALanguage) => {
       setDialogState(true);
       setSublanguage(choice);
     },
     [setDialogState, setSublanguage]
   );
-  const handleCloseDialog = React.useCallback(() => {
+  const handleCloseDialog = useCallback(() => {
     setDialogState(false);
   }, [setDialogState]);
-  const handleConfirmDialog = React.useCallback(() => {
+  const handleConfirmDialog = useCallback(() => {
     setDialogState(false);
     handleUpdateSublanguage(chosenSublang);
   }, [chosenSublang, setDialogState, handleUpdateSublanguage]);
 
-  const chapterRenderer: ItemRenderer<SALanguage> = React.useCallback(
+  const chapterRenderer: ItemRenderer<SALanguage> = useCallback(
     (lang, { handleClick }) => (
       <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
     ),
     []
   );
 
-  const chapterListRenderer: ItemListRenderer<SALanguage> = React.useCallback(
+  const chapterListRenderer: ItemListRenderer<SALanguage> = useCallback(
     ({ itemsParentRef, renderItem, items }) => {
       const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
       const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
@@ -83,20 +93,26 @@ const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> =
       onClose={handleCloseDialog}
       title="Updating default Source sublanguage"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         Are you sure you want to update the <b>default Playground Source sublanguage</b> from{' '}
         {styliseSublanguage(sourceChapter, sourceVariant)} to <b>{chosenSublang.displayName}</b>?
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <ControlButton label="Cancel" onClick={handleCloseDialog} options={{ minimal: false }} />
-          <ControlButton
-            label="Confirm"
-            onClick={handleConfirmDialog}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </div>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton
+              label="Cancel"
+              onClick={handleCloseDialog}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Confirm"
+              onClick={handleConfirmDialog}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 

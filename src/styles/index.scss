@@ -19,7 +19,6 @@
 
 @import '../../node_modules/@blueprintjs/core/lib/scss/variables';
 @import 'global';
-@import 'blueprint';
 
 @import 'academy';
 @import 'achievementcontrol';
@@ -27,20 +26,14 @@
 @import 'application';
 @import 'chatbot';
 @import 'commons';
-@import 'contextMenu';
 @import 'contributors';
-@import 'dialogs';
-@import 'draggable';
 @import 'dropdown';
 @import 'editorTabs';
 @import 'envvisualizer';
-@import 'fileSystemView';
 @import 'game';
 @import 'github';
-@import 'githubAssessments';
-@import 'storysimulator';
+@import 'gamesimulator';
 @import 'groundcontrol';
-@import 'login';
 @import 'mobileworkspace';
 @import 'navigationBar';
 @import 'playground';
@@ -52,4 +45,3 @@
 @import 'variableHighlighting';
 @import 'workspaceGreen';
 @import 'workspace';
-@import 'assessmentComments';

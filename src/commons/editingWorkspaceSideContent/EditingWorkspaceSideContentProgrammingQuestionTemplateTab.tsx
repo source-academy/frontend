@@ -117,7 +117,7 @@ const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
         filterable={false}
       >
         <Button
-          className={Classes.MINIMAL}
+          minimal
           text={currentEditor.label}
           icon={IconNames.EDIT}
           rightIcon={IconNames.DOUBLE_CARET_VERTICAL}

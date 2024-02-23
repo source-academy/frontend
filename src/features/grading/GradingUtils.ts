@@ -1,7 +1,9 @@
+import { ColumnFilter } from '@tanstack/react-table';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 
 import { GradingOverview } from './GradingTypes';
 
+// TODO: Unused. Marked for deletion.
 export const isSubmissionUngraded = (s: GradingOverview): boolean => {
   const isSubmitted = s.submissionStatus === 'submitted';
   const isNotGraded =
@@ -68,4 +70,41 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
   win.setTimeout(() => {
     win.URL.revokeObjectURL(url);
   }, 0);
+};
+
+// Cleanup work: change all references to column properties in backend saga to backend name to reduce
+// un-needed hardcode conversion, ensuring that places that reference it are updated. A two-way conversion
+// function would be good to implement in GradingUtils.
+export const convertFilterToBackendParams = (column: ColumnFilter) => {
+  switch (column.id) {
+    case 'assessmentName':
+      return { title: column.value };
+    case 'assessmentType':
+      return { type: column.value };
+    case 'studentName':
+      return { name: column.value };
+    case 'studentUsername':
+      return { username: column.value };
+    case 'submissionStatus':
+      return { status: column.value };
+    case 'groupName':
+      return { groupName: column.value };
+    default:
+      return {};
+  }
+};
+
+export const paginationToBackendParams = (page: number, pageSize: number) => {
+  return { offset: page * pageSize, pageSize: pageSize };
+};
+
+export const ungradedToBackendParams = (showAll: boolean) => {
+  if (showAll) {
+    return {};
+  }
+  return {
+    status: 'submitted',
+    isManuallyGraded: true,
+    notFullyGraded: true
+  };
 };

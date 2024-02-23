@@ -1,6 +1,6 @@
 import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React from 'react';
 
 import { propsAreEqual } from '../utils/MemoizeHelper';
 import { assertType } from '../utils/TypeHelper';
@@ -51,7 +51,7 @@ const renderTab = (
   const tabTitle = (
     <Tooltip2 content={tab.label}>
       <div className={generateClassName(tab.id)} id={generateIconId(tabId)}>
-        <Icon icon={tab.iconName} iconSize={iconSize} />
+        <Icon icon={tab.iconName} size={iconSize} />
       </div>
     </Tooltip2>
   );

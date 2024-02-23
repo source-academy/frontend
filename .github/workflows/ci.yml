@@ -19,11 +19,16 @@ jobs:
         commands: [tsc, 'format:ci', eslint, build, test, test-coveralls]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Install dependencies (apt)
+        run: |
+          sudo apt-get update && \
+          sudo apt-get install -y --no-install-recommends \
+          libxi-dev libgl1-mesa-dev
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
           cache: yarn
       - name: Install dependencies
         run: yarn install --frozen-lockfile

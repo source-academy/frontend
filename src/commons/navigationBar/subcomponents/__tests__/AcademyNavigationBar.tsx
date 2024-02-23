@@ -11,8 +11,8 @@ jest.mock('react-redux', () => ({
 const useSelectorMock = useSelector as jest.Mock;
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
-const staffRoutes = ['grading', 'groundcontrol', 'sourcereel', 'storysimulator', 'dashboard'];
-const adminRoutes = ['adminpanel', 'xpcalculation'];
+const staffRoutes = ['grading', 'groundcontrol', 'sourcereel', 'gamesimulator', 'dashboard'];
+const adminRoutes = ['adminpanel'];
 const courseId = 0;
 const createCoursePath = (path: string) => `/courses/${courseId}/${path}`;
 
@@ -43,7 +43,7 @@ const mockProps = {
 };
 const element = <AcademyNavigationBar {...mockProps} />;
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student', () => {
   useSelectorMock.mockReturnValue({
     role: Role.Student,
     courseId
@@ -57,7 +57,7 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and Grading NavLinks render for Role.Staff', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard and Grading NavLinks render for Role.Staff', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Staff,
     courseId
@@ -71,7 +71,7 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and G
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, XP Calculation and AdminPanel NavLinks render for Role.Admin', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Admin,
     courseId

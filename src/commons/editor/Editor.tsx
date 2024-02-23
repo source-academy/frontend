@@ -1,13 +1,13 @@
 /* eslint-disable simple-import-sort/imports */
-import { Ace, createEditSession, require as acequire } from 'ace-builds';
+import { Ace, require as acequire, createEditSession } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
-import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import * as AceBuilds from 'ace-builds';
+import { Chapter, Variant } from 'js-slang/dist/types';
+import React from 'react';
+import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
 import { keyBindings, KeyFunction } from './EditorHotkeys';
@@ -16,14 +16,13 @@ import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
+import { IAceEditor } from 'react-ace/lib/types';
+import { getModeString, selectMode } from '../utils/AceHelper';
+import { EditorBinding } from '../WorkspaceSettingsContext';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
-import useTypeInference from './UseTypeInference';
-import { getModeString, selectMode } from '../utils/AceHelper';
-import { EditorBinding } from '../WorkspaceSettingsContext';
-import { IAceEditor } from 'react-ace/lib/types';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -570,7 +569,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 });
 
 // don't create a new list every render.
-const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor];
+const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
   const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});

@@ -2,12 +2,12 @@ import { NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import { GetResponseDataTypeFromEndpointMethod } from '@octokit/types';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { loginGitHub, logoutGitHub } from 'src/commons/application/actions/SessionActions';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import academyClasses from 'src/styles/Academy.module.scss';
 
 import ContentDisplay from '../../commons/ContentDisplay';
 import { MissionRepoData } from '../../commons/githubAssessments/GitHubMissionTypes';
@@ -101,7 +101,7 @@ const GitHubClassroom: React.FC = () => {
   );
 
   return (
-    <div className="Academy" style={{ overflow: 'hidden' }}>
+    <div className={academyClasses['Academy']} style={{ overflow: 'hidden' }}>
       <GitHubAssessmentsNavigationBar
         changeCourseHandler={changeCourseHandler}
         handleGitHubLogIn={handleGitHubLogIn}

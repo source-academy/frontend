@@ -13,7 +13,7 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { GHAssessmentTypeOverview } from '../../../pages/githubAssessments/GitHubClassroom';
@@ -64,7 +64,7 @@ const GitHubAssessmentsNavigationBar: React.FC<GitHubAssessmentsNavigationBarPro
               }
             >
               <Icon icon={idx < 5 ? icons[idx] : icons[0]} />
-              <div className="navbar-button-text hidden-xs hidden-sm">{type}</div>
+              <div className="hidden-xs hidden-sm">{type}</div>
             </NavLink>
           );
         })}

@@ -46,8 +46,8 @@ export enum QuestionTypes {
 export type QuestionType = keyof typeof QuestionTypes;
 
 /*
-W* Used to display information regarding an assessment in the UI.
-*
+ * Used to display information regarding an assessment in the UI.
+ *
  * @property closeAt an ISO 8601 compliant date string specifiying when
  *   the assessment closes
  * @property openAt an ISO 8601 compliant date string specifiying when
@@ -81,6 +81,7 @@ export type Assessment = {
   type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
+  hasTokenCounter?: boolean;
   id: number;
   longSummary: string;
   missionPDF: string;
@@ -95,6 +96,7 @@ export type AssessmentConfiguration = {
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
+  hasTokenCounter: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {
@@ -121,7 +123,7 @@ export interface IContestVotingQuestion extends BaseQuestion {
   prepend: string;
   postpend: string;
   contestEntries: ContestEntry[];
-  contestLeaderboard: ContestEntry[];
+  scoreLeaderboard: ContestEntry[];
   type: 'voting';
 }
 

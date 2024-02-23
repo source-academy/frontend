@@ -1,0 +1,18 @@
+@import '_global';
+
+.context-menu {
+  background-color: $cadet-color-1;
+  padding: 5px 1px;
+  z-index: 5;
+}
+
+.context-menu-item {
+  list-style: none;
+  user-select: none;
+  padding: 3px 16px;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: $cadet-color-3;
+  }
+}
