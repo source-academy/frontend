@@ -4,8 +4,8 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
+import { SideContentType } from '../SideContentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
-import { SideContentType } from './SideContentTypes';
 
 export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
 
