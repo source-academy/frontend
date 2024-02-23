@@ -117,6 +117,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   submissions,
   updateEntries
 }) => {
+  const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
@@ -169,7 +170,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     setColumnFilters(newFilters);
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, dispatch]);
@@ -196,7 +196,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <TextInput
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-          placeholder="assessment name search"
+          placeholder="Search by assessment name"
           value={searchQuery}
           onChange={handleSearchQueryUpdate}
         />

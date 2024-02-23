@@ -46,9 +46,8 @@ const Grading: React.FC = () => {
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
 
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-
   const [pageSize, setPageSize] = useState(10);
+  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
   const dispatch = useDispatch();
   const updateGradingOverviewsCallback = useCallback(
@@ -134,7 +133,7 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>Entries per page</Text>
+              <Text>showing</Text>
               <SimpleDropdown
                 options={pageSizeOptions}
                 selectedValue={pageSize}
@@ -142,6 +141,7 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
+              <Text>entries per page.</Text>
             </Flex>
             <GradingSubmissionsTable
               totalRows={gradingOverviews.count}
