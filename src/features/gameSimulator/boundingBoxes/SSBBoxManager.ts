@@ -11,7 +11,7 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 
 /**
- * This manager manages the bounding boxes for Story Simulator's Object Placement scene
+ * This manager manages the bounding boxes for Game Simulator's Object Placement scene
  *
  * It handles:
  * (1) Storing of information on bounding boxes

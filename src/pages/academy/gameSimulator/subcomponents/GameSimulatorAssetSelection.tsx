@@ -5,10 +5,10 @@ import {
   deleteS3File,
   fetchAssetPaths,
   s3AssetFolders
-} from 'src/features/storySimulator/StorySimulatorService';
+} from 'src/features/gameSimulator/GameSimulatorService';
 
-import { assetPathsToTree, treeMap } from './StorySimulatorAssetSelectionHelper';
-import StorySimulatorAssetViewer from './StorySimulatorAssetViewer';
+import { assetPathsToTree, treeMap } from './GameSimulatorAssetSelectionHelper';
+import GameSimulatorAssetViewer from './GameSimulatorAssetViewer';
 
 type TreeState = {
   nodes: TreeNodeInfo[];
@@ -18,9 +18,9 @@ type TreeState = {
  * This component provides a preview of all the S3 asset files.
  *
  * When a image is selected, the filename of the image is stored in session storage,
- * so Story Simulator's Object Placement can read the filename and load the image.
+ * so Game Simulator's Object Placement can read the filename and load the image.
  */
-const StorySimulatorAssetSelection = () => {
+const GameSimulatorAssetSelection = () => {
   const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);
 
   const [currentAsset, setCurrentAsset] = React.useState('');
@@ -44,7 +44,7 @@ const StorySimulatorAssetSelection = () => {
 
   return (
     <>
-      <StorySimulatorAssetViewer assetPath={currentAsset} />
+      <GameSimulatorAssetViewer assetPath={currentAsset} />
       <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />
     </>
   );
@@ -74,4 +74,4 @@ const deleteFile = (filePath: string) => async () => {
   alert(confirm ? await deleteS3File(filePath) : 'Whew');
 };
 
-export default StorySimulatorAssetSelection;
+export default GameSimulatorAssetSelection;
