@@ -155,7 +155,7 @@ class GameEscapeManager implements IGameUI {
         callback: () => {
           this.cleanUp();
           if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
-            this.scene.scene.start('StorySimulatorMenu');
+            this.scene.scene.start('GameSimulatorMenu');
           } else {
             this.scene.scene.start('MainMenu');
           }
