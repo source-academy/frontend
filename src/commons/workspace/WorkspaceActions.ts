@@ -97,7 +97,7 @@ export const browseReplHistoryUp = createAction(
 
 export const changeExternalLibrary = createAction(
   CHANGE_EXTERNAL_LIBRARY,
-  (newExternal: string, workspaceLocation: WorkspaceLocation) => ({
+  (newExternal: ExternalLibraryName, workspaceLocation: WorkspaceLocation) => ({
     payload: { newExternal, workspaceLocation }
   })
 );
