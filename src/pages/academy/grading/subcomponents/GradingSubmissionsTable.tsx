@@ -133,24 +133,25 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     debouncedSetSearchValue(e.target.value);
   };
 
-  // masquerade search value as a column filter.
-  const searchFilter: ColumnFilter[] = useMemo(
-    () => [{ id: 'assessmentName', value: searchValue }],
-    [searchValue]
-  );
-
   const [page, setPage] = useState(0);
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
   const resetPage = useCallback(() => setPage(0), [setPage]);
 
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
-    // allow column filters to override search bar filter.
-    return searchFilter
-      .concat(columnFilters)
-      .map(convertFilterToBackendParams)
-      .reduce(Object.assign, {});
-  }, [searchFilter, columnFilters]);
+    const filters: Array<{ [key: string]: any }> = [
+      { id: 'assessmentName', value: searchValue },
+      ...columnFilters
+    ].map(convertFilterToBackendParams);
+
+    const params: Record<string, any> = {};
+    filters.forEach(e => {
+      Object.keys(e).forEach(key => {
+        params[key] = e[key];
+      });
+    });
+    return params;
+  }, [columnFilters, searchValue]);
 
   const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
   const table = useReactTable({

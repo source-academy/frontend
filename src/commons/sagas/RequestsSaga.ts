@@ -606,7 +606,7 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean,
-  graded: Record<string, any>,
+  graded: Record<string, any> | undefined,
   pageParams: Record<string, any>,
   filterParams: Record<string, any>
 ): Promise<GradingOverviews | null> => {

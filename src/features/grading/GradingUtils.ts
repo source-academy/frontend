@@ -99,11 +99,12 @@ export const paginationToBackendParams = (page: number, pageSize: number) => {
 };
 
 export const ungradedToBackendParams = (showAll: boolean) => {
-  return showAll
-    ? {}
-    : {
-        status: 'submitted',
-        isManuallyGraded: true,
-        notFullyGraded: true
-      };
+  if (!showAll) {
+    return;
+  }
+  return {
+    status: 'submitted',
+    isManuallyGraded: true,
+    notFullyGraded: true
+  };
 };
