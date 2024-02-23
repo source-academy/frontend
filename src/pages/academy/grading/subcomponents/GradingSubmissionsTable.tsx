@@ -28,7 +28,7 @@ import {
   TextInput
 } from '@tremor/react';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
@@ -188,15 +188,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     );
   }, [columnFilters, dispatch]);
 
-  // for operations that require a page reset (indirectly).
-  // also initializes the table when dropdown filters change, affecting updateEntries
-  const isFirstRender = useRef(true);
   useEffect(() => {
-    if (isFirstRender.current === true) {
-      isFirstRender.current = false;
-    } else {
-      updateEntries(page, backendFilterParams);
-    }
+    updateEntries(page, backendFilterParams);
   }, [updateEntries, page, backendFilterParams]);
 
   return (
