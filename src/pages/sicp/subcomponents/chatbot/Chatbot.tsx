@@ -1,6 +1,7 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import logo from 'src/assets/SA.jpg';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import ChatBox from './ChatBox';
 
@@ -13,6 +14,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ getSection, getText }) => {
   const [isPop, setPop] = React.useState(false);
   const [isDivVisible, setIsDivVisible] = React.useState(false);
   const [tipsMessage, setTipsMessage] = React.useState('You can click me for a chat');
+  const { isLoggedIn } = useSession();
   // const tipsBoxRef = React.useRef<HTMLDivElement | null>(null);
 
   // To Show reminder words
@@ -46,7 +48,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ getSection, getText }) => {
           icon={<Icon icon={<img src={logo} className="iSA" alt="SA Logo" />} />}
         ></AnchorButton>
       </div>
-      {isPop && <ChatBox getSection={getSection} getText={getText} />}
+      {isPop && isLoggedIn && <ChatBox getSection={getSection} getText={getText} />}
     </div>
   );
 };
