@@ -347,12 +347,18 @@ export default function* WorkspaceSaga(): SagaIterator {
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, activeEditorTabIndex ? activeEditorTabIndex : 0, []));
+    yield put(
+      actions.setEditorHighlightedLines(
+        workspaceLocation,
+        activeEditorTabIndex ? activeEditorTabIndex : 0,
+        []
+      )
+    );
     const codeFilePath = '/code.js';
     const codeFiles = {
       [codeFilePath]: code
     };
-    
+
     yield call(
       evalCode,
       codeFiles,
@@ -369,8 +375,16 @@ export default function* WorkspaceSaga(): SagaIterator {
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    const activeEditorTabIndex: number | null = yield select((state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex)
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, activeEditorTabIndex ? activeEditorTabIndex : 0, []));
+    const activeEditorTabIndex: number | null = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex
+    );
+    yield put(
+      actions.setEditorHighlightedLines(
+        workspaceLocation,
+        activeEditorTabIndex ? activeEditorTabIndex : 0,
+        []
+      )
+    );
     context.runtime.break = false;
     lastDebuggerResult = undefined;
   });
@@ -550,12 +564,15 @@ export default function* WorkspaceSaga(): SagaIterator {
     NAV_DECLARATION,
     function* (action: ReturnType<typeof actions.navigateToDeclaration>) {
       const workspaceLocation = action.payload.workspaceLocation;
-      const activeEditorTabIndex: number | null = yield select((state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex)
+      const activeEditorTabIndex: number | null = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex
+      );
       const code: string = yield select(
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        (state: OverallState) => activeEditorTabIndex ? 
-        state.workspaces[workspaceLocation].editorTabs[activeEditorTabIndex].value :
-        state.workspaces[workspaceLocation].editorTabs[0].value
+        (state: OverallState) =>
+          activeEditorTabIndex
+            ? state.workspaces[workspaceLocation].editorTabs[activeEditorTabIndex].value
+            : state.workspaces[workspaceLocation].editorTabs[0].value
       );
       context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
@@ -564,13 +581,19 @@ export default function* WorkspaceSaga(): SagaIterator {
         column: action.payload.cursorPosition.column
       });
       if (result) {
-        const activeEditorTabIndex: number | null = yield select((state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex)
+        const activeEditorTabIndex: number | null = yield select(
+          (state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex
+        );
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         yield put(
-          actions.moveCursor(action.payload.workspaceLocation, activeEditorTabIndex ? activeEditorTabIndex : 0, {
-            row: result.start.line - 1,
-            column: result.start.column
-          })
+          actions.moveCursor(
+            action.payload.workspaceLocation,
+            activeEditorTabIndex ? activeEditorTabIndex : 0,
+            {
+              row: result.start.line - 1,
+              column: result.start.column
+            }
+          )
         );
       }
     }
@@ -609,19 +632,39 @@ export default function* WorkspaceSaga(): SagaIterator {
 let lastDebuggerResult: any;
 let lastNonDetResult: Result;
 function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
-  const activeEditorTabIndex: number | null = yield select((state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex)
+  const activeEditorTabIndex: number | null = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex
+  );
   try {
     const row = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, activeEditorTabIndex ? activeEditorTabIndex : 0, []));
+    yield put(
+      actions.setEditorHighlightedLines(
+        workspaceLocation,
+        activeEditorTabIndex ? activeEditorTabIndex : 0,
+        []
+      )
+    );
     // We highlight only one row to show the current line
     // If we highlight from start to end, the whole program block will be highlighted at the start
     // since the first node is the program node
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, activeEditorTabIndex ? activeEditorTabIndex : 0, [[row, row]]));
+    yield put(
+      actions.setEditorHighlightedLines(
+        workspaceLocation,
+        activeEditorTabIndex ? activeEditorTabIndex : 0,
+        [[row, row]]
+      )
+    );
     visualizeEnv(lastDebuggerResult);
   } catch (e) {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, activeEditorTabIndex ? activeEditorTabIndex : 0, []));
+    yield put(
+      actions.setEditorHighlightedLines(
+        workspaceLocation,
+        activeEditorTabIndex ? activeEditorTabIndex : 0,
+        []
+      )
+    );
     // most likely harmless, we can pretty much ignore this.
     // half of the time this comes from execution ending or a stack overflow and
     // the context goes missing.
@@ -776,7 +819,7 @@ function* insertDebuggerStatements(
 
 export function* evalEditor(
   workspaceLocation: WorkspaceLocation,
-  isGraderTab=false
+  isGraderTab = false
 ): Generator<StrictEffect, void, any> {
   const [
     prepend,
@@ -803,7 +846,7 @@ export function* evalEditor(
     state.fileSystem.inBrowserFileSystem,
     state.session.remoteExecutionSession
   ]);
-  console.log("evalEditor")
+  console.log('evalEditor');
   if (activeEditorTabIndex === null) {
     throw new Error('Cannot evaluate program without an entrypoint file.');
   }
@@ -813,12 +856,12 @@ export function* evalEditor(
   let files: Record<string, string>;
   if (isFolderModeEnabled) {
     files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
-    if (workspaceLocation === "assessment" && isGraderTab) {
+    if (workspaceLocation === 'assessment' && isGraderTab) {
       const questionNumber = yield select(
         (state: OverallState) => state.workspaces.assessment.currentQuestion
-      )
+      );
       if (typeof questionNumber !== undefined) {
-        entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`
+        entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`;
       }
     }
   } else {
@@ -963,27 +1006,27 @@ export function* runTestCase(
 
   // Populate valueFiles with the entire fileSystem if folder mode is enabled and is an assessment
   // Always sets the entry path as the current question
-  if (isFolderModeEnabled && workspaceLocation === "assessment") {
-    console.log("In runtestcase and here!")
+  if (isFolderModeEnabled && workspaceLocation === 'assessment') {
+    console.log('In runtestcase and here!');
     const questionNumber = yield select(
       (state: OverallState) => state.workspaces.assessment.currentQuestion
-    )
+    );
     if (typeof questionNumber !== undefined) {
-      valueFileEntryPath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`
-    } 
+      valueFileEntryPath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`;
+    }
     const fileSystem = yield select((state: OverallState) => state.fileSystem.inBrowserFileSystem);
     valueFiles = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
   }
 
-    yield call(
-      evalCode,
-      valueFiles,
-      valueFileEntryPath,
-      context,
-      execTime,
-      workspaceLocation,
-      EVAL_SILENT
-    );
+  yield call(
+    evalCode,
+    valueFiles,
+    valueFileEntryPath,
+    context,
+    execTime,
+    workspaceLocation,
+    EVAL_SILENT
+  );
 
   // Halt execution if the student's code in the editor results in an error
   if (context.errors.length) {
@@ -1091,7 +1134,7 @@ export function* evalCode(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  console.log("evalCode")
+  console.log('evalCode');
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
   const isStoriesBlock = actionType === EVAL_STORY || workspaceLocation === 'stories';

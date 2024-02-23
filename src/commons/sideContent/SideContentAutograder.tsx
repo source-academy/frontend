@@ -92,9 +92,10 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
   return (
     <div className="Autograder">
       {isFolderModeEnabled && (
-      <span className="entrypoint-span">
-        Entry point file for Testcases: <code className='filepath-design bp5-code'>{currentFileBeingRan}</code>
-      </span>
+        <span className="entrypoint-span">
+          Entry point file for Testcases:{' '}
+          <code className="filepath-design bp5-code">{currentFileBeingRan}</code>
+        </span>
       )}
       <Button
         className="collapse-button"

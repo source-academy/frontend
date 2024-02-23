@@ -327,10 +327,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = useCallback(() => {
-    console.log('handleeval')
+    console.log('handleeval');
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
-      console.log("running all test cases!")
+      console.log('running all test cases!');
       handleRunAllTestcases();
     } else {
       handleEditorEval();
@@ -546,7 +546,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             <SideContentAutograder
               testcases={editorTestcases}
               isFolderModeEnabled={isFolderModeEnabled}
-              currentFileBeingRan={`/${questionId+1}.js`}
+              currentFileBeingRan={`/${questionId + 1}.js`}
               autogradingResults={
                 // Display autograding results if assessment has been graded by an avenger, OR does not need to be manually graded
                 isGraded || !props.assessmentConfiguration.isManuallyGraded
