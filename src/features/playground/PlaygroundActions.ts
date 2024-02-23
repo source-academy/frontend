@@ -1,6 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
-import { action } from 'typesafe-actions';
 
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 import {
@@ -13,7 +12,7 @@ import {
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
 
-export const generateLzString = () => action(GENERATE_LZ_STRING);
+export const generateLzString = createAction(GENERATE_LZ_STRING, () => ({ payload: {} }));
 
 export const shortenURL = createAction(SHORTEN_URL, (keyword: string) => ({ payload: keyword }));
 
