@@ -27,6 +27,7 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
+import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -128,10 +129,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     ...tableFilters.columnFilters
   ]);
 
-  // Polish: debounce this search, or have a onClick event listener search instead.
-  // Polish: if search value does not change content of submissions, do not reset page.
-  // not as easy as i thought it was with setTimeout.
   const [searchValue, setSearchValue] = useState('');
+  const debouncedSetSearchValue = debounce(setSearchValue, 300);
 
   // masquerade search value as a column filter.
   const searchFilter: ColumnFilter[] = useMemo(
@@ -220,7 +219,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
           placeholder="assessment name search"
           value={searchValue}
-          onChange={e => setSearchValue(e.target.value)}
+          onChange={e => debouncedSetSearchValue(e.target.value)}
         />
       </Flex>
       <Table marginTop="mt-2">
