@@ -1,4 +1,4 @@
-import { Classes, Colors, Menu, Text } from '@blueprintjs/core';
+import { Classes, Colors, Divider, FormGroup, Menu, Text } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import * as React from 'react';
@@ -69,63 +69,41 @@ export class ControlBarSessionButtons extends React.PureComponent<
     const inviteButtonPopoverContent = (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         {!this.props.editorSessionId ? (
-          <ControlButton label={'Create'} icon={IconNames.ADD} onClick={handleStartInvite} />
+          <>
+            <Text>You are not currently in any session.</Text>
+            <Divider />
+            <ControlButton label={'Create'} icon={IconNames.ADD} onClick={handleStartInvite} />
+          </>
         ) : (
           <>
-            {this.state.sessionEditingId ? (
-              <Text>This session is editable.</Text>
-            ) : (
-              <Text>This session is read-only.</Text>
-            )}
+            <Text>
+              You have joined the session as{' '}
+              {this.state.sessionEditingId ? 'an editor' : 'a viewer'}.
+            </Text>
+            <Divider />
             {this.state.sessionEditingId && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <Text>Invite as editor:</Text>
-                <div style={{ marginLeft: '10px' }}>
-                  <input
-                    value={this.state.sessionEditingId}
-                    readOnly={true}
-                    ref={this.sessionEditingIdInputElem}
-                  />
-                  <CopyToClipboard text={'' + this.state.sessionEditingId}>
-                    <ControlButton
-                      icon={IconNames.DUPLICATE}
-                      onClick={this.selectSessionEditingId}
-                    />
-                  </CopyToClipboard>
-                </div>
-              </div>
+              <FormGroup subLabel="Invite as editor">
+                <input
+                  value={this.state.sessionEditingId}
+                  readOnly={true}
+                  ref={this.sessionEditingIdInputElem}
+                />
+                <CopyToClipboard text={'' + this.state.sessionEditingId}>
+                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionEditingId} />
+                </CopyToClipboard>
+              </FormGroup>
             )}
             {this.state.sessionViewingId && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <Text>Invite as viewer:</Text>
-                <div style={{ marginLeft: '10px' }}>
-                  <input
-                    value={this.state.sessionViewingId}
-                    readOnly={true}
-                    ref={this.sessionViewingIdInputElem}
-                  />
-                  <CopyToClipboard text={'' + this.state.sessionViewingId}>
-                    <ControlButton
-                      icon={IconNames.DUPLICATE}
-                      onClick={this.selectSessionViewingId}
-                    />
-                  </CopyToClipboard>
-                </div>
-              </div>
+              <FormGroup subLabel="Invite as viewer">
+                <input
+                  value={this.state.sessionViewingId}
+                  readOnly={true}
+                  ref={this.sessionViewingIdInputElem}
+                />
+                <CopyToClipboard text={'' + this.state.sessionViewingId}>
+                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionViewingId} />
+                </CopyToClipboard>
+              </FormGroup>
             )}
           </>
         )}
@@ -138,7 +116,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
         inheritDarkTheme={false}
         content={inviteButtonPopoverContent}
       >
-        <ControlButton label="Invite" icon={IconNames.GRAPH} onClick={handleStartInvite} />
+        <ControlButton label="Invite" icon={IconNames.GRAPH} />
       </Popover2>
     );
 

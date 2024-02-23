@@ -3,6 +3,7 @@ import sharedbAce from '@sourceacademy/sharedb-ace';
 import * as React from 'react';
 
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
 
 // EditorHook structure:
@@ -25,8 +26,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       return;
     }
 
-    console.log(sessionDetails);
-
     const editor = reactAceRef.current!.editor;
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       WsUrl: getSessionUrl(editorSessionId, true),
@@ -38,6 +37,11 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     ShareAce.on('ready', () => {
       ShareAce.add(editor, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
+      showSuccessMessage(
+        'You have joined a session as ' + (sessionDetails.readOnly
+          ? 'a viewer in read-only mode.'
+          : 'an editor.')
+      );
     });
     ShareAce.on('error', (path: string, error: any) => {
       console.error('ShareAce error', error);
