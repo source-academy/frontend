@@ -10,7 +10,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
-import { createButton } from '../../utils/ButtonUtils';
+import { createButton, createButtonText } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import TalkModeConstants, { talkButtonStyle } from './GameModeTalkConstants';
@@ -54,7 +54,7 @@ class GameModeTalk implements IGameUI {
     talkMenuContainer.add(
       buttons.map((button, index) =>
         this.createTalkTopicButton(
-          '[ ' + (index + 1) + ' ]  ' + button.text,
+          createButtonText(index + 1, button.text),
           buttonPositions[index][0],
           buttonPositions[index][1],
           button.callback

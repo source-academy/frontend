@@ -11,7 +11,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType, LocationId } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
-import { createButton } from '../../utils/ButtonUtils';
+import { createButton, createButtonText } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import MoveModeConstants, { moveButtonStyle } from './GameModeMoveConstants';
@@ -83,7 +83,7 @@ class GameModeMove implements IGameUI {
     moveMenuContainer.add(
       buttons.map((button, index) => {
         return this.createMoveButton(
-          '[ ' + (index + 1) + ' ]  ' + button.text,
+          createButtonText(index + 1, button.text),
           buttonPositions[index][0] + MoveModeConstants.button.xOffSet,
           buttonPositions[index][1],
           button.callback,
