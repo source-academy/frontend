@@ -14,7 +14,7 @@ import SSCursorMode from '../../cursorMode/SSCursorMode';
 import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
 import SSLogManager from '../../logger/SSLogManager';
 import SSObjectManager from '../../objects/SSObjectManager';
-import { StorySimState } from '../../StorySimulatorTypes';
+import { GameSimState } from '../../GameSimulatorTypes';
 import SSTransformManager from '../../transform/SSTransformManager';
 import ObjPlacementConstants from './ObjectPlacementConstants';
 
@@ -95,8 +95,8 @@ export default class ObjectPlacement extends Phaser.Scene {
     const uiContainer = new Phaser.GameObjects.Container(this, 0, 0);
     const backButton = new CommonBackButton(this, () => {
       this.cleanUp();
-      SourceAcademyGame.getInstance().setStorySimState(StorySimState.Default);
-      this.scene.start('StorySimulatorMenu');
+      SourceAcademyGame.getInstance().setGameSimState(GameSimState.Default);
+      this.scene.start('GameSimulatorMenu');
     });
 
     this.cursorModes = new SSCursorMode(
@@ -117,7 +117,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      SSImageAssets.storySimBg.key
+      SSImageAssets.gameSimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
 

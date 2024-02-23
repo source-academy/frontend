@@ -1,7 +1,7 @@
 import { AssetMap, AssetType, ImageAsset } from 'src/features/game/assets/AssetsTypes';
 
 const SSImageAssets: AssetMap<ImageAsset> = {
-  storySimBg: {
+  gameSimBg: {
     type: AssetType.Image,
     key: 'student-room',
     path: '/locations/deathCube_ext/shields-down.png'

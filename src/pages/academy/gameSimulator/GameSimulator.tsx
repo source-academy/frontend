@@ -1,32 +1,32 @@
 import React from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
-import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
+import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
-import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
-import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';
-import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
-import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
+import GameSimulatorAssetFileUploader from './subcomponents/GameSimulatorAssetFileUploader';
+import GameSimulatorAssetSelection from './subcomponents/GameSimulatorAssetSelection';
+import GameSimulatorChapterSim from './subcomponents/GameSimulatorChapterSim';
+import GameSimulatorCheckpointSim from './subcomponents/GameSimulatorCheckpointSim';
+import { createGameSimulatorGame } from './subcomponents/GameSimulatorGame';
 
 /**
- * Story simulator main page
+ * Game simulator main page
  *
  * Displays the following elements:
- * (1) Story Simulator phaser canvas
- * (2) Story Simulator control panel
+ * (1) Game Simulator phaser canvas
+ * (2) Game Simulator control panel
  *
- * Story Simulator control panel's content can be altered using
- * `setStorySimState` function. This function is passed into story
- * simulator phaser game, so that the StorySimulatorMainMenu buttons
- * are able to control what is shown on the Story Simulator panel.
+ * Game Simulator control panel's content can be altered using
+ * `setGameSimState` function. This function is passed into story
+ * simulator phaser game, so that the GameSimulatorMainMenu buttons
+ * are able to control what is shown on the Game Simulator panel.
  */
-function StorySimulator() {
+function GameSimulator() {
   const session = useTypedSelector(state => state.session);
-  const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
+  const [gameSimState, setGameSimState] = React.useState<string>(GameSimState.Default);
 
   React.useEffect(() => {
-    createStorySimulatorGame().setStorySimStateSetter(setStorySimState);
+    createGameSimulatorGame().setGameSimStateSetter(setGameSimState);
   }, []);
 
   React.useEffect(() => {
@@ -39,29 +39,29 @@ function StorySimulator() {
   }, [session]);
 
   return (
-    <div className="StorySimulatorWrapper">
+    <div className="GameSimulatorWrapper">
       <div id="game-display" />
-      <div className="LeftAlign StorySimulatorPanel">
-        {storySimState === StorySimState.Default && <h3>Welcome to story simulator!</h3>}
-        {storySimState === StorySimState.CheckpointSim && <StorySimulatorCheckpointSim />}
-        {storySimState === StorySimState.ObjectPlacement && (
+      <div className="LeftAlign GameSimulatorPanel">
+        {gameSimState === GameSimState.Default && <h3>Welcome to Game simulator!</h3>}
+        {gameSimState === GameSimState.CheckpointSim && <GameSimulatorCheckpointSim />}
+        {gameSimState === GameSimState.ObjectPlacement && (
           <>
             <h3>Asset Selection</h3>
-            <StorySimulatorAssetSelection />
+            <GameSimulatorAssetSelection />
           </>
         )}
-        {storySimState === StorySimState.AssetUploader && (
+        {gameSimState === GameSimState.AssetUploader && (
           <>
             <h3>Asset uploader</h3>
-            <StorySimulatorAssetFileUploader />
+            <GameSimulatorAssetFileUploader />
             <h3>Asset Viewer</h3>
-            <StorySimulatorAssetSelection />
+            <GameSimulatorAssetSelection />
           </>
         )}
-        {storySimState === StorySimState.ChapterSim && <StorySimulatorChapterSim />}
+        {gameSimState === GameSimState.ChapterSim && <GameSimulatorChapterSim />}
       </div>
     </div>
   );
 }
 
-export default StorySimulator;
+export default GameSimulator;

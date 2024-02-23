@@ -1,11 +1,11 @@
 import { Button } from '@blueprintjs/core';
 import { useRequest } from 'src/commons/utils/Hooks';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
-import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
-import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
-import { fetchTextAssets } from 'src/features/storySimulator/StorySimulatorService';
+import MainMenu from 'src/features/gameSimulator/scenes/mainMenu/MainMenu';
+import mainMenuConstants from 'src/features/gameSimulator/scenes/mainMenu/MainMenuConstants';
+import { fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
 
-import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
+import CheckpointTxtLoader from './GameSimulatorCheckpointTxtLoader';
 
 /**
  * This component helps one simulate a checkpoint by
