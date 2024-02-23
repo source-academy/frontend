@@ -610,17 +610,13 @@ export const getGradingOverviews = async (
   pageParams: Record<string, any>,
   filterParams: Record<string, any>
 ): Promise<GradingOverviews | null> => {
-  // this converts the payload into a useable query string without a leading '?'
-  const gradedQuery = new URLSearchParams(graded);
-  const pageQuery = new URLSearchParams(pageParams);
-  const filterQuery = new URLSearchParams(filterParams);
+  const params = new URLSearchParams({ ...graded, ...pageParams, ...filterParams });
+  params.append('group', `${group}`);
 
   // gradedQuery placed behind filterQuery to override progress filter if any
-  const resp = await request(
-    `${courseId()}/admin/grading?group=${group}&${pageQuery}&${filterQuery}&${gradedQuery}`,
-    'GET',
-    { ...tokens }
-  );
+  const resp = await request(`${courseId()}/admin/grading?${params.toString()}`, 'GET', {
+    ...tokens
+  });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
   }
