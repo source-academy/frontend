@@ -57,7 +57,6 @@
     "mdast-util-to-hast": "^13.0.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
-    "openai": "^4.17.5",
     "phaser": "^3.55.2",
     "query-string": "^7.1.1",
     "re-resizable": "^6.9.9",
