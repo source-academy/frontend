@@ -1,9 +1,9 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { mockStudents } from 'src/commons/mocks/UserMocks';
 import {
   paginationToBackendParams,
   ungradedToBackendParams
 } from 'src/features/grading/GradingUtils';
-import { mockStudents } from 'src/commons/mocks/UserMocks';
 
 import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
@@ -582,8 +582,8 @@ test('updateGradingOverviews generates correct action object', () => {
         studentId: 100,
         studentName: 'test student',
         studentNames: [],
-      studentUsername: 'E0123456',
-      studentUsernames: [],
+        studentUsername: 'E0123456',
+        studentUsernames: [],
         submissionId: 1,
         submissionStatus: 'attempting',
         groupName: 'group',

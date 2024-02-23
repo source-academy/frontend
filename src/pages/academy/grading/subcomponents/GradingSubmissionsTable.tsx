@@ -63,7 +63,8 @@ const makeColumns = (handleClick: () => void) => [
       const finalFallbackValue = fallbackValue?.join(', ') || '';
       return (
         <Filterable
-         onClick={handleClick} column={info.column}
+          onClick={handleClick}
+          column={info.column}
           value={finalValue !== '' ? finalValue : finalFallbackValue}
         />
       );
@@ -78,7 +79,8 @@ const makeColumns = (handleClick: () => void) => [
       const finalFallbackValue = fallbackValue?.join(', ') || '';
       return (
         <Filterable
-         onClick={handleClick} column={info.column}
+          onClick={handleClick}
+          column={info.column}
           value={finalValue !== '' ? finalValue : finalFallbackValue}
         />
       );
