@@ -140,10 +140,3 @@ export type Contributor = {
   githubName: string;
   commits: number;
 };
-
-export type ContributorsProps = {
-  repos: Repo[];
-  contributors: Contributor[][];
-  handleFetchRepos: () => Repo[];
-  handleFetchContributors: (repos: Repo[]) => Contributor[][];
-};

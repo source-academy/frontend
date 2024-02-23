@@ -1,6 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { Converter } from 'showdown';
 
 type MarkdownProps = {
