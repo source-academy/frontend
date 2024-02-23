@@ -536,22 +536,23 @@ test('updateGradingOverviews generates correct action object', () => {
         assessmentName: 'test assessment',
         assessmentType: 'Contests',
         questions: '',
-      initialXp: 0,
-      xpBonus: 100,
-      xpAdjustment: 50,
-      currentXp: 50,
-      maxXp: 500,
-      studentId: 100,
-      studentName: 'test student',
-      studentUsername: 'E0123456',
-      submissionId: 1,
-      submissionStatus: 'attempting',
-      groupName: 'group',
-      gradingStatus: 'excluded',
-      questionCount: 6,
-      gradedCount: 0
-    }
-  ]};
+        initialXp: 0,
+        xpBonus: 100,
+        xpAdjustment: 50,
+        currentXp: 50,
+        maxXp: 500,
+        studentId: 100,
+        studentName: 'test student',
+        studentUsername: 'E0123456',
+        submissionId: 1,
+        submissionStatus: 'attempting',
+        groupName: 'group',
+        gradingStatus: 'excluded',
+        questionCount: 6,
+        gradedCount: 0
+      }
+    ]
+  };
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
