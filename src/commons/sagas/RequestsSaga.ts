@@ -635,34 +635,35 @@ export const getGradingOverviews = async (
           studentUsername: overview.student.username,
           studentName: overview.student.name,
           questions: overview.questions,
-        submissionId: overview.id,
-        submissionStatus: overview.status,
-        groupName: overview.student.groupName,
-        groupLeaderId: overview.student.groupLeaderId,
-        // Grading Status
-        gradingStatus: 'none',
-        questionCount: overview.assessment.questionCount,
-        gradedCount: overview.gradedCount,
-        // XP
-        initialXp: overview.xp,
-        xpAdjustment: overview.xpAdjustment,
-        currentXp: overview.xp + overview.xpAdjustment,
-        maxXp: overview.assessment.maxXp,
-        xpBonus: overview.xpBonus
-      };
-      gradingOverview.gradingStatus = computeGradingStatus(
-        overview.assessment.isManuallyGraded,
-        gradingOverview.submissionStatus,
-        gradingOverview.gradedCount,
-        gradingOverview.questionCount
-      );
-      return gradingOverview;
-    })
-    .sort((subX: GradingOverview, subY: GradingOverview) =>
-      subX.assessmentId !== subY.assessmentId
-        ? subY.assessmentId - subX.assessmentId
-        : subY.submissionId - subX.submissionId
-    )};
+          submissionId: overview.id,
+          submissionStatus: overview.status,
+          groupName: overview.student.groupName,
+          groupLeaderId: overview.student.groupLeaderId,
+          // Grading Status
+          gradingStatus: 'none',
+          questionCount: overview.assessment.questionCount,
+          gradedCount: overview.gradedCount,
+          // XP
+          initialXp: overview.xp,
+          xpAdjustment: overview.xpAdjustment,
+          currentXp: overview.xp + overview.xpAdjustment,
+          maxXp: overview.assessment.maxXp,
+          xpBonus: overview.xpBonus
+        };
+        gradingOverview.gradingStatus = computeGradingStatus(
+          overview.assessment.isManuallyGraded,
+          gradingOverview.submissionStatus,
+          gradingOverview.gradedCount,
+          gradingOverview.questionCount
+        );
+        return gradingOverview;
+      })
+      .sort((subX: GradingOverview, subY: GradingOverview) =>
+        subX.assessmentId !== subY.assessmentId
+          ? subY.assessmentId - subX.assessmentId
+          : subY.submissionId - subX.submissionId
+      )
+  };
 };
 
 /**
