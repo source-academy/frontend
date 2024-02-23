@@ -4,7 +4,9 @@ import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockGradingAnswer } from '../../mocks/GradingMocks';
-import SideContentAutograder, { SideContentAutograderProps } from '../SideContentAutograder';
+import SideContentAutograder, {
+  SideContentAutograderProps
+} from '../content/SideContentAutograder';
 
 const mockErrors: SourceError[] = [
   {

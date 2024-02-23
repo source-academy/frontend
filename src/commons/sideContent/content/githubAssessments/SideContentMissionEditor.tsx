@@ -3,10 +3,10 @@ import { Chapter } from 'js-slang/dist/types';
 import React from 'react';
 import classes from 'src/styles/GithubAssessments.module.scss';
 
-import { SALanguage } from '../../application/ApplicationTypes';
-import { ControlBarChapterSelect } from '../../controlBar/ControlBarChapterSelect';
-import { MissionMetadata } from '../../githubAssessments/GitHubMissionTypes';
-import Constants from '../../utils/Constants';
+import { SALanguage } from '../../../application/ApplicationTypes';
+import { ControlBarChapterSelect } from '../../../controlBar/ControlBarChapterSelect';
+import { MissionMetadata } from '../../../githubAssessments/GitHubMissionTypes';
+import Constants from '../../../utils/Constants';
 
 export type SideContentMissionEditorProps = {
   isFolderModeEnabled: boolean;
