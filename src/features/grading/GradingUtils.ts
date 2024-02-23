@@ -100,7 +100,7 @@ export const paginationToBackendParams = (page: number, pageSize: number) => {
 
 export const ungradedToBackendParams = (showAll: boolean) => {
   if (!showAll) {
-    return;
+    return {};
   }
   return {
     status: 'submitted',
