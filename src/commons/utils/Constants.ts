@@ -41,7 +41,6 @@ const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
-const chatGptKey = process.env.REACT_APP_KEY || '';
 
 // For achievements feature (CA - Continual Assessment)
 // TODO: remove dependency of the ca levels on the env file
@@ -141,7 +140,6 @@ const Constants = {
   sicpBackendUrl,
   workspaceSettingsLocalStorageKey,
   caFulfillmentLevel,
-  chatGptKey
 };
 
 export default Constants;
