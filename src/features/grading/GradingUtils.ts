@@ -99,7 +99,7 @@ export const paginationToBackendParams = (page: number, pageSize: number) => {
 };
 
 export const ungradedToBackendParams = (showAll: boolean) => {
-  if (!showAll) {
+  if (showAll) {
     return {};
   }
   return {
