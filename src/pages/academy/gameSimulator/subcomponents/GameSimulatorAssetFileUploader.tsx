@@ -1,17 +1,14 @@
 import { Button, InputGroup, Menu, MenuItem, Position } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
-import {
-  s3AssetFolders,
-  uploadAssetsToS3
-} from 'src/features/storySimulator/StorySimulatorService';
+import { s3AssetFolders, uploadAssetsToS3 } from 'src/features/gameSimulator/GameSimulatorService';
 
 const specifyFolderText = 'Specify own folder...';
 const folderOverwritePlaceholder = "Or specify your own, e.g. 'locations/hallway'";
 
 /**
  * This is component allows storywriters to upload any assets into to
- * specific folders into Story Sim's Asset Uploader
+ * specific folders into Game Sim's Asset Uploader
  */
 const AssetFileUploader = () => {
   const [fileList, setFileList] = React.useState<FileList>();
