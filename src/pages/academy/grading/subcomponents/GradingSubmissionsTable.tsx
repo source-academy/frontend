@@ -175,6 +175,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   }, [columnFilters, dispatch]);
 
   useEffect(() => {
+    resetPage();
+  }, [updateEntries, resetPage]);
+
+  useEffect(() => {
     updateEntries(page, backendFilterParams);
   }, [updateEntries, page, backendFilterParams]);
 
