@@ -279,17 +279,11 @@ export const processingFunctions = {
     </table>
   ),
 
-  TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => {
-    const id = obj['id'];
-    if (id === undefined) {
-      return <div></div>;
-    }
-    return (
-      <AnchorLink id={obj['id']} refs={refs} top={-3}>
-        <div className="sicp-text">{parseArr(obj['child']!, refs)}</div>
-      </AnchorLink>
-    );
-  },
+  TEXT: (obj: JsonType, refs: React.MutableRefObject<{}>) => (
+    <AnchorLink id={obj['id']} refs={refs} top={-3}>
+      <div className="sicp-text">{parseArr(obj['child']!, refs)}</div>
+    </AnchorLink>
+  ),
 
   TITLE: handleTitle,
 
