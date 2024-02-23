@@ -572,6 +572,8 @@ export const defaultSideContentManager: SideContentManagerState = {
   grading: defaultSideContent,
   playground: defaultSideContent,
   githubAssessment: defaultSideContent,
+  groundControl: defaultSideContent,
+  teamFormation: defaultSideContent,
   sicp: defaultSideContent,
   sourcecast: defaultSideContent,
   sourcereel: defaultSideContent,
