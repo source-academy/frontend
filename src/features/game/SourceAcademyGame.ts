@@ -13,7 +13,7 @@ import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
 import Settings from 'src/features/game/scenes/settings/Settings';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
-import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
+import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 import { AchievementGoal, AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
@@ -47,7 +47,7 @@ type GlobalGameProps = {
   roomCode: string;
   roomPreviewMapping: Map<ItemId, AssetPath>;
   saveManager: GameSaveManager;
-  setStorySimState: (value: React.SetStateAction<string>) => void;
+  setGameSimState: (value: React.SetStateAction<string>) => void;
   soundManager: GameSoundManager;
   ssChapterSimFilenames: string[];
   userStateManager: GameUserStateManager;
@@ -74,7 +74,7 @@ export default class SourceAcademyGame extends Phaser.Game {
       roomCode: '',
       roomPreviewMapping: new Map<ItemId, AssetPath>(),
       saveManager: new GameSaveManager(),
-      setStorySimState: Constants.nullFunction,
+      setGameSimState: Constants.nullFunction,
       soundManager: new GameSoundManager(),
       ssChapterSimFilenames: [],
       userStateManager: new GameUserStateManager()
@@ -107,8 +107,8 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.goals = goals;
   }
 
-  public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
-    this.setStorySimState = setStorySimState;
+  public setGameSimStateSetter(setGameSimState: (value: React.SetStateAction<string>) => void) {
+    this.setGameSimState = setGameSimState;
   }
 
   public setRoomPreviewMapping(mapping: Map<ItemId, AssetPath>) {
@@ -123,8 +123,8 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.roomCode = await getRoomPreviewCode();
   }
 
-  public setStorySimState(state: StorySimState) {
-    this.global.setStorySimState(state);
+  public setGameSimState(state: GameSimState) {
+    this.global.setGameSimState(state);
   }
 
   public setCurrentSceneRef(scene: Phaser.Scene) {

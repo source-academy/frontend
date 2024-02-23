@@ -3,13 +3,14 @@ import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { Grading } from '../../features/grading/GradingTypes';
+import { GradingQuery } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
+import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
@@ -32,6 +33,7 @@ export type OverallState = {
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
+  readonly sideContent: SideContentManagerState;
 };
 
 export type Story = {
@@ -385,7 +387,11 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  debuggerContext: {} as DebuggerContext
+  debuggerContext: {} as DebuggerContext,
+  sideContent: {
+    alerts: [],
+    dynamicTabs: []
+  }
 });
 
 const defaultFileName = 'program.js';
@@ -402,8 +408,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   grading: {
     ...createDefaultWorkspace('grading'),
     submissionsTableFilters: {
-      columnFilters: [],
-      globalFilter: null
+      columnFilters: []
     },
     currentSubmission: undefined,
     currentQuestion: undefined,
@@ -508,7 +513,7 @@ export const defaultSession: SessionState = {
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
-  gradings: new Map<number, Grading>(),
+  gradings: new Map<number, GradingQuery>(),
   notifications: []
 };
 
@@ -531,11 +536,31 @@ export const createDefaultStoriesEnv = (
   stepLimit: 1000,
   globals: [],
   usingSubst: false,
-  debuggerContext: {} as DebuggerContext
+  debuggerContext: {} as DebuggerContext,
+  sideContent: {
+    dynamicTabs: [],
+    alerts: []
+  }
 });
 
 export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null
+};
+
+export const defaultSideContent: SideContentState = {
+  dynamicTabs: [],
+  alerts: []
+};
+
+export const defaultSideContentManager: SideContentManagerState = {
+  assessment: defaultSideContent,
+  grading: defaultSideContent,
+  playground: defaultSideContent,
+  githubAssessment: defaultSideContent,
+  sicp: defaultSideContent,
+  sourcecast: defaultSideContent,
+  sourcereel: defaultSideContent,
+  stories: {}
 };
 
 export const defaultState: OverallState = {
@@ -547,5 +572,6 @@ export const defaultState: OverallState = {
   session: defaultSession,
   stories: defaultStories,
   workspaces: defaultWorkspaceManager,
-  fileSystem: defaultFileSystem
+  fileSystem: defaultFileSystem,
+  sideContent: defaultSideContentManager
 };
