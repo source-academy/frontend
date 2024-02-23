@@ -129,8 +129,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     ...tableFilters.columnFilters
   ]);
 
+  /** The value to be shown in the search bar */
+  const [searchQuery, setSearchQuery] = useState('');
+  /** The actual value sent to the backend */
   const [searchValue, setSearchValue] = useState('');
   const debouncedSetSearchValue = debounce(setSearchValue, 300);
+  const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
+    setSearchQuery(e.target.value);
+    debouncedSetSearchValue(e.target.value);
+  };
 
   // masquerade search value as a column filter.
   const searchFilter: ColumnFilter[] = useMemo(
@@ -218,8 +225,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
           placeholder="assessment name search"
-          value={searchValue}
-          onChange={e => debouncedSetSearchValue(e.target.value)}
+          value={searchQuery}
+          onChange={handleSearchQueryUpdate}
         />
       </Flex>
       <Table marginTop="mt-2">
