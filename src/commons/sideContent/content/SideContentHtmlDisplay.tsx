@@ -39,6 +39,7 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
 
   useEffect(() => {
     alertSideContent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
