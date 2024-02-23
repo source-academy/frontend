@@ -149,7 +149,7 @@ const cracoConfig = (module.exports = {
   },
   babel: {
     presets: [
-      ['@babel/preset-typescript', { allowDeclareFields: true }]
+      ['@babel/preset-typescript']
     ]
   }
 });
