@@ -7,6 +7,7 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { SideContentState } from '../sideContent/SideContentTypes';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -14,7 +15,6 @@ export const BROWSE_REPL_HISTORY_DOWN = 'BROWSE_REPL_HISTORY_DOWN';
 export const BROWSE_REPL_HISTORY_UP = 'BROWSE_REPL_HISTORY_UP';
 export const CHANGE_EXEC_TIME = 'CHANGE_EXEC_TIME';
 export const CHANGE_EXTERNAL_LIBRARY = 'CHANGE_EXTERNAL_LIBRARY';
-export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
 export const CHANGE_STEP_LIMIT = 'CHANGE_STEP_LIMIT';
 export const CHAPTER_SELECT = 'CHAPTER_SELECT';
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT';
@@ -159,10 +159,10 @@ export type WorkspaceState = {
   readonly tokenCount: integer;
   readonly customNotification: string;
   readonly sharedbConnected: boolean;
-  readonly sideContentHeight?: number;
   readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
+  readonly sideContent: SideContentState;
 };
 
 type ReplHistory = {
