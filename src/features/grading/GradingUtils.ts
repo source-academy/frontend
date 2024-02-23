@@ -3,6 +3,7 @@ import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 
 import { GradingOverview } from './GradingTypes';
 
+// TODO: Unused. Marked for deletion.
 export const isSubmissionUngraded = (s: GradingOverview): boolean => {
   const isSubmitted = s.submissionStatus === 'submitted';
   const isNotGraded =
