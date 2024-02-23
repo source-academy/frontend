@@ -1,5 +1,5 @@
-import { TabId } from '@blueprintjs/core';
 import * as bp3core from '@blueprintjs/core';
+import { TabId } from '@blueprintjs/core';
 import * as bp3icons from '@blueprintjs/icons';
 import * as bp3popover from '@blueprintjs/popover2';
 import * as jsslang from 'js-slang';
@@ -12,13 +12,17 @@ import ace from 'react-ace';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
 
+import { defaultSideContent } from '../application/ApplicationTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
-import { ModuleSideContent, SideContentTab, SideContentType } from './SideContentTypes';
 import {
+  ModuleSideContent,
   NonStoryWorkspaceLocation,
   SideContentLocation,
+  SideContentState,
+  SideContentTab,
+  SideContentType,
   StoryWorkspaceLocation
 } from './SideContentTypes';
 
@@ -71,9 +75,9 @@ export const generateTabAlert = (shouldAlert: boolean) =>
 
 export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
   const [workspaceLocation, storyEnv] = getLocation(location);
-  const { alerts, dynamicTabs, selectedTab, height } = useTypedSelector(state =>
+  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(state =>
     workspaceLocation === 'stories'
-      ? state.sideContent.stories[storyEnv]
+      ? state.sideContent.stories[storyEnv] ?? { ...defaultSideContent }
       : state.sideContent[workspaceLocation]
   );
   const dispatch = useDispatch();
@@ -108,6 +112,6 @@ export const isStoryLocation = (
 export const getLocation = (
   location: SideContentLocation
 ): [NonStoryWorkspaceLocation] | ['stories', string] => {
-  if (isStoryLocation(location)) return location.split('.') as ['stories', string];
+  if (isStoryLocation(location)) return location.split('.', 2) as ['stories', string];
   return [location];
 };
