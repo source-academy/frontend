@@ -1,6 +1,7 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
+import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import {
   createDefaultStoriesEnv,
@@ -169,24 +170,27 @@ export const StoriesReducer: Reducer<StoriesState> = (
           }
         }
       };
-    case NOTIFY_STORIES_EVALUATED:
+    case NOTIFY_STORIES_EVALUATED: {
+      const debuggerContext: DebuggerContext = {
+        ...state.envs[env].debuggerContext,
+        result: action.payload.result,
+        lastDebuggerResult: action.payload.lastDebuggerResult,
+        code: action.payload.code,
+        context: action.payload.context,
+        workspaceLocation: 'stories'
+      };
+
       return {
         ...state,
         envs: {
           ...state.envs,
           [env]: {
             ...state.envs[env],
-            debuggerContext: {
-              ...state.envs[env].debuggerContext,
-              result: action.payload.result,
-              lastDebuggerResult: action.payload.lastDebuggerResult,
-              code: action.payload.code,
-              context: action.payload.context,
-              workspaceLocation: 'stories'
-            }
+            debuggerContext
           }
         }
       };
+    }
     case TOGGLE_STORIES_USING_SUBST:
       return {
         ...state,
