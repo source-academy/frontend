@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
-import { fetchChapters, fetchTextAssets } from 'src/features/storySimulator/StorySimulatorService';
-import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
+import { fetchChapters, fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
+import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import StorySimulatorChapterEditor from './StorySimulatorChapterEditor';
+import GameSimulatorChapterEditor from './GameSimulatorChapterEditor';
 
 export const inAYear = (date: Date) => {
   date.setFullYear(date.getFullYear() + 1);
@@ -47,7 +47,7 @@ const ChapterSim = React.memo(() => {
         </option>
       </select>
       <hr />
-      <StorySimulatorChapterEditor
+      <GameSimulatorChapterEditor
         chapterDetail={chapters[chosenIndex] || defaultChapter}
         checkpointFilenames={textAssets}
       />

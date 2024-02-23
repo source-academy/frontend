@@ -10,10 +10,10 @@ import { callGameManagerForSim } from 'src/features/game/utils/TxtLoaderUtils';
 import {
   deleteChapterRequest,
   updateChapterRequest
-} from 'src/features/storySimulator/StorySimulatorService';
-import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
+} from 'src/features/gameSimulator/GameSimulatorService';
+import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import { createChapterIndex, inAYear } from './StorySimulatorChapterSim';
+import { createChapterIndex, inAYear } from './GameSimulatorChapterSim';
 
 type ChapterSimProps = {
   chapterDetail: ChapterDetail;
