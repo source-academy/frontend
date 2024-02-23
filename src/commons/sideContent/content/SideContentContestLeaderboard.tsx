@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
-import { ContestEntry } from '../assessment/AssessmentTypes';
+import { ContestEntry } from '../../assessment/AssessmentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 import { SideContentType } from './SideContentTypes';
 

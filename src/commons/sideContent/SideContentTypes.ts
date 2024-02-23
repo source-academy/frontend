@@ -1,8 +1,14 @@
 import { IconName } from '@blueprintjs/core';
 
-import { DebuggerContext } from '../workspace/WorkspaceTypes';
+import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
+export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
+export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
+export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
+export const RESET_SIDE_CONTENT = 'RESET_SIDE_CONTENT';
+export const SPAWN_SIDE_CONTENT = 'SPAWN_SIDE_CONTENT';
+export const REMOVE_SIDE_CONTENT_ALERT = 'REMOVE_SIDE_CONTENT_ALERT';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -83,3 +89,37 @@ export type ModuleSideContent = {
   body: (props: any) => JSX.Element;
   toSpawn?: (context: DebuggerContext) => boolean;
 };
+
+export type NonStoryWorkspaceLocation = Exclude<WorkspaceLocation, 'stories'>;
+export type StoryWorkspaceLocation = `stories.${string}`;
+export type SideContentManagerState = Record<NonStoryWorkspaceLocation, SideContentState> & {
+  stories: Record<string, SideContentState>;
+};
+
+/**
+ * A SideContentLocation specifier is an extension of the WorkspaceLocation type
+ * that includes a specification for story workspaces
+ * Story Envs should be specified in the following format: ``stories.${env}``
+ */
+export type SideContentLocation = NonStoryWorkspaceLocation | StoryWorkspaceLocation;
+
+export type SideContentState = {
+  height?: number;
+  dynamicTabs: SideContentTab[];
+  alerts: string[];
+  selectedTab?: SideContentType;
+};
+
+export type ChangeTabsCallback = (
+  newId: SideContentType,
+  oldId: SideContentType,
+  event: React.MouseEvent<HTMLElement>
+) => void;
+
+export type SideContentDispatchProps = {
+  /**
+   * Call this function to cause the icon of the tab with the provided ID to flash
+   */
+  alertSideContent: (newId: SideContentType) => void;
+};
+export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';

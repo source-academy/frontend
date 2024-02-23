@@ -378,7 +378,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
@@ -418,7 +417,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="briefing-icon"
                               tabindex="0"
                             >
                               <span
@@ -458,7 +456,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="contest_voting-icon"
                               tabindex="0"
                             >
                               <span
@@ -486,7 +483,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="score_leaderboard-icon"
                               tabindex="0"
                             >
                               <span
@@ -1610,7 +1606,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                       >
                         <div
                           class="bp5-tab-indicator-wrapper"
-                          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
+                          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px; transition: none;"
                         >
                           <div
                             class="bp5-tab-indicator"
@@ -1633,7 +1629,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
@@ -1673,7 +1668,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="briefing-icon"
                               tabindex="0"
                             >
                               <span
@@ -1713,7 +1707,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="autograder-icon"
                               tabindex="0"
                             >
                               <span
@@ -2416,7 +2409,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
@@ -2456,7 +2448,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="briefing-icon"
                               tabindex="0"
                             >
                               <span
@@ -2496,7 +2487,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="autograder-icon"
                               tabindex="0"
                             >
                               <span
@@ -3189,7 +3179,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
@@ -3217,7 +3206,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="briefing-icon"
                               tabindex="0"
                             >
                               <span
@@ -3245,7 +3233,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="autograder-icon"
                               tabindex="0"
                             >
                               <span
@@ -3900,13 +3887,13 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
                           aria-disabled="false"
-                          aria-expanded="false"
-                          aria-selected="false"
+                          aria-expanded="true"
+                          aria-selected="true"
                           class="bp5-tab side-content-tab"
                           data-tab-id="question_overview"
                           id="bp5-tab-title_side-content-tabs_question_overview"
                           role="tab"
-                          tabindex="-1"
+                          tabindex="0"
                         >
                           <span
                             class="bp5-popover-target"
@@ -3914,7 +3901,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="question_overview-icon"
                               tabindex="0"
                             >
                               <span
@@ -3954,7 +3940,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="briefing-icon"
                               tabindex="0"
                             >
                               <span
@@ -3994,7 +3979,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="autograder-icon"
                               tabindex="0"
                             >
                               <span
@@ -4020,13 +4004,13 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_grading"
                           aria-disabled="false"
-                          aria-expanded="true"
-                          aria-selected="true"
+                          aria-expanded="false"
+                          aria-selected="false"
                           class="bp5-tab side-content-tab"
                           data-tab-id="grading"
                           id="bp5-tab-title_side-content-tabs_grading"
                           role="tab"
-                          tabindex="0"
+                          tabindex="-1"
                         >
                           <span
                             class="bp5-popover-target"
@@ -4034,7 +4018,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="grading-icon"
                               tabindex="0"
                             >
                               <span
@@ -4047,7 +4030,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                       </div>
                       <div
-                        aria-hidden="true"
+                        aria-hidden="false"
                         aria-labelledby="bp5-tab-title_side-content-tabs_question_overview"
                         class="bp5-tab-panel side-content-tab"
                         id="bp5-tab-panel_side-content-tabs_question_overview"
@@ -4213,7 +4196,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                       </div>
                       <div
-                        aria-hidden="false"
+                        aria-hidden="true"
                         aria-labelledby="bp5-tab-title_side-content-tabs_grading"
                         class="bp5-tab-panel side-content-tab"
                         id="bp5-tab-panel_side-content-tabs_grading"
