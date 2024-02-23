@@ -3,7 +3,7 @@ import '@tremor/react/dist/esm/tremor.css';
 import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Button, Card, Flex, Text, Title } from '@tremor/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
@@ -65,11 +65,6 @@ const Grading: React.FC = () => {
     [dispatch, showAllGroups, showAllSubmissions, pageSize]
   );
 
-  // Default value initializer, runs once only
-  useEffect(() => {
-    dispatch(fetchGradingOverviews(showAllGroups));
-  }, [dispatch, showAllGroups]);
-
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
     (params.submissionId && !params.submissionId?.match(numberRegExp)) ||
@@ -103,6 +98,7 @@ const Grading: React.FC = () => {
 
   return (
     <ContentDisplay
+      loadContentDispatch={() => dispatch(fetchGradingOverviews(showAllGroups))}
       display={
         gradingOverviews?.data === undefined ? (
           loadingDisplay
