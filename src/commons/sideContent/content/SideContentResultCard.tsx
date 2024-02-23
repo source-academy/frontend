@@ -2,7 +2,7 @@ import { Card, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
 
-import { AutogradingError, AutogradingResult } from '../assessment/AssessmentTypes';
+import { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
 
 type SideContentResultCardProps = StateProps;
 

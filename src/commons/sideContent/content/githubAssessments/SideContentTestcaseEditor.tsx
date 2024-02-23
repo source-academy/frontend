@@ -4,10 +4,10 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import AceEditor from 'react-ace';
 
-import { Testcase } from '../../assessment/AssessmentTypes';
-import ControlButton from '../../ControlButton';
-import { showSimpleConfirmDialog } from '../../utils/DialogHelper';
-import SideContentTestcaseCard from '../SideContentTestcaseCard';
+import { Testcase } from '../../../assessment/AssessmentTypes';
+import ControlButton from '../../../ControlButton';
+import { showSimpleConfirmDialog } from '../../../utils/DialogHelper';
+import SideContentTestcaseCard from '../../content/SideContentTestcaseCard';
 import SideContentEditableTestcaseCard from './SideContentEditableTestcaseCard';
 
 export type SideContentTestcaseEditorProps = DispatchProps & StateProps;
