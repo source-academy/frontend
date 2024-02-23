@@ -7,7 +7,7 @@ import { loadImage } from '../../game/utils/LoaderUtils';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 
 /**
- * This manager manages the background for Story Simulator's Object Placement scene
+ * This manager manages the background for Game Simulator's Object Placement scene
  * It handles (1) storing of information on the chosen background (2) Rendering background
  */
 export default class SSBackgroundManager {

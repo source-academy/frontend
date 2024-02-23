@@ -35,6 +35,11 @@ export type GradingOverview = {
   gradedCount: number;
 };
 
+export type GradingOverviews = {
+  count: number; // To support server-side pagination
+  data: GradingOverview[];
+};
+
 export type GradingOverviewWithNotifications = {
   notifications: Notification[];
 } & GradingOverview;
@@ -43,7 +48,23 @@ export type GradingOverviewWithNotifications = {
  * The information fetched before
  * grading a submission.
  */
-export type Grading = GradingQuestion[];
+export type GradingAnswer = GradingQuestion[];
+
+export type GradingAssessment = {
+  coverPicture: string;
+  id: number;
+  number: string;
+  reading: string;
+  story: string;
+  summaryLong: string;
+  summaryShort: string;
+  title: string;
+};
+
+export type GradingQuery = {
+  answers: GradingAnswer;
+  assessment: GradingAssessment;
+};
 
 /**
  * Encapsulates information regarding grading a
@@ -89,17 +110,4 @@ type Answer = {
   maxXp: number;
   solutionTemplate?: string;
   choices?: MCQChoice[];
-};
-
-export type GradingWorkspaceParams = {
-  submissionId?: string;
-  questionId?: string;
-};
-
-export type GradingNavLinkProps = {
-  data: GradingOverviewWithNotifications;
-};
-
-export type GradingCellProps = {
-  data: GradingOverview;
 };

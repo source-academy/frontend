@@ -3,7 +3,7 @@ import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { Grading } from '../../features/grading/GradingTypes';
+import { GradingQuery } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
@@ -402,8 +402,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   grading: {
     ...createDefaultWorkspace('grading'),
     submissionsTableFilters: {
-      columnFilters: [],
-      globalFilter: null
+      columnFilters: []
     },
     currentSubmission: undefined,
     currentQuestion: undefined,
@@ -508,7 +507,7 @@ export const defaultSession: SessionState = {
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
-  gradings: new Map<number, Grading>(),
+  gradings: new Map<number, GradingQuery>(),
   notifications: []
 };
 
