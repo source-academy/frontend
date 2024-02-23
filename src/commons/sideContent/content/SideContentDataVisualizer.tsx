@@ -3,14 +3,26 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import React from 'react';
 import { configure, GlobalHotKeys } from 'react-hotkeys';
+import { connect, MapDispatchToProps } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
-import { Step } from '../../features/dataVisualizer/dataVisualizerTypes';
-import { Links } from '../utils/Constants';
+import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
+import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
+import { Links } from '../../utils/Constants';
+import { beginAlertSideContent } from '../SideContentActions';
+import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type State = {
   steps: Step[];
   currentStep: number;
+};
+
+type OwnProps = {
+  workspaceLocation: SideContentLocation;
+};
+
+type DispatchProps = {
+  alertSideContent: () => void;
 };
 
 const dataVisualizerKeyMap = {
@@ -23,15 +35,14 @@ const dataVisualizerKeyMap = {
  * data_data function in Source. It adds a listener to the DataVisualizer singleton
  * which updates the steps list via setState whenever new steps are added.
  */
-class SideContentDataVisualizer extends React.Component<{}, State> {
+class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchProps, State> {
   constructor(props: any) {
     super(props);
     this.state = { steps: [], currentStep: 0 };
     DataVisualizer.init(steps => {
       if (this.state.steps.length > 0) {
         //  Blink icon
-        const icon = document.getElementById('data_visualizer-icon');
-        icon?.classList.add('side-content-tab-alert');
+        this.props.alertSideContent();
       }
       this.setState({ steps, currentStep: 0 });
     });
@@ -180,4 +191,25 @@ class SideContentDataVisualizer extends React.Component<{}, State> {
   };
 }
 
-export default SideContentDataVisualizer;
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
+  bindActionCreators(
+    {
+      alertSideContent: () =>
+        beginAlertSideContent(SideContentType.dataVisualizer, props.workspaceLocation)
+    },
+    dispatch
+  );
+
+export const SideContentDataVisualizer = connect(
+  null,
+  mapDispatchToProps
+)(SideContentDataVisualizerBase);
+
+const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
+  label: 'Data Visualizer',
+  iconName: IconNames.EYE_OPEN,
+  body: <SideContentDataVisualizer workspaceLocation={location} />,
+  id: SideContentType.dataVisualizer
+});
+
+export default makeDataVisualizerTabFrom;

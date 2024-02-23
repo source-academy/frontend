@@ -2,7 +2,7 @@ import { Button, Collapse, Icon, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useMemo, useState } from 'react';
 
-import { ContestEntry } from '../assessment/AssessmentTypes';
+import { ContestEntry } from '../../assessment/AssessmentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 
 export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
