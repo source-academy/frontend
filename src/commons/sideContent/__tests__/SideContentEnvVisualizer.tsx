@@ -6,7 +6,7 @@ import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import { mockContext } from '../../mocks/ContextMocks';
 import { visualizeEnv } from '../../utils/JsSlangHelper';
-import SideContentEnvVisualizer from '../SideContentEnvVisualizer';
+import { SideContentEnvVisualizer } from '../content/SideContentEnvVisualizer';
 
 const mockStore = mockInitialStore();
 const element = (
