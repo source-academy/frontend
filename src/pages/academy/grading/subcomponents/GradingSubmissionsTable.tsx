@@ -263,6 +263,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           </Flex>
         </Footer>
       </Table>
+      <Flex marginTop="-mt-6">
+        <></>
+      </Flex>
     </>
   );
 };
