@@ -139,7 +139,7 @@ const Constants = {
   cadetLoggerInterval,
   sicpBackendUrl,
   workspaceSettingsLocalStorageKey,
-  caFulfillmentLevel,
+  caFulfillmentLevel
 };
 
 export default Constants;
