@@ -170,11 +170,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(
-      updateSubmissionsTableFilters({
-        columnFilters
-      })
-    );
+    dispatch(updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, dispatch]);
 
   useEffect(() => {
