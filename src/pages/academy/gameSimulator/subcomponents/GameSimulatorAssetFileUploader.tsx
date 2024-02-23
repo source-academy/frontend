@@ -1,10 +1,7 @@
 import { Button, InputGroup, Menu, MenuItem, Position } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
-import {
-  s3AssetFolders,
-  uploadAssetsToS3
-} from 'src/features/gameSimulator/GameSimulatorService';
+import { s3AssetFolders, uploadAssetsToS3 } from 'src/features/gameSimulator/GameSimulatorService';
 
 const specifyFolderText = 'Specify own folder...';
 const folderOverwritePlaceholder = "Or specify your own, e.g. 'locations/hallway'";

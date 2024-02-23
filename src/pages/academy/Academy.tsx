@@ -22,11 +22,11 @@ import Sourcecast from '../sourcecast/Sourcecast';
 import AdminPanel from './adminPanel/AdminPanel';
 import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
+import GameSimulator from './gameSimulator/GameSimulator';
 import Grading from './grading/Grading';
 import GroundControl from './groundControl/GroundControlContainer';
 import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/Sourcereel';
-import GameSimulator from './gameSimulator/GameSimulator';
 
 const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();

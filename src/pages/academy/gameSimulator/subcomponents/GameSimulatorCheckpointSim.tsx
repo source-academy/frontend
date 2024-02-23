@@ -1,9 +1,9 @@
 import { Button } from '@blueprintjs/core';
 import { useRequest } from 'src/commons/utils/Hooks';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
 import MainMenu from 'src/features/gameSimulator/scenes/mainMenu/MainMenu';
 import mainMenuConstants from 'src/features/gameSimulator/scenes/mainMenu/MainMenuConstants';
-import { fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
 
 import CheckpointTxtLoader from './GameSimulatorCheckpointTxtLoader';
 

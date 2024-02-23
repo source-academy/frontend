@@ -12,9 +12,9 @@ import SSBackgroundManager from '../../background/SSBackgroundManager';
 import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
 import SSCursorMode from '../../cursorMode/SSCursorMode';
 import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
+import { GameSimState } from '../../GameSimulatorTypes';
 import SSLogManager from '../../logger/SSLogManager';
 import SSObjectManager from '../../objects/SSObjectManager';
-import { GameSimState } from '../../GameSimulatorTypes';
 import SSTransformManager from '../../transform/SSTransformManager';
 import ObjPlacementConstants from './ObjectPlacementConstants';
 
