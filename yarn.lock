@@ -8310,10 +8310,10 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.42:
-  version "1.0.42"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.42.tgz#47cd5d0e50ec7a81778e077dfc94b5e69399fff3"
-  integrity sha512-Gesed5z+m18vRkCRpR06wEL4RSnQw4H54/rHVodtZD51EhQ5hEFb2oUpdIEIL8gOFQwwbeivFwaZELyqU5kVOg==
+js-slang@^1.0.45:
+  version "1.0.45"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.45.tgz#7246ff653a0fde98af0252202a62c4f6f3126f7a"
+  integrity sha512-NnAvoPwryXzqqMRXbP8ArEqKm6GKAJVkqqZZTKzg0D1wwB3I/n9PZrLHyaoJYJ+xr/XhulRbnfEe0bxR1ITTLw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -8326,7 +8326,7 @@ js-slang@^1.0.42:
     astring "^1.4.3"
     gpu.js "^2.16.0"
     js-base64 "^3.7.5"
-    lodash "^4.17.20"
+    lodash "^4.17.21"
     node-getopt "^0.3.2"
     source-map "0.7.3"
     xmlhttprequest-ts "^1.0.1"
