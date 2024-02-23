@@ -128,22 +128,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     ...tableFilters.columnFilters
   ]);
 
-  const [visibleSearchValue, setVisibleSearchValue] = useState('');
-  const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
-
-  // timeout delay could be a placed within a config.
-  useEffect(() => {
-    const changeSearch = setTimeout(() => {
-      setDebouncedSearchValue(visibleSearchValue);
-    }, 300);
-
-    return () => clearTimeout(changeSearch);
-  }, [visibleSearchValue]);
+  // Polish: debounce this search, or have a onClick event listener search instead.
+  // Polish: if search value does not change content of submissions, do not reset page.
+  // not as easy as i thought it was with setTimeout.
+  const [searchValue, setSearchValue] = useState('');
 
   // masquerade search value as a column filter.
   const searchFilter: ColumnFilter[] = useMemo(
-    () => [{ id: 'assessmentName', value: debouncedSearchValue }],
-    [debouncedSearchValue]
+    () => [{ id: 'assessmentName', value: searchValue }],
+    [searchValue]
   );
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
@@ -226,8 +219,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
           placeholder="assessment name search"
-          value={visibleSearchValue}
-          onChange={e => setVisibleSearchValue(e.target.value)}
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
         />
       </Flex>
       <Table marginTop="mt-2">
