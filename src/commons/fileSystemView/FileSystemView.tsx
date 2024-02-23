@@ -17,7 +17,7 @@ export type FileSystemViewProps = {
   basePath: string;
 };
 
-const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProps) => {
+const FileSystemView: React.FC<FileSystemViewProps> = props => {
   const { workspaceLocation, basePath } = props;
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 

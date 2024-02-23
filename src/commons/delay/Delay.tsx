@@ -8,9 +8,7 @@ export type DelayProps = {
 /**
  * Delays the rendering of child components by a set time.
  */
-const Delay: React.FC<DelayProps> = (props: DelayProps) => {
-  const { children, waitInMsBeforeRender } = props;
-
+const Delay: React.FC<DelayProps> = ({ children, waitInMsBeforeRender }) => {
   const [isRendered, setIsRendered] = React.useState<boolean>(false);
 
   React.useEffect(() => {

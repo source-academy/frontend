@@ -18,7 +18,7 @@ type Props = {
  * @param storageName the field in browser storage where the loaded/fetched txt files get stored temporarily
  * @param s3TxtFiles the list of S3 txt files to choose from
  */
-function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
+const CheckpointTxtLoader: React.FC<Props> = ({ storageName, s3TxtFiles }) => {
   const [chosenFilename, setChosenFilename] = React.useState(s3TxtFiles[0]);
 
   function onLoadTxt(e: any) {
@@ -62,7 +62,7 @@ function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
       <hr />
     </div>
   );
-}
+};
 
 const loadFileLocally = (storageName: string, txtFile: File) => {
   const reader = new FileReader();

@@ -1,8 +1,10 @@
+import React from 'react';
+
 type Props = {
   port: string;
 };
 
-const PortSvg = ({ port }: Props) => (
+const PortSvg: React.FC<Props> = ({ port }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     id="port-svg6348"

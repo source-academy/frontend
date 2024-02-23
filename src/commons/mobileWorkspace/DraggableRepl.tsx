@@ -10,7 +10,7 @@ type DraggableReplProps = {
   replProps: ReplProps;
 };
 
-const DraggableRepl: React.FC<DraggableReplProps> = (props: DraggableReplProps) => {
+const DraggableRepl: React.FC<DraggableReplProps> = props => {
   return (
     <Draggable
       axis="y"

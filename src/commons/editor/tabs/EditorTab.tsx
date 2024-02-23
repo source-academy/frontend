@@ -10,7 +10,7 @@ export type EditorTabProps = {
   remove: () => void;
 };
 
-const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
+const EditorTab: React.FC<EditorTabProps> = props => {
   const { filePath, isActive, setActive, remove } = props;
 
   const onClick = (e: React.MouseEvent<HTMLElement>) => {

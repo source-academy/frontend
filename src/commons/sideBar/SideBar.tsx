@@ -25,7 +25,7 @@ export type SideBarProps = {
   collapseSideBar: () => void;
 };
 
-const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
+const SideBar: React.FC<SideBarProps> = props => {
   const { tabs, isExpanded, expandSideBar, collapseSideBar } = props;
 
   const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);

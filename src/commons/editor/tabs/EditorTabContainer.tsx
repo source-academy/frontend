@@ -11,7 +11,7 @@ export type EditorTabContainerProps = {
   removeEditorTabByIndex: (editorTabIndex: number) => void;
 };
 
-const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabContainerProps) => {
+const EditorTabContainer: React.FC<EditorTabContainerProps> = props => {
   const {
     baseFilePath,
     filePaths,
