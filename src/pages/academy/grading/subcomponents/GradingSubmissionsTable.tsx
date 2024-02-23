@@ -131,7 +131,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   /** The actual value sent to the backend */
   const [searchValue, setSearchValue] = useState('');
-  const debouncedSetSearchValue = debounce(setSearchValue, 300);
+  const debouncedSetSearchValue = useMemo(() => debounce(setSearchValue, 300), []);
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
     debouncedSetSearchValue(e.target.value);
