@@ -63,10 +63,16 @@ class GameModeMenu implements IGameUI {
       numOfItems: buttons.length
     });
 
-    const lineList : Phaser.GameObjects.Line[] = buttons.map((button, index) => this.createLine(buttonPositions[index][0], buttonPositions[index][1] + MenuModeConstants.button.yOffset + 20, button)) 
-    
+    const lineList: Phaser.GameObjects.Line[] = buttons.map((button, index) =>
+      this.createLine(
+        buttonPositions[index][0],
+        buttonPositions[index][1] + MenuModeConstants.button.yOffset + 20,
+        button
+      )
+    );
+
     modeMenuContainer.add(
-      buttons.map((button, index) => 
+      buttons.map((button, index) =>
         this.createModeButton(
           button.text,
           buttonPositions[index][0],
@@ -75,18 +81,22 @@ class GameModeMenu implements IGameUI {
         )
       )
     );
-    
+
     modeMenuContainer.add(lineList);
-    
+
     return modeMenuContainer;
   }
 
   /**
    * Create underline for each button.
    */
-  private createLine(xPos: number, yPos: number, button : {
-    text: GameMode;
-    callback: () => Promise<void>;}
+  private createLine(
+    xPos: number,
+    yPos: number,
+    button: {
+      text: GameMode;
+      callback: () => Promise<void>;
+    }
   ) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     if (button.text === GameMode.Explore) {
@@ -96,11 +106,19 @@ class GameModeMenu implements IGameUI {
     } else {
       xPos -= 30;
     }
-    const line : Phaser.GameObjects.Line = gameManager.add.line(0, 15, xPos, yPos, xPos+20, yPos, 0xBCE7DA);
+    const line: Phaser.GameObjects.Line = gameManager.add.line(
+      0,
+      15,
+      xPos,
+      yPos,
+      xPos + 20,
+      yPos,
+      0xbce7da
+    );
     line.setLineWidth(4);
     return line;
   }
- 
+
   /**
    * Get the mode buttons preset to be formatted later.
    * The preset includes the text to be displayed on the button and

@@ -42,4 +42,4 @@ export const keyboardShortcuts = {
     Phaser.Input.Keyboard.KeyCodes.THREE,
     Phaser.Input.Keyboard.KeyCodes.FOUR
   ]
-}
+};
