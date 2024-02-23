@@ -3,7 +3,7 @@ import '@tremor/react/dist/esm/tremor.css';
 import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Button, Card, Flex, Text, Title } from '@tremor/react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
@@ -11,7 +11,11 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/GradingUtils';
+import {
+  exportGradingCSV,
+  paginationToBackendParams,
+  ungradedToBackendParams
+} from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
@@ -28,6 +32,13 @@ const showOptions = [
   { value: true, label: 'all' }
 ];
 
+const pageSizeOptions = [
+  { value: 10, label: '10' },
+  { value: 15, label: '15' },
+  { value: 25, label: '25' },
+  { value: 50, label: '50' }
+];
+
 const Grading: React.FC = () => {
   const { courseId, gradingOverviews, role, group } = useSession();
   const params = useParams<{ submissionId: string; questionId: string }>();
@@ -35,12 +46,23 @@ const Grading: React.FC = () => {
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchGradingOverviews(!showAllGroups));
-  }, [dispatch, role, showAllGroups]);
-
+  const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+
+  const dispatch = useDispatch();
+  const updateGradingOverviewsCallback = useCallback(
+    (page: number, filterParams: Object) => {
+      dispatch(
+        fetchGradingOverviews(
+          showAllGroups,
+          ungradedToBackendParams(showAllSubmissions),
+          paginationToBackendParams(page, pageSize),
+          filterParams
+        )
+      );
+    },
+    [dispatch, showAllGroups, showAllSubmissions, pageSize]
+  );
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -69,14 +91,15 @@ const Grading: React.FC = () => {
   );
 
   const submissions =
-    gradingOverviews?.map(e =>
+    gradingOverviews?.data?.map(e =>
       !e.studentName ? { ...e, studentName: '(user has yet to log in)' } : e
     ) ?? [];
 
   return (
     <ContentDisplay
+      loadContentDispatch={() => dispatch(fetchGradingOverviews(showAllGroups))}
       display={
-        gradingOverviews === undefined ? (
+        gradingOverviews?.data === undefined ? (
           loadingDisplay
         ) : (
           <Card>
@@ -87,7 +110,7 @@ const Grading: React.FC = () => {
                   variant="light"
                   size="xs"
                   icon={() => <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />}
-                  onClick={() => exportGradingCSV(gradingOverviews)}
+                  onClick={() => exportGradingCSV(gradingOverviews.data)}
                 >
                   Export to CSV
                 </Button>
@@ -110,9 +133,21 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
+              <Text>showing</Text>
+              <SimpleDropdown
+                options={pageSizeOptions}
+                selectedValue={pageSize}
+                onClick={setPageSize}
+                popoverProps={{ position: Position.BOTTOM }}
+                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+              />
+              <Text>entries per page.</Text>
             </Flex>
             <GradingSubmissionsTable
-              submissions={submissions.filter(s => showAllSubmissions || isSubmissionUngraded(s))}
+              totalRows={gradingOverviews.count}
+              pageSize={pageSize}
+              submissions={submissions}
+              updateEntries={updateGradingOverviewsCallback}
             />
           </Card>
         )
