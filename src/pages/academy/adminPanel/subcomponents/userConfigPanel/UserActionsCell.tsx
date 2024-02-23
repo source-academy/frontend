@@ -1,4 +1,12 @@
-import { Button, Dialog, DialogBody, DialogFooter, Intent, Popover, Position } from '@blueprintjs/core';
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Intent,
+  Popover,
+  Position
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
