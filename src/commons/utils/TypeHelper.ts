@@ -79,5 +79,3 @@ export const assertType =
     // Keep the original type as inferred by TS
   ): T =>
     obj;
-
-export type Replace<T, V extends Partial<Record<keyof T, any>>> = Omit<T, keyof V> & V;

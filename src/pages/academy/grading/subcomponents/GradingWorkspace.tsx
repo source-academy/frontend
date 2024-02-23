@@ -6,6 +6,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
@@ -13,7 +14,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
   clearReplOutput,
   evalEditor,
   evalRepl,

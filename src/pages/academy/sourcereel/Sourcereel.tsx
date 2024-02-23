@@ -10,6 +10,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import {
   saveSourcecastData,
@@ -55,7 +56,6 @@ import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace'
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
   evalEditor,

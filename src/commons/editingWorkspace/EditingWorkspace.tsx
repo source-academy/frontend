@@ -48,6 +48,7 @@ import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
+import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
@@ -55,7 +56,6 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeSideContentHeight,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -563,7 +563,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
     return {
       tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
-      onChange: () => {},
       workspaceLocation
     };
   };

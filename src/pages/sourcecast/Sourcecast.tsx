@@ -12,12 +12,12 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { Position } from 'src/commons/editor/EditorTypes';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
   evalEditor,

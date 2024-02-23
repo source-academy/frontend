@@ -29,6 +29,7 @@ import {
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeEnvVisualizerTabFrom from 'src/commons/sideContent/content/SideContentEnvVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
@@ -42,7 +43,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
   changeStepLimit,
   chapterSelect,
   clearReplOutput,

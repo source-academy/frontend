@@ -1,8 +1,8 @@
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
-import { CHANGE_SIDE_CONTENT_HEIGHT } from '../workspace/WorkspaceTypes';
 import { getDynamicTabs, getTabId } from './SideContentHelper';
 import { getLocation } from './SideContentHelper';
+import { CHANGE_SIDE_CONTENT_HEIGHT } from './SideContentTypes';
 import {
   END_ALERT_SIDE_CONTENT,
   REMOVE_SIDE_CONTENT_ALERT,

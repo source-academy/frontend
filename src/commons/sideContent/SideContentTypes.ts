@@ -121,3 +121,4 @@ export type SideContentDispatchProps = {
    */
   alertSideContent: (newId: SideContentType) => void;
 };
+export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';

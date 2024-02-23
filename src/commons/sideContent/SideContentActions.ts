@@ -1,8 +1,10 @@
+import { createAction } from '@reduxjs/toolkit';
 import { action } from 'typesafe-actions';
 
-import { DebuggerContext } from '../workspace/WorkspaceTypes';
+import { DebuggerContext, type WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   BEGIN_ALERT_SIDE_CONTENT,
+  CHANGE_SIDE_CONTENT_HEIGHT,
   END_ALERT_SIDE_CONTENT,
   REMOVE_SIDE_CONTENT_ALERT,
   RESET_SIDE_CONTENT,
@@ -36,3 +38,9 @@ export const spawnSideContent = (
 
 export const resetSideContent = (workspaceLocation: SideContentLocation) =>
   action(RESET_SIDE_CONTENT, { workspaceLocation });
+export const changeSideContentHeight = createAction(
+  CHANGE_SIDE_CONTENT_HEIGHT,
+  (height: number, workspaceLocation: WorkspaceLocation) => ({
+    payload: { height, workspaceLocation }
+  })
+);
