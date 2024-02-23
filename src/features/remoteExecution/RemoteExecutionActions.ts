@@ -1,4 +1,4 @@
-import { action } from 'typesafe-actions';
+import { createAction } from '@reduxjs/toolkit';
 
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
@@ -13,20 +13,34 @@ import {
   REMOTE_EXEC_UPDATE_SESSION
 } from './RemoteExecutionTypes';
 
-export const remoteExecFetchDevices = () => action(REMOTE_EXEC_FETCH_DEVICES);
+export const remoteExecFetchDevices = createAction(REMOTE_EXEC_FETCH_DEVICES, () => ({
+  payload: {}
+}));
 
-export const remoteExecUpdateDevices = (devices: Device[]) =>
-  action(REMOTE_EXEC_UPDATE_DEVICES, devices);
+export const remoteExecUpdateDevices = createAction(
+  REMOTE_EXEC_UPDATE_DEVICES,
+  (devices: Device[]) => ({ payload: devices })
+);
 
-export const remoteExecUpdateSession = (session?: DeviceSession) =>
-  action(REMOTE_EXEC_UPDATE_SESSION, session);
+export const remoteExecUpdateSession = createAction(
+  REMOTE_EXEC_UPDATE_SESSION,
+  (session?: DeviceSession) => ({ payload: session })
+);
 
-export const remoteExecConnect = (workspace: WorkspaceLocation, device: Device) =>
-  action(REMOTE_EXEC_CONNECT, { workspace, device });
+export const remoteExecConnect = createAction(
+  REMOTE_EXEC_CONNECT,
+  (workspace: WorkspaceLocation, device: Device) => ({ payload: { workspace, device } })
+);
 
-export const remoteExecDisconnect = () => action(REMOTE_EXEC_DISCONNECT);
+export const remoteExecDisconnect = createAction(REMOTE_EXEC_DISCONNECT, () => ({ payload: {} }));
 
-export const remoteExecRun = (files: Record<string, string>, entrypointFilePath: string) =>
-  action(REMOTE_EXEC_RUN, { files, entrypointFilePath });
+export const remoteExecRun = createAction(
+  REMOTE_EXEC_RUN,
+  (files: Record<string, string>, entrypointFilePath: string) => ({
+    payload: { files, entrypointFilePath }
+  })
+);
 
-export const remoteExecReplInput = (input: string) => action(REMOTE_EXEC_REPL_INPUT, input);
+export const remoteExecReplInput = createAction(REMOTE_EXEC_REPL_INPUT, (input: string) => ({
+  payload: input
+}));
