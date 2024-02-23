@@ -36,7 +36,6 @@ import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
@@ -274,25 +273,6 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
         ...defaultWorkspaceManager.playground,
         externalLibrary: newExternal
       }
-    });
-  });
-});
-
-describe('CHANGE_SIDE_CONTENT_HEIGHT', () => {
-  test('sets sideContentHeight correctly', () => {
-    const height = 100;
-    const actions = generateActions(CHANGE_SIDE_CONTENT_HEIGHT, { height });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sideContentHeight: height
-        }
-      });
     });
   });
 });

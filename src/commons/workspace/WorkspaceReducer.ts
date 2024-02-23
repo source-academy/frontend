@@ -38,7 +38,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
   changeStepLimit,
   clearReplInput,
   clearReplOutput,
@@ -201,10 +200,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(changeExecTime, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].execTime = action.payload.execTime;
-    })
-    .addCase(changeSideContentHeight, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].sideContentHeight = action.payload.height;
     })
     .addCase(changeStepLimit, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -1087,21 +1082,23 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           breakpointSteps: action.payload.breakpointSteps
         }
       };
-    case NOTIFY_PROGRAM_EVALUATED:
+    case NOTIFY_PROGRAM_EVALUATED: {
+      const debuggerContext = {
+        ...state[workspaceLocation].debuggerContext,
+        result: action.payload.result,
+        lastDebuggerResult: action.payload.lastDebuggerResult,
+        code: action.payload.code,
+        context: action.payload.context,
+        workspaceLocation: action.payload.workspaceLocation
+      };
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          debuggerContext: {
-            ...state[workspaceLocation].debuggerContext,
-            result: action.payload.result,
-            lastDebuggerResult: action.payload.lastDebuggerResult,
-            code: action.payload.code,
-            context: action.payload.context,
-            workspaceLocation: action.payload.workspaceLocation
-          }
+          debuggerContext
         }
       };
+    }
     default:
       return state;
   }

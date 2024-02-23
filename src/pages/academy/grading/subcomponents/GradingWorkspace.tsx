@@ -2,11 +2,11 @@ import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
@@ -14,7 +14,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -51,8 +50,10 @@ import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRu
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
 import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
+import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
+import SideContentToneMatrix from '../../../../commons/sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
+import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
@@ -74,7 +75,10 @@ const unansweredPrependValue: string = `// This answer does not have significant
 
 const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.grading
+  );
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
@@ -87,7 +91,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContentHeight,
     currentSubmission: storedSubmissionId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
@@ -381,7 +384,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation
+      workspaceLocation
     };
 
     return sideContentProps;
@@ -501,7 +504,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
       handleBrowseHistoryDown: handleBrowseHistoryDown,

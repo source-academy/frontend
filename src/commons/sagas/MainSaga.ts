@@ -10,6 +10,7 @@ import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';
 import PlaygroundSaga from './PlaygroundSaga';
 import RemoteExecutionSaga from './RemoteExecutionSaga';
+import SideContentSaga from './SideContentSaga';
 import StoriesSaga from './StoriesSaga';
 import WorkspaceSaga from './WorkspaceSaga';
 
@@ -23,6 +24,7 @@ export default function* MainSaga(): SagaIterator {
     fork(PersistenceSaga),
     fork(GitHubPersistenceSaga),
     fork(RemoteExecutionSaga),
-    fork(StoriesSaga)
+    fork(StoriesSaga),
+    fork(SideContentSaga)
   ]);
 }
