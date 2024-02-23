@@ -28,6 +28,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ getSection, getText }) => {
   };
 
   return (
+    <div> 
+      {isLoggedIn && 
     <div className="bot-container">
       <div className="bot-area">
         {isDivVisible && (
@@ -48,7 +50,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ getSection, getText }) => {
           icon={<Icon icon={<img src={logo} className="iSA" alt="SA Logo" />} />}
         ></AnchorButton>
       </div>
-      {isPop && isLoggedIn && <ChatBox getSection={getSection} getText={getText} />}
+      {isPop && <ChatBox getSection={getSection} getText={getText} />}
+    </div> }
     </div>
   );
 };
