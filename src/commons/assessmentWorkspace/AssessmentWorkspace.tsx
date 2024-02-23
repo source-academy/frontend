@@ -37,6 +37,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
+  Question,
   QuestionTypes,
   Testcase
 } from '../assessment/AssessmentTypes';
@@ -143,7 +144,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     editorTestcases,
     hasUnsavedChanges,
     isRunning,
-    output,   
+    output,
     replValue,
     sideContentHeight,
     currentAssessment: storedAssessmentId,
@@ -323,19 +324,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = useCallback(() => {
-      // Run testcases when the autograder tab is selected
-      if (activeTab.current === SideContentType.autograder) {
-        handleRunAllTestcases();
-      } else {
-        handleEditorEval();
-      }
+    // Run testcases when the autograder tab is selected
+    if (activeTab.current === SideContentType.autograder) {
+      handleRunAllTestcases();
+    } else {
+      handleEditorEval();
+    }
 
-      const input: Input = {
-        time: Date.now(),
-        type: 'keyboardCommand',
-        data: KeyboardCommand.run
-      };
-      pushLog(input);
+    const input: Input = {
+      time: Date.now(),
+      type: 'keyboardCommand',
+      data: KeyboardCommand.run
+    };
+    pushLog(input);
   }, [handleEditorEval, handleRunAllTestcases, pushLog]);
 
   /**
@@ -380,7 +381,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
 
     const question = assessment.questions[questionId];
- 
 
     const options: {
       autogradingResults?: AutogradingResult[];
@@ -400,17 +400,24 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
         // We use || not ?? to match both null and an empty string
         // Sets the current active tab to the current "question file" and also force re-writes the file system
-        const someHardcodedFilesForTesting = {
-          '/assessment/test1.js': `export const test = () => {display("hello");};`,
-          '/assessment/test2.js': '// just a comment here'
-        };
         // The leading slash "/" at the front is VERY IMPORTANT! DO NOT DELETE
 
+        // "otherFiles" refers to all other files that have an "answer" record
+        const otherFiles: Record<string, string> = {};
+        assessment.questions.forEach((question: Question, index) => {
+          if (question.answer && question.type === 'programming' && index !== questionId) {
+            otherFiles[`/${workspaceLocation}/${index + 1}.js`] = question.answer;
+          }
+        });
+        question.library.chapter = Chapter.SOURCE_2;
+
         rewriteFilesWithContent(currentQuestionFilePath, {
-          [currentQuestionFilePath]:
-          isReset ? programmingQuestionData.solutionTemplate : 
-            programmingQuestionData.answer || programmingQuestionData.solutionTemplate,
-          ...someHardcodedFilesForTesting
+          [currentQuestionFilePath]: isReset
+            ? programmingQuestionData.solutionTemplate
+            : isReset
+            ? programmingQuestionData.solutionTemplate
+            : programmingQuestionData.answer || programmingQuestionData.solutionTemplate,
+          ...otherFiles
         });
 
         // Initialize session once the editorValue is known.
@@ -710,17 +717,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 isFound = true;
                 dispatch(updateActiveEditorTabIndex(workspaceLocation, index));
               }
-            })
+            });
             // Original question tab not found, we need to open it
             if (!isFound) {
               const fileContents = await handleReadFile(fileSystem, currentQuestionFilePath);
-              console.log(fileContents)
               dispatch(
-                addEditorTab(
-                  workspaceLocation,
-                  currentQuestionFilePath,
-                  fileContents ?? ''
-                )
+                addEditorTab(workspaceLocation, currentQuestionFilePath, fileContents ?? '')
               );
               // Set to the end of the editorTabs array (i.e the newly created editorTab)
               dispatch(updateActiveEditorTabIndex(workspaceLocation, editorTabs.length));
@@ -735,16 +737,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} key="file_mode" />
     );
 
-    const editorButtonsMobileBreakpoint = [
-      fileModeButton,
-      runButton,
-      saveButton,
-      resetButton,
-      chapterSelect
-    ];
+    const editorButtonsMobileBreakpoint = [fileModeButton, runButton, saveButton, resetButton];
+    // Only allow folder mode to be enabled if chapter >= 2 and is a programming question
+    if (question.library.chapter >= 2 && question.type === 'programming')
+      editorButtonsMobileBreakpoint.push(toggleFolderModeButton);
 
-    // Only allow folder mode to be enabled if chapter >= 2
-    if (question.library.chapter >= 2) editorButtonsMobileBreakpoint.push(toggleFolderModeButton)
+    editorButtonsMobileBreakpoint.push(chapterSelect);
     const editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
     const flowButtons = [previousButton, questionView, nextButton];
     return {
