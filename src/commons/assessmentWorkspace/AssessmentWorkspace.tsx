@@ -327,8 +327,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = useCallback(() => {
+    console.log('handleeval')
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
+      console.log("running all test cases!")
       handleRunAllTestcases();
     } else {
       handleEditorEval();
@@ -408,10 +410,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         // "otherFiles" refers to all other files that have an "answer" record
         const otherFiles: Record<string, string> = {};
         assessment.questions.forEach((question: Question, index) => {
-          if (question.answer && question.type === 'programming' && index !== questionId) {
+          if (question.type === 'programming' && question.answer && index !== questionId) {
             otherFiles[`/${workspaceLocation}/${index + 1}.js`] = question.answer;
           }
         });
+
+        // ================================================
+        // !!! REMOVE AFTER TESTING !!!
+        // ================================================
         question.library.chapter = Chapter.SOURCE_2;
 
         rewriteFilesWithContent(currentQuestionFilePath, {
@@ -539,6 +545,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           body: (
             <SideContentAutograder
               testcases={editorTestcases}
+              isFolderModeEnabled={isFolderModeEnabled}
+              currentFileBeingRan={`/${questionId+1}.js`}
               autogradingResults={
                 // Display autograding results if assessment has been graded by an avenger, OR does not need to be manually graded
                 isGraded || !props.assessmentConfiguration.isManuallyGraded

@@ -18,6 +18,8 @@ type DispatchProps = {
 type StateProps = {
   autogradingResults: AutogradingResult[];
   testcases: Testcase[];
+  currentFileBeingRan: string;
+  isFolderModeEnabled?: boolean;
 };
 
 type OwnProps = {
@@ -32,7 +34,14 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
   const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
   const [showsResults, setResultsShown] = React.useState<boolean>(true);
 
-  const { testcases, autogradingResults, handleTestcaseEval, workspaceLocation } = props;
+  const {
+    testcases,
+    autogradingResults,
+    handleTestcaseEval,
+    workspaceLocation,
+    currentFileBeingRan,
+    isFolderModeEnabled
+  } = props;
 
   const testcaseCards = React.useMemo(
     () =>
@@ -82,6 +91,11 @@ const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps>
 
   return (
     <div className="Autograder">
+      {isFolderModeEnabled && (
+      <span className="entrypoint-span">
+        Entry point file for Testcases: <code className='filepath-design bp5-code'>{currentFileBeingRan}</code>
+      </span>
+      )}
       <Button
         className="collapse-button"
         icon={showsTestcases ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}

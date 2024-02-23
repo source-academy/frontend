@@ -873,11 +873,21 @@ $code-color-notification: #f9f0d7;
   .ContestEntryVoting,
   .ContestLeaderboard {
     min-width: 640px;
+    .entrypoint-span {
+      display: block;
+      width: fit-content;
+      margin-bottom: 5px;
+      .filepath-design {
+        text-decoration: underline;
+        color: $code-color-code;
+      }
+    }
 
     *:focus {
       /* Disable blue border when an Autograder sub-element is in focus */
       outline: none;
     }
+
 
     .collapse-button {
       width: 100%;
