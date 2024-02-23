@@ -42,7 +42,6 @@ exports[`GitHubClassroom renders correctly 1`] = `
               layout="vertical"
             />
           }
-          loadContentDispatch={[Function]}
         />
       }
       path="login"
