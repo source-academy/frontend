@@ -7,26 +7,30 @@ import {
   Divider,
   Slider
 } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators } from 'redux';
+import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import { CSEAnimation } from 'src/features/envVisualizer/EnvVisualizerAnimation';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
-import { OverallState } from '../application/ApplicationTypes';
-import { HighlightedLines } from '../editor/EditorTypes';
-import Constants, { Links } from '../utils/Constants';
+import { OverallState } from '../../application/ApplicationTypes';
+import { HighlightedLines } from '../../editor/EditorTypes';
+import Constants, { Links } from '../../utils/Constants';
 import {
   evalEditor,
   setEditorHighlightedLinesControl,
   updateEnvSteps
-} from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+} from '../../workspace/WorkspaceActions';
+import { beginAlertSideContent } from '../SideContentActions';
+import { getLocation } from '../SideContentHelper';
+import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;
@@ -49,17 +53,17 @@ type StateProps = {
 };
 
 type OwnProps = {
-  workspaceLocation: WorkspaceLocation;
+  workspaceLocation: NonStoryWorkspaceLocation;
 };
 
 type DispatchProps = {
-  handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) => void;
-  handleEditorEval: (workspaceLocation: WorkspaceLocation) => void;
+  handleEnvStepUpdate: (steps: number) => void;
+  handleEditorEval: () => void;
   setEditorHighlightedLines: (
-    workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
     newHighlightedLines: HighlightedLines[]
   ) => void;
+  handleAlertSideContent: () => void;
 };
 
 const envVizKeyMap = {
@@ -69,7 +73,7 @@ const envVizKeyMap = {
   LAST_STEP: 'e'
 };
 
-class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State> {
+class SideContentEnvVisualizerBase extends React.Component<EnvVisualizerProps, State> {
   constructor(props: EnvVisualizerProps) {
     super(props);
     this.state = {
@@ -81,13 +85,16 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
       stepLimitExceeded: false
     };
     EnvVisualizer.init(
-      visualization => this.setState({ visualization }, () => CSEAnimation.playAnimation()),
+      visualization => {
+        this.setState({ visualization }, () => CSEAnimation.playAnimation());
+        if (visualization) this.props.handleAlertSideContent();
+      },
       this.state.width,
       this.state.height,
       (segments: [number, number][]) => {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         // This comment is copied over from workspace saga
-        props.setEditorHighlightedLines(props.workspaceLocation, 0, segments);
+        props.setEditorHighlightedLines(0, segments);
       },
       isControlEmpty => {
         this.setState({ stepLimitExceeded: !isControlEmpty && this.state.lastStep });
@@ -387,11 +394,11 @@ class SideContentEnvVisualizer extends React.Component<EnvVisualizerProps, State
     } else {
       this.setState({ lastStep: false });
     }
-    this.props.handleEditorEval(this.props.workspaceLocation);
+    this.props.handleEditorEval();
   };
 
   private sliderShift = (newValue: number) => {
-    this.props.handleEnvStepUpdate(newValue, this.props.workspaceLocation);
+    this.props.handleEnvStepUpdate(newValue);
     this.setState((state: State) => {
       return { value: newValue };
     });
@@ -455,39 +462,63 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   state: OverallState,
   ownProps: OwnProps
 ) => {
-  let workspaceLocation: WorkspaceLocation;
-  if (ownProps.workspaceLocation === 'playground' || ownProps.workspaceLocation === 'sicp') {
-    workspaceLocation = ownProps.workspaceLocation;
-  } else {
-    workspaceLocation = 'playground';
+  let workspace: PlaygroundWorkspaceState;
+  const [loc] = getLocation(ownProps.workspaceLocation);
+
+  switch (loc) {
+    // case 'stories': {
+    //   workspace = state.stories.envs[storyEnv]
+    //   break
+    // }
+    case 'sicp': {
+      workspace = state.workspaces.sicp;
+      break;
+    }
+    default: {
+      workspace = state.workspaces.playground;
+      break;
+    }
   }
+
   return {
     ...ownProps,
-    numOfStepsTotal: state.workspaces[workspaceLocation].envStepsTotal,
-    numOfSteps: state.workspaces[workspaceLocation].envSteps,
-    breakpointSteps: state.workspaces[workspaceLocation].breakpointSteps,
-    needEnvUpdate: state.workspaces[workspaceLocation].updateEnv
+    numOfStepsTotal: workspace.envStepsTotal,
+    numOfSteps: workspace.envSteps,
+    breakpointSteps: workspace.breakpointSteps,
+    needEnvUpdate: workspace.updateEnv
   };
 };
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
   bindActionCreators(
     {
-      handleEditorEval: (workspaceLocation: WorkspaceLocation) => evalEditor(workspaceLocation),
-      handleEnvStepUpdate: (steps: number, workspaceLocation: WorkspaceLocation) =>
-        updateEnvSteps(steps, workspaceLocation),
+      handleEditorEval: () => evalEditor(props.workspaceLocation),
+      handleEnvStepUpdate: (steps: number) => updateEnvSteps(steps, props.workspaceLocation),
+      handleAlertSideContent: () =>
+        beginAlertSideContent(SideContentType.envVisualizer, props.workspaceLocation),
       setEditorHighlightedLines: (
-        workspaceLocation: WorkspaceLocation,
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[]
-      ) => setEditorHighlightedLinesControl(workspaceLocation, editorTabIndex, newHighlightedLines)
+      ) =>
+        setEditorHighlightedLinesControl(
+          props.workspaceLocation,
+          editorTabIndex,
+          newHighlightedLines
+        )
     },
     dispatch
   );
 
-const SideContentEnvVisualizerContainer = connect(
+export const SideContentEnvVisualizer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SideContentEnvVisualizer);
+)(SideContentEnvVisualizerBase);
 
-export default SideContentEnvVisualizerContainer;
+const makeEnvVisualizerTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
+  label: 'Env Visualizer',
+  iconName: IconNames.GLOBE,
+  body: <SideContentEnvVisualizer workspaceLocation={location} />,
+  id: SideContentType.envVisualizer
+});
+
+export default makeEnvVisualizerTabFrom;

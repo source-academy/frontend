@@ -1,4 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { CHANGE_SIDE_CONTENT_HEIGHT } from 'src/commons/sideContent/SideContentTypes';
 
 import {
   createDefaultWorkspace,
@@ -15,7 +17,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExternalLibrary,
-  changeSideContentHeight,
   changeSublanguage,
   chapterSelect,
   clearReplInput,
@@ -59,7 +60,6 @@ import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
   CLEAR_REPL_INPUT,
@@ -120,7 +120,7 @@ test('browseReplHistoryUp generates correct action object', () => {
 });
 
 test('changeExternalLibrary generates correct action object', () => {
-  const newExternal = 'new-external-test';
+  const newExternal = 'new-external-test' as ExternalLibraryName;
   const action = changeExternalLibrary(newExternal, playgroundWorkspace);
   expect(action).toEqual({
     type: CHANGE_EXTERNAL_LIBRARY,

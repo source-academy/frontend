@@ -4,8 +4,8 @@ import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import React from 'react';
 
-import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
 type SideContentTestcaseCardProps = DispatchProps & StateProps & OwnProps;
 
