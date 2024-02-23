@@ -510,7 +510,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-                              id="popular_vote_leaderboard-icon"
                               tabindex="0"
                             >
                               <span
