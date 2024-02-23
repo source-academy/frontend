@@ -28,30 +28,31 @@ const Chatbot: React.FC<ChatbotProps> = ({ getSection, getText }) => {
   };
 
   return (
-    <div> 
-      {isLoggedIn && 
-    <div className="bot-container">
-      <div className="bot-area">
-        {isDivVisible && (
-          // <div className="tips-box">
-          <div className="tips-box">
-            <p className="tips-message">
-              I am Louis, your SICP bot
-              <br />
-              {tipsMessage}
-            </p>
+    <div>
+      {isLoggedIn && (
+        <div className="bot-container">
+          <div className="bot-area">
+            {isDivVisible && (
+              // <div className="tips-box">
+              <div className="tips-box">
+                <p className="tips-message">
+                  I am Louis, your SICP bot
+                  <br />
+                  {tipsMessage}
+                </p>
+              </div>
+            )}
+            <AnchorButton
+              className="bot-button"
+              onMouseEnter={() => setIsDivVisible(true)}
+              onMouseLeave={() => setIsDivVisible(false)}
+              onClick={togglePop}
+              icon={<Icon icon={<img src={logo} className="iSA" alt="SA Logo" />} />}
+            ></AnchorButton>
           </div>
-        )}
-        <AnchorButton
-          className="bot-button"
-          onMouseEnter={() => setIsDivVisible(true)}
-          onMouseLeave={() => setIsDivVisible(false)}
-          onClick={togglePop}
-          icon={<Icon icon={<img src={logo} className="iSA" alt="SA Logo" />} />}
-        ></AnchorButton>
-      </div>
-      {isPop && <ChatBox getSection={getSection} getText={getText} />}
-    </div> }
+          {isPop && <ChatBox getSection={getSection} getText={getText} />}
+        </div>
+      )}
     </div>
   );
 };
