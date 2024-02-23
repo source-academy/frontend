@@ -4,7 +4,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ContestEntry } from '../assessment/AssessmentTypes';
+import { ContestEntry } from '../../assessment/AssessmentTypes';
 
 export type SideContentContestVotingProps = DispatchProps & StateProps;
 
