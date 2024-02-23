@@ -1,6 +1,6 @@
 import { Card } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 
 import { Assessment, IMCQQuestion } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';

@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import {
   Assessment,
@@ -33,7 +33,6 @@ export const SET_COURSE_REGISTRATION = 'SET_COURSE_REGISTRATION';
 export const SET_ASSESSMENT_CONFIGURATIONS = 'SET_ASSESSMENT_CONFIGURATIONS';
 export const SET_ADMIN_PANEL_COURSE_REGISTRATIONS = 'SET_ADMIN_PANEL_COURSE_REGISTRATIONS';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
-export const SET_GITHUB_ASSESSMENT = 'SET_GITHUB_ASSESSMENT';
 export const SET_GITHUB_OCTOKIT_OBJECT = 'SET_GITHUB_OCTOKIT_OBJECT';
 export const SET_GITHUB_ACCESS_TOKEN = 'SET_GITHUB_ACCESS_TOKEN';
 export const SUBMIT_ANSWER = 'SUBMIT_ANSWER';
@@ -70,9 +69,6 @@ export const UPDATE_NOTIFICATION_CONFIG = 'UPDATE_NOTIFICATION_CONFIG';
 export const UPDATE_NOTIFICATION_PREFERENCES = 'UPDATE_NOTIFICATION_PREFERENCES';
 export const DELETE_TIME_OPTIONS = 'DELETE_TIME_OPTIONS';
 export const UPDATE_TIME_OPTIONS = 'UPDATE_TIME_OPTIONS';
-
-export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
-export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
 
 export type SessionState = {
   // Tokens
@@ -119,8 +115,8 @@ export type SessionState = {
 
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
-  readonly gradingOverviews?: GradingOverview[];
-  readonly gradings: Map<number, Grading>;
+  readonly gradingOverviews?: GradingOverviews;
+  readonly gradings: Map<number, GradingQuery>;
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubAssessment?: MissionRepoData;

@@ -1,6 +1,6 @@
 import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
 import { Tooltip2 } from '@blueprintjs/popover2';
-import * as React from 'react';
+import React from 'react';
 
 import { propsAreEqual } from '../utils/MemoizeHelper';
 import { assertType } from '../utils/TypeHelper';

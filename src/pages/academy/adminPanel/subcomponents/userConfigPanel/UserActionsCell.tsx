@@ -1,35 +1,33 @@
-import { Button, Classes, Dialog, Intent, Position } from '@blueprintjs/core';
+import { Button, Dialog, DialogBody, DialogFooter, Intent, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 import ControlButton from 'src/commons/ControlButton';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
-type DeleteUserCellProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   data: AdminPanelCourseRegistration;
-  rowIndex: number;
+  rowIndex: number; // unused prop
   handleDeleteUserFromCourse: (courseRegId: number) => void;
 };
 
-const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
-  const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
+const DeleteUserCell: React.FC<Props> = ({ data, handleDeleteUserFromCourse }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const clickHandler = () => {
-    if (props.data.role === Role.Admin) {
+    if (data.role === Role.Admin) {
       showWarningMessage('You cannot delete an admin user!');
       return;
     }
     setIsDialogOpen(true);
   };
 
-  const handleDelete = React.useCallback(() => {
-    props.handleDeleteUserFromCourse(props.data.courseRegId);
+  const handleDelete = useCallback(() => {
+    handleDeleteUserFromCourse(data.courseRegId);
     setIsDialogOpen(false);
-  }, [props]);
+  }, [data.courseRegId, handleDeleteUserFromCourse]);
 
   return (
     <>
@@ -37,13 +35,13 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
         content="You cannot delete an admin!"
         interactionKind="click"
         position={Position.TOP}
-        disabled={props.data.role !== Role.Admin}
+        disabled={data.role !== Role.Admin}
       >
         <Button
           text="Delete User"
           icon={IconNames.CROSS}
           onClick={clickHandler}
-          disabled={props.data.role === Role.Admin}
+          disabled={data.role === Role.Admin}
         />
       </Popover2>
       <Dialog
@@ -53,34 +51,36 @@ const DeleteUserCell: React.FC<DeleteUserCellProps> = props => {
         title="Deleting User From Course"
         canOutsideClickClose
       >
-        <div className={Classes.DIALOG_BODY}>
+        <DialogBody>
           <p>
             Are you sure you want to <b>delete</b> the user{' '}
             <i>
-              {props.data.name} ({props.data.username})
+              {data.name} ({data.username})
             </i>
             ?
           </p>
           <p>
             <b>All their assessment answers will be deleted as well.</b>
           </p>
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <ControlButton
-              label="Cancel"
-              icon={IconNames.CROSS}
-              onClick={() => setIsDialogOpen(false)}
-              options={{ minimal: false }}
-            />
-            <ControlButton
-              label="Confirm"
-              icon={IconNames.TRASH}
-              onClick={handleDelete}
-              options={{ minimal: false, intent: Intent.DANGER }}
-            />
-          </div>
-        </div>
+        </DialogBody>
+        <DialogFooter
+          actions={
+            <>
+              <ControlButton
+                label="Cancel"
+                icon={IconNames.CROSS}
+                onClick={() => setIsDialogOpen(false)}
+                options={{ minimal: false }}
+              />
+              <ControlButton
+                label="Confirm"
+                icon={IconNames.TRASH}
+                onClick={handleDelete}
+                options={{ minimal: false, intent: Intent.DANGER }}
+              />
+            </>
+          }
+        />
       </Dialog>
     </>
   );

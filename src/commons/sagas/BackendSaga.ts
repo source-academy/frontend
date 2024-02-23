@@ -9,7 +9,12 @@ import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
 } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingOverview,
+  GradingOverviews,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
   DELETE_ASSESSMENT,
@@ -410,12 +415,15 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
-      const filterToGroup = action.payload;
+      const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
 
-      const gradingOverviews: GradingOverview[] | null = yield call(
+      const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,
         tokens,
-        filterToGroup
+        filterToGroup,
+        gradedFilter,
+        pageParams,
+        filterParams
       );
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));
@@ -427,7 +435,7 @@ function* BackendSaga(): SagaIterator {
     const tokens: Tokens = yield selectTokens();
     const id = action.payload;
 
-    const grading: Grading | null = yield call(getGrading, id, tokens);
+    const grading: GradingQuery | null = yield call(getGrading, id, tokens);
     if (grading) {
       yield put(actions.updateGrading(id, grading));
     }
@@ -448,7 +456,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews || []
+        (state: OverallState) => state.session.gradingOverviews?.data || []
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
@@ -457,8 +465,14 @@ function* BackendSaga(): SagaIterator {
         return overview;
       });
 
+      const totalPossibleEntries = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.count
+      );
+
       yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
+      yield put(
+        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
+      );
     }
   );
 
@@ -489,10 +503,10 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Submitted!', 1000);
 
     // Now, update the grade for the question in the Grading in the store
-    const grading: Grading = yield select((state: OverallState) =>
+    const grading: GradingQuery = yield select((state: OverallState) =>
       state.session.gradings.get(submissionId)
     );
-    const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
+    const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
           xpAdjustment,
@@ -503,7 +517,9 @@ function* BackendSaga(): SagaIterator {
       return gradingQuestion;
     });
 
-    yield put(actions.updateGrading(submissionId, newGrading));
+    yield put(
+      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    );
   };
 
   const sendGradeAndContinue = function* (

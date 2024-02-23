@@ -1,5 +1,10 @@
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
+import {
+  GradingAnswer,
+  GradingAssessment,
+  GradingOverview,
+  GradingQuery
+} from '../../features/grading/GradingTypes';
 import { Role } from '../application/ApplicationTypes';
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockLibrary } from './AssessmentMocks';
@@ -74,10 +79,14 @@ export const mockGradingOverviews: GradingOverview[] = [
  *
  * @param accessToken a valid access token for the cadet backend.
  * @param group a boolean if true, only fetches submissions from the grader's group
+ * @param pageParams contains pagination details on offset and page index.
+ * @param backendParams contains filters to set conditions in SQL query.
  */
 export const mockFetchGradingOverview = (
   accessToken: string,
-  group: boolean
+  group: boolean,
+  pageParams: { offset: number; pageSize: number },
+  backendParams: Object
 ): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
@@ -102,7 +111,7 @@ export const mockTestcases: Testcase[] = [
   { type: TestcaseTypes.opaque, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
-export const mockGrading: Grading = [
+export const mockGradingAnswer: GradingAnswer = [
   {
     question: {
       answer: `function remainder(n, d) {
@@ -386,20 +395,47 @@ New message from **Avenger**!
   }
 ];
 
+export const mockGradingAssessment: GradingAssessment = {
+  coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
+  id: 1,
+  number: '10',
+  reading:
+    'This is for you to read. Read it carefully. Perhaps you will find the answer to life here.',
+  story: `Story:
+Start of story.
+End of story.
+The End.
+
+Credits
+Starring: Source Academy`,
+  summaryLong:
+    'This is the long summary of the assessment. It is a very very very very long summary',
+  summaryShort: 'This is short summary',
+  title: 'Assessment 1: Some Title'
+};
+
+export const mockGradingQuery: GradingQuery = {
+  answers: mockGradingAnswer,
+  assessment: mockGradingAssessment
+};
+
 /**
  * Mock for fetching a trainer/admin's student grading information.
  * A null value is returned for invalid token or role.
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-export const mockFetchGrading = (accessToken: string, submissionId: number): Grading | null => {
+export const mockFetchGrading = (
+  accessToken: string,
+  submissionId: number
+): GradingQuery | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
     return null;
   } else {
-    return mockGrading;
+    return mockGradingQuery;
   }
 };
 
