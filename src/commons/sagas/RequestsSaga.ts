@@ -11,6 +11,7 @@ import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
   GradingAnswer,
   GradingOverview,
+  GradingOverviews,
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
@@ -605,10 +606,10 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
 export const getGradingOverviews = async (
   tokens: Tokens,
   group: boolean,
-  graded: any,
-  pageParams: any,
-  filterParams: any
-): Promise<{ count: number; data: GradingOverview[] } | null> => {
+  graded: Record<string, any>,
+  pageParams: Record<string, any>,
+  filterParams: Record<string, any>
+): Promise<GradingOverviews | null> => {
   // this converts the payload into a useable query string without a leading '?'
   const gradedQuery = new URLSearchParams(graded);
   const pageQuery = new URLSearchParams(pageParams);

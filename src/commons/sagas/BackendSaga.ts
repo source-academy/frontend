@@ -11,6 +11,7 @@ import {
 } from '../../features/dashboard/DashboardTypes';
 import {
   GradingOverview,
+  GradingOverviews,
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
@@ -416,7 +417,7 @@ function* BackendSaga(): SagaIterator {
 
       const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
 
-      const gradingOverviews: { count: number; data: GradingOverview[] } | null = yield call(
+      const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,
         tokens,
         filterToGroup,
