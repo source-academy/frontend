@@ -513,6 +513,27 @@
 .grading-overview-filterable-btns {
   padding: 0;
 
+  // Hides overflowed text for the buttons
+  &,
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    // For general filterable buttons
+    & {
+      max-width: 20vw;
+    }
+
+    /* Special case for filtered buttons (those you click to remove filter)
+      -16px for icon
+      -0.875rem for icon margins
+      -1.125rem for additional padding
+    */
+    p {
+      max-width: calc(20vw - 16px - 2rem);
+    }
+  }
+
   // Invisible border for backgroundless buttons
   &:not(:has(> div)) {
     text-decoration: none;
