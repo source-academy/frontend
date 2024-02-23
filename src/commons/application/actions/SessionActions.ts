@@ -1,6 +1,10 @@
+import {
+  paginationToBackendParams,
+  ungradedToBackendParams
+} from 'src/features/grading/GradingUtils';
 import { action } from 'typesafe-actions'; // EDITED
 
-import { GradingOverview, GradingQuery } from '../../../features/grading/GradingTypes';
+import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -104,11 +108,20 @@ export const fetchTotalXpAdmin = (courseRegId: number) => action(FETCH_TOTAL_XP_
 export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, submissionId);
 
 /**
- * @param filterToGroup - param when set to true, only shows submissions under the group
+ * @param filterToGroup - param that when set to true, only shows submissions under the group
  * of the grader
+ * @param gradedFilter - backend params to filter to ungraded
+ * @param pageParams - param that contains offset and pageSize, informing backend about how
+ * many entries, starting from what offset, to get
+ * @param filterParams - param that contains columnFilters converted into JSON for
+ * processing into query parameters
  */
-export const fetchGradingOverviews = (filterToGroup = true) =>
-  action(FETCH_GRADING_OVERVIEWS, filterToGroup);
+export const fetchGradingOverviews = (
+  filterToGroup = true,
+  gradedFilter = ungradedToBackendParams(false),
+  pageParams = paginationToBackendParams(0, 10),
+  filterParams = {}
+) => action(FETCH_GRADING_OVERVIEWS, { filterToGroup, gradedFilter, pageParams, filterParams });
 
 export const login = (providerId: string) => action(LOGIN, providerId);
 
@@ -204,7 +217,7 @@ export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalX
 
 export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 
-export const updateGradingOverviews = (overviews: GradingOverview[]) =>
+export const updateGradingOverviews = (overviews: GradingOverviews) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);
 
 /**
