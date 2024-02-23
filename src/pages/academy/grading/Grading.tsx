@@ -48,19 +48,16 @@ const Grading: React.FC = () => {
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
-  const [page, setPage] = useState(0);
-
   const [pageSize, setPageSize] = useState(10);
 
   const dispatch = useDispatch();
   const updateGradingOverviewsCallback = useCallback(
-    (filterParams: Object, changeTo = 0) => {
-      setPage(p => changeTo);
+    (page: number, filterParams: Object) => {
       dispatch(
         fetchGradingOverviews(
           showAllGroups,
           ungradedToBackendParams(showAllSubmissions),
-          paginationToBackendParams(changeTo, pageSize),
+          paginationToBackendParams(page, pageSize),
           filterParams
         )
       );
@@ -71,7 +68,7 @@ const Grading: React.FC = () => {
   // Default value initializer, runs once only
   useEffect(() => {
     dispatch(fetchGradingOverviews(showAllGroups));
-  }, [dispatch]);
+  }, [dispatch, showAllGroups]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -152,7 +149,6 @@ const Grading: React.FC = () => {
             </Flex>
             <GradingSubmissionsTable
               totalRows={gradingOverviews.count}
-              page={page}
               pageSize={pageSize}
               submissions={submissions}
               updateEntries={updateGradingOverviewsCallback}
