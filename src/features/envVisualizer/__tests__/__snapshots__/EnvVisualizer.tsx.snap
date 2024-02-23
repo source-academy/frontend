@@ -181,7 +181,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 127.5 L 486.12109375 390 L 486.12109375 390 M 140 127.5 L 486.12109375 390 L 486.12109375 390 "
+      data="M 140 127.5 L 486.0078125 390 L 486.0078125 390 M 140 127.5 L 486.0078125 390 L 486.0078125 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -194,7 +194,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
         Array [
           140,
           127.5,
-          486.12109375,
+          486.0078125,
           390,
         ]
       }
@@ -309,7 +309,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 197.5 L 802.2421875 390 L 802.2421875 390 M 140 197.5 L 802.2421875 390 L 802.2421875 390 "
+      data="M 140 197.5 L 802.015625 390 L 802.015625 390 M 140 197.5 L 802.015625 390 L 802.015625 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -322,7 +322,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
         Array [
           140,
           197.5,
-          802.2421875,
+          802.015625,
           390,
         ]
       }
@@ -437,7 +437,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 "
+      data="M 140 267.5 L 1118.0234375 390 L 1118.0234375 390 M 140 267.5 L 1118.0234375 390 L 1118.0234375 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -450,7 +450,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
         Array [
           140,
           267.5,
-          1118.36328125,
+          1118.0234375,
           390,
         ]
       }
@@ -565,7 +565,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 337.5 L 1434.484375 390 L 1434.484375 390 M 140 337.5 L 1434.484375 390 L 1434.484375 390 "
+      data="M 140 337.5 L 1434.03125 390 L 1434.03125 390 M 140 337.5 L 1434.03125 390 L 1434.03125 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -578,7 +578,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
         Array [
           140,
           337.5,
-          1434.484375,
+          1434.03125,
           390,
         ]
       }
@@ -743,7 +743,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={207.0908203125}
+    x={207.005859375}
     y={5}
   >
     <Tag
@@ -764,7 +764,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   </Label>
   <Label
     visible={false}
-    x={212.0908203125}
+    x={212.005859375}
     y={45}
   >
     <Tag
@@ -792,7 +792,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={236.12109375}
+    x={236.0078125}
     y={5}
   >
     <Tag
@@ -813,7 +813,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   </Label>
   <Label
     visible={false}
-    x={241.12109375}
+    x={241.0078125}
     y={45}
   >
     <Tag
@@ -841,7 +841,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={265.1513671875}
+    x={265.009765625}
     y={5}
   >
     <Tag
@@ -862,7 +862,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   </Label>
   <Label
     visible={false}
-    x={270.1513671875}
+    x={270.009765625}
     y={45}
   >
     <Tag
@@ -890,7 +890,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={294.181640625}
+    x={294.01171875}
     y={5}
   >
     <Tag
@@ -911,7 +911,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   </Label>
   <Label
     visible={false}
-    x={299.181640625}
+    x={299.01171875}
     y={45}
   >
     <Tag
@@ -939,7 +939,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={323.2119140625}
+    x={323.013671875}
     y={5}
   >
     <Tag
@@ -960,7 +960,7 @@ exports[`EnvVisualizer Control Stash correctly renders: Control is truncated pro
   </Label>
   <Label
     visible={false}
-    x={328.2119140625}
+    x={328.013671875}
     y={45}
   >
     <Tag
@@ -1874,32 +1874,6 @@ exports[`EnvVisualizer Control Stash correctly renders: global environments are 
       text="Pop most recently pushed value from stash"
     />
   </Label>
-  <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-  >
-    <Path
-      data="M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 M 195.009765625 40 L 316.0078125 555 L 316.0078125 555 "
-      hitStrokeWidth={5}
-      preventDefault={false}
-      stroke="#999999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999999"
-      pointerWidth={10}
-      points={
-        Array [
-          195.009765625,
-          40,
-          316.0078125,
-          555,
-        ]
-      }
-      preventDefault={false}
-      strokeEnabled={false}
-    />
-  </Group>
 </React.Fragment>
 `;
 
