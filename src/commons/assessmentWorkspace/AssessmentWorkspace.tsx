@@ -734,7 +734,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         key="folder"
       />
     );
-    
+
     // Moved to tabs
     /*
     const fileModeButton = (
@@ -750,8 +750,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     ];
 
     // Only allow folder mode to be enabled if chapter >= 2
-    if (question.library.chapter >= 2) editorButtonsMobileBreakpoint.push(toggleFolderModeButton)
-    editorButtonsMobileBreakpoint.push(chapterSelect)
+    if (question.library.chapter >= 2) editorButtonsMobileBreakpoint.push(toggleFolderModeButton);
+    editorButtonsMobileBreakpoint.push(chapterSelect);
 
     let editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
     const flowButtons = [previousButton, questionView, nextButton];

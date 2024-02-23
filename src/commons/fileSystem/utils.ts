@@ -10,10 +10,7 @@ type File = {
   contents: string;
 };
 
-export const handleReadFile = (
-  fileSystem: FSModule,
-  fullFilePath: string,
-): Promise<string> => {
+export const handleReadFile = (fileSystem: FSModule, fullFilePath: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     fileSystem.readFile(fullFilePath, 'utf-8', (err, fileContents) => {
       if (err) {
@@ -23,11 +20,10 @@ export const handleReadFile = (
       if (fileContents === undefined) {
         return;
       }
-  
+
       resolve(fileContents);
     });
-  })
- 
+  });
 };
 
 /**

@@ -1164,7 +1164,7 @@ export function* evalCode(
       ? DisplayBufferService.attachConsole(workspaceLocation)
       : () => {};
 
-      console.log(files)
+  console.log(files);
   const { result, interrupted, paused } = yield race({
     result:
       actionType === DEBUG_RESUME
