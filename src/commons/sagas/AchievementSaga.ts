@@ -192,6 +192,7 @@ export default function* AchievementSaga(): SagaIterator {
       (state: OverallState) => state.session.enableAchievements
     );
     if (action.payload.find(e => e === EventType.ERROR)) {
+      // TODO update this to work with new side content system
       // Flash the home icon if there is an error and the user is in the env viz or subst viz tab
       const introIcon = document.getElementById(SideContentType.introduction + '-icon');
       const envTab = document.getElementById(
