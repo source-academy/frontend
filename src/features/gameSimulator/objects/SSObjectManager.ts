@@ -11,7 +11,7 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { SSObjectDetail } from './SSObjectManagerTypes';
 
 /**
- * This manager manages the object (image assets) for Story Simulator's Object Placement scene
+ * This manager manages the object (image assets) for Game Simulator's Object Placement scene
  *
  * It handles:
  * (1) Storing of information on image assets used

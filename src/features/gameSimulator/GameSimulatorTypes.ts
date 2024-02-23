@@ -1,4 +1,4 @@
-export enum StorySimState {
+export enum GameSimState {
   Default = 'Default',
   ObjectPlacement = 'ObjectPlacement',
   AssetUploader = 'AssetUploader',

@@ -15,7 +15,7 @@ const staffRoutes = [
   'grading',
   'groundcontrol',
   'sourcereel',
-  'storysimulator',
+  'gamesimulator',
   'dashboard',
   'teamformation'
 ];
@@ -50,7 +50,7 @@ const mockProps = {
 };
 const element = <AcademyNavigationBar {...mockProps} />;
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks do NOT render for Role.Student', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks do NOT render for Role.Student', () => {
   useSelectorMock.mockReturnValue({
     role: Role.Student,
     courseId
@@ -64,7 +64,7 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grad
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Team Formation and Grading NavLinks render for Role.Staff', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Team Formation and Grading NavLinks render for Role.Staff', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Staff,
     courseId
@@ -78,7 +78,7 @@ test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Team
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Admin,
     courseId
