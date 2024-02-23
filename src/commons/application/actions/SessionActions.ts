@@ -1,13 +1,12 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { GradingOverview, GradingQuery } from '../../../features/grading/GradingTypes';
 import {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
   ContestEntry
 } from '../../assessment/AssessmentTypes';
-import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import {
   Notification,
   NotificationFilterFunction
@@ -22,7 +21,6 @@ import {
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
@@ -52,7 +50,6 @@ import {
   SET_COURSE_CONFIGURATION,
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_ASSESSMENT,
   SET_GITHUB_OCTOKIT_OBJECT,
   SET_GOOGLE_USER,
   SET_NOTIFICATION_CONFIGS,
@@ -65,7 +62,6 @@ import {
   TimeOption,
   Tokens,
   UNSUBMIT_SUBMISSION,
-  UPDATE_ALL_USER_XP,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_ASSESSMENT_OVERVIEWS,
@@ -102,8 +98,6 @@ export const fetchAssessmentOverviews = () => action(FETCH_ASSESSMENT_OVERVIEWS)
 export const fetchTotalXp = () => action(FETCH_TOTAL_XP);
 
 export const fetchTotalXpAdmin = (courseRegId: number) => action(FETCH_TOTAL_XP_ADMIN, courseRegId);
-
-export const fetchAllUserXp = () => action(FETCH_ALL_USER_XP);
 
 export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, submissionId);
 
@@ -151,9 +145,6 @@ export const setAdminPanelCourseRegistrations = (
 ) => action(SET_ADMIN_PANEL_COURSE_REGISTRATIONS, courseRegistrations);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
-
-export const setGitHubAssessment = (missionRepoData: MissionRepoData) =>
-  action(SET_GITHUB_ASSESSMENT, missionRepoData);
 
 export const setGitHubOctokitObject = (authToken?: string) =>
   action(SET_GITHUB_OCTOKIT_OBJECT, generateOctokitInstance(authToken || ''));
@@ -209,8 +200,6 @@ export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
 
 export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalXp);
 
-export const updateAllUserXp = (allUserXp: string[][]) => action(UPDATE_ALL_USER_XP, allUserXp);
-
 export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 
 export const updateGradingOverviews = (overviews: GradingOverview[]) =>
@@ -220,7 +209,7 @@ export const updateGradingOverviews = (overviews: GradingOverview[]) =>
  * An extra id parameter is included here because of
  * no id for Grading.
  */
-export const updateGrading = (submissionId: number, grading: Grading) =>
+export const updateGrading = (submissionId: number, grading: GradingQuery) =>
   action(UPDATE_GRADING, {
     submissionId,
     grading

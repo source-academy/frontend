@@ -3,7 +3,7 @@ import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { Grading } from '../../features/grading/GradingTypes';
+import { GradingQuery } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
@@ -96,7 +96,22 @@ export type ErrorOutput = {
   consoleLogs: string[];
 };
 
-export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
+/**
+ * An output which represents a message being displayed to the user. Not a true
+ * result from the program, but rather a customised notification meant to highlight
+ * events that occur outside execution of the program.
+ */
+export type NotificationOutput = {
+  type: 'notification';
+  consoleLog: string;
+};
+
+export type InterpreterOutput =
+  | RunningOutput
+  | CodeOutput
+  | ResultOutput
+  | ErrorOutput
+  | NotificationOutput;
 
 export enum Role {
   Student = 'student',
@@ -179,11 +194,11 @@ export const htmlLanguage: SALanguage = {
 };
 
 const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
-  { chapter: Chapter.SCHEME_1, variant: Variant.DEFAULT, displayName: 'Scheme \xa71' },
-  { chapter: Chapter.SCHEME_2, variant: Variant.DEFAULT, displayName: 'Scheme \xa72' },
-  { chapter: Chapter.SCHEME_3, variant: Variant.DEFAULT, displayName: 'Scheme \xa73' },
-  { chapter: Chapter.SCHEME_4, variant: Variant.DEFAULT, displayName: 'Scheme \xa74' },
-  { chapter: Chapter.FULL_SCHEME, variant: Variant.DEFAULT, displayName: 'Full Scheme' }
+  { chapter: Chapter.SCHEME_1, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa71' },
+  { chapter: Chapter.SCHEME_2, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa72' },
+  { chapter: Chapter.SCHEME_3, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa73' },
+  { chapter: Chapter.SCHEME_4, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa74' },
+  { chapter: Chapter.FULL_SCHEME, variant: Variant.EXPLICIT_CONTROL, displayName: 'Full Scheme' }
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
@@ -240,7 +255,8 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
 
   // Enable Subst Visualizer only for default Source 1 & 2
   supportedFeatures.substVisualizer =
-    chapter <= Chapter.SOURCE_2 && (variant === Variant.DEFAULT || variant === Variant.NATIVE);
+    chapter <= Chapter.SOURCE_2 &&
+    (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
 
   // Enable Env Visualizer for Source Chapter 3 and above
   supportedFeatures.envVisualizer =
@@ -372,6 +388,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     originalValue: ''
   },
   replValue: '',
+  hasTokenCounter: false,
+  tokenCount: 0,
+  customNotification: '',
   sharedbConnected: false,
   stepLimit: 1000,
   globals: [],
@@ -496,7 +515,6 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  allUserXp: undefined,
   story: {
     story: '',
     playStory: false
@@ -507,7 +525,7 @@ export const defaultSession: SessionState = {
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
-  gradings: new Map<number, Grading>(),
+  gradings: new Map<number, GradingQuery>(),
   notifications: []
 };
 

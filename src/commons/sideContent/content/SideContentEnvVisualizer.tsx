@@ -11,20 +11,21 @@ import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import { CSEAnimation } from 'src/features/envVisualizer/EnvVisualizerAnimation';
 import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 
 import { OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
-import { setEditorHighlightedLinesControl, updateEnvSteps } from '../../workspace/WorkspaceActions';
-import { evalEditor } from '../../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import { evalEditor, setEditorHighlightedLinesControl, updateEnvSteps } from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
+import { getLocation } from '../SideContentHelper';
 import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type State = {
@@ -81,7 +82,7 @@ class SideContentEnvVisualizerBase extends React.Component<EnvVisualizerProps, S
     };
     EnvVisualizer.init(
       visualization => {
-        this.setState({ visualization });
+        this.setState({ visualization }, () => CSEAnimation.playAnimation());
         if (visualization) this.props.handleAlertSideContent();
       },
       this.state.width,
@@ -411,6 +412,7 @@ class SideContentEnvVisualizerBase extends React.Component<EnvVisualizerProps, S
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
+      CSEAnimation.enableAnimations();
     }
   };
 
@@ -456,18 +458,31 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   state: OverallState,
   ownProps: OwnProps
 ) => {
-  let workspaceLocation: WorkspaceLocation;
-  if (ownProps.workspaceLocation === 'playground' || ownProps.workspaceLocation === 'sicp') {
-    workspaceLocation = ownProps.workspaceLocation;
-  } else {
-    workspaceLocation = 'playground';
+  let workspace: PlaygroundWorkspaceState
+  const [loc] = getLocation(ownProps.workspaceLocation)
+
+  switch (loc) {
+    // case 'stories': {
+    //   workspace = state.stories.envs[storyEnv]
+    //   break
+    // }
+    case 'sicp': {
+      workspace = state.workspaces.sicp
+      break
+    }
+    default: {
+      workspace = state.workspaces.playground
+      break
+    }
   }
+
+
   return {
     ...ownProps,
-    numOfStepsTotal: state.workspaces[workspaceLocation].envStepsTotal,
-    numOfSteps: state.workspaces[workspaceLocation].envSteps,
-    breakpointSteps: state.workspaces[workspaceLocation].breakpointSteps,
-    needEnvUpdate: state.workspaces[workspaceLocation].updateEnv
+    numOfStepsTotal: workspace.envStepsTotal,
+    numOfSteps: workspace.envSteps,
+    breakpointSteps: workspace.breakpointSteps,
+    needEnvUpdate: workspace.updateEnv
   };
 };
 

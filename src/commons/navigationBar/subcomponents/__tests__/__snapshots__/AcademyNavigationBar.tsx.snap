@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and Grading NavLinks render for Role.Staff 1`] = `
-<Blueprint4.Navbar
+<Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
-  <Blueprint4.NavbarGroup
+  <Blueprint5.NavbarGroup
     align="left"
   >
     <NavLink
@@ -12,8 +12,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Missions"
       to="/courses/0/missions"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="flame"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -30,8 +32,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Quests"
       to="/courses/0/quests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="lightbulb"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -48,8 +52,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Paths"
       to="/courses/0/paths"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="predictive-analysis"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -66,8 +72,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Contests"
       to="/courses/0/contests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="comparison"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -84,8 +92,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Others"
       to="/courses/0/others"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="manual"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -97,8 +107,8 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         notificationFilter={[Function]}
       />
     </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup
+  </Blueprint5.NavbarGroup>
+  <Blueprint5.NavbarGroup
     align="right"
   >
     <NavLink
@@ -106,8 +116,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Ground Control"
       to="/courses/0/groundcontrol"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="satellite"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -120,8 +132,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Dashboard"
       to="/courses/0/dashboard"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="globe"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -134,8 +148,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Sourcereel"
       to="/courses/0/sourcereel"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="mobile-video"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md"
@@ -148,8 +164,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Grading"
       to="/courses/0/grading"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="endorsed"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md"
@@ -166,8 +184,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Game Simulator"
       to="/courses/0/storysimulator"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="crown"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md"
@@ -180,8 +200,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Notifications"
       to="/courses/0/notipreference"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="notifications"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
@@ -189,15 +211,15 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         Notifications
       </div>
     </NavLink>
-  </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>
+  </Blueprint5.NavbarGroup>
+</Blueprint5.Navbar>
 `;
 
 exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student 1`] = `
-<Blueprint4.Navbar
+<Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
-  <Blueprint4.NavbarGroup
+  <Blueprint5.NavbarGroup
     align="left"
   >
     <NavLink
@@ -205,8 +227,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Missions"
       to="/courses/0/missions"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="flame"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -223,8 +247,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Quests"
       to="/courses/0/quests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="lightbulb"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -241,8 +267,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Paths"
       to="/courses/0/paths"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="predictive-analysis"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -259,8 +287,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Contests"
       to="/courses/0/contests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="comparison"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -277,8 +307,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Others"
       to="/courses/0/others"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="manual"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -290,8 +322,8 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         notificationFilter={[Function]}
       />
     </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup
+  </Blueprint5.NavbarGroup>
+  <Blueprint5.NavbarGroup
     align="right"
   >
     <NavLink
@@ -299,8 +331,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Notifications"
       to="/courses/0/notipreference"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="notifications"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
@@ -308,15 +342,15 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         Notifications
       </div>
     </NavLink>
-  </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>
+  </Blueprint5.NavbarGroup>
+</Blueprint5.Navbar>
 `;
 
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, XP Calculation and AdminPanel NavLinks render for Role.Admin 1`] = `
-<Blueprint4.Navbar
+exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin 1`] = `
+<Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
-  <Blueprint4.NavbarGroup
+  <Blueprint5.NavbarGroup
     align="left"
   >
     <NavLink
@@ -324,8 +358,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Missions"
       to="/courses/0/missions"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="flame"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -342,8 +378,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Quests"
       to="/courses/0/quests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="lightbulb"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -360,8 +398,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Paths"
       to="/courses/0/paths"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="predictive-analysis"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -378,8 +418,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Contests"
       to="/courses/0/contests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="comparison"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -396,8 +438,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Others"
       to="/courses/0/others"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="manual"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -409,8 +453,8 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         notificationFilter={[Function]}
       />
     </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup
+  </Blueprint5.NavbarGroup>
+  <Blueprint5.NavbarGroup
     align="right"
   >
     <NavLink
@@ -418,8 +462,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Ground Control"
       to="/courses/0/groundcontrol"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="satellite"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -432,8 +478,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Dashboard"
       to="/courses/0/dashboard"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="globe"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm"
@@ -446,8 +494,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Sourcereel"
       to="/courses/0/sourcereel"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="mobile-video"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md"
@@ -460,8 +510,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Grading"
       to="/courses/0/grading"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="endorsed"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md"
@@ -478,27 +530,15 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Game Simulator"
       to="/courses/0/storysimulator"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="crown"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
         Game Simulator
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="XP Calculation"
-      to="/courses/0/xpcalculation"
-    >
-      <Blueprint4.Icon
-        icon="calculator"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        XP Calculation
       </div>
     </NavLink>
     <NavLink
@@ -506,8 +546,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Admin Panel"
       to="/courses/0/adminpanel"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="settings"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
@@ -520,8 +562,10 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Notifications"
       to="/courses/0/notipreference"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="notifications"
+        tagName="span"
       />
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
@@ -529,6 +573,6 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
         Notifications
       </div>
     </NavLink>
-  </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>
+  </Blueprint5.NavbarGroup>
+</Blueprint5.Navbar>
 `;

@@ -14,7 +14,7 @@ export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
   contestVoting = 'contest_voting',
-  contestLeaderboard = 'contest_leaderboard',
+  scoreLeaderboard = 'score_leaderboard',
   dataVisualizer = 'data_visualizer',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',

@@ -3,10 +3,8 @@ import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
-import { mockGrading } from '../../mocks/GradingMocks';
-import SideContentAutograder, {
-  SideContentAutograderProps
-} from '../content/SideContentAutograder';
+import { mockGradingAnswer } from '../../mocks/GradingMocks';
+import SideContentAutograder, { SideContentAutograderProps } from '../content/SideContentAutograder';
 
 const mockErrors: SourceError[] = [
   {
@@ -68,7 +66,8 @@ const mockSecretTestcases: Testcase[] = [
 
 const secretTestcaseCardClasses = publicTestcaseCardClasses.map(classes => `${classes} secret`);
 
-const mockAutogradingResults: AutogradingResult[] = mockGrading[0].question.autogradingResults;
+const mockAutogradingResults: AutogradingResult[] =
+  mockGradingAnswer[0].question.autogradingResults;
 
 const resultCardClasses = [
   'ResultCard correct',

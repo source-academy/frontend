@@ -1,7 +1,7 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
-import * as qs from 'query-string';
+import qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
 import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';

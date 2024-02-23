@@ -1,6 +1,6 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
@@ -27,7 +27,6 @@ import GroundControl from './groundControl/GroundControlContainer';
 import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/Sourcereel';
 import StorySimulator from './storySimulator/StorySimulator';
-import XpCalculation from './xpCalculation/XpCalculation';
 
 const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();
@@ -42,10 +41,9 @@ const Academy: React.FC<{}> = () => {
       ? [
           <Route path="groundcontrol" element={<GroundControl />} key={0} />,
           <Route path={`grading/${gradingRegExp}`} element={<Grading />} key={1} />,
-          <Route path="xpcalculation" element={<XpCalculation />} key={2} />,
-          <Route path="sourcereel" element={<Sourcereel />} key={3} />,
-          <Route path="storysimulator" element={<StorySimulator />} key={4} />,
-          <Route path="dashboard" element={<Dashboard />} key={5} />
+          <Route path="sourcereel" element={<Sourcereel />} key={2} />,
+          <Route path="storysimulator" element={<StorySimulator />} key={3} />,
+          <Route path="dashboard" element={<Dashboard />} key={4} />
         ]
       : null;
   return (

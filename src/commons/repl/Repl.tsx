@@ -3,7 +3,7 @@ import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -122,6 +122,12 @@ export const Output: React.FC<OutputProps> = (props: OutputProps) => {
           </Card>
         );
       }
+    case 'notification':
+      return (
+        <Card className="notification-output-container">
+          <Pre className="notification-output">{'💡 ' + props.output.consoleLog}</Pre>
+        </Card>
+      );
     default:
       return <Card>''</Card>;
   }

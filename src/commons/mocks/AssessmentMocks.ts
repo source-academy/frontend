@@ -22,6 +22,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: false,
       earlySubmissionXp: 200
     },
     {
@@ -30,6 +31,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: false,
       earlySubmissionXp: 200
     },
     {
@@ -38,6 +40,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: false,
       earlySubmissionXp: 200
     },
     {
@@ -46,6 +49,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: true,
       earlySubmissionXp: 200
     },
     {
@@ -54,6 +58,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: false,
       earlySubmissionXp: 200
     }
   ],
@@ -64,6 +69,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: false,
       earlySubmissionXp: 200
     },
     {
@@ -72,6 +78,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: false,
       earlySubmissionXp: 200
     },
     {
@@ -80,6 +87,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
+      hasTokenCounter: false,
       earlySubmissionXp: 200
     }
   ]
@@ -862,7 +870,7 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
         answer: { code: 'function voting_test() { return true; }' }
       }
     ],
-    contestLeaderboard: [
+    scoreLeaderboard: [
       {
         submission_id: 1,
         student_name: 'student_1',
