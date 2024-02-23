@@ -72,11 +72,11 @@ class Bindings extends Phaser.Scene {
           binding.key,
           binding.text,
           bindingPositions[index][1] < 450
-            ? bindingPositions[index][0] - 400
-            : bindingPositions[index][0] + 400,
-          bindingPositions[index][1] <= 450
-            ? bindingPositions[index][1] + BindingConstants.key.yStart - 200
-            : bindingPositions[index][1] + BindingConstants.key.yStart - 775
+            ? bindingPositions[index][0] - screenSize.x / 5
+            : bindingPositions[index][0] + screenSize.x / 5,
+          bindingPositions[index][1] < 450
+            ? bindingPositions[index][1] + screenCenter.y - screenSize.y / 4
+            : bindingPositions[index][1] + screenCenter.y - screenSize.y / 1.5
         );
       })
     );
@@ -95,7 +95,7 @@ class Bindings extends Phaser.Scene {
   private getBindings() {
     return [
       {
-        key: 'ESC',
+        key: 'Esc',
         text: 'Escape Menu'
       },
       {
@@ -107,20 +107,20 @@ class Bindings extends Phaser.Scene {
         text: 'Next dialogue'
       },
       {
-        key: '<Number>',
-        text: '       Select topics/locations'
-      },
-      {
-        key: 'T',
-        text: 'Enter the Talk mode'
-      },
-      {
         key: 'E',
-        text: 'Enter the Explore mode'
+        text: 'Explore mode'
       },
       {
         key: 'V',
-        text: 'Enter the Move mode'
+        text: 'Move mode'
+      },
+      {
+        key: 'T',
+        text: 'Talk mode'
+      },
+      {
+        key: '<Number>',
+        text: '       Select topics/locations'
       }
     ];
   }
