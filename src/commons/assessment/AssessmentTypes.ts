@@ -46,8 +46,8 @@ export enum QuestionTypes {
 export type QuestionType = keyof typeof QuestionTypes;
 
 /*
-W* Used to display information regarding an assessment in the UI.
-*
+ * Used to display information regarding an assessment in the UI.
+ *
  * @property closeAt an ISO 8601 compliant date string specifiying when
  *   the assessment closes
  * @property openAt an ISO 8601 compliant date string specifiying when
