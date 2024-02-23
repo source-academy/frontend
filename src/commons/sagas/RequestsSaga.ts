@@ -12,6 +12,7 @@ import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
   GradingAnswer,
   GradingOverview,
+  GradingOverviews,
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
@@ -636,24 +637,34 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
  */
 export const getGradingOverviews = async (
   tokens: Tokens,
-  group: boolean
-): Promise<GradingOverview[] | null> => {
-  const resp = await request(`${courseId()}/admin/grading?group=${group}`, 'GET', {
+  group: boolean,
+  graded: Record<string, any> | undefined,
+  pageParams: Record<string, any>,
+  filterParams: Record<string, any>
+): Promise<GradingOverviews | null> => {
+  // gradedQuery placed behind filterQuery to override progress filter if any
+  const params = new URLSearchParams({ ...pageParams, ...filterParams, ...graded });
+  params.append('group', `${group}`);
+
+  const resp = await request(`${courseId()}/admin/grading?${params.toString()}`, 'GET', {
     ...tokens
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
   }
   const gradingOverviews = await resp.json();
-  return gradingOverviews
-    .map((overview: any) => {
-      const gradingOverview: GradingOverview = {
-        assessmentId: overview.assessment.id,
-        assessmentNumber: overview.assessment.assessmentNumber,
-        assessmentName: overview.assessment.title,
-        assessmentType: overview.assessment.type,
-        studentId: overview.student ? overview.student.id : -1,
-        studentName: overview.student ? overview.student.name : undefined,
+
+  return {
+    count: gradingOverviews.count,
+    data: gradingOverviews.data
+      .map((overview: any) => {
+        const gradingOverview: GradingOverview = {
+          assessmentId: overview.assessment.id,
+          assessmentNumber: overview.assessment.assessmentNumber,
+          assessmentName: overview.assessment.title,
+          assessmentType: overview.assessment.type,
+          studentId: overview.student ? overview.student.id : -1,
+          studentName: overview.student ? overview.student.name : undefined,
         studentNames: overview.team
           ? overview.team.team_members.map((member: { name: any }) => member.name)
           : undefined,
@@ -661,34 +672,35 @@ export const getGradingOverviews = async (
         studentUsernames: overview.team
           ? overview.team.team_members.map((member: { username: any }) => member.username)
           : undefined,
-        submissionId: overview.id,
-        submissionStatus: overview.status,
-        groupName: overview.student ? overview.student.groupName : '-',
-        groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
-        // Grading Status
-        gradingStatus: 'none',
-        questionCount: overview.assessment.questionCount,
-        gradedCount: overview.gradedCount,
-        // XP
-        initialXp: overview.xp,
-        xpAdjustment: overview.xpAdjustment,
-        currentXp: overview.xp + overview.xpAdjustment,
-        maxXp: overview.assessment.maxXp,
-        xpBonus: overview.xpBonus
-      };
-      gradingOverview.gradingStatus = computeGradingStatus(
-        overview.assessment.isManuallyGraded,
-        gradingOverview.submissionStatus,
-        gradingOverview.gradedCount,
-        gradingOverview.questionCount
-      );
-      return gradingOverview;
-    })
-    .sort((subX: GradingOverview, subY: GradingOverview) =>
-      subX.assessmentId !== subY.assessmentId
-        ? subY.assessmentId - subX.assessmentId
-        : subY.submissionId - subX.submissionId
-    );
+          submissionId: overview.id,
+          submissionStatus: overview.status,
+          groupName: overview.student ? overview.student.groupName : '-',
+          groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
+          // Grading Status
+          gradingStatus: 'none',
+          questionCount: overview.assessment.questionCount,
+          gradedCount: overview.gradedCount,
+          // XP
+          initialXp: overview.xp,
+          xpAdjustment: overview.xpAdjustment,
+          currentXp: overview.xp + overview.xpAdjustment,
+          maxXp: overview.assessment.maxXp,
+          xpBonus: overview.xpBonus
+        };
+        gradingOverview.gradingStatus = computeGradingStatus(
+          overview.assessment.isManuallyGraded,
+          gradingOverview.submissionStatus,
+          gradingOverview.gradedCount,
+          gradingOverview.questionCount
+        );
+        return gradingOverview;
+      })
+      .sort((subX: GradingOverview, subY: GradingOverview) =>
+        subX.assessmentId !== subY.assessmentId
+          ? subY.assessmentId - subX.assessmentId
+          : subY.submissionId - subX.submissionId
+      )
+  };
 };
 
 /*
@@ -934,7 +946,6 @@ export const getGrading = async (
       result.grade.grader = gradingQuestion.grade.grader;
       result.grade.gradedAt = gradingQuestion.grade.gradedAt;
     }
-
     return result;
   });
 

@@ -181,7 +181,6 @@ export type DebuggerContext = {
 
 export type SubmissionsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
-  globalFilter: string | null;
 };
 
 export type TeamFormationsTableFilters = {

@@ -11,6 +11,7 @@ import {
 } from '../../features/dashboard/DashboardTypes';
 import {
   GradingOverview,
+  GradingOverviews,
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
@@ -455,12 +456,15 @@ function* BackendSaga(): SagaIterator {
         return;
       }
 
-      const filterToGroup = action.payload;
+      const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
 
-      const gradingOverviews: GradingOverview[] | null = yield call(
+      const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,
         tokens,
-        filterToGroup
+        filterToGroup,
+        gradedFilter,
+        pageParams,
+        filterParams
       );
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));
@@ -625,7 +629,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews || []
+        (state: OverallState) => state.session.gradingOverviews?.data || []
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
@@ -634,8 +638,14 @@ function* BackendSaga(): SagaIterator {
         return overview;
       });
 
+      const totalPossibleEntries = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.count
+      );
+
       yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
+      yield put(
+        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
+      );
     }
   );
 

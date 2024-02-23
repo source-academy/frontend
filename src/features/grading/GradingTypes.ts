@@ -36,6 +36,11 @@ export type GradingOverview = {
   gradedCount: number;
 };
 
+export type GradingOverviews = {
+  count: number; // To support server-side pagination
+  data: GradingOverview[];
+};
+
 export type GradingOverviewWithNotifications = {
   notifications: Notification[];
 } & GradingOverview;

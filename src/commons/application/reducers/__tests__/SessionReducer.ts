@@ -562,7 +562,10 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', 
 test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', () => {
   const newDefaultSession = {
     ...defaultSession,
-    gradingOverviews: gradingOverviewTest1
+    gradingOverviews: {
+      count: gradingOverviewTest1.length,
+      data: gradingOverviewTest1
+    }
   };
   const gradingOverviewsPayload = [...gradingOverviewTest2, ...gradingOverviewTest1];
   const action = {
