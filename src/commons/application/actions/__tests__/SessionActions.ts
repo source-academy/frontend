@@ -1,6 +1,10 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import {
+  paginationToBackendParams,
+  ungradedToBackendParams
+} from 'src/features/grading/GradingUtils';
 
-import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
+import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
@@ -150,16 +154,29 @@ test('fetchGradingOverviews generates correct default action object', () => {
   const action = fetchGradingOverviews();
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
-    payload: true
+    payload: {
+      filterToGroup: true,
+      gradedFilter: ungradedToBackendParams(false),
+      pageParams: paginationToBackendParams(0, 10),
+      filterParams: {}
+    }
   });
 });
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const action = fetchGradingOverviews(filterToGroup);
+  const gradedFilter = ungradedToBackendParams(true);
+  const pageParams = { offset: 123, pageSize: 456 };
+  const filterParams = { abc: 'xxx', def: 'yyy' };
+  const action = fetchGradingOverviews(filterToGroup, gradedFilter, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
-    payload: filterToGroup
+    payload: {
+      filterToGroup: filterToGroup,
+      gradedFilter: gradedFilter,
+      pageParams: pageParams,
+      filterParams: filterParams
+    }
   });
 });
 
@@ -510,28 +527,31 @@ test('updateAssessment generates correct action object', () => {
 });
 
 test('updateGradingOverviews generates correct action object', () => {
-  const overviews: GradingOverview[] = [
-    {
-      assessmentId: 1,
-      assessmentNumber: 'M1A',
-      assessmentName: 'test assessment',
-      assessmentType: 'Contests',
-      initialXp: 0,
-      xpBonus: 100,
-      xpAdjustment: 50,
-      currentXp: 50,
-      maxXp: 500,
-      studentId: 100,
-      studentName: 'test student',
-      studentUsername: 'E0123456',
-      submissionId: 1,
-      submissionStatus: 'attempting',
-      groupName: 'group',
-      gradingStatus: 'excluded',
-      questionCount: 6,
-      gradedCount: 0
-    }
-  ];
+  const overviews: GradingOverviews = {
+    count: 1,
+    data: [
+      {
+        assessmentId: 1,
+        assessmentNumber: 'M1A',
+        assessmentName: 'test assessment',
+        assessmentType: 'Contests',
+        initialXp: 0,
+        xpBonus: 100,
+        xpAdjustment: 50,
+        currentXp: 50,
+        maxXp: 500,
+        studentId: 100,
+        studentName: 'test student',
+        studentUsername: 'E0123456',
+        submissionId: 1,
+        submissionStatus: 'attempting',
+        groupName: 'group',
+        gradingStatus: 'excluded',
+        questionCount: 6,
+        gradedCount: 0
+      }
+    ]
+  };
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({

@@ -47,6 +47,7 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { Documentation } from '../documentation/Documentation';
 import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileSystem/utils';
+import { resetSideContent } from '../sideContent/SideContentActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
@@ -327,6 +328,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     const codeFiles = {
       [codeFilePath]: code
     };
+    yield put(resetSideContent(`stories.${env}`));
     yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY, env);
   });
 
@@ -416,20 +418,19 @@ export default function* WorkspaceSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
       const newHighlightedLines = action.payload.newHighlightedLines;
       if (newHighlightedLines.length === 0) {
-        highlightCleanForControl();
+        yield call(highlightCleanForControl);
       } else {
         try {
-          newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
+          for (const [startRow, endRow] of newHighlightedLines) {
             for (let row = startRow; row <= endRow; row++) {
-              highlightLineForControl(row);
+              yield call(highlightLineForControl, row);
             }
-          });
+          }
         } catch (e) {
           // Error most likely caused by trying to highlight the lines of the prelude
           // in Env Viz. Can be ignored.
         }
       }
-      yield;
     }
   );
 
@@ -477,6 +478,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       yield put(actions.beginClearContext(workspaceLocation, library, false));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
+      if (workspaceLocation !== 'stories') yield put(actions.resetSideContent(workspaceLocation));
       yield call(
         showSuccessMessage,
         `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
@@ -538,8 +540,8 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(
     BEGIN_CLEAR_CONTEXT,
     function* (action: ReturnType<typeof actions.beginClearContext>) {
-      DataVisualizer.clear();
-      EnvVisualizer.clear();
+      yield call([DataVisualizer, DataVisualizer.clear]);
+      yield call([EnvVisualizer, EnvVisualizer.clear]);
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
         window[key] = value;
@@ -1157,11 +1159,6 @@ export function* evalCode(
   const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
-    // icon to blink
-    const icon = document.getElementById(SideContentType.substVisualizer + '-icon');
-    if (icon) {
-      icon.classList.add('side-content-tab-alert');
-    }
   }
 
   // For the environment visualiser slider

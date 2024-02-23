@@ -40,7 +40,6 @@ import {
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CHANGE_STEP_LIMIT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -225,14 +224,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           execTime: action.payload.execTime
-        }
-      };
-    case CHANGE_SIDE_CONTENT_HEIGHT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContentHeight: action.payload.height
         }
       };
     case CHANGE_STEP_LIMIT:
@@ -1149,21 +1140,23 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           breakpointSteps: action.payload.breakpointSteps
         }
       };
-    case NOTIFY_PROGRAM_EVALUATED:
+    case NOTIFY_PROGRAM_EVALUATED: {
+      const debuggerContext = {
+        ...state[workspaceLocation].debuggerContext,
+        result: action.payload.result,
+        lastDebuggerResult: action.payload.lastDebuggerResult,
+        code: action.payload.code,
+        context: action.payload.context,
+        workspaceLocation: action.payload.workspaceLocation
+      };
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          debuggerContext: {
-            ...state[workspaceLocation].debuggerContext,
-            result: action.payload.result,
-            lastDebuggerResult: action.payload.lastDebuggerResult,
-            code: action.payload.code,
-            context: action.payload.context,
-            workspaceLocation: action.payload.workspaceLocation
-          }
+          debuggerContext
         }
       };
+    }
     default:
       return state;
   }
