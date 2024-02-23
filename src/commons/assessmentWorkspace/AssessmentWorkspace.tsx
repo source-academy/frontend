@@ -746,12 +746,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       // fileModeButton,
       runButton,
       saveButton,
-      resetButton,
-      chapterSelect
+      resetButton
     ];
 
     // Only allow folder mode to be enabled if chapter >= 2
     if (question.library.chapter >= 2) editorButtonsMobileBreakpoint.push(toggleFolderModeButton)
+    editorButtonsMobileBreakpoint.push(chapterSelect)
+
     let editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
     const flowButtons = [previousButton, questionView, nextButton];
 
