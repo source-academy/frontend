@@ -124,7 +124,6 @@ const GitHubClassroom: React.FC = () => {
             octokit && (!courses || (courses.length > 0 && !assessmentTypeOverviews)) ? (
               <ContentDisplay
                 display={<NonIdealState description="Loading..." icon={<Spinner />} />}
-                loadContentDispatch={() => {}}
               />
             ) : octokit && courses && courses.length === 0 ? (
               <Navigate to={RelativeRoutes.GITHUB_WELCOME} replace />
@@ -138,7 +137,6 @@ const GitHubClassroom: React.FC = () => {
                     icon={IconNames.WARNING_SIGN}
                   />
                 }
-                loadContentDispatch={() => {}}
               />
             )
           }
