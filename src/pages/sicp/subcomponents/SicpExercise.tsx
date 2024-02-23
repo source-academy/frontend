@@ -1,5 +1,5 @@
 import { Button, Card, Collapse, Elevation } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 
 type SicpExerciseProps = OwnProps;
 type OwnProps = {

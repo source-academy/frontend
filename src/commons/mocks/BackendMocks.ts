@@ -2,7 +2,11 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingOverview,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   OverallState,
   Role,
@@ -177,7 +181,7 @@ export function* mockBackendSaga(): SagaIterator {
     const accessToken = yield select((state: OverallState) => state.session.accessToken);
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId));
     if (grading !== null) {
-      yield put(actions.updateGrading(submissionId, [...grading]));
+      yield put(actions.updateGrading(submissionId, grading));
     }
   });
 
@@ -217,10 +221,10 @@ export function* mockBackendSaga(): SagaIterator {
 
     const { submissionId, questionId, xpAdjustment, comments } = action.payload;
     // Now, update the grade for the question in the Grading in the store
-    const grading: Grading = yield select((state: OverallState) =>
+    const grading: GradingQuery = yield select((state: OverallState) =>
       state.session.gradings.get(submissionId)
     );
-    const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
+    const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
           xpAdjustment,
@@ -230,7 +234,9 @@ export function* mockBackendSaga(): SagaIterator {
       }
       return gradingQuestion;
     });
-    yield put(actions.updateGrading(submissionId, newGrading));
+    yield put(
+      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    );
     yield call(showSuccessMessage, 'Submitted!', 1000);
   };
 

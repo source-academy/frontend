@@ -8,10 +8,11 @@ export type EditorTabProps = {
   isActive: boolean;
   setActive: () => void;
   remove: () => void;
+  readOnly?: boolean;
 };
 
 const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
-  const { filePath, isActive, setActive, remove } = props;
+  const { filePath, isActive, setActive, remove, readOnly } = props;
 
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     // Stop the click event from propagating to the parent component.
@@ -26,6 +27,10 @@ const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
       })}
       onClick={setActive}
     >
+      {' '}
+      {readOnly !== undefined && (
+        <Icon className="file-mode-button" icon={readOnly ? IconNames.LOCK : IconNames.UNLOCK} />
+      )}
       {filePath}
       <Icon className="remove-button" icon={IconNames.SMALL_CROSS} onClick={onClick} />
     </Card>

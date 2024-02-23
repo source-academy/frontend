@@ -45,7 +45,7 @@ import { ControlBarProps } from '../controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
-import { ControlBarFileModeButton } from '../controlBar/ControlBarFileModeButton';
+// import { ControlBarFileModeButton } from '../controlBar/ControlBarFileModeButton';
 import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
 import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
@@ -99,7 +99,8 @@ import {
   updateCurrentAssessmentId,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateTabReadOnly
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
@@ -230,10 +231,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       const currentFilePath = editorTabs[activeEditorTabIndex].filePath;
       if (currentFilePath && currentFilePath === `/${workspaceLocation}/${questionId + 1}.js`) {
         setIsEditable(true);
+        dispatch(updateTabReadOnly(workspaceLocation, activeEditorTabIndex, false));
         return;
       }
     }
     setIsEditable(false);
+    dispatch(updateTabReadOnly(workspaceLocation, activeEditorTabIndex, true));
   }, [activeEditorTabIndex, editorTabs, questionId]);
 
   /**
@@ -676,7 +679,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       <ControlBarRunButton
         isEntrypointFileDefined={activeEditorTabIndex !== null}
         handleEditorEval={handleEval}
-        readOnly={!isEditable}
         key="run"
       />
     );
@@ -732,19 +734,34 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         key="folder"
       />
     );
-
+    
+    // Moved to tabs
+    /*
     const fileModeButton = (
       <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} key="file_mode" />
     );
+    */
 
-    const editorButtonsMobileBreakpoint = [fileModeButton, runButton, saveButton, resetButton];
-    // Only allow folder mode to be enabled if chapter >= 2 and is a programming question
-    if (question.library.chapter >= 2 && question.type === 'programming')
-      editorButtonsMobileBreakpoint.push(toggleFolderModeButton);
+    let editorButtonsMobileBreakpoint = [
+      // fileModeButton,
+      runButton,
+      saveButton,
+      resetButton,
+      chapterSelect
+    ];
 
-    editorButtonsMobileBreakpoint.push(chapterSelect);
-    const editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
+    // Only allow folder mode to be enabled if chapter >= 2
+    if (question.library.chapter >= 2) editorButtonsMobileBreakpoint.push(toggleFolderModeButton)
+    let editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
     const flowButtons = [previousButton, questionView, nextButton];
+
+    if (!isEditable) {
+      editorButtonsMobileBreakpoint = editorButtonsMobileBreakpoint.filter(x => x !== saveButton);
+      editorButtonsNotMobileBreakpoint = editorButtonsNotMobileBreakpoint.filter(
+        x => x !== saveButton
+      );
+    }
+
     return {
       editorButtons: !isMobileBreakpoint
         ? editorButtonsMobileBreakpoint
