@@ -1,4 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { CHANGE_SIDE_CONTENT_HEIGHT } from 'src/commons/sideContent/SideContentTypes';
 
 import {
   createDefaultWorkspace,
@@ -15,7 +17,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExternalLibrary,
-  changeSideContentHeight,
   changeSublanguage,
   chapterSelect,
   clearReplInput,
@@ -59,7 +60,6 @@ import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
   CLEAR_REPL_INPUT,
@@ -558,14 +558,12 @@ test('updateSubmissionsTableFilters generates correct action object', () => {
       value: 'Missions'
     }
   ];
-  const globalFilter = 'runes';
-  const action = updateSubmissionsTableFilters({ columnFilters, globalFilter });
+  const action = updateSubmissionsTableFilters({ columnFilters });
   expect(action).toEqual({
     type: UPDATE_SUBMISSIONS_TABLE_FILTERS,
     payload: {
       filters: {
-        columnFilters,
-        globalFilter
+        columnFilters
       }
     }
   });

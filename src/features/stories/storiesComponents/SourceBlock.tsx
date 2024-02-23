@@ -7,6 +7,10 @@ import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
 import ControlButton from 'src/commons/ControlButton';
+import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import SideContent, { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -16,16 +20,11 @@ import {
   evalStory,
   toggleStoriesUsingSubst
 } from 'src/features/stories/StoriesActions';
-import {
-  dataVisualizerTab,
-  makeHtmlDisplayTabFrom,
-  makeSubstVisualizerTabFrom
-} from 'src/pages/playground/PlaygroundTabs';
+import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import StoriesSideContent, { StoriesSideContentProps } from './StoriesSideContent';
 import { DEFAULT_ENV } from './UserBlogContent';
 
 export type SourceBlockProps = {
@@ -55,7 +54,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.storiesRun);
 
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
@@ -80,6 +78,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   }, [props.content]);
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
+  const { selectedTab, setSelectedTab } = useSideContent(`stories.${env}`);
 
   const onChangeTabs = React.useCallback(
     (
@@ -138,8 +137,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     if (chapter === Chapter.HTML) {
       if (output.length > outputIndex && output[outputIndex].type === 'result') {
         tabs.push(
-          makeHtmlDisplayTabFrom(output[outputIndex] as ResultOutput, errorMsg =>
-            dispatch(addHtmlConsoleError(errorMsg, 'stories', env))
+          makeHtmlDisplayTabFrom(
+            output[outputIndex] as ResultOutput,
+            errorMsg => dispatch(addHtmlConsoleError(errorMsg, 'stories', env)),
+            `stories.${env}`
           )
         );
       }
@@ -153,7 +154,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
     if (chapter >= Chapter.SOURCE_2) {
       // Enable Data Visualizer for Source Chapter 2 and above
-      tabs.push(dataVisualizerTab);
+      tabs.push(makeDataVisualizerTabFrom(`stories.${env}`));
     }
     // if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
     //   // Enable Env Visualizer for Source Chapter 3 and above
@@ -165,22 +166,23 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       (variant === Variant.DEFAULT || variant === Variant.NATIVE)
     ) {
       // Enable Subst Visualizer only for default Source 1 & 2
-      tabs.push(makeSubstVisualizerTabFrom(output.slice(outputIndex)));
+      tabs.push(makeSubstVisualizerTabFrom(`stories.${env}`, output.slice(outputIndex)));
     }
 
     return tabs;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapter, variant, output, dispatch, env]);
 
-  const sideContentProps: StoriesSideContentProps = {
+  const sideContentProps: SideContentProps = {
     selectedTabId: selectedTab,
     onChange: onChangeTabs,
     tabs: {
       beforeDynamicTabs: tabs,
       afterDynamicTabs: []
     },
-    workspaceLocation: 'stories',
-    getDebuggerContext: state => state.stories.envs[env].debuggerContext
+    // storiesEnv: env,
+    workspaceLocation: `stories.${env}`
+    // getDebuggerContext: state => state.stories.envs[env].debuggerContext
   };
 
   const execEvaluate = () => {
@@ -189,7 +191,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // method because of the fact that execution logic is handled
     // by the environment setting, but the currently showing tab
     // is handled by the component setting.
-    onChangeTabs(selectedTab, selectedTab, {} as any);
+    if (selectedTab) onChangeTabs(selectedTab, selectedTab, {} as any);
 
     dispatch(evalStory(env, code));
     setOutputIndex(output.length);
@@ -253,7 +255,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                 />
               </Card>
               <div>
-                <StoriesSideContent {...sideContentProps} />
+                <SideContent {...sideContentProps} />
               </div>
             </div>
           </div>

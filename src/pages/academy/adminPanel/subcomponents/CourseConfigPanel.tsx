@@ -9,7 +9,7 @@ import {
   Tabs,
   TextArea
 } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';

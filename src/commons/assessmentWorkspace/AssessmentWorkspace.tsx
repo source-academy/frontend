@@ -1,9 +1,10 @@
 import {
   Button,
-  ButtonGroup,
   Card,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   Intent,
   NonIdealState,
   Spinner,
@@ -58,11 +59,13 @@ import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
+import SideContentAutograder from '../sideContent/content/SideContentAutograder';
+import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
+import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
+import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
-import SideContentAutograder from '../sideContent/SideContentAutograder';
-import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
-import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
-import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
+import { changeSideContentHeight } from '../sideContent/SideContentActions';
+import { useSideContent } from '../sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
@@ -74,7 +77,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
   clearReplOutput,
   disableTokenCounter,
   enableTokenCounter,
@@ -113,8 +115,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
-
-  const [selectedTab, setSelectedTab] = useState(
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
@@ -133,7 +135,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContentHeight,
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -264,10 +265,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
+    if (!selectedTab) return;
+
     if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab]);
+  }, [isMobileBreakpoint, props, selectedTab, setSelectedTab]);
 
   /* ==================
      onChange handlers
@@ -552,7 +555,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         afterDynamicTabs: []
       },
       onChange: onChangeTabs,
-      workspaceLocation: workspaceLocation
+      workspaceLocation
     };
   };
 
@@ -767,28 +770,30 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       onClose={closeOverlay}
       title="Confirmation: Reset editor?"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Markdown content="Are you sure you want to reset the template?" />
         <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <ButtonGroup>
-          <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
-          <ControlButton
-            label="Confirm"
-            onClick={() => {
-              closeOverlay();
-              // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-              handleEditorValueChange(
-                0,
-                (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
-              );
-              handleUpdateHasUnsavedChanges(true);
-            }}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </ButtonGroup>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
+            <ControlButton
+              label="Confirm"
+              onClick={() => {
+                closeOverlay();
+                // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
+                handleEditorValueChange(
+                  0,
+                  (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+                );
+                handleUpdateHasUnsavedChanges(true);
+              }}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 
@@ -849,7 +854,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: replProps
   };

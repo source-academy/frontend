@@ -146,6 +146,11 @@ const cracoConfig = (module.exports = {
         '<rootDir>/node_modules/vfile/lib';
       return jestConfig;
     }
+  },
+  babel: {
+    presets: [
+      ['@babel/preset-typescript']
+    ]
   }
 });
 
