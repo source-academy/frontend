@@ -483,10 +483,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             <div
                               aria-expanded="false"
                               class="side-content-tooltip"
-<<<<<<< HEAD
-=======
-                              id="score_leaderboard-icon"
->>>>>>> f9c94503c89ff2b0ae05b216d5e23a28b9eb4d50
                               tabindex="0"
                             >
                               <span
@@ -1384,13 +1380,8 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                         role="tablist"
                       >
                         <div
-<<<<<<< HEAD
-                          class="bp4-tab-indicator-wrapper"
-                          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px; transition: none;"
-=======
                           class="bp5-tab-indicator-wrapper"
-                          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
->>>>>>> f9c94503c89ff2b0ae05b216d5e23a28b9eb4d50
+                          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px; transition: none;"
                         >
                           <div
                             class="bp5-tab-indicator"
@@ -3671,15 +3662,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
                           aria-disabled="false"
-<<<<<<< HEAD
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp4-tab side-content-tab"
-=======
-                          aria-expanded="false"
-                          aria-selected="false"
                           class="bp5-tab side-content-tab"
->>>>>>> f9c94503c89ff2b0ae05b216d5e23a28b9eb4d50
                           data-tab-id="question_overview"
                           id="bp5-tab-title_side-content-tabs_question_overview"
                           role="tab"
@@ -3794,15 +3779,9 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_grading"
                           aria-disabled="false"
-<<<<<<< HEAD
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp4-tab side-content-tab"
-=======
-                          aria-expanded="true"
-                          aria-selected="true"
                           class="bp5-tab side-content-tab"
->>>>>>> f9c94503c89ff2b0ae05b216d5e23a28b9eb4d50
                           data-tab-id="grading"
                           id="bp5-tab-title_side-content-tabs_grading"
                           role="tab"
@@ -3826,17 +3805,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                       </div>
                       <div
-<<<<<<< HEAD
                         aria-hidden="false"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_question_overview"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_question_overview"
-=======
-                        aria-hidden="true"
                         aria-labelledby="bp5-tab-title_side-content-tabs_question_overview"
                         class="bp5-tab-panel side-content-tab"
                         id="bp5-tab-panel_side-content-tabs_question_overview"
->>>>>>> f9c94503c89ff2b0ae05b216d5e23a28b9eb4d50
                         role="tabpanel"
                       >
                         <div
@@ -3999,17 +3971,10 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                       </div>
                       <div
-<<<<<<< HEAD
                         aria-hidden="true"
-                        aria-labelledby="bp4-tab-title_side-content-tabs_grading"
-                        class="bp4-tab-panel side-content-tab"
-                        id="bp4-tab-panel_side-content-tabs_grading"
-=======
-                        aria-hidden="false"
                         aria-labelledby="bp5-tab-title_side-content-tabs_grading"
                         class="bp5-tab-panel side-content-tab"
                         id="bp5-tab-panel_side-content-tabs_grading"
->>>>>>> f9c94503c89ff2b0ae05b216d5e23a28b9eb4d50
                         role="tabpanel"
                       >
                         <div

@@ -27,7 +27,6 @@ export type OverallState = {
   readonly router: RouterState;
   readonly academy: AcademyState;
   readonly achievement: AchievementState;
-  readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
@@ -35,11 +34,6 @@ export type OverallState = {
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
-};
-
-export type ApplicationState = {
-  // readonly environment: ApplicationEnvironment;
-  readonly moduleBackend: string;
 };
 
 export type Story = {
@@ -305,11 +299,6 @@ export const defaultRouter: RouterState = null;
 
 export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
-};
-
-export const defaultApplication: ApplicationState = {
-  // environment: currentEnvironment(),
-  moduleBackend: Constants.moduleBackendUrl
 };
 
 export const defaultDashboard: DashboardState = {

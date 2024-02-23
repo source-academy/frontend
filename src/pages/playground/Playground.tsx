@@ -26,7 +26,6 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { ControlBarDevSettingsButton } from 'src/commons/controlBar/ControlBarDevSettingsButton';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeEnvVisualizerTabFrom from 'src/commons/sideContent/content/SideContentEnvVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -579,11 +578,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleReplEval, isRunning, selectedTab]
   );
 
-  const devSettingsButton = useMemo(
-    () => (process.env.NODE_ENV === 'development' ? <ControlBarDevSettingsButton /> : null),
-    []
-  );
-
   // Compute this here to avoid re-rendering the button every keystroke
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
@@ -1001,8 +995,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           ? null
           : usingSubst || usingEnv
           ? stepperStepLimit
-          : executionTime,
-        devSettingsButton
+          : executionTime
       ]
     },
     editorContainerProps: editorContainerProps,

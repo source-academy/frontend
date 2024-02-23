@@ -23,7 +23,11 @@ import { Layout } from 'src/features/envVisualizer/EnvVisualizerLayout';
 import { OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
-import { evalEditor, setEditorHighlightedLinesControl, updateEnvSteps } from '../../workspace/WorkspaceActions';
+import {
+  evalEditor,
+  setEditorHighlightedLinesControl,
+  updateEnvSteps
+} from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
@@ -458,8 +462,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   state: OverallState,
   ownProps: OwnProps
 ) => {
-  let workspace: PlaygroundWorkspaceState
-  const [loc] = getLocation(ownProps.workspaceLocation)
+  let workspace: PlaygroundWorkspaceState;
+  const [loc] = getLocation(ownProps.workspaceLocation);
 
   switch (loc) {
     // case 'stories': {
@@ -467,15 +471,14 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     //   break
     // }
     case 'sicp': {
-      workspace = state.workspaces.sicp
-      break
+      workspace = state.workspaces.sicp;
+      break;
     }
     default: {
-      workspace = state.workspaces.playground
-      break
+      workspace = state.workspaces.playground;
+      break;
     }
   }
-
 
   return {
     ...ownProps,

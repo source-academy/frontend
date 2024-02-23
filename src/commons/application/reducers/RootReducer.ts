@@ -8,7 +8,6 @@ import { StoriesReducer as stories } from '../../../features/stories/StoriesRedu
 import { FileSystemReducer as fileSystem } from '../../fileSystem/FileSystemReducer';
 import { SideContentReducer as sideContent } from '../../sideContent/SideContentReducer';
 import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer';
-import { ApplicationReducer as application } from '../ApplicationReducer';
 import { RouterReducer as router } from './CommonsReducer';
 import { SessionsReducer as session } from './SessionsReducer';
 
@@ -17,7 +16,6 @@ const createRootReducer = () =>
     router,
     academy,
     achievement,
-    application,
     dashboard,
     playground,
     session,

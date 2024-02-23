@@ -3,15 +3,15 @@ import type { MockedFunction } from 'jest-mock';
 import { Context } from 'js-slang';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as sideContentHelper from 'src/commons/sideContent/SideContentHelper';
+import { SideContentReducer } from 'src/commons/sideContent/SideContentReducer';
 import {
   NOTIFY_PROGRAM_EVALUATED,
+  type SideContentManagerState,
   SideContentState,
   SideContentTab,
   SideContentType
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
-import { WorkspaceReducer } from 'src/commons/workspace/WorkspaceReducer';
-import { WorkspaceManagerState } from 'src/commons/workspace/WorkspaceTypes';
 
 import SideContentSaga from '../SideContentSaga';
 
@@ -24,11 +24,9 @@ describe('Side Content Alerts for normal side content', () => {
 
   const expectSagaWrapper = (initialState: SideContentState, dynamicTabs: SideContentTab[]) => {
     mockedGetDynamicTabs.mockImplementationOnce(() => dynamicTabs);
-    return expectSaga(SideContentSaga).withReducer(WorkspaceReducer, {
-      playground: {
-        sideContent: initialState
-      }
-    } as unknown as WorkspaceManagerState);
+    return expectSaga(SideContentSaga).withReducer(SideContentReducer, {
+      playground: initialState
+    } as unknown as SideContentManagerState);
   };
   const mockTab: SideContentTab = {
     id: SideContentType.module,
@@ -49,10 +47,8 @@ describe('Side Content Alerts for normal side content', () => {
 
     expect(storeState).toMatchObject({
       playground: {
-        sideContent: {
-          dynamicTabs: [mockTab],
-          alerts: ['tab2', SideContentType.envVisualizer, SideContentType.dataVisualizer]
-        }
+        dynamicTabs: [mockTab],
+        alerts: ['tab2', SideContentType.envVisualizer, SideContentType.dataVisualizer]
       }
     });
   });
@@ -69,10 +65,8 @@ describe('Side Content Alerts for normal side content', () => {
 
     expect(storeState).toMatchObject({
       playground: {
-        sideContent: {
-          dynamicTabs: [],
-          alerts: [SideContentType.dataVisualizer]
-        }
+        dynamicTabs: [],
+        alerts: [SideContentType.dataVisualizer]
       }
     });
   });
@@ -93,11 +87,9 @@ describe('Side Content Alerts for normal side content', () => {
 
     expect(storeState).toMatchObject({
       playground: {
-        sideContent: {
-          dynamicTabs: [mockTab],
-          alerts: [SideContentType.dataVisualizer],
-          selectedTab: mockTab.label
-        }
+        dynamicTabs: [mockTab],
+        alerts: [SideContentType.dataVisualizer],
+        selectedTab: mockTab.label
       }
     });
   });
