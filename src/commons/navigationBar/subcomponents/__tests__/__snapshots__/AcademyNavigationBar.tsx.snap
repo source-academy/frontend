@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and Grading NavLinks render for Role.Staff 1`] = `
+exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard and Grading NavLinks render for Role.Staff 1`] = `
 <Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
@@ -182,7 +182,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
     <NavLink
       className={[Function]}
       title="Game Simulator"
-      to="/courses/0/storysimulator"
+      to="/courses/0/gamesimulator"
     >
       <Blueprint5.Icon
         autoLoad={true}
@@ -215,7 +215,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
 </Blueprint5.Navbar>
 `;
 
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student 1`] = `
+exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student 1`] = `
 <Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
@@ -346,7 +346,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
 </Blueprint5.Navbar>
 `;
 
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin 1`] = `
+exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin 1`] = `
 <Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
@@ -528,7 +528,7 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
     <NavLink
       className={[Function]}
       title="Game Simulator"
-      to="/courses/0/storysimulator"
+      to="/courses/0/gamesimulator"
     >
       <Blueprint5.Icon
         autoLoad={true}

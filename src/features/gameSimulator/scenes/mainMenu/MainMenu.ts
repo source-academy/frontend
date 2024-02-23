@@ -12,20 +12,20 @@ import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 
 import SSImageAssets from '../../assets/ImageAssets';
-import { StorySimState } from '../../StorySimulatorTypes';
+import { GameSimState } from '../../GameSimulatorTypes';
 import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 
 /**
- * Entry point for story simulator.
+ * Entry point for Game simulator.
  *
- * User can access different story simulator
+ * User can access different Game simulator
  * functionalities from here.
  */
 class MainMenu extends Phaser.Scene {
   private layerManager?: GameLayerManager;
 
   constructor() {
-    super('StorySimulatorMenu');
+    super('GameSimulatorMenu');
   }
 
   public preload() {
@@ -47,7 +47,7 @@ class MainMenu extends Phaser.Scene {
 
   public async create() {
     if (SourceAcademyGame.getInstance().getAccountInfo().role === 'student') {
-      console.log('Students cannot use story sim');
+      console.log('Students cannot use Game sim');
       return;
     }
     this.renderBackground();
@@ -84,7 +84,7 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Object Placement',
         callback: () => {
-          SourceAcademyGame.getInstance().setStorySimState(StorySimState.ObjectPlacement);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimState.ObjectPlacement);
           this.getLayerManager().clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
@@ -92,19 +92,19 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Checkpoint Simulator',
         callback: () => {
-          SourceAcademyGame.getInstance().setStorySimState(StorySimState.CheckpointSim);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimState.CheckpointSim);
         }
       },
       {
         text: 'Asset Uploader',
         callback: () => {
-          SourceAcademyGame.getInstance().setStorySimState(StorySimState.AssetUploader);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimState.AssetUploader);
         }
       },
       {
         text: 'Chapter Simulator',
         callback: () => {
-          SourceAcademyGame.getInstance().setStorySimState(StorySimState.ChapterSim);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimState.ChapterSim);
         }
       }
     ];
@@ -149,7 +149,7 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      SSImageAssets.storySimBg.key
+      SSImageAssets.gameSimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
     const backgroundUnderlay = new Phaser.GameObjects.Image(
