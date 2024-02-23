@@ -2,13 +2,12 @@ import '@tremor/react/dist/esm/tremor.css';
 
 import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Button, Card, Col, ColGrid, Flex, Text, Title } from '@tremor/react';
+import { Button, Card, Flex, Text, Title } from '@tremor/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -17,28 +16,24 @@ import { exportGradingCSV, isSubmissionUngraded } from 'src/features/grading/Gra
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
-import GradingSummary from './subcomponents/GradingSummary';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
+const groupOptions = [
+  { value: false, label: 'my groups' },
+  { value: true, label: 'all groups' }
+];
+
+const showOptions = [
+  { value: false, label: 'ungraded' },
+  { value: true, label: 'all' }
+];
+
 const Grading: React.FC = () => {
-  const {
-    courseId,
-    gradingOverviews,
-    role,
-    group,
-    assessmentOverviews: assessments = []
-  } = useSession();
-  const params = useParams<{
-    submissionId: string;
-    questionId: string;
-  }>();
+  const { courseId, gradingOverviews, role, group } = useSession();
+  const params = useParams<{ submissionId: string; questionId: string }>();
 
   const isAdmin = role === Role.Admin;
   const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
-  const groupOptions = [
-    { value: false, label: 'my groups' },
-    { value: true, label: 'all groups' }
-  ];
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -46,10 +41,6 @@ const Grading: React.FC = () => {
   }, [dispatch, role, showAllGroups]);
 
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-  const showOptions = [
-    { value: false, label: 'ungraded' },
-    { value: true, label: 'all' }
-  ];
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -88,63 +79,42 @@ const Grading: React.FC = () => {
         gradingOverviews === undefined ? (
           loadingDisplay
         ) : (
-          <ColGrid numColsLg={8} gapX="gap-x-4" gapY="gap-y-2">
-            <Col numColSpanLg={6}>
-              <Card>
-                <Flex justifyContent="justify-between">
-                  <Flex justifyContent="justify-start" spaceX="space-x-6">
-                    <Title>Submissions</Title>
-                    <Button
-                      variant="light"
-                      size="xs"
-                      icon={() => (
-                        <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />
-                      )}
-                      onClick={() => exportGradingCSV(gradingOverviews)}
-                    >
-                      Export to CSV
-                    </Button>
-                  </Flex>
-                </Flex>
-                <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
-                  <Text>Viewing</Text>
-                  <SimpleDropdown
-                    options={showOptions}
-                    selectedValue={showAllSubmissions}
-                    onClick={setShowAllSubmissions}
-                    popoverProps={{ position: Position.BOTTOM }}
-                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-                  />
-                  <Text>submissions from</Text>
-                  <SimpleDropdown
-                    options={groupOptions}
-                    selectedValue={showAllGroups}
-                    onClick={setShowAllGroups}
-                    popoverProps={{ position: Position.BOTTOM }}
-                    buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
-                  />
-                </Flex>
-                <GradingSubmissionsTable
-                  submissions={submissions.filter(
-                    s => showAllSubmissions || isSubmissionUngraded(s)
-                  )}
-                />
-              </Card>
-            </Col>
-
-            <Col numColSpanLg={2}>
-              <Card hFull>
-                <GradingSummary
-                  // Only include submissions from the same group in the summary
-                  submissions={submissions.filter(
-                    ({ groupName, gradingStatus }) =>
-                      groupName === group && gradingStatus !== GradingStatuses.excluded
-                  )}
-                  assessments={assessments}
-                />
-              </Card>
-            </Col>
-          </ColGrid>
+          <Card>
+            <Flex justifyContent="justify-between">
+              <Flex justifyContent="justify-start" spaceX="space-x-6">
+                <Title>Submissions</Title>
+                <Button
+                  variant="light"
+                  size="xs"
+                  icon={() => <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />}
+                  onClick={() => exportGradingCSV(gradingOverviews)}
+                >
+                  Export to CSV
+                </Button>
+              </Flex>
+            </Flex>
+            <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
+              <Text>Viewing</Text>
+              <SimpleDropdown
+                options={showOptions}
+                selectedValue={showAllSubmissions}
+                onClick={setShowAllSubmissions}
+                popoverProps={{ position: Position.BOTTOM }}
+                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+              />
+              <Text>submissions from</Text>
+              <SimpleDropdown
+                options={groupOptions}
+                selectedValue={showAllGroups}
+                onClick={setShowAllGroups}
+                popoverProps={{ position: Position.BOTTOM }}
+                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+              />
+            </Flex>
+            <GradingSubmissionsTable
+              submissions={submissions.filter(s => showAllSubmissions || isSubmissionUngraded(s))}
+            />
+          </Card>
         )
       }
       fullWidth={true}

@@ -1,7 +1,7 @@
 import { Button, Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { configure, GlobalHotKeys } from 'react-hotkeys';
 
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
