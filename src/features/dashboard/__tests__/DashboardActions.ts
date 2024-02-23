@@ -8,7 +8,8 @@ import {
 test('fetchGroupGradingSummary generates correct action object', () => {
   const action = fetchGroupGradingSummary();
   expect(action).toEqual({
-    type: FETCH_GROUP_GRADING_SUMMARY
+    type: FETCH_GROUP_GRADING_SUMMARY,
+    payload: {}
   });
 });
 

@@ -4,6 +4,7 @@ import { logOut } from '../CommonsActions';
 test('logOut generates correct action object', () => {
   const action = logOut();
   expect(action).toEqual({
-    type: LOG_OUT
+    type: LOG_OUT,
+    payload: {}
   });
 });

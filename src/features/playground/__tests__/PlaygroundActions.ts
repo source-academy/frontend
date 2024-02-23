@@ -4,7 +4,8 @@ import { CHANGE_QUERY_STRING, GENERATE_LZ_STRING } from '../PlaygroundTypes';
 test('generateLzString generates correct action object', () => {
   const action = generateLzString();
   expect(action).toEqual({
-    type: GENERATE_LZ_STRING
+    type: GENERATE_LZ_STRING,
+    payload: {}
   });
 });
 
