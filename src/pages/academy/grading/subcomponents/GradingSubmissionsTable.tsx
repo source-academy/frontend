@@ -76,11 +76,7 @@ const makeColumns = (handleClick: () => void) => [
   }),
   columnHelper.accessor('gradingStatus', {
     header: 'Grading',
-    cell: info => (
-      <Flex justifyContent="justify-start" spaceX="space-x-2">
-        <GradingStatusBadge status={info.getValue()} />
-      </Flex>
-    )
+    cell: info => <GradingStatusBadge status={info.getValue()} />
   }),
   columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
     header: 'Raw XP (+Bonus)',
