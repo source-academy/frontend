@@ -9,7 +9,7 @@ import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
 
-// TEMP-FIX: Disable auto freezing of states for RTK as this breaks the code evaluation sagas
+// FIXME: Hotfix: Disable auto freezing of states for RTK as this breaks the code evaluation sagas
 setAutoFreeze(false);
 
 export const store = createStore();
