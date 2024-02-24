@@ -36,6 +36,7 @@ export async function displayNotification(scene: IBaseScene, message: string): P
   const dialogueRenderer = new DialogueRenderer({});
   const container = dialogueRenderer.getDialogueContainer();
 
+
   scene.getLayerManager().addToLayer(Layer.Effects, container);
   scene.getLayerManager().fadeInLayer(Layer.Effects);
 

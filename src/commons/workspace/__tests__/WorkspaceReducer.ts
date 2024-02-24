@@ -36,7 +36,6 @@ import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
@@ -70,66 +69,20 @@ import {
   WorkspaceManagerState
 } from '../WorkspaceTypes';
 
-const assessmentWorkspace: WorkspaceLocation = 'assessment';
-const gradingWorkspace: WorkspaceLocation = 'grading';
 const playgroundWorkspace: WorkspaceLocation = 'playground';
-const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
-const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 const sicpWorkspace: WorkspaceLocation = 'sicp';
-const githubAssessmentWorkspace: WorkspaceLocation = 'githubAssessment';
+const locations: ReadonlyArray<WorkspaceLocation> = [
+  'assessment',
+  'grading',
+  'playground',
+  'sourcecast',
+  'sourcereel',
+  'sicp',
+  'githubAssessment'
+] as const;
 
 function generateActions(type: string, payload: any = {}): any[] {
-  return [
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: assessmentWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: gradingWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: playgroundWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: sourcecastWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: sourcereelWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: sicpWorkspace
-      }
-    },
-    {
-      type,
-      payload: {
-        ...payload,
-        workspaceLocation: githubAssessmentWorkspace
-      }
-    }
-  ];
+  return locations.map(l => ({ type, payload: { ...payload, workspaceLocation: l } }));
 }
 
 // cloneDeep not required for proper redux
@@ -324,25 +277,6 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
   });
 });
 
-describe('CHANGE_SIDE_CONTENT_HEIGHT', () => {
-  test('sets sideContentHeight correctly', () => {
-    const height = 100;
-    const actions = generateActions(CHANGE_SIDE_CONTENT_HEIGHT, { height });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sideContentHeight: height
-        }
-      });
-    });
-  });
-});
-
 describe('CLEAR_REPL_INPUT', () => {
   test('clears replValue', () => {
     const replValue = 'test repl value';
@@ -365,12 +299,7 @@ describe('CLEAR_REPL_INPUT', () => {
 
 describe('CLEAR_REPL_OUTPUT', () => {
   test('clears output', () => {
-    const output: InterpreterOutput[] = [
-      {
-        type: 'code',
-        value: 'test repl input'
-      }
-    ];
+    const output: InterpreterOutput[] = [{ type: 'code', value: 'test repl input' }];
     const clearReplDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ output });
     const actions = generateActions(CLEAR_REPL_OUTPUT);
 
@@ -588,25 +517,13 @@ describe('EVAL_EDITOR', () => {
 
 // Test data for EVAL_INTERPRETER_ERROR, EVAL_INTERPRETER_SUCCESS, EVAL_TESTCASE_SUCCESS and HANDLE_CONSOLE_OUTPUT
 const outputWithRunningOutput: RunningOutput[] = [
-  {
-    type: 'running',
-    consoleLogs: ['console-log-test']
-  },
-  {
-    type: 'running',
-    consoleLogs: ['console-log-test-2']
-  }
+  { type: 'running', consoleLogs: ['console-log-test'] },
+  { type: 'running', consoleLogs: ['console-log-test-2'] }
 ];
 
 const outputWithRunningAndCodeOutput: InterpreterOutput[] = [
-  {
-    type: 'running',
-    consoleLogs: ['console-log-test']
-  },
-  {
-    type: 'code',
-    value: 'sample code'
-  }
+  { type: 'running', consoleLogs: ['console-log-test'] },
+  { type: 'code', value: 'sample code' }
 ];
 
 describe('EVAL_INTERPRETER_ERROR', () => {
@@ -630,14 +547,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
           ...evalEditorDefaultState[location],
           isRunning: false,
           isDebugging: false,
-          output: [
-            {
-              ...outputWithRunningOutput[0]
-            },
-            {
-              consoleLogs: ['console-log-test-2']
-            }
-          ]
+          output: [{ ...outputWithRunningOutput[0] }, { consoleLogs: ['console-log-test-2'] }]
         }
       });
     });
@@ -664,15 +574,9 @@ describe('EVAL_INTERPRETER_ERROR', () => {
           isRunning: false,
           isDebugging: false,
           output: [
-            {
-              ...outputWithRunningAndCodeOutput[0]
-            },
-            {
-              ...outputWithRunningAndCodeOutput[1]
-            },
-            {
-              consoleLogs: []
-            }
+            { ...outputWithRunningAndCodeOutput[0] },
+            { ...outputWithRunningAndCodeOutput[1] },
+            { consoleLogs: [] }
           ]
         }
       });
@@ -703,13 +607,8 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
           ...evalEditorDefaultState[location],
           isRunning: false,
           output: [
-            {
-              ...outputWithRunningOutput[0]
-            },
-            {
-              consoleLogs: ['console-log-test-2'],
-              value: 'undefined'
-            }
+            { ...outputWithRunningOutput[0] },
+            { consoleLogs: ['console-log-test-2'], value: 'undefined' }
           ]
         }
       });
@@ -738,16 +637,9 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
           ...evalEditorDefaultState[location],
           isRunning: false,
           output: [
-            {
-              ...outputWithRunningAndCodeOutput[0]
-            },
-            {
-              ...outputWithRunningAndCodeOutput[1]
-            },
-            {
-              consoleLogs: [],
-              value: 'undefined'
-            }
+            { ...outputWithRunningAndCodeOutput[0] },
+            { ...outputWithRunningAndCodeOutput[1] },
+            { consoleLogs: [], value: 'undefined' }
           ]
         }
       });
@@ -775,25 +667,13 @@ describe('EVAL_REPL', () => {
 
 // Test data for EVAL_TESTCASE_FAILURE and EVAL_TESTCASE_SUCCESS
 const outputWithCodeAndRunningOutput: InterpreterOutput[] = [
-  {
-    type: 'code',
-    value: 'sample code'
-  },
-  {
-    type: 'running',
-    consoleLogs: ['console-log-test']
-  }
+  { type: 'code', value: 'sample code' },
+  { type: 'running', consoleLogs: ['console-log-test'] }
 ];
 
 const outputWithCodeOutput: CodeOutput[] = [
-  {
-    type: 'code',
-    value: 'code 1'
-  },
-  {
-    type: 'code',
-    value: 'code 2'
-  }
+  { type: 'code', value: 'code 1' },
+  { type: 'code', value: 'code 2' }
 ];
 
 const editorTestcases: Testcase[] = [
@@ -817,10 +697,7 @@ describe('EVAL_TESTCASE_FAILURE', () => {
     const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases
     });
-    const actions = generateActions(EVAL_TESTCASE_FAILURE, {
-      value,
-      index: 1
-    });
+    const actions = generateActions(EVAL_TESTCASE_FAILURE, { value, index: 1 });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalFailureDefaultState, action);
@@ -830,14 +707,8 @@ describe('EVAL_TESTCASE_FAILURE', () => {
         [location]: {
           ...evalFailureDefaultState[location],
           editorTestcases: [
-            {
-              ...editorTestcases[0]
-            },
-            {
-              ...editorTestcases[1],
-              result: undefined,
-              errors: value
-            }
+            { ...editorTestcases[0] },
+            { ...editorTestcases[1], result: undefined, errors: value }
           ]
         }
       });
@@ -855,10 +726,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
       editorTestcases
     });
 
-    const actions = generateActions(EVAL_TESTCASE_SUCCESS, {
-      value,
-      index: 1
-    });
+    const actions = generateActions(EVAL_TESTCASE_SUCCESS, { value, index: 1 });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
@@ -870,14 +738,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           isRunning: false,
           output: outputWithCodeAndRunningOutput,
           editorTestcases: [
-            {
-              ...editorTestcases[0]
-            },
-            {
-              ...editorTestcases[1],
-              result: value,
-              errors: undefined
-            }
+            { ...editorTestcases[0] },
+            { ...editorTestcases[1], result: value, errors: undefined }
           ]
         }
       });
@@ -893,10 +755,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
       editorTestcases
     });
 
-    const actions = generateActions(EVAL_TESTCASE_SUCCESS, {
-      value,
-      index: 0
-    });
+    const actions = generateActions(EVAL_TESTCASE_SUCCESS, { value, index: 0 });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
@@ -908,14 +767,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           isRunning: false,
           output: outputWithCodeOutput,
           editorTestcases: [
-            {
-              ...editorTestcases[0],
-              result: value,
-              errors: undefined
-            },
-            {
-              ...editorTestcases[1]
-            }
+            { ...editorTestcases[0], result: value, errors: undefined },
+            { ...editorTestcases[1] }
           ]
         }
       });
@@ -937,9 +790,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
         [location]: {
           ...consoleLogDefaultState[location],
           output: [
-            {
-              ...outputWithRunningOutput[0]
-            },
+            { ...outputWithRunningOutput[0] },
             {
               ...outputWithRunningOutput[1],
               consoleLogs: outputWithRunningOutput[1].consoleLogs.concat(logString)
@@ -986,12 +837,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
         ...consoleLogDefaultState,
         [location]: {
           ...consoleLogDefaultState[location],
-          output: [
-            {
-              type: 'running',
-              consoleLogs: [logString]
-            }
-          ]
+          output: [{ type: 'running', consoleLogs: [logString] }]
         }
       });
     });
@@ -1059,14 +905,8 @@ describe('RESET_TESTCASE', () => {
         [location]: {
           ...resetTestcaseDefaultState[location],
           editorTestcases: [
-            {
-              ...editorTestcases[0]
-            },
-            {
-              ...editorTestcases[1],
-              result: undefined,
-              errors: undefined
-            }
+            { ...editorTestcases[0] },
+            { ...editorTestcases[1], result: undefined, errors: undefined }
           ]
         }
       });
@@ -1164,10 +1004,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
     });
     const newOutput = '';
 
-    const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
-      type: 'code',
-      value: newOutput
-    });
+    const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, { type: 'code', value: newOutput });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(inputToOutputDefaultState, action);
@@ -1176,13 +1013,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
         ...inputToOutputDefaultState,
         [location]: {
           ...inputToOutputDefaultState[location],
-          output: [
-            {
-              type: 'code',
-              workspaceLocation: location,
-              value: newOutput
-            }
-          ],
+          output: [{ type: 'code', workspaceLocation: location, value: newOutput }],
           replHistory
         }
       });
@@ -1261,10 +1092,7 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
     const questionId = 7;
     const assessmentAction = {
       type: UPDATE_CURRENT_ASSESSMENT_ID,
-      payload: {
-        assessmentId,
-        questionId
-      }
+      payload: { assessmentId, questionId }
     };
 
     const result = WorkspaceReducer(defaultWorkspaceManager, assessmentAction);
@@ -1285,10 +1113,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
     const questionId = 8;
     const assessmentAction = {
       type: UPDATE_CURRENT_SUBMISSION_ID,
-      payload: {
-        submissionId,
-        questionId
-      }
+      payload: { submissionId, questionId }
     };
 
     const result = WorkspaceReducer(defaultWorkspaceManager, assessmentAction);
@@ -1525,13 +1350,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
         ...defaultWorkspaceState,
         [location]: {
           ...defaultWorkspaceState[location],
-          editorTabs: [
-            zerothEditorTab,
-            {
-              ...firstEditorTab,
-              value: newEditorValue
-            }
-          ]
+          editorTabs: [zerothEditorTab, { ...firstEditorTab, value: newEditorValue }]
         }
       });
     });
@@ -1598,13 +1417,7 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
         ...defaultWorkspaceState,
         [location]: {
           ...defaultWorkspaceState[location],
-          editorTabs: [
-            zerothEditorTab,
-            {
-              ...firstEditorTab,
-              breakpoints: newBreakpoints
-            }
-          ]
+          editorTabs: [zerothEditorTab, { ...firstEditorTab, breakpoints: newBreakpoints }]
         }
       });
     });
@@ -1685,10 +1498,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
           ...defaultWorkspaceState[location],
           editorTabs: [
             zerothEditorTab,
-            {
-              ...firstEditorTab,
-              highlightedLines: newHighlightedLines
-            }
+            { ...firstEditorTab, highlightedLines: newHighlightedLines }
           ]
         }
       });
@@ -1768,13 +1578,7 @@ describe('MOVE_CURSOR', () => {
         ...defaultWorkspaceState,
         [location]: {
           ...defaultWorkspaceState[location],
-          editorTabs: [
-            zerothEditorTab,
-            {
-              ...firstEditorTab,
-              newCursorPosition
-            }
-          ]
+          editorTabs: [zerothEditorTab, { ...firstEditorTab, newCursorPosition }]
         }
       });
     });
@@ -1820,12 +1624,7 @@ describe('ADD_EDITOR_TAB', () => {
             editorTabs: [
               zerothEditorTab,
               firstEditorTab,
-              {
-                filePath,
-                value: editorValue,
-                highlightedLines: [],
-                breakpoints: []
-              }
+              { filePath, value: editorValue, highlightedLines: [], breakpoints: [] }
             ]
           }
         })
@@ -2613,13 +2412,7 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
           ...defaultWorkspaceState,
           [location]: {
             ...defaultWorkspaceManager[location],
-            editorTabs: [
-              zerothEditorTab,
-              {
-                ...firstEditorTab,
-                filePath: newFilePath
-              }
-            ]
+            editorTabs: [zerothEditorTab, { ...firstEditorTab, filePath: newFilePath }]
           }
         })
       );
@@ -2760,9 +2553,7 @@ describe('TOGGLE_USING_SUBST', () => {
                 usingSubst: true
               }
             }
-          : {
-              ...defaultWorkspaceManager
-            };
+          : { ...defaultWorkspaceManager };
 
       expect(result).toEqual(expectedResult);
     });
