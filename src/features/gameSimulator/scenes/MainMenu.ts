@@ -11,8 +11,8 @@ import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 
-import SSImageAssets from '../../assets/ImageAssets';
-import { GameSimState } from '../../GameSimulatorTypes';
+import SSImageAssets from '../assets/ImageAssets';
+import { GameSimState } from '../GameSimulatorTypes';
 import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 
 /**
@@ -81,14 +81,6 @@ class MainMenu extends Phaser.Scene {
 
   private getOptionButtons() {
     return [
-      {
-        text: 'Object Placement',
-        callback: () => {
-          SourceAcademyGame.getInstance().setGameSimState(GameSimState.ObjectPlacement);
-          this.getLayerManager().clearAllLayers();
-          this.scene.start('ObjectPlacement');
-        }
-      },
       {
         text: 'Checkpoint Simulator',
         callback: () => {
