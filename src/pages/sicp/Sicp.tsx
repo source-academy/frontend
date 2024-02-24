@@ -49,7 +49,7 @@ const Sicp: React.FC = () => {
   }
 
   const getText = () => {
-    const divs = document.querySelectorAll('div.sicp-text');
+    const divs = document.querySelectorAll('p.sicp-text');
     let visibleParagraphs = '';
 
     divs.forEach(div => {
