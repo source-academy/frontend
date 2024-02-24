@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useSession } from 'src/commons/utils/Hooks';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
+import classes from 'src/styles/Chatbot.module.scss';
 
 import { request } from '../../../../commons/utils/RequestHelper';
 import SICPNotes from './SicpNotes';
@@ -144,10 +145,14 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getSection, getText }) => {
   };
 
   return (
-    <div className="chat-container">
-      <div className="chat-message" ref={chatRef}>
+    <div className={classes['chat-container']}>
+      <div className={classes['chat-message']} ref={chatRef}>
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.role}`} style={{ whiteSpace: 'pre-line' }}>
+          <div
+            key={index}
+            className={classes[`${message.role}`]}
+            style={{ whiteSpace: 'pre-line' }}
+          >
             {renderMessageContent(message.content)}
           </div>
         ))}
@@ -155,17 +160,17 @@ const ChatBox: React.FC<ChatBoxProps> = ({ getSection, getText }) => {
       </div>
       <input
         type="text"
-        className="user-input"
+        className={classes['user-input']}
         placeholder="Type your message here..."
         value={userInput}
         onChange={handleUserInput}
         onKeyDown={keyDown}
       />
-      <div className="button-container">
-        <Button className="button-send" onClick={sendMessage}>
+      <div className={classes['button-container']}>
+        <Button className={classes['button-send']} onClick={sendMessage}>
           Send
         </Button>
-        <Button className="button-clean" onClick={cleanMessage}>
+        <Button className={classes['button-clean']} onClick={cleanMessage}>
           Clean
         </Button>
       </div>
