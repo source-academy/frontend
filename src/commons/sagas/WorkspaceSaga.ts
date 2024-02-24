@@ -16,7 +16,7 @@ import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { cloneDeep, random } from 'lodash';
+import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, StrictEffect, take } from 'redux-saga/effects';
@@ -1040,8 +1040,6 @@ export function* evalCode(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  // FIXME: Hotfix due to Immer's auto-freezing of objects
-  context = cloneDeep(context);
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
   const isStoriesBlock = actionType === EVAL_STORY || workspaceLocation === 'stories';
