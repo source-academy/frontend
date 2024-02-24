@@ -1,5 +1,4 @@
 import { Button } from '@blueprintjs/core';
-import { Buffer as NodeBuffer } from 'buffer';
 import * as React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -7,12 +6,6 @@ import { SourceTheme } from 'src/features/sicp/SourceTheme';
 
 import { request } from '../../../../commons/utils/RequestHelper';
 import SICPNotes from './SicpNotes';
-
-Buffer.from('anything', 'base64');
-
-if (!(window as any).Buffer) {
-  (window as any).Buffer = NodeBuffer;
-}
 
 interface ChatBoxProps {
   getSection: () => string;
