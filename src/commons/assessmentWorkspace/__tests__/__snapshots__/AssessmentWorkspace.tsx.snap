@@ -493,6 +493,33 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                             </div>
                           </span>
                         </div>
+                        <div
+                          aria-controls="bp5-tab-panel_side-content-tabs_popular_vote_leaderboard"
+                          aria-disabled="false"
+                          aria-expanded="false"
+                          aria-selected="false"
+                          class="bp5-tab side-content-tab"
+                          data-tab-id="popular_vote_leaderboard"
+                          id="bp5-tab-title_side-content-tabs_popular_vote_leaderboard"
+                          role="tab"
+                          tabindex="-1"
+                        >
+                          <span
+                            class="bp5-popover-target"
+                          >
+                            <div
+                              aria-expanded="false"
+                              class="side-content-tooltip"
+                              tabindex="0"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp5-icon bp5-icon-large bp5-icon-people"
+                                data-icon="people"
+                              />
+                            </div>
+                          </span>
+                        </div>
                       </div>
                       <div
                         aria-hidden="false"
@@ -854,7 +881,204 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                                     <div
                                       class="header-score"
                                     >
-                                      Score
+                                      Calculated Score
+                                      <span
+                                        aria-hidden="true"
+                                        class="bp5-icon bp5-icon-caret-down"
+                                      >
+                                        <svg
+                                          data-icon="caret-down"
+                                          height="16"
+                                          role="img"
+                                          viewBox="0 0 16 16"
+                                          width="16"
+                                        >
+                                          <path
+                                            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                                            fill-rule="evenodd"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="LeaderboardCard"
+                                  >
+                                    <div
+                                      class="bp5-interactive bp5-card bp5-elevation-1"
+                                      data-testid="SideContentLeaderboardCard"
+                                    >
+                                      <pre
+                                        class="bp5-code-block contestentry-entryid"
+                                      >
+                                        student_1
+                                      </pre>
+                                      <pre
+                                        class="bp5-code-block contestentry-rank"
+                                      >
+                                        1
+                                      </pre>
+                                      <pre
+                                        class="bp5-code-block contestentry-score"
+                                        data-testid="contestentry-score"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="LeaderboardCard"
+                                  >
+                                    <div
+                                      class="bp5-interactive bp5-card bp5-elevation-1"
+                                      data-testid="SideContentLeaderboardCard"
+                                    >
+                                      <pre
+                                        class="bp5-code-block contestentry-entryid"
+                                      >
+                                        student_2
+                                      </pre>
+                                      <pre
+                                        class="bp5-code-block contestentry-rank"
+                                      >
+                                        2
+                                      </pre>
+                                      <pre
+                                        class="bp5-code-block contestentry-score"
+                                        data-testid="contestentry-score"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_popular_vote_leaderboard"
+                        class="bp5-tab-panel side-content-tab"
+                        id="bp5-tab-panel_side-content-tabs_popular_vote_leaderboard"
+                        role="tabpanel"
+                      >
+                        <div
+                          class="side-content-text"
+                        >
+                          <div
+                            class="ContestLeaderboard"
+                          >
+                            <button
+                              class="bp5-button bp5-minimal collapse-button"
+                              type="button"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp5-icon bp5-icon-caret-down"
+                              >
+                                <svg
+                                  data-icon="caret-down"
+                                  height="16"
+                                  role="img"
+                                  viewBox="0 0 16 16"
+                                  width="16"
+                                >
+                                  <path
+                                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                              <span
+                                class="bp5-button-text"
+                              >
+                                <span>
+                                  Popular Vote Leaderboard
+                                </span>
+                                <span
+                                  class="bp5-popover-target"
+                                >
+                                  <span
+                                    aria-expanded="false"
+                                    aria-hidden="true"
+                                    class="bp5-icon bp5-icon-help"
+                                    tabindex="0"
+                                  >
+                                    <svg
+                                      data-icon="help"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                    >
+                                      <path
+                                        d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </span>
+                              </span>
+                            </button>
+                            <div
+                              class="bp5-collapse"
+                              style="height: auto; overflow-y: visible; transition: none;"
+                            >
+                              <div
+                                aria-hidden="false"
+                                class="bp5-collapse-body"
+                                style="transform: translateY(0); transition: none;"
+                              >
+                                <div>
+                                  <div
+                                    class="leaderboard-header"
+                                  >
+                                    <div
+                                      class="header-entryid"
+                                    >
+                                      Student Name
+                                      <span
+                                        aria-hidden="true"
+                                        class="bp5-icon bp5-icon-caret-down"
+                                      >
+                                        <svg
+                                          data-icon="caret-down"
+                                          height="16"
+                                          role="img"
+                                          viewBox="0 0 16 16"
+                                          width="16"
+                                        >
+                                          <path
+                                            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                                            fill-rule="evenodd"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </div>
+                                    <div
+                                      class="header-entryrank"
+                                    >
+                                      Rank
+                                      <span
+                                        aria-hidden="true"
+                                        class="bp5-icon bp5-icon-caret-down"
+                                      >
+                                        <svg
+                                          data-icon="caret-down"
+                                          height="16"
+                                          role="img"
+                                          viewBox="0 0 16 16"
+                                          width="16"
+                                        >
+                                          <path
+                                            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                                            fill-rule="evenodd"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </div>
+                                    <div
+                                      class="header-score"
+                                    >
+                                      Popularity Score
                                       <span
                                         aria-hidden="true"
                                         class="bp5-icon bp5-icon-caret-down"
