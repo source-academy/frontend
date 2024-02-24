@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { setAutoFreeze } from 'immer';
 import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 
@@ -7,6 +8,9 @@ import createRootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
+
+// FIXME: Hotfix: Disable auto freezing of states for RTK as this breaks the code evaluation sagas
+setAutoFreeze(false);
 
 export const store = createStore();
 
