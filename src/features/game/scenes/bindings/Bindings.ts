@@ -72,11 +72,11 @@ class Bindings extends Phaser.Scene {
           binding.key,
           binding.text,
           bindingPositions[index][1] < 450
-            ? bindingPositions[index][0] - screenSize.x / 5
-            : bindingPositions[index][0] + screenSize.x / 5,
+            ? bindingPositions[index][0] - BindingConstants.key.xOffset
+            : bindingPositions[index][0] + BindingConstants.key.xOffset,
           bindingPositions[index][1] < 450
-            ? bindingPositions[index][1] + screenCenter.y - screenSize.y / 4
-            : bindingPositions[index][1] + screenCenter.y - screenSize.y / 1.5
+            ? bindingPositions[index][1] + BindingConstants.key.yOffset1
+            : bindingPositions[index][1] + BindingConstants.key.yOffset2
         );
       })
     );
