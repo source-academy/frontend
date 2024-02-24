@@ -4,6 +4,7 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useMemo, useState } from 'react';
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
+import { SideContentType } from '../SideContentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 
 export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
@@ -14,27 +15,8 @@ type DispatchProps = {
 
 type StateProps = {
   orderedContestEntries: ContestEntry[];
+  leaderboardType: SideContentType;
 };
-
-/*
-Contest Leaderboard inner components
-*/
-const columnHeader = (colClass: string, colTitle: string) => (
-  <div className={colClass}>
-    {colTitle}
-    <Icon icon={IconNames.CARET_DOWN} />
-  </div>
-);
-
-const contestEntryHeader = (
-  <div className="leaderboard-header">
-    {columnHeader('header-entryid', 'Student Name')}
-    {columnHeader('header-entryrank', 'Rank')}
-    {columnHeader('header-score', 'Score')}
-  </div>
-);
-
-const contestLeaderboardTooltipContent = 'View the top-rated contest entries!';
 
 /**
  * Renders the contest leaderboard entries as a SideContentTab for Contest Voting questions.
@@ -47,8 +29,52 @@ const contestLeaderboardTooltipContent = 'View the top-rated contest entries!';
 const SideContentContestLeaderboard: React.FunctionComponent<
   SideContentContestLeaderboardProps
 > = props => {
-  const { orderedContestEntries, handleContestEntryClick } = props;
+  const { orderedContestEntries, handleContestEntryClick, leaderboardType } = props;
   const [showLeaderboard, setShowLeaderboard] = useState<boolean>(true);
+
+  /**
+   * Contest Leaderboard inner components
+   */
+
+  const leaderboardTitle = useMemo(() => {
+    return leaderboardType === SideContentType.scoreLeaderboard
+      ? 'Score Leaderboard'
+      : leaderboardType === SideContentType.popularVoteLeaderboard
+      ? 'Popular Vote Leaderboard'
+      : 'Contest Leaderboard';
+  }, [leaderboardType]);
+
+  const contestLeaderboardTooltipContent = useMemo(() => {
+    return leaderboardType === SideContentType.scoreLeaderboard
+      ? 'View the highest scoring contest entries!'
+      : leaderboardType === SideContentType.popularVoteLeaderboard
+      ? 'View the most popular contest entries!'
+      : 'View the top-rated contest entries!';
+  }, [leaderboardType]);
+
+  const columnHeader = (colClass: string, colTitle: string) => (
+    <div className={colClass}>
+      {colTitle}
+      <Icon icon={IconNames.CARET_DOWN} />
+    </div>
+  );
+
+  const contestEntryHeader = useMemo(() => {
+    return (
+      <div className="leaderboard-header">
+        {columnHeader('header-entryid', 'Student Name')}
+        {columnHeader('header-entryrank', 'Rank')}
+        {columnHeader(
+          'header-score',
+          leaderboardType === SideContentType.scoreLeaderboard
+            ? 'Calculated Score'
+            : leaderboardType === SideContentType.popularVoteLeaderboard
+            ? 'Popularity Score'
+            : 'Metric'
+        )}
+      </div>
+    );
+  }, [leaderboardType]);
 
   const contestEntryCards = useMemo(
     () => (
@@ -68,7 +94,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         )}
       </div>
     ),
-    [handleContestEntryClick, orderedContestEntries]
+    [handleContestEntryClick, orderedContestEntries, contestEntryHeader]
   );
 
   return (
@@ -79,7 +105,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<
         minimal={true}
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
-        <span>Score Leaderboard</span>
+        <span>{leaderboardTitle}</span>
         <Tooltip2 content={contestLeaderboardTooltipContent}>
           <Icon icon={IconNames.HELP} />
         </Tooltip2>

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import SideContentContestLeaderboard from '../content/SideContentContestLeaderboard';
+import { SideContentType } from '../SideContentTypes';
 
 const mockLeaderboardEntries = [
   {
@@ -27,7 +28,8 @@ const mockLeaderboardEntries = [
 
 const mockProps = {
   handleContestEntryClick: () => {},
-  orderedContestEntries: mockLeaderboardEntries
+  orderedContestEntries: mockLeaderboardEntries,
+  leaderboardType: SideContentType.scoreLeaderboard
 };
 
 // Basic snapshot testing to catch unexpected changes
@@ -54,13 +56,14 @@ test('SideContentContestLeaderboard orders entry in the same order as orderedCon
   expect(scores).toEqual(['100', '90', '80']);
 });
 
-test('Clicking the contest entry updates the editor for contest leaderboard.', async () => {
+test('Clicking the contest entry updates the editor for score leaderboard.', async () => {
   const user = userEvent.setup();
   const mockedHandleContestEntryClick = jest.fn();
 
   const mockProps = {
     handleContestEntryClick: mockedHandleContestEntryClick,
-    orderedContestEntries: mockLeaderboardEntries
+    orderedContestEntries: mockLeaderboardEntries,
+    leaderboardType: SideContentType.scoreLeaderboard
   };
 
   const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;
