@@ -1,6 +1,5 @@
 export enum GameSimState {
   Default = 'Default',
-  ObjectPlacement = 'ObjectPlacement',
   AssetUploader = 'AssetUploader',
   CheckpointSim = 'CheckpointSim',
   ChapterSim = 'ChapterSim'
