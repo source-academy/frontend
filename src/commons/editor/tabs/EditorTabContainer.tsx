@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { EditorTabStateProps } from '../Editor';
 import EditorTab from './EditorTab';
 import { getShortestUniqueFilePaths } from './utils';
 
 export type EditorTabContainerProps = {
+  editorTabs: EditorTabStateProps[];
   baseFilePath: string;
   filePaths: string[];
   activeEditorTabIndex: number;
@@ -13,6 +15,7 @@ export type EditorTabContainerProps = {
 
 const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabContainerProps) => {
   const {
+    editorTabs,
     baseFilePath,
     filePaths,
     activeEditorTabIndex,
@@ -38,6 +41,7 @@ const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabC
           isActive={index === activeEditorTabIndex}
           setActive={() => setActiveEditorTabIndex(index)}
           remove={() => removeEditorTabByIndex(index)}
+          readOnly={editorTabs[index].readOnly}
         />
       ))}
     </div>

@@ -336,6 +336,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         body: (
           <SideContentAutograder
             testcases={editorTestcases}
+            currentFileBeingRan={`/${questionId + 1}.js`}
             autogradingResults={autogradingResults}
             handleTestcaseEval={handleTestcaseEval}
             workspaceLocation="grading"

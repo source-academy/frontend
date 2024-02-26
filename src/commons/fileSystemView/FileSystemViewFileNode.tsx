@@ -6,6 +6,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
+import { handleReadFile } from '../fileSystem/utils';
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -19,31 +20,32 @@ export type FileSystemViewFileNodeProps = {
   basePath: string;
   fileName: string;
   indentationLevel: number;
+  disableEditing?: boolean;
   refreshDirectory: () => void;
 };
 
 const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
   props: FileSystemViewFileNodeProps
 ) => {
-  const { workspaceLocation, fileSystem, basePath, fileName, indentationLevel, refreshDirectory } =
-    props;
+  const {
+    workspaceLocation,
+    fileSystem,
+    basePath,
+    fileName,
+    indentationLevel,
+    refreshDirectory,
+    disableEditing
+  } = props;
 
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const dispatch = useDispatch();
 
   const fullPath = path.join(basePath, fileName);
 
-  const handleOpenFile = () => {
-    fileSystem.readFile(fullPath, 'utf-8', (err, fileContents) => {
-      if (err) {
-        console.error(err);
-      }
-      if (fileContents === undefined) {
-        throw new Error('File contents are undefined.');
-      }
+  const handleOpenFile = async () => {
+    const fileContents = await handleReadFile(fileSystem, fullPath);
 
-      dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
-    });
+    dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
   };
 
   const handleRenameFile = () => setIsEditing(true);
@@ -90,6 +92,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
       open={handleOpenFile}
       rename={handleRenameFile}
       remove={handleRemoveFile}
+      disableEditing={disableEditing}
     >
       <div className={classes['file-system-view-node-container']} onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />

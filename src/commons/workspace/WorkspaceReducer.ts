@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import { isEqual, isNull } from 'lodash';
 import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
@@ -74,6 +75,7 @@ import {
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
+  UPDATE_EDITOR_TAB_READ_ONLY,
   UPDATE_EDITOR_VALUE,
   UPDATE_ENVSTEPS,
   UPDATE_ENVSTEPSTOTAL,
@@ -1030,6 +1032,34 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     }
+    case UPDATE_EDITOR_TAB_READ_ONLY: {
+      const { editorTabIndex, isReadOnly } = action.payload;
+      if (isNull(editorTabIndex) || editorTabIndex < 0) {
+        return state;
+      }
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState, index: number | null) =>
+        index === editorTabIndex
+          ? {
+              ...editorTab,
+              readOnly: isReadOnly
+            }
+          : editorTab
+      );
+
+      if (isEqual(editorTabs, newEditorTabs)) {
+        return state;
+      }
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
+    }
+
     case UPDATE_REPL_VALUE:
       return {
         ...state,

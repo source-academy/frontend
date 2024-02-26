@@ -61,6 +61,7 @@ import {
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
+  UPDATE_EDITOR_TAB_READ_ONLY,
   UPDATE_EDITOR_VALUE,
   UPDATE_ENVSTEPS,
   UPDATE_ENVSTEPSTOTAL,
@@ -332,6 +333,13 @@ export const renameEditorTabsForDirectory = createAction(
   RENAME_EDITOR_TABS_FOR_DIRECTORY,
   (workspaceLocation: WorkspaceLocation, oldDirectoryPath: string, newDirectoryPath: string) => ({
     payload: { workspaceLocation, oldDirectoryPath, newDirectoryPath }
+  })
+);
+
+export const updateTabReadOnly = createAction(
+  UPDATE_EDITOR_TAB_READ_ONLY,
+  (workspaceLocation: WorkspaceLocation, editorTabIndex: number | null, isReadOnly: boolean) => ({
+    payload: { workspaceLocation, editorTabIndex, isReadOnly }
   })
 );
 
