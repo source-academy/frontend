@@ -741,7 +741,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     // Define the function to check if the Save button should be disabled
     const shouldDisableSaveButton = (): boolean | undefined => {
-      const isIndividualAssessment: boolean = assessmentOverview?.maxTeamSize === 0;
+      const isIndividualAssessment: boolean = assessmentOverview?.maxTeamSize === 1;
       if (isIndividualAssessment) {
         return false;
       }
