@@ -551,3 +551,15 @@
     }
   }
 }
+
+.grading-overview-footer-sibling {
+  // Footer component
+  ~ div ~ div {
+    pointer-events: none;
+
+    // Footer's children
+    > * > * {
+      pointer-events: all;
+    }
+  }
+}
