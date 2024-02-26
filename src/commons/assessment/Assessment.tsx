@@ -343,16 +343,17 @@ const Assessment: React.FC<AssessmentProps> = props => {
     );
   }
 
-  const hasBonusXP = betchaAssessment?.hasBonusXp;
   // Define the warning text when finalising submissions
-  const warningText = hasBonusXP ? (
+  const hasBonusXp = (betchaAssessment?.earlySubmissionXp as number) > 0;
+  console.log(hasBonusXp);
+  const warningText = hasBonusXp ? (
     <p>
-      Finalising your submission early does not grant you additional XP, and{' '}
+      Finalising your submission early grants you additional XP, but{' '}
       <span className="warning">this action is irreversible.</span>
     </p>
   ) : (
     <p>
-      Finalising your submission early grants you additional XP, but{' '}
+      Finalising your submission early does not grant you additional XP, and{' '}
       <span className="warning">this action is irreversible.</span>
     </p>
   );

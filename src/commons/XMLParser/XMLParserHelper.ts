@@ -76,7 +76,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     coverImage: rawOverview.coverimage,
     id: EDITING_ID,
     maxXp: maxXpVal,
-    hasBonusXp: false,
+    earlySubmissionXp: 0,
     number: rawOverview.number || '',
     openAt: rawOverview.startdate,
     title: rawOverview.title,
