@@ -682,6 +682,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           }
         }
       }
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       handleSave(question.id, editorTabs[0].value);
       setTimeout(() => {
         handleAssessmentFetch(props.assessmentId);
