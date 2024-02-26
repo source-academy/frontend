@@ -230,7 +230,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
             </TableRow>
           ))}
         </TableBody>
-
+        <div className="grading-overview-footer-sibling"></div>
         <Footer>
           <Flex justifyContent="justify-center" spaceX="space-x-3">
             <Button
