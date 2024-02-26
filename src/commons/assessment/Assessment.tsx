@@ -343,6 +343,20 @@ const Assessment: React.FC<AssessmentProps> = props => {
     );
   }
 
+  const hasBonusXP = betchaAssessment?.hasBonusXp;
+  // Define the warning text when finalising submissions
+  const warningText = hasBonusXP ? (
+    <p>
+      Finalising your submission early does not grant you additional XP, and{' '}
+      <span className="warning">this action is irreversible.</span>
+    </p>
+  ) : (
+    <p>
+      Finalising your submission early grants you additional XP, but{' '}
+      <span className="warning">this action is irreversible.</span>
+    </p>
+  );
+
   // Define the betcha dialog (in each card's menu)
   const submissionText = betchaAssessment ? (
     <p>
@@ -355,10 +369,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const betchaText = (
     <>
       {submissionText}
-      <p>
-        Finalising your submission early grants you additional XP, but{' '}
-        <span className="warning">this action is irreversible.</span>
-      </p>
+      {warningText}
     </>
   );
   const betchaDialog = (

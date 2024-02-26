@@ -63,6 +63,7 @@ export type AssessmentOverview = {
   id: number;
   isPublished?: boolean;
   maxXp: number;
+  hasBonusXp: boolean;
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
@@ -236,6 +237,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
     maxXp: 0,
+    hasBonusXp: false,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
     reading: '',
