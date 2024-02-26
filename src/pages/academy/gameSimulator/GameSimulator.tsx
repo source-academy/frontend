@@ -44,12 +44,6 @@ function GameSimulator() {
       <div className="LeftAlign GameSimulatorPanel">
         {gameSimState === GameSimState.Default && <h3>Welcome to Game simulator!</h3>}
         {gameSimState === GameSimState.CheckpointSim && <GameSimulatorCheckpointSim />}
-        {gameSimState === GameSimState.ObjectPlacement && (
-          <>
-            <h3>Asset Selection</h3>
-            <GameSimulatorAssetSelection />
-          </>
-        )}
         {gameSimState === GameSimState.AssetUploader && (
           <>
             <h3>Asset uploader</h3>
