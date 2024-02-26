@@ -369,6 +369,7 @@ const SicpNavigationBar: React.FC = () => {
   return (
     <>
       <Omnibar
+        className="sicp-search-bar"
         isOpen={isOmnibarOpen}
         inputProps={{
           disabled: omnibarMode === 'submenu',
