@@ -158,7 +158,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const table = useReactTable({
     data: submissions,
     columns,
-    state: { columnFilters },
+    state: { 
+      columnFilters,
+      pagination: {
+        pageIndex: 0,
+        pageSize: pageSize
+      }
+    },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
