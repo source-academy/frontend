@@ -132,7 +132,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const updateSearch = (newValue: string) => {
     resetPage();
     setSearchValue(newValue);
-  }
+  };
   const debouncedUpdateSearchValue = useMemo(() => debounce(updateSearch, 300), []);
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
@@ -163,7 +163,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const table = useReactTable({
     data: submissions,
     columns,
-    state: { 
+    state: {
       columnFilters,
       pagination: {
         pageIndex: 0,
