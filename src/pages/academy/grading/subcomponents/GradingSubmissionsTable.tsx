@@ -179,6 +179,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
     setColumnFilters(newFilters);
+    resetPage();
   };
 
   useEffect(() => {
