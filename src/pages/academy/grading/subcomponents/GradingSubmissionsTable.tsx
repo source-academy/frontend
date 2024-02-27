@@ -128,10 +128,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   /** The actual value sent to the backend */
   const [searchValue, setSearchValue] = useState('');
-  const debouncedSetSearchValue = useMemo(() => debounce(setSearchValue, 300), []);
+  // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
+  const updateSearch = (newValue: string) => {
+    resetPage();
+    setSearchValue(newValue);
+  }
+  const debouncedUpdateSearchValue = useMemo(() => debounce(updateSearch, 300), []);
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
-    debouncedSetSearchValue(e.target.value);
+    debouncedUpdateSearchValue(e.target.value);
   };
 
   const [page, setPage] = useState(0);
@@ -182,7 +187,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   useEffect(() => {
     resetPage();
-  }, [updateEntries, resetPage]);
+  }, [updateEntries, resetPage, searchValue]);
 
   useEffect(() => {
     updateEntries(page, backendFilterParams);
