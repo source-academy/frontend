@@ -124,24 +124,27 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     ...tableFilters.columnFilters
   ]);
 
+  const [page, setPage] = useState(0);
+  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
+  const resetPage = useCallback(() => setPage(0), [setPage]);
+
   /** The value to be shown in the search bar */
   const [searchQuery, setSearchQuery] = useState('');
   /** The actual value sent to the backend */
   const [searchValue, setSearchValue] = useState('');
   // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
-  const updateSearch = (newValue: string) => {
-    resetPage();
-    setSearchValue(newValue);
-  };
-  const debouncedUpdateSearchValue = useMemo(() => debounce(updateSearch, 300), [updateSearch]);
+  const debouncedUpdateSearchValue = useMemo(
+    () =>
+      debounce((newValue: string) => {
+        resetPage();
+        setSearchValue(newValue);
+      }, 300),
+    [resetPage]
+  );
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
     debouncedUpdateSearchValue(e.target.value);
   };
-
-  const [page, setPage] = useState(0);
-  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-  const resetPage = useCallback(() => setPage(0), [setPage]);
 
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
