@@ -133,7 +133,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     resetPage();
     setSearchValue(newValue);
   };
-  const debouncedUpdateSearchValue = useMemo(() => debounce(updateSearch, 300), []);
+  const debouncedUpdateSearchValue = useMemo(() => debounce(updateSearch, 300), [updateSearch]);
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
     debouncedUpdateSearchValue(e.target.value);
