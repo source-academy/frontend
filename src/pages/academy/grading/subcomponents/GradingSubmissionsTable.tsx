@@ -229,31 +229,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   return (
     <>
-      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
-        <Flex alignItems="items-center" spaceX="space-x-2">
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
-            <BpIcon icon={IconNames.FILTER_LIST} />
-            <Text>
-              {columnFilters.length > 0
-                ? 'Filters: '
-                : 'No filters applied. Click on any cell to filter by its value.' +
-                  (hiddenColumns.columns.length === 0
-                    ? ' Click on any column header to hide it.'
-                    : '')}{' '}
-            </Text>
-          </div>
-          <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
-        </Flex>
-
-        <TextInput
-          maxWidth="max-w-sm"
-          icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-          placeholder="Search by assessment name"
-          value={searchQuery}
-          onChange={handleSearchQueryUpdate}
-        />
-      </Flex>
-
       {hiddenColumns.columns.length > 0 ? (
         <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
           <Flex alignItems="items-center" spaceX="space-x-2">
@@ -283,6 +258,31 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       ) : (
         <></>
       )}
+      
+      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
+        <Flex alignItems="items-center" spaceX="space-x-2">
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
+            <BpIcon icon={IconNames.FILTER_LIST} />
+            <Text>
+              {columnFilters.length > 0
+                ? 'Filters: '
+                : 'No filters applied. Click on any cell to filter by its value.' +
+                  (hiddenColumns.columns.length === 0
+                    ? ' Click on any column header to hide it.'
+                    : '')}{' '}
+            </Text>
+          </div>
+          <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
+        </Flex>
+
+        <TextInput
+          maxWidth="max-w-sm"
+          icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+          placeholder="Search by assessment name"
+          value={searchQuery}
+          onChange={handleSearchQueryUpdate}
+        />
+      </Flex>
 
       <Table marginTop="mt-2">
         <TableHead>
@@ -299,7 +299,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                     <button
                       type="button"
                       className="grading-overview-filterable-btns tr-text-gray-500 tr-font-semibold"
-                      onClick={e => {
+                      onClick={(e) => {
                         handleColumnFilterAdd(header.getContext().header.id);
                       }}
                     >
