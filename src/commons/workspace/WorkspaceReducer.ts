@@ -77,6 +77,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_ENVSTEPS,
   UPDATE_ENVSTEPSTOTAL,
+  UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -629,6 +630,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         grading: {
           ...state.grading,
           submissionsTableFilters: action.payload.filters
+        }
+      };
+    case UPDATE_GRADING_COLUMN_VISIBILITY:
+      return {
+        ...state,
+        grading: {
+          ...state.grading,
+          columnVisiblity: action.payload.filters
         }
       };
     case UPDATE_CURRENT_ASSESSMENT_ID:

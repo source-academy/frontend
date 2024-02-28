@@ -141,7 +141,7 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>entries per page.</Text>
+              <Text>entries per page</Text>
             </Flex>
             <GradingSubmissionsTable
               totalRows={gradingOverviews.count}

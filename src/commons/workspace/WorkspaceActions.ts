@@ -34,6 +34,7 @@ import {
   EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
+  GradingColumnVisibility,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -64,6 +65,7 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_ENVSTEPS,
   UPDATE_ENVSTEPSTOTAL,
+  UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -396,6 +398,11 @@ export const setIsEditorReadonly = createAction(
 export const updateSubmissionsTableFilters = createAction(
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   (filters: SubmissionsTableFilters) => ({ payload: { filters } })
+);
+
+export const updateGradingColumnVisibility = createAction(
+  UPDATE_GRADING_COLUMN_VISIBILITY,
+  (filters: GradingColumnVisibility) => ({ payload: { filters } })
 );
 
 export const updateCurrentAssessmentId = createAction(

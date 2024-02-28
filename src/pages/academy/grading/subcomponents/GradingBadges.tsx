@@ -95,4 +95,32 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, SubmissionStatusBadge };
+type ColumnFilterBadgeProps = {
+  filter: string;
+  onRemove: (toRemove: string) => void;
+  filtersName: string;
+};
+
+const ColumnFilterBadge: React.FC<ColumnFilterBadgeProps> = ({ filter, onRemove, filtersName }) => {
+  return (
+    <button
+      type="button"
+      className="grading-overview-filterable-btns"
+      onClick={() => onRemove(filter)}
+    >
+      <Badge
+        text={filtersName}
+        icon={() => <Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
+        color={getBadgeColorFromLabel(filter)}
+      />
+    </button>
+  );
+};
+
+export {
+  AssessmentTypeBadge,
+  ColumnFilterBadge,
+  FilterBadge,
+  GradingStatusBadge,
+  SubmissionStatusBadge
+};

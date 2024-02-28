@@ -410,6 +410,9 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     submissionsTableFilters: {
       columnFilters: []
     },
+    columnVisiblity: {
+      columns: []
+    },
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false
