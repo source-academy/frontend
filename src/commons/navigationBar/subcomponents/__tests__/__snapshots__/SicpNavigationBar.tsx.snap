@@ -3,6 +3,7 @@
 exports[`Navbar renders correctly 1`] = `
 <React.Fragment>
   <Blueprint5.Omnibar
+    className="sicp-search-bar"
     inputProps={
       Object {
         "disabled": false,

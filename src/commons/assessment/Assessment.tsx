@@ -18,6 +18,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
+import classNames from 'classnames';
 import { sortBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -91,7 +92,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       // tslint:disable-next-line:jsx-no-lambda
       onClick={() => setBetchaAssessment(overview)}
     >
-      <span className="custom-hidden-xxxs">Finalize</span>
+      <span>Finalize</span>
       <span className="custom-hidden-xxs"> Submission</span>
     </Button>
   );
@@ -140,10 +141,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
             dispatch(acknowledgeNotifications(filterNotificationsByAssessment(overview.id)))
           }
         >
-          <span className="custom-hidden-xxxs" data-testid="Assessment-Attempt-Button">
-            {label}
-          </span>
-          <span className="custom-hidden-xxs">{optionalLabel}</span>
+          <span data-testid="Assessment-Attempt-Button">{label}</span>
+          <span className="custom-hidden-xxxs">{optionalLabel}</span>
         </Button>
       </NavLink>
     );
@@ -166,11 +165,10 @@ const Assessment: React.FC<AssessmentProps> = props => {
   ) => {
     const showGrade =
       overview.gradingStatus === 'graded' || !props.assessmentConfiguration.isManuallyGraded;
-    const ratio = isMobileBreakpoint ? 5 : 3;
     return (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
-          <div className={`col-xs-${String(ratio)} listing-picture`}>
+          <div className={classNames('listing-picture', !isMobileBreakpoint && 'col-xs-3')}>
             <NotificationBadge
               className="badge"
               notificationFilter={filterNotificationsByAssessment(overview.id)}
@@ -182,7 +180,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
               src={overview.coverImage ? overview.coverImage : defaultCoverImage}
             />
           </div>
-          <div className={`col-xs-${String(12 - ratio)} listing-text`}>
+          <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
             {makeOverviewCardTitle(overview, index, renderGradingStatus)}
             <div className="listing-xp">
               <H6>
