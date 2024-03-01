@@ -353,3 +353,10 @@ $sicp-content-lr-padding: 6em;
     width: 70% !important;
   }
 }
+
+.sicp-search-bar {
+  @media only screen and (max-width: 768px) {
+    left: 1%;
+    width: 98%;
+  }
+}
