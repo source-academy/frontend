@@ -72,7 +72,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": false,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": true,
@@ -85,7 +85,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": false,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": true,
@@ -98,7 +98,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": false,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": false,
@@ -111,7 +111,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": false,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": false,
@@ -124,7 +124,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": false,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": true,
@@ -137,7 +137,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": true,
@@ -150,7 +150,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": true,
@@ -163,7 +163,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -176,7 +176,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": true,
@@ -189,7 +189,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -202,7 +202,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -215,7 +215,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": true,
       "repl": false,
       "substVisualizer": false,
@@ -228,7 +228,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": false,
+      "cseMachine": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -241,7 +241,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -254,7 +254,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -267,7 +267,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -280,7 +280,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -293,7 +293,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -306,7 +306,7 @@ Array [
     "mainLanguage": "JavaScript",
     "supports": Object {
       "dataVisualizer": true,
-      "envVisualizer": true,
+      "cseMachine": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,

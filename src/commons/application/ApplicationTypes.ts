@@ -147,7 +147,7 @@ export interface SALanguage extends Language {
 type LanguageFeatures = Partial<{
   dataVisualizer: boolean;
   substVisualizer: boolean;
-  envVisualizer: boolean;
+  cseMachine: boolean;
   multiFile: boolean;
   repl: boolean;
 }>;
@@ -252,8 +252,8 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
     chapter <= Chapter.SOURCE_2 &&
     (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
 
-  // Enable Env Visualizer for Source Chapter 3 and above
-  supportedFeatures.envVisualizer =
+  // Enable CSE Machine for Source Chapter 3 and above
+  supportedFeatures.cseMachine =
     chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET;
 
   // Local imports/exports require Source 2+ as Source 1 does not have lists.
@@ -417,8 +417,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
-    usingEnv: false,
-    updateEnv: true,
+    usingCSE: false,
+    updateCSE: true,
     envSteps: -1,
     envStepsTotal: 0,
     breakpointSteps: [],
@@ -470,8 +470,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sicp: {
     ...createDefaultWorkspace('sicp'),
     usingSubst: false,
-    usingEnv: false,
-    updateEnv: true,
+    usingCSE: false,
+    updateCSE: true,
     envSteps: -1,
     envStepsTotal: 0,
     breakpointSteps: [],

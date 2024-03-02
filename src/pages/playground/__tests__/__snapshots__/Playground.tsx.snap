@@ -495,13 +495,13 @@ exports[`Playground tests Playground renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_env_visualizer"
+                          aria-controls="bp5-tab-panel_side-content-tabs_cse_machine"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
-                          data-tab-id="env_visualizer"
-                          id="bp5-tab-title_side-content-tabs_env_visualizer"
+                          data-tab-id="cse_machine"
+                          id="bp5-tab-title_side-content-tabs_cse_machine"
                           role="tab"
                           tabindex="-1"
                         >
@@ -710,9 +710,9 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_env_visualizer"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_cse_machine"
                         class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_env_visualizer"
+                        id="bp5-tab-panel_side-content-tabs_cse_machine"
                         role="tabpanel"
                       >
                         <div
@@ -986,8 +986,8 @@ and also the
                              
                             <div
                               class="bp5-running-text"
-                              data-testid="env-visualizer-default-text"
-                              id="env-visualizer-default-text"
+                              data-testid="cse-machine-default-text"
+                              id="cse-machine-default-text"
                             >
                               The environment model visualizer generates environment model diagrams following a notation introduced in
                                

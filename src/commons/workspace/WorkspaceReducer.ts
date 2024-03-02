@@ -65,18 +65,18 @@ import {
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_UPDATE_ENV,
-  TOGGLE_USING_ENV,
+  TOGGLE_UPDATE_CSE,
+  TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
+  UPDATE_CSESTEPS,
+  UPDATE_CSESTEPSTOTAL,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
-  UPDATE_ENVSTEPS,
-  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -595,28 +595,28 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         return state;
       }
     }
-    case TOGGLE_USING_ENV: {
+    case TOGGLE_USING_CSE: {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            usingEnv: action.payload.usingEnv
+            usingCSE: action.payload.usingCSE
           }
         };
       } else {
         return state;
       }
     }
-    case TOGGLE_UPDATE_ENV: {
+    case TOGGLE_UPDATE_CSE: {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            updateEnv: action.payload.updateEnv
+            updateCSE: action.payload.updateCSE
           }
         };
       } else {
@@ -1058,7 +1058,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
-    case UPDATE_ENVSTEPS:
+    case UPDATE_CSESTEPS:
       return {
         ...state,
         [workspaceLocation]: {
@@ -1066,7 +1066,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           envSteps: action.payload.steps
         }
       };
-    case UPDATE_ENVSTEPSTOTAL:
+    case UPDATE_CSESTEPSTOTAL:
       return {
         ...state,
         [workspaceLocation]: {

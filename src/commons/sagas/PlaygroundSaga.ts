@@ -4,7 +4,7 @@ import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import CSEMachine from 'src/features/cseMachine/CSEMachine';
 
 import {
   changeQueryString,
@@ -22,8 +22,8 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notifications/N
 import {
   clearReplOutput,
   setEditorHighlightedLines,
-  toggleUpdateEnv,
-  toggleUsingEnv,
+  toggleUpdateCSE,
+  toggleUsingCSE,
   toggleUsingSubst,
   updateEnvSteps,
   updateEnvStepsTotal
@@ -97,23 +97,23 @@ export default function* PlaygroundSaga(): SagaIterator {
         }
       }
 
-      if (newId !== SideContentType.envVisualizer) {
-        yield put(toggleUsingEnv(false, workspaceLocation));
-        yield call([EnvVisualizer, EnvVisualizer.clearEnv]);
+      if (newId !== SideContentType.cseMachine) {
+        yield put(toggleUsingCSE(false, workspaceLocation));
+        yield call([CSEMachine, CSEMachine.clearCSE]);
         yield put(updateEnvSteps(-1, workspaceLocation));
         yield put(updateEnvStepsTotal(0, workspaceLocation));
-        yield put(toggleUpdateEnv(true, workspaceLocation));
+        yield put(toggleUpdateCSE(true, workspaceLocation));
         yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
       }
 
       if (
         isSourceLanguage(playgroundSourceChapter) &&
-        (newId === SideContentType.substVisualizer || newId === SideContentType.envVisualizer)
+        (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
       ) {
         if (playgroundSourceChapter <= Chapter.SOURCE_2) {
           yield put(toggleUsingSubst(true, workspaceLocation));
         } else {
-          yield put(toggleUsingEnv(true, workspaceLocation));
+          yield put(toggleUsingCSE(true, workspaceLocation));
         }
       }
     }

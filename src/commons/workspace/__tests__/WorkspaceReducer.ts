@@ -862,8 +862,8 @@ describe('LOG_OUT', () => {
       replValue: 'test repl value here',
       sharedbConnected: false,
       usingSubst: false,
-      usingEnv: false,
-      updateEnv: true,
+      usingCSE: false,
+      updateCSE: true,
       envSteps: -1,
       envStepsTotal: 0,
       breakpointSteps: []

@@ -52,18 +52,18 @@ import {
   SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
-  TOGGLE_UPDATE_ENV,
-  TOGGLE_USING_ENV,
+  TOGGLE_UPDATE_CSE,
+  TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
+  UPDATE_CSESTEPS,
+  UPDATE_CSESTEPSTOTAL,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
-  UPDATE_ENVSTEPS,
-  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_SUBLANGUAGE,
@@ -458,29 +458,29 @@ export const addHtmlConsoleError = createAction(
   })
 );
 
-export const toggleUsingEnv = createAction(
-  TOGGLE_USING_ENV,
-  (usingEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { usingEnv, workspaceLocation }
+export const toggleUsingCSE = createAction(
+  TOGGLE_USING_CSE,
+  (usingCSE: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingCSE, workspaceLocation }
   })
 );
 
-export const toggleUpdateEnv = createAction(
-  TOGGLE_UPDATE_ENV,
-  (updateEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { updateEnv, workspaceLocation }
+export const toggleUpdateCSE = createAction(
+  TOGGLE_UPDATE_CSE,
+  (updateCSE: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { updateCSE, workspaceLocation }
   })
 );
 
 export const updateEnvSteps = createAction(
-  UPDATE_ENVSTEPS,
+  UPDATE_CSESTEPS,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })
 );
 
 export const updateEnvStepsTotal = createAction(
-  UPDATE_ENVSTEPSTOTAL,
+  UPDATE_CSESTEPSTOTAL,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })
