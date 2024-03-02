@@ -44,6 +44,32 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
       dispatch(unsubmitSubmission(submissionId));
     }
   };
+  
+  // Planned logic flow:
+  // hide both publish and un-publish icons if !fully graded
+  // show publish icon if fully graded && not published
+  // show un-publish icon if fully graded && published
+  // polish: "publish All" feature (global, admin access), "publish All" (group only)
+
+  // TODO
+  const canPublish = () => Math.random() > 0.5;
+
+  // TODO - Redux loop
+  const handlePublishClick = async () => {
+    const confirm = await showSimpleConfirmDialog({
+      contents: (
+        <>
+          <p>Publish your grading?</p>
+          <p>DEVNOTE (remove): You should only see this when notFullyGraded = false, isPublished = false.</p>
+        </>
+      ),
+      positiveIntent: 'primary',
+      positiveLabel: 'Publish'
+    });
+    if (confirm) {
+      alert("dummy dispatch");
+    }
+  };
 
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-2">
@@ -61,6 +87,11 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
 
       <button type="button" style={{ padding: 0 }} onClick={handleUnsubmitClick}>
         <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
+      </button>
+
+
+      <button type="button" style={{ padding: 0 }} onClick={handlePublishClick} hidden={canPublish()}>
+        <Icon tooltip="Publish" icon={() => <BpIcon icon={IconNames.SendToMap} />} variant="simple" />
       </button>
     </Flex>
   );
