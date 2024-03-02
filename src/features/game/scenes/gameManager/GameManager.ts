@@ -15,11 +15,14 @@ import GameDialogueStorageManager from '../../dialogue/GameDialogueStorageManage
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
+import { keyboardShortcuts } from '../../input/GameInputConstants';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { LocationId } from '../../location/GameMapTypes';
+import { GameItemType } from '../../location/GameMapTypes';
 import GameLogManager from '../../log/GameLogManager';
+import { GameMode } from '../../mode/GameModeTypes';
 import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -261,33 +264,65 @@ class GameManager extends Phaser.Scene {
   }
 
   /**
-   * Bind escape menu and dashboard to keyboard triggers.
+   * Bind escape menu, dashboard, and mode selections to keyboard triggers.
    */
   private bindKeyboardTriggers() {
-    this.getInputManager().registerKeyboardListener(
-      Phaser.Input.Keyboard.KeyCodes.ESC,
-      'up',
-      async () => {
-        if (this.getPhaseManager().isCurrentPhaseTerminal()) {
-          await this.getPhaseManager().popPhase();
-        } else {
-          await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
-        }
+    this.getInputManager().registerKeyboardListener(keyboardShortcuts.Menu, 'up', async () => {
+      if (this.getPhaseManager().isCurrentPhaseTerminal()) {
+        await this.getPhaseManager().popPhase();
+      } else {
+        await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
       }
-    );
-    this.getInputManager().registerKeyboardListener(
-      Phaser.Input.Keyboard.KeyCodes.TAB,
-      'up',
-      async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
-          await this.getPhaseManager().popPhase();
-        } else if (this.getPhaseManager().isCurrentPhaseTerminal()) {
-          await this.getPhaseManager().swapPhase(GamePhaseType.Dashboard);
-        } else {
-          await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
-        }
+    });
+    this.getInputManager().registerKeyboardListener(keyboardShortcuts.Dashboard, 'up', async () => {
+      if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
+        await this.getPhaseManager().popPhase();
+      } else if (this.getPhaseManager().isCurrentPhaseTerminal()) {
+        await this.getPhaseManager().swapPhase(GamePhaseType.Dashboard);
+      } else {
+        await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
       }
+    });
+    this.registerMenuKeyboardListener(
+      keyboardShortcuts.Explore,
+      GameMode.Explore,
+      GamePhaseType.Explore
     );
+    this.registerMenuKeyboardListener(keyboardShortcuts.Move, GameMode.Move, GamePhaseType.Move);
+    this.registerMenuKeyboardListener(keyboardShortcuts.Talk, GameMode.Talk, GamePhaseType.Talk);
+  }
+
+  /**
+   * Helper function to register keyboard listeners for mode selections.
+   */
+  private registerMenuKeyboardListener(shortcut: number, mode: GameMode, phase: GamePhaseType) {
+    this.getInputManager().registerKeyboardListener(shortcut, 'up', async () => {
+      const modes = this.getCurrentLocationModes();
+      if (modes.includes(mode) && this.getPhaseManager().isCurrentPhase(GamePhaseType.Menu)) {
+        await this.getPhaseManager().pushPhase(phase);
+      } else if (this.getPhaseManager().isCurrentPhase(phase)) {
+        await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
+      }
+    });
+  }
+
+  /**
+   * the same method from GameModeMenu to get the available modes under current location
+   */
+  private getCurrentLocationModes() {
+    const currLocId = this.currentLocationId;
+    let latestModesInLoc = this.getStateManager().getLocationModes(currLocId);
+    const talkTopics = GameGlobalAPI.getInstance().getGameItemsInLocation(
+      GameItemType.talkTopics,
+      currLocId
+    );
+
+    // Remove talk mode if there is no talk topics
+    if (talkTopics.length === 0) {
+      latestModesInLoc = latestModesInLoc.filter(mode => mode !== GameMode.Talk);
+    }
+
+    return latestModesInLoc;
   }
 
   /**
