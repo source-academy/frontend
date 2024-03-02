@@ -24,13 +24,7 @@ import { Value } from './components/values/Value';
 import CSEMachine from './CSEMachine';
 import { CSEAnimation } from './CSEMachineAnimation';
 import { Config, ShapeDefaultProps } from './CSEMachineConfig';
-import {
-  CompactReferenceType,
-  Data,
-  EnvTree,
-  EnvTreeNode,
-  ReferenceType
-} from './CSEMachineTypes';
+import { CompactReferenceType, Data, EnvTree, EnvTreeNode, ReferenceType } from './CSEMachineTypes';
 import {
   deepCopyTree,
   getNextChildren,
@@ -193,7 +187,7 @@ export class Layout {
       Layout.compactHeight = Math.max(
         Config.CanvasMinHeight,
         lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
-        Layout.controlStashHeight
+        Layout.controlStashHeight ?? 0
       );
 
       Layout.compactWidth = Math.max(
@@ -582,8 +576,7 @@ export class Layout {
                     listening={false}
                   />
                   {!CSEMachine.getCompactLayout() && Layout.grid.draw()}
-                  {CSEMachine.getCompactLayout() &&
-                    Layout.compactLevels.map(level => level.draw())}
+                  {CSEMachine.getCompactLayout() && Layout.compactLevels.map(level => level.draw())}
                   {CSEMachine.getCompactLayout() &&
                     CSEMachine.getControlStash() &&
                     Layout.controlComponent.draw()}
