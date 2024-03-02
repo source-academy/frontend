@@ -1333,9 +1333,10 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
  * POST /chat
  */
 
-export async function chat(payload: { role: string; content: string }[]): Promise<string> {
-  const { accessToken, refreshToken } = store.getState().session;
-  const tokens = { accessToken, refreshToken };
+export async function chat(
+  tokens: Tokens,
+  payload: { role: string; content: string }[]
+): Promise<string> {
   const response = await request(`chat`, 'POST', {
     ...tokens,
     body: { json: payload }
