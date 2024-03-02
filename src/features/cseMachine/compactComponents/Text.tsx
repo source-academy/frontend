@@ -3,10 +3,10 @@ import React from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import { CompactConfig, ShapeDefaultProps } from '../CSEMachineCompactConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Data, IHoverable } from '../CSEMachineTypes';
-import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../CSEMachineUtils';
+import { CompactConfig, ShapeDefaultProps } from '../CseMachineCompactConfig';
+import { Layout } from '../CseMachineLayout';
+import { Data, IHoverable } from '../CseMachineTypes';
+import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../CseMachineUtils';
 
 export interface TextOptions {
   maxWidth: number;

@@ -2,10 +2,10 @@ import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import { CompactConfig, ShapeDefaultProps } from '../CSEMachineCompactConfig';
-import { Layout } from '../CSEMachineLayout';
-import { CompactReferenceType, ReferenceType } from '../CSEMachineTypes';
-import { defaultSAColor } from '../CSEMachineUtils';
+import { CompactConfig, ShapeDefaultProps } from '../CseMachineCompactConfig';
+import { Layout } from '../CseMachineLayout';
+import { CompactReferenceType, ReferenceType } from '../CseMachineTypes';
+import { defaultSAColor } from '../CseMachineUtils';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit extends Visible {

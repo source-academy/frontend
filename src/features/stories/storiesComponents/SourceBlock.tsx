@@ -106,7 +106,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   // const cseMachineTab: SideContentTab = {
   //   label: 'CSE Machine',
   //   iconName: IconNames.GLOBE,
-  //   body: <SideContentCSEMachine />,
+  //   body: <SideContentCseMachine />,
   //   id: SideContentType.cseMachine
   // };
 

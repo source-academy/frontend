@@ -5,11 +5,11 @@ import React from 'react';
 import { Group } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import CSEMachine from '../CSEMachine';
-import { ControlStashConfig } from '../CSEMachineControlStash';
-import { Layout } from '../CSEMachineLayout';
-import { IHoverable } from '../CSEMachineTypes';
-import { getStashItemComponent } from '../CSEMachineUtils';
+import CseMachine from '../CseMachine';
+import { ControlStashConfig } from '../CseMachineControlStash';
+import { Layout } from '../CseMachineLayout';
+import { IHoverable } from '../CseMachineTypes';
+import { getStashItemComponent } from '../CseMachineUtils';
 import { StashItemComponent } from './StashItemComponent';
 
 export class StashStack extends Visible implements IHoverable {
@@ -37,7 +37,7 @@ export class StashStack extends Visible implements IHoverable {
     };
     this.stashItemComponents = this.stash
       .getStack()
-      .slice(CSEMachine.getStackTruncated() ? -10 : 0)
+      .slice(CseMachine.getStackTruncated() ? -10 : 0)
       .map(stashItemToComponent);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}

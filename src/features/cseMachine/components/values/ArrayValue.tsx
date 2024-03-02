@@ -1,10 +1,10 @@
 import React, { RefObject } from 'react';
 import { Group, Rect } from 'react-konva';
 
-import { Config } from '../../CSEMachineConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { Data, ReferenceType } from '../../CSEMachineTypes';
-import { setUnhoveredStyle } from '../../CSEMachineUtils';
+import { Config } from '../../CseMachineConfig';
+import { Layout } from '../../CseMachineLayout';
+import { Data, ReferenceType } from '../../CseMachineTypes';
+import { setUnhoveredStyle } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayLevel } from '../ArrayLevel';
 import { ArrayUnit } from '../ArrayUnit';

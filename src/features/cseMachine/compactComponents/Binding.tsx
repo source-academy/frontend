@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Visible } from '../components/Visible';
-import { CompactConfig } from '../CSEMachineCompactConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Data } from '../CSEMachineTypes';
-import { isCompactMainReference, isDummyKey } from '../CSEMachineUtils';
+import { CompactConfig } from '../CseMachineCompactConfig';
+import { Layout } from '../CseMachineLayout';
+import { Data } from '../CseMachineTypes';
+import { isCompactMainReference, isDummyKey } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';

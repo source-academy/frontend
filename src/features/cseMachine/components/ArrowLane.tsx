@@ -1,5 +1,5 @@
-import { Config } from '../CSEMachineConfig';
-import { Data, IVisible } from '../CSEMachineTypes';
+import { Config } from '../CseMachineConfig';
+import { Data, IVisible } from '../CseMachineTypes';
 import { Frame } from './Frame';
 import { Grid } from './Grid';
 import { Value } from './values/Value';

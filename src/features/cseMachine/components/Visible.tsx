@@ -1,7 +1,7 @@
 import React from 'react';
 import { RefObject } from 'react';
 
-import { IVisible } from '../CSEMachineTypes';
+import { IVisible } from '../CseMachineTypes';
 
 /**
  * class to implement the IVisible interface, used by both compact and non-compact components.

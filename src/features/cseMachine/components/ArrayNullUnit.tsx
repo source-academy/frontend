@@ -1,10 +1,10 @@
 import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
 
-import CSEMachine from '../CSEMachine';
-import { Config, ShapeDefaultProps } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { ReferenceType } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { ReferenceType } from '../CseMachineTypes';
 import { Visible } from './Visible';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
@@ -34,7 +34,7 @@ export class ArrayNullUnit extends Visible {
         key={Layout.key++}
         points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
         stroke={
-          CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+          CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
         }
         hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
         ref={this.ref}

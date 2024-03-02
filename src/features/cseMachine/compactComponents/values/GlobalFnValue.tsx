@@ -8,11 +8,11 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import CSEMachine from '../../CSEMachine';
-import { CompactConfig, ShapeDefaultProps } from '../../CSEMachineCompactConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { CompactReferenceType, IHoverable } from '../../CSEMachineTypes';
-import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CSEMachineUtils';
+import CseMachine from '../../CseMachine';
+import { CompactConfig, ShapeDefaultProps } from '../../CseMachineCompactConfig';
+import { Layout } from '../../CseMachineLayout';
+import { CompactReferenceType, IHoverable } from '../../CseMachineTypes';
+import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
@@ -114,12 +114,12 @@ export class GlobalFnValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     if (!this.selected) {
       this.labelRef.current.hide();
     } else {
@@ -128,7 +128,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     }
   };
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.selected = !this.selected;
     if (!this.selected) {
       this.labelRef.current.hide();
@@ -183,7 +183,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             fill={defaultSAColor()}
           />
         </Group>
-        {CSEMachine.getPrintableMode() ? (
+        {CseMachine.getPrintableMode() ? (
           <KonvaLabel
             x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
             y={this.y() - CompactConfig.TextPaddingY}

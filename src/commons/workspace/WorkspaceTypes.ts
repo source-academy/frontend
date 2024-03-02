@@ -85,8 +85,8 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
-  readonly usingCSE: boolean;
-  readonly updateCSE: boolean;
+  readonly usingCse: boolean;
+  readonly updateCse: boolean;
   readonly currentStep: number;
   readonly stepsTotal: number;
   readonly breakpointSteps: number[];

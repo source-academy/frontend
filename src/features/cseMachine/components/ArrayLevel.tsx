@@ -1,8 +1,8 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
-import { Config, ShapeDefaultProps } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
 import { FrameLevel } from './FrameLevel';
 import { Level } from './Level';
 import { ArrayValue } from './values/ArrayValue';

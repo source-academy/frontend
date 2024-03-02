@@ -1,10 +1,10 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
-import { Config, ShapeDefaultProps } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { EnvTreeNode } from '../CSEMachineTypes';
-import { getNextChildren } from '../CSEMachineUtils';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { EnvTreeNode } from '../CseMachineTypes';
+import { getNextChildren } from '../CseMachineUtils';
 import { ArrayLevel } from './ArrayLevel';
 import { ArrayUnit } from './ArrayUnit';
 import { ArrowLane } from './ArrowLane';

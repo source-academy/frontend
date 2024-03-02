@@ -1,7 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 
-import { Config } from '../../CSEMachineConfig';
-import { StepsArray } from '../../CSEMachineTypes';
+import { Config } from '../../CseMachineConfig';
+import { StepsArray } from '../../CseMachineTypes';
 import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';

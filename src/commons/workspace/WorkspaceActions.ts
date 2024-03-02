@@ -458,17 +458,17 @@ export const addHtmlConsoleError = createAction(
   })
 );
 
-export const toggleUsingCSE = createAction(
+export const toggleUsingCse = createAction(
   TOGGLE_USING_CSE,
-  (usingCSE: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { usingCSE, workspaceLocation }
+  (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingCse, workspaceLocation }
   })
 );
 
-export const toggleUpdateCSE = createAction(
+export const toggleUpdateCse = createAction(
   TOGGLE_UPDATE_CSE,
-  (updateCSE: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { updateCSE, workspaceLocation }
+  (updateCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { updateCse, workspaceLocation }
   })
 );
 

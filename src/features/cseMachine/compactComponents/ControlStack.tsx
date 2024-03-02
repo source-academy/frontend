@@ -6,11 +6,11 @@ import React from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import CSEMachine from '../CSEMachine';
-import { CompactConfig } from '../CSEMachineCompactConfig';
-import { ControlStashConfig } from '../CSEMachineControlStash';
-import { Layout } from '../CSEMachineLayout';
-import { IHoverable } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { CompactConfig } from '../CseMachineCompactConfig';
+import { ControlStashConfig } from '../CseMachineControlStash';
+import { Layout } from '../CseMachineLayout';
+import { IHoverable } from '../CseMachineTypes';
 import {
   defaultSAColor,
   getControlItemComponent,
@@ -18,7 +18,7 @@ import {
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle
-} from '../CSEMachineUtils';
+} from '../CseMachineUtils';
 import { ControlItemComponent } from './ControlItemComponent';
 
 export class ControlStack extends Visible implements IHoverable {
@@ -47,10 +47,10 @@ export class ControlStack extends Visible implements IHoverable {
         if (node.loc) {
           const start = node.loc.start.line - 1;
           const end = node.loc.end.line - 1;
-          CSEMachine.setEditorHighlightedLines([[start, end]]);
+          CseMachine.setEditorHighlightedLines([[start, end]]);
         }
       };
-      unhighlightOnHover = () => CSEMachine.setEditorHighlightedLines([]);
+      unhighlightOnHover = () => CseMachine.setEditorHighlightedLines([]);
       const component = getControlItemComponent(
         controlItem,
         this._height,
@@ -66,7 +66,7 @@ export class ControlStack extends Visible implements IHoverable {
 
     this.stackItemComponents = this.control
       .getStack()
-      .slice(CSEMachine.getStackTruncated() ? -10 : 0)
+      .slice(CseMachine.getStackTruncated() ? -10 : 0)
       .map(controlItemToComponent);
   }
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {
@@ -91,15 +91,15 @@ export class ControlStack extends Visible implements IHoverable {
     };
     return (
       <Group key={Layout.key++} ref={this.ref}>
-        {CSEMachine.getStackTruncated() && Layout.control.size() > 10 && (
+        {CseMachine.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
             x={Number(ControlStashConfig.ShowMoreButtonX)}
             y={Number(ControlStashConfig.ShowMoreButtonY)}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onMouseUp={() => {
-              CSEMachine.toggleStackTruncated();
-              CSEMachine.redraw();
+              CseMachine.toggleStackTruncated();
+              CseMachine.redraw();
             }}
           >
             <Tag

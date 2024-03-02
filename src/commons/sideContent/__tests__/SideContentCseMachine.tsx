@@ -5,13 +5,13 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import { mockContext } from '../../mocks/ContextMocks';
-import { visualizeCSEMachine } from '../../utils/JsSlangHelper';
-import { SideContentCSEMachine } from '../content/SideContentCSEMachine';
+import { visualizeCseMachine } from '../../utils/JsSlangHelper';
+import { SideContentCseMachine } from '../content/SideContentCseMachine';
 
 const mockStore = mockInitialStore();
 const element = (
   <Provider store={mockStore}>
-    <SideContentCSEMachine workspaceLocation="playground" />
+    <SideContentCseMachine workspaceLocation="playground" />
   </Provider>
 );
 
@@ -27,7 +27,7 @@ test('CSE Machine sets visualization state and renders', async () => {
 
   const context = mockContext();
   runInContext('const hello="world"; debugger;', context);
-  act(() => visualizeCSEMachine({ context }));
+  act(() => visualizeCseMachine({ context }));
 
   expect(screen.queryAllByTestId('cse-machine-default-text')).toHaveLength(0);
   expect(screen.queryAllByTestId('sa-cse-machine')).toHaveLength(1);

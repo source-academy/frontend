@@ -16,9 +16,9 @@ import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
-import CSEMachine from 'src/features/cseMachine/CSEMachine';
-import { CSEAnimation } from 'src/features/cseMachine/CSEMachineAnimation';
-import { Layout } from 'src/features/cseMachine/CSEMachineLayout';
+import CseMachine from 'src/features/cseMachine/CseMachine';
+import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
+import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 
 import { OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
@@ -41,7 +41,7 @@ type State = {
   stepLimitExceeded: boolean;
 };
 
-type CSEMachineProps = OwnProps & StateProps & DispatchProps;
+type CseMachineProps = OwnProps & StateProps & DispatchProps;
 
 type StateProps = {
   editorWidth?: string;
@@ -49,7 +49,7 @@ type StateProps = {
   stepsTotal: number;
   currentStep: number;
   breakpointSteps: number[];
-  needCSEUpdate: boolean;
+  needCseUpdate: boolean;
 };
 
 type OwnProps = {
@@ -66,15 +66,15 @@ type DispatchProps = {
   handleAlertSideContent: () => void;
 };
 
-const cseMachKeyMap = {
+const cseMachineKeyMap = {
   FIRST_STEP: 'a',
   NEXT_STEP: 'f',
   PREVIOUS_STEP: 'b',
   LAST_STEP: 'e'
 };
 
-class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> {
-  constructor(props: CSEMachineProps) {
+class SideContentCseMachineBase extends React.Component<CseMachineProps, State> {
+  constructor(props: CseMachineProps) {
     super(props);
     this.state = {
       visualization: null,
@@ -84,9 +84,9 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
       lastStep: false,
       stepLimitExceeded: false
     };
-    CSEMachine.init(
+    CseMachine.init(
       visualization => {
-        this.setState({ visualization }, () => CSEAnimation.playAnimation());
+        this.setState({ visualization }, () => CseAnimation.playAnimation());
         if (visualization) this.props.handleAlertSideContent();
       },
       this.state.width,
@@ -140,14 +140,14 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
         height: newHeight,
         width: newWidth
       });
-      CSEMachine.updateDimensions(newWidth, newHeight);
+      CseMachine.updateDimensions(newWidth, newHeight);
     }
   }, 300);
 
   componentDidMount() {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
-    CSEMachine.redraw();
+    CseMachine.redraw();
   }
 
   componentWillUnmount() {
@@ -159,7 +159,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
     editorWidth?: string;
     sideContentHeight?: number;
     stepsTotal: number;
-    needCSEUpdate: boolean;
+    needCseUpdate: boolean;
   }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
@@ -167,14 +167,14 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
     ) {
       this.handleResize();
     }
-    if (prevProps.needCSEUpdate && !this.props.needCSEUpdate) {
+    if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
       this.stepFirst();
-      CSEMachine.clearCSE();
+      CseMachine.clearCse();
     }
   }
 
   public render() {
-    const cseMachHandlers = this.state.visualization
+    const cseMachineHandlers = this.state.visualization
       ? {
           FIRST_STEP: this.stepFirst,
           NEXT_STEP: this.stepNext,
@@ -190,8 +190,8 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
 
     return (
       <HotKeys
-        keyMap={cseMachKeyMap}
-        handlers={cseMachHandlers}
+        keyMap={cseMachineKeyMap}
+        handlers={cseMachineHandlers}
         style={{
           maxHeight: '100%',
           overflow: this.state.visualization ? 'hidden' : 'auto'
@@ -211,17 +211,17 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
               <Tooltip2 content="Control and Stash" compact>
                 <AnchorButton
                   onMouseUp={() => {
-                    if (this.state.visualization && CSEMachine.getCompactLayout()) {
-                      CSEMachine.toggleControlStash();
-                      CSEMachine.redraw();
+                    if (this.state.visualization && CseMachine.getCompactLayout()) {
+                      CseMachine.toggleControlStash();
+                      CseMachine.redraw();
                     }
                   }}
                   icon="layers"
-                  disabled={!this.state.visualization || !CSEMachine.getCompactLayout()}
+                  disabled={!this.state.visualization || !CseMachine.getCompactLayout()}
                 >
                   <Checkbox
-                    checked={CSEMachine.getControlStash()}
-                    disabled={!CSEMachine.getCompactLayout()}
+                    checked={CseMachine.getControlStash()}
+                    disabled={!CseMachine.getCompactLayout()}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -229,17 +229,17 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
               <Tooltip2 content="Truncate Control" compact>
                 <AnchorButton
                   onMouseUp={() => {
-                    if (this.state.visualization && CSEMachine.getControlStash()) {
-                      CSEMachine.toggleStackTruncated();
-                      CSEMachine.redraw();
+                    if (this.state.visualization && CseMachine.getControlStash()) {
+                      CseMachine.toggleStackTruncated();
+                      CseMachine.redraw();
                     }
                   }}
                   icon="minimize"
-                  disabled={!this.state.visualization || !CSEMachine.getControlStash()}
+                  disabled={!this.state.visualization || !CseMachine.getControlStash()}
                 >
                   <Checkbox
-                    checked={CSEMachine.getStackTruncated()}
-                    disabled={!CSEMachine.getControlStash()}
+                    checked={CseMachine.getStackTruncated()}
+                    disabled={!CseMachine.getControlStash()}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -272,15 +272,15 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization) {
-                      CSEMachine.toggleCompactLayout();
-                      CSEMachine.redraw();
+                      CseMachine.toggleCompactLayout();
+                      CseMachine.redraw();
                     }
                   }}
                   icon="build"
                   disabled={!this.state.visualization}
                 >
                   <Checkbox
-                    checked={!CSEMachine.getCompactLayout()}
+                    checked={!CseMachine.getCompactLayout()}
                     disabled={!this.state.visualization}
                     style={{ margin: 0 }}
                   />
@@ -290,8 +290,8 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization) {
-                      CSEMachine.togglePrintableMode();
-                      CSEMachine.redraw();
+                      CseMachine.togglePrintableMode();
+                      CseMachine.redraw();
                     }
                   }}
                   icon="print"
@@ -299,7 +299,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
                 >
                   <Checkbox
                     disabled={!this.state.visualization}
-                    checked={CSEMachine.getPrintableMode()}
+                    checked={CseMachine.getPrintableMode()}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -416,7 +416,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
-      CSEAnimation.enableAnimations();
+      CseAnimation.enableAnimations();
     }
   };
 
@@ -485,7 +485,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     stepsTotal: workspace.stepsTotal,
     currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
-    needCSEUpdate: workspace.updateCSE
+    needCseUpdate: workspace.updateCse
   };
 };
 
@@ -509,16 +509,16 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
     dispatch
   );
 
-export const SideContentCSEMachine = connect(
+export const SideContentCseMachine = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SideContentCSEMachineBase);
+)(SideContentCseMachineBase);
 
-const makeCSEMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
+const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
   label: 'CSE Machine',
   iconName: IconNames.GLOBE,
-  body: <SideContentCSEMachine workspaceLocation={location} />,
+  body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine
 });
 
-export default makeCSEMachineTabFrom;
+export default makeCseMachineTabFrom;

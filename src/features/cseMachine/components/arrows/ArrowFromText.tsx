@@ -1,5 +1,5 @@
-import { Config } from '../../CSEMachineConfig';
-import { StepsArray } from '../../CSEMachineTypes';
+import { Config } from '../../CseMachineConfig';
+import { StepsArray } from '../../CseMachineTypes';
 import { ArrowLane } from '../ArrowLane';
 import { Frame } from '../Frame';
 import { Grid } from '../Grid';

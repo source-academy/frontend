@@ -26,11 +26,11 @@ import { Binding } from './components/Binding';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
-import CSEMachine from './CSEMachine';
-import { CompactConfig } from './CSEMachineCompactConfig';
-import { Config } from './CSEMachineConfig';
-import { ControlStashConfig } from './CSEMachineControlStash';
-import { Layout } from './CSEMachineLayout';
+import CseMachine from './CseMachine';
+import { CompactConfig } from './CseMachineCompactConfig';
+import { Config } from './CseMachineConfig';
+import { ControlStashConfig } from './CseMachineControlStash';
+import { Layout } from './CseMachineLayout';
 import {
   CompactReferenceType,
   Data,
@@ -41,7 +41,7 @@ import {
   FnTypes,
   PrimitiveTypes,
   ReferenceType
-} from './CSEMachineTypes';
+} from './CseMachineTypes';
 
 // TODO: can make use of lodash
 /** Returns `true` if `x` is an object */
@@ -290,12 +290,12 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
   nodes.forEach(node => {
     node.setAttrs({
       stroke: node.attrs.stroke
-        ? CSEMachine.getPrintableMode()
+        ? CseMachine.getPrintableMode()
           ? Config.SA_BLUE.toString()
           : Config.SA_WHITE.toString()
         : node.attrs.stroke,
       fill: node.attrs.fill
-        ? CSEMachine.getPrintableMode()
+        ? CseMachine.getPrintableMode()
           ? Config.SA_BLUE.toString()
           : Config.SA_WHITE.toString()
         : node.attrs.fill,
@@ -408,7 +408,7 @@ export function getControlItemComponent(
   highlightOnHover: () => void,
   unhighlightOnHover: () => void
 ): ControlItemComponent {
-  const topItem = CSEMachine.getStackTruncated()
+  const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
@@ -710,19 +710,19 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 };
 
 export const defaultSAColor = () =>
-  CSEMachine.getPrintableMode()
+  CseMachine.getPrintableMode()
     ? CompactConfig.SA_BLUE.toString()
     : CompactConfig.SA_WHITE.toString();
 
 export const stackItemSAColor = (index: number) =>
   isStashItemInDanger(index)
     ? ControlStashConfig.STASH_DANGER_ITEM.toString()
-    : CSEMachine.getPrintableMode()
+    : CseMachine.getPrintableMode()
     ? ControlStashConfig.SA_BLUE.toString()
     : ControlStashConfig.SA_WHITE.toString();
 export const currentItemSAColor = (test: boolean) =>
   test
     ? CompactConfig.SA_CURRENT_ITEM.toString()
-    : CSEMachine.getPrintableMode()
+    : CseMachine.getPrintableMode()
     ? ControlStashConfig.SA_BLUE.toString()
     : ControlStashConfig.SA_WHITE.toString();
