@@ -23,6 +23,15 @@ const onHoverAlpha = 1.0;
 const offHoverAlpha = 0.9;
 
 /**
+ * Create an index for the button
+ * @param index: index of the button
+ * @param text: text of the button
+ */
+export function createButtonText(index: number, text: string): string {
+  return '[ ' + index + ' ]  ' + text;
+}
+
+/**
  * Create a button with basic functionalities.
  *
  * Functionalities include:
