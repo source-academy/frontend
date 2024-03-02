@@ -16,7 +16,7 @@ describe('getLanguageConfig', () => {
   });
 
   test('throws an error for an invalid chapter/variant combination', () => {
-    // @ts-expect-error error is expected for an invalid chapter
+    // @ts-ignore: error is expected for an invalid chapter
     expect(() => getLanguageConfig(5, Variant.DEFAULT)).toThrowErrorMatchingSnapshot();
   });
 });
