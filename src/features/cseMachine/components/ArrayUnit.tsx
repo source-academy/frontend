@@ -96,9 +96,7 @@ export class ArrayUnit extends Visible {
           width={this.width()}
           height={this.height()}
           stroke={
-            CSEMachine.getPrintableMode()
-              ? Config.SA_BLUE.toString()
-              : Config.SA_WHITE.toString()
+            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
           fillEnabled={false}

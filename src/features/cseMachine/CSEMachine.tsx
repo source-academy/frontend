@@ -163,11 +163,7 @@ export default class CSEMachine {
       ) {
         this.setVis(Layout.currentDark);
       } else {
-        Layout.setContext(
-          CSEMachine.environmentTree,
-          CSEMachine.control,
-          CSEMachine.stash
-        );
+        Layout.setContext(CSEMachine.environmentTree, CSEMachine.control, CSEMachine.stash);
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);

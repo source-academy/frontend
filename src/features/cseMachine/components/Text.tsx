@@ -101,9 +101,7 @@ export class Text extends Visible implements IHoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: CSEMachine.getPrintableMode()
-        ? Config.SA_BLUE.toString()
-        : Config.SA_WHITE.toString()
+      fill: CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
     };
     return (
       <Group key={Layout.key++} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

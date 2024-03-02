@@ -256,9 +256,7 @@ export class Frame extends Visible implements IHoverable {
           width={this.width()}
           height={this.height()}
           stroke={
-            CSEMachine.getPrintableMode()
-              ? Config.SA_BLUE.toString()
-              : Config.SA_WHITE.toString()
+            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           cornerRadius={Number(Config.FrameCornerRadius)}
           key={Layout.key++}

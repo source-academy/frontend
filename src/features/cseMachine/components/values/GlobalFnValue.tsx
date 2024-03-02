@@ -158,9 +158,7 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.radius}
             stroke={
-              CSEMachine.getPrintableMode()
-                ? Config.SA_BLUE.toString()
-                : Config.SA_WHITE.toString()
+              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -170,9 +168,7 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.innerRadius}
             fill={
-              CSEMachine.getPrintableMode()
-                ? Config.SA_BLUE.toString()
-                : Config.SA_WHITE.toString()
+              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -182,9 +178,7 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.radius}
             stroke={
-              CSEMachine.getPrintableMode()
-                ? Config.SA_BLUE.toString()
-                : Config.SA_WHITE.toString()
+              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -194,9 +188,7 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.innerRadius}
             fill={
-              CSEMachine.getPrintableMode()
-                ? Config.SA_BLUE.toString()
-                : Config.SA_WHITE.toString()
+              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
         </Group>

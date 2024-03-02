@@ -946,8 +946,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceVariant: languageConfig.variant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
-      selectedTab === SideContentType.substVisualizer ||
-      selectedTab === SideContentType.cseMachine,
+      selectedTab === SideContentType.substVisualizer || selectedTab === SideContentType.cseMachine,
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor
@@ -1014,8 +1013,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       workspaceLocation
     },
     sideContentIsResizeable:
-      selectedTab !== SideContentType.substVisualizer &&
-      selectedTab !== SideContentType.cseMachine
+      selectedTab !== SideContentType.substVisualizer && selectedTab !== SideContentType.cseMachine
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

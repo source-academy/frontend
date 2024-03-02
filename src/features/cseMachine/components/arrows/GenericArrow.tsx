@@ -142,9 +142,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         <KonvaPath
           {...ShapeDefaultProps}
           stroke={
-            CSEMachine.getPrintableMode()
-              ? Config.SA_BLUE.toString()
-              : Config.SA_WHITE.toString()
+            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           strokeWidth={this.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
@@ -155,9 +153,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           {...ShapeDefaultProps}
           points={points.slice(points.length - 4)}
           fill={
-            CSEMachine.getPrintableMode()
-              ? Config.SA_BLUE.toString()
-              : Config.SA_WHITE.toString()
+            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}
