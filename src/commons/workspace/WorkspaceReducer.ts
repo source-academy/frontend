@@ -71,14 +71,14 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
-  UPDATE_CSESTEPS,
-  UPDATE_CSESTEPSTOTAL,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
@@ -1058,20 +1058,20 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
-    case UPDATE_CSESTEPS:
+    case UPDATE_CURRENTSTEP:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          envSteps: action.payload.steps
+          currentStep: action.payload.steps
         }
       };
-    case UPDATE_CSESTEPSTOTAL:
+    case UPDATE_STEPSTOTAL:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          envStepsTotal: action.payload.steps
+          stepsTotal: action.payload.steps
         }
       };
     case UPDATE_BREAKPOINTSTEPS:

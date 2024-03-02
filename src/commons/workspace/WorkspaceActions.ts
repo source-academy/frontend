@@ -58,14 +58,14 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
-  UPDATE_CSESTEPS,
-  UPDATE_CSESTEPSTOTAL,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
@@ -472,15 +472,15 @@ export const toggleUpdateCSE = createAction(
   })
 );
 
-export const updateEnvSteps = createAction(
-  UPDATE_CSESTEPS,
+export const updateCurrentStep = createAction(
+  UPDATE_CURRENTSTEP,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })
 );
 
-export const updateEnvStepsTotal = createAction(
-  UPDATE_CSESTEPSTOTAL,
+export const updateStepsTotal = createAction(
+  UPDATE_STEPSTOTAL,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })

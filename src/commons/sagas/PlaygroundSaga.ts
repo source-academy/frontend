@@ -25,8 +25,8 @@ import {
   toggleUpdateCSE,
   toggleUsingCSE,
   toggleUsingSubst,
-  updateEnvSteps,
-  updateEnvStepsTotal
+  updateCurrentStep,
+  updateStepsTotal
 } from '../workspace/WorkspaceActions';
 import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
@@ -100,8 +100,8 @@ export default function* PlaygroundSaga(): SagaIterator {
       if (newId !== SideContentType.cseMachine) {
         yield put(toggleUsingCSE(false, workspaceLocation));
         yield call([CSEMachine, CSEMachine.clearCSE]);
-        yield put(updateEnvSteps(-1, workspaceLocation));
-        yield put(updateEnvStepsTotal(0, workspaceLocation));
+        yield put(updateCurrentStep(-1, workspaceLocation));
+        yield put(updateStepsTotal(0, workspaceLocation));
         yield put(toggleUpdateCSE(true, workspaceLocation));
         yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
       }

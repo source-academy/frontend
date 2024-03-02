@@ -26,7 +26,7 @@ import Constants, { Links } from '../../utils/Constants';
 import {
   evalEditor,
   setEditorHighlightedLinesControl,
-  updateEnvSteps
+  updateCurrentStep
 } from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
@@ -46,8 +46,8 @@ type CSEMachineProps = OwnProps & StateProps & DispatchProps;
 type StateProps = {
   editorWidth?: string;
   sideContentHeight?: number;
-  numOfStepsTotal: number;
-  numOfSteps: number;
+  stepsTotal: number;
+  currentStep: number;
   breakpointSteps: number[];
   needCSEUpdate: boolean;
 };
@@ -57,7 +57,7 @@ type OwnProps = {
 };
 
 type DispatchProps = {
-  handleEnvStepUpdate: (steps: number) => void;
+  handleStepUpdate: (steps: number) => void;
   handleEditorEval: () => void;
   setEditorHighlightedLines: (
     editorTabIndex: number,
@@ -158,7 +158,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
   componentDidUpdate(prevProps: {
     editorWidth?: string;
     sideContentHeight?: number;
-    numOfStepsTotal: number;
+    stepsTotal: number;
     needCSEUpdate: boolean;
   }) {
     if (
@@ -179,7 +179,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
           FIRST_STEP: this.stepFirst,
           NEXT_STEP: this.stepNext,
           PREVIOUS_STEP: this.stepPrevious,
-          LAST_STEP: this.stepLast(this.props.numOfStepsTotal)
+          LAST_STEP: this.stepLast(this.props.stepsTotal)
         }
       : {
           FIRST_STEP: () => {},
@@ -201,7 +201,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
           <Slider
             disabled={!this.state.visualization}
             min={1}
-            max={this.props.numOfStepsTotal}
+            max={this.props.stepsTotal}
             onChange={this.sliderShift}
             onRelease={this.sliderRelease}
             value={this.state.value < 1 ? 1 : this.state.value}
@@ -389,7 +389,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
   }
 
   private sliderRelease = (newValue: number) => {
-    if (newValue === this.props.numOfStepsTotal) {
+    if (newValue === this.props.stepsTotal) {
       this.setState({ lastStep: true });
     } else {
       this.setState({ lastStep: false });
@@ -398,7 +398,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
   };
 
   private sliderShift = (newValue: number) => {
-    this.props.handleEnvStepUpdate(newValue);
+    this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
       return { value: newValue };
     });
@@ -412,7 +412,7 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
   };
 
   private stepNext = () => {
-    const lastStepValue = this.props.numOfStepsTotal;
+    const lastStepValue = this.props.stepsTotal;
     if (this.state.value !== lastStepValue) {
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
@@ -440,8 +440,8 @@ class SideContentCSEMachineBase extends React.Component<CSEMachineProps, State> 
         return;
       }
     }
-    this.sliderShift(this.props.numOfStepsTotal);
-    this.sliderRelease(this.props.numOfStepsTotal);
+    this.sliderShift(this.props.stepsTotal);
+    this.sliderRelease(this.props.stepsTotal);
   };
 
   private stepPrevBreakpoint = () => {
@@ -482,8 +482,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
 
   return {
     ...ownProps,
-    numOfStepsTotal: workspace.envStepsTotal,
-    numOfSteps: workspace.envSteps,
+    stepsTotal: workspace.stepsTotal,
+    currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
     needCSEUpdate: workspace.updateCSE
   };
@@ -493,7 +493,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
   bindActionCreators(
     {
       handleEditorEval: () => evalEditor(props.workspaceLocation),
-      handleEnvStepUpdate: (steps: number) => updateEnvSteps(steps, props.workspaceLocation),
+      handleStepUpdate: (steps: number) => updateCurrentStep(steps, props.workspaceLocation),
       handleAlertSideContent: () =>
         beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (

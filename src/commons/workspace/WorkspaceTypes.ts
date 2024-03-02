@@ -60,8 +60,8 @@ export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE';
 export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
 export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
-export const UPDATE_CSESTEPS = 'UPDATE_CSESTEPS';
-export const UPDATE_CSESTEPSTOTAL = 'UPDATE_CSESTEPSTOTAL';
+export const UPDATE_CURRENTSTEP = 'UPDATE_CURRENTSTEP';
+export const UPDATE_STEPSTOTAL = 'UPDATE_STEPSTOTAL';
 export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
@@ -87,8 +87,8 @@ type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
   readonly usingCSE: boolean;
   readonly updateCSE: boolean;
-  readonly envSteps: number;
-  readonly envStepsTotal: number;
+  readonly currentStep: number;
+  readonly stepsTotal: number;
   readonly breakpointSteps: number[];
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;

@@ -1079,14 +1079,14 @@ export function* evalCode(
             .updateCSE
       )
     : false;
-  // When envSteps is -1, the entire code is run from the start.
-  const envSteps: number = needUpdateCSE
+  // When currentStep is -1, the entire code is run from the start.
+  const currentStep: number = needUpdateCSE
     ? -1
     : correctWorkspace
     ? yield select(
         (state: OverallState) =>
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .envSteps
+            .currentStep
       )
     : -1;
   const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
@@ -1109,7 +1109,7 @@ export function* evalCode(
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter,
-            envSteps: envSteps
+            envSteps: currentStep
           });
     } else if (variant === Variant.LAZY) {
       return call(runFilesInContext, files, entrypointFilePath, context, {
@@ -1117,7 +1117,7 @@ export function* evalCode(
         originalMaxExecTime: execTime,
         stepLimit: stepLimit,
         useSubst: substActiveAndCorrectChapter,
-        envSteps: envSteps
+        envSteps: currentStep
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
@@ -1182,7 +1182,7 @@ export function* evalCode(
               stepLimit: stepLimit,
               throwInfiniteLoops: true,
               useSubst: substActiveAndCorrectChapter,
-              envSteps: envSteps
+              envSteps: currentStep
             }
           ),
 
@@ -1290,7 +1290,7 @@ export function* evalCode(
   // The first time the code is executed using the explicit control evaluator,
   // the total number of steps and the breakpoints are updated in the CSE Machine slider.
   if (context.executionMethod === 'cse-machine' && needUpdateCSE) {
-    yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
+    yield put(actions.updateStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
     // `needUpdateCSE` implies `correctWorkspace`, which satisfies the type constraint.
     // But TS can't infer that yet, so we need a typecast here.
     yield put(actions.toggleUpdateCSE(false, workspaceLocation as any));

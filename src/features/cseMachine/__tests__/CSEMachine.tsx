@@ -218,7 +218,7 @@ const codeSamplesControlStash = [
 codeSamplesControlStash.forEach((codeSample, idx) => {
   test('CSE Machine Control Stash correctly renders: ' + codeSample[0], async () => {
     const code = codeSample[1] as string;
-    const envSteps = codeSample[2] as number;
+    const currentStep = codeSample[2] as number;
     const truncate = codeSample[3];
     if (!CSEMachine.getCompactLayout()) {
       CSEMachine.toggleCompactLayout();
@@ -228,7 +228,7 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     }
     CSEMachine.toggleControlStash();
     const context = createContext(4);
-    await runInContext(code, context, { executionMethod: 'cse-machine', envSteps });
+    await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: currentStep });
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control!,
