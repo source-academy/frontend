@@ -21,7 +21,7 @@ import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, StrictEffect, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import CSEMachine from 'src/features/cseMachine/CSEMachine';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
@@ -61,7 +61,7 @@ import {
   highlightLine,
   highlightLineForControl,
   makeElevatedContext,
-  visualizeEnv
+  visualizeCSEMachine
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
@@ -383,7 +383,7 @@ export default function* WorkspaceSaga(): SagaIterator {
           });
         } catch (e) {
           // Error most likely caused by trying to highlight the lines of the prelude
-          // in Env Viz. Can be ignored.
+          // in CSE Machine. Can be ignored.
         }
       }
       yield;
@@ -405,7 +405,7 @@ export default function* WorkspaceSaga(): SagaIterator {
           }
         } catch (e) {
           // Error most likely caused by trying to highlight the lines of the prelude
-          // in Env Viz. Can be ignored.
+          // in CSE Machine. Can be ignored.
         }
       }
     }
@@ -518,7 +518,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     BEGIN_CLEAR_CONTEXT,
     function* (action: ReturnType<typeof actions.beginClearContext>) {
       yield call([DataVisualizer, DataVisualizer.clear]);
-      yield call([EnvVisualizer, EnvVisualizer.clear]);
+      yield call([CSEMachine, CSEMachine.clear]);
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
         window[key] = value;
@@ -606,7 +606,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
     // If we highlight from start to end, the whole program block will be highlighted at the start
     // since the first node is the program node
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[row, row]]));
-    visualizeEnv(lastDebuggerResult);
+    visualizeCSEMachine(lastDebuggerResult);
   } catch (e) {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
@@ -1069,24 +1069,24 @@ export function* evalCode(
     ? yield select(
         (state: OverallState) =>
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .usingEnv
+            .usingCSE
       )
     : false;
-  const needUpdateEnv: boolean = correctWorkspace
+  const needUpdateCSE: boolean = correctWorkspace
     ? yield select(
         (state: OverallState) =>
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .updateEnv
+            .updateCSE
       )
     : false;
-  // When envSteps is -1, the entire code is run from the start.
-  const envSteps: number = needUpdateEnv
+  // When currentStep is -1, the entire code is run from the start.
+  const currentStep: number = needUpdateCSE
     ? -1
     : correctWorkspace
     ? yield select(
         (state: OverallState) =>
           (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .envSteps
+            .currentStep
       )
     : -1;
   const envActiveAndCorrectChapter = context.chapter >= 3 && envIsActive;
@@ -1109,7 +1109,7 @@ export function* evalCode(
             originalMaxExecTime: execTime,
             stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter,
-            envSteps: envSteps
+            envSteps: currentStep
           });
     } else if (variant === Variant.LAZY) {
       return call(runFilesInContext, files, entrypointFilePath, context, {
@@ -1117,7 +1117,7 @@ export function* evalCode(
         originalMaxExecTime: execTime,
         stepLimit: stepLimit,
         useSubst: substActiveAndCorrectChapter,
-        envSteps: envSteps
+        envSteps: currentStep
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
@@ -1182,7 +1182,7 @@ export function* evalCode(
               stepLimit: stepLimit,
               throwInfiniteLoops: true,
               useSubst: substActiveAndCorrectChapter,
-              envSteps: envSteps
+              envSteps: currentStep
             }
           ),
 
@@ -1288,12 +1288,12 @@ export function* evalCode(
   }
 
   // The first time the code is executed using the explicit control evaluator,
-  // the total number of steps and the breakpoints are updated in the Environment Visualiser slider.
-  if (context.executionMethod === 'cse-machine' && needUpdateEnv) {
-    yield put(actions.updateEnvStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
-    // `needUpdateEnv` implies `correctWorkspace`, which satisfies the type constraint.
+  // the total number of steps and the breakpoints are updated in the CSE Machine slider.
+  if (context.executionMethod === 'cse-machine' && needUpdateCSE) {
+    yield put(actions.updateStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
+    // `needUpdateCSE` implies `correctWorkspace`, which satisfies the type constraint.
     // But TS can't infer that yet, so we need a typecast here.
-    yield put(actions.toggleUpdateEnv(false, workspaceLocation as any));
+    yield put(actions.toggleUpdateCSE(false, workspaceLocation as any));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
