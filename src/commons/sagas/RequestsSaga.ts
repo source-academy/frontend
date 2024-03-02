@@ -1014,11 +1014,12 @@ export const putAssessmentConfigs = async (
   return resp;
 };
 
+// Notification related request
 export const putNotificationConfigs = async (
   tokens: Tokens,
   notificationConfigs: NotificationConfiguration[]
 ) => {
-  return await request(`notifications/config`, 'PUT', {
+  return await request(`courses/${courseIdWithoutPrefix()}/admin/notifications/config`, 'PUT', {
     ...tokens,
     body: notificationConfigs,
     noHeaderAccept: true
@@ -1081,11 +1082,15 @@ export const removeTimeOptions = async (
   tokens: Tokens,
   timeOptionIds: number[]
 ): Promise<Response | null> => {
-  const resp = await request(`notifications/options`, 'DELETE', {
-    ...tokens,
-    body: timeOptionIds,
-    noHeaderAccept: true
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/admin/notifications/options`,
+    'DELETE',
+    {
+      ...tokens,
+      body: timeOptionIds,
+      noHeaderAccept: true
+    }
+  );
 
   return resp;
 };
@@ -1094,7 +1099,7 @@ export const putTimeOptions = async (
   tokens: Tokens,
   timeOptions: TimeOption[]
 ): Promise<Response | null> => {
-  const resp = await request(`notifications/options`, 'PUT', {
+  const resp = await request(`courses/${courseIdWithoutPrefix()}/notifications/options`, 'PUT', {
     ...tokens,
     body: timeOptions,
     noHeaderAccept: true
@@ -1106,9 +1111,13 @@ export const putTimeOptions = async (
 export const getNotificationConfigs = async (
   tokens: Tokens
 ): Promise<NotificationConfiguration[] | null> => {
-  const resp = await request(`notifications/config/${courseIdWithoutPrefix()}`, 'GET', {
-    ...tokens
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/admin/notifications/config`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
   if (!resp || !resp.ok) {
     return null;
   }
@@ -1120,9 +1129,13 @@ export const getConfigurableNotificationConfigs = async (
   tokens: Tokens,
   courseRegId: number
 ): Promise<NotificationConfiguration[] | null> => {
-  const resp = await request(`notifications/config/user/${courseRegId}`, 'GET', {
-    ...tokens
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/notifications/config/user/${courseRegId}`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
   if (!resp || !resp.ok) {
     return null;
   }
@@ -1155,13 +1168,17 @@ export const putNotificationPreferences = async (
   notiPrefs: NotificationPreference[],
   courseRegId: number
 ): Promise<Response | null> => {
-  const resp = await request(`notifications/preferences`, 'PUT', {
-    ...tokens,
-    body: notiPrefs.map(pref => {
-      return { ...pref, courseRegId: courseRegId };
-    }),
-    noHeaderAccept: true
-  });
+  const resp = await request(
+    `courses/${courseIdWithoutPrefix()}/notifications/preferences`,
+    'PUT',
+    {
+      ...tokens,
+      body: notiPrefs.map(pref => {
+        return { ...pref, courseRegId: courseRegId };
+      }),
+      noHeaderAccept: true
+    }
+  );
 
   return resp;
 };

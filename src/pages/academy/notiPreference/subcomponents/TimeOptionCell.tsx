@@ -32,7 +32,6 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
   }
 
   const onRemove = (value: React.ReactNode, index: number) => {
-    // TODO: Show Warning Dialog
     setValues(values.filter(i => i !== value));
     props.setDelete(timeOptions[index]);
     props.setStateHandler(
@@ -46,11 +45,10 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
       const newTimeOption: TimeOption = {
         id: -1,
         minutes: parseFloat(value as string) * 60,
-        isDefault: true
+        isDefault: false
       };
 
-      setValues([...values, value]);
-      console.log(props.rowIndex, value, values);
+      setValues([...values, ...(value as string[])]);
       props.setStateHandler(props.rowIndex, [...timeOptions, newTimeOption]);
     } else {
       // TODO: Toaster if posisble
@@ -59,4 +57,5 @@ const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
 
   return <TagInput values={values} onRemove={onRemove} onAdd={onAdd} />;
 };
+
 export default TimeOptionCell;

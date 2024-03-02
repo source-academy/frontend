@@ -15,7 +15,6 @@ import { NotificationConfiguration, TimeOption } from 'src/commons/application/t
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './assessmentConfigPanel/BooleanCell';
-import SelectCell from './notificationConfigPanel/SelectCell';
 import TimeOptionCell from './notificationConfigPanel/TimeOptionCell';
 
 const NotificationConfigPanel = () => {
@@ -94,16 +93,21 @@ const NotificationConfigPanel = () => {
     return params.data!.notificationType.forStaff ? 'Staff' : 'Student';
   };
 
+  const notificationTypeId: ValueFormatterFunc<NotificationConfiguration> = params => {
+    const id = params.data!.notificationType?.id || 0;
+    return String(id);
+  };
+
   const columnDefs: ColDef[] = [
-    {
-      headerName: 'Notification Type',
-      field: 'notificationType.name',
-      rowDrag: true
-    },
     {
       headerName: 'Assessment Type',
       field: 'assessmentConfig.type',
-      valueFormatter: assessmentTypeFormatter
+      valueFormatter: assessmentTypeFormatter,
+      rowDrag: true
+    },
+    {
+      headerName: 'Notification Type',
+      field: 'notificationType.name'
     },
     {
       headerName: 'Recipients',
@@ -119,16 +123,20 @@ const NotificationConfigPanel = () => {
     //   headerName: 'Past 30 Days',
     //   field: 'notificationType.id'
     // },
+
     {
-      headerName: 'Reminder Time Options (hours)',
+      headerName: 'Default Reminder Time(hours)',
       field: 'timeOptions',
       cellRenderer: TimeOptionCell,
       cellRendererParams: {
         setStateHandler: setTimeOptions,
         setDelete: addTimeOptionsToDelete,
-        field: 'timeOptions'
+        field: 'timeOptions',
+        typeId: notificationTypeId
       }
     },
+
+    /*
     {
       headerName: 'Default Reminder (hours)',
       field: 'timeOptions',
@@ -138,6 +146,7 @@ const NotificationConfigPanel = () => {
         field: 'timeOptions'
       }
     },
+    */
     {
       headerName: 'Enabled',
       field: 'isEnabled',
