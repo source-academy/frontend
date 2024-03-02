@@ -989,7 +989,7 @@ and also the
                               data-testid="cse-machine-default-text"
                               id="cse-machine-default-text"
                             >
-                              The environment model visualizer generates environment model diagrams following a notation introduced in
+                              The CSE machine generates control, stash and environment model diagrams following a notation introduced in
                                
                               <a
                                 href="https://sourceacademy.org/sicpjs/3.2"
@@ -1003,7 +1003,7 @@ and also the
                               .
                               <br />
                               <br />
-                               On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program
+                               On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program
                               <br />
                               <br />
                               <div

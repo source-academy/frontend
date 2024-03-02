@@ -20,7 +20,7 @@ export default class CSEMachine {
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
-  private static controlStash: boolean = true; // TODO: discuss if the default should be true
+  private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
