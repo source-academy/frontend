@@ -83,10 +83,10 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
+          usingCSE: false,
+          updateCSE: true,
+          currentStep: -1,
+          stepsTotal: 0,
           breakpointSteps: []
         }
       }
@@ -150,10 +150,10 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
+          usingCSE: false,
+          updateCSE: true,
+          currentStep: -1,
+          stepsTotal: 0,
           breakpointSteps: []
         }
       }
@@ -217,10 +217,10 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
+          usingCSE: false,
+          updateCSE: true,
+          currentStep: -1,
+          stepsTotal: 0,
           breakpointSteps: []
         }
       }
@@ -267,10 +267,10 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
+          usingCSE: false,
+          updateCSE: true,
+          currentStep: -1,
+          stepsTotal: 0,
           breakpointSteps: []
         }
       }
@@ -336,10 +336,10 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
+          usingCSE: false,
+          updateCSE: true,
+          currentStep: -1,
+          stepsTotal: 0,
           breakpointSteps: []
         }
       }
@@ -394,10 +394,10 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
+          usingCSE: false,
+          updateCSE: true,
+          currentStep: -1,
+          stepsTotal: 0,
           breakpointSteps: []
         }
       }
