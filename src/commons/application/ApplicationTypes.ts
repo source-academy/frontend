@@ -417,8 +417,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
-    usingCSE: false,
-    updateCSE: true,
+    usingCse: false,
+    updateCse: true,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
@@ -470,8 +470,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sicp: {
     ...createDefaultWorkspace('sicp'),
     usingSubst: false,
-    usingCSE: false,
-    updateCSE: true,
+    usingCse: false,
+    updateCse: true,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],

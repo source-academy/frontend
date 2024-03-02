@@ -2,11 +2,11 @@ import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import CSEMachine from '../CSEMachine';
-import { CompactConfig, ShapeDefaultProps } from '../CSEMachineCompactConfig';
-import { ControlStashConfig } from '../CSEMachineControlStash';
-import { Layout } from '../CSEMachineLayout';
-import { EnvTreeNode } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { CompactConfig, ShapeDefaultProps } from '../CseMachineCompactConfig';
+import { ControlStashConfig } from '../CseMachineControlStash';
+import { Layout } from '../CseMachineLayout';
+import { EnvTreeNode } from '../CseMachineTypes';
 import { Frame } from './Frame';
 
 /** this class encapsulates a level of frames to be drawn with the same y values */
@@ -21,13 +21,13 @@ export class Level extends Visible {
     readonly envTreeNodes: EnvTreeNode[]
   ) {
     super();
-    this._x = CSEMachine.getControlStash()
+    this._x = CseMachine.getControlStash()
       ? ControlStashConfig.ControlPosX +
         ControlStashConfig.ControlItemWidth +
         CompactConfig.CanvasPaddingX
       : CompactConfig.CanvasPaddingX;
     this._y = CompactConfig.CanvasPaddingY;
-    CSEMachine.getControlStash() &&
+    CseMachine.getControlStash() &&
       !this.parentLevel &&
       (this._y +=
         ControlStashConfig.StashItemHeight + ControlStashConfig.ControlItemTextPadding * 3);

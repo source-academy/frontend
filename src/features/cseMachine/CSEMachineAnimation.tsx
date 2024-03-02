@@ -8,39 +8,39 @@ import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
 import { isInstr } from './compactComponents/ControlStack';
-import CSEMachine from './CSEMachine';
-import { Layout } from './CSEMachineLayout';
+import CseMachine from './CseMachine';
+import { Layout } from './CseMachineLayout';
 
-export class CSEAnimation {
+export class CseAnimation {
   private static animationEnabled = false;
   static readonly animationComponents: Animatable[] = [];
   static readonly defaultDuration = 0.3;
   static readonly defaultEasing = Easings.StrongEaseInOut;
 
   static enableAnimations(): void {
-    CSEAnimation.animationEnabled = true;
+    CseAnimation.animationEnabled = true;
   }
 
   static disableAnimations(): void {
-    CSEAnimation.animationEnabled = false;
+    CseAnimation.animationEnabled = false;
   }
 
   private static clearAnimationComponents(): void {
-    CSEAnimation.animationComponents.length = 0;
+    CseAnimation.animationComponents.length = 0;
   }
 
   static updateAnimation() {
-    CSEAnimation.animationComponents.forEach(a => a.destroy());
-    CSEAnimation.clearAnimationComponents();
+    CseAnimation.animationComponents.forEach(a => a.destroy());
+    CseAnimation.clearAnimationComponents();
 
     if (!Layout.previousControlComponent) return;
     const lastControlItem = Layout.previousControlComponent.control.peek();
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
     if (
-      !CSEAnimation.animationEnabled ||
+      !CseAnimation.animationEnabled ||
       !lastControlItem ||
       !lastControlComponent ||
-      !CSEMachine.getControlStash() // TODO: handle cases where there are environment animations
+      !CseMachine.getControlStash() // TODO: handle cases where there are environment animations
     ) {
       return;
     }
@@ -107,15 +107,15 @@ export class CSEAnimation {
         case InstrType.MARKER:
       }
     }
-    if (animation) CSEAnimation.animationComponents.push(animation);
+    if (animation) CseAnimation.animationComponents.push(animation);
   }
 
   static playAnimation(): void {
-    if (!CSEAnimation.animationEnabled) {
-      CSEAnimation.disableAnimations();
+    if (!CseAnimation.animationEnabled) {
+      CseAnimation.disableAnimations();
       return;
     }
-    CSEAnimation.disableAnimations();
+    CseAnimation.disableAnimations();
     for (const animationComponent of this.animationComponents) {
       animationComponent.animate();
     }

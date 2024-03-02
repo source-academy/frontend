@@ -1,5 +1,5 @@
-import { CompactConfig } from '../../CSEMachineCompactConfig';
-import { StepsArray } from '../../CSEMachineTypes';
+import { CompactConfig } from '../../CseMachineCompactConfig';
+import { StepsArray } from '../../CseMachineTypes';
 import { Text } from '../Text';
 import { ArrayValue } from '../values/ArrayValue';
 import { Value } from '../values/Value';

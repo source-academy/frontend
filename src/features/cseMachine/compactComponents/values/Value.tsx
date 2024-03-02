@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Visible } from '../../components/Visible';
-import { CompactReferenceType, Data } from '../../CSEMachineTypes';
+import { CompactReferenceType, Data } from '../../CseMachineTypes';
 
 /** the value of a `Binding` or an `ArrayUnit` */
 export abstract class Value extends Visible {

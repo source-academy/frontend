@@ -2,21 +2,21 @@ import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
-import { Layout } from './CSEMachineLayout';
-import { EnvTree } from './CSEMachineTypes';
-import { deepCopyTree, getEnvID } from './CSEMachineUtils';
+import { Layout } from './CseMachineLayout';
+import { EnvTree } from './CseMachineTypes';
+import { deepCopyTree, getEnvID } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
 type SetisStepLimitExceeded = (isControlEmpty: boolean) => void;
 
 /** CSE Machine is exposed from this class */
-export default class CSEMachine {
-  /** callback function to update the visualization state in the SideContentCSEMachine component */
+export default class CseMachine {
+  /** callback function to update the visualization state in the SideContentCseMachine component */
   private static setVis: SetVis;
   /** function to highlight editor lines */
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
-  /** callback function to update the step limit exceeded state in the SideContentCSEMachine component */
+  /** callback function to update the step limit exceeded state in the SideContentCseMachine component */
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   private static printableMode: boolean = false;
   private static compactLayout: boolean = true;
@@ -27,38 +27,38 @@ export default class CSEMachine {
   private static control: Control | undefined;
   private static stash: Stash | undefined;
   public static togglePrintableMode(): void {
-    CSEMachine.printableMode = !CSEMachine.printableMode;
+    CseMachine.printableMode = !CseMachine.printableMode;
   }
   public static toggleCompactLayout(): void {
-    CSEMachine.compactLayout = !CSEMachine.compactLayout;
+    CseMachine.compactLayout = !CseMachine.compactLayout;
   }
   public static toggleControlStash(): void {
-    CSEMachine.controlStash = !CSEMachine.controlStash;
+    CseMachine.controlStash = !CseMachine.controlStash;
   }
   public static toggleStackTruncated(): void {
-    CSEMachine.stackTruncated = !CSEMachine.stackTruncated;
+    CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
   public static getCurrentEnvId(): string {
-    return CSEMachine.currentEnvId;
+    return CseMachine.currentEnvId;
   }
   public static getPrintableMode(): boolean {
-    return CSEMachine.printableMode;
+    return CseMachine.printableMode;
   }
   public static getCompactLayout(): boolean {
-    return CSEMachine.compactLayout;
+    return CseMachine.compactLayout;
   }
   public static getControlStash(): boolean {
-    return CSEMachine.controlStash;
+    return CseMachine.controlStash;
   }
   public static getStackTruncated(): boolean {
-    return CSEMachine.stackTruncated;
+    return CseMachine.stackTruncated;
   }
 
   public static isControl(): boolean {
     return this.control ? !this.control.isEmpty() : false;
   }
 
-  /** SideContentCSEMachine initializes this onMount with the callback function */
+  /** SideContentCseMachine initializes this onMount with the callback function */
   static init(
     setVis: SetVis,
     width: number,
@@ -78,16 +78,16 @@ export default class CSEMachine {
     Layout.compactValues.clear();
   }
 
-  /** updates the visualization state in the SideContentCSEMachine component based on
+  /** updates the visualization state in the SideContentCseMachine component based on
    * the JS Slang context passed in */
-  static drawCSE(context: Context) {
+  static drawCse(context: Context) {
     // store environmentTree at last breakpoint.
-    CSEMachine.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
-    CSEMachine.currentEnvId = getEnvID(context.runtime.environments[0]);
+    CseMachine.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
+    CseMachine.currentEnvId = getEnvID(context.runtime.environments[0]);
     if (!this.setVis || !context.runtime.control || !context.runtime.stash)
       throw new Error('CSE machine not initialized');
-    CSEMachine.control = context.runtime.control;
-    CSEMachine.stash = context.runtime.stash;
+    CseMachine.control = context.runtime.control;
+    CseMachine.stash = context.runtime.stash;
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
@@ -100,70 +100,70 @@ export default class CSEMachine {
   }
 
   static redraw() {
-    if (CSEMachine.environmentTree && CSEMachine.control && CSEMachine.stash) {
+    if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
       if (
-        CSEMachine.getCompactLayout() &&
-        CSEMachine.getPrintableMode() &&
-        CSEMachine.getControlStash() &&
-        CSEMachine.getStackTruncated() &&
+        CseMachine.getCompactLayout() &&
+        CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        CseMachine.getStackTruncated() &&
         Layout.currentStackTruncLight !== undefined
       ) {
         this.setVis(Layout.currentStackTruncLight);
       } else if (
-        CSEMachine.getCompactLayout() &&
-        CSEMachine.getPrintableMode() &&
-        CSEMachine.getControlStash() &&
-        !CSEMachine.getStackTruncated() &&
+        CseMachine.getCompactLayout() &&
+        CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        !CseMachine.getStackTruncated() &&
         Layout.currentStackLight !== undefined
       ) {
         this.setVis(Layout.currentStackLight);
       } else if (
-        CSEMachine.getCompactLayout() &&
-        !CSEMachine.getPrintableMode() &&
-        CSEMachine.getControlStash() &&
-        CSEMachine.getStackTruncated() &&
+        CseMachine.getCompactLayout() &&
+        !CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        CseMachine.getStackTruncated() &&
         Layout.currentStackTruncDark !== undefined
       ) {
         this.setVis(Layout.currentStackTruncDark);
       } else if (
-        CSEMachine.getCompactLayout() &&
-        !CSEMachine.getPrintableMode() &&
-        CSEMachine.getControlStash() &&
-        !CSEMachine.getStackTruncated() &&
+        CseMachine.getCompactLayout() &&
+        !CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        !CseMachine.getStackTruncated() &&
         Layout.currentStackDark !== undefined
       ) {
         this.setVis(Layout.currentStackDark);
       } else if (
-        CSEMachine.getCompactLayout() &&
-        CSEMachine.getPrintableMode() &&
-        !CSEMachine.getControlStash() &&
+        CseMachine.getCompactLayout() &&
+        CseMachine.getPrintableMode() &&
+        !CseMachine.getControlStash() &&
         Layout.currentCompactLight !== undefined
       ) {
         this.setVis(Layout.currentCompactLight);
       } else if (
-        CSEMachine.getCompactLayout() &&
-        !CSEMachine.getPrintableMode() &&
-        !CSEMachine.getControlStash() &&
+        CseMachine.getCompactLayout() &&
+        !CseMachine.getPrintableMode() &&
+        !CseMachine.getControlStash() &&
         Layout.currentCompactDark !== undefined
       ) {
         this.setVis(Layout.currentCompactDark);
       } else if (
-        !CSEMachine.getCompactLayout() &&
-        CSEMachine.getPrintableMode() &&
-        !CSEMachine.getControlStash() &&
+        !CseMachine.getCompactLayout() &&
+        CseMachine.getPrintableMode() &&
+        !CseMachine.getControlStash() &&
         Layout.currentLight !== undefined
       ) {
         this.setVis(Layout.currentLight);
       } else if (
-        !CSEMachine.getCompactLayout() &&
-        !CSEMachine.getPrintableMode() &&
-        !CSEMachine.getControlStash() &&
+        !CseMachine.getCompactLayout() &&
+        !CseMachine.getPrintableMode() &&
+        !CseMachine.getControlStash() &&
         Layout.currentDark !== undefined
       ) {
         this.setVis(Layout.currentDark);
       } else {
-        Layout.setContext(CSEMachine.environmentTree, CSEMachine.control, CSEMachine.stash);
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -176,12 +176,12 @@ export default class CSEMachine {
     }
   }
 
-  static clearCSE() {
+  static clearCse() {
     if (this.setVis) {
       this.setVis(undefined);
-      CSEMachine.environmentTree = undefined;
-      CSEMachine.control = undefined;
-      CSEMachine.stash = undefined;
+      CseMachine.environmentTree = undefined;
+      CseMachine.control = undefined;
+      CseMachine.stash = undefined;
     }
     this.clear();
   }

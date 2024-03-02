@@ -1,10 +1,10 @@
 import React from 'react';
 
-import CSEMachine from '../CSEMachine';
-import { Config } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Data } from '../CSEMachineTypes';
-import { isDummyKey, isMainReference } from '../CSEMachineUtils';
+import CseMachine from '../CseMachine';
+import { Config } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { Data } from '../CseMachineTypes';
+import { isDummyKey, isMainReference } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
@@ -103,7 +103,7 @@ export class Binding extends Visible {
     this._y = this.offsetY;
   }
   hoveredWidth(): number {
-    return CSEMachine.getPrintableMode()
+    return CseMachine.getPrintableMode()
       ? this._hoveredWidth
       : this._width +
           (this.value instanceof FnValue || this.value instanceof GlobalFnValue

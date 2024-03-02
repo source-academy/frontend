@@ -9,10 +9,10 @@ import { Frame } from '../components/Frame';
 import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
-import CSEMachine from '../CSEMachine';
-import { Config } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Env, EnvTree } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { Config } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { Env, EnvTree } from '../CseMachineTypes';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -80,8 +80,8 @@ const codeSamples = [
 
 codeSamples.forEach((code, idx) => {
   test('CSE Machine calculates correct layout for code sample ' + idx, async () => {
-    if (CSEMachine.getCompactLayout()) {
-      CSEMachine.toggleCompactLayout();
+    if (CseMachine.getCompactLayout()) {
+      CseMachine.toggleCompactLayout();
     }
     const context = createContext(4);
     await runInContext(code, context);
@@ -165,11 +165,11 @@ codeSamples.forEach((code, idx) => {
       Layout.draw();
     };
     checkCompactLayout();
-    CSEMachine.togglePrintableMode();
+    CseMachine.togglePrintableMode();
     checkCompactLayout();
-    CSEMachine.toggleCompactLayout();
+    CseMachine.toggleCompactLayout();
     checkNonCompactLayout();
-    CSEMachine.togglePrintableMode();
+    CseMachine.togglePrintableMode();
     checkNonCompactLayout();
   });
 });
@@ -220,13 +220,13 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     const code = codeSample[1] as string;
     const currentStep = codeSample[2] as number;
     const truncate = codeSample[3];
-    if (!CSEMachine.getCompactLayout()) {
-      CSEMachine.toggleCompactLayout();
+    if (!CseMachine.getCompactLayout()) {
+      CseMachine.toggleCompactLayout();
     }
     if (truncate) {
-      CSEMachine.toggleStackTruncated();
+      CseMachine.toggleStackTruncated();
     }
-    CSEMachine.toggleControlStash();
+    CseMachine.toggleControlStash();
     const context = createContext(4);
     await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: currentStep });
     Layout.setContext(

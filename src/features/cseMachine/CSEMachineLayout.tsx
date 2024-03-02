@@ -21,10 +21,10 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { PrimitiveValue } from './components/values/PrimitiveValue';
 import { UnassignedValue } from './components/values/UnassignedValue';
 import { Value } from './components/values/Value';
-import CSEMachine from './CSEMachine';
-import { CSEAnimation } from './CSEMachineAnimation';
-import { Config, ShapeDefaultProps } from './CSEMachineConfig';
-import { CompactReferenceType, Data, EnvTree, EnvTreeNode, ReferenceType } from './CSEMachineTypes';
+import CseMachine from './CseMachine';
+import { CseAnimation } from './CseMachineAnimation';
+import { Config, ShapeDefaultProps } from './CseMachineConfig';
+import { CompactReferenceType, Data, EnvTree, EnvTreeNode, ReferenceType } from './CseMachineTypes';
 import {
   deepCopyTree,
   getNextChildren,
@@ -35,7 +35,7 @@ import {
   isGlobalFn,
   isPrimitiveData,
   isUnassigned
-} from './CSEMachineUtils';
+} from './CseMachineUtils';
 
 /** this class encapsulates the logic for calculating the layout */
 export class Layout {
@@ -116,7 +116,7 @@ export class Layout {
       Layout.stageHeight = Math.min(Layout.height(), window.innerHeight);
       Layout.stageRef.current.width(Layout.stageWidth);
       Layout.stageRef.current.height(Layout.stageHeight);
-      CSEMachine.redraw();
+      CseMachine.redraw();
     }
     if (Layout.stageHeight > Layout.visibleHeight) {
     }
@@ -170,7 +170,7 @@ export class Layout {
     // initialize control and stash
     Layout.initializeControlStash();
 
-    if (CSEMachine.getControlStash()) {
+    if (CseMachine.getControlStash()) {
       Layout.controlStashHeight = Math.max(
         Config.CanvasMinHeight,
         Layout.controlComponent.y() + Layout.controlComponent.height() + Config.CanvasPaddingY
@@ -181,7 +181,7 @@ export class Layout {
         Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX
       );
     }
-    if (CSEMachine.getCompactLayout()) {
+    if (CseMachine.getCompactLayout()) {
       // calculate height and width by considering lowest and widest level
       const lastLevel = Layout.compactLevels[Layout.compactLevels.length - 1];
       Layout.compactHeight = Math.max(
@@ -197,7 +197,7 @@ export class Layout {
           0
         ) +
           Config.CanvasPaddingX * 2 +
-          (CSEMachine.getControlStash()
+          (CseMachine.getControlStash()
             ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
             : 0)
       );
@@ -212,7 +212,7 @@ export class Layout {
       );
     }
     // initialise animations
-    CSEAnimation.updateAnimation();
+    CseAnimation.updateAnimation();
   }
 
   static initializeControlStash() {
@@ -295,16 +295,16 @@ export class Layout {
   }
 
   public static width(): number {
-    return CSEMachine.getCompactLayout() ? Layout.compactWidth : Layout.nonCompactWidth;
+    return CseMachine.getCompactLayout() ? Layout.compactWidth : Layout.nonCompactWidth;
   }
 
   public static height(): number {
-    return CSEMachine.getCompactLayout() ? Layout.compactHeight : Layout.nonCompactHeight;
+    return CseMachine.getCompactLayout() ? Layout.compactHeight : Layout.nonCompactHeight;
   }
 
   /** initializes grid */
   private static initializeGrid(): void {
-    if (CSEMachine.getCompactLayout()) {
+    if (CseMachine.getCompactLayout()) {
       this.compactLevels = [];
       let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
       let prevLevel: CompactLevel | null = null;
@@ -547,7 +547,7 @@ export class Layout {
                 width: Layout.width(),
                 height: Layout.height(),
                 overflow: 'hidden',
-                backgroundColor: CSEMachine.getPrintableMode()
+                backgroundColor: CseMachine.getPrintableMode()
                   ? Config.PRINT_BACKGROUND.toString()
                   : Config.SA_BLUE.toString()
               }}
@@ -568,24 +568,24 @@ export class Layout {
                     width={Layout.width()}
                     height={Layout.height()}
                     fill={
-                      CSEMachine.getPrintableMode()
+                      CseMachine.getPrintableMode()
                         ? Config.PRINT_BACKGROUND.toString()
                         : Config.SA_BLUE.toString()
                     }
                     key={Layout.key++}
                     listening={false}
                   />
-                  {!CSEMachine.getCompactLayout() && Layout.grid.draw()}
-                  {CSEMachine.getCompactLayout() && Layout.compactLevels.map(level => level.draw())}
-                  {CSEMachine.getCompactLayout() &&
-                    CSEMachine.getControlStash() &&
+                  {!CseMachine.getCompactLayout() && Layout.grid.draw()}
+                  {CseMachine.getCompactLayout() && Layout.compactLevels.map(level => level.draw())}
+                  {CseMachine.getCompactLayout() &&
+                    CseMachine.getControlStash() &&
                     Layout.controlComponent.draw()}
-                  {CSEMachine.getCompactLayout() &&
-                    CSEMachine.getControlStash() &&
+                  {CseMachine.getCompactLayout() &&
+                    CseMachine.getControlStash() &&
                     Layout.stashComponent.draw()}
-                  {CSEMachine.getCompactLayout() &&
-                    CSEMachine.getControlStash() &&
-                    CSEAnimation.animationComponents.map(c => c.draw())}
+                  {CseMachine.getCompactLayout() &&
+                    CseMachine.getControlStash() &&
+                    CseAnimation.animationComponents.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>
@@ -593,10 +593,10 @@ export class Layout {
         </div>
       );
       Layout.prevLayout = layout;
-      if (CSEMachine.getCompactLayout()) {
-        if (CSEMachine.getPrintableMode()) {
-          if (CSEMachine.getControlStash()) {
-            if (CSEMachine.getStackTruncated()) {
+      if (CseMachine.getCompactLayout()) {
+        if (CseMachine.getPrintableMode()) {
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
               Layout.currentStackTruncLight = layout;
             } else {
               Layout.currentStackLight = layout;
@@ -605,8 +605,8 @@ export class Layout {
             Layout.currentCompactLight = layout;
           }
         } else {
-          if (CSEMachine.getControlStash()) {
-            if (CSEMachine.getStackTruncated()) {
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
               Layout.currentStackTruncDark = layout;
             } else {
               Layout.currentStackDark = layout;
@@ -616,7 +616,7 @@ export class Layout {
           }
         }
       } else {
-        if (CSEMachine.getPrintableMode()) {
+        if (CseMachine.getPrintableMode()) {
           Layout.currentLight = layout;
         } else {
           Layout.currentDark = layout;

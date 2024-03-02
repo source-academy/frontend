@@ -4,7 +4,7 @@ import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
-import CSEMachine from 'src/features/cseMachine/CSEMachine';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import {
   changeQueryString,
@@ -22,8 +22,8 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notifications/N
 import {
   clearReplOutput,
   setEditorHighlightedLines,
-  toggleUpdateCSE,
-  toggleUsingCSE,
+  toggleUpdateCse,
+  toggleUsingCse,
   toggleUsingSubst,
   updateCurrentStep,
   updateStepsTotal
@@ -98,11 +98,11 @@ export default function* PlaygroundSaga(): SagaIterator {
       }
 
       if (newId !== SideContentType.cseMachine) {
-        yield put(toggleUsingCSE(false, workspaceLocation));
-        yield call([CSEMachine, CSEMachine.clearCSE]);
+        yield put(toggleUsingCse(false, workspaceLocation));
+        yield call([CseMachine, CseMachine.clearCse]);
         yield put(updateCurrentStep(-1, workspaceLocation));
         yield put(updateStepsTotal(0, workspaceLocation));
-        yield put(toggleUpdateCSE(true, workspaceLocation));
+        yield put(toggleUpdateCse(true, workspaceLocation));
         yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
       }
 
@@ -113,7 +113,7 @@ export default function* PlaygroundSaga(): SagaIterator {
         if (playgroundSourceChapter <= Chapter.SOURCE_2) {
           yield put(toggleUsingSubst(true, workspaceLocation));
         } else {
-          yield put(toggleUsingCSE(true, workspaceLocation));
+          yield put(toggleUsingCse(true, workspaceLocation));
         }
       }
     }

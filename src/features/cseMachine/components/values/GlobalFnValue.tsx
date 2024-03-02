@@ -8,11 +8,11 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import CSEMachine from '../../CSEMachine';
-import { Config, ShapeDefaultProps } from '../../CSEMachineConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { ReferenceType } from '../../CSEMachineTypes';
-import { getBodyText, getParamsText, getTextWidth } from '../../CSEMachineUtils';
+import CseMachine from '../../CseMachine';
+import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
+import { Layout } from '../../CseMachineLayout';
+import { ReferenceType } from '../../CseMachineTypes';
+import { getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
@@ -116,12 +116,12 @@ export class GlobalFnValue extends Value {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     if (!this.selected) {
       this.labelRef.current.hide();
     } else {
@@ -130,7 +130,7 @@ export class GlobalFnValue extends Value {
     }
   };
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.selected = !this.selected;
     if (!this.selected) {
       this.labelRef.current.hide();
@@ -158,7 +158,7 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.radius}
             stroke={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -168,7 +168,7 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.innerRadius}
             fill={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -178,7 +178,7 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.radius}
             stroke={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -188,11 +188,11 @@ export class GlobalFnValue extends Value {
             y={this.y()}
             radius={this.innerRadius}
             fill={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
         </Group>
-        {CSEMachine.getPrintableMode() ? (
+        {CseMachine.getPrintableMode() ? (
           <KonvaLabel
             x={this.x() + this.width() + Config.TextPaddingX * 2}
             y={this.y() - Config.TextPaddingY}

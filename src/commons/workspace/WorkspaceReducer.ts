@@ -602,7 +602,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            usingCSE: action.payload.usingCSE
+            usingCse: action.payload.usingCse
           }
         };
       } else {
@@ -616,7 +616,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            updateCSE: action.payload.updateCSE
+            updateCse: action.payload.updateCse
           }
         };
       } else {

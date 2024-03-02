@@ -1,5 +1,5 @@
-import { Config } from '../../CSEMachineConfig';
-import { IVisible, StepsArray } from '../../CSEMachineTypes';
+import { Config } from '../../CseMachineConfig';
+import { IVisible, StepsArray } from '../../CseMachineTypes';
 import { ArrayUnit } from '../ArrayUnit';
 import { ArrowLane } from '../ArrowLane';
 import { ArrayValue } from '../values/ArrayValue';

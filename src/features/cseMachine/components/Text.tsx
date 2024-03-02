@@ -2,11 +2,11 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
-import CSEMachine from '../CSEMachine';
-import { Config, ShapeDefaultProps } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Data, IHoverable } from '../CSEMachineTypes';
-import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../CSEMachineUtils';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { Data, IHoverable } from '../CseMachineTypes';
+import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../CseMachineUtils';
 import { Frame } from './Frame';
 import { Visible } from './Visible';
 
@@ -82,7 +82,7 @@ export class Text extends Visible implements IHoverable {
     this._y = y;
   };
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
     this.ref.current.moveToTop();
     this.ref.current.show();
@@ -90,7 +90,7 @@ export class Text extends Visible implements IHoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     setUnhoveredCursor(currentTarget);
     this.ref.current.hide();
     currentTarget.getLayer()?.draw();
@@ -101,7 +101,7 @@ export class Text extends Visible implements IHoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+      fill: CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
     };
     return (
       <Group key={Layout.key++} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -111,7 +111,7 @@ export class Text extends Visible implements IHoverable {
         <KonvaLabel x={this.x()} y={this.y()} ref={this.ref} visible={false} listening={false}>
           <KonvaTag
             {...ShapeDefaultProps}
-            fill={CSEMachine.getPrintableMode() ? 'white' : 'black'}
+            fill={CseMachine.getPrintableMode() ? 'white' : 'black'}
             opacity={0.5}
             listening={false}
           />
