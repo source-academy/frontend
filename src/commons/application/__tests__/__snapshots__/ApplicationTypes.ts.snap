@@ -71,8 +71,8 @@ Array [
     "displayName": "Source §1",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": false,
-      "envVisualizer": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": true,
@@ -84,8 +84,8 @@ Array [
     "displayName": "Source §1 Typed",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": false,
-      "envVisualizer": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": true,
@@ -97,8 +97,8 @@ Array [
     "displayName": "Source §1 WebAssembly",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": false,
-      "envVisualizer": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": false,
@@ -110,8 +110,8 @@ Array [
     "displayName": "Source §1 Lazy",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": false,
-      "envVisualizer": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": false,
@@ -123,8 +123,8 @@ Array [
     "displayName": "Source §1 Native",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": false,
-      "envVisualizer": false,
       "multiFile": false,
       "repl": true,
       "substVisualizer": true,
@@ -136,8 +136,8 @@ Array [
     "displayName": "Source §2",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": true,
-      "envVisualizer": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": true,
@@ -149,8 +149,8 @@ Array [
     "displayName": "Source §2 Typed",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": true,
-      "envVisualizer": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": true,
@@ -162,8 +162,8 @@ Array [
     "displayName": "Source §2 Lazy",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": true,
-      "envVisualizer": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -175,8 +175,8 @@ Array [
     "displayName": "Source §2 Native",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": true,
-      "envVisualizer": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": true,
@@ -188,8 +188,8 @@ Array [
     "displayName": "Source §3",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -201,8 +201,8 @@ Array [
     "displayName": "Source §3 Typed",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -214,8 +214,8 @@ Array [
     "displayName": "Source §3 Concurrent",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": true,
-      "envVisualizer": false,
       "multiFile": true,
       "repl": false,
       "substVisualizer": false,
@@ -227,8 +227,8 @@ Array [
     "displayName": "Source §3 Non-Det",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": false,
       "dataVisualizer": true,
-      "envVisualizer": false,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -240,8 +240,8 @@ Array [
     "displayName": "Source §3 Native",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -253,8 +253,8 @@ Array [
     "displayName": "Source §4",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -266,8 +266,8 @@ Array [
     "displayName": "Source §4 Typed",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -279,8 +279,8 @@ Array [
     "displayName": "Source §4 GPU",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -292,8 +292,8 @@ Array [
     "displayName": "Source §4 Native",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
@@ -305,8 +305,8 @@ Array [
     "displayName": "Source §4 Explicit-Control",
     "mainLanguage": "JavaScript",
     "supports": Object {
+      "cseMachine": true,
       "dataVisualizer": true,
-      "envVisualizer": true,
       "multiFile": true,
       "repl": true,
       "substVisualizer": false,
