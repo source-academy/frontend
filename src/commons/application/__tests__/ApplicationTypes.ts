@@ -16,7 +16,7 @@ describe('getLanguageConfig', () => {
   });
 
   test('throws an error for an invalid chapter/variant combination', () => {
-    expect(() => getLanguageConfig(5, Variant.DEFAULT)).toThrowErrorMatchingSnapshot();
+    expect(() => getLanguageConfig(5 as Chapter, Variant.DEFAULT)).toThrowErrorMatchingSnapshot();
   });
 });
 
@@ -50,12 +50,12 @@ describe('available Source language configurations', () => {
       {
         chapter: Chapter.SOURCE_3,
         variant: Variant.DEFAULT,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       },
       {
         chapter: Chapter.SOURCE_3,
         variant: Variant.TYPED,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       },
       {
         chapter: Chapter.SOURCE_3,
@@ -66,33 +66,33 @@ describe('available Source language configurations', () => {
       {
         chapter: Chapter.SOURCE_3,
         variant: Variant.NATIVE,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       },
       // Source 4
       {
         chapter: Chapter.SOURCE_4,
         variant: Variant.DEFAULT,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       },
       {
         chapter: Chapter.SOURCE_4,
         variant: Variant.TYPED,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       },
       {
         chapter: Chapter.SOURCE_4,
         variant: Variant.GPU,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       },
       {
         chapter: Chapter.SOURCE_4,
         variant: Variant.NATIVE,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       },
       {
         chapter: Chapter.SOURCE_4,
         variant: Variant.EXPLICIT_CONTROL,
-        supports: { dataVisualizer: true, envVisualizer: true }
+        supports: { dataVisualizer: true, cseMachine: true }
       }
     ];
 

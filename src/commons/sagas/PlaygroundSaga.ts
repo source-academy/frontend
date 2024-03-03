@@ -4,7 +4,7 @@ import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import {
   changeQueryString,
@@ -22,11 +22,11 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notifications/N
 import {
   clearReplOutput,
   setEditorHighlightedLines,
-  toggleUpdateEnv,
-  toggleUsingEnv,
+  toggleUpdateCse,
+  toggleUsingCse,
   toggleUsingSubst,
-  updateEnvSteps,
-  updateEnvStepsTotal
+  updateCurrentStep,
+  updateStepsTotal
 } from '../workspace/WorkspaceActions';
 import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
@@ -97,23 +97,23 @@ export default function* PlaygroundSaga(): SagaIterator {
         }
       }
 
-      if (newId !== SideContentType.envVisualizer) {
-        yield put(toggleUsingEnv(false, workspaceLocation));
-        yield call([EnvVisualizer, EnvVisualizer.clearEnv]);
-        yield put(updateEnvSteps(-1, workspaceLocation));
-        yield put(updateEnvStepsTotal(0, workspaceLocation));
-        yield put(toggleUpdateEnv(true, workspaceLocation));
+      if (newId !== SideContentType.cseMachine) {
+        yield put(toggleUsingCse(false, workspaceLocation));
+        yield call([CseMachine, CseMachine.clearCse]);
+        yield put(updateCurrentStep(-1, workspaceLocation));
+        yield put(updateStepsTotal(0, workspaceLocation));
+        yield put(toggleUpdateCse(true, workspaceLocation));
         yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
       }
 
       if (
         isSourceLanguage(playgroundSourceChapter) &&
-        (newId === SideContentType.substVisualizer || newId === SideContentType.envVisualizer)
+        (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
       ) {
         if (playgroundSourceChapter <= Chapter.SOURCE_2) {
           yield put(toggleUsingSubst(true, workspaceLocation));
         } else {
-          yield put(toggleUsingEnv(true, workspaceLocation));
+          yield put(toggleUsingCse(true, workspaceLocation));
         }
       }
     }
