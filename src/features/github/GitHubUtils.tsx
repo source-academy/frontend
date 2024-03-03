@@ -84,7 +84,7 @@ export async function checkIfFileCanBeOpened(
   }
 
   if (Array.isArray(files)) {
-    true;
+    return true;
   }
 
   return true;
@@ -248,6 +248,7 @@ export async function openFolderInFolderMode(
   });
 
   const tree_sha = requests.data.commit.commit.tree.sha;
+  console.log(requests);
 
   const results = await octokit.request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}?recursive=1', {
     owner: repoOwner,
