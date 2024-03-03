@@ -474,7 +474,7 @@ export function getControlItemComponent(
         if (isRawBlockStatement(controlItem)) {
           // if is raw block statement, remove curly braces (like a statement sequence)
           const match = textB.match(/{[\n\t\ ]*(?<body>[^\n\t\ ](?:.|[\n])*[^\n\t\ ])[\n\t\ ]*}/);
-          const unwrapped = match ? (match.groups ? match.groups.body : "") : "";
+          const unwrapped = match ? (match.groups ? match.groups.body : '') : '';
           return new ControlItemComponent(
             unwrapped,
             unwrapped,
