@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import {  useResponsive, useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -52,6 +52,7 @@ const AchievementDashboard: React.FC = () => {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
+  const { isMobileBreakpoint } = useResponsive();
 
   const {
     group,
@@ -67,6 +68,8 @@ const AchievementDashboard: React.FC = () => {
   const inferencer = useTypedSelector(
     state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
   );
+
+  
 
   const dispatch = useDispatch();
   const {
@@ -120,6 +123,7 @@ const AchievementDashboard: React.FC = () => {
   userAssessmentOverviews &&
     assessmentConfigs &&
     insertFakeAchievements(userAssessmentOverviews, assessmentConfigs, inferencer);
+  
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
@@ -156,8 +160,7 @@ const AchievementDashboard: React.FC = () => {
             updateGoalProgress={handleUpdateGoalProgress}
           />
         )}
-
-        <div className="achievement-main">
+        <div className={isMobileBreakpoint ? 'achievement-main-mobile' : 'achievement-main'}>
           <div className="filter-container">
             <AchievementFilter
               filterState={filterState}

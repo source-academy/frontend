@@ -278,7 +278,6 @@ const NavigationBar: React.FC = () => {
     );
 
   const commonNavbarRight = (
-    <div style={{ position: 'absolute', top: 0, right: 0, zIndex: 10 }}>
       <NavbarGroup align={Alignment.RIGHT}>
         {location.pathname.startsWith('/playground') && <NavigationBarLangSelectButton />}
         <NavLink
@@ -301,7 +300,6 @@ const NavigationBar: React.FC = () => {
 
         <Dropdown />
       </NavbarGroup>
-    </div>
   );
 
   return (
@@ -313,6 +311,7 @@ const NavigationBar: React.FC = () => {
           classes['primary-navbar'],
           Classes.DARK
         )}
+        
       >
         {Constants.playgroundOnly
           ? isMobileBreakpoint
