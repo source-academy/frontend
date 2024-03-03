@@ -631,6 +631,8 @@ export const getGradingOverviews = async (
           assessmentNumber: overview.assessment.assessmentNumber,
           assessmentName: overview.assessment.title,
           assessmentType: overview.assessment.type,
+          // Temporary development hardcode
+          isPublished: false, // overview.assessment.published,
           studentId: overview.student.id,
           studentUsername: overview.student.username,
           studentName: overview.student.name,
@@ -784,6 +786,21 @@ export const postUnsubmit = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/unsubmit`, 'POST', {
+    ...tokens,
+    noHeaderAccept: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/grading/{submissionId}/publish
+ */
+export const publishGrading = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}/publishGrading`, 'POST', {
     ...tokens,
     noHeaderAccept: true
   });

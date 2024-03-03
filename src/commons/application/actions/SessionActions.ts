@@ -45,6 +45,7 @@ import {
   LOGOUT_GOOGLE,
   NotificationConfiguration,
   NotificationPreference,
+  PUBLISH_GRADING,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
@@ -230,6 +231,11 @@ export const updateGrading = (submissionId: number, grading: GradingQuery) =>
 
 export const unsubmitSubmission = (submissionId: number) =>
   action(UNSUBMIT_SUBMISSION, {
+    submissionId
+  });
+
+export const publishGrading = (submissionId: number) =>
+  action(PUBLISH_GRADING, {
     submissionId
   });
 

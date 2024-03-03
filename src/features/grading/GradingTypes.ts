@@ -18,6 +18,7 @@ export type GradingOverview = {
   assessmentName: string;
   assessmentType: AssessmentType;
   initialXp: number;
+  isPublished: boolean;
   xpBonus: number;
   xpAdjustment: number;
   currentXp: number;

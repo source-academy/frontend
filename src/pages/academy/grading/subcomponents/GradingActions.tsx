@@ -4,6 +4,7 @@ import { Flex, Icon } from '@tremor/react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
+  publishGrading,
   reautogradeSubmission,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
@@ -44,7 +45,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
       dispatch(unsubmitSubmission(submissionId));
     }
   };
-  
+
   // Planned logic flow:
   // hide both publish and un-publish icons if !fully graded
   // show publish icon if fully graded && not published
@@ -60,14 +61,17 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
       contents: (
         <>
           <p>Publish your grading?</p>
-          <p>DEVNOTE (remove): You should only see this when notFullyGraded = false, isPublished = false.</p>
+          <p>
+            DEVNOTE (remove): You should only see this when notFullyGraded = false, isPublished =
+            false.
+          </p>
         </>
       ),
       positiveIntent: 'primary',
       positiveLabel: 'Publish'
     });
     if (confirm) {
-      alert("dummy dispatch");
+      dispatch(publishGrading(submissionId));
     }
   };
 
@@ -89,9 +93,17 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
         <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
       </button>
 
-
-      <button type="button" style={{ padding: 0 }} onClick={handlePublishClick} hidden={canPublish()}>
-        <Icon tooltip="Publish" icon={() => <BpIcon icon={IconNames.SendToMap} />} variant="simple" />
+      <button
+        type="button"
+        style={{ padding: 0 }}
+        onClick={handlePublishClick}
+        hidden={canPublish()}
+      >
+        <Icon
+          tooltip="Publish"
+          icon={() => <BpIcon icon={IconNames.SendToMap} />}
+          variant="simple"
+        />
       </button>
     </Flex>
   );

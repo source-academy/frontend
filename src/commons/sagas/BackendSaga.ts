@@ -52,6 +52,7 @@ import {
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
   NotificationConfiguration,
+  PUBLISH_GRADING,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -117,6 +118,7 @@ import {
   postReautogradeSubmission,
   postSourcecast,
   postUnsubmit,
+  publishGrading,
   putAssessmentConfigs,
   putCourseConfig,
   putCourseResearchAgreement,
@@ -470,6 +472,42 @@ function* BackendSaga(): SagaIterator {
       );
 
       yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+      yield put(
+        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
+      );
+    }
+  );
+
+  yield takeEvery(
+    PUBLISH_GRADING,
+    function* (action: ReturnType<typeof actions.publishGrading>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { submissionId } = action.payload;
+
+      const resp: Response | null = yield publishGrading(submissionId, tokens);
+
+      // Development function to test response. TODO: Remove once tested.
+      
+
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const overviews: GradingOverview[] = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.data || []
+      );
+      const newOverviews = overviews.map(overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, submissionStatus: 'attempted' };
+        }
+        return overview;
+      });
+
+      const totalPossibleEntries = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.count
+      );
+
+      yield call(showSuccessMessage, 'Publish grading successful', 1000);
       yield put(
         actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
       );
