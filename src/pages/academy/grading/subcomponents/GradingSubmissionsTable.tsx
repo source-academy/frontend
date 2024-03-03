@@ -36,7 +36,7 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
+import { AssessmentTypeBadge, GradingStatusBadge, PublishedStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -93,6 +93,15 @@ const makeColumns = (handleClick: () => void) => [
         </Flex>
       );
     }
+  }),
+  columnHelper.accessor('isPublished', {
+    header: 'Published',
+    enableColumnFilter: false,
+    cell: info => (
+        <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+          <PublishedStatusBadge status={info.getValue()} />
+        </Filterable>
+    )
   }),
   columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
     header: 'Actions',

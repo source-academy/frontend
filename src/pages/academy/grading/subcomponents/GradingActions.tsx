@@ -101,7 +101,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
       >
         <Icon
           tooltip="Publish"
-          icon={() => <BpIcon icon={IconNames.SendToMap} />}
+          icon={() => <BpIcon icon={IconNames.SEND_TO_MAP} />}
           variant="simple"
         />
       </button>

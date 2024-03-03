@@ -15,6 +15,10 @@ const BADGE_COLORS = {
   attempting: 'yellow',
   attempted: 'red',
 
+  // published status - assumes no other boolean usage here, change if required.
+  true: 'green',
+  false: 'red',
+
   // grading status
   graded: 'green',
   grading: 'yellow',
@@ -47,6 +51,19 @@ type SubmissionStatusBadgeProps = {
 const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
   const statusText = status.charAt(0).toUpperCase() + status.slice(1);
   return <Badge text={statusText} color={getBadgeColorFromLabel(status)} />;
+};
+
+type PublishedStatusBadgeProps = {
+  isPublished: boolean;
+};
+
+const PublishedStatusBadge: React.FC<PublishedStatusBadgeProps> = ({ isPublished }) => {
+  const statusText = isPublished ? 'Published' : 'Not published';
+  const badgeColor = isPublished ? 'green' : 'red';
+  const badgeIcon = () => (
+    <Icon icon={isPublished ? IconNames.SEND_TO_MAP : IconNames.CROSS} style={{ marginRight: '0.5rem' }}/>
+  );
+  return <Badge text={statusText} color={badgeColor} icon={badgeIcon} />;
 };
 
 type GradingStatusBadgeProps = {
@@ -95,4 +112,4 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, SubmissionStatusBadge };
+export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, PublishedStatusBadge, SubmissionStatusBadge };
