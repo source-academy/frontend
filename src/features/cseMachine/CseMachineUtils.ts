@@ -10,8 +10,7 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { isRawBlockStatement } from 'js-slang/dist/cse-machine/utils';
-import { Environment, Value as StashValue } from 'js-slang/dist/types';
+import { Environment, RawBlockStatement, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
@@ -471,7 +470,7 @@ export function getControlItemComponent(
         );
       case 'BlockStatement':
         const textB = astToString(controlItem).trim();
-        if (isRawBlockStatement(controlItem)) {
+        if ((controlItem as RawBlockStatement).isRawBlock == 'true') {
           // if is raw block statement, remove curly braces (like a statement sequence)
           const match = textB.match(/{[\n\t\ ]*(?<body>[^\n\t\ ](?:.|[\n])*[^\n\t\ ])[\n\t\ ]*}/);
           const unwrapped = match ? (match.groups ? match.groups.body : '') : '';
