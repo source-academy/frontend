@@ -1,3 +1,4 @@
+import { Program } from 'estree';
 import {
   AppInstr,
   ArrLitInstr,
@@ -9,6 +10,7 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
+import { isRawBlockStatement } from 'js-slang/dist/cse-machine/utils';
 import { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
@@ -365,6 +367,19 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   }
 }
 
+function hasDeclaration(c: Program) {
+  for (const statement of c.body) {
+    if (
+      statement.type === 'VariableDeclaration' ||
+      statement.type === 'FunctionDeclaration' ||
+      statement.type === 'ImportDeclaration'
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export const truncateText = (programStr: string, maxWidth: number, maxHeight: number): string => {
   // Truncate so item component looks like a square
   // Add ellipsis for each line if needed
@@ -422,14 +437,27 @@ export function getControlItemComponent(
           .map(line => `\t\t${line}`)
           .join('\n');
         const textP = `{\n${originalText}\n}`;
-        return new ControlItemComponent(
-          textP,
-          textP,
-          stackHeight,
-          highlightOnHover,
-          unhighlightOnHover,
-          topItem
-        );
+        if (hasDeclaration(controlItem)) {
+          // include curly braces (implicit block) if program has top level declarations
+          return new ControlItemComponent(
+            textP,
+            textP,
+            stackHeight,
+            highlightOnHover,
+            unhighlightOnHover,
+            topItem
+          );
+          // otherwise don't show the curly braces (like a raw block statement)
+        } else {
+          return new ControlItemComponent(
+            originalText,
+            originalText,
+            stackHeight,
+            highlightOnHover,
+            unhighlightOnHover,
+            topItem
+          );
+        }
       case 'Literal':
         const textL =
           typeof controlItem.value === 'string' ? `"${controlItem.value}"` : controlItem.value;
@@ -441,6 +469,30 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      case 'BlockStatement':
+        const textB = astToString(controlItem).trim();
+        if (isRawBlockStatement(controlItem)) {
+          // if is raw block statement, remove curly braces (like a statement sequence)
+          const match = textB.match(/{[\n\t\ ]*(?<body>[^\n\t\ ](?:.|[\n])*[^\n\t\ ])[\n\t\ ]*}/);
+          const unwrapped = match ? (match.groups ? match.groups.body : "") : "";
+          return new ControlItemComponent(
+            unwrapped,
+            unwrapped,
+            stackHeight,
+            highlightOnHover,
+            unhighlightOnHover,
+            topItem
+          );
+        } else {
+          return new ControlItemComponent(
+            textB,
+            textB,
+            stackHeight,
+            highlightOnHover,
+            unhighlightOnHover,
+            topItem
+          );
+        }
       default:
         const text = astToString(controlItem).trim();
         return new ControlItemComponent(
