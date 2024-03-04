@@ -7,7 +7,7 @@ export const Config = {
   Fill: 'white',
 
   BoxWidth: 45,
-  BoxMinWidth: 15, // Set to half of BoxHeight for empty arrays following EnvVisualizerConfig
+  BoxMinWidth: 15, // Set to half of BoxHeight for empty arrays following CseMachineConfig
   BoxHeight: 30,
   BoxSpacingX: 50,
   BoxSpacingY: 60,

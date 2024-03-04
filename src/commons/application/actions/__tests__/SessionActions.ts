@@ -1,6 +1,10 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import {
+  paginationToBackendParams,
+  ungradedToBackendParams
+} from 'src/features/grading/GradingUtils';
 
-import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
+import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
@@ -150,16 +154,29 @@ test('fetchGradingOverviews generates correct default action object', () => {
   const action = fetchGradingOverviews();
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
-    payload: true
+    payload: {
+      filterToGroup: true,
+      gradedFilter: ungradedToBackendParams(false),
+      pageParams: paginationToBackendParams(0, 10),
+      filterParams: {}
+    }
   });
 });
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const action = fetchGradingOverviews(filterToGroup);
+  const gradedFilter = ungradedToBackendParams(true);
+  const pageParams = { offset: 123, pageSize: 456 };
+  const filterParams = { abc: 'xxx', def: 'yyy' };
+  const action = fetchGradingOverviews(filterToGroup, gradedFilter, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
-    payload: filterToGroup
+    payload: {
+      filterToGroup: filterToGroup,
+      gradedFilter: gradedFilter,
+      pageParams: pageParams,
+      filterParams: filterParams
+    }
   });
 });
 
@@ -510,28 +527,31 @@ test('updateAssessment generates correct action object', () => {
 });
 
 test('updateGradingOverviews generates correct action object', () => {
-  const overviews: GradingOverview[] = [
-    {
-      assessmentId: 1,
-      assessmentNumber: 'M1A',
-      assessmentName: 'test assessment',
-      assessmentType: 'Contests',
-      initialXp: 0,
-      xpBonus: 100,
-      xpAdjustment: 50,
-      currentXp: 50,
-      maxXp: 500,
-      studentId: 100,
-      studentName: 'test student',
-      studentUsername: 'E0123456',
-      submissionId: 1,
-      submissionStatus: 'attempting',
-      groupName: 'group',
-      gradingStatus: 'excluded',
-      questionCount: 6,
-      gradedCount: 0
-    }
-  ];
+  const overviews: GradingOverviews = {
+    count: 1,
+    data: [
+      {
+        assessmentId: 1,
+        assessmentNumber: 'M1A',
+        assessmentName: 'test assessment',
+        assessmentType: 'Contests',
+        initialXp: 0,
+        xpBonus: 100,
+        xpAdjustment: 50,
+        currentXp: 50,
+        maxXp: 500,
+        studentId: 100,
+        studentName: 'test student',
+        studentUsername: 'E0123456',
+        submissionId: 1,
+        submissionStatus: 'attempting',
+        groupName: 'group',
+        gradingStatus: 'excluded',
+        questionCount: 6,
+        gradedCount: 0
+      }
+    ]
+  };
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
@@ -542,26 +562,38 @@ test('updateGradingOverviews generates correct action object', () => {
 
 test('updateGrading generates correct action object', () => {
   const submissionId = 3;
-  const grading: Grading = [
-    {
-      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
-      student: {
-        name: 'test student',
-        username: 'E0123456',
-        id: 234
-      },
-      grade: {
-        xp: 100,
-        xpAdjustment: 0,
-        comments: 'Well done.',
-        grader: {
-          name: 'HARTIN MENZ',
-          id: 100
+  const grading: GradingQuery = {
+    answers: [
+      {
+        question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
+        student: {
+          name: 'test student',
+          username: 'E0123456',
+          id: 234
         },
-        gradedAt: '2019-08-16T13:26:32+00:00'
+        grade: {
+          xp: 100,
+          xpAdjustment: 0,
+          comments: 'Well done.',
+          grader: {
+            name: 'HARTIN MENZ',
+            id: 100
+          },
+          gradedAt: '2019-08-16T13:26:32+00:00'
+        }
       }
+    ],
+    assessment: {
+      coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
+      id: 1,
+      number: '5',
+      reading: 'reading here',
+      story: 'story here',
+      summaryLong: 'long summary here',
+      summaryShort: 'short summary here',
+      title: 'assessment title here'
     }
-  ];
+  };
 
   const action = updateGrading(submissionId, grading);
   expect(action).toEqual({
