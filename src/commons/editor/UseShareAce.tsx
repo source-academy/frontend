@@ -38,9 +38,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       ShareAce.add(editor, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
       showSuccessMessage(
-        'You have joined a session as ' + (sessionDetails.readOnly
-          ? 'a viewer in read-only mode.'
-          : 'an editor.')
+        'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
       );
     });
     ShareAce.on('error', (path: string, error: any) => {
