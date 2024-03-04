@@ -2,6 +2,7 @@
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
+import 'ace-builds/src-noconflict/ext-settings_menu';
 import 'js-slang/dist/editors/ace/theme/source';
 
 import * as AceBuilds from 'ace-builds';
@@ -558,6 +559,87 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       /* eslint-enable */
     }
   });
+
+  // Override the overlayPage function to add an id to the overlay div.
+  // This allows the overlay div to be referenced and removed when the editor is unmounted.
+  acequire('ace/ext/menu_tools/overlay_page').overlayPage = function (
+    editor: any,
+    contentElement: HTMLElement,
+    callback: any
+  ) {
+    let closer: HTMLElement | null = document.createElement('div');
+    // Add id to the overlay div
+    closer.id = 'overlay';
+    let ignoreFocusOut = false;
+
+    function documentEscListener(e: KeyboardEvent) {
+      if (e.keyCode === 27) {
+        close();
+      }
+    }
+
+    function close() {
+      if (!closer) return;
+      document.removeEventListener('keydown', documentEscListener);
+      closer?.parentNode?.removeChild(closer);
+      if (editor) {
+        editor.focus();
+      }
+      closer = null;
+      callback && callback();
+    }
+
+    /**
+     * Defines whether overlay is closed when user clicks outside of it.
+     *
+     * @param {Boolean} ignore      If set to true overlay stays open when focus moves to another part of the editor.
+     */
+    function setIgnoreFocusOut(ignore: boolean) {
+      ignoreFocusOut = ignore;
+      if (ignore) {
+        closer!.style.pointerEvents = 'none';
+        contentElement.style.pointerEvents = 'auto';
+      }
+    }
+
+    closer.style.cssText =
+      'margin: 0; padding: 0; ' +
+      'position: fixed; top:0; bottom:0; left:0; right:0;' +
+      'z-index: 9990; ' +
+      (editor ? 'background-color: rgba(0, 0, 0, 0.3);' : '');
+    closer.addEventListener('click', function (e: Event) {
+      if (!ignoreFocusOut) {
+        close();
+      }
+    });
+
+    // click closer if esc key is pressed
+    document.addEventListener('keydown', documentEscListener);
+
+    contentElement.addEventListener('click', function (e: Event) {
+      e.stopPropagation();
+    });
+
+    closer.appendChild(contentElement);
+    document.body.appendChild(closer);
+    if (editor) {
+      editor.blur();
+    }
+    return {
+      close: close,
+      setIgnoreFocusOut: setIgnoreFocusOut
+    };
+  };
+
+  // Remove the overlay div when the editor is unmounted
+  React.useEffect(() => {
+    return () => {
+      const div = document.getElementById('overlay');
+      if (div) {
+        div.parentNode?.removeChild(div);
+      }
+    };
+  }, []);
 
   return (
     <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
