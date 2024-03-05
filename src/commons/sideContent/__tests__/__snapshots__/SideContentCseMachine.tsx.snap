@@ -1,0 +1,479 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CSE Machine component renders correctly 1`] = `
+<div
+  onBlur={[Function]}
+  onFocus={[Function]}
+  onKeyDown={[Function]}
+  onKeyPress={[Function]}
+  onKeyUp={[Function]}
+  style={
+    Object {
+      "maxHeight": "100%",
+      "overflow": "auto",
+    }
+  }
+  tabIndex="-1"
+>
+  <div
+    className="sa-substituter bp5-dark"
+  >
+    <div
+      className="bp5-slider bp5-disabled"
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+    >
+      <div
+        className="bp5-slider-track"
+      >
+        <div
+          className="bp5-slider-progress"
+          style={
+            Object {
+              "left": "0.00%",
+              "right": "100.00%",
+              "top": 0,
+            }
+          }
+        />
+        <div
+          className="bp5-slider-progress bp5-intent-primary"
+          style={
+            Object {
+              "left": "0.00%",
+              "right": "100.00%",
+              "top": 0,
+            }
+          }
+        />
+        <div
+          className="bp5-slider-progress"
+          style={
+            Object {
+              "left": "0.00%",
+              "right": "100.00%",
+              "top": 0,
+            }
+          }
+        />
+      </div>
+      <div
+        className="bp5-slider-axis"
+      />
+      <span
+        aria-disabled={true}
+        aria-orientation="horizontal"
+        aria-valuemax={0}
+        aria-valuemin={1}
+        aria-valuenow={1}
+        className="bp5-slider-handle"
+        role="slider"
+        style={Object {}}
+        tabIndex={0}
+      >
+        <span
+          className="bp5-slider-label"
+        >
+          1
+        </span>
+      </span>
+    </div>
+    <div
+      style={
+        Object {
+          "alignItems": "center",
+          "display": "flex",
+          "justifyContent": "space-between",
+        }
+      }
+    >
+      <div
+        className="bp5-button-group"
+      >
+        <span
+          className="bp5-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            aria-expanded={false}
+            className="bp5-button bp5-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp5-icon bp5-icon-standard bp5-icon-layers"
+              data-icon="layers"
+            />
+            <span
+              className="bp5-button-text"
+            >
+              <label
+                className="bp5-control bp5-checkbox"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
+              >
+                <input
+                  checked={false}
+                  disabled={false}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="bp5-control-indicator"
+                />
+              </label>
+            </span>
+          </a>
+        </span>
+        <span
+          className="bp5-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            aria-expanded={false}
+            className="bp5-button bp5-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp5-icon bp5-icon-standard bp5-icon-minimize"
+              data-icon="minimize"
+            />
+            <span
+              className="bp5-button-text"
+            >
+              <label
+                className="bp5-control bp5-checkbox bp5-disabled"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
+              >
+                <input
+                  checked={false}
+                  disabled={true}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="bp5-control-indicator"
+                />
+              </label>
+            </span>
+          </a>
+        </span>
+      </div>
+      <div
+        className="bp5-button-group"
+      >
+        <button
+          className="bp5-button bp5-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp5-icon bp5-icon-standard bp5-icon-double-chevron-left"
+            data-icon="double-chevron-left"
+          />
+        </button>
+        <button
+          className="bp5-button bp5-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp5-icon bp5-icon-standard bp5-icon-chevron-left"
+            data-icon="chevron-left"
+          />
+        </button>
+        <button
+          className="bp5-button bp5-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp5-icon bp5-icon-standard bp5-icon-chevron-right"
+            data-icon="chevron-right"
+          />
+        </button>
+        <button
+          className="bp5-button bp5-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp5-icon bp5-icon-standard bp5-icon-double-chevron-right"
+            data-icon="double-chevron-right"
+          />
+        </button>
+      </div>
+      <div
+        className="bp5-button-group"
+      >
+        <span
+          className="bp5-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            aria-expanded={false}
+            className="bp5-button bp5-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp5-icon bp5-icon-standard bp5-icon-build"
+              data-icon="build"
+            />
+            <span
+              className="bp5-button-text"
+            >
+              <label
+                className="bp5-control bp5-checkbox bp5-disabled"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
+              >
+                <input
+                  checked={false}
+                  disabled={true}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="bp5-control-indicator"
+                />
+              </label>
+            </span>
+          </a>
+        </span>
+        <span
+          className="bp5-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            aria-expanded={false}
+            className="bp5-button bp5-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp5-icon bp5-icon-standard bp5-icon-print"
+              data-icon="print"
+            />
+            <span
+              className="bp5-button-text"
+            >
+              <label
+                className="bp5-control bp5-checkbox bp5-disabled"
+                style={
+                  Object {
+                    "margin": 0,
+                  }
+                }
+              >
+                <input
+                  checked={false}
+                  disabled={true}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="bp5-control-indicator"
+                />
+              </label>
+            </span>
+          </a>
+        </span>
+        <span
+          className="bp5-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            aria-expanded={false}
+            className="bp5-button bp5-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp5-icon bp5-icon-standard bp5-icon-floppy-disk"
+              data-icon="floppy-disk"
+            />
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+   
+  <div
+    className="bp5-running-text"
+    data-testid="cse-machine-default-text"
+    id="cse-machine-default-text"
+  >
+    The CSE machine generates control, stash and environment model diagrams following a notation introduced in
+     
+    <a
+      href="https://sourceacademy.org/sicpjs/3.2"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <i>
+        Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
+      </i>
+    </a>
+    .
+    <br />
+    <br />
+     On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program
+    <br />
+    <br />
+    <div
+      className="bp5-divider"
+    />
+    Some useful keyboard shortcuts:
+    <br />
+    <br />
+    a: Move to the first step
+    <br />
+    e: Move to the last step
+    <br />
+    f: Move to the next step
+    <br />
+    b: Move to the previous step
+    <br />
+    <br />
+    Note that these shortcuts are only active when the browser focus is on this tab.
+  </div>
+  <div
+    className="bp5-button-group bp5-vertical"
+    style={
+      Object {
+        "bottom": "20px",
+        "position": "absolute",
+        "right": "20px",
+      }
+    }
+  >
+    <button
+      className="bp5-button bp5-disabled"
+      disabled={true}
+      onBlur={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px",
+          "marginBottom": "5px",
+        }
+      }
+      tabIndex={-1}
+      type="button"
+    >
+      <span
+        aria-hidden={true}
+        className="bp5-icon bp5-icon-standard bp5-icon-plus"
+        data-icon="plus"
+      />
+    </button>
+    <button
+      className="bp5-button bp5-disabled"
+      disabled={true}
+      onBlur={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px",
+        }
+      }
+      tabIndex={-1}
+      type="button"
+    >
+      <span
+        aria-hidden={true}
+        className="bp5-icon bp5-icon-standard bp5-icon-minus"
+        data-icon="minus"
+      />
+    </button>
+  </div>
+</div>
+`;
