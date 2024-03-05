@@ -1,6 +1,6 @@
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
@@ -114,7 +114,7 @@ const getStaffNavlinkInfo = ({
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
-      to: `/courses/${courseId}/storysimulator`,
+      to: `/courses/${courseId}/gamesimulator`,
       icon: IconNames.CROWN,
       text: 'Game Simulator',
       disabled: !isStaffOrAdmin,

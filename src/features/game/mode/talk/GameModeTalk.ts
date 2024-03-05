@@ -1,5 +1,3 @@
-import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
@@ -7,10 +5,12 @@ import { screenSize } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { keyboardShortcuts } from '../../input/GameInputConstants';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { createButton } from '../../utils/ButtonUtils';
+import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
+import { createButton, createButtonText } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import TalkModeConstants, { talkButtonStyle } from './GameModeTalkConstants';
@@ -54,14 +54,13 @@ class GameModeTalk implements IGameUI {
     talkMenuContainer.add(
       buttons.map((button, index) =>
         this.createTalkTopicButton(
-          button.text,
+          createButtonText(index + 1, button.text),
           buttonPositions[index][0],
           buttonPositions[index][1],
           button.callback
         )
       )
     );
-
     // Add check for interacted talk topics
     buttons.forEach((button, index) => {
       const checkedSprite = new Phaser.GameObjects.Sprite(
@@ -130,6 +129,21 @@ class GameModeTalk implements IGameUI {
   }
 
   /**
+   * Register keyboard listners for talk topic selection.
+   * Called by the activeUI function.
+   */
+  private registerKeyboardListener(): void {
+    const talkTopics: ItemId[] = this.getLatestTalkTopics();
+    const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
+    talkTopics.forEach((dialogueId: ItemId, index) => {
+      inputManager.registerKeyboardListener(keyboardShortcuts.Options[index], 'up', async () => {
+        GameGlobalAPI.getInstance().triggerInteraction(dialogueId);
+        await GameGlobalAPI.getInstance().showDialogue(dialogueId);
+      });
+    });
+  }
+
+  /**
    * Activate the 'Talk' mode UI.
    *
    * Usually only called by the phase manager when 'Talk' phase is
@@ -139,6 +153,8 @@ class GameModeTalk implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
+
+    this.registerKeyboardListener();
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
@@ -150,6 +166,15 @@ class GameModeTalk implements IGameUI {
   }
 
   /**
+   * Remove keyboard listners for topic selection.
+   * Called by the deactiveUI function.
+   */
+  private removeKeyboardListener(): void {
+    const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
+    inputManager.clearKeyboardListeners(keyboardShortcuts.Options);
+  }
+
+  /**
    * Deactivate the 'Talk' mode UI.
    *
    * Usually only called by the phase manager when 'Talk' phase is
@@ -157,6 +182,7 @@ class GameModeTalk implements IGameUI {
    */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    this.removeKeyboardListener();
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 

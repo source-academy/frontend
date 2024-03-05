@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import * as React from 'react';
+import React from 'react';
 
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';

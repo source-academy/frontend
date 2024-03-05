@@ -1,45 +1,20 @@
 import { IconNames } from '@blueprintjs/icons';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
-import SideContentRemoteExecution from 'src/commons/sideContent/remoteExecution/SideContentRemoteExecution';
-import SideContentEnvVisualizer from 'src/commons/sideContent/SideContentEnvVisualizer';
-import SideContentSubstVisualizer from 'src/commons/sideContent/SideContentSubstVisualizer';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-
-import { InterpreterOutput, ResultOutput } from '../../commons/application/ApplicationTypes';
-import Markdown from '../../commons/Markdown';
-import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
-import SideContentHtmlDisplay from '../../commons/sideContent/SideContentHtmlDisplay';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import Markdown from 'src/commons/Markdown';
+import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
+import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
+import {
+  SideContentLocation,
+  SideContentTab,
+  SideContentType
+} from 'src/commons/sideContent/SideContentTypes';
 
 export const mobileOnlyTabIds: readonly SideContentType[] = [
   SideContentType.mobileEditor,
   SideContentType.mobileEditorRun
 ];
 export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
-
-export const dataVisualizerTab: SideContentTab = {
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <SideContentDataVisualizer />,
-  id: SideContentType.dataVisualizer
-};
-
-export const makeEnvVisualizerTabFrom = (workspaceLocation: WorkspaceLocation): SideContentTab => ({
-  label: 'CSE Machine',
-  iconName: IconNames.GLOBE,
-  body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-  id: SideContentType.envVisualizer
-});
-
-export const makeHtmlDisplayTabFrom = (
-  output: ResultOutput,
-  handleError: (errorMsg: string) => void
-): SideContentTab => ({
-  label: 'HTML Display',
-  iconName: IconNames.MODAL,
-  body: <SideContentHtmlDisplay content={output.value} handleAddHtmlConsoleError={handleError} />,
-  id: SideContentType.htmlDisplay
-});
 
 export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   label: 'Introduction',
@@ -64,7 +39,10 @@ export const makeRemoteExecutionTabFrom = (
   id: SideContentType.remoteExecution
 });
 
-export const makeSubstVisualizerTabFrom = (output: InterpreterOutput[]): SideContentTab => {
+export const makeSubstVisualizerTabFrom = (
+  workspaceLocation: SideContentLocation,
+  output: InterpreterOutput[]
+): SideContentTab => {
   const processStepperOutput = (output: InterpreterOutput[]) => {
     const editorOutput = output[0];
     if (
@@ -83,7 +61,12 @@ export const makeSubstVisualizerTabFrom = (output: InterpreterOutput[]): SideCon
   return {
     label: 'Stepper',
     iconName: IconNames.FLOW_REVIEW,
-    body: <SideContentSubstVisualizer content={processStepperOutput(output)} />,
+    body: (
+      <SideContentSubstVisualizer
+        workspaceLocation={workspaceLocation}
+        content={processStepperOutput(output)}
+      />
+    ),
     id: SideContentType.substVisualizer
   };
 };

@@ -46,8 +46,9 @@ import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspace
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
+import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
-import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
+import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
@@ -55,7 +56,6 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeSideContentHeight,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -105,7 +105,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContentHeight,
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -563,7 +562,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     }
 
     return {
-      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] }
+      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
+      workspaceLocation
     };
   };
 
@@ -700,7 +700,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
       handleBrowseHistoryDown: handleBrowseHistoryDown,
