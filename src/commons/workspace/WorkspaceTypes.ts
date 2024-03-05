@@ -38,8 +38,8 @@ export const SEND_REPL_INPUT_TO_OUTPUT = 'SEND_REPL_INPUT_TO_OUTPUT';
 export const SET_TOKEN_COUNT = 'SET_TOKEN_COUNT';
 export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
-export const TOGGLE_USING_ENV = 'TOGGLE_USING_ENV';
-export const TOGGLE_UPDATE_ENV = 'TOGGLE_UPDATE_ENV';
+export const TOGGLE_USING_CSE = 'TOGGLE_USING_CSE';
+export const TOGGLE_UPDATE_CSE = 'TOGGLE_UPDATE_CSE';
 export const UPDATE_SUBMISSIONS_TABLE_FILTERS = 'UPDATE_SUBMISSIONS_TABLE_FILTERS';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
@@ -60,8 +60,8 @@ export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE';
 export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
 export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
-export const UPDATE_ENVSTEPS = 'UPDATE_ENVSTEPS';
-export const UPDATE_ENVSTEPSTOTAL = 'UPDATE_ENVSTEPSTOTAL';
+export const UPDATE_CURRENTSTEP = 'UPDATE_CURRENTSTEP';
+export const UPDATE_STEPSTOTAL = 'UPDATE_STEPSTOTAL';
 export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
@@ -85,10 +85,10 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
-  readonly usingEnv: boolean;
-  readonly updateEnv: boolean;
-  readonly envSteps: number;
-  readonly envStepsTotal: number;
+  readonly usingCse: boolean;
+  readonly updateCse: boolean;
+  readonly currentStep: number;
+  readonly stepsTotal: number;
   readonly breakpointSteps: number[];
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
