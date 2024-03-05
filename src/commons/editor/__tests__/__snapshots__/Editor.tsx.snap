@@ -15,5 +15,6 @@ exports[`Editor renders correctly 1`] = `
   handleUpdateHasUnsavedChanges={[Function]}
   highlightedLines={Array []}
   isEditorAutorun={false}
+  sessionDetails={null}
 />
 `;
