@@ -2,7 +2,11 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingOverviews,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   OverallState,
   Role,
@@ -162,12 +166,12 @@ export function* mockBackendSaga(): SagaIterator {
     FETCH_GRADING_OVERVIEWS,
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
-      const filterToGroup = action.payload;
+      const { filterToGroup, pageParams, filterParams } = action.payload;
       const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup)
+        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams)
       );
       if (gradingOverviews !== null) {
-        yield put(actions.updateGradingOverviews([...gradingOverviews]));
+        yield put(actions.updateGradingOverviews(gradingOverviews));
       }
     }
   );
@@ -177,7 +181,7 @@ export function* mockBackendSaga(): SagaIterator {
     const accessToken = yield select((state: OverallState) => state.session.accessToken);
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId));
     if (grading !== null) {
-      yield put(actions.updateGrading(submissionId, [...grading]));
+      yield put(actions.updateGrading(submissionId, grading));
     }
   });
 
@@ -185,10 +189,14 @@ export function* mockBackendSaga(): SagaIterator {
     UNSUBMIT_SUBMISSION,
     function* (action: ReturnType<typeof actions.unsubmitSubmission>) {
       const { submissionId } = action.payload;
-      const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews || []
+      const overviews: GradingOverviews = yield select(
+        (state: OverallState) =>
+          state.session.gradingOverviews || {
+            count: 0,
+            data: []
+          }
       );
-      const index = overviews.findIndex(
+      const index = overviews.data.findIndex(
         overview =>
           overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
       );
@@ -196,14 +204,14 @@ export function* mockBackendSaga(): SagaIterator {
         yield call(showWarningMessage, '400: Bad Request');
         return;
       }
-      const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      const newOverviews = overviews.data.map(overview => {
         if (overview.submissionId === submissionId) {
           return { ...overview, submissionStatus: 'attempted' };
         }
         return overview;
       });
       yield call(showSuccessMessage, 'Unsubmit successful!', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
+      yield put(actions.updateGradingOverviews({ ...overviews, data: newOverviews }));
     }
   );
 
@@ -217,10 +225,10 @@ export function* mockBackendSaga(): SagaIterator {
 
     const { submissionId, questionId, xpAdjustment, comments } = action.payload;
     // Now, update the grade for the question in the Grading in the store
-    const grading: Grading = yield select((state: OverallState) =>
+    const grading: GradingQuery = yield select((state: OverallState) =>
       state.session.gradings.get(submissionId)
     );
-    const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
+    const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
           xpAdjustment,
@@ -230,7 +238,9 @@ export function* mockBackendSaga(): SagaIterator {
       }
       return gradingQuestion;
     });
-    yield put(actions.updateGrading(submissionId, newGrading));
+    yield put(
+      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    );
     yield call(showSuccessMessage, 'Submitted!', 1000);
   };
 

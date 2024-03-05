@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import {
   Assessment,
@@ -18,7 +18,6 @@ export const FETCH_COURSE_CONFIG = 'FETCH_COURSE_CONFIG';
 export const FETCH_ASSESSMENT = 'FETCH_ASSESSMENT';
 export const FETCH_ASSESSMENT_ADMIN = 'FETCH_ASSESSMENT_ADMIN';
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
-export const FETCH_ALL_USER_XP = 'FETCH_ALL_USER_XP';
 export const FETCH_TOTAL_XP = 'FETCH_TOTAL_XP';
 export const FETCH_TOTAL_XP_ADMIN = 'FETCH_TOTAL_XP_ADMIN';
 export const FETCH_GRADING = 'FETCH_GRADING';
@@ -34,7 +33,6 @@ export const SET_COURSE_REGISTRATION = 'SET_COURSE_REGISTRATION';
 export const SET_ASSESSMENT_CONFIGURATIONS = 'SET_ASSESSMENT_CONFIGURATIONS';
 export const SET_ADMIN_PANEL_COURSE_REGISTRATIONS = 'SET_ADMIN_PANEL_COURSE_REGISTRATIONS';
 export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
-export const SET_GITHUB_ASSESSMENT = 'SET_GITHUB_ASSESSMENT';
 export const SET_GITHUB_OCTOKIT_OBJECT = 'SET_GITHUB_OCTOKIT_OBJECT';
 export const SET_GITHUB_ACCESS_TOKEN = 'SET_GITHUB_ACCESS_TOKEN';
 export const SUBMIT_ANSWER = 'SUBMIT_ANSWER';
@@ -48,7 +46,6 @@ export const REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN =
 export const UNSUBMIT_SUBMISSION = 'UNSUBMIT_SUBMISSION';
 export const UPDATE_ASSESSMENT_OVERVIEWS = 'UPDATE_ASSESSMENT_OVERVIEWS';
 export const UPDATE_TOTAL_XP = 'UPDATE_TOTAL_XP';
-export const UPDATE_ALL_USER_XP = 'UPDATE_ALL_USER_XP';
 export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
 export const UPDATE_GRADING_OVERVIEWS = 'UPDATE_GRADING_OVERVIEWS';
 export const UPDATE_GRADING = 'UPDATE_GRADING';
@@ -73,9 +70,6 @@ export const UPDATE_NOTIFICATION_PREFERENCES = 'UPDATE_NOTIFICATION_PREFERENCES'
 export const DELETE_TIME_OPTIONS = 'DELETE_TIME_OPTIONS';
 export const UPDATE_TIME_OPTIONS = 'UPDATE_TIME_OPTIONS';
 
-export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
-export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
-
 export type SessionState = {
   // Tokens
   readonly accessToken?: string;
@@ -93,7 +87,6 @@ export type SessionState = {
   readonly gameState: GameState;
   readonly courseId?: number;
   readonly xp: number;
-  readonly allUserXp: string[][] | undefined;
   readonly story: Story;
 
   // Course Configuration
@@ -121,8 +114,8 @@ export type SessionState = {
 
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
-  readonly gradingOverviews?: GradingOverview[];
-  readonly gradings: Map<number, Grading>;
+  readonly gradingOverviews?: GradingOverviews;
+  readonly gradings: Map<number, GradingQuery>;
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubAssessment?: MissionRepoData;

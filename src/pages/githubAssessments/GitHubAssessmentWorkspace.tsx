@@ -15,11 +15,13 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeSideContentHeight,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -80,11 +82,10 @@ import { MobileSideContentProps } from '../../commons/mobileWorkspace/mobileSide
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
-import SideContentMarkdownEditor from '../../commons/sideContent/githubAssessments/SideContentMarkdownEditor';
-import SideContentMissionEditor from '../../commons/sideContent/githubAssessments/SideContentMissionEditor';
-import SideContentTaskEditor from '../../commons/sideContent/githubAssessments/SideContentTaskEditor';
-import SideContentTestcaseEditor from '../../commons/sideContent/githubAssessments/SideContentTestcaseEditor';
-import { SideContentProps } from '../../commons/sideContent/SideContent';
+import SideContentMarkdownEditor from '../../commons/sideContent/content/githubAssessments/SideContentMarkdownEditor';
+import SideContentMissionEditor from '../../commons/sideContent/content/githubAssessments/SideContentMissionEditor';
+import SideContentTaskEditor from '../../commons/sideContent/content/githubAssessments/SideContentTaskEditor';
+import SideContentTestcaseEditor from '../../commons/sideContent/content/githubAssessments/SideContentTestcaseEditor';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants from '../../commons/utils/Constants';
 import { promisifyDialog, showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
@@ -175,7 +176,10 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const assessmentOverview = location.state as GHAssessmentOverview;
 
   const [showBriefingOverlay, setShowBriefingOverlay] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(SideContentType.questionOverview);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.questionOverview
+  );
   const { isMobileBreakpoint } = useResponsive();
 
   const {
@@ -186,8 +190,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     hasUnsavedChanges,
     isRunning,
     output,
-    replValue,
-    sideContentHeight
+    replValue
   } = useTypedSelector(state => state.workspaces.githubAssessment);
 
   /**
@@ -727,7 +730,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     ) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const onEditorValueChange = useCallback(
     (editorTabIndex: number, val: string) => {
@@ -822,7 +825,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     [currentTaskNumber, taskList, setTaskListWrapper]
   );
 
-  const sideContentProps: () => SideContentProps = () => {
+  const sideContentProps = (): SideContentProps => {
     const tabs: SideContentTab[] = [
       {
         label: 'Task',
@@ -1117,6 +1120,7 @@ const GitHubAssessmentWorkspace: React.FC = () => {
   const sideBarProps = {
     tabs: []
   };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(),
     editorContainerProps: currentTaskIsMCQ && displayMCQInEditor ? undefined : editorContainerProps,
@@ -1125,7 +1129,6 @@ const GitHubAssessmentWorkspace: React.FC = () => {
     hasUnsavedChanges: hasUnsavedChanges,
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(),
     replProps: replProps
   };

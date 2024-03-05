@@ -26,6 +26,11 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
+import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
+import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -38,7 +43,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
   changeStepLimit,
   chapterSelect,
   clearReplOutput,
@@ -54,17 +58,13 @@ import {
   setFolderMode,
   toggleEditorAutorun,
   toggleFolderMode,
-  toggleUpdateEnv,
-  toggleUsingEnv,
+  toggleUpdateCse,
   toggleUsingSubst,
   updateActiveEditorTabIndex,
   updateEditorValue,
-  updateEnvSteps,
-  updateEnvStepsTotal,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
 import {
   githubOpenFile,
   githubSaveFile,
@@ -128,10 +128,7 @@ import {
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
-  dataVisualizerTab,
   desktopOnlyTabIds,
-  makeEnvVisualizerTabFrom,
-  makeHtmlDisplayTabFrom,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSubstVisualizerTabFrom,
@@ -255,10 +252,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isDebugging,
     output,
     replValue,
-    sideContentHeight,
     sharedbConnected,
     usingSubst,
-    usingEnv,
+    usingCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
@@ -282,7 +278,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleSetEditorBreakpoints,
     handleReplEval,
     handleReplOutputClear,
-    handleUsingEnv,
     handleUsingSubst
   } = useMemo(() => {
     return {
@@ -296,7 +291,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
       handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
-      handleUsingEnv: (usingEnv: boolean) => dispatch(toggleUsingEnv(usingEnv, workspaceLocation)),
       handleUsingSubst: (usingSubst: boolean) =>
         dispatch(toggleUsingSubst(usingSubst, workspaceLocation))
     };
@@ -311,7 +305,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const [lastEdit, setLastEdit] = useState(new Date());
   const [isGreen, setIsGreen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
   );
   const [hasBreakpoints, setHasBreakpoints] = useState(false);
@@ -389,12 +384,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
+    if (!selectedTab) return;
+
     if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const handlers = useMemo(
     () => ({
@@ -411,71 +408,55 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleEditorValueChange]
   );
 
-  const handleEnvVisualiserReset = useCallback(() => {
-    handleUsingEnv(false);
-    EnvVisualizer.clearEnv();
-    dispatch(updateEnvSteps(-1, workspaceLocation));
-    dispatch(updateEnvStepsTotal(0, workspaceLocation));
-    dispatch(toggleUpdateEnv(true, workspaceLocation));
-    dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
-  }, [dispatch, workspaceLocation, handleUsingEnv]);
+  // const onChangeTabs = useCallback(
+  //   (
+  //     newTabId: SideContentType,
+  //     prevTabId: SideContentType,
+  //     event: React.MouseEvent<HTMLElement>
+  //   ) => {
+  //     if (newTabId === prevTabId) {
+  //       return;
+  //     }
 
-  const onChangeTabs = useCallback(
-    (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
-    ) => {
-      if (newTabId === prevTabId) {
-        return;
-      }
+  //     // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+  //     if (prevTabId === SideContentType.substVisualizer) {
+  //       if (newTabId === SideContentType.mobileEditorRun) return;
+  //       if (!hasBreakpoints) {
+  //         handleReplOutputClear();
+  //         handleUsingSubst(false);
+  //       }
+  //     }
 
-      // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-      if (
-        prevTabId === SideContentType.substVisualizer &&
-        newTabId === SideContentType.mobileEditorRun
-      ) {
-        return;
-      }
+  // if (
+  //   prevTabId === SideContentType.cseMachine &&
+  //   newTabId === SideContentType.mobileEditorRun
+  // ) {
+  //   return;
+  // }
 
-      if (
-        prevTabId === SideContentType.envVisualizer &&
-        newTabId === SideContentType.mobileEditorRun
-      ) {
-        return;
-      }
+  //     // if (newTabId !== SideContentType.cseMachine) {
+  //     //   handleCseMachineReset();
+  //     // }
 
-      if (newTabId !== SideContentType.envVisualizer) {
-        handleEnvVisualiserReset();
-      }
+  //     // if (
+  //     //   isSourceLanguage(playgroundSourceChapter) &&
+  //     //   (newTabId === SideContentType.substVisualizer || newTabId === SideContentType.cseMachine)
+  //     // ) {
+  //     //   if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+  //     //     handleUsingSubst(true);
+  //     //   } else {
+  //     //     handleUsingCse(true);
+  //     //   }
+  //     // }
 
-      if (
-        isSourceLanguage(playgroundSourceChapter) &&
-        (newTabId === SideContentType.substVisualizer || newTabId === SideContentType.envVisualizer)
-      ) {
-        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-          handleUsingSubst(true);
-        } else {
-          handleUsingEnv(true);
-        }
-      }
-
-      if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
-        handleReplOutputClear();
-        handleUsingSubst(false);
-      }
-
-      setSelectedTab(newTabId);
-    },
-    [
-      hasBreakpoints,
-      handleEnvVisualiserReset,
-      playgroundSourceChapter,
-      handleUsingSubst,
-      handleUsingEnv,
-      handleReplOutputClear
-    ]
-  );
+  //     // setSelectedTab(newTabId);
+  //   },
+  //   [
+  //     hasBreakpoints,
+  //     handleUsingSubst,
+  //     handleReplOutputClear
+  //   ]
+  // );
 
   const pushLog = useCallback(
     (newInput: Input) => {
@@ -662,18 +643,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
         stepSize={usingSubst ? 2 : 1}
         handleChangeStepLimit={limit => {
           dispatch(changeStepLimit(limit, workspaceLocation));
-          usingEnv && dispatch(toggleUpdateEnv(true, workspaceLocation));
+          usingCse && dispatch(toggleUpdateCse(true, workspaceLocation));
         }}
         handleOnBlurAutoScale={limit => {
           limit % 2 === 0 || !usingSubst
             ? dispatch(changeStepLimit(limit, workspaceLocation))
             : dispatch(changeStepLimit(limit + 1, workspaceLocation));
-          usingEnv && dispatch(toggleUpdateEnv(true, workspaceLocation));
+          usingCse && dispatch(toggleUpdateCse(true, workspaceLocation));
         }}
         key="step_limit"
       />
     ),
-    [dispatch, stepLimit, usingSubst, usingEnv, workspaceLocation]
+    [dispatch, stepLimit, usingSubst, usingCse, workspaceLocation]
   );
 
   const getEditorValue = useCallback(
@@ -747,7 +728,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
 
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
-  const shouldShowEnvVisualizer = languageConfig.supports.envVisualizer;
+  const shouldShowCseMachine = languageConfig.supports.cseMachine;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   const playgroundIntroductionTab: SideContentTab = useMemo(
@@ -762,8 +743,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
       // For HTML Chapter, HTML Display tab is added only after code is run
       if (output.length > 0 && output[0].type === 'result') {
         tabs.push(
-          makeHtmlDisplayTabFrom(output[0] as ResultOutput, errorMsg =>
-            dispatch(addHtmlConsoleError(errorMsg, workspaceLocation))
+          makeHtmlDisplayTabFrom(
+            output[0] as ResultOutput,
+            errorMsg => dispatch(addHtmlConsoleError(errorMsg, workspaceLocation)),
+            workspaceLocation
           )
         );
       }
@@ -773,13 +756,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
       if (shouldShowDataVisualizer) {
-        tabs.push(dataVisualizerTab);
+        tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
-      if (shouldShowEnvVisualizer) {
-        tabs.push(makeEnvVisualizerTabFrom(workspaceLocation));
+      if (shouldShowCseMachine) {
+        tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
       if (shouldShowSubstVisualizer) {
-        tabs.push(makeSubstVisualizerTabFrom(output));
+        tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
       }
     }
 
@@ -797,7 +780,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch,
     workspaceLocation,
     shouldShowDataVisualizer,
-    shouldShowEnvVisualizer,
+    shouldShowCseMachine,
     shouldShowSubstVisualizer,
     remoteExecutionTab
   ]);
@@ -826,7 +809,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       };
 
       pushLog(input);
-      dispatch(toggleUpdateEnv(true, workspaceLocation));
+      dispatch(toggleUpdateCse(true, workspaceLocation));
       dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
     },
     [pushLog, dispatch, workspaceLocation]
@@ -886,7 +869,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         }
       }
       handleSetEditorBreakpoints(editorTabIndex, breakpoints);
-      dispatch(toggleUpdateEnv(true, workspaceLocation));
+      dispatch(toggleUpdateCse(true, workspaceLocation));
     },
     [
       selectedTab,
@@ -963,8 +946,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceVariant: languageConfig.variant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
-      selectedTab === SideContentType.substVisualizer ||
-      selectedTab === SideContentType.envVisualizer,
+      selectedTab === SideContentType.substVisualizer || selectedTab === SideContentType.cseMachine,
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor
@@ -1010,7 +992,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
-          : usingSubst || usingEnv
+          : usingSubst || usingCse
           ? stepperStepLimit
           : executionTime
       ]
@@ -1022,20 +1004,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ),
     replProps: replProps,
     sideBarProps: sideBarProps,
-    sideContentHeight: sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
-      onChange: onChangeTabs,
       tabs: {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation,
-      sideContentHeight: sideContentHeight
+      workspaceLocation
     },
     sideContentIsResizeable:
-      selectedTab !== SideContentType.substVisualizer &&
-      selectedTab !== SideContentType.envVisualizer
+      selectedTab !== SideContentType.substVisualizer && selectedTab !== SideContentType.cseMachine
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
@@ -1055,7 +1033,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         ]
       },
       selectedTabId: selectedTab,
-      onChange: onChangeTabs,
+      onChange: setSelectedTab,
       tabs: {
         beforeDynamicTabs: mobileTabs,
         afterDynamicTabs: []

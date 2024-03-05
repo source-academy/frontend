@@ -127,7 +127,11 @@ const cracoConfig = (module.exports = {
           'trim-lines',
           'property-information',
           'space-separated-tokens',
-          'comma-separated-tokens'
+          'comma-separated-tokens',
+          'query-string',
+          'decode-uri-component',
+          'split-on-first',
+          'filter-obj'
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
@@ -142,6 +146,11 @@ const cracoConfig = (module.exports = {
         '<rootDir>/node_modules/vfile/lib';
       return jestConfig;
     }
+  },
+  babel: {
+    presets: [
+      ['@babel/preset-typescript']
+    ]
   }
 });
 

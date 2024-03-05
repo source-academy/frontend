@@ -216,11 +216,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
       itemRenderer={assessmentTypeRenderer}
       filterable={false}
     >
-      <Button
-        className={Classes.MINIMAL}
-        text={assessmentType}
-        rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-      />
+      <Button minimal text={assessmentType} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
     </AssessmentTypeSelectComponent>
   );
 

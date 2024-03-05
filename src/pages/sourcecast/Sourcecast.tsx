@@ -2,7 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import {
@@ -12,11 +12,12 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { Position } from 'src/commons/editor/EditorTypes';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
   evalEditor,
@@ -55,8 +56,8 @@ import {
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
-import SideContentDataVisualizer from '../../commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
+import makeCseMachineTabFrom from '../../commons/sideContent/content/SideContentCseMachine';
+import makeDataVisualizerTabFrom from '../../commons/sideContent/content/SideContentDataVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
@@ -94,7 +95,6 @@ const Sourcecast: React.FC = () => {
     playbackData,
     playbackStatus,
     replValue,
-    sideContentHeight,
     sourcecastIndex,
     context: { chapter: sourceChapter, variant: sourceVariant },
     uid,
@@ -151,7 +151,10 @@ const Sourcecast: React.FC = () => {
    * which contains the ag-grid table of available Sourcecasts. This is intentional
    * to avoid an ag-grid console warning. For more info, see issue #1152 in frontend.
    */
-  const [selectedTab, setSelectedTab] = useState(SideContentType.introduction);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.introduction
+  );
 
   const handleQueryParam = () => {
     const newUid = params.sourcecastId;
@@ -211,7 +214,7 @@ const Sourcecast: React.FC = () => {
     ) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab]);
+  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
 
   const autorunButtonHandlers = useMemo(() => {
     return {
@@ -259,19 +262,9 @@ const Sourcecast: React.FC = () => {
     <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
   );
 
-  const dataVisualizerTab: SideContentTab = {
-    label: 'Data Visualizer',
-    iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer />,
-    id: SideContentType.dataVisualizer
-  };
+  const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
 
-  const envVisualizerTab: SideContentTab = {
-    label: 'CSE Machine',
-    iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-    id: SideContentType.envVisualizer
-  };
+  const cseMachineTab = makeCseMachineTabFrom(workspaceLocation);
 
   const tabs: SideContentTab[] = [
     {
@@ -292,7 +285,7 @@ const Sourcecast: React.FC = () => {
       id: SideContentType.introduction
     },
     dataVisualizerTab,
-    envVisualizerTab
+    cseMachineTab
   ];
 
   const onChangeTabs = (
@@ -371,7 +364,6 @@ const Sourcecast: React.FC = () => {
     handleSideContentHeightChange: handleSideContentHeightChange,
     replProps,
     sideBarProps,
-    sideContentHeight,
     sideContentProps: {
       selectedTabId: selectedTab,
       onChange: onChangeTabs,
@@ -379,8 +371,7 @@ const Sourcecast: React.FC = () => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation,
-      sideContentHeight
+      workspaceLocation
     }
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {

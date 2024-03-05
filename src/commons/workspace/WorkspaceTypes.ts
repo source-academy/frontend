@@ -7,6 +7,7 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { SideContentState } from '../sideContent/SideContentTypes';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -14,13 +15,14 @@ export const BROWSE_REPL_HISTORY_DOWN = 'BROWSE_REPL_HISTORY_DOWN';
 export const BROWSE_REPL_HISTORY_UP = 'BROWSE_REPL_HISTORY_UP';
 export const CHANGE_EXEC_TIME = 'CHANGE_EXEC_TIME';
 export const CHANGE_EXTERNAL_LIBRARY = 'CHANGE_EXTERNAL_LIBRARY';
-export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
 export const CHANGE_STEP_LIMIT = 'CHANGE_STEP_LIMIT';
 export const CHAPTER_SELECT = 'CHAPTER_SELECT';
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT';
 export const CLEAR_REPL_OUTPUT = 'CLEAR_REPL_OUTPUT';
 export const CLEAR_REPL_OUTPUT_LAST = 'CLEAR_REPL_OUTPUT_LAST';
 export const END_CLEAR_CONTEXT = 'END_CLEAR_CONTEXT';
+export const ENABLE_TOKEN_COUNTER = 'ENABLE_TOKEN_COUNTER';
+export const DISABLE_TOKEN_COUNTER = 'DISABLE_TOKEN_COUNTER';
 export const EVAL_EDITOR = 'EVAL_EDITOR';
 export const EVAL_REPL = 'EVAL_REPL';
 export const PROMPT_AUTOCOMPLETE = 'PROMPT_AUTOCOMPLETE';
@@ -33,10 +35,11 @@ export const PLAYGROUND_EXTERNAL_SELECT = 'PLAYGROUND_EXTERNAL_SELECT ';
 export const RESET_TESTCASE = 'RESET_TESTCASE';
 export const RESET_WORKSPACE = 'RESET_WORKSPACE';
 export const SEND_REPL_INPUT_TO_OUTPUT = 'SEND_REPL_INPUT_TO_OUTPUT';
+export const SET_TOKEN_COUNT = 'SET_TOKEN_COUNT';
 export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
-export const TOGGLE_USING_ENV = 'TOGGLE_USING_ENV';
-export const TOGGLE_UPDATE_ENV = 'TOGGLE_UPDATE_ENV';
+export const TOGGLE_USING_CSE = 'TOGGLE_USING_CSE';
+export const TOGGLE_UPDATE_CSE = 'TOGGLE_UPDATE_CSE';
 export const UPDATE_SUBMISSIONS_TABLE_FILTERS = 'UPDATE_SUBMISSIONS_TABLE_FILTERS';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
@@ -57,8 +60,8 @@ export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE';
 export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
 export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
-export const UPDATE_ENVSTEPS = 'UPDATE_ENVSTEPS';
-export const UPDATE_ENVSTEPSTOTAL = 'UPDATE_ENVSTEPSTOTAL';
+export const UPDATE_CURRENTSTEP = 'UPDATE_CURRENTSTEP';
+export const UPDATE_STEPSTOTAL = 'UPDATE_STEPSTOTAL';
 export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
@@ -82,10 +85,10 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
-  readonly usingEnv: boolean;
-  readonly updateEnv: boolean;
-  readonly envSteps: number;
-  readonly envStepsTotal: number;
+  readonly usingCse: boolean;
+  readonly updateCse: boolean;
+  readonly currentStep: number;
+  readonly stepsTotal: number;
   readonly breakpointSteps: number[];
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
@@ -136,11 +139,14 @@ export type WorkspaceState = {
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
+  readonly hasTokenCounter: boolean;
+  readonly tokenCount: integer;
+  readonly customNotification: string;
   readonly sharedbConnected: boolean;
-  readonly sideContentHeight?: number;
   readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
+  readonly sideContent: SideContentState;
 };
 
 type ReplHistory = {
@@ -159,5 +165,4 @@ export type DebuggerContext = {
 
 export type SubmissionsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
-  globalFilter: string | null;
 };
