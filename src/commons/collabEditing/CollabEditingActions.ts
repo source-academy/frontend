@@ -16,7 +16,10 @@ export const setEditorSessionId = createAction(
 
 export const setSessionDetails = createAction(
   SET_SESSION_DETAILS,
-  (workspaceLocation: WorkspaceLocation, sessionDetails: { docId: string, readOnly: boolean } | null) => ({
+  (
+    workspaceLocation: WorkspaceLocation,
+    sessionDetails: { docId: string; readOnly: boolean } | null
+  ) => ({
     payload: { workspaceLocation, sessionDetails }
   })
 );
