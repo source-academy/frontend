@@ -291,7 +291,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission1',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -300,7 +300,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission2',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -309,7 +309,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       type: 'Mission3',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -675,7 +675,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Missions',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -684,7 +684,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Quests',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -693,7 +693,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Paths',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -702,7 +702,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Contests',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -711,7 +711,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       type: 'Others',
       isManuallyGraded: true,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      isContest: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -729,7 +729,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
     type: 'Mission1',
     isManuallyGraded: true,
     displayInDashboard: true,
-    hasTokenCounter: false,
+    isContest: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   };

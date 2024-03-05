@@ -94,9 +94,9 @@ export type AssessmentConfiguration = {
   type: AssessmentType;
   isManuallyGraded: boolean;
   displayInDashboard: boolean;
+  isContest: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
-  isContest: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {

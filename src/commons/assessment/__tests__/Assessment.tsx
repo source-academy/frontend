@@ -17,7 +17,7 @@ const mockAssessmentProps = assertType<AssessmentProps>()({
     type: 'Missions',
     isManuallyGraded: true,
     displayInDashboard: true,
-    hasTokenCounter: false,
+    isContest: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   }
