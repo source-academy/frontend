@@ -14,14 +14,12 @@ export const setEditorSessionId = createAction(
   })
 );
 
-export const setSessionDetails = (
-  workspaceLocation: WorkspaceLocation,
-  sessionDetails: { docId: string; readOnly: boolean } | null
-) =>
-  action(SET_SESSION_DETAILS, {
-    workspaceLocation,
-    sessionDetails
-  });
+export const setSessionDetails = createAction(
+  SET_SESSION_DETAILS,
+  (workspaceLocation: WorkspaceLocation, sessionDetails: { docId: string, readOnly: boolean } | null) => ({
+    payload: { workspaceLocation, sessionDetails }
+  })
+);
 
 /**
  * Sets ShareDB connection status.
