@@ -23,3 +23,15 @@ const MenuModeConstants = {
 };
 
 export default MenuModeConstants;
+
+export const MenuLineConstants = {
+  x: 0,
+  y: 15,
+  lineLength: 20,
+  lineWidth: 4,
+  exploreOffset: -68,
+  moveOffset: 20,
+  talkOffset: -30,
+  yOffset: 20,
+  color: 0xbce7da
+};

@@ -65,20 +65,20 @@ import {
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_UPDATE_ENV,
-  TOGGLE_USING_ENV,
+  TOGGLE_UPDATE_CSE,
+  TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
-  UPDATE_ENVSTEPS,
-  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
@@ -595,28 +595,28 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         return state;
       }
     }
-    case TOGGLE_USING_ENV: {
+    case TOGGLE_USING_CSE: {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            usingEnv: action.payload.usingEnv
+            usingCse: action.payload.usingCse
           }
         };
       } else {
         return state;
       }
     }
-    case TOGGLE_UPDATE_ENV: {
+    case TOGGLE_UPDATE_CSE: {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            updateEnv: action.payload.updateEnv
+            updateCse: action.payload.updateCse
           }
         };
       } else {
@@ -1058,20 +1058,20 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
-    case UPDATE_ENVSTEPS:
+    case UPDATE_CURRENTSTEP:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          envSteps: action.payload.steps
+          currentStep: action.payload.steps
         }
       };
-    case UPDATE_ENVSTEPSTOTAL:
+    case UPDATE_STEPSTOTAL:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          envStepsTotal: action.payload.steps
+          stepsTotal: action.payload.steps
         }
       };
     case UPDATE_BREAKPOINTSTEPS:
