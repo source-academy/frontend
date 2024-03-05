@@ -562,6 +562,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
   // Override the overlayPage function to add an id to the overlay div.
   // This allows the overlay div to be referenced and removed when the editor is unmounted.
+  // See https://github.com/source-academy/frontend/pull/2832
   acequire('ace/ext/menu_tools/overlay_page').overlayPage = function (
     editor: any,
     contentElement: HTMLElement,
