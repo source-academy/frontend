@@ -96,7 +96,7 @@ export type AssessmentConfiguration = {
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
-  hasTokenCounter: boolean;
+  isContest: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {

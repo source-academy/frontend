@@ -49,11 +49,11 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('displayInDashboard', value);
   };
 
-  const setHasTokenCounter = (index: number, value: boolean) => {
+  const setIsContest = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      hasTokenCounter: value
+      isContest: value
     };
     setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasTokenCounter', value);
@@ -92,7 +92,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
-      hasTokenCounter: false,
+      isContest: false,
       earlySubmissionXp: 0
     });
     setAssessmentConfig(temp);
@@ -138,12 +138,12 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
       }
     },
     {
-      headerName: 'Has Token Counter',
-      field: 'hasTokenCounter',
+      headerName: 'Is Contest Related',
+      field: 'isContest',
       cellRenderer: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setHasTokenCounter,
-        field: 'hasTokenCounter'
+        setStateHandler: setIsContest,
+        field: 'isContest'
       }
     },
     {
