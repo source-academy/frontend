@@ -271,13 +271,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         />
         <AgGridReact
           domLayout={'autoHeight'}
-          columnDefs={
-            this.state.gridAssessmentType === GridAssessmentType.Assessments
-              ? this.assessmentColumnDefs
-              : this.state.gridAssessmentType === GridAssessmentType.Contests
-              ? this.contestColumnDefs
-              : null
-          }
+          columnDefs={this.assessmentColumnDefs}
           defaultColDef={this.defaultColumnDefs}
           onGridReady={this.onGridReady}
           onGridSizeChanged={this.resizeGrid}
@@ -349,13 +343,22 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   };
 
   private handleGridAssessmentTypeChange = (assessmentType: String) => {
-    this.setState({
-      gridAssessmentType:
-        assessmentType === 'assessments'
-          ? GridAssessmentType.Assessments
-          : assessmentType === 'contests'
-          ? GridAssessmentType.Contests
-          : GridAssessmentType.Default // Should never reach this point as long as there is appropriate assessmentType
+    const newGridAssessmentType =
+      assessmentType === 'assessments'
+        ? GridAssessmentType.Assessments
+        : assessmentType === 'contests'
+        ? GridAssessmentType.Contests
+        : GridAssessmentType.Default; // Should never reach this point as long as there is appropriate assessmentType
+    this.setState({ gridAssessmentType: newGridAssessmentType }, () => {
+      this.columnApi?.resetColumnState();
+      const columnDefs =
+        newGridAssessmentType === GridAssessmentType.Assessments
+          ? this.assessmentColumnDefs
+          : newGridAssessmentType === GridAssessmentType.Contests
+          ? this.contestColumnDefs
+          : [];
+      this.gridApi?.setColumnDefs(columnDefs);
+      this.gridApi?.sizeColumnsToFit();
     });
   };
 
