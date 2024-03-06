@@ -56,6 +56,7 @@ export type QuestionType = keyof typeof QuestionTypes;
 export type AssessmentOverview = {
   type: AssessmentType;
   isManuallyGraded: boolean;
+  isContestRelated: boolean;
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
@@ -94,7 +95,7 @@ export type AssessmentConfiguration = {
   type: AssessmentType;
   isManuallyGraded: boolean;
   displayInDashboard: boolean;
-  isContest: boolean;
+  isContestRelated: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
 };
@@ -232,6 +233,7 @@ export const overviewTemplate = (): AssessmentOverview => {
   return {
     type: 'Missions',
     isManuallyGraded: true,
+    isContestRelated: false,
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,

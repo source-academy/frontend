@@ -22,7 +22,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: false,
+      isContestRelated: false,
       earlySubmissionXp: 200
     },
     {
@@ -31,7 +31,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: false,
+      isContestRelated: false,
       earlySubmissionXp: 200
     },
     {
@@ -40,7 +40,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: false,
+      isContestRelated: false,
       earlySubmissionXp: 200
     },
     {
@@ -49,7 +49,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: true,
+      isContestRelated: true,
       earlySubmissionXp: 200
     },
     {
@@ -58,7 +58,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: false,
+      isContestRelated: false,
       earlySubmissionXp: 200
     }
   ],
@@ -69,7 +69,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: false,
+      isContestRelated: false,
       earlySubmissionXp: 200
     },
     {
@@ -78,7 +78,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: false,
+      isContestRelated: false,
       earlySubmissionXp: 200
     },
     {
@@ -87,7 +87,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      isContest: false,
+      isContestRelated: false,
       earlySubmissionXp: 200
     }
   ]

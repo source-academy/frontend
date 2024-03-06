@@ -151,7 +151,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       type: 'Mission1',
       buildHidden: false,
       buildSolution: false,
-      isContest: false,
+      isContestRelated: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -160,7 +160,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       type: 'Mission1',
       buildHidden: false,
       buildSolution: false,
-      isContest: false,
+      isContestRelated: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -169,7 +169,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       type: 'Mission1',
       buildHidden: false,
       buildSolution: false,
-      isContest: false,
+      isContestRelated: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }

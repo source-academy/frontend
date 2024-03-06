@@ -250,13 +250,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling enabling and disabling token counter depending on assessment configuration
    */
   useEffect(() => {
-    if (props.assessmentConfiguration.isContest) {
+    if (props.assessmentConfiguration.isContestRelated) {
       handleEnableTokenCounter();
     } else {
       handleDisableTokenCounter();
     }
   }, [
-    props.assessmentConfiguration.isContest,
+    props.assessmentConfiguration.isContestRelated,
     handleEnableTokenCounter,
     handleDisableTokenCounter
   ]);
@@ -430,7 +430,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   ) => {
     const question = assessment!.questions[questionId];
     const isGraded = question.grader !== undefined;
-    const isContestVoting = question?.type === QuestionTypes.voting;
+    const isContestRelatedVoting = question?.type === QuestionTypes.voting;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
@@ -445,7 +445,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       }
     ];
 
-    if (isContestVoting) {
+    if (isContestRelatedVoting) {
       tabs.push(
         {
           label: `Contest Voting Briefing`,

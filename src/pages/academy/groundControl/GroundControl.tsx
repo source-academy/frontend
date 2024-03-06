@@ -282,7 +282,10 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           defaultColDef={this.defaultColumnDefs}
           onGridReady={this.onGridReady}
           onGridSizeChanged={this.resizeGrid}
-          rowData={this.props.assessmentOverviews}
+          rowData={this.filterAssessmentOverviews(
+            this.props.assessmentOverviews,
+            this.gridAssessmentType
+          )}
           rowHeight={30}
           suppressCellFocus={true}
           suppressMovableColumns={true}
@@ -353,6 +356,19 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         : assessmentType === 'contests'
         ? GridAssessmentType.Contests
         : GridAssessmentType.Default; // Should never reach this point as long as there is appropriate assessmentType
+  };
+
+  private filterAssessmentOverviews = (
+    assessmentOverviews: AssessmentOverview[] | undefined,
+    gridAssessmentType: GridAssessmentType
+  ) => {
+    return assessmentOverviews === undefined
+      ? undefined
+      : gridAssessmentType === GridAssessmentType.Contests
+      ? assessmentOverviews.filter(assessmentOverview => assessmentOverview.isContestRelated)
+      : gridAssessmentType === GridAssessmentType.Assessments
+      ? assessmentOverviews.filter(assessmentOverview => !assessmentOverview.isContestRelated)
+      : undefined;
   };
 }
 
