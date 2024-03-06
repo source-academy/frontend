@@ -254,21 +254,23 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
     const grid = (
       <div className="Grid ag-grid-parent ag-theme-balham">
-        <SegmentedControl
-          options={[
-            {
-              label: 'Assessments',
-              value: 'assessments'
-            },
-            {
-              label: 'Contests',
-              value: 'contests'
-            }
-          ]}
-          onValueChange={value => this.handleGridAssessmentTypeChange(value)}
-          defaultValue="assessments"
-          small={true}
-        />
+        <div className="assessment-type-control">
+          <SegmentedControl
+            options={[
+              {
+                label: 'Assessments',
+                value: 'assessments'
+              },
+              {
+                label: 'Contests',
+                value: 'contests'
+              }
+            ]}
+            onValueChange={value => this.handleGridAssessmentTypeChange(value)}
+            defaultValue="assessments"
+            intent={'primary'}
+          />
+        </div>
         <AgGridReact
           domLayout={'autoHeight'}
           columnDefs={this.assessmentColumnDefs}
