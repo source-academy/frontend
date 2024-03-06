@@ -1,7 +1,7 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-balham.css';
 
-import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
+import { Button, Collapse, Divider, Intent, SegmentedControl } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
@@ -38,11 +38,19 @@ type State = {
   showDropzone: boolean;
 };
 
+enum GridAssessmentType {
+  Contests,
+  Assessments,
+  Default
+}
+
 class GroundControl extends React.Component<GroundControlProps, State> {
-  private columnDefs: ColDef[];
+  private assessmentColumnDefs: ColDef[];
+  private contestColumnDefs: ColDef[];
   private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
   private columnApi?: ColumnApi;
+  private gridAssessmentType: GridAssessmentType;
 
   public constructor(props: GroundControlProps) {
     super(props);
@@ -51,7 +59,86 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       showDropzone: false
     };
 
-    this.columnDefs = [
+    this.assessmentColumnDefs = [
+      {
+        field: 'number',
+        headerName: 'ID',
+        width: 50
+      },
+      {
+        headerName: 'Title',
+        field: 'title'
+      },
+      {
+        headerName: 'Category',
+        field: 'type',
+        width: 100
+      },
+      {
+        headerName: 'Open Date',
+        field: 'openAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: this.dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
+        cellRenderer: EditCell,
+        cellRendererParams: {
+          handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
+          forOpenDate: true
+        },
+        width: 150
+      },
+      {
+        headerName: 'Close Date',
+        field: 'closeAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: this.dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
+        cellRenderer: EditCell,
+        cellRendererParams: {
+          handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
+          forOpenDate: false
+        },
+        width: 150
+      },
+      {
+        headerName: 'Publish',
+        field: '',
+        cellRenderer: PublishCell,
+        cellRendererParams: {
+          handlePublishAssessment: this.props.handlePublishAssessment
+        },
+        width: 100,
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: {
+          padding: 0
+        }
+      },
+      {
+        headerName: 'Delete',
+        field: '',
+        cellRenderer: DeleteCell,
+        cellRendererParams: {
+          handleDeleteAssessment: this.props.handleDeleteAssessment
+        },
+        width: 100,
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: {
+          padding: 0
+        }
+      }
+    ];
+
+    this.contestColumnDefs = [
       {
         field: 'number',
         headerName: 'ID',
@@ -135,6 +222,8 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       resizable: true,
       sortable: true
     };
+
+    this.gridAssessmentType = GridAssessmentType.Assessments;
   }
 
   public render() {
@@ -166,9 +255,30 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
     const grid = (
       <div className="Grid ag-grid-parent ag-theme-balham">
+        <SegmentedControl
+          options={[
+            {
+              label: 'Assessments',
+              value: 'assessments'
+            },
+            {
+              label: 'Contests',
+              value: 'contests'
+            }
+          ]}
+          onValueChange={this.handleGridAssessmentTypeChange}
+          defaultValue="assessments"
+          small={true}
+        />
         <AgGridReact
           domLayout={'autoHeight'}
-          columnDefs={this.columnDefs}
+          columnDefs={
+            this.gridAssessmentType === GridAssessmentType.Assessments
+              ? this.assessmentColumnDefs
+              : this.gridAssessmentType === GridAssessmentType.Contests
+              ? this.contestColumnDefs
+              : null
+          }
           defaultColDef={this.defaultColumnDefs}
           onGridReady={this.onGridReady}
           onGridSizeChanged={this.resizeGrid}
@@ -234,6 +344,15 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
   private toggleDropzone = () => {
     this.setState({ showDropzone: !this.state.showDropzone });
+  };
+
+  private handleGridAssessmentTypeChange = (assessmentType: String) => {
+    this.gridAssessmentType =
+      assessmentType === 'assessments'
+        ? GridAssessmentType.Assessments
+        : assessmentType === 'contests'
+        ? GridAssessmentType.Contests
+        : GridAssessmentType.Default; // Should never reach this point as long as there is appropriate assessmentType
   };
 }
 
