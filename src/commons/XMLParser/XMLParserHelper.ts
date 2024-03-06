@@ -72,6 +72,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
   return {
     type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
     isManuallyGraded: true, // TODO: This is temporarily hardcoded to true. To be redone when overhauling MissionControl
+    isContestRelated: false,
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
     id: EDITING_ID,
