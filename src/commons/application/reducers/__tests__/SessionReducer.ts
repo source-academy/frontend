@@ -314,6 +314,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isContestRelated: false,
     closeAt: 'test_string',
     coverImage: 'test_string',
     id: 0,
@@ -332,6 +333,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
     type: 'Contests',
     isManuallyGraded: true,
+    isContestRelated: false,
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',

@@ -487,6 +487,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
     {
       type: 'Missions',
       isManuallyGraded: true,
+      isContestRelated: false,
       closeAt: 'test_string',
       coverImage: 'test_string',
       id: 0,
