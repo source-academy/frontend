@@ -101,13 +101,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       ? styliseSublanguage(chapter, variant)
       : env + ' | ' + styliseSublanguage(chapter, variant);
 
-  // TODO: Add env visualiser tabs and shift to language config
+  // TODO: Add CSE machine tabs and shift to language config
 
-  // const envVisualizerTab: SideContentTab = {
+  // const cseMachineTab: SideContentTab = {
   //   label: 'CSE Machine',
   //   iconName: IconNames.GLOBE,
-  //   body: <SideContentEnvVisualizer />,
-  //   id: SideContentType.envVisualizer
+  //   body: <SideContentCseMachine />,
+  //   id: SideContentType.cseMachine
   // };
 
   const usingSubst = selectedTab === SideContentType.substVisualizer;
@@ -157,8 +157,8 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       tabs.push(makeDataVisualizerTabFrom(`stories.${env}`));
     }
     // if (chapter >= 3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET) {
-    //   // Enable Env Visualizer for Source Chapter 3 and above
-    //   tabs.push(envVisualizerTab);
+    //   // Enable CSE Machine for Source Chapter 3 and above
+    //   tabs.push(cseMachineTab);
     // }
 
     if (

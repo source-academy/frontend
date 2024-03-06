@@ -37,25 +37,25 @@ describe('Side Content Alerts for normal side content', () => {
 
   test('Check that alerts from existing tabs are processed after dynamic tabs are loaded', async () => {
     const { storeState } = await expectSagaWrapper({ dynamicTabs: [], alerts: [] }, [mockTab])
-      .dispatch(actions.beginAlertSideContent(SideContentType.envVisualizer, 'playground'))
+      .dispatch(actions.beginAlertSideContent(SideContentType.cseMachine, 'playground'))
       .dispatch(actions.beginAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .dispatch(actions.notifyProgramEvaluated({}, {}, '', {} as Context, 'playground'))
       .take(NOTIFY_PROGRAM_EVALUATED)
-      .put(actions.endAlertSideContent(SideContentType.envVisualizer, 'playground'))
+      .put(actions.endAlertSideContent(SideContentType.cseMachine, 'playground'))
       .put(actions.endAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .silentRun();
 
     expect(storeState).toMatchObject({
       playground: {
         dynamicTabs: [mockTab],
-        alerts: ['tab2', SideContentType.envVisualizer, SideContentType.dataVisualizer]
+        alerts: ['tab2', SideContentType.cseMachine, SideContentType.dataVisualizer]
       }
     });
   });
 
   test('All alerts are reset upon new evaluation', async () => {
     const { storeState } = await expectSagaWrapper(
-      { alerts: ['tab0', 'tab1', SideContentType.envVisualizer], dynamicTabs: [] },
+      { alerts: ['tab0', 'tab1', SideContentType.cseMachine], dynamicTabs: [] },
       []
     )
       .dispatch(actions.beginAlertSideContent(SideContentType.dataVisualizer, 'playground'))
@@ -74,7 +74,7 @@ describe('Side Content Alerts for normal side content', () => {
   test('Selected tab is not included in alerts', async () => {
     const { storeState } = await expectSagaWrapper(
       {
-        alerts: ['tab0', 'tab1', SideContentType.envVisualizer],
+        alerts: ['tab0', 'tab1', SideContentType.cseMachine],
         dynamicTabs: [],
         selectedTab: 'tab2' as any
       },
