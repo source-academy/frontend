@@ -510,7 +510,7 @@
 }
 
 .grading-overview-filterable-btns {
-  padding: 0;
+  padding: 0 2px;
 
   // Hides overflowed text for the buttons
   &,
@@ -528,7 +528,7 @@
       -0.875rem for icon margins
       -1.125rem for additional padding
     */
-    p {
+    p, &:has(> span) > span {
       max-width: calc(20vw - 16px - 2rem);
     }
   }
@@ -540,7 +540,7 @@
 
   &:hover {
     // Buttons with bg
-    > div > span {
+    > div > span, &:has(> span) {
       // Use of contrast due to unknown background color
       filter: contrast(0.9);
     }
@@ -550,6 +550,10 @@
       text-decoration: underline;
     }
   }
+}
+
+.grading-overview-filterable-btns, .grading-overview-rounded-btns {
+  border-radius: 9999px;
 }
 
 .grading-overview-footer-sibling {

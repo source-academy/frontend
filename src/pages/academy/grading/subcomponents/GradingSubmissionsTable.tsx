@@ -31,17 +31,12 @@ import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  updateGradingColumnVisibility,
-  updateSubmissionsTableFilters
-} from 'src/commons/workspace/WorkspaceActions';
-import { GradingColumnVisibility } from 'src/commons/workspace/WorkspaceTypes';
+import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
-import GradingColumnFilters from './GradingColumnFilters';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -124,15 +119,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 }) => {
   const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
-  const columnVisibility = useTypedSelector(state => state.workspaces.grading.columnVisiblity);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters
   ]);
-
-  const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
-    columnVisibility ? columnVisibility : { columns: [] }
-  );
 
   const [page, setPage] = useState(0);
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
@@ -195,29 +185,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     resetPage();
   };
 
-  const handleColumnFilterRemove = (toRemove: string) => {
-    setHiddenColumns((prev: GradingColumnVisibility) => {
-      return {
-        columns: prev.columns.filter(column => column !== toRemove)
-      };
-    });
-  };
-
-  const handleColumnFilterAdd = (toAdd: string) => {
-    setHiddenColumns((prev: GradingColumnVisibility) => {
-      return {
-        columns: [...prev.columns, toAdd]
-      };
-    });
-  };
-
   useEffect(() => {
     dispatch(updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, dispatch]);
-
-  useEffect(() => {
-    dispatch(updateGradingColumnVisibility(hiddenColumns));
-  }, [hiddenColumns, dispatch]);
 
   useEffect(() => {
     resetPage();
@@ -229,36 +199,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   return (
     <>
-      {hiddenColumns.columns.length > 0 ? (
-        <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
-          <Flex alignItems="items-center" spaceX="space-x-2">
-            <div
-              style={{
-                display: 'flex',
-                gap: '0.5rem',
-                alignItems: 'center',
-                height: '1.75rem',
-                marginRight: '10px'
-              }}
-            >
-              <Text>Columns Hidden:</Text>
-            </div>
-            <GradingColumnFilters
-              filters={hiddenColumns.columns}
-              filtersName={hiddenColumns.columns.map(id => {
-                const headerTexts = columns.filter(
-                  col => col['accessorKey'] === id || col['header'] === id
-                );
-                return headerTexts[0]['header'] ? headerTexts[0]['header'].toString() : '';
-              })}
-              onFilterRemove={handleColumnFilterRemove}
-            />
-          </Flex>
-        </Flex>
-      ) : (
-        <></>
-      )}
-      
       <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
         <Flex alignItems="items-center" spaceX="space-x-2">
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
@@ -266,10 +206,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
             <Text>
               {columnFilters.length > 0
                 ? 'Filters: '
-                : 'No filters applied. Click on any cell to filter by its value.' +
-                  (hiddenColumns.columns.length === 0
-                    ? ' Click on any column header to hide it.'
-                    : '')}{' '}
+                : 'No filters applied. Click on any cell to filter by its value.'}{' '}
             </Text>
           </div>
           <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
@@ -283,53 +220,28 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           onChange={handleSearchQueryUpdate}
         />
       </Flex>
-
       <Table marginTop="mt-2">
         <TableHead>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map(header =>
-                hiddenColumns.columns.reduce(
-                  (accumulator, currentValue) => accumulator || header.id.includes(currentValue),
-                  false
-                ) ? (
-                  <></>
-                ) : (
-                  <TableHeaderCell key={header.id}>
-                    <button
-                      type="button"
-                      className="grading-overview-filterable-btns tr-text-gray-500 tr-font-semibold"
-                      onClick={(e) => {
-                        handleColumnFilterAdd(header.getContext().header.id);
-                      }}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </button>
-                  </TableHeaderCell>
-                )
-              )}
+              {headerGroup.headers.map(header => (
+                <TableHeaderCell key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </TableHeaderCell>
+              ))}
             </TableRow>
           ))}
         </TableHead>
         <TableBody>
           {table.getRowModel().rows.map(row => (
             <TableRow key={row.id}>
-              {row
-                .getVisibleCells()
-                .map(cell =>
-                  hiddenColumns.columns.reduce(
-                    (accumulator, currentValue) => accumulator || cell.id.includes(currentValue),
-                    false
-                  ) ? (
-                    <></>
-                  ) : (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  )
-                )}
+              {row.getVisibleCells().map(cell => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>

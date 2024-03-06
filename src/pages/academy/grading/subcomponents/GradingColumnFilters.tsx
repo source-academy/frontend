@@ -1,5 +1,3 @@
-import { Flex } from '@tremor/react';
-
 import { ColumnFilterBadge } from './GradingBadges';
 
 type GradingSubmissionFiltersProps = {
@@ -14,7 +12,7 @@ const GradingColumnFilters: React.FC<GradingSubmissionFiltersProps> = ({
   filtersName
 }) => {
   return (
-    <Flex justifyContent="justify-start" spaceX="space-x-1">
+    <div>
       {filters.map((filter, index) => (
         <ColumnFilterBadge
           filter={filter}
@@ -23,7 +21,7 @@ const GradingColumnFilters: React.FC<GradingSubmissionFiltersProps> = ({
           key={filter}
         />
       ))}
-    </Flex>
+    </div>
   );
 };
 
