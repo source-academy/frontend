@@ -36,6 +36,7 @@ export type StateProps = {
 
 type State = {
   showDropzone: boolean;
+  gridAssessmentType: GridAssessmentType;
 };
 
 enum GridAssessmentType {
@@ -50,13 +51,13 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
   private columnApi?: ColumnApi;
-  private gridAssessmentType: GridAssessmentType;
 
   public constructor(props: GroundControlProps) {
     super(props);
 
     this.state = {
-      showDropzone: false
+      showDropzone: false,
+      gridAssessmentType: GridAssessmentType.Assessments
     };
 
     this.assessmentColumnDefs = [
@@ -222,8 +223,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       resizable: true,
       sortable: true
     };
-
-    this.gridAssessmentType = GridAssessmentType.Assessments;
   }
 
   public render() {
@@ -266,16 +265,16 @@ class GroundControl extends React.Component<GroundControlProps, State> {
               value: 'contests'
             }
           ]}
-          onValueChange={this.handleGridAssessmentTypeChange}
+          onValueChange={value => this.handleGridAssessmentTypeChange(value)}
           defaultValue="assessments"
           small={true}
         />
         <AgGridReact
           domLayout={'autoHeight'}
           columnDefs={
-            this.gridAssessmentType === GridAssessmentType.Assessments
+            this.state.gridAssessmentType === GridAssessmentType.Assessments
               ? this.assessmentColumnDefs
-              : this.gridAssessmentType === GridAssessmentType.Contests
+              : this.state.gridAssessmentType === GridAssessmentType.Contests
               ? this.contestColumnDefs
               : null
           }
@@ -284,7 +283,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           onGridSizeChanged={this.resizeGrid}
           rowData={this.filterAssessmentOverviews(
             this.props.assessmentOverviews,
-            this.gridAssessmentType
+            this.state.gridAssessmentType
           )}
           rowHeight={30}
           suppressCellFocus={true}
@@ -350,12 +349,14 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   };
 
   private handleGridAssessmentTypeChange = (assessmentType: String) => {
-    this.gridAssessmentType =
-      assessmentType === 'assessments'
-        ? GridAssessmentType.Assessments
-        : assessmentType === 'contests'
-        ? GridAssessmentType.Contests
-        : GridAssessmentType.Default; // Should never reach this point as long as there is appropriate assessmentType
+    this.setState({
+      gridAssessmentType:
+        assessmentType === 'assessments'
+          ? GridAssessmentType.Assessments
+          : assessmentType === 'contests'
+          ? GridAssessmentType.Contests
+          : GridAssessmentType.Default // Should never reach this point as long as there is appropriate assessmentType
+    });
   };
 
   private filterAssessmentOverviews = (
