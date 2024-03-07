@@ -106,7 +106,7 @@ const ChapterPublisherEditor = memo(({ chapterDetail, chapterFilenames }: Chapte
 
   const clearChanges = () => {
     const confirm = window.confirm(
-      `Are you you want to clear changes for Chapter ${id}: ${title}?`
+      `Are you sure you want to clear changes for Chapter ${id}: ${title}?`
     );
     if (confirm) {
       setRender(!rerender);
