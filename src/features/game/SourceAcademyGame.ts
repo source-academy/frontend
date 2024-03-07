@@ -13,7 +13,7 @@ import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
 import Settings from 'src/features/game/scenes/settings/Settings';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
-import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
+import { GameSimulatorState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 import { AchievementGoal, AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
@@ -123,7 +123,7 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.roomCode = await getRoomPreviewCode();
   }
 
-  public setGameSimState(state: GameSimState) {
+  public setGameSimState(state: GameSimulatorState) {
     this.global.setGameSimState(state);
   }
 
