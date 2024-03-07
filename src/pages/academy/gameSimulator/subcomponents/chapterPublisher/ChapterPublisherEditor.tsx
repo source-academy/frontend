@@ -13,7 +13,7 @@ import {
 } from 'src/features/gameSimulator/GameSimulatorService';
 import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import { createChapterIndex, inAYear } from './GameSimulatorChapterSim';
+import { createChapterIndex, inAYear } from './ChapterPublisher';
 
 type ChapterSimProps = {
   chapterDetail: ChapterDetail;

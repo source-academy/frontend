@@ -4,7 +4,7 @@ import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyG
 import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 import AssetViewer from './subcomponents/assetViewer/AssetViewer';
-import GameSimulatorChapterSim from './subcomponents/chapterPublisher/GameSimulatorChapterSim';
+import GameSimulatorChapterSim from './subcomponents/chapterPublisher/ChapterPublisher';
 import GameSimulatorCheckpointSim from './subcomponents/chapterSimulator/GameSimulatorCheckpointSim';
 import { createGameSimulatorGame } from './subcomponents/GameSimulatorGame';
 

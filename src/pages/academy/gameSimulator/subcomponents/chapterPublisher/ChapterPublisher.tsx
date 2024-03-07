@@ -3,7 +3,7 @@ import { useRequest } from 'src/commons/utils/Hooks';
 import { fetchChapters, fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
 import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import GameSimulatorChapterEditor from './GameSimulatorChapterEditor';
+import GameSimulatorChapterEditor from './ChapterPublisherEditor';
 
 export const inAYear = (date: Date) => {
   date.setFullYear(date.getFullYear() + 1);
