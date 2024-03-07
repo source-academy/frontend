@@ -3,10 +3,10 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import GameSimulatorAssetFileUploader from './subcomponents/GameSimulatorAssetFileUploader';
-import GameSimulatorAssetSelection from './subcomponents/GameSimulatorAssetSelection';
-import GameSimulatorChapterSim from './subcomponents/GameSimulatorChapterSim';
-import GameSimulatorCheckpointSim from './subcomponents/GameSimulatorCheckpointSim';
+import GameSimulatorAssetFileUploader from './subcomponents/assetViewer/GameSimulatorAssetFileUploader';
+import GameSimulatorAssetSelection from './subcomponents/assetViewer/GameSimulatorAssetSelection';
+import GameSimulatorChapterSim from './subcomponents/chapterPublisher/GameSimulatorChapterSim';
+import GameSimulatorCheckpointSim from './subcomponents/chapterSimulator/GameSimulatorCheckpointSim';
 import { createGameSimulatorGame } from './subcomponents/GameSimulatorGame';
 
 /**
