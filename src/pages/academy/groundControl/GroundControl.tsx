@@ -268,7 +268,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
             ]}
             onValueChange={value => this.handleGridAssessmentTypeChange(value)}
             defaultValue="assessments"
-            intent={'primary'}
           />
         </div>
         <AgGridReact
