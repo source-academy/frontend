@@ -57,6 +57,7 @@ export type AssessmentOverview = {
   type: AssessmentType;
   isManuallyGraded: boolean;
   isContestRelated: boolean;
+  isContestVoting?: boolean;
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
