@@ -8,8 +8,8 @@ import {
   s3AssetFolders
 } from 'src/features/gameSimulator/GameSimulatorService';
 
-import { assetPathsToTree, treeMap } from './GameSimulatorAssetSelectionHelper';
-import GameSimulatorAssetViewer from './GameSimulatorAssetViewer';
+import { assetPathsToTree, treeMap } from './AssetViewerUtils';
+import AssetViewerPreview from './AssetViewerPreview';
 
 type TreeState = {
   nodes: TreeNodeInfo[];
@@ -45,7 +45,7 @@ const GameSimulatorAssetSelection = () => {
 
   return (
     <>
-      <GameSimulatorAssetViewer assetPath={currentAsset} />
+      <AssetViewerPreview assetPath={currentAsset} />
       <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />
     </>
   );
