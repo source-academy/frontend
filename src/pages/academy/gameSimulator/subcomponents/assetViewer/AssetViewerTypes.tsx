@@ -1,3 +1,3 @@
 export type AssetProps = {
-    assetPath: string;
-  };
+  assetPath: string;
+};

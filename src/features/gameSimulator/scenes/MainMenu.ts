@@ -12,7 +12,7 @@ import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 
 import SSImageAssets from '../assets/ImageAssets';
-import { GameSimState } from '../GameSimulatorTypes';
+import { GameSimulatorState } from '../GameSimulatorTypes';
 import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 
 /**
@@ -82,21 +82,21 @@ class MainMenu extends Phaser.Scene {
   private getOptionButtons() {
     return [
       {
-        text: 'Checkpoint Simulator',
+        text: 'Simulate Chapters',
         callback: () => {
-          SourceAcademyGame.getInstance().setGameSimState(GameSimState.CheckpointSim);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.ChapterSimulator);
         }
       },
       {
-        text: 'Asset Uploader',
+        text: 'Publish / Edit Chapters',
         callback: () => {
-          SourceAcademyGame.getInstance().setGameSimState(GameSimState.AssetUploader);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.ChapterPublisher);
         }
       },
       {
-        text: 'Chapter Simulator',
+        text: 'View / Upload Assets',
         callback: () => {
-          SourceAcademyGame.getInstance().setGameSimState(GameSimState.ChapterSim);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.AssetViewer);
         }
       }
     ];
