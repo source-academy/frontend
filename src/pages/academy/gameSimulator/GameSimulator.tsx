@@ -4,7 +4,7 @@ import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyG
 import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 import AssetViewer from './subcomponents/assetViewer/AssetViewer';
-import GameSimulatorChapterSim from './subcomponents/chapterPublisher/ChapterPublisher';
+import ChapterPublisher from './subcomponents/chapterPublisher/ChapterPublisher';
 import GameSimulatorCheckpointSim from './subcomponents/chapterSimulator/GameSimulatorCheckpointSim';
 import { createGameSimulatorGame } from './subcomponents/GameSimulatorGame';
 
@@ -43,7 +43,7 @@ function GameSimulator() {
       <div className="LeftAlign GameSimulatorPanel">
         {gameSimState === GameSimState.Default && <h3>Welcome to Game simulator!</h3>}
         {gameSimState === GameSimState.CheckpointSim && <GameSimulatorCheckpointSim />}
-        {gameSimState === GameSimState.ChapterSim && <GameSimulatorChapterSim />}
+        {gameSimState === GameSimState.ChapterSim && <ChapterPublisher />}
         {gameSimState === GameSimState.AssetUploader && <AssetViewer />}
       </div>
     </div>

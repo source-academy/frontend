@@ -1,57 +1,42 @@
-import React from 'react';
+import { memo, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import { fetchChapters, fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
 import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import GameSimulatorChapterEditor from './ChapterPublisherEditor';
-
-export const inAYear = (date: Date) => {
-  date.setFullYear(date.getFullYear() + 1);
-  return date;
-};
-
-export const createChapterIndex = -1;
-const defaultChapter = {
-  id: createChapterIndex,
-  title: 'title goes here',
-  imageUrl: '/locations/telebay/emergency.png',
-  openAt: new Date().toISOString(),
-  closeAt: inAYear(new Date()).toISOString(),
-  isPublished: false,
-  filenames: []
-};
+import ChapterPublisherEditor from './ChapterPublisherEditor';
+import { defaultChapter, newChapterIndex } from './ChapterPublisherUtils';
 
 /**
- * This components renders the chapter editor/chapter creator component
- * based on the chapter chosen in the dropdown.
+ * This components renders the Chapter Publisher component.
  *
- * @param textAssets - the list of all text assets on S3 to choose from
+ * @param textAssets - List of all text assets on S3 to choose from.
  */
-const ChapterSim = React.memo(() => {
+const ChapterPublisher = memo(() => {
   const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
   const { value: chapters } = useRequest<ChapterDetail[]>(fetchChapters, []);
 
-  const [chosenIndex, setChosenIndex] = React.useState(createChapterIndex);
+  const [chosenIndex, setChosenIndex] = useState(-1);
 
   return (
     <>
-      <h3>Chapter Simulator</h3>
-      <select className="bp4-menu" onChange={(e: any) => setChosenIndex(e.target.value)}>
+      <h3>Publish / Edit Chapters</h3>
+      <select className="bp4-menu" onChange={(e: any) => setChosenIndex(e.target.key)}>
         {chapters.map((chapter, chapterIndex) => (
-          <option value={chapterIndex} key={chapterIndex}>
+          <option key={chapterIndex} value={chapter.title}>
             {`Chapter ${chapterIndex}: ${chapter.title}`}
           </option>
         ))}
-        <option value={createChapterIndex} key={createChapterIndex}>
-          {`Create new chapter`}
-        </option>
+        <option key={newChapterIndex} value={''}>{`New chapter`}</option>
       </select>
+      <br />
+      <br />
       <hr />
-      <GameSimulatorChapterEditor
+      <ChapterPublisherEditor
         chapterDetail={chapters[chosenIndex] || defaultChapter}
-        checkpointFilenames={textAssets}
+        chapterFilenames={textAssets}
       />
     </>
   );
 });
-export default ChapterSim;
+
+export default ChapterPublisher;
