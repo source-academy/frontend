@@ -3,8 +3,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import GameSimulatorAssetFileUploader from './subcomponents/assetViewer/AssetViewerUpload';
-import GameSimulatorAssetSelection from './subcomponents/assetViewer/AssetViewer';
+import AssetViewer from './subcomponents/assetViewer/AssetViewer';
 import GameSimulatorChapterSim from './subcomponents/chapterPublisher/GameSimulatorChapterSim';
 import GameSimulatorCheckpointSim from './subcomponents/chapterSimulator/GameSimulatorCheckpointSim';
 import { createGameSimulatorGame } from './subcomponents/GameSimulatorGame';
@@ -44,15 +43,8 @@ function GameSimulator() {
       <div className="LeftAlign GameSimulatorPanel">
         {gameSimState === GameSimState.Default && <h3>Welcome to Game simulator!</h3>}
         {gameSimState === GameSimState.CheckpointSim && <GameSimulatorCheckpointSim />}
-        {gameSimState === GameSimState.AssetUploader && (
-          <>
-            <h3>Asset uploader</h3>
-            <GameSimulatorAssetFileUploader />
-            <h3>Asset Viewer</h3>
-            <GameSimulatorAssetSelection />
-          </>
-        )}
         {gameSimState === GameSimState.ChapterSim && <GameSimulatorChapterSim />}
+        {gameSimState === GameSimState.AssetUploader && <AssetViewer />}
       </div>
     </div>
   );

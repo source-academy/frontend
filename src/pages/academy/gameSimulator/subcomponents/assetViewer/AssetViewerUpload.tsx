@@ -1,21 +1,16 @@
-import { Button, InputGroup, Menu, MenuItem, Position } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
-import React from 'react';
+import { Button, InputGroup, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
+import { useState } from 'react';
 import { s3AssetFolders, uploadAssetsToS3 } from 'src/features/gameSimulator/GameSimulatorService';
 
-const specifyFolderText = 'Specify own folder...';
-const folderOverwritePlaceholder = "Or specify your own, e.g. 'locations/hallway'";
-
 /**
- * This is component allows storywriters to upload any assets into to
- * specific folders into Game Sim's Asset Uploader
+ * This component allows uploading of new assets into the S3 asset files.
  */
-const AssetFileUploader = () => {
-  const [fileList, setFileList] = React.useState<FileList>();
-  const [uploadFolder, setUploadFolder] = React.useState<string>(s3AssetFolders[0]);
+const AssetViewerUpload = () => {
+  const [fileList, setFileList] = useState<FileList>();
+  const [uploadFolder, setUploadFolder] = useState<string>(s3AssetFolders[0]);
 
-  const [folderOverwrite, setFolderOverwrite] = React.useState<string>();
-  const [showfolderOverwrite, setShowFolderOverwrite] = React.useState<boolean>(false);
+  const [folderOverwrite, setFolderOverwrite] = useState<string>();
+  const [showfolderOverwrite, setShowFolderOverwrite] = useState<boolean>(false);
 
   function handleLoadFile(e: any) {
     if (!e.target.files) return;
@@ -51,32 +46,28 @@ const AssetFileUploader = () => {
       {s3AssetFolders.map(folder => (
         <MenuItem onClick={handleChangeUploadFolder} id={folder} key={folder} text={folder} />
       ))}
-      <MenuItem
-        onClick={showSpecifyFolder}
-        id={specifyFolderText}
-        key={specifyFolderText}
-        text={specifyFolderText}
-      ></MenuItem>
+      <MenuItem onClick={showSpecifyFolder} text={'Custom Folder'}></MenuItem>
     </Menu>
   );
   return (
     <div className="LeftAlign">
-      <h4>Choose Folder</h4>
-      <Popover2 placement={Position.BOTTOM} content={uploadButtonPopoverContent}>
+      <h4>Choose a Folder to upload an asset to:</h4>
+      <Popover placement={Position.BOTTOM} content={uploadButtonPopoverContent}>
         <Button text={uploadFolder} />
-      </Popover2>
+      </Popover>
+      <br />
+      <br />
       {showfolderOverwrite && (
         <InputGroup
-          placeholder={folderOverwritePlaceholder}
+          placeholder={"Specify your own custom folder: e.g. 'locations/hallway'"}
           onChange={handleChangeFolderOverwrite}
         />
       )}
-      <br />
-      <h4>Choose File</h4>
+      <h4>Choose the asset File to be uploaded:</h4>
       <input type="file" multiple onChange={handleLoadFile} />
       <Button onClick={handleUploadButtonClick}>Upload</Button>
     </div>
   );
 };
 
-export default AssetFileUploader;
+export default AssetViewerUpload;

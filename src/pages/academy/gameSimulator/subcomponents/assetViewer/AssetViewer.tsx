@@ -1,78 +1,63 @@
-import { Icon, Tree, TreeNodeInfo } from '@blueprintjs/core';
-import { Tooltip2 } from '@blueprintjs/popover2';
+import { Tab, Tabs, Tree, TreeNodeInfo } from '@blueprintjs/core';
+import { cloneDeep } from 'lodash';
 import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
-import {
-  deleteS3File,
-  fetchAssetPaths,
-  s3AssetFolders
-} from 'src/features/gameSimulator/GameSimulatorService';
+import { fetchAssetPaths, s3AssetFolders } from 'src/features/gameSimulator/GameSimulatorService';
 
-import { assetPathsToTree, treeMap } from './AssetViewerUtils';
 import AssetViewerPreview from './AssetViewerPreview';
-
-type TreeState = {
-  nodes: TreeNodeInfo[];
-};
+import AssetViewerUpload from './AssetViewerUpload';
+import { convertAssetPathsToTree, deleteIcon, treeMap } from './AssetViewerUtils';
 
 /**
- * This component provides a preview of all the S3 asset files.
+ * This component renders the Asset Viewer component.
  *
- * When a image is selected, the filename of the image is stored in session storage,
- * so Game Simulator's Object Placement can read the filename and load the image.
+ * It provides a preview of all the S3 asset files in a document tree format.
+ * The selected asset will be available for preview.
  */
-const GameSimulatorAssetSelection = () => {
+const AssetViewer = () => {
   const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);
 
   const [currentAsset, setCurrentAsset] = React.useState('');
-  const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
+  const [assetTree, setAssetTree] = React.useState([] as TreeNodeInfo[]);
 
   React.useEffect(() => {
-    setAssetTree({ nodes: assetPathsToTree(assetPaths, toolIcons, s3AssetFolders) });
+    setAssetTree(convertAssetPathsToTree(assetPaths, deleteIcon, s3AssetFolders));
   }, [assetPaths]);
 
-  const handleNodeClick = (nodeData: TreeNodeInfo) => {
-    treeMap(assetTree.nodes, (node: TreeNodeInfo) => (node.isSelected = false));
-    nodeData.isSelected = !nodeData.isSelected;
-    nodeData.isExpanded = !nodeData.isExpanded;
+  const handleNodeClick = (nodeData: TreeNodeInfo, path: integer[]) => {
     const selectedPath = nodeData.id.toString();
     if (!nodeData.childNodes) {
       setCurrentAsset(selectedPath);
-      sessionStorage.setItem('selectedAsset', selectedPath);
     }
-    setAssetTree({ ...assetTree });
+    const newTree = cloneDeep(assetTree);
+    const originallySelected = Tree.nodeFromPath(path, newTree).isSelected;
+    treeMap(newTree, (node: TreeNodeInfo) => (node.isSelected = false));
+    Tree.nodeFromPath(path, newTree).isSelected =
+      originallySelected === null ? true : !originallySelected;
+    Tree.nodeFromPath(path, newTree).isExpanded = !Tree.nodeFromPath(path, newTree).isExpanded;
+    setAssetTree(newTree);
   };
 
   return (
     <>
-      <AssetViewerPreview assetPath={currentAsset} />
-      <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />
+      <h3>View / Upload Assets</h3>
+      <Tabs animate={true} id="assetviewer" renderActiveTabPanelOnly={true}>
+        <Tab
+          id="view"
+          title="View Assets"
+          panel={
+            <>
+              <AssetViewerPreview assetPath={currentAsset} />
+              <hr />
+              <br />
+              <Tree contents={assetTree} onNodeClick={handleNodeClick} />
+            </>
+          }
+        />
+        <Tab id="upload" title="Upload Assets" panel={<AssetViewerUpload />} />
+      </Tabs>
     </>
   );
 };
 
-/**
- * Tools that are added to asset selection, includes: trash-can delete tool
- *
- * @param filePath the path to asset you want to supply tools for
- * @returns {JSX.Element} A trash can that deletes the file given the asset path
- */
-const toolIcons = (filePath: string) => (
-  <Tooltip2 content="Delete">
-    <Icon icon="trash" onClick={deleteFile(filePath)} />
-  </Tooltip2>
-);
-
-/**
- * This function deletes an S3 file given the short filepath
- *
- * @param filePath - the file path e.g. "stories/chapter0.txt"
- */
-const deleteFile = (filePath: string) => async () => {
-  const confirm = window.confirm(
-    `Are you sure you want to delete ${filePath}?\nThere is no undoing this action!`
-  );
-  alert(confirm ? await deleteS3File(filePath) : 'Whew');
-};
-
-export default GameSimulatorAssetSelection;
+export default AssetViewer;

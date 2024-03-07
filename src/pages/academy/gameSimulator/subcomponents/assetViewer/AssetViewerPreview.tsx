@@ -2,17 +2,14 @@ import { memo } from 'react';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 
-type AssetProps = {
-  assetPath: string;
-};
+import { AssetProps } from './AssetViewerTypes';
 
 /**
- * This file renders one asset path so that story writers can preview
- * the asset
+ * This component renders the asset corresponding to the given asset path.
  *
- * @assetPath - the asset to render/preview
+ * @assetPath - The path of the asset to render / preview.
  */
-const AssetViewer = memo(({ assetPath }: AssetProps) => {
+const AssetViewerPreview = memo(({ assetPath }: AssetProps) => {
   const displayAssetPath = assetPath || Constants.defaultAssetPath;
   return (
     <img
@@ -28,4 +25,4 @@ const AssetViewer = memo(({ assetPath }: AssetProps) => {
   );
 });
 
-export default AssetViewer;
+export default AssetViewerPreview;
