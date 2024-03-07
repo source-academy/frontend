@@ -1,25 +1,21 @@
 import 'ace-builds/webpack-resolver';
 
 import { Button, Tab, Tabs } from '@blueprintjs/core';
-import React from 'react';
+import { useState } from 'react';
 import { toTxtPath } from 'src/features/game/assets/TextAssets';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 
-type Props = {
-  storageName: string;
-  s3TxtFiles: string[];
-};
+import { Props } from './ChapterSimulatorTypes';
+import { createHeadersWithCors, loadFileLocally } from './ChapterSimulatorUtils';
 
 /**
- * This component enables story writers to upload their txt file contents
- * to the browser, or load a file from S3 and store the txt contents
- * in the browser. So that GameManager can read from these txt files
+ * This component allows chapter text files to be loaded either from S3, or from the user's local device.
  *
- * @param storageName the field in browser storage where the loaded/fetched txt files get stored temporarily
- * @param s3TxtFiles the list of S3 txt files to choose from
+ * @param storageName The field within browser storage to temporarily store the loaded / fetched text file(s).
+ * @param s3TxtFiles List of all text assets on S3 to choose from.
  */
-function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
-  const [chosenFilename, setChosenFilename] = React.useState(s3TxtFiles[0]);
+function ChapterSimulatorTextLoader({ storageName, s3TxtFiles }: Props) {
+  const [chosenFilename, setChosenFilename] = useState(s3TxtFiles[0]);
 
   function onLoadTxt(e: any) {
     if (!e.target.files) return;
@@ -59,26 +55,8 @@ function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
         <Tab id="own" title="Local" panel={uploadButton} />
         <Tab id="s3" title="S3" panel={chooseS3Txt} />
       </Tabs>
-      <hr />
     </div>
   );
 }
 
-const loadFileLocally = (storageName: string, txtFile: File) => {
-  const reader = new FileReader();
-  reader.readAsText(txtFile);
-  reader.onloadend = _ => {
-    if (!reader.result) {
-      return;
-    }
-    sessionStorage.setItem(storageName, reader.result.toString());
-  };
-};
-
-export default CheckpointTxtLoader;
-
-function createHeadersWithCors(): Headers {
-  const headers = new Headers();
-  headers.append('Access-Control-Allow-Origin', '*');
-  return headers;
-}
+export default ChapterSimulatorTextLoader;

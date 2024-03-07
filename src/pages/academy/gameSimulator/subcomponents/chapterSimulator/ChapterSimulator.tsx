@@ -5,39 +5,47 @@ import { fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService
 import MainMenu from 'src/features/gameSimulator/scenes/MainMenu';
 import mainMenuConstants from 'src/features/gameSimulator/scenes/MainMenuConstants';
 
-import CheckpointTxtLoader from './GameSimulatorCheckpointTxtLoader';
+import ChapterSimulatorTextLoader from './ChapterSimulatorTextLoader';
 
 /**
- * This component helps one simulate a checkpoint by
- * supplying two txt files - the default txt file
- * and the checkpoint txt file
+ * This component renders the Chapter Simulator component.
  *
- * @param textAssets these are the list of text files on S3, if storywriter's simulation
- *                   involves S3 text files.
+ * It will simulate a game chapter using the given text files (from either S3 or Local).
+ *
+ * @param textAssets List of all text assets on S3 to choose from.
  */
-export default function CheckpointSim() {
+const ChapterSimulator = () => {
   const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
 
   function simulateCheckpoint() {
     (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).simulateCheckpoint();
   }
 
+  function clearSessionStorage(e: any) {
+    sessionStorage.setItem(mainMenuConstants.gameTxtStorageName.checkpointTxt, '');
+    sessionStorage.setItem(mainMenuConstants.gameTxtStorageName.defaultChapter, '');
+  }
+
   return (
     <>
-      <h3>Checkpoint Text Loader</h3>
-      <b>Step 1: Choose default checkpoint</b>
-      <CheckpointTxtLoader
-        s3TxtFiles={textAssets}
-        storageName={mainMenuConstants.gameTxtStorageName.defaultChapter}
-      />
-      <b>Step 2: Choose checkpoint text</b>
-      <CheckpointTxtLoader
+      <h3>Simulate Chapters</h3>
+      <b>Choose the Main Chapter file:</b>
+      <ChapterSimulatorTextLoader
         s3TxtFiles={textAssets}
         storageName={mainMenuConstants.gameTxtStorageName.checkpointTxt}
       />
       <br />
+      <br />
+      <b>Choose a Default Variables ("Default Checkpoint") file (Optional):</b>
+      <ChapterSimulatorTextLoader
+        s3TxtFiles={textAssets}
+        storageName={mainMenuConstants.gameTxtStorageName.defaultChapter}
+      />
+      <br />
+      <hr />
+      <br />
       <Button onClick={simulateCheckpoint} icon="play">
-        Simulate Checkpoint
+        Simulate Chapter
       </Button>
       <br />
       <br />
@@ -45,9 +53,6 @@ export default function CheckpointSim() {
       <br />
     </>
   );
-}
+};
 
-function clearSessionStorage(e: any) {
-  sessionStorage.setItem(mainMenuConstants.gameTxtStorageName.checkpointTxt, '');
-  sessionStorage.setItem(mainMenuConstants.gameTxtStorageName.defaultChapter, '');
-}
+export default ChapterSimulator;

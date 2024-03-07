@@ -5,7 +5,7 @@ import { GameSimState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 import AssetViewer from './subcomponents/assetViewer/AssetViewer';
 import ChapterPublisher from './subcomponents/chapterPublisher/ChapterPublisher';
-import GameSimulatorCheckpointSim from './subcomponents/chapterSimulator/GameSimulatorCheckpointSim';
+import ChapterSimulator from './subcomponents/chapterSimulator/ChapterSimulator';
 import { createGameSimulatorGame } from './subcomponents/GameSimulatorGame';
 
 /**
@@ -42,7 +42,7 @@ function GameSimulator() {
       <div id="game-display" />
       <div className="LeftAlign GameSimulatorPanel">
         {gameSimState === GameSimState.Default && <h3>Welcome to Game simulator!</h3>}
-        {gameSimState === GameSimState.CheckpointSim && <GameSimulatorCheckpointSim />}
+        {gameSimState === GameSimState.CheckpointSim && <ChapterSimulator />}
         {gameSimState === GameSimState.ChapterSim && <ChapterPublisher />}
         {gameSimState === GameSimState.AssetUploader && <AssetViewer />}
       </div>
