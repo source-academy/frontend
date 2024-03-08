@@ -81,6 +81,17 @@ class GameInputManager {
     this.keyboardListeners.forEach(keyboardListener => keyboardListener.removeAllListeners());
     this.eventListeners.forEach(eventListener => eventListener.removeAllListeners());
   }
+
+  /**
+   * Clear specific keyboard listeners.
+   */
+  public clearKeyboardListeners(keycodes: number[]) {
+    this.keyboardListeners.forEach(keyboardListener => {
+      if (keycodes.includes(keyboardListener.keyCode)) {
+        keyboardListener.removeAllListeners();
+      }
+    });
+  }
 }
 
 export default GameInputManager;

@@ -27,11 +27,13 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
-import { useEffect, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
+import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
@@ -39,46 +41,42 @@ import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
 
-const columns = [
+const makeColumns = (handleClick: () => void) => [
   columnHelper.accessor('assessmentName', {
     header: 'Name',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('assessmentType', {
     header: 'Type',
     cell: info => (
-      <Filterable column={info.column} value={info.getValue()}>
+      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
         <AssessmentTypeBadge type={info.getValue()} />
       </Filterable>
     )
   }),
   columnHelper.accessor('studentName', {
     header: 'Student',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('studentUsername', {
     header: 'Username',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('groupName', {
     header: 'Group',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('submissionStatus', {
     header: 'Progress',
     cell: info => (
-      <Filterable column={info.column} value={info.getValue()}>
+      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
         <SubmissionStatusBadge status={info.getValue()} />
       </Filterable>
     )
   }),
   columnHelper.accessor('gradingStatus', {
     header: 'Grading',
-    cell: info => (
-      <Filterable column={info.column} value={info.getValue()}>
-        <GradingStatusBadge status={info.getValue()} />
-      </Filterable>
-    )
+    cell: info => <GradingStatusBadge status={info.getValue()} />
   }),
   columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
     header: 'Raw XP (+Bonus)',
@@ -107,27 +105,75 @@ const columns = [
 ];
 
 type GradingSubmissionTableProps = {
+  totalRows: number;
+  pageSize: number;
   submissions: GradingOverview[];
+  updateEntries: (page: number, filterParams: Object) => void;
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submissions }) => {
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
+  totalRows,
+  pageSize,
+  submissions,
+  updateEntries
+}) => {
   const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters
   ]);
-  const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
 
+  const [page, setPage] = useState(0);
+  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
+  const resetPage = useCallback(() => setPage(0), [setPage]);
+
+  /** The value to be shown in the search bar */
+  const [searchQuery, setSearchQuery] = useState('');
+  /** The actual value sent to the backend */
+  const [searchValue, setSearchValue] = useState('');
+  // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
+  const debouncedUpdateSearchValue = useMemo(
+    () =>
+      debounce((newValue: string) => {
+        resetPage();
+        setSearchValue(newValue);
+      }, 300),
+    [resetPage]
+  );
+  const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
+    setSearchQuery(e.target.value);
+    debouncedUpdateSearchValue(e.target.value);
+  };
+
+  // Converts the columnFilters array into backend query parameters.
+  const backendFilterParams = useMemo(() => {
+    const filters: Array<{ [key: string]: any }> = [
+      { id: 'assessmentName', value: searchValue },
+      ...columnFilters
+    ].map(convertFilterToBackendParams);
+
+    const params: Record<string, any> = {};
+    filters.forEach(e => {
+      Object.keys(e).forEach(key => {
+        params[key] = e[key];
+      });
+    });
+    return params;
+  }, [columnFilters, searchValue]);
+
+  const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
   const table = useReactTable({
     data: submissions,
     columns,
     state: {
       columnFilters,
-      globalFilter
+      pagination: {
+        pageIndex: 0,
+        pageSize: pageSize
+      }
     },
     onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel()
@@ -136,16 +182,20 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
     setColumnFilters(newFilters);
+    resetPage();
   };
 
   useEffect(() => {
-    dispatch(
-      updateSubmissionsTableFilters({
-        columnFilters,
-        globalFilter
-      })
-    );
-  }, [columnFilters, globalFilter, dispatch]);
+    dispatch(updateSubmissionsTableFilters({ columnFilters }));
+  }, [columnFilters, dispatch]);
+
+  useEffect(() => {
+    resetPage();
+  }, [updateEntries, resetPage, searchValue]);
+
+  useEffect(() => {
+    updateEntries(page, backendFilterParams);
+  }, [updateEntries, page, backendFilterParams]);
 
   return (
     <>
@@ -165,9 +215,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
         <TextInput
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
-          placeholder="Search for any value here..."
-          value={globalFilter ?? ''}
-          onChange={e => setGlobalFilter(e.target.value)}
+          placeholder="Search by assessment name"
+          value={searchQuery}
+          onChange={handleSearchQueryUpdate}
         />
       </Flex>
       <Table marginTop="mt-2">
@@ -195,29 +245,46 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({ submiss
             </TableRow>
           ))}
         </TableBody>
-
+        <div className="grading-overview-footer-sibling"></div>
         <Footer>
           <Flex justifyContent="justify-center" spaceX="space-x-3">
             <Button
               size="xs"
+              icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_LEFT} />}
+              variant="light"
+              onClick={() => setPage(0)}
+              disabled={page <= 0}
+            />
+            <Button
+              size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
               variant="light"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={() => setPage(page - 1)}
+              disabled={page <= 0}
             />
             <Bold>
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              Page {page + 1} of {maxPage + 1}
             </Bold>
             <Button
               size="xs"
               icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
               variant="light"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={() => setPage(page + 1)}
+              disabled={page >= maxPage}
+            />
+            <Button
+              size="xs"
+              icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_RIGHT} />}
+              variant="light"
+              onClick={() => setPage(maxPage)}
+              disabled={page >= maxPage}
             />
           </Flex>
         </Footer>
       </Table>
+      <Flex marginTop="-mt-6">
+        <></>
+      </Flex>
     </>
   );
 };
@@ -226,11 +293,13 @@ type FilterableProps = {
   column: Column<any, unknown>;
   value: string;
   children?: React.ReactNode;
+  onClick?: () => void;
 };
 
-const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
+const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClick }) => {
   const handleFilterChange = () => {
     column.setFilterValue(value);
+    onClick?.();
   };
 
   return (

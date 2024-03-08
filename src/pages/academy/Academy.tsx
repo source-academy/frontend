@@ -22,11 +22,11 @@ import Sourcecast from '../sourcecast/Sourcecast';
 import AdminPanel from './adminPanel/AdminPanel';
 import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
+import GameSimulator from './gameSimulator/GameSimulator';
 import Grading from './grading/Grading';
 import GroundControl from './groundControl/GroundControlContainer';
 import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/Sourcereel';
-import StorySimulator from './storySimulator/StorySimulator';
 
 const Academy: React.FC<{}> = () => {
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const Academy: React.FC<{}> = () => {
           <Route path="groundcontrol" element={<GroundControl />} key={0} />,
           <Route path={`grading/${gradingRegExp}`} element={<Grading />} key={1} />,
           <Route path="sourcereel" element={<Sourcereel />} key={2} />,
-          <Route path="storysimulator" element={<StorySimulator />} key={3} />,
+          <Route path="gamesimulator" element={<GameSimulator />} key={3} />,
           <Route path="dashboard" element={<Dashboard />} key={4} />
         ]
       : null;

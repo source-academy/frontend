@@ -10,6 +10,7 @@ import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTyp
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
+import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
@@ -32,6 +33,7 @@ export type OverallState = {
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
+  readonly sideContent: SideContentManagerState;
 };
 
 export type Story = {
@@ -145,7 +147,7 @@ export interface SALanguage extends Language {
 type LanguageFeatures = Partial<{
   dataVisualizer: boolean;
   substVisualizer: boolean;
-  envVisualizer: boolean;
+  cseMachine: boolean;
   multiFile: boolean;
   repl: boolean;
 }>;
@@ -250,8 +252,8 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
     chapter <= Chapter.SOURCE_2 &&
     (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
 
-  // Enable Env Visualizer for Source Chapter 3 and above
-  supportedFeatures.envVisualizer =
+  // Enable CSE Machine for Source Chapter 3 and above
+  supportedFeatures.cseMachine =
     chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET;
 
   // Local imports/exports require Source 2+ as Source 1 does not have lists.
@@ -385,7 +387,11 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  debuggerContext: {} as DebuggerContext
+  debuggerContext: {} as DebuggerContext,
+  sideContent: {
+    alerts: [],
+    dynamicTabs: []
+  }
 });
 
 const defaultFileName = 'program.js';
@@ -402,8 +408,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   grading: {
     ...createDefaultWorkspace('grading'),
     submissionsTableFilters: {
-      columnFilters: [],
-      globalFilter: null
+      columnFilters: []
     },
     currentSubmission: undefined,
     currentQuestion: undefined,
@@ -412,10 +417,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
-    usingEnv: false,
-    updateEnv: true,
-    envSteps: -1,
-    envStepsTotal: 0,
+    usingCse: false,
+    updateCse: true,
+    currentStep: -1,
+    stepsTotal: 0,
     breakpointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
@@ -465,10 +470,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sicp: {
     ...createDefaultWorkspace('sicp'),
     usingSubst: false,
-    usingEnv: false,
-    updateEnv: true,
-    envSteps: -1,
-    envStepsTotal: 0,
+    usingCse: false,
+    updateCse: true,
+    currentStep: -1,
+    stepsTotal: 0,
     breakpointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
@@ -531,11 +536,31 @@ export const createDefaultStoriesEnv = (
   stepLimit: 1000,
   globals: [],
   usingSubst: false,
-  debuggerContext: {} as DebuggerContext
+  debuggerContext: {} as DebuggerContext,
+  sideContent: {
+    dynamicTabs: [],
+    alerts: []
+  }
 });
 
 export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null
+};
+
+export const defaultSideContent: SideContentState = {
+  dynamicTabs: [],
+  alerts: []
+};
+
+export const defaultSideContentManager: SideContentManagerState = {
+  assessment: defaultSideContent,
+  grading: defaultSideContent,
+  playground: defaultSideContent,
+  githubAssessment: defaultSideContent,
+  sicp: defaultSideContent,
+  sourcecast: defaultSideContent,
+  sourcereel: defaultSideContent,
+  stories: {}
 };
 
 export const defaultState: OverallState = {
@@ -547,5 +572,6 @@ export const defaultState: OverallState = {
   session: defaultSession,
   stories: defaultStories,
   workspaces: defaultWorkspaceManager,
-  fileSystem: defaultFileSystem
+  fileSystem: defaultFileSystem,
+  sideContent: defaultSideContentManager
 };

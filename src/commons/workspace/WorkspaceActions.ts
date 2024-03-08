@@ -20,7 +20,6 @@ import {
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
   CHANGE_STEP_LIMIT,
   CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
@@ -53,20 +52,20 @@ import {
   SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
-  TOGGLE_UPDATE_ENV,
-  TOGGLE_USING_ENV,
+  TOGGLE_UPDATE_CSE,
+  TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
-  UPDATE_ENVSTEPS,
-  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
@@ -94,7 +93,7 @@ export const browseReplHistoryUp = createAction(
 
 export const changeExternalLibrary = createAction(
   CHANGE_EXTERNAL_LIBRARY,
-  (newExternal: string, workspaceLocation: WorkspaceLocation) => ({
+  (newExternal: ExternalLibraryName, workspaceLocation: WorkspaceLocation) => ({
     payload: { newExternal, workspaceLocation }
   })
 );
@@ -103,13 +102,6 @@ export const changeExecTime = createAction(
   CHANGE_EXEC_TIME,
   (execTime: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { execTime, workspaceLocation }
-  })
-);
-
-export const changeSideContentHeight = createAction(
-  CHANGE_SIDE_CONTENT_HEIGHT,
-  (height: number, workspaceLocation: WorkspaceLocation) => ({
-    payload: { height, workspaceLocation }
   })
 );
 
@@ -466,29 +458,29 @@ export const addHtmlConsoleError = createAction(
   })
 );
 
-export const toggleUsingEnv = createAction(
-  TOGGLE_USING_ENV,
-  (usingEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { usingEnv, workspaceLocation }
+export const toggleUsingCse = createAction(
+  TOGGLE_USING_CSE,
+  (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingCse, workspaceLocation }
   })
 );
 
-export const toggleUpdateEnv = createAction(
-  TOGGLE_UPDATE_ENV,
-  (updateEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { updateEnv, workspaceLocation }
+export const toggleUpdateCse = createAction(
+  TOGGLE_UPDATE_CSE,
+  (updateCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { updateCse, workspaceLocation }
   })
 );
 
-export const updateEnvSteps = createAction(
-  UPDATE_ENVSTEPS,
+export const updateCurrentStep = createAction(
+  UPDATE_CURRENTSTEP,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })
 );
 
-export const updateEnvStepsTotal = createAction(
-  UPDATE_ENVSTEPSTOTAL,
+export const updateStepsTotal = createAction(
+  UPDATE_STEPSTOTAL,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })

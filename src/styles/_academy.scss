@@ -2,10 +2,6 @@
   .custom-hidden-xxxs {
     display: none;
   }
-
-  .listing-button .#{$ns}-button .#{$ns}-icon {
-    margin-right: 0px;
-  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -98,17 +94,20 @@
       }
 
       .listing {
-        height: 160px;
+        height: 300px;
       }
 
       .listing-picture {
-        height: 100%;
+        height: 50%;
+        width: 100%;
         padding: 0;
       }
 
       .listing-text {
         padding: 0 0 0 0.5rem;
         justify-content: space-between;
+        height: 50%;
+        width: 100%;
 
         .#{$ns}-heading {
           margin: 0;
@@ -513,6 +512,27 @@
 .grading-overview-filterable-btns {
   padding: 0;
 
+  // Hides overflowed text for the buttons
+  &,
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    // For general filterable buttons
+    & {
+      max-width: 20vw;
+    }
+
+    /* Special case for filtered buttons (those you click to remove filter)
+      -16px for icon
+      -0.875rem for icon margins
+      -1.125rem for additional padding
+    */
+    p {
+      max-width: calc(20vw - 16px - 2rem);
+    }
+  }
+
   // Invisible border for backgroundless buttons
   &:not(:has(> div)) {
     text-decoration: none;
@@ -528,6 +548,18 @@
     // Backgroundless buttons
     &:not(:has(> div)) {
       text-decoration: underline;
+    }
+  }
+}
+
+.grading-overview-footer-sibling {
+  // Footer component
+  ~ div ~ div {
+    pointer-events: none;
+
+    // Footer's children
+    > * > * {
+      pointer-events: all;
     }
   }
 }
