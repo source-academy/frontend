@@ -16,7 +16,7 @@ import { defineSymbol } from 'js-slang/dist/createContext';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorSeverity, ErrorType, Variant } from 'js-slang/dist/types';
 import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
@@ -1129,22 +1129,96 @@ export function* evalCode(
     }
   }
 
+  function reportCCompilationError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.SYNTAX,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
+      },
+      explain: () => errorMessage,
+      elaborate: () => ''
+    });
+  }
+
+  function reportCRuntimeError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.RUNTIME,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
+      },
+      explain: () => errorMessage,
+      elaborate: () => ''
+    });
+  }
+
+  function reportCCompilationWarnings(warningMessages: string[], context: Context) {
+    warningMessages.forEach(w => {
+      context.errors.push({
+        type: ErrorType.SYNTAX,
+        severity: ErrorSeverity.WARNING,
+        location: {
+          start: {
+            line: 0,
+            column: 0
+          },
+          end: {
+            line: 0,
+            column: 0
+          }
+        },
+        explain: () => w,
+        elaborate: () => w
+      });
+    });
+  }
+
   async function cCompileAndRun(cCode: string, context: Context) {
     const cCompilerConfig = await makeCCompilerConfig(cCode, context);
     return await compileAndRunCCode(cCode, cCompilerConfig)
-      .then(() => {
+      .then(compilationResult => {
+        if (compilationResult.status === 'failure') {
+          // report any compilation failure
+          reportCCompilationError(compilationResult.errorMessage, context);
+          return {
+            status: 'error',
+            context
+          };
+        }
+        if (compilationResult.warnings.length > 0) {
+          reportCCompilationWarnings(compilationResult.warnings, context);
+          return {
+            status: 'error',
+            context
+          }
+        }
         if (specialCReturnObject === null) {
           return {
             status: 'finished',
             context,
-            value: { toReplString: () => 'Successfully compiled and run C program' }
+            value: { toReplString: () => 'Compilation Successful. Execution output:' }
           };
         }
         return { status: 'finished', context, value: specialCReturnObject };
       })
       .catch((e: any): Result => {
         console.log(e);
-        cCompilerConfig.printFunction(e.message);
+        reportCRuntimeError(e.message, context);
         return { status: 'error' };
       });
   }
