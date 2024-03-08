@@ -7,9 +7,9 @@ import { Frame } from '../compactComponents/Frame';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { defaultOptions, Text } from '../compactComponents/Text';
 import { PrimitiveValue } from '../compactComponents/values/PrimitiveValue';
-import { CompactConfig } from '../EnvVisualizerCompactConfig';
-import { ControlStashConfig } from '../EnvVisualizerControlStash';
-import { getTextWidth } from '../EnvVisualizerUtils';
+import { CompactConfig } from '../CseMachineCompactConfig';
+import { ControlStashConfig } from '../CseMachineControlStash';
+import { getTextWidth } from '../CseMachineUtils';
 import { Animatable, AnimatedTextboxComponent, AnimatedTextComponent } from './AnimationComponents';
 import { getNodePositionFromItem } from './AnimationUtils';
 

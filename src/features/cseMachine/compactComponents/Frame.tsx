@@ -3,6 +3,7 @@ import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import CseMachine from '../CseMachine';
+import { CseAnimation } from '../CseMachineAnimation';
 import { CompactConfig, ShapeDefaultProps } from '../CseMachineCompactConfig';
 import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
@@ -18,7 +19,6 @@ import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
-import { CseAnimation } from '../CseMachineAnimation';
 
 const frameNames = new Map([
   ['global', 'Global'],

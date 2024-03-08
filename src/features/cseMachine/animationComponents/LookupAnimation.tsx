@@ -5,8 +5,8 @@ import { Binding } from '../compactComponents/Binding';
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { Frame } from '../compactComponents/Frame';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
-import { ControlStashConfig } from '../EnvVisualizerControlStash';
-import { getTextWidth } from '../EnvVisualizerUtils';
+import { ControlStashConfig } from '../CseMachineControlStash';
+import { getTextWidth } from '../CseMachineUtils';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
 import { getNodePositionFromItem } from './AnimationUtils';
 

@@ -1,21 +1,26 @@
-import { InstrType } from 'js-slang/dist/cse-machine/types';
+import { AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
 import { Easings } from 'konva/lib/Tween';
 
 import { Animatable } from './animationComponents/AnimationComponents';
+import { lookupBinding } from './animationComponents/AnimationUtils';
+import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
+import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
 import { isInstr } from './compactComponents/ControlStack';
+import { Frame } from './compactComponents/Frame';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 
 export class CseAnimation {
-  private static animationEnabled = false;
   static readonly animationComponents: Animatable[] = [];
   static readonly defaultDuration = 0.3;
   static readonly defaultEasing = Easings.StrongEaseInOut;
+  private static animationEnabled = false;
+  private static currentFrame: Frame;
 
   static enableAnimations(): void {
     CseAnimation.animationEnabled = true;
@@ -23,6 +28,10 @@ export class CseAnimation {
 
   static disableAnimations(): void {
     CseAnimation.animationEnabled = false;
+  }
+
+  static setCurrentFrame(frame: Frame) {
+    CseAnimation.currentFrame = frame;
   }
 
   private static clearAnimationComponents(): void {
@@ -46,7 +55,15 @@ export class CseAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
+      // console.log("TYPE: " + lastControlItem.type);
       switch (lastControlItem.type) {
+        case 'Identifier':
+          animation = new LookupAnimation(
+            lastControlComponent,
+            Layout.stashComponent.stashItemComponents.at(-1)!,
+            ...lookupBinding(CseAnimation.currentFrame, lastControlItem.name)
+          );
+          break;
         case 'Literal':
           animation = new LiteralAnimation(
             lastControlComponent,
@@ -54,6 +71,9 @@ export class CseAnimation {
           );
           break;
         case 'Program':
+        case 'UnaryExpression':
+        case 'BinaryExpression':
+        case 'CallExpression':
         case 'ExpressionStatement':
         case 'VariableDeclaration':
           const currentControlSize = Layout.controlComponent.control.size();
@@ -67,11 +87,18 @@ export class CseAnimation {
           break;
       }
     } else {
+      // console.log("INSTRTYPE: " + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
         case InstrType.FOR:
+          break;
         case InstrType.ASSIGNMENT:
+          animation = new AssignmentAnimation(
+            lastControlComponent,
+            Layout.stashComponent.stashItemComponents.at(-1)!,
+            ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
+          );
           break;
         case InstrType.UNARY_OP:
           animation = new UnaryOperationAnimation(
@@ -89,9 +116,14 @@ export class CseAnimation {
           );
           break;
         case InstrType.POP:
+          const currentStashSize = Layout.stashComponent.stash.size();
+          const previousStashSize = Layout.previousStashComponent.stash.size();
+          const lastStashIsUndefined =
+            currentStashSize === 1 && currentStashSize === previousStashSize;
           animation = new PopAnimation(
             lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!
+            Layout.previousStashComponent.stashItemComponents.at(-1)!,
+            lastStashIsUndefined ? Layout.stashComponent.stashItemComponents.at(-1)! : undefined
           );
           break;
         case InstrType.APPLICATION:

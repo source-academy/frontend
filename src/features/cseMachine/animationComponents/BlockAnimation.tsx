@@ -2,7 +2,7 @@ import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
-import { currentItemSAColor } from '../EnvVisualizerUtils';
+import { currentItemSAColor } from '../CseMachineUtils';
 import {
   Animatable,
   AnimatedRectComponent,
