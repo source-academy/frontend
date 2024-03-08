@@ -1194,7 +1194,10 @@ export function* evalCode(
       .then(compilationResult => {
         if (compilationResult.status === 'failure') {
           // report any compilation failure
-          reportCCompilationError(compilationResult.errorMessage, context);
+          reportCCompilationError(
+            `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
+            context
+          );
           return {
             status: 'error',
             context
@@ -1205,7 +1208,7 @@ export function* evalCode(
           return {
             status: 'error',
             context
-          }
+          };
         }
         if (specialCReturnObject === null) {
           return {
