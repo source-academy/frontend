@@ -13,14 +13,6 @@ export function getSessionUrl(sessionId: string, ws?: boolean): string {
   return url.toString();
 }
 
-/*
-export async function checkSessionIdExists(sessionId: string): Promise<boolean> {
-  const resp = await fetch(getSessionUrl(sessionId));
-
-  return resp && resp.ok;
-}
-*/
-
 export async function getDocInfoFromSessionId(
   sessionId: string
 ): Promise<{ docId: string; readOnly: boolean } | null> {
