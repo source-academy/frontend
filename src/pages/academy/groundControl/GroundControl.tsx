@@ -1,11 +1,8 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-
 import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
+import DataTable from 'src/commons/dataTable/DataTable';
 
 import {
   AssessmentConfiguration,
@@ -165,8 +162,8 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     );
 
     const grid = (
-      <div className="Grid ag-grid-parent ag-theme-balham">
-        <AgGridReact
+      <div className="Grid">
+        <DataTable
           domLayout={'autoHeight'}
           columnDefs={this.columnDefs}
           defaultColDef={this.defaultColumnDefs}

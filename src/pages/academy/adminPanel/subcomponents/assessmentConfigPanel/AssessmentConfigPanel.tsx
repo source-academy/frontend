@@ -6,9 +6,9 @@ import {
   GridReadyEvent,
   RowDragEvent
 } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash';
 import React from 'react';
+import DataTable from 'src/commons/dataTable/DataTable';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
@@ -228,8 +228,8 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   };
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
-      <AgGridReact
+    <div className="Grid">
+      <DataTable
         domLayout={'autoHeight'}
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}

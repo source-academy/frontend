@@ -13,11 +13,11 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
 import React from 'react';
 import { useCSVReader } from 'react-papaparse';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import DataTable from 'src/commons/dataTable/DataTable';
 
 import Constants from '../../../../commons/utils/Constants';
 
@@ -63,8 +63,8 @@ const AddUserPanel: React.FC<Props> = props => {
   };
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
-      <AgGridReact
+    <div className="Grid">
+      <DataTable
         domLayout={'autoHeight'}
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}

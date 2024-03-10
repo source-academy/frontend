@@ -1,9 +1,9 @@
 import { Button, H2 } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
+import DataTable from 'src/commons/dataTable/DataTable';
 
 import RolesCell from './RolesCell';
 import UserActionsCell from './UserActionsCell';
@@ -79,8 +79,8 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
   };
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
-      <AgGridReact
+    <div className="Grid">
+      <DataTable
         domLayout={'autoHeight'}
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}

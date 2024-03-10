@@ -1,5 +1,3 @@
-import 'ag-grid-community/styles/ag-grid.css';
-
 import {
   Divider,
   FormGroup,
@@ -9,11 +7,11 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
 import React from 'react';
 
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import DataTable from '../dataTable/DataTable';
 import { getStandardDate } from '../utils/DateHelper';
 import SourcastDeleteCell from './SourceRecorderDeleteCell';
 import SourceRecorderSelectCell from './SourceRecorderSelectCell';
@@ -167,18 +165,16 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         </div>
         <Divider />
         <div className="SourcecastTable">
-          <div className="ag-grid-parent">
-            <AgGridReact
-              domLayout={'autoHeight'}
-              columnDefs={this.state.columnDefs}
-              defaultColDef={this.defaultColumnDefs}
-              onGridReady={this.onGridReady}
-              rowData={data}
-              rowHeight={30}
-              pagination={false}
-              paginationPageSize={50}
-            />
-          </div>
+          <DataTable
+            domLayout={'autoHeight'}
+            columnDefs={this.state.columnDefs}
+            defaultColDef={this.defaultColumnDefs}
+            onGridReady={this.onGridReady}
+            rowData={data}
+            rowHeight={30}
+            pagination={false}
+            paginationPageSize={50}
+          />
         </div>
         <br />
       </div>
