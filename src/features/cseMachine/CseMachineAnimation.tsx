@@ -6,6 +6,7 @@ import { lookupBinding } from './animationComponents/AnimationUtils';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
+import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
@@ -21,6 +22,7 @@ export class CseAnimation {
   static readonly defaultEasing = Easings.StrongEaseInOut;
   private static animationEnabled = false;
   private static currentFrame: Frame;
+  private static previousFrame: Frame;
 
   static enableAnimations(): void {
     CseAnimation.animationEnabled = true;
@@ -31,6 +33,7 @@ export class CseAnimation {
   }
 
   static setCurrentFrame(frame: Frame) {
+    CseAnimation.previousFrame = CseAnimation.currentFrame;
     CseAnimation.currentFrame = frame;
   }
 
@@ -128,7 +131,10 @@ export class CseAnimation {
           break;
         case InstrType.APPLICATION:
         case InstrType.BRANCH:
+          break;
         case InstrType.ENVIRONMENT:
+          animation = new EnvironmentAnimation(CseAnimation.previousFrame, CseAnimation.currentFrame);
+          break;
         case InstrType.ARRAY_LITERAL:
         case InstrType.ARRAY_ACCESS:
         case InstrType.ARRAY_ASSIGNMENT:

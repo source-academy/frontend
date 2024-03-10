@@ -57,7 +57,6 @@ export class LookupAnimation extends Animatable {
   }
 
   async animate() {
-    console.log(this.stashItem);
     this.stashItem.ref.current.hide();
     if (this.stashItem.arrow) {
       this.stashItem.arrow.ref.current?.hide();
