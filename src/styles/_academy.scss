@@ -279,11 +279,6 @@
 }
 
 .Grid {
-  .ag-center-cols-viewport {
-    /* Fixes spurious horizontal scrollbar in grid viewport at certain widths */
-    overflow-x: inherit;
-  }
-
   :focus {
     /* Disable rendering blue border when a sub-component in grid is in focus */
     outline: none;
@@ -305,50 +300,6 @@
       margin-left: 7px;
     }
   }
-}
-
-.ag-grid-controls {
-  .pagination-details.pagination-details.pagination-details {
-    /* Chain selectors for increased specificity: set default cursor */
-    cursor: default;
-    font-weight: bold;
-
-    .#{$ns}-button-text {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-}
-
-.ag-header-cell.ag-header-cell.ag-header-cell {
-  /* Chain selectors for increased specificity: reduce internal padding of header cells */
-  padding-left: 0.375em;
-  padding-right: 0.375em;
-
-  .ag-header-cell-label {
-    /* Increase font size of headers; pad left to centre with filter icon */
-    font-size: 1.1em;
-    font-weight: bold;
-    justify-content: center;
-    padding-left: 1em;
-  }
-
-  &:not(.ag-header-cell-sortable) .ag-header-cell-label {
-    padding-right: 1em;
-  }
-}
-
-.ag-cell {
-  font-size: 1.1em;
-  /* Override to reduce ag-grid default padding */
-  padding-left: 0.375em !important;
-  padding-right: 0.375em !important;
-  text-align: center;
-}
-
-#filterBar {
-  width: 400px;
 }
 
 .md th,
