@@ -14,3 +14,8 @@ export const loadFileLocally = (storageName: string, txtFile: File) => {
     sessionStorage.setItem(storageName, reader.result.toString());
   };
 };
+
+export const dateOneYearFromNow = (date: Date) => {
+  date.setFullYear(date.getFullYear() + 1);
+  return date;
+};
