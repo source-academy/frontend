@@ -1,8 +1,8 @@
 export enum GameSimulatorState {
-  Default = 'Default',
-  AssetViewer = 'AssetViewer',
-  ChapterSimulator = 'ChapterSimulator',
-  ChapterPublisher = 'ChapterPublisher'
+  DEFAULT = 'DEFAULT',
+  ASSETVIEWER = 'ASSETVIEWER',
+  CHAPTERSIMULATOR = 'CHAPTERSIMULATOR',
+  CHAPTERPUBLISHER = 'CHAPTERPUBLISHER'
 }
 
 export type ChapterDetail = {

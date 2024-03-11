@@ -4,15 +4,14 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
 import { useInput } from 'src/commons/utils/Hooks';
 import { SortableList, useSortableList } from 'src/commons/utils/SortableList';
-// import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
-// import { callGameManagerForSim } from 'src/features/game/utils/TxtLoaderUtils';
 import {
   deleteChapterRequest,
   updateChapterRequest
 } from 'src/features/gameSimulator/GameSimulatorService';
 import { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import { dateOneYearFromNow, newChapterIndex } from './ChapterPublisherUtils';
+import { defaultChapter } from './ChapterPublisherConstants';
+import { dateOneYearFromNow } from './ChapterPublisherUtils';
 
 /**
  * This component renders the Chapter Publishing form to create new chapters.
@@ -89,7 +88,7 @@ const ChapterPublisherEditor = memo(({ chapterDetail, chapterFilenames }: Chapte
       return;
     }
     const response =
-      parseInt(id) === newChapterIndex
+      parseInt(id) === defaultChapter.id
         ? await updateChapterRequest('', { story: updatedChapter })
         : await updateChapterRequest(id, { story: updatedChapter });
 
@@ -113,11 +112,6 @@ const ChapterPublisherEditor = memo(({ chapterDetail, chapterFilenames }: Chapte
       alert('Cleared changes');
     }
   };
-
-  // const simulateChapter = async () => {
-  //   SourceAcademyGame.getInstance().setChapterSimStack(chosenFiles);
-  //   await callGameManagerForSim();
-  // };
 
   return (
     <>
@@ -162,10 +156,6 @@ const ChapterPublisherEditor = memo(({ chapterDetail, chapterFilenames }: Chapte
           );
         })}
       <br />
-      {/* <Button icon="play" onClick={simulateChapter}>
-        Simulate Chapter
-      </Button> */}
-      {/* <br /> */}
       <hr />
       <br />
       <Switch

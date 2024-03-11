@@ -84,19 +84,19 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Simulate Chapters',
         callback: () => {
-          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.ChapterSimulator);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.CHAPTERSIMULATOR);
         }
       },
       {
         text: 'Publish / Edit Chapters',
         callback: () => {
-          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.ChapterPublisher);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.CHAPTERPUBLISHER);
         }
       },
       {
         text: 'View / Upload Assets',
         callback: () => {
-          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.AssetViewer);
+          SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.ASSETVIEWER);
         }
       }
     ];

@@ -26,7 +26,7 @@ import ChapterSimulator from './subcomponents/chapterSimulator/ChapterSimulator'
 function GameSimulator() {
   const session = useTypedSelector(state => state.session);
   const [gameSimulatorState, setGameSimulatorState] = React.useState<string>(
-    GameSimulatorState.Default
+    GameSimulatorState.DEFAULT
   );
 
   const createGameSimulatorGame = () => {
@@ -54,10 +54,10 @@ function GameSimulator() {
     <div className="GameSimulatorWrapper">
       <div id="game-display" />
       <div className="LeftAlign GameSimulatorPanel">
-        {gameSimulatorState === GameSimulatorState.Default && <h3>Welcome to Game simulator!</h3>}
-        {gameSimulatorState === GameSimulatorState.ChapterSimulator && <ChapterSimulator />}
-        {gameSimulatorState === GameSimulatorState.ChapterPublisher && <ChapterPublisher />}
-        {gameSimulatorState === GameSimulatorState.AssetViewer && <AssetViewer />}
+        {gameSimulatorState === GameSimulatorState.DEFAULT && <h3>Welcome to Game simulator!</h3>}
+        {gameSimulatorState === GameSimulatorState.CHAPTERSIMULATOR && <ChapterSimulator />}
+        {gameSimulatorState === GameSimulatorState.CHAPTERPUBLISHER && <ChapterPublisher />}
+        {gameSimulatorState === GameSimulatorState.ASSETVIEWER && <AssetViewer />}
       </div>
     </div>
   );

@@ -3,8 +3,8 @@ import { useRequest } from 'src/commons/utils/Hooks';
 import { fetchChapters, fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
 import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
+import { defaultChapter } from './ChapterPublisherConstants';
 import ChapterPublisherEditor from './ChapterPublisherEditor';
-import { defaultChapter, newChapterIndex } from './ChapterPublisherUtils';
 
 /**
  * This components renders the Chapter Publisher component in the Game Simulator.
@@ -26,7 +26,7 @@ const ChapterPublisher = memo(() => {
             {`Chapter ${chapterIndex}: ${chapter.title}`}
           </option>
         ))}
-        <option key={newChapterIndex} value={''}>{`New chapter`}</option>
+        <option key={defaultChapter.id} value={''}>{`New chapter`}</option>
       </select>
       <br />
       <br />
