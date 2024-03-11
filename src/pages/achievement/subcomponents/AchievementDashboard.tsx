@@ -157,7 +157,7 @@ const AchievementDashboard: React.FC = () => {
             updateGoalProgress={handleUpdateGoalProgress}
           />
         )}
-        <div className={isMobileBreakpoint ? 'achievement-main-mobile' : 'achievement-main'}>
+        <div className='achievement-main'>
           <div className="filter-container">
             <AchievementFilter
               filterState={filterState}
