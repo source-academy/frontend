@@ -1,9 +1,9 @@
 import { memo, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
+import { defaultChapter } from 'src/features/gameSimulator/GameSimulatorConstants';
 import { fetchChapters, fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
 import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import { defaultChapter } from './ChapterPublisherConstants';
 import ChapterPublisherEditor from './ChapterPublisherEditor';
 
 /**

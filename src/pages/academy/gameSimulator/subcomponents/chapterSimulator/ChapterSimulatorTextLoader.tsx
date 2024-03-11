@@ -5,8 +5,10 @@ import { useState } from 'react';
 import { toTxtPath } from 'src/features/game/assets/TextAssets';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { StorageProps } from 'src/features/gameSimulator/GameSimulatorTypes';
-
-import { createHeadersWithCors, loadFileLocally } from './ChapterSimulatorUtils';
+import {
+  createHeadersWithCors,
+  loadFileLocally
+} from 'src/features/gameSimulator/GameSimulatorUtils';
 
 /**
  * This component allows chapter text files to be loaded either from S3, or from the user's local device.

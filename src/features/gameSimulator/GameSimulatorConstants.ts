@@ -1,6 +1,8 @@
 import * as Phaser from 'phaser';
 import { screenSize } from 'src/features/game/commons/CommonConstants';
 
+import { dateOneYearFromNow } from './GameSimulatorUtils';
+
 export const gameSimConfig = {
   debug: true,
   type: Phaser.CANVAS,
@@ -16,4 +18,14 @@ export const gameSimConfig = {
   fps: {
     target: 24
   }
+};
+
+export const defaultChapter = {
+  id: -1,
+  title: '',
+  imageUrl: '/locations/spaceshipBackground.png',
+  openAt: new Date().toISOString(),
+  closeAt: dateOneYearFromNow(new Date()).toISOString(),
+  isPublished: false,
+  filenames: []
 };

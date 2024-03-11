@@ -4,14 +4,13 @@ import { memo, useCallback, useEffect, useState } from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
 import { useInput } from 'src/commons/utils/Hooks';
 import { SortableList, useSortableList } from 'src/commons/utils/SortableList';
+import { defaultChapter } from 'src/features/gameSimulator/GameSimulatorConstants';
 import {
   deleteChapterRequest,
   updateChapterRequest
 } from 'src/features/gameSimulator/GameSimulatorService';
 import { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
-
-import { defaultChapter } from './ChapterPublisherConstants';
-import { dateOneYearFromNow } from './ChapterPublisherUtils';
+import { dateOneYearFromNow } from 'src/features/gameSimulator/GameSimulatorUtils';
 
 /**
  * This component renders the Chapter Publishing form to create new chapters.
