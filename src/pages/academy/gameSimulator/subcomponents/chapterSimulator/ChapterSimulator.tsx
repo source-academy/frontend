@@ -1,9 +1,9 @@
 import { Button } from '@blueprintjs/core';
 import { useRequest } from 'src/commons/utils/Hooks';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import { gameSimulatorMenuConstants } from 'src/features/gameSimulator/GameSimulatorConstants';
+import GameSimulatorMenu from 'src/features/gameSimulator/GameSimulatorMenu';
 import { fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
-import MainMenu from 'src/features/gameSimulator/scenes/MainMenu';
-import mainMenuConstants from 'src/features/gameSimulator/scenes/MainMenuConstants';
 
 import ChapterSimulatorTextLoader from './ChapterSimulatorTextLoader';
 
@@ -18,12 +18,14 @@ const ChapterSimulator = () => {
   const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
 
   function simulateCheckpoint() {
-    (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).simulateCheckpoint();
+    (
+      SourceAcademyGame.getInstance().getCurrentSceneRef() as GameSimulatorMenu
+    ).simulateCheckpoint();
   }
 
   function clearSessionStorage(e: any) {
-    sessionStorage.setItem(mainMenuConstants.gameTxtStorageName.checkpointTxt, '');
-    sessionStorage.setItem(mainMenuConstants.gameTxtStorageName.defaultChapter, '');
+    sessionStorage.setItem(gameSimulatorMenuConstants.gameTxtStorageName.checkpointTxt, '');
+    sessionStorage.setItem(gameSimulatorMenuConstants.gameTxtStorageName.defaultChapter, '');
   }
 
   return (
@@ -32,14 +34,14 @@ const ChapterSimulator = () => {
       <b>Choose the Main Chapter file:</b>
       <ChapterSimulatorTextLoader
         s3TxtFiles={textAssets}
-        storageName={mainMenuConstants.gameTxtStorageName.checkpointTxt}
+        storageName={gameSimulatorMenuConstants.gameTxtStorageName.checkpointTxt}
       />
       <br />
       <br />
       <b>Choose a Default Variables ("Default Checkpoint") file (Optional):</b>
       <ChapterSimulatorTextLoader
         s3TxtFiles={textAssets}
-        storageName={mainMenuConstants.gameTxtStorageName.defaultChapter}
+        storageName={gameSimulatorMenuConstants.gameTxtStorageName.defaultChapter}
       />
       <br />
       <hr />

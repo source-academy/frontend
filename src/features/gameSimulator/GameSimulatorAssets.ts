@@ -1,6 +1,6 @@
 import { AssetMap, AssetType, ImageAsset } from 'src/features/game/assets/AssetsTypes';
 
-const SSImageAssets: AssetMap<ImageAsset> = {
+const GameSimulatorAssets: AssetMap<ImageAsset> = {
   gameSimBg: {
     type: AssetType.Image,
     key: 'student-room',
@@ -23,4 +23,4 @@ const SSImageAssets: AssetMap<ImageAsset> = {
   iconBg: { type: AssetType.Image, key: 'icon-bg', path: '/ui/modeIconBg.png' }
 };
 
-export default SSImageAssets;
+export default GameSimulatorAssets;

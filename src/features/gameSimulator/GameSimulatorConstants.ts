@@ -1,9 +1,11 @@
 import * as Phaser from 'phaser';
+import FontAssets from 'src/features/game/assets/FontAssets';
 import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
 import { dateOneYearFromNow } from './GameSimulatorUtils';
 
-export const gameSimConfig = {
+export const gameSimulatorConfig = {
   debug: true,
   type: Phaser.CANVAS,
   width: screenSize.x,
@@ -17,6 +19,21 @@ export const gameSimConfig = {
   },
   fps: {
     target: 24
+  }
+};
+
+export const gameSimulatorMenuOptStyle: BitmapFontStyle = {
+  key: FontAssets.zektonDarkFont.key,
+  size: 35,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
+
+export const gameSimulatorMenuConstants = {
+  maxOptButtonsRow: 2,
+  optButton: { xSpace: screenSize.x * 0.9, ySpace: screenSize.y * 0.5 },
+  gameTxtStorageName: {
+    defaultChapter: 'defaultChapter',
+    checkpointTxt: 'checkpointTxt'
   }
 };
 

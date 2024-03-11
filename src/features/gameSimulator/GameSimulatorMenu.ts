@@ -11,9 +11,9 @@ import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 
-import SSImageAssets from '../assets/ImageAssets';
-import { GameSimulatorState } from '../GameSimulatorTypes';
-import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
+import GameSimulatorAssets from './GameSimulatorAssets';
+import { gameSimulatorMenuConstants, gameSimulatorMenuOptStyle } from './GameSimulatorConstants';
+import { GameSimulatorState } from './GameSimulatorTypes';
 
 /**
  * Entry point for Game simulator.
@@ -21,7 +21,7 @@ import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
  * User can access different Game simulator
  * functionalities from here.
  */
-class MainMenu extends Phaser.Scene {
+class GameSimulatorMenu extends Phaser.Scene {
   private layerManager?: GameLayerManager;
 
   constructor() {
@@ -36,7 +36,7 @@ class MainMenu extends Phaser.Scene {
     Object.values(ImageAssets).forEach(asset =>
       this.load.image(asset.key, toS3Path(asset.path, false))
     );
-    Object.values(SSImageAssets).forEach(asset =>
+    Object.values(GameSimulatorAssets).forEach(asset =>
       this.load.image(asset.key, toS3Path(asset.path, false))
     );
     Object.values(FontAssets).forEach(asset =>
@@ -60,9 +60,9 @@ class MainMenu extends Phaser.Scene {
 
     const buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length,
-      maxXSpace: mainMenuConstants.optButton.xSpace,
-      maxYSpace: mainMenuConstants.optButton.ySpace,
-      numItemLimit: mainMenuConstants.maxOptButtonsRow,
+      maxXSpace: gameSimulatorMenuConstants.optButton.xSpace,
+      maxYSpace: gameSimulatorMenuConstants.optButton.ySpace,
+      numItemLimit: gameSimulatorMenuConstants.maxOptButtonsRow,
       redistributeLast: true
     });
 
@@ -104,19 +104,19 @@ class MainMenu extends Phaser.Scene {
 
   private createOptButton(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(this, {
-      assetKey: SSImageAssets.invertedButton.key,
+      assetKey: GameSimulatorAssets.invertedButton.key,
       message: text,
       textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-      bitMapTextStyle: mainMenuOptStyle,
+      bitMapTextStyle: gameSimulatorMenuOptStyle,
       onUp: callback
     }).setPosition(xPos, yPos);
   }
 
   public simulateCheckpoint() {
     const defaultChapterText =
-      sessionStorage.getItem(mainMenuConstants.gameTxtStorageName.defaultChapter) || '';
+      sessionStorage.getItem(gameSimulatorMenuConstants.gameTxtStorageName.defaultChapter) || '';
     const checkpointTxt =
-      sessionStorage.getItem(mainMenuConstants.gameTxtStorageName.checkpointTxt) || '';
+      sessionStorage.getItem(gameSimulatorMenuConstants.gameTxtStorageName.checkpointTxt) || '';
     if (defaultChapterText === '' && checkpointTxt === '') {
       return;
     }
@@ -141,14 +141,14 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      SSImageAssets.gameSimBg.key
+      GameSimulatorAssets.gameSimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
     const backgroundUnderlay = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      SSImageAssets.blueUnderlay.key
+      GameSimulatorAssets.blueUnderlay.key
     ).setAlpha(0.5);
     this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
     this.getLayerManager().addToLayer(Layer.Background, backgroundUnderlay);
@@ -156,4 +156,4 @@ class MainMenu extends Phaser.Scene {
   public getLayerManager = () => mandatory(this.layerManager);
 }
 
-export default MainMenu;
+export default GameSimulatorMenu;
