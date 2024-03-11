@@ -14,3 +14,17 @@ export type ChapterDetail = {
   isPublished: boolean;
   imageUrl: string;
 };
+
+export type ChapterSimProps = {
+  chapterDetail: ChapterDetail;
+  chapterFilenames?: string[];
+};
+
+export type AssetProps = {
+  assetPath: string;
+};
+
+export type StorageProps = {
+  storageName: string;
+  s3TxtFiles: string[];
+};

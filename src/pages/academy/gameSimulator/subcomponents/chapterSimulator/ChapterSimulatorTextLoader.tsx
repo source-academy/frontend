@@ -4,8 +4,8 @@ import { Button, Tab, Tabs } from '@blueprintjs/core';
 import { useState } from 'react';
 import { toTxtPath } from 'src/features/game/assets/TextAssets';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
+import { StorageProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import { Props } from './ChapterSimulatorTypes';
 import { createHeadersWithCors, loadFileLocally } from './ChapterSimulatorUtils';
 
 /**
@@ -14,7 +14,7 @@ import { createHeadersWithCors, loadFileLocally } from './ChapterSimulatorUtils'
  * @param storageName The field within browser storage to temporarily store the loaded / fetched text file(s).
  * @param s3TxtFiles List of all text assets on S3 to choose from.
  */
-function ChapterSimulatorTextLoader({ storageName, s3TxtFiles }: Props) {
+function ChapterSimulatorTextLoader({ storageName, s3TxtFiles }: StorageProps) {
   const [chosenFilename, setChosenFilename] = useState(s3TxtFiles[0]);
 
   function onLoadTxt(e: any) {

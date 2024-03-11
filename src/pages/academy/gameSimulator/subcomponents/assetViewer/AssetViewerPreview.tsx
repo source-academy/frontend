@@ -1,8 +1,7 @@
 import { memo } from 'react';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
-
-import { AssetProps } from './AssetViewerTypes';
+import { AssetProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 /**
  * This component renders the asset corresponding to the given asset path.

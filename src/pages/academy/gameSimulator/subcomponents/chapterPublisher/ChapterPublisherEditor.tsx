@@ -10,8 +10,8 @@ import {
   deleteChapterRequest,
   updateChapterRequest
 } from 'src/features/gameSimulator/GameSimulatorService';
+import { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import { ChapterSimProps } from './ChapterPublisherTypes';
 import { dateOneYearFromNow, newChapterIndex } from './ChapterPublisherUtils';
 
 /**
