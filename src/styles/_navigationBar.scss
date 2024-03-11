@@ -1,14 +1,13 @@
 /*
  * Style for all navigation bars.
  */
- .NavigationBar {
+.NavigationBar {
   width: 100%;
   display: flex; /* Establish flex container */
   justify-content: space-between; /* Align children to both ends */
   flex-wrap: nowrap; /* Prevent wrapping */
   padding: 0px 10px;
 }
-
 
 a.NavigationBar__link {
   color: inherit;

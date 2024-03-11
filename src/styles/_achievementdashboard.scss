@@ -31,7 +31,7 @@
           width: 2.5em;
         }
 
-        >* {
+        > * {
           margin: 0 auto;
         }
       }
@@ -201,7 +201,7 @@
 
       padding: $default-spacing;
 
-      >*+* {
+      > * + * {
         margin-top: $default-spacing;
       }
 
@@ -229,7 +229,7 @@
               align-items: center;
               display: flex;
 
-              >* {
+              > * {
                 margin: 0;
               }
             }
@@ -276,7 +276,8 @@
 
             .dropdown-lines {
               height: $top-spacing + $card-height + $remaining-width + $line-extension;
-              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0 $line-width;
+              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0
+                $line-width;
               min-width: $line-width;
             }
 
@@ -442,7 +443,6 @@
       border-radius: 1.5px;
     }
   }
-
 
   .achievement-main-mobile {
     $border-glow-radius: 10px;
@@ -509,7 +509,7 @@
 
       padding: $default-spacing;
 
-      >*+* {
+      > * + * {
         margin-top: $default-spacing;
       }
 
@@ -537,7 +537,7 @@
               align-items: center;
               display: flex;
 
-              >* {
+              > * {
                 margin: 0;
               }
             }
@@ -584,7 +584,8 @@
 
             .dropdown-lines {
               height: $top-spacing + $card-height + $remaining-width + $line-extension;
-              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0 $line-width;
+              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0
+                $line-width;
               min-width: $line-width;
             }
 
@@ -750,5 +751,4 @@
       border-radius: 1.5px;
     }
   }
-
 }
