@@ -11,8 +11,11 @@ import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 
-import GameSimulatorAssets from './GameSimulatorAssets';
-import { gameSimulatorMenuConstants, gameSimulatorMenuOptStyle } from './GameSimulatorConstants';
+import {
+  gameSimulatorMenuAssets,
+  gameSimulatorMenuConstants,
+  gameSimulatorMenuOptStyle
+} from './GameSimulatorConstants';
 import { GameSimulatorState } from './GameSimulatorTypes';
 
 /**
@@ -36,7 +39,7 @@ class GameSimulatorMenu extends Phaser.Scene {
     Object.values(ImageAssets).forEach(asset =>
       this.load.image(asset.key, toS3Path(asset.path, false))
     );
-    Object.values(GameSimulatorAssets).forEach(asset =>
+    Object.values(gameSimulatorMenuAssets).forEach(asset =>
       this.load.image(asset.key, toS3Path(asset.path, false))
     );
     Object.values(FontAssets).forEach(asset =>
@@ -104,7 +107,7 @@ class GameSimulatorMenu extends Phaser.Scene {
 
   private createOptButton(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(this, {
-      assetKey: GameSimulatorAssets.invertedButton.key,
+      assetKey: gameSimulatorMenuAssets.invertedButton.key,
       message: text,
       textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
       bitMapTextStyle: gameSimulatorMenuOptStyle,
@@ -141,14 +144,14 @@ class GameSimulatorMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      GameSimulatorAssets.gameSimBg.key
+      gameSimulatorMenuAssets.gameSimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
     const backgroundUnderlay = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      GameSimulatorAssets.blueUnderlay.key
+      gameSimulatorMenuAssets.blueUnderlay.key
     ).setAlpha(0.5);
     this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
     this.getLayerManager().addToLayer(Layer.Background, backgroundUnderlay);
