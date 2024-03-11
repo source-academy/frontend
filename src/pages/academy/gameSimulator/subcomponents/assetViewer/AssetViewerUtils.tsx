@@ -1,6 +1,5 @@
-import { Icon, Tooltip, TreeNodeInfo } from '@blueprintjs/core';
+import { TreeNodeInfo } from '@blueprintjs/core';
 import { set } from 'lodash';
-import { deleteS3File } from 'src/features/gameSimulator/GameSimulatorService';
 
 /**
  * This function takes a list of filepaths and returns blueprint core tree nodes.
@@ -48,35 +47,6 @@ export function convertAssetPathsToTree(
     });
   };
   return convertAssetObjectsToTree([], assetObj);
-}
-
-/**
- * Delete button that is tied to each asset.
- *
- * (May be extended to include tools apart from deletion)
- *
- * @param filePath The path to the asset that you want to supply the delete button for.
- * @returns {JSX.Element} A delete button that deletes the file with the given asset path.
- */
-export function deleteIcon(filePath: string) {
-  const deleteFile = (filePath: string) => async () => {
-    const confirm = window.confirm(`Are you sure you want to delete ${filePath}?`);
-    const reconfirm = window.confirm(
-      `Are you REALLY sure you want to delete ${filePath}?\nThere is NO undoing this action!`
-    );
-    alert(
-      confirm
-        ? reconfirm
-          ? await deleteS3File(filePath)
-          : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
-        : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
-    );
-  };
-  return (
-    <Tooltip content="Delete">
-      <Icon icon="trash" onClick={deleteFile(filePath)} />
-    </Tooltip>
-  );
 }
 
 /**

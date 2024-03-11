@@ -1,15 +1,16 @@
-import { Tab, Tabs, Tree, TreeNodeInfo } from '@blueprintjs/core';
+import { Icon, Tab, Tabs, Tooltip, Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import { fetchAssetPaths, s3AssetFolders } from 'src/features/gameSimulator/GameSimulatorService';
+import { deleteS3File } from 'src/features/gameSimulator/GameSimulatorService';
 
 import AssetViewerPreview from './AssetViewerPreview';
 import AssetViewerUpload from './AssetViewerUpload';
-import { convertAssetPathsToTree, deleteIcon, treeMap } from './AssetViewerUtils';
+import { convertAssetPathsToTree, treeMap } from './AssetViewerUtils';
 
 /**
- * This component renders the Asset Viewer component.
+ * This component renders the Asset Viewer component in the Game Simulator.
  *
  * It provides a preview of all the S3 asset files in a document tree format.
  * The selected asset will be available for preview.
@@ -21,6 +22,26 @@ const AssetViewer = () => {
   const [assetTree, setAssetTree] = React.useState([] as TreeNodeInfo[]);
 
   React.useEffect(() => {
+    const deleteIcon = (filePath: string): JSX.Element => {
+      const deleteFile = (filePath: string) => async () => {
+        const confirm = window.confirm(`Are you sure you want to delete ${filePath}?`);
+        const reconfirm = window.confirm(
+          `Are you REALLY sure you want to delete ${filePath}?\nThere is NO undoing this action!`
+        );
+        alert(
+          confirm
+            ? reconfirm
+              ? await deleteS3File(filePath)
+              : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
+            : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
+        );
+      };
+      return (
+        <Tooltip content="Delete">
+          <Icon icon="trash" onClick={deleteFile(filePath)} />
+        </Tooltip>
+      );
+    };
     setAssetTree(convertAssetPathsToTree(assetPaths, deleteIcon, s3AssetFolders));
   }, [assetPaths]);
 

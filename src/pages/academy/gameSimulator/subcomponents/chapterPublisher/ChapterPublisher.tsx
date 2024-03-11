@@ -7,7 +7,7 @@ import ChapterPublisherEditor from './ChapterPublisherEditor';
 import { defaultChapter, newChapterIndex } from './ChapterPublisherUtils';
 
 /**
- * This components renders the Chapter Publisher component.
+ * This components renders the Chapter Publisher component in the Game Simulator.
  *
  * @param textAssets - List of all text assets on S3 to choose from.
  */

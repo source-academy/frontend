@@ -8,7 +8,7 @@ import mainMenuConstants from 'src/features/gameSimulator/scenes/MainMenuConstan
 import ChapterSimulatorTextLoader from './ChapterSimulatorTextLoader';
 
 /**
- * This component renders the Chapter Simulator component.
+ * This component renders the Chapter Simulator component in the Game Simulator.
  *
  * It will simulate a game chapter using the given text files (from either S3 or Local).
  *
