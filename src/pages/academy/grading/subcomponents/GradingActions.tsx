@@ -51,15 +51,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isPublish
   // TODO - Redux loop
   const handlePublishClick = async () => {
     const confirm = await showSimpleConfirmDialog({
-      contents: (
-        <>
-          <p>Publish this assessment's grading?</p>
-          <p>
-            DEVNOTE (remove): You should only see this when notFullyGraded = false, isPublished =
-            false.
-          </p>
-        </>
-      ),
+      contents: "Publish this assessment's grading?",
       positiveIntent: 'primary',
       positiveLabel: 'Publish'
     });
@@ -70,15 +62,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isPublish
 
   const handleUnpublishClick = async () => {
     const confirm = await showSimpleConfirmDialog({
-      contents: (
-        <>
-          <p>Unpublish this assessment's grading?</p>
-          <p>
-            DEVNOTE (remove): You should only see this when notFullyGraded = false, isPublished =
-            true.
-          </p>
-        </>
-      ),
+      contents: "Unpublish this assessment's grading?",
       positiveIntent: 'primary',
       positiveLabel: 'Unpublish'
     });
