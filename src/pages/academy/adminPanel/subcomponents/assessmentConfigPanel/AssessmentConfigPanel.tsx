@@ -9,9 +9,9 @@ import {
 import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash';
 import React from 'react';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
-import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
 import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
 import NumericCell from './NumericCell';
