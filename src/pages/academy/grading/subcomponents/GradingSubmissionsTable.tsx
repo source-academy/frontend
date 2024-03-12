@@ -36,7 +36,12 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, GradingStatusBadge, PublishedStatusBadge, SubmissionStatusBadge } from './GradingBadges';
+import {
+  AssessmentTypeBadge,
+  GradingStatusBadge,
+  PublishedStatusBadge,
+  SubmissionStatusBadge
+} from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -97,18 +102,14 @@ const makeColumns = (handleClick: () => void) => [
   columnHelper.accessor('isPublished', {
     header: 'Published',
     enableColumnFilter: false,
-    cell: info => (
-        <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-          <PublishedStatusBadge status={info.getValue()} />
-        </Filterable>
-    )
+    cell: info => <PublishedStatusBadge isPublished={info.getValue()} />
   }),
-  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
+  columnHelper.accessor(({ submissionId, isPublished }) => ({ submissionId, isPublished }), {
     header: 'Actions',
     enableColumnFilter: false,
     cell: info => {
-      const { submissionId } = info.getValue();
-      return <GradingActions submissionId={submissionId} />;
+      const { submissionId, isPublished } = info.getValue();
+      return <GradingActions submissionId={submissionId} isPublished={isPublished} />;
     }
   })
 ];
@@ -200,7 +201,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   useEffect(() => {
     resetPage();
-  }, [updateEntries, resetPage, searchValue]);
+  }, [updateEntries, resetPage]);
 
   useEffect(() => {
     updateEntries(page, backendFilterParams);

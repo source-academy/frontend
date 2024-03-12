@@ -60,6 +60,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   TimeOption,
   Tokens,
+  UNPUBLISH_GRADING,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
@@ -131,6 +132,7 @@ import {
   removeAssessmentConfig,
   removeTimeOptions,
   removeUserCourseRegistration,
+  UnpublishGrading,
   updateAssessment,
   uploadAssessment
 } from './RequestsSaga';
@@ -485,10 +487,6 @@ function* BackendSaga(): SagaIterator {
       const { submissionId } = action.payload;
 
       const resp: Response | null = yield publishGrading(submissionId, tokens);
-
-      // Development function to test response. TODO: Remove once tested.
-      
-
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -498,7 +496,7 @@ function* BackendSaga(): SagaIterator {
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, submissionStatus: 'attempted' };
+          return { ...overview, isPublished: true };
         }
         return overview;
       });
@@ -508,6 +506,38 @@ function* BackendSaga(): SagaIterator {
       );
 
       yield call(showSuccessMessage, 'Publish grading successful', 1000);
+      yield put(
+        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
+      );
+    }
+  );
+
+  yield takeEvery(
+    UNPUBLISH_GRADING,
+    function* (action: ReturnType<typeof actions.unpublishGrading>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { submissionId } = action.payload;
+
+      const resp: Response | null = yield UnpublishGrading(submissionId, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const overviews: GradingOverview[] = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.data || []
+      );
+      const newOverviews = overviews.map(overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, isPublished: false };
+        }
+        return overview;
+      });
+
+      const totalPossibleEntries = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.count
+      );
+
+      yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
       yield put(
         actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
       );

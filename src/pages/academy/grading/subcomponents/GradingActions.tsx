@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import {
   publishGrading,
   reautogradeSubmission,
+  unpublishGrading,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
@@ -13,9 +14,10 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type GradingActionsProps = {
   submissionId: number;
+  isPublished: boolean;
 };
 
-const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
+const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isPublished }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
 
@@ -46,21 +48,12 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
     }
   };
 
-  // Planned logic flow:
-  // hide both publish and un-publish icons if !fully graded
-  // show publish icon if fully graded && not published
-  // show un-publish icon if fully graded && published
-  // polish: "publish All" feature (global, admin access), "publish All" (group only)
-
-  // TODO
-  const canPublish = () => Math.random() > 0.5;
-
   // TODO - Redux loop
   const handlePublishClick = async () => {
     const confirm = await showSimpleConfirmDialog({
       contents: (
         <>
-          <p>Publish your grading?</p>
+          <p>Publish this assessment's grading?</p>
           <p>
             DEVNOTE (remove): You should only see this when notFullyGraded = false, isPublished =
             false.
@@ -72,6 +65,25 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
     });
     if (confirm) {
       dispatch(publishGrading(submissionId));
+    }
+  };
+
+  const handleUnpublishClick = async () => {
+    const confirm = await showSimpleConfirmDialog({
+      contents: (
+        <>
+          <p>Unpublish this assessment's grading?</p>
+          <p>
+            DEVNOTE (remove): You should only see this when notFullyGraded = false, isPublished =
+            true.
+          </p>
+        </>
+      ),
+      positiveIntent: 'primary',
+      positiveLabel: 'Unpublish'
+    });
+    if (confirm) {
+      dispatch(unpublishGrading(submissionId));
     }
   };
 
@@ -97,11 +109,24 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
         type="button"
         style={{ padding: 0 }}
         onClick={handlePublishClick}
-        hidden={canPublish()}
+        hidden={isPublished}
       >
         <Icon
           tooltip="Publish"
-          icon={() => <BpIcon icon={IconNames.SEND_TO_MAP} />}
+          icon={() => <BpIcon icon={IconNames.TICK_CIRCLE} />}
+          variant="simple"
+        />
+      </button>
+
+      <button
+        type="button"
+        style={{ padding: 0 }}
+        onClick={handleUnpublishClick}
+        hidden={!isPublished}
+      >
+        <Icon
+          tooltip="Unpublish"
+          icon={() => <BpIcon icon={IconNames.CROSS_CIRCLE} />}
           variant="simple"
         />
       </button>

@@ -794,16 +794,35 @@ export const postUnsubmit = async (
 };
 
 /**
- * POST /courses/{courseId}/admin/grading/{submissionId}/publish
+ * POST /courses/{courseId}/admin/grading/{submissionId}/publish_grades
  */
 export const publishGrading = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/grading/${submissionId}/publishGrading`, 'POST', {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}/publish_grades`, 'POST', {
     ...tokens,
     noHeaderAccept: true
   });
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/grading/{submissionId}/unpublish_grades
+ */
+export const UnpublishGrading = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/grading/${submissionId}/unpublish_grades`,
+    'POST',
+    {
+      ...tokens,
+      noHeaderAccept: true
+    }
+  );
 
   return resp;
 };

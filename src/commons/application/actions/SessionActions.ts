@@ -66,6 +66,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   TimeOption,
   Tokens,
+  UNPUBLISH_GRADING,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_CONFIGS,
@@ -234,8 +235,17 @@ export const unsubmitSubmission = (submissionId: number) =>
     submissionId
   });
 
+/**
+ * Publishing / unpublishing actions
+ */
+
 export const publishGrading = (submissionId: number) =>
   action(PUBLISH_GRADING, {
+    submissionId
+  });
+
+export const unpublishGrading = (submissionId: number) =>
+  action(UNPUBLISH_GRADING, {
     submissionId
   });
 

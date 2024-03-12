@@ -60,10 +60,7 @@ type PublishedStatusBadgeProps = {
 const PublishedStatusBadge: React.FC<PublishedStatusBadgeProps> = ({ isPublished }) => {
   const statusText = isPublished ? 'Published' : 'Not published';
   const badgeColor = isPublished ? 'green' : 'red';
-  const badgeIcon = () => (
-    <Icon icon={isPublished ? IconNames.SEND_TO_MAP : IconNames.CROSS} style={{ marginRight: '0.5rem' }}/>
-  );
-  return <Badge text={statusText} color={badgeColor} icon={badgeIcon} />;
+  return <Badge text={statusText} color={badgeColor} />;
 };
 
 type GradingStatusBadgeProps = {
@@ -112,4 +109,10 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, PublishedStatusBadge, SubmissionStatusBadge };
+export {
+  AssessmentTypeBadge,
+  FilterBadge,
+  GradingStatusBadge,
+  PublishedStatusBadge,
+  SubmissionStatusBadge
+};
