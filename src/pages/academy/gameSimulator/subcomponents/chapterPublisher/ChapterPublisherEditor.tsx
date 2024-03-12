@@ -115,7 +115,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
   return (
     <>
       <h4>
-        Title: <input className="bp4-input" type="text" placeholder="New title" {...titleProps} />
+        Title: <input className="bp5-input" type="text" placeholder="New title" {...titleProps} />
       </h4>
       <b>Open date: </b>
       {openDate && getStandardDateTime(openDate.toISOString())}
@@ -127,14 +127,14 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
         highlightCurrentDay={true}
       />
       <h4>
-        Chapter Preview Image URL: <input className="bp4-input" type="text" {...imageUrlProps} />
+        Chapter Preview Image URL: <input className="bp5-input" type="text" {...imageUrlProps} />
       </h4>
       <h4>Chapter Files (.txt):</h4>
       <SortableList items={chosenFiles} onSortEnd={onSortEnd} />
       {chosenFiles.length > 0 ? (
         <>
           <br />
-          <Button icon={'delete'} onClick={deleteAllFromChosen}>
+          <Button icon="delete" onClick={deleteAllFromChosen}>
             Clear all selected files
           </Button>
           <br />
@@ -159,7 +159,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
       <br />
       <Switch
         checked={isPublished}
-        labelElement={'Published'}
+        labelElement="Published"
         onChange={() => setIsPublished(!isPublished)}
       />
       <Button onClick={saveChapter}>Save Changes</Button>{' '}

@@ -39,7 +39,7 @@ const ChapterSimulatorTextLoader: React.FC<StorageProps> = ({ storageName, s3Txt
 
   const chooseS3Txt = (
     <>
-      <select className="bp4-menu" onChange={changeChosenFilename}>
+      <select className="bp5-menu" onChange={changeChosenFilename}>
         {s3TxtFiles.map(file => (
           <option value={file} key={file}>
             {file}

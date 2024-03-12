@@ -20,13 +20,15 @@ const ChapterPublisher: React.FC = () => {
   return (
     <>
       <h3>Publish / Edit Chapters</h3>
-      <select className="bp4-menu" onChange={(e: any) => setChosenIndex(e.target.key)}>
+      <select className="bp5-menu" onChange={(e: any) => setChosenIndex(e.target.key)}>
         {chapters.map((chapter, chapterIndex) => (
           <option key={chapterIndex} value={chapter.title}>
             {`Chapter ${chapterIndex}: ${chapter.title}`}
           </option>
         ))}
-        <option key={defaultChapter.id} value={''}>{`New chapter`}</option>
+        <option key={defaultChapter.id} value="">
+          New chapter
+        </option>
       </select>
       <br />
       <br />

@@ -13,7 +13,7 @@ const AssetViewerPreview: React.FC<AssetProps> = ({ assetPath }) => {
   return (
     <img
       alt="asset"
-      crossOrigin={'anonymous'}
+      crossOrigin="anonymous"
       src={toS3Path(displayAssetPath, !!assetPath)}
       width="150px"
       onError={e => {

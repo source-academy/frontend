@@ -46,7 +46,7 @@ const AssetViewerUpload: React.FC = () => {
       {s3AssetFolders.map(folder => (
         <MenuItem onClick={handleChangeUploadFolder} id={folder} key={folder} text={folder} />
       ))}
-      <MenuItem onClick={showSpecifyFolder} text={'Custom Folder'}></MenuItem>
+      <MenuItem onClick={showSpecifyFolder} text="Custom Folder"></MenuItem>
     </Menu>
   );
   return (
@@ -59,7 +59,7 @@ const AssetViewerUpload: React.FC = () => {
       <br />
       {showfolderOverwrite && (
         <InputGroup
-          placeholder={"Specify your own custom folder: e.g. 'locations/hallway'"}
+          placeholder="Specify your own custom folder: e.g. 'locations/hallway'"
           onChange={handleChangeFolderOverwrite}
         />
       )}
