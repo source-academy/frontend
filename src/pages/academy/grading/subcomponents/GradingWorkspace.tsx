@@ -273,7 +273,8 @@ const GradingWorkspace: React.FC<Props> = props => {
         {
           value: editorValue,
           highlightedLines: [],
-          breakpoints: []
+          breakpoints: [],
+          githubSaveInfo: {repoName: '', filePath: ''}
         }
       ],
       programPrependValue,

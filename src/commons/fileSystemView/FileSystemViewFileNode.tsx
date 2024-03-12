@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
@@ -12,6 +12,8 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
+import { OverallState } from '../application/ApplicationTypes';
+import { actions } from '../utils/ActionsHelper';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -32,19 +34,32 @@ const FileSystemViewFileNode: React.FC<Props> = ({
 }) => {
   const [isEditing, setIsEditing] = React.useState(false);
   const dispatch = useDispatch();
+  const store = useStore<OverallState>();
 
   const fullPath = path.join(basePath, fileName);
 
   const handleOpenFile = () => {
-    fileSystem.readFile(fullPath, 'utf-8', (err, fileContents) => {
+    fileSystem.readFile(fullPath, 'utf-8', async (err, fileContents) => {
       if (err) {
         console.error(err);
       }
       if (fileContents === undefined) {
         throw new Error('File contents are undefined.');
       }
-
       dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
+      const idx = store.getState().workspaces['playground'].activeEditorTabIndex || 0;
+      const repoName = store.getState().playground.repoName || '';
+      const editorFilePath = store.getState().workspaces['playground'].editorTabs[idx].filePath || '';
+      console.log(repoName);
+      console.log(editorFilePath);
+      store.dispatch(actions.updateEditorGithubSaveInfo(
+        'playground',
+        idx,
+        repoName,
+        editorFilePath,
+        new Date()
+      ));
+      console.log(store.getState().workspaces['playground'].editorTabs);
     });
   };
 

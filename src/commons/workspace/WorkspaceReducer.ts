@@ -92,7 +92,8 @@ import {
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
-  WorkspaceManagerState
+  WorkspaceManagerState,
+  UPDATE_EDITOR_GITHUB_SAVE_INFO
 } from './WorkspaceTypes';
 
 const getWorkspaceLocation = (action: any): WorkspaceLocation => {
@@ -837,7 +838,8 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         filePath,
         value: editorValue,
         highlightedLines: [],
-        breakpoints: []
+        breakpoints: [],
+        githubSaveInfo: {repoName: '', filePath: ''}
       };
       const newEditorTabs: EditorTabState[] = [
         ...state[workspaceLocation].editorTabs,

@@ -7,6 +7,8 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 
+import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
+
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
 export const BROWSE_REPL_HISTORY_DOWN = 'BROWSE_REPL_HISTORY_DOWN';
@@ -119,6 +121,7 @@ export type EditorTabState = {
   readonly highlightedLines: HighlightedLines[];
   readonly breakpoints: string[];
   readonly newCursorPosition?: Position;
+  githubSaveInfo: GitHubSaveInfo;
 };
 
 export type WorkspaceState = {

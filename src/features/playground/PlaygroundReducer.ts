@@ -8,6 +8,7 @@ import {
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
+  PLAYGROUND_UPDATE_REPO_NAME,
   PlaygroundState,
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
@@ -41,12 +42,17 @@ export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = (
       return {
         ...state,
         persistenceObject: action.payload
-      }
+      };
     case PLAYGROUND_UPDATE_LANGUAGE_CONFIG:
       return {
         ...state,
         languageConfig: action.payload
       };
+    case PLAYGROUND_UPDATE_REPO_NAME:
+      return {
+        ...state,
+        repoName: action.payload
+      }
     default:
       return state;
   }

@@ -10,7 +10,8 @@ import {
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
   SHORTEN_URL,
-  UPDATE_SHORT_URL
+  UPDATE_SHORT_URL,
+  PLAYGROUND_UPDATE_REPO_NAME
 } from './PlaygroundTypes';
 
 export const generateLzString = createAction(GENERATE_LZ_STRING, () => ({ payload: {} }));
@@ -45,4 +46,9 @@ export const playgroundUpdateGitHubSaveInfo = createAction(
 export const playgroundConfigLanguage = createAction(
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
   (languageConfig: SALanguage) => ({ payload: languageConfig })
+);
+
+export const playgroundUpdateRepoName = createAction(
+  PLAYGROUND_UPDATE_REPO_NAME,
+  (repoName: string) => ({ payload: repoName })
 );

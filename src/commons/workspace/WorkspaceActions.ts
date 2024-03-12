@@ -74,7 +74,8 @@ import {
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
-  WorkspaceState
+  WorkspaceState,
+  UPDATE_EDITOR_GITHUB_SAVE_INFO
 } from './WorkspaceTypes';
 
 export const setTokenCount = createAction(
@@ -516,3 +517,4 @@ export const updateLastNonDetResult = createAction(
     payload: { lastNonDetResult, workspaceLocation }
   })
 );
+

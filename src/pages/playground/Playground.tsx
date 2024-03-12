@@ -409,6 +409,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     (editorTabIndex: number, newEditorValue: string) => {
       setLastEdit(new Date());
       // TODO change editor tab label to reflect path of opened file?
+      
       handleEditorValueChange(editorTabIndex, newEditorValue);
     },
     [handleEditorValueChange]
@@ -618,6 +619,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
+  console.log(githubSaveInfo);
   const githubButtons = useMemo(() => {
     return (
       <ControlBarGitHubButtons
