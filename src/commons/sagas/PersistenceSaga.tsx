@@ -29,7 +29,7 @@ import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
-import { refreshFileView } from '../fileSystemView/FileSystemViewList';
+import { refreshFileView } from '../fileSystemView/FileSystemViewList'; // TODO broken when folder is open when reading folders
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const SCOPES =
@@ -91,12 +91,14 @@ export function* persistenceSaga(): SagaIterator {
     let toastKey: string | undefined;
     try {
       yield call(ensureInitialisedAndAuthorised);
-      const { id, name, mimeType, picked } = yield call(pickFile, 
+      const { id, name, mimeType, picked, parentId } = yield call(pickFile, 
         'Pick a file/folder to open', 
         {
           pickFolders: true
         }
         ); // id, name, picked gotten here
+
+      yield call(console.log, parentId);
       if (!picked) {
         return;
       }
@@ -142,8 +144,6 @@ export function* persistenceSaga(): SagaIterator {
         }
         yield call(console.log, "there is a filesystem");
 
-        yield put(actions.playgroundUpdatePersistenceFolder({ id, name, lastSaved: new Date() }));
-
         // rmdir everything TODO replace everything hardcoded with playground?
         yield call(rmFilesInDirRecursively, fileSystem, "/playground");
 
@@ -172,6 +172,10 @@ export function* persistenceSaga(): SagaIterator {
         yield call(refreshFileView); // refreshes folder view TODO super jank?
 
         yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
+
+        // TODO does not update playground on loading folder
+        yield call(console.log, "ahfdaskjhfkjsadf", parentId);
+        yield put(actions.playgroundUpdatePersistenceFolder({ id, name, parentId, lastSaved: new Date() }));
 
         return;
       }
@@ -348,10 +352,14 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery( // TODO work on this
     PERSISTENCE_SAVE_ALL,
     function* () {
+      // TODO: when top level folder is renamed, save all just leaves the old folder alone and saves in a new folder if it exists
+      //       Add checking to see if current folder already exists when renamed?
+      //       Some way to keep track of when files/folders are renamed???????????
+      // TODO: if top level folder already exists in GDrive, to 
+
       // Case init: Don't care, delete everything in remote and save again
       // Callable only if persistenceObject isFolder
-
-      const [currFolderObject] = yield select(
+      const [currFolderObject] = yield select( // TODO resolve type here?
         (state: OverallState) => [
           state.playground.persistenceObject
         ]
@@ -360,6 +368,12 @@ export function* persistenceSaga(): SagaIterator {
         yield call(console.log, "no obj!");
         return;
       }
+      if (!(currFolderObject as PersistenceObject).isFolder) {
+        yield call (console.log, "folder not opened!");
+        return;
+      }
+
+      
 
       console.log("currFolderObj", currFolderObject);
 
@@ -378,6 +392,44 @@ export function* persistenceSaga(): SagaIterator {
       // behaviour of open folder for GDrive loads even empty folders
       yield call(console.log, "currfiles", currFiles);
 
+      const [chapter, variant, external] = yield select(
+        (state: OverallState) => [
+          state.workspaces.playground.context.chapter,
+          state.workspaces.playground.context.variant,
+          state.workspaces.playground.externalLibrary
+        ]
+      );
+      const config: IPlaygroundConfig = {
+        chapter,
+        variant,
+        external
+      };
+
+      // check if top level folder has been renamed
+      // assuming only 1 top level folder exists, so get 1 file
+      const testPath = Object.keys(currFiles)[0];
+      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(testPath);
+      if (regexResult === null) {
+        yield call(console.log, "Regex null!");
+        return; // should never come here
+      }
+      const topLevelFolderName = regexResult[1].slice(
+        ("/playground/").length, -1).split("/")[0];
+      
+      if (topLevelFolderName === "") {
+        yield call(console.log, "no top level folder?");
+        return;
+      }
+
+      if (topLevelFolderName !== currFolderObject.name) {
+        // top level folder name has been renamed
+        yield call(console.log, "TLFN changed from ", currFolderObject.name, " to ", topLevelFolderName);
+        const newTopLevelFolderId: string = yield call(getContainingFolderIdRecursively, [topLevelFolderName],
+          currFolderObject.parentId!); // try and find the folder if it exists
+        currFolderObject.name = topLevelFolderName; // so that the new top level folder will be created below
+        currFolderObject.id = newTopLevelFolderId; // so that new top level folder will be saved in root of gdrive
+      }
+
       //const fileNameRegex = new RegExp('@"[^\\]+$"');
       for (const currFullFilePath of Object.keys(currFiles)) {
         const currFileContent = currFiles[currFullFilePath];
@@ -395,18 +447,34 @@ export function* persistenceSaga(): SagaIterator {
         // /fold1/fold2/ becomes ["fold1", "fold2"]
         // If in top level folder, becomes [""]
 
-        yield call(getContainingFolderIdRecursively, currFileParentFolders,
+        const currFileParentFolderId: string = yield call(getContainingFolderIdRecursively, currFileParentFolders,
           currFolderObject.id);
 
-        // yield call(
-        //   createFile,
-        //   fileName,
-        //   currFolderObject.id,
-
-        // );
-
         yield call (console.log, "name", currFileName, "content", currFileContent
-        , "path", currFileParentFolders);
+        , "parent folder id", currFileParentFolderId);
+
+        const currFileId: string = yield call(getFileFromFolder, currFileParentFolderId, currFileName);
+
+        if (currFileId === "") {
+          // file does not exist, create file
+          yield call(console.log, "creating ", currFileName);
+          yield call(createFile, currFileName, currFileParentFolderId, MIME_SOURCE, currFileContent, config);
+
+        } else {
+          // file exists, update file
+          yield call(console.log, "updating ", currFileName, " id: ", currFileId);
+          yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
+        }
+        yield put(actions.playgroundUpdatePersistenceFolder({ id: currFolderObject.id, name: currFolderObject.name, parentId: currFolderObject.parentId, lastSaved: new Date() }));
+        yield call(showSuccessMessage, `${currFileName} successfully saved to Google Drive.`, 1000);
+
+        // TODO: create getFileIdRecursively, that uses currFileParentFolderId
+        //         to query GDrive api to get a particular file's GDrive id OR modify reading func to save each obj's id somewhere
+        //       Then use updateFile like in persistence_save_file to update files that exist
+        //         on GDrive, or createFile if the file doesn't exist
+
+        // TODO: lazy loading of files?
+        //         just show the folder structure, then load the file - to turn into an issue
       }
 
       
@@ -663,6 +731,35 @@ async function getFilesOfFolder( // recursively get files
   return ans;
 }
 
+async function getFileFromFolder( // returns string id or empty string if failed
+  parentFolderId: string,
+  fileName: string
+): Promise<string> {
+  let fileList: gapi.client.drive.File[] | undefined;
+
+  await gapi.client.drive.files.list({
+    q: '\'' + parentFolderId + '\'' + ' in parents and trashed = false and name = \'' + fileName + '\'',
+  }).then(res => {
+    fileList = res.result.files
+  })
+
+  console.log(fileList);
+
+  if (!fileList || fileList.length === 0) {
+    // file does not exist
+    console.log("file not exist: " + fileName);
+    return "";
+  }
+
+  //check if file is correct
+  if (fileList![0].name === fileName) {
+    // file is correct
+    return fileList![0].id!;
+  } else {
+    return "";
+  }
+}
+
 async function getContainingFolderIdRecursively( // TODO memoize?
   parentFolders: string[],
   topFolderId: string,
@@ -799,7 +896,7 @@ function createFolderAndReturnId(
     headers,
     body
   }).then(res => res.result.id)
-};
+}
 
 function createMultipartBody(
   meta: any,

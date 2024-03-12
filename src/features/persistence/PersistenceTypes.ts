@@ -8,6 +8,7 @@ export type PersistenceState = 'INACTIVE' | 'SAVED' | 'DIRTY';
 
 export type PersistenceObject = {
   id: string;
+  parentId?: string; // only relevant for isFolder = true
   name: string;
   lastSaved?: Date;
   isFolder?: boolean;
