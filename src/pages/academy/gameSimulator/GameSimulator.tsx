@@ -23,7 +23,7 @@ import ChapterSimulator from './subcomponents/chapterSimulator/ChapterSimulator'
  * simulator phaser game, so that the GameSimulatorMenu buttons
  * are able to control what is shown on the Game Simulator panel.
  */
-function GameSimulator() {
+const GameSimulator: React.FC = () => {
   const session = useTypedSelector(state => state.session);
   const [gameSimulatorState, setGameSimulatorState] = React.useState<string>(
     GameSimulatorState.DEFAULT
@@ -61,6 +61,6 @@ function GameSimulator() {
       </div>
     </div>
   );
-}
+};
 
 export default GameSimulator;

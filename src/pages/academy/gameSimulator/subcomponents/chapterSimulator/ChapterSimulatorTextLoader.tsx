@@ -16,7 +16,7 @@ import {
  * @param storageName The field within browser storage to temporarily store the loaded / fetched text file(s).
  * @param s3TxtFiles List of all text assets on S3 to choose from.
  */
-function ChapterSimulatorTextLoader({ storageName, s3TxtFiles }: StorageProps) {
+const ChapterSimulatorTextLoader: React.FC<StorageProps> = ({ storageName, s3TxtFiles }) => {
   const [chosenFilename, setChosenFilename] = useState(s3TxtFiles[0]);
 
   function onLoadTxt(e: any) {
@@ -59,6 +59,6 @@ function ChapterSimulatorTextLoader({ storageName, s3TxtFiles }: StorageProps) {
       </Tabs>
     </div>
   );
-}
+};
 
 export default ChapterSimulatorTextLoader;

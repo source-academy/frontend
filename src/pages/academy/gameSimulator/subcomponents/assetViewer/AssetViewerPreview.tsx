@@ -8,7 +8,7 @@ import { AssetProps } from 'src/features/gameSimulator/GameSimulatorTypes';
  *
  * @assetPath - The path of the asset to render / preview.
  */
-const AssetViewerPreview = memo(({ assetPath }: AssetProps) => {
+const AssetViewerPreview: React.FC<AssetProps> = ({ assetPath }) => {
   const displayAssetPath = assetPath || Constants.defaultAssetPath;
   return (
     <img
@@ -22,6 +22,6 @@ const AssetViewerPreview = memo(({ assetPath }: AssetProps) => {
       }}
     />
   );
-});
+};
 
-export default AssetViewerPreview;
+export default memo(AssetViewerPreview);

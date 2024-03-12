@@ -14,7 +14,7 @@ import ChapterSimulatorTextLoader from './ChapterSimulatorTextLoader';
  *
  * @param textAssets List of all text assets on S3 to choose from.
  */
-const ChapterSimulator = () => {
+const ChapterSimulator: React.FC = () => {
   const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
 
   function simulateCheckpoint() {

@@ -15,7 +15,7 @@ import { convertAssetPathsToTree, treeMap } from './AssetViewerUtils';
  * It provides a preview of all the S3 asset files in a document tree format.
  * The selected asset will be available for preview.
  */
-const AssetViewer = () => {
+const AssetViewer: React.FC = () => {
   const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);
 
   const [currentAsset, setCurrentAsset] = React.useState('');

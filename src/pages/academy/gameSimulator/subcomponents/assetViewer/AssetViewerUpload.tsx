@@ -1,11 +1,11 @@
 import { Button, InputGroup, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { s3AssetFolders, uploadAssetsToS3 } from 'src/features/gameSimulator/GameSimulatorService';
 
 /**
  * This component allows uploading of new assets into the S3 asset files.
  */
-const AssetViewerUpload = () => {
+const AssetViewerUpload: React.FC = () => {
   const [fileList, setFileList] = useState<FileList>();
   const [uploadFolder, setUploadFolder] = useState<string>(s3AssetFolders[0]);
 

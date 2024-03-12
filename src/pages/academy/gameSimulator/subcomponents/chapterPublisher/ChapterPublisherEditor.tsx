@@ -20,7 +20,7 @@ import { dateOneYearFromNow } from 'src/features/gameSimulator/GameSimulatorUtil
  *                      existing chapters if user wants to edit the selected chapter.
  * @param chapterFilenames List of all text asset filenames on S3 to choose from.
  */
-const ChapterPublisherEditor = memo(({ chapterDetail, chapterFilenames }: ChapterSimProps) => {
+const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chapterFilenames }) => {
   const { id } = chapterDetail;
   const { value: title, setValue: setTitle, inputProps: titleProps } = useInput('');
   const { value: imageUrl, setValue: setImageUrl, inputProps: imageUrlProps } = useInput('');
@@ -173,6 +173,6 @@ const ChapterPublisherEditor = memo(({ chapterDetail, chapterFilenames }: Chapte
       </Button>
     </>
   );
-});
+};
 
-export default ChapterPublisherEditor;
+export default memo(ChapterPublisherEditor);
