@@ -1,0 +1,6198 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 57.5 L 170 390 L 170 390 M 140 57.5 L 170 390 L 170 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          57.5,
+          170,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 127.5 L 486.12109375 390 L 486.12109375 390 M 140 127.5 L 486.12109375 390 L 486.12109375 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          127.5,
+          486.12109375,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 197.5 L 802.2421875 390 L 802.2421875 390 M 140 197.5 L 802.2421875 390 L 802.2421875 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          197.5,
+          802.2421875,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 6`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 7`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          267.5,
+          1118.36328125,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 8`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 9`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 337.5 L 1434.484375 390 L 1434.484375 390 M 140 337.5 L 1434.484375 390 L 1434.484375 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          337.5,
+          1434.484375,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 10`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 11`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 12`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={178.060546875}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="9"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={183.060546875}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="9"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 13`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={207.0908203125}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="8"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={212.0908203125}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="8"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 14`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={236.12109375}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={241.12109375}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 15`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={265.1513671875}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={270.1513671875}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 16`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={294.181640625}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff0000"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={299.181640625}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 17`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={323.2119140625}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff0000"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="24"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={328.2119140625}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="24"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="call 0"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Call function with 0 arguments"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr acc"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Access array at given index"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="1"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="1"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 162.5 L 170 240 L 170 240 M 140 162.5 L 170 240 L 170 240 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          162.5,
+          170,
+          240,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="mark"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Mark return address"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 6`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 232.5 L 170 390 L 170 390 M 140 232.5 L 170 390 L 170 390 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          232.5,
+          170,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 7`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="return ar…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="return arr;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 8`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 9`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="while"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Keep executing while loop body if predicate holds"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 10`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x < n"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x < n"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 11`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={390}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x = x + 1;"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={395}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x = x + 1;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={425}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={430}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={460}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr[x] = …"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={465}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="arr[x] = () => x;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="math_sin(…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="math_sin(math_PI / 2);"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 140 92.5 L 30 60 L 30 60 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          140,
+          92.5,
+          30,
+          60,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="asgn math…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Assign value on top of stash to math_sin"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999999"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="black"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="black"
+    />
+    <Text
+      fill="#999999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 0 1`] = `
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 0 2`] = `
+Object {
+  "head": Object {
+    "50": [Function],
+    "52": [Function],
+    "54": [Function],
+    "56": [Function],
+    "fn": [Function],
+    "x": Array [
+      "long string",
+      Array [
+        [Function],
+        [Function],
+      ],
+      Array [
+        1,
+        Array [
+          Array [
+            2,
+            3,
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      5,
+      6,
+    ],
+    "y": Array [
+      Array [
+        [Function],
+        [Function],
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        Array [
+          [Function],
+          Array [
+            Array [
+              Array [
+                2,
+                3,
+              ],
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "1",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 0 3`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  0,
+  1,
+  "fn:= ",
+  [Function],
+  "x:= ",
+  Array [
+    "long string",
+    Array [
+      [Function],
+      [Function],
+    ],
+    Array [
+      1,
+      Array [
+        Array [
+          2,
+          3,
+        ],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+    ],
+    [Function],
+    5,
+    6,
+  ],
+  "y:= ",
+  Array [
+    Array [
+      [Function],
+      [Function],
+    ],
+    Array [
+      Array [
+        1,
+        Array [
+          Array [
+            2,
+            3,
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        [Function],
+        Array [
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+    ],
+  ],
+  "50:= ",
+  [Function],
+  "52:= ",
+  [Function],
+  "54:= ",
+  [Function],
+  "56:= ",
+  [Function],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 1 1`] = `
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 1 2`] = `
+Object {
+  "head": Object {
+    "106": [Function],
+    "fn": [Function],
+    "l": Array [
+      1,
+      Array [
+        Array [
+          Array [
+            1,
+            Array [
+              2,
+              Array [
+                3,
+                Array [
+                  [Function],
+                  null,
+                ],
+              ],
+            ],
+          ],
+          Array [
+            Array [
+              Array [
+                1,
+                2,
+              ],
+              3,
+            ],
+            Array [
+              Array [
+                1,
+                Array [
+                  1,
+                  2,
+                ],
+                [Function],
+                4,
+                5,
+              ],
+              Array [
+                4,
+                null,
+              ],
+            ],
+          ],
+        ],
+        Array [
+          [Function],
+          Array [
+            Array [
+              1,
+              Array [
+                Array [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              4,
+            ],
+            null,
+          ],
+        ],
+      ],
+    ],
+    "x": Array [
+      1,
+      Array [
+        Array [
+          1,
+          2,
+        ],
+        3,
+      ],
+      4,
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "57",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 1 3`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  0,
+  1,
+  "fn:= ",
+  [Function],
+  "x:= ",
+  Array [
+    1,
+    Array [
+      Array [
+        1,
+        2,
+      ],
+      3,
+    ],
+    4,
+  ],
+  "l:= ",
+  Array [
+    1,
+    Array [
+      Array [
+        Array [
+          1,
+          Array [
+            2,
+            Array [
+              3,
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+        Array [
+          Array [
+            Array [
+              1,
+              2,
+            ],
+            3,
+          ],
+          Array [
+            Array [
+              1,
+              Array [
+                1,
+                2,
+              ],
+              [Function],
+              4,
+              5,
+            ],
+            Array [
+              4,
+              null,
+            ],
+          ],
+        ],
+      ],
+      Array [
+        [Function],
+        Array [
+          Array [
+            1,
+            Array [
+              Array [
+                1,
+                2,
+              ],
+              3,
+            ],
+            4,
+          ],
+          null,
+        ],
+      ],
+    ],
+  ],
+  "106:= ",
+  [Function],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 2 1`] = `
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 2 2`] = `
+Object {
+  "head": Object {
+    "x1": Array [
+      1,
+      Array [
+        2,
+        Array [
+          3,
+          Array [
+            [Circular],
+            null,
+          ],
+        ],
+      ],
+    ],
+    "x2": Array [
+      3,
+      Array [
+        Array [
+          1,
+          Array [
+            2,
+            [Circular],
+          ],
+        ],
+        null,
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "107",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 2 3`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  0,
+  1,
+  "x1:= ",
+  Array [
+    1,
+    Array [
+      2,
+      Array [
+        3,
+        Array [
+          [Circular],
+          null,
+        ],
+      ],
+    ],
+  ],
+  "x2:= ",
+  Array [
+    3,
+    Array [
+      Array [
+        1,
+        Array [
+          2,
+          [Circular],
+        ],
+      ],
+      null,
+    ],
+  ],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 3 1`] = `
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 3 2`] = `
+Object {
+  "head": Object {
+    "202": [Function],
+    "204": [Function],
+    "e": Array [
+      Array [
+        3,
+        Array [
+          4,
+          Array [
+            5,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        2,
+        Array [
+          Array [
+            3,
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+    ],
+    "f": Array [
+      1,
+      2,
+    ],
+    "g": Array [
+      Array [
+        [Function],
+        Array [
+          4,
+          Array [
+            5,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        2,
+        Array [
+          Array [
+            [Function],
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+    ],
+    "y": Array [
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        [Function],
+        Array [
+          1,
+          2,
+        ],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "154",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 3 3`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  0,
+  1,
+  "e:= ",
+  Array [
+    Array [
+      3,
+      Array [
+        4,
+        Array [
+          5,
+          null,
+        ],
+      ],
+    ],
+    Array [
+      2,
+      Array [
+        Array [
+          3,
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+    ],
+  ],
+  "f:= ",
+  Array [
+    1,
+    2,
+  ],
+  "g:= ",
+  Array [
+    Array [
+      [Function],
+      Array [
+        4,
+        Array [
+          5,
+          null,
+        ],
+      ],
+    ],
+    Array [
+      2,
+      Array [
+        Array [
+          [Function],
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+    ],
+  ],
+  "y:= ",
+  Array [
+    Array [
+      1,
+      2,
+    ],
+    Array [
+      [Function],
+      Array [
+        1,
+        2,
+      ],
+    ],
+  ],
+  "202:= ",
+  [Function],
+  "204:= ",
+  [Function],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 1`] = `
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 2`] = `
+Object {
+  "head": Object {
+    "f": [Function],
+    "x": 0,
+    "y": 10,
+    "z": [Function],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "205",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 3`] = `
+Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 11,
+      },
+    ],
+    "callee": Node {
+      "end": 97,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 15,
+          "line": 7,
+        },
+        "start": Position {
+          "column": 14,
+          "line": 7,
+        },
+      },
+      "name": "f",
+      "start": 96,
+      "type": "Identifier",
+    },
+    "end": 101,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 19,
+        "line": 7,
+      },
+      "start": Position {
+        "column": 14,
+        "line": 7,
+      },
+    },
+    "start": 96,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "255": [Function],
+    "x": 11,
+  },
+  "id": Any<String>,
+  "name": "f",
+  "tail": Object {
+    "head": Object {
+      "f": [Function],
+      "x": 0,
+      "y": 10,
+      "z": [Function],
+    },
+    "id": "251",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
+        "__access_export__": [Function],
+        "__access_named_export__": [Function],
+        "accumulate": [Function],
+        "append": [Function],
+        "build_list": [Function],
+        "build_stream": [Function],
+        "enum_list": [Function],
+        "enum_stream": [Function],
+        "equal": [Function],
+        "eval_stream": [Function],
+        "filter": [Function],
+        "for_each": [Function],
+        "integers_from": [Function],
+        "is_stream": [Function],
+        "length": [Function],
+        "list_ref": [Function],
+        "list_to_stream": [Function],
+        "list_to_string": [Function],
+        "map": [Function],
+        "member": [Function],
+        "remove": [Function],
+        "remove_all": [Function],
+        "reverse": [Function],
+        "stream_append": [Function],
+        "stream_filter": [Function],
+        "stream_for_each": [Function],
+        "stream_length": [Function],
+        "stream_map": [Function],
+        "stream_member": [Function],
+        "stream_ref": [Function],
+        "stream_remove": [Function],
+        "stream_remove_all": [Function],
+        "stream_reverse": [Function],
+        "stream_to_list": [Function],
+      },
+      "id": "205",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          ":::pre-declared names::": Symbol(),
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 4`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  0,
+  1,
+  "x: ",
+  0,
+  "y: ",
+  10,
+  "f:= ",
+  [Function],
+  "z:= ",
+  [Function],
+  0,
+  2,
+  "x: ",
+  11,
+  "255:= ",
+  [Function],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 5 1`] = `
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+    "accumulate": [Function],
+    "pair": [Function],
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 5 2`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      1,
+      Array [
+        [Function],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "256",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+        "accumulate": [Function],
+        "pair": [Function],
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 5 3`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  "accumulate: ",
+  [Function],
+  "pair: ",
+  [Function],
+  0,
+  1,
+  "x:= ",
+  Array [
+    1,
+    Array [
+      [Function],
+      Array [
+        [Function],
+        null,
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 6 1`] = `
+Object {
+  "head": Object {
+    ":::pre-declared names::": Symbol(),
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 6 2`] = `
+Object {
+  "head": Object {
+    "x": Array [],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "303",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 6 3`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  0,
+  1,
+  "x:= ",
+  Array [],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 1`] = `
+Object {
+  "head": Object {
+    "411": [Function],
+    ":::pre-declared names::": Symbol(),
+    "integers_from": [Function],
+  },
+  "id": Any<String>,
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 2`] = `
+Object {
+  "head": Object {
+    "eval_stream": [Function],
+    "x": 1,
+    "y": Array [
+      [Circular],
+      Array [
+        1,
+        [Circular],
+        [Circular],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "programEnvironment",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "411": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "350",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        "411": [Function],
+        ":::pre-declared names::": Symbol(),
+        "integers_from": [Function],
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 3`] = `
+Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 1,
+      },
+    ],
+    "callee": Node {
+      "end": 418,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 29,
+          "line": 16,
+        },
+        "start": Position {
+          "column": 16,
+          "line": 16,
+        },
+      },
+      "name": "integers_from",
+      "start": 405,
+      "type": "Identifier",
+    },
+    "end": 421,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 32,
+        "line": 16,
+      },
+      "start": Position {
+        "column": 16,
+        "line": 16,
+      },
+    },
+    "start": 405,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "414": [Function],
+    "422": [Function],
+    "n": 1,
+  },
+  "id": Any<String>,
+  "name": "integers_from",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "411": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "350",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        "411": [Function],
+        ":::pre-declared names::": Symbol(),
+        "integers_from": [Function],
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 4`] = `
+Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 13321,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 23,
+          "line": 450,
+        },
+        "start": Position {
+          "column": 10,
+          "line": 450,
+        },
+      },
+      "name": "integers_from",
+      "start": 13308,
+      "type": "Identifier",
+    },
+    "end": 13328,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 30,
+        "line": 450,
+      },
+      "start": Position {
+        "column": 10,
+        "line": 450,
+      },
+    },
+    "start": 13308,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "426": [Function],
+    "n": 2,
+  },
+  "id": Any<String>,
+  "name": "n => ...",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "411": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_to_list": [Function],
+    },
+    "id": "350",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        "411": [Function],
+        ":::pre-declared names::": Symbol(),
+        "integers_from": [Function],
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 5`] = `
+Object {
+  "head": Object {
+    "i": 5,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "eval_stream": [Function],
+      "x": 1,
+      "y": Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    },
+    "id": "396",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
+        "411": [Function],
+        "__access_export__": [Function],
+        "__access_named_export__": [Function],
+        "accumulate": [Function],
+        "append": [Function],
+        "build_list": [Function],
+        "build_stream": [Function],
+        "enum_list": [Function],
+        "enum_stream": [Function],
+        "equal": [Function],
+        "eval_stream": [Function],
+        "filter": [Function],
+        "for_each": [Function],
+        "integers_from": [Function],
+        "is_stream": [Function],
+        "length": [Function],
+        "list_ref": [Function],
+        "list_to_stream": [Function],
+        "list_to_string": [Function],
+        "map": [Function],
+        "member": [Function],
+        "remove": [Function],
+        "remove_all": [Function],
+        "reverse": [Function],
+        "stream_append": [Function],
+        "stream_filter": [Function],
+        "stream_for_each": [Function],
+        "stream_length": [Function],
+        "stream_map": [Function],
+        "stream_member": [Function],
+        "stream_ref": [Function],
+        "stream_remove": [Function],
+        "stream_remove_all": [Function],
+        "stream_reverse": [Function],
+        "stream_to_list": [Function],
+      },
+      "id": "350",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "411": [Function],
+          ":::pre-declared names::": Symbol(),
+          "integers_from": [Function],
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 6`] = `
+Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": Array [
+          1,
+          [Function],
+        ],
+      },
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 404,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 15,
+          "line": 16,
+        },
+        "start": Position {
+          "column": 4,
+          "line": 16,
+        },
+      },
+      "name": "eval_stream",
+      "start": 393,
+      "type": "Identifier",
+    },
+    "end": 425,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 36,
+        "line": 16,
+      },
+      "start": Position {
+        "column": 4,
+        "line": 16,
+      },
+    },
+    "start": 393,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "n": 2,
+    "s": Array [
+      1,
+      [Function],
+    ],
+  },
+  "id": Any<String>,
+  "name": "eval_stream",
+  "tail": Object {
+    "head": Object {
+      "eval_stream": [Function],
+      "x": 1,
+      "y": Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    },
+    "id": "396",
+    "name": "programEnvironment",
+    "tail": Object {
+      "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
+        "411": [Function],
+        "__access_export__": [Function],
+        "__access_named_export__": [Function],
+        "accumulate": [Function],
+        "append": [Function],
+        "build_list": [Function],
+        "build_stream": [Function],
+        "enum_list": [Function],
+        "enum_stream": [Function],
+        "equal": [Function],
+        "eval_stream": [Function],
+        "filter": [Function],
+        "for_each": [Function],
+        "integers_from": [Function],
+        "is_stream": [Function],
+        "length": [Function],
+        "list_ref": [Function],
+        "list_to_stream": [Function],
+        "list_to_string": [Function],
+        "map": [Function],
+        "member": [Function],
+        "remove": [Function],
+        "remove_all": [Function],
+        "reverse": [Function],
+        "stream_append": [Function],
+        "stream_filter": [Function],
+        "stream_for_each": [Function],
+        "stream_length": [Function],
+        "stream_map": [Function],
+        "stream_member": [Function],
+        "stream_ref": [Function],
+        "stream_remove": [Function],
+        "stream_remove_all": [Function],
+        "stream_reverse": [Function],
+        "stream_to_list": [Function],
+      },
+      "id": "350",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "411": [Function],
+          ":::pre-declared names::": Symbol(),
+          "integers_from": [Function],
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 7`] = `
+Object {
+  "head": Object {
+    "_copy_of_i": 1,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "id": "397",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "id": "396",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "411": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_to_list": [Function],
+        },
+        "id": "350",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "411": [Function],
+            ":::pre-declared names::": Symbol(),
+            "integers_from": [Function],
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 8`] = `
+Object {
+  "head": Object {
+    "_copy_of_i": 2,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "id": "397",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "id": "396",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "411": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_to_list": [Function],
+        },
+        "id": "350",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "411": [Function],
+            ":::pre-declared names::": Symbol(),
+            "integers_from": [Function],
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 9`] = `
+Object {
+  "head": Object {
+    "_copy_of_i": 3,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "id": "397",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "id": "396",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "411": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_to_list": [Function],
+        },
+        "id": "350",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "411": [Function],
+            ":::pre-declared names::": Symbol(),
+            "integers_from": [Function],
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 10`] = `
+Object {
+  "head": Object {
+    "_copy_of_i": 4,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "id": "397",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "id": "396",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "411": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_to_list": [Function],
+        },
+        "id": "350",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "411": [Function],
+            ":::pre-declared names::": Symbol(),
+            "integers_from": [Function],
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 11`] = `
+Object {
+  "head": Object {
+    "es": [Function],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "callExpression": Object {
+      "arguments": Array [
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": Array [
+            1,
+            [Function],
+          ],
+        },
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": 2,
+        },
+      ],
+      "callee": Node {
+        "end": 404,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 15,
+            "line": 16,
+          },
+          "start": Position {
+            "column": 4,
+            "line": 16,
+          },
+        },
+        "name": "eval_stream",
+        "start": 393,
+        "type": "Identifier",
+      },
+      "end": 425,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 36,
+          "line": 16,
+        },
+        "start": Position {
+          "column": 4,
+          "line": 16,
+        },
+      },
+      "start": 393,
+      "type": "CallExpression",
+    },
+    "head": Object {
+      "n": 2,
+      "s": Array [
+        1,
+        [Function],
+      ],
+    },
+    "id": "415",
+    "name": "eval_stream",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "id": "396",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "411": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_to_list": [Function],
+        },
+        "id": "350",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "411": [Function],
+            ":::pre-declared names::": Symbol(),
+            "integers_from": [Function],
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 12`] = `
+Object {
+  "head": Object {
+    "i": 1,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 1,
+    },
+    "id": "398",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "id": "397",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "id": "396",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "411": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "350",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "411": [Function],
+              ":::pre-declared names::": Symbol(),
+              "integers_from": [Function],
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 13`] = `
+Object {
+  "head": Object {
+    "i": 2,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 2,
+    },
+    "id": "401",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "id": "397",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "id": "396",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "411": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "350",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "411": [Function],
+              ":::pre-declared names::": Symbol(),
+              "integers_from": [Function],
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 14`] = `
+Object {
+  "head": Object {
+    "i": 3,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 3,
+    },
+    "id": "404",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "id": "397",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "id": "396",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "411": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "350",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "411": [Function],
+              ":::pre-declared names::": Symbol(),
+              "integers_from": [Function],
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 15`] = `
+Object {
+  "head": Object {
+    "i": 4,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 4,
+    },
+    "id": "407",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "id": "397",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "id": "396",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "411": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "350",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "411": [Function],
+              ":::pre-declared names::": Symbol(),
+              "integers_from": [Function],
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 16`] = `
+Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": Array [
+          1,
+          [Function],
+        ],
+      },
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 375,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 34,
+          "line": 14,
+        },
+        "start": Position {
+          "column": 32,
+          "line": 14,
+        },
+      },
+      "name": "es",
+      "start": 373,
+      "type": "Identifier",
+    },
+    "end": 381,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 40,
+        "line": 14,
+      },
+      "start": Position {
+        "column": 32,
+        "line": 14,
+      },
+    },
+    "start": 373,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "n": 2,
+    "s": Array [
+      1,
+      [Function],
+    ],
+  },
+  "id": Any<String>,
+  "name": "es",
+  "tail": Object {
+    "head": Object {
+      "es": [Function],
+    },
+    "id": "416",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "callExpression": Object {
+        "arguments": Array [
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": Array [
+              1,
+              [Function],
+            ],
+          },
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 2,
+          },
+        ],
+        "callee": Node {
+          "end": 404,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 15,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "name": "eval_stream",
+          "start": 393,
+          "type": "Identifier",
+        },
+        "end": 425,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 36,
+            "line": 16,
+          },
+          "start": Position {
+            "column": 4,
+            "line": 16,
+          },
+        },
+        "start": 393,
+        "type": "CallExpression",
+      },
+      "head": Object {
+        "n": 2,
+        "s": Array [
+          1,
+          [Function],
+        ],
+      },
+      "id": "415",
+      "name": "eval_stream",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "id": "396",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "411": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "350",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "411": [Function],
+              ":::pre-declared names::": Symbol(),
+              "integers_from": [Function],
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 17`] = `
+Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": Array [
+          2,
+          [Function],
+        ],
+      },
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 1,
+      },
+    ],
+    "callee": Node {
+      "end": 305,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 61,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 59,
+          "line": 12,
+        },
+      },
+      "name": "es",
+      "start": 303,
+      "type": "Identifier",
+    },
+    "end": 328,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 84,
+        "line": 12,
+      },
+      "start": Position {
+        "column": 59,
+        "line": 12,
+      },
+    },
+    "start": 303,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "n": 1,
+    "s": Array [
+      2,
+      [Function],
+    ],
+  },
+  "id": Any<String>,
+  "name": "es",
+  "tail": Object {
+    "head": Object {
+      "es": [Function],
+    },
+    "id": "416",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "callExpression": Object {
+        "arguments": Array [
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": Array [
+              1,
+              [Function],
+            ],
+          },
+          Object {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 2,
+          },
+        ],
+        "callee": Node {
+          "end": 404,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 15,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "name": "eval_stream",
+          "start": 393,
+          "type": "Identifier",
+        },
+        "end": 425,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 36,
+            "line": 16,
+          },
+          "start": Position {
+            "column": 4,
+            "line": 16,
+          },
+        },
+        "start": 393,
+        "type": "CallExpression",
+      },
+      "head": Object {
+        "n": 2,
+        "s": Array [
+          1,
+          [Function],
+        ],
+      },
+      "id": "415",
+      "name": "eval_stream",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "id": "396",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "411": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_to_list": [Function],
+          },
+          "id": "350",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "411": [Function],
+              ":::pre-declared names::": Symbol(),
+              "integers_from": [Function],
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 18`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 1,
+    },
+    "id": "399",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 1,
+      },
+      "id": "398",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "397",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "396",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "411": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "350",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                "411": [Function],
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 19`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 2,
+    },
+    "id": "402",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 2,
+      },
+      "id": "401",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "397",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "396",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "411": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "350",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                "411": [Function],
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 20`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 3,
+    },
+    "id": "405",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 3,
+      },
+      "id": "404",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "397",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "396",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "411": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "350",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                "411": [Function],
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 21`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 4,
+    },
+    "id": "408",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 4,
+      },
+      "id": "407",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "id": "397",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "396",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "411": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "350",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                "411": [Function],
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 22`] = `
+Object {
+  "head": Object {
+    "z": Array [
+      Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "callExpression": Object {
+      "arguments": Array [
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": Array [
+            1,
+            [Function],
+          ],
+        },
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": 2,
+        },
+      ],
+      "callee": Node {
+        "end": 375,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 34,
+            "line": 14,
+          },
+          "start": Position {
+            "column": 32,
+            "line": 14,
+          },
+        },
+        "name": "es",
+        "start": 373,
+        "type": "Identifier",
+      },
+      "end": 381,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 40,
+          "line": 14,
+        },
+        "start": Position {
+          "column": 32,
+          "line": 14,
+        },
+      },
+      "start": 373,
+      "type": "CallExpression",
+    },
+    "head": Object {
+      "n": 2,
+      "s": Array [
+        1,
+        [Function],
+      ],
+    },
+    "id": "418",
+    "name": "es",
+    "tail": Object {
+      "head": Object {
+        "es": [Function],
+      },
+      "id": "416",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "callExpression": Object {
+          "arguments": Array [
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": Array [
+                1,
+                [Function],
+              ],
+            },
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": 2,
+            },
+          ],
+          "callee": Node {
+            "end": 404,
+            "loc": SourceLocation {
+              "end": Position {
+                "column": 15,
+                "line": 16,
+              },
+              "start": Position {
+                "column": 4,
+                "line": 16,
+              },
+            },
+            "name": "eval_stream",
+            "start": 393,
+            "type": "Identifier",
+          },
+          "end": 425,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 36,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "start": 393,
+          "type": "CallExpression",
+        },
+        "head": Object {
+          "n": 2,
+          "s": Array [
+            1,
+            [Function],
+          ],
+        },
+        "id": "415",
+        "name": "eval_stream",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "396",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "411": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "350",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                "411": [Function],
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 23`] = `
+Object {
+  "head": Object {
+    "z": Array [
+      Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    ],
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "callExpression": Object {
+      "arguments": Array [
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": Array [
+            2,
+            [Function],
+          ],
+        },
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": 1,
+        },
+      ],
+      "callee": Node {
+        "end": 305,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 61,
+            "line": 12,
+          },
+          "start": Position {
+            "column": 59,
+            "line": 12,
+          },
+        },
+        "name": "es",
+        "start": 303,
+        "type": "Identifier",
+      },
+      "end": 328,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 84,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 59,
+          "line": 12,
+        },
+      },
+      "start": 303,
+      "type": "CallExpression",
+    },
+    "head": Object {
+      "n": 1,
+      "s": Array [
+        2,
+        [Function],
+      ],
+    },
+    "id": "427",
+    "name": "es",
+    "tail": Object {
+      "head": Object {
+        "es": [Function],
+      },
+      "id": "416",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "callExpression": Object {
+          "arguments": Array [
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": Array [
+                1,
+                [Function],
+              ],
+            },
+            Object {
+              "loc": undefined,
+              "type": "Literal",
+              "value": 2,
+            },
+          ],
+          "callee": Node {
+            "end": 404,
+            "loc": SourceLocation {
+              "end": Position {
+                "column": 15,
+                "line": 16,
+              },
+              "start": Position {
+                "column": 4,
+                "line": 16,
+              },
+            },
+            "name": "eval_stream",
+            "start": 393,
+            "type": "Identifier",
+          },
+          "end": 425,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 36,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "start": 393,
+          "type": "CallExpression",
+        },
+        "head": Object {
+          "n": 2,
+          "s": Array [
+            1,
+            [Function],
+          ],
+        },
+        "id": "415",
+        "name": "eval_stream",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "id": "396",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "411": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_to_list": [Function],
+            },
+            "id": "350",
+            "name": "programEnvironment",
+            "tail": Object {
+              "head": Object {
+                "411": [Function],
+                ":::pre-declared names::": Symbol(),
+                "integers_from": [Function],
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
+Array [
+  0,
+  0,
+  ":::pre-declared names::: ",
+  Symbol(),
+  "integers_from: ",
+  [Function],
+  0,
+  1,
+  "y: ",
+  Array [
+    [Circular],
+    Array [
+      1,
+      [Circular],
+      [Circular],
+    ],
+  ],
+  "eval_stream:= ",
+  [Function],
+  "x: ",
+  1,
+  1,
+  1,
+  "n: ",
+  1,
+  "414:= ",
+  [Function],
+  2,
+  1,
+  "n: ",
+  2,
+  "426:= ",
+  [Function],
+  0,
+  2,
+  "i: ",
+  5,
+  4,
+  2,
+  "s: ",
+  Array [
+    1,
+    [Function],
+  ],
+  "n: ",
+  2,
+  0,
+  3,
+  "_copy_of_i:= ",
+  1,
+  1,
+  3,
+  "_copy_of_i:= ",
+  2,
+  2,
+  3,
+  "_copy_of_i:= ",
+  3,
+  3,
+  3,
+  "_copy_of_i:= ",
+  4,
+  4,
+  3,
+  "es:= ",
+  [Function],
+  0,
+  4,
+  "i:= ",
+  1,
+  1,
+  4,
+  "i:= ",
+  2,
+  2,
+  4,
+  "i:= ",
+  3,
+  3,
+  4,
+  "i:= ",
+  4,
+  4,
+  4,
+  "s: ",
+  Array [
+    1,
+    [Function],
+  ],
+  "n: ",
+  2,
+  5,
+  4,
+  "s: ",
+  Array [
+    2,
+    [Function],
+  ],
+  "n: ",
+  1,
+  0,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
+  1,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
+  2,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
+  3,
+  5,
+  "x:= ",
+  Array [
+    Array [],
+  ],
+  4,
+  5,
+  "z:= ",
+  Array [
+    Array [
+      [Circular],
+      Array [
+        1,
+        [Circular],
+        [Circular],
+      ],
+    ],
+  ],
+  5,
+  5,
+  "z:= ",
+  Array [
+    Array [
+      [Circular],
+      Array [
+        1,
+        [Circular],
+        [Circular],
+      ],
+    ],
+  ],
+]
+`;
