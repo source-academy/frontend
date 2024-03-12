@@ -124,19 +124,27 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     ...tableFilters.columnFilters
   ]);
 
+  const [page, setPage] = useState(0);
+  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
+  const resetPage = useCallback(() => setPage(0), [setPage]);
+
   /** The value to be shown in the search bar */
   const [searchQuery, setSearchQuery] = useState('');
   /** The actual value sent to the backend */
   const [searchValue, setSearchValue] = useState('');
-  const debouncedSetSearchValue = useMemo(() => debounce(setSearchValue, 300), []);
+  // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
+  const debouncedUpdateSearchValue = useMemo(
+    () =>
+      debounce((newValue: string) => {
+        resetPage();
+        setSearchValue(newValue);
+      }, 300),
+    [resetPage]
+  );
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
-    debouncedSetSearchValue(e.target.value);
+    debouncedUpdateSearchValue(e.target.value);
   };
-
-  const [page, setPage] = useState(0);
-  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-  const resetPage = useCallback(() => setPage(0), [setPage]);
 
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
@@ -158,7 +166,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const table = useReactTable({
     data: submissions,
     columns,
-    state: { columnFilters },
+    state: {
+      columnFilters,
+      pagination: {
+        pageIndex: 0,
+        pageSize: pageSize
+      }
+    },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -168,6 +182,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
     setColumnFilters(newFilters);
+    resetPage();
   };
 
   useEffect(() => {
@@ -176,7 +191,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   useEffect(() => {
     resetPage();
-  }, [updateEntries, resetPage]);
+  }, [updateEntries, resetPage, searchValue]);
 
   useEffect(() => {
     updateEntries(page, backendFilterParams);

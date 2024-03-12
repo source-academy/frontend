@@ -43,8 +43,8 @@ import {
   SourcecastEditorContainerProps
 } from '../../../commons/editor/EditorContainer';
 import { Position } from '../../../commons/editor/EditorTypes';
+import makeCseMachineTabFrom from '../../../commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from '../../../commons/sideContent/content/SideContentDataVisualizer';
-import makeEnvVisualizerTabFrom from '../../../commons/sideContent/content/SideContentEnvVisualizer';
 import { useSideContent } from '../../../commons/sideContent/SideContentHelper';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
@@ -315,7 +315,7 @@ const Sourcereel: React.FC = () => {
   };
 
   const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
-  const envVisualizerTab = makeEnvVisualizerTabFrom(workspaceLocation);
+  const cseMachineTab = makeCseMachineTabFrom(workspaceLocation);
 
   const workspaceHandlers = useMemo(() => {
     return {
@@ -435,7 +435,7 @@ const Sourcereel: React.FC = () => {
             id: SideContentType.introduction
           },
           dataVisualizerTab,
-          envVisualizerTab
+          cseMachineTab
         ],
         afterDynamicTabs: []
       },

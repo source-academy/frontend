@@ -193,16 +193,16 @@ export default function* AchievementSaga(): SagaIterator {
     );
     if (action.payload.find(e => e === EventType.ERROR)) {
       // TODO update this to work with new side content system
-      // Flash the home icon if there is an error and the user is in the env viz or subst viz tab
+      // Flash the home icon if there is an error and the user is in the CSE machine or subst viz tab
       const introIcon = document.getElementById(SideContentType.introduction + '-icon');
-      const envTab = document.getElementById(
-        'bp4-tab-panel_side-content-tabs_' + SideContentType.envVisualizer
+      const cseTab = document.getElementById(
+        'bp4-tab-panel_side-content-tabs_' + SideContentType.cseMachine
       );
       const substTab = document.getElementById(
         'bp4-tab-panel_side-content-tabs_' + SideContentType.substVisualizer
       );
       if (
-        (envTab && envTab.ariaHidden === 'false') ||
+        (cseTab && cseTab.ariaHidden === 'false') ||
         (substTab && substTab.ariaHidden === 'false')
       ) {
         introIcon && introIcon.classList.add('side-content-tab-alert-error');

@@ -3,7 +3,7 @@ import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist
 import { Chapter, Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
-import EnvVisualizer from 'src/features/envVisualizer/EnvVisualizer';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
 import { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
@@ -90,11 +90,11 @@ function visualizeData(...args: Data[]) {
   }
 }
 
-export function visualizeEnv({ context }: { context: Context }) {
+export function visualizeCseMachine({ context }: { context: Context }) {
   try {
-    EnvVisualizer.drawEnv(context);
+    CseMachine.drawCse(context);
   } catch (err) {
-    throw new Error('Env visualizer is not enabled');
+    throw new Error('CSE machine is not enabled');
   }
 }
 
