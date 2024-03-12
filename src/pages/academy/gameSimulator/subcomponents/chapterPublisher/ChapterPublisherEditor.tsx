@@ -162,7 +162,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
         labelElement="Published"
         onChange={() => setIsPublished(!isPublished)}
       />
-      <Button onClick={saveChapter}>Save Changes</Button>{' '}
+      <Button onClick={saveChapter}>Save Changes</Button>
       <Button intent={Intent.WARNING} onClick={clearChanges}>
         Clear Changes
       </Button>
