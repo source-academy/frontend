@@ -328,7 +328,8 @@ export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig
+  languageConfig: defaultLanguageConfig,
+  repoName: ''
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -358,7 +359,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
         ? defaultEditorValue
         : '',
       highlightedLines: [],
-      breakpoints: []
+      breakpoints: [],
+      githubSaveInfo: { repoName:'', filePath:''}
     }
   ],
   programPrependValue: '',
@@ -423,7 +425,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
         filePath: getDefaultFilePath('playground'),
         value: defaultEditorValue,
         highlightedLines: [],
-        breakpoints: []
+        breakpoints: [],
+        githubSaveInfo: {repoName:'', filePath:''}
       }
     ]
   },
@@ -476,7 +479,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
         filePath: getDefaultFilePath('sicp'),
         value: defaultEditorValue,
         highlightedLines: [],
-        breakpoints: []
+        breakpoints: [],
+        githubSaveInfo: {repoName:'', filePath:''}
       }
     ]
   },

@@ -81,7 +81,8 @@ import {
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
-  WorkspaceManagerState
+  WorkspaceManagerState,
+  UPDATE_EDITOR_GITHUB_SAVE_INFO
 } from './WorkspaceTypes';
 
 /**
@@ -878,7 +879,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         filePath,
         value: editorValue,
         highlightedLines: [],
-        breakpoints: []
+        breakpoints: [],
+        githubSaveInfo: {repoName: '', filePath: ''}
       };
       const newEditorTabs: EditorTabState[] = [
         ...state[workspaceLocation].editorTabs,
@@ -1137,6 +1139,21 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             context: action.payload.context,
             workspaceLocation: action.payload.workspaceLocation
           }
+        }
+      };
+    case UPDATE_EDITOR_GITHUB_SAVE_INFO:
+      const { editorTabIndex, repoName, filePath, lastSaved } = action.payload;
+      const newEditorTabs = [...state[workspaceLocation].editorTabs];
+      newEditorTabs[editorTabIndex] = {
+        ...newEditorTabs[editorTabIndex],
+        githubSaveInfo: { repoName, filePath, lastSaved }
+      };
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
         }
       };
     default:

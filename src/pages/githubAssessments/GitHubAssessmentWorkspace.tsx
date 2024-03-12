@@ -204,7 +204,8 @@ const GitHubAssessmentWorkspace: React.FC = () => {
           {
             value: currentTaskList[actualTaskIndex].savedCode,
             highlightedLines: [],
-            breakpoints: []
+            breakpoints: [],
+            githubSaveInfo: {repoName: '', filePath: ''}
           }
         ],
         programPrependValue: currentTaskList[actualTaskIndex].testPrepend,

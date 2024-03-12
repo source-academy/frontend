@@ -72,7 +72,8 @@ import {
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
-  WorkspaceState
+  WorkspaceState,
+  UPDATE_EDITOR_GITHUB_SAVE_INFO
 } from './WorkspaceTypes';
 
 export const setTokenCount = (workspaceLocation: WorkspaceLocation, tokenCount: number) =>
@@ -427,3 +428,16 @@ export const updateBreakpointSteps = (
   breakpointSteps: number[],
   workspaceLocation: WorkspaceLocation
 ) => action(UPDATE_BREAKPOINTSTEPS, { breakpointSteps, workspaceLocation });
+
+export const updateEditorGithubSaveInfo = (
+  workspaceLocation: WorkspaceLocation,
+  editorTabIndex: number,
+  repoName: string,
+  filePath: string,
+  lastSaved: Date
+) => action(UPDATE_EDITOR_GITHUB_SAVE_INFO, { 
+  workspaceLocation,
+  editorTabIndex,
+  repoName, 
+  filePath, 
+  lastSaved });

@@ -308,8 +308,10 @@ export async function openFolderInFolderMode(
       })
     })
     promise.then(() => {
-      console.log("promises fulfilled");
+      store.dispatch(actions.playgroundUpdateRepoName(repoName));
+      console.log("promises fulfilled"); 
       refreshFileView();
+      showSuccessMessage('Successfully loaded file!', 1000);
     })
   }
 
