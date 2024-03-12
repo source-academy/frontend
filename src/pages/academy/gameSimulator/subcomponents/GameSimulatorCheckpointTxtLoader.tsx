@@ -41,7 +41,7 @@ const CheckpointTxtLoader: React.FC<Props> = ({ storageName, s3TxtFiles }) => {
 
   const chooseS3Txt = (
     <>
-      <select className="5-menu" onChange={changeChosenFilename}>
+      <select className="bp5-menu" onChange={changeChosenFilename}>
         {s3TxtFiles.map(file => (
           <option value={file} key={file}>
             {file}
