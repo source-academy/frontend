@@ -123,8 +123,8 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
         onChange={(date: Date | null) => {
           date && setOpenDate(date);
         }}
-        showActionsBar={true}
-        highlightCurrentDay={true}
+        showActionsBar
+        highlightCurrentDay
       />
       <h4>
         Chapter Preview Image URL: <input className="bp5-input" type="text" {...imageUrlProps} />

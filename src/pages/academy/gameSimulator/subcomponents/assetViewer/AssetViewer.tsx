@@ -19,7 +19,7 @@ const AssetViewer: React.FC = () => {
   const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);
 
   const [currentAsset, setCurrentAsset] = React.useState('');
-  const [assetTree, setAssetTree] = React.useState([] as TreeNodeInfo[]);
+  const [assetTree, setAssetTree] = React.useState<TreeNodeInfo[]>([]);
 
   React.useEffect(() => {
     const deleteIcon = (filePath: string): JSX.Element => {
