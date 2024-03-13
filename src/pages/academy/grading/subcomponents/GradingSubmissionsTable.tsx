@@ -1,4 +1,6 @@
 import '@tremor/react/dist/esm/tremor.css';
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css"
 
 import { Button, H6, Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -23,6 +25,8 @@ import {
   TableRow,
   TextInput
 } from '@tremor/react';
+import { ColDef, ICellRendererParams } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -120,6 +124,157 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   submissions,
   updateEntries
 }) => {
+
+  // End of Original Code
+
+  interface IRow {
+    assessmentName: string;
+    assessmentType: string;
+    studentName: string;
+    studentUsername: string;
+    groupName: string;
+    submissionStatus: string;
+    gradingStatus: string;
+    xp: string;
+    actions: string;
+    index: number;
+  }
+
+  const defaultColumnDefs: ColDef = {
+    filter: false,
+    resizable: false,
+    sortable: true
+  };
+
+  const [rowData, setRowData] = useState<IRow[]>();
+
+  const [colDefs, setColDefs] = useState<ColDef<IRow>[]>();
+
+  const generateCols = (resetPage: () => void) => {
+    const cols: ColDef<IRow>[] = [];
+
+    cols.push({ headerName: "Name", field: "assessmentName", flex: 3, cellStyle: defaultCellStyle({textAlign: "left"}), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: FilterableNew, 
+              params: {
+                setColumnFilters: setColumnFilters,
+                id: "assessmentName",
+                value: params.data.assessmentName,
+                onClick: resetPage,
+              }
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses("grading-left-align") });
+    cols.push({ headerName: "Type", field: "assessmentType", flex: 1, cellStyle: defaultCellStyle(), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: FilterableNew, 
+              params: {
+                setColumnFilters: setColumnFilters,
+                id: "assessmentType",
+                value: params.data.assessmentType,
+                onClick: resetPage, 
+                children: [<AssessmentTypeBadge type={params.data.assessmentType} />]
+              }
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses() });
+      cols.push({ headerName: "Student", field: "studentName", flex: 1.5, cellStyle: defaultCellStyle({textAlign: "left"}), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: FilterableNew, 
+              params: {
+                setColumnFilters: setColumnFilters,
+                id: "studentName",
+                value: params.data.studentName,
+                onClick: resetPage,
+              }
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses("grading-left-align") });
+      cols.push({ headerName: "Username", field: "studentUsername", flex: 1, cellStyle: defaultCellStyle(), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: FilterableNew, 
+              params: {
+                setColumnFilters: setColumnFilters,
+                id: "studentUsername",
+                value: params.data.studentUsername,
+                onClick: resetPage,
+              }
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses() });
+      cols.push({ headerName: "Group", field: "groupName", flex: 0.75, cellStyle: defaultCellStyle(), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: FilterableNew, 
+              params: {
+                setColumnFilters: setColumnFilters,
+                id: "groupName",
+                value: params.data.groupName,
+                onClick: resetPage,
+              }
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses() });
+      cols.push({ headerName: "Progress", field: "submissionStatus", flex: 1, cellStyle: defaultCellStyle(), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: FilterableNew, 
+              params: {
+                setColumnFilters: setColumnFilters,
+                id: "submissionStatus",
+                value: params.data.submissionStatus,
+                onClick: resetPage, 
+                children: [<SubmissionStatusBadge status={params.data.submissionStatus} />]
+              }
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses() });
+      cols.push({ headerName: "Grading", field: "gradingStatus", flex: 1, cellStyle: defaultCellStyle(), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: GradingStatusBadge, 
+              params: {
+                status: params.data.gradingStatus
+              } 
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses() });
+      cols.push({ headerName: "Raw XP (+Bonus)", field: "xp", flex: 1, cellStyle: defaultCellStyle(), headerClass: defaultHeaderClasses() });
+      cols.push({ headerName: "Actions", field: "actions", flex: 1, cellStyle: defaultCellStyle(), cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+        return (params.data !== undefined) 
+          ? { 
+              component: GradingActions, 
+              params: {
+                submissionId: params.data.index, 
+                style: {justifyContent: "center"} 
+              } 
+            }
+          : undefined;
+      }, headerClass: defaultHeaderClasses() });
+
+    return cols;
+  }
+
+  const defaultCellStyle = (style?: React.CSSProperties) => {
+    return {
+      textAlign: "center",
+      display: "flex", 
+      justifyContent: "center", 
+      flexDirection: "column",
+      fontSize: "0.875rem",
+      ...style,
+    }
+  };
+
+  const defaultHeaderClasses = (extraClass?: string) => {
+    return ("grading-default-headers " + (extraClass !== undefined ? extraClass : ""));
+  };
+
+  // Start of Original Code
   const dispatch = useDispatch();
   const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
   const columnVisibility = useTypedSelector(state => state.workspaces.grading.columnVisiblity);
@@ -225,6 +380,31 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     updateEntries(page, backendFilterParams);
   }, [updateEntries, page, backendFilterParams]);
 
+  // End of Original Code
+
+  useEffect(() => {
+    setRowData(submissions.map((submission): IRow => {
+      return {
+        assessmentName: submission.assessmentName,
+        assessmentType: submission.assessmentType,
+        studentName: submission.studentName,
+        studentUsername: submission.studentUsername,
+        groupName: submission.groupName,
+        submissionStatus: submission.submissionStatus,
+        gradingStatus: submission.gradingStatus,
+        xp: submission.initialXp + " (+" + submission.xpBonus + ") / " + submission.maxXp,
+        actions: "",
+        index: submission.submissionId,
+      };
+    })); 
+  }, [submissions]);
+  
+  useEffect(() => {
+    setColDefs(generateCols(resetPage));
+  }, [resetPage]);
+
+  // Start of Original Code
+
   return (
     <>
       {hiddenColumns.columns.length > 0 ? (
@@ -271,6 +451,23 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           onChange={handleSearchQueryUpdate}
         />
       </GradingFlex>
+      
+      {/* End of Original Code */}
+
+      <div className="ag-theme-quartz" style={{ height: "50vh" }}>
+        <AgGridReact
+          rowData={rowData}
+          columnDefs={colDefs}
+          defaultColDef={defaultColumnDefs}
+          pagination={true}
+          paginationPageSize={pageSize}
+          suppressPaginationPanel={true}
+          rowClass="grading-left-align"
+          rowHeight={60}
+        />
+      </div>
+
+      {/* Start of Original Code */}
 
       <Table marginTop="mt-2">
         <TableHead>
@@ -370,9 +567,38 @@ type FilterableProps = {
   onClick?: () => void;
 };
 
+type FilterablePropsNew = {
+  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
+  id: string;
+  value: string;
+  children?: React.ReactNode;
+  onClick?: () => void;
+};
+
 const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClick }) => {
   const handleFilterChange = () => {
     column.setFilterValue(value);
+    onClick?.();
+  };
+
+  return (
+    <button type="button" className="grading-overview-filterable-btns" onClick={handleFilterChange}>
+      {children || value}
+    </button>
+  );
+};
+
+const FilterableNew: React.FC<FilterablePropsNew> = ({ setColumnFilters, id, value, children, onClick }) => {
+  const handleFilterChange = () => {
+    setColumnFilters((prev: ColumnFiltersState) => {
+      return [
+        ...prev,
+        {
+          id: id,
+          value: value
+        }
+      ];
+    });
     onClick?.();
   };
 
