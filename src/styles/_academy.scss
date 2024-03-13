@@ -337,13 +337,17 @@
   &:not(.ag-header-cell-sortable) .ag-header-cell-label {
     padding-right: 1em;
   }
+
+  .ag-cell-label-container:not(:has(> span.ag-header-icon.ag-header-cell-menu-button)) > .ag-header-cell-label {
+    padding-right: 1em;
+  }
 }
 
 .ag-cell {
   font-size: 1.1em;
   /* Override to reduce ag-grid default padding */
-  padding-left: 0.375em !important;
-  padding-right: 0.375em !important;
+  padding-left: 0.375em;
+  padding-right: 0.375em;
   text-align: center;
 }
 
@@ -510,7 +514,8 @@
 }
 
 .grading-overview-filterable-btns {
-  padding: 0;
+  padding: 0 2px;
+  text-align: inherit;
 
   // Hides overflowed text for the buttons
   &,
@@ -528,7 +533,7 @@
       -0.875rem for icon margins
       -1.125rem for additional padding
     */
-    p {
+    p, &:has(> span) > span {
       max-width: calc(20vw - 16px - 2rem);
     }
   }
@@ -540,7 +545,7 @@
 
   &:hover {
     // Buttons with bg
-    > div > span {
+    > div > span, &:has(> span) {
       // Use of contrast due to unknown background color
       filter: contrast(0.9);
     }
@@ -550,6 +555,10 @@
       text-decoration: underline;
     }
   }
+}
+
+.grading-overview-filterable-btns, .grading-overview-rounded-btns {
+  border-radius: 9999px;
 }
 
 .grading-overview-footer-sibling {
@@ -562,4 +571,23 @@
       pointer-events: all;
     }
   }
+}
+
+.ag-header-cell.grading-default-headers {
+  span.ag-header-cell-text {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 600;
+  }
+}
+
+.ag-header-cell.grading-left-align {
+  span.ag-header-cell-text {
+    margin: 0 auto 0 0;
+  }
+}
+
+.ag-header-cell.hide-cols-btn {
+  width: 32px;
+  height: 32px;
 }

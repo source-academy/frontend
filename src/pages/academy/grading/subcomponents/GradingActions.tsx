@@ -1,20 +1,23 @@
 import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Flex, Icon } from '@tremor/react';
+import { Icon } from '@tremor/react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   reautogradeSubmission,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type GradingActionsProps = {
   submissionId: number;
+  style?: React.CSSProperties;
 };
 
-const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
+const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, style }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
 
@@ -46,7 +49,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
   };
 
   return (
-    <Flex justifyContent="justify-start" spaceX="space-x-2">
+    <GradingFlex justifyContent="justify-start" style={{columnGap: "5px", ...style}}>
       <Link to={`/courses/${courseId}/grading/${submissionId}`}>
         <Icon tooltip="Grade" icon={() => <BpIcon icon={IconNames.EDIT} />} variant="light" />
       </Link>
@@ -62,7 +65,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
       <button type="button" style={{ padding: 0 }} onClick={handleUnsubmitClick}>
         <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
       </button>
-    </Flex>
+    </GradingFlex>
   );
 };
 
