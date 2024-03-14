@@ -8,11 +8,7 @@ export class LiteralAnimation extends AnimatedTextboxComponent {
     controlItem: ControlItemComponent,
     private stashItem: StashItemComponent
   ) {
-    super(
-      getNodePosition(controlItem),
-      getNodePosition(stashItem),
-      controlItem.text
-    );
+    super(getNodePosition(controlItem), getNodePosition(stashItem), controlItem.text);
   }
 
   async animate() {

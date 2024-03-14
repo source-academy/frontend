@@ -53,7 +53,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 57.5 L 170 390 L 170 390 M 140 57.5 L 170 390 L 170 390 "
+      data="M 140 57.5 L 170 390 L 170 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -181,7 +181,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 127.5 L 486.12109375 390 L 486.12109375 390 M 140 127.5 L 486.12109375 390 L 486.12109375 390 "
+      data="M 140 127.5 L 486.12109375 390 L 486.12109375 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -309,7 +309,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 197.5 L 802.2421875 390 L 802.2421875 390 M 140 197.5 L 802.2421875 390 L 802.2421875 390 "
+      data="M 140 197.5 L 802.2421875 390 L 802.2421875 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -437,7 +437,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 "
+      data="M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -565,7 +565,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 337.5 L 1434.484375 390 L 1434.484375 390 M 140 337.5 L 1434.484375 390 L 1434.484375 390 "
+      data="M 140 337.5 L 1434.484375 390 L 1434.484375 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -1189,7 +1189,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 162.5 L 170 240 L 170 240 M 140 162.5 L 170 240 L 170 240 "
+      data="M 140 162.5 L 170 240 L 170 240 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -1317,7 +1317,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 232.5 L 170 390 L 170 390 M 140 232.5 L 170 390 L 170 390 "
+      data="M 140 232.5 L 170 390 L 170 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"

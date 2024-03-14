@@ -129,7 +129,7 @@ export class Frame extends Visible implements IHoverable {
       : CompactConfig.FramePaddingY * 2;
 
     this.totalHeight = this.height() + this.name.height() + CompactConfig.TextPaddingY / 2;
-    
+
     if (CseMachine.getCurrentEnvId() === this.environment.id) {
       CseAnimation.setCurrentFrame(this);
     }

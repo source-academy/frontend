@@ -133,7 +133,10 @@ export class CseAnimation {
         case InstrType.BRANCH:
           break;
         case InstrType.ENVIRONMENT:
-          animation = new EnvironmentAnimation(CseAnimation.previousFrame, CseAnimation.currentFrame);
+          animation = new EnvironmentAnimation(
+            CseAnimation.previousFrame,
+            CseAnimation.currentFrame
+          );
           break;
         case InstrType.ARRAY_LITERAL:
         case InstrType.ARRAY_ACCESS:

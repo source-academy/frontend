@@ -17,7 +17,7 @@ export function lookupBinding(currFrame: Frame, bindingName: string): [Frame, Bi
   while (frame !== undefined) {
     const binding = frame.bindings.find(b => b.keyString.split(':')[0] === bindingName);
     // return the top most global frame if we have reached the top of the tree
-    if (frame?.environment?.id === "-1") {
+    if (frame?.environment?.id === '-1') {
       return [frame, frame.bindings[0]];
     }
     if (binding) {
