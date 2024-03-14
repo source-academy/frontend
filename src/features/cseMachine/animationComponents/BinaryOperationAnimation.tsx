@@ -66,17 +66,17 @@ export class BinaryOperationAnimation extends Animatable {
 
   async animate() {
     this.result.ref.current.hide();
+    // Shifts the right operand to the right and move the operator in between the operands
     await Promise.all([
       this.binaryOperatorAnimation.animate(),
       this.rightOperandAnimation.animate()
     ]);
+    // Merges the operators and operands together to form the result
     const to = { ...this.resultPosition, opacity: 0 };
-    this.binaryOperatorAnimation.setDestination(to);
-    this.rightOperandAnimation.setDestination(to);
     await Promise.all([
-      this.binaryOperatorAnimation.animate(),
+      this.binaryOperatorAnimation.animateTo(to),
       this.leftOperandAnimation.animate(),
-      this.rightOperandAnimation.animate(),
+      this.rightOperandAnimation.animateTo(to),
       this.resultAnimation.animate()
     ]);
     this.ref.current?.hide();

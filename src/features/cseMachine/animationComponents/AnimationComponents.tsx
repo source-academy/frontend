@@ -55,7 +55,7 @@ abstract class AnimationComponent extends Animatable {
     });
   }
 
-  setDestination(to: NodeConfig, animationConfig?: AnimationConfig) {
+  private setDestination(to: NodeConfig, animationConfig?: AnimationConfig) {
     this.to = to;
     if (animationConfig) this.animationConfig = animationConfig;
   }
@@ -104,6 +104,11 @@ abstract class AnimationComponent extends Animatable {
       });
       this.tween.play();
     });
+  }
+
+  async animateTo(to: NodeConfig, animationConfig?: AnimationConfig): Promise<void> {
+    this.setDestination(to, animationConfig);
+    return this.animate();
   }
 
   destroy() {
@@ -215,17 +220,17 @@ export class AnimatedTextboxComponent extends Animatable {
     );
   }
 
-  setDestination(to: NodeConfig, animationConfig?: AnimationConfig) {
-    this.rectComponent.setDestination(to, animationConfig);
-    this.textComponent.setDestination(to, animationConfig);
-  }
-
   async animate() {
     await Promise.all([this.rectComponent.animate(), this.textComponent.animate()]);
     this._x = this.rectComponent.x();
     this._y = this.rectComponent.y();
     this._width = this.rectComponent.width();
     this._height = this.rectComponent.height();
+  }
+
+  async animateTo(to: NodeConfig, animationConfig?: AnimationConfig) {
+    this.rectComponent.animateTo(to, animationConfig);
+    this.textComponent.animateTo(to, animationConfig);
   }
 
   destroy() {

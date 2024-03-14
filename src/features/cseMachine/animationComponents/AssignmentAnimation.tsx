@@ -80,32 +80,32 @@ export class AssignmentAnimation extends Animatable {
     // move asgn instruction up, right next to stash item
     await Promise.all([this.asgnItemAnimation.animate()]);
     // move both asgn instruction and stash item down to the frame the binding is in
-    this.asgnItemAnimation.setDestination(
-      {
-        x: this.frame.x() - this.asgnItemAnimation.width() - this.stashItemAnimation.width(),
-        y: this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
-      },
-      { durationMultiplier: 2 }
-    );
-    await Promise.all([this.asgnItemAnimation.animate(), this.stashItemAnimation.animate()]);
-    // move both asgn instruction and stash item right, fade in the binding value
-    this.asgnItemAnimation.setDestination(
-      {
-        x: this.binding.x() - this.asgnItemAnimation.width(),
-        opacity: 0
-      },
-      { durationMultiplier: 1 }
-    );
-    this.stashItemAnimation.setDestination(
-      {
-        x: this.binding.x(),
-        opacity: 0
-      },
-      { durationMultiplier: 1 }
-    );
     await Promise.all([
-      this.asgnItemAnimation.animate(),
-      this.stashItemAnimation.animate(),
+      this.asgnItemAnimation.animateTo(
+        {
+          x: this.frame.x() - this.asgnItemAnimation.width() - this.stashItemAnimation.width(),
+          y: this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
+        },
+        { durationMultiplier: 2 }
+      ),
+      this.stashItemAnimation.animate()
+    ]);
+    // move both asgn instruction and stash item right, fade in the binding value
+    await Promise.all([
+      this.asgnItemAnimation.animateTo(
+        {
+          x: this.binding.x() - this.asgnItemAnimation.width(),
+          opacity: 0
+        },
+        { durationMultiplier: 1 }
+      ),
+      this.stashItemAnimation.animateTo(
+        {
+          x: this.binding.x(),
+          opacity: 0
+        },
+        { durationMultiplier: 1 }
+      ),
       this.bindingAnimation?.animate()
     ]);
     this.ref.current?.hide();

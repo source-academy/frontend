@@ -55,11 +55,9 @@ export class UnaryOperationAnimation extends Animatable {
     this.result.ref.current.hide();
     await Promise.all([this.operatorAnimation.animate(), this.operandAnimation.animate()]);
     const to = { ...this.resultPosition, opacity: 0 };
-    this.operatorAnimation.setDestination(to);
-    this.operandAnimation.setDestination(to);
     await Promise.all([
-      this.operatorAnimation.animate(),
-      this.operandAnimation.animate(),
+      this.operatorAnimation.animateTo(to),
+      this.operandAnimation.animateTo(to),
       this.resultAnimation.animate()
     ]);
     this.ref.current?.hide();

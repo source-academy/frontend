@@ -64,24 +64,27 @@ export class LookupAnimation extends Animatable {
     // move name item next to binding
     await Promise.all([this.nameItemAnimation.animate()]);
     // the name item 'pulls' the stash item out of the binding
-    this.nameItemAnimation.setDestination(
-      {
-        x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
-      },
-      { durationMultiplier: 1 }
-    );
-    await Promise.all([this.nameItemAnimation.animate(), this.stashItemAnimation.animate()]);
+    await Promise.all([
+      this.nameItemAnimation.animateTo(
+        {
+          x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
+        },
+        { durationMultiplier: 1 }
+      ),
+      this.stashItemAnimation.animate()
+    ]);
     // move both name item and stash item to the stash, while fading out the name item
-    this.nameItemAnimation.setDestination({
-      x: this.stashItem.x() - this.nameItemAnimation.width(),
-      y: this.stashItem.y(),
-      opacity: 0
-    });
-    this.stashItemAnimation.setDestination({
-      x: this.stashItem.x(),
-      y: this.stashItem.y()
-    });
-    await Promise.all([this.nameItemAnimation.animate(), this.stashItemAnimation.animate()]);
+    await Promise.all([
+      this.nameItemAnimation.animateTo({
+        x: this.stashItem.x() - this.nameItemAnimation.width(),
+        y: this.stashItem.y(),
+        opacity: 0
+      }),
+      this.stashItemAnimation.animateTo({
+        x: this.stashItem.x(),
+        y: this.stashItem.y()
+      })
+    ]);
     this.ref.current?.hide();
     this.stashItem.ref.current?.show();
     if (this.stashItem.arrow) {

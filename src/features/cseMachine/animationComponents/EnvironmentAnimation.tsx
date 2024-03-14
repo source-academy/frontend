@@ -38,19 +38,18 @@ export class EnvironmentAnimation extends Animatable {
   }
 
   async animate() {
-    this.frameAnimation.setDestination({
+    // increase frame border width
+    await this.frameAnimation.animateTo({
       strokeWidth: 10
     });
-    await Promise.all([this.frameAnimation.animate()]);
-    this.frameAnimation.setDestination({
+    // move frame border to correct position
+    await this.frameAnimation.animateTo({
       ...getNodePositionFromItem(this.currFrame)
     });
-    await Promise.all([this.frameAnimation.animate()]);
     this.tempRect.ref.current?.hide();
-    this.frameAnimation.setDestination({
+    await this.frameAnimation.animateTo({
       strokeWidth: 0
     });
-    await Promise.all([this.frameAnimation.animate()]);
   }
 
   destroy() {
