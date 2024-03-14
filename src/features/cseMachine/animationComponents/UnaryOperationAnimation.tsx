@@ -5,7 +5,7 @@ import { Group } from 'react-konva';
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePositionFromItem } from './AnimationUtils';
+import { getNodePosition } from './AnimationUtils';
 
 export class UnaryOperationAnimation extends Animatable {
   private operatorAnimation: AnimatedTextboxComponent;
@@ -19,9 +19,9 @@ export class UnaryOperationAnimation extends Animatable {
     private result: StashItemComponent
   ) {
     super();
-    const operatorPosition = getNodePositionFromItem(operator);
-    const operandPosition = getNodePositionFromItem(operand);
-    const resultPosition = getNodePositionFromItem(result);
+    const operatorPosition = getNodePosition(operator);
+    const operandPosition = getNodePosition(operand);
+    const resultPosition = getNodePosition(result);
     this.resultPosition = resultPosition;
     this.operatorAnimation = new AnimatedTextboxComponent(
       operatorPosition,

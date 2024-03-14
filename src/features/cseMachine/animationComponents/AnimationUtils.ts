@@ -2,7 +2,7 @@ import { Binding } from '../compactComponents/Binding';
 import { Frame } from '../compactComponents/Frame';
 import { Visible } from '../components/Visible';
 
-export function getNodePositionFromItem(item: Visible) {
+export function getNodePosition(item: Visible) {
   return {
     x: item.x(),
     y: item.y(),

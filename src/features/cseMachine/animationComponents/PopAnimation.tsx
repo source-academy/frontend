@@ -5,7 +5,7 @@ import { Group } from 'react-konva';
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePositionFromItem } from './AnimationUtils';
+import { getNodePosition } from './AnimationUtils';
 
 export class PopAnimation extends Animatable {
   private popItemAnimation: AnimatedTextboxComponent;
@@ -17,8 +17,8 @@ export class PopAnimation extends Animatable {
     private undefinedStashItem?: StashItemComponent
   ) {
     super();
-    const popItemPosition = getNodePositionFromItem(popItem);
-    const stashItemPosition = getNodePositionFromItem(stashItem);
+    const popItemPosition = getNodePosition(popItem);
+    const stashItemPosition = getNodePosition(stashItem);
     // TODO: improve the animation make the travel path an arc
     this.popItemAnimation = new AnimatedTextboxComponent(
       popItemPosition,

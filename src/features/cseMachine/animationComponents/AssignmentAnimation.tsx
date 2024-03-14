@@ -11,7 +11,7 @@ import { CompactConfig } from '../CseMachineCompactConfig';
 import { ControlStashConfig } from '../CseMachineControlStash';
 import { getTextWidth } from '../CseMachineUtils';
 import { Animatable, AnimatedTextboxComponent, AnimatedTextComponent } from './AnimationComponents';
-import { getNodePositionFromItem } from './AnimationUtils';
+import { getNodePosition } from './AnimationUtils';
 
 export class AssignmentAnimation extends Animatable {
   private asgnItemAnimation: AnimatedTextboxComponent;
@@ -25,10 +25,10 @@ export class AssignmentAnimation extends Animatable {
     private binding: Binding
   ) {
     super();
-    const asgnItemPosition = getNodePositionFromItem(asgnItem);
+    const asgnItemPosition = getNodePosition(asgnItem);
     const minAsgnItemWidth =
       getTextWidth(asgnItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
-    const stashItemPosition = getNodePositionFromItem(stashItem);
+    const stashItemPosition = getNodePosition(stashItem);
     this.asgnItemAnimation = new AnimatedTextboxComponent(
       asgnItemPosition,
       {
@@ -45,12 +45,12 @@ export class AssignmentAnimation extends Animatable {
         y: this.binding.y() + this.binding.height() / 2 - stashItemPosition.height / 2
       },
       stashItem.text,
-      { durationMultiplier: 2 }
+      { durationMultiplier: 1.5 }
     );
     if (this.binding.value instanceof PrimitiveValue && this.binding.value.text instanceof Text) {
       this.bindingAnimation = new AnimatedTextComponent(
         {
-          ...getNodePositionFromItem(this.binding.value.text),
+          ...getNodePosition(this.binding.value.text),
           x: this.binding.value.text.x() - 16,
           opacity: 0
         },
@@ -86,7 +86,7 @@ export class AssignmentAnimation extends Animatable {
           x: this.frame.x() - this.asgnItemAnimation.width() - this.stashItemAnimation.width(),
           y: this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
         },
-        { durationMultiplier: 2 }
+        { durationMultiplier: 1.5 }
       ),
       this.stashItemAnimation.animate()
     ]);

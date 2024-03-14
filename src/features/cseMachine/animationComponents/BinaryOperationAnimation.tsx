@@ -5,7 +5,7 @@ import { Group } from 'react-konva';
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePositionFromItem } from './AnimationUtils';
+import { getNodePosition } from './AnimationUtils';
 
 export class BinaryOperationAnimation extends Animatable {
   private binaryOperatorAnimation: AnimatedTextboxComponent;
@@ -21,10 +21,10 @@ export class BinaryOperationAnimation extends Animatable {
     private result: StashItemComponent
   ) {
     super();
-    const binOpPosition = getNodePositionFromItem(binaryOperator);
-    const leftOpPosition = getNodePositionFromItem(leftOperand);
-    const rightOpPosition = getNodePositionFromItem(rightOperand);
-    const resultPosition = getNodePositionFromItem(result);
+    const binOpPosition = getNodePosition(binaryOperator);
+    const leftOpPosition = getNodePosition(leftOperand);
+    const rightOpPosition = getNodePosition(rightOperand);
+    const resultPosition = getNodePosition(result);
     this.resultPosition = resultPosition;
     this.binaryOperatorAnimation = new AnimatedTextboxComponent(
       binOpPosition,

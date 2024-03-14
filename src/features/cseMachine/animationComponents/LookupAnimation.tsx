@@ -8,7 +8,7 @@ import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { ControlStashConfig } from '../CseMachineControlStash';
 import { getTextWidth } from '../CseMachineUtils';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePositionFromItem } from './AnimationUtils';
+import { getNodePosition } from './AnimationUtils';
 
 export class LookupAnimation extends Animatable {
   private nameItemAnimation: AnimatedTextboxComponent;
@@ -21,10 +21,10 @@ export class LookupAnimation extends Animatable {
     binding: Binding
   ) {
     super();
-    const nameItemPosition = getNodePositionFromItem(nameItem);
+    const nameItemPosition = getNodePosition(nameItem);
     const minNameItemWidth =
       getTextWidth(nameItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
-    const stashItemPosition = getNodePositionFromItem(stashItem);
+    const stashItemPosition = getNodePosition(stashItem);
     this.nameItemAnimation = new AnimatedTextboxComponent(
       nameItemPosition,
       {
@@ -33,7 +33,7 @@ export class LookupAnimation extends Animatable {
         width: minNameItemWidth
       },
       nameItem.text,
-      { durationMultiplier: 2 }
+      { durationMultiplier: 1.5 }
     );
     this.stashItemAnimation = new AnimatedTextboxComponent(
       {

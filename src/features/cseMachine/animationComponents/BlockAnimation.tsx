@@ -9,7 +9,7 @@ import {
   AnimatedTextboxComponent,
   AnimatedTextComponent
 } from './AnimationComponents';
-import { getNodePositionFromItem } from './AnimationUtils';
+import { getNodePosition } from './AnimationUtils';
 
 export class BlockAnimation extends Animatable {
   initialItemAnimation: Animatable;
@@ -20,13 +20,13 @@ export class BlockAnimation extends Animatable {
     private targetItems: ControlItemComponent[]
   ) {
     super();
-    const initialPosition = getNodePositionFromItem(this.initialItem);
+    const initialPosition = getNodePosition(this.initialItem);
     targetItems.sort((a, b) => a.y() - b.y());
     let totalHeight = 0;
     this.targetItemAnimations = new Array(targetItems.length + 1);
     let i = 0;
     for (i = 0; i < targetItems.length - 1; i++) {
-      const destination = getNodePositionFromItem(targetItems[i]);
+      const destination = getNodePosition(targetItems[i]);
       totalHeight += destination.height;
       this.targetItemAnimations[i] = new AnimatedTextboxComponent(
         {
@@ -41,7 +41,7 @@ export class BlockAnimation extends Animatable {
     }
     // We also need to animate the color of the last item rect, so we need to split it
     // into 2 different animations (text and rect) instead
-    const lastPosition = getNodePositionFromItem(targetItems[i]);
+    const lastPosition = getNodePosition(targetItems[i]);
     totalHeight += lastPosition.height;
     const lastPositionStart = {
       ...initialPosition,
