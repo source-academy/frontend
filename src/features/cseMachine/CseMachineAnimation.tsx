@@ -7,6 +7,7 @@ import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
+import { FrameCreationAnimation } from './animationComponents/FrameCreationAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
@@ -41,6 +42,17 @@ export class CseAnimation {
     CseAnimation.animationComponents.length = 0;
   }
 
+  private static getNewControlItems() {
+    const currentControlSize = Layout.controlComponent.control.size();
+    const previousControlSize = Layout.previousControlComponent.control.size();
+    const numOfItems = currentControlSize - previousControlSize + 1;
+    if (numOfItems <= 0) return [];
+    const targetItems = Array.from({ length: numOfItems }, (_, i) => {
+      return Layout.controlComponent.stackItemComponents[previousControlSize + i - 1];
+    });
+    return targetItems;
+  }
+
   static updateAnimation() {
     CseAnimation.animationComponents.forEach(a => a.destroy());
     CseAnimation.clearAnimationComponents();
@@ -48,6 +60,7 @@ export class CseAnimation {
     if (!Layout.previousControlComponent) return;
     const lastControlItem = Layout.previousControlComponent.control.peek();
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
+    const currControlComponent = Layout.controlComponent.stackItemComponents.at(-1);
     if (
       !CseAnimation.animationEnabled ||
       !lastControlItem ||
@@ -58,8 +71,24 @@ export class CseAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
-      // console.log("TYPE: " + lastControlItem.type);
+      console.log("TYPE: " + lastControlItem.type);
       switch (lastControlItem.type) {
+        case 'BlockStatement':
+          CseAnimation.animationComponents.push(
+            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          );
+          if (!currControlComponent) return;
+          // awkward check to detect if a frame has indeed been created
+          if (CseAnimation.currentFrame.y() !== CseAnimation.previousFrame.y()) {
+            CseAnimation.animationComponents.push(
+              new FrameCreationAnimation(
+                CseAnimation.previousFrame,
+                CseAnimation.currentFrame, 
+                currControlComponent
+              )
+            )
+          }
+          break;
         case 'Identifier':
           animation = new LookupAnimation(
             lastControlComponent,
@@ -74,6 +103,18 @@ export class CseAnimation {
           );
           break;
         case 'Program':
+          if (!currControlComponent) return;
+          // awkward check to detect if a frame has indeed been created
+          if (CseAnimation.currentFrame.y() !== CseAnimation.previousFrame.y()) {
+            CseAnimation.animationComponents.push(
+              new FrameCreationAnimation(
+                CseAnimation.previousFrame,
+                CseAnimation.currentFrame, 
+                currControlComponent
+              )
+            )
+          }
+          break;
         case 'UnaryExpression':
         case 'BinaryExpression':
         case 'CallExpression':
@@ -90,7 +131,7 @@ export class CseAnimation {
           break;
       }
     } else {
-      // console.log("INSTRTYPE: " + lastControlItem.instrType);
+      console.log("INSTRTYPE: " + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
@@ -151,14 +192,14 @@ export class CseAnimation {
     if (animation) CseAnimation.animationComponents.push(animation);
   }
 
-  static playAnimation(): void {
+  static async playAnimation() {
     if (!CseAnimation.animationEnabled) {
       CseAnimation.disableAnimations();
       return;
     }
     CseAnimation.disableAnimations();
     for (const animationComponent of this.animationComponents) {
-      animationComponent.animate();
+      await animationComponent.animate();
     }
   }
 }
