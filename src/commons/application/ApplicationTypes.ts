@@ -356,9 +356,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
       filePath: ['playground', 'sicp'].includes(workspaceLocation)
         ? getDefaultFilePath(workspaceLocation)
         : undefined,
-      value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
-        ? defaultEditorValue
-        : '',
+      value: ['playground', 'sourcecast'].includes(workspaceLocation) ? defaultEditorValue : '',
       highlightedLines: [],
       breakpoints: []
     }
