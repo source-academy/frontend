@@ -284,9 +284,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     sideBarTabs
   ]);
 
-  const inAssessmentWorkspace =
-    props.mobileSideContentProps.workspaceLocation === 'assessment' ||
-    props.mobileSideContentProps.workspaceLocation === 'githubAssessment';
+  const inAssessmentWorkspace = props.mobileSideContentProps.workspaceLocation === 'assessment';
 
   return (
     <div className="workspace mobile-workspace">
