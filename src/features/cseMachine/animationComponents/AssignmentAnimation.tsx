@@ -1,15 +1,18 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
+import { GenericArrow } from '../compactComponents/arrows/GenericArrow';
 import { Binding } from '../compactComponents/Binding';
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { Frame } from '../compactComponents/Frame';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { defaultOptions, Text } from '../compactComponents/Text';
 import { PrimitiveValue } from '../compactComponents/values/PrimitiveValue';
+import { Value } from '../compactComponents/values/Value';
 import { CompactConfig } from '../CseMachineCompactConfig';
 import { ControlStashConfig } from '../CseMachineControlStash';
 import { getTextWidth } from '../CseMachineUtils';
+import { AnimatedGenericArrow } from './AnimatedArrowComponents';
 import { Animatable, AnimatedTextboxComponent, AnimatedTextComponent } from './AnimationComponents';
 import { getNodePosition } from './AnimationUtils';
 
@@ -17,6 +20,8 @@ export class AssignmentAnimation extends Animatable {
   private asgnItemAnimation: AnimatedTextboxComponent;
   private stashItemAnimation: AnimatedTextboxComponent;
   private bindingAnimation?: AnimatedTextComponent;
+  private arrow?: GenericArrow<Text, Value>;
+  private arrowAnimation?: AnimatedGenericArrow<Text, Value>;
 
   constructor(
     asgnItem: ControlItemComponent,
@@ -59,6 +64,15 @@ export class AssignmentAnimation extends Animatable {
         { durationMultiplier: 0.5, delayMultiplier: 1 },
         { ...defaultOptions, fill: CompactConfig.SA_WHITE.toString() }
       );
+    } else if (this.binding.getArrow()) {
+      const arrow = this.binding.getArrow()!;
+      this.arrow = arrow;
+      this.arrowAnimation = new AnimatedGenericArrow(
+        arrow,
+        { x: -16, opacity: 0 },
+        { x: 0, opacity: 1 },
+        { durationMultiplier: 0.5, delayMultiplier: 1 }
+      );
     }
   }
 
@@ -68,6 +82,7 @@ export class AssignmentAnimation extends Animatable {
         {this.asgnItemAnimation.draw()}
         {this.stashItemAnimation.draw()}
         {this.bindingAnimation?.draw()}
+        {this.arrowAnimation?.draw()}
       </Group>
     );
   }
@@ -76,6 +91,10 @@ export class AssignmentAnimation extends Animatable {
     // hide value of binding
     if (this.bindingAnimation) {
       this.binding.value.ref.current.hide();
+    }
+    // hide arrow
+    if (this.arrow) {
+      this.arrow.ref.current.hide();
     }
     // move asgn instruction up, right next to stash item
     await Promise.all([this.asgnItemAnimation.animate()]);
@@ -90,7 +109,7 @@ export class AssignmentAnimation extends Animatable {
       ),
       this.stashItemAnimation.animate()
     ]);
-    // move both asgn instruction and stash item right, fade in the binding value
+    // move both asgn instruction and stash item right, fade in the binding value and binding arrow
     await Promise.all([
       this.asgnItemAnimation.animateTo(
         {
@@ -106,16 +125,20 @@ export class AssignmentAnimation extends Animatable {
         },
         { durationMultiplier: 1 }
       ),
-      this.bindingAnimation?.animate()
+      this.bindingAnimation?.animate(),
+      this.arrowAnimation?.animate()
     ]);
     this.ref.current?.hide();
     this.binding.value.ref.current?.show();
+    this.arrow?.ref.current?.show();
   }
 
   destroy() {
     this.binding.value.ref.current?.show();
+    this.arrow?.ref.current?.show();
     this.asgnItemAnimation.destroy();
     this.stashItemAnimation.destroy();
     this.bindingAnimation?.destroy();
+    this.arrowAnimation?.destroy();
   }
 }

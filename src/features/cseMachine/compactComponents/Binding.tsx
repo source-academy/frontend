@@ -84,6 +84,14 @@ export class Binding extends Visible {
         this._height = this.prevBinding.height();
       }
     }
+
+    if (
+      !this.isDummyBinding && // value is unreferenced in dummy binding
+      !(this.value instanceof PrimitiveValue) &&
+      !(this.value instanceof UnassignedValue)
+    ) {
+      this.arrow = new ArrowFromText(this.key).to(this.value);
+    }
   }
 
   draw(): React.ReactNode {
@@ -92,11 +100,7 @@ export class Binding extends Visible {
         {this.isDummyBinding
           ? null // omit the key since value is anonymous
           : this.key.draw()}
-        {this.isDummyBinding || // value is unreferenced in dummy binding
-        this.value instanceof PrimitiveValue ||
-        this.value instanceof UnassignedValue
-          ? null
-          : new ArrowFromText(this.key).to(this.value).draw()}
+        {this.arrow?.draw()}
         {isCompactMainReference(this.value, this) ? this.value.draw() : null}
       </React.Fragment>
     );

@@ -18,7 +18,7 @@ type StrictNodeConfig = Omit<NodeConfig, 'x' | 'y' | 'width' | 'height'> & {
   height: number;
 };
 
-type AnimationConfig = {
+export type AnimationConfig = {
   durationMultiplier?: number;
   delayMultiplier?: number;
   easing?: typeof Easings.Linear;
@@ -32,21 +32,21 @@ export abstract class Animatable extends Visible {
   abstract destroy(): void;
 }
 
-abstract class AnimationComponent extends Animatable {
+export abstract class AnimationComponent extends Animatable {
   private isDestroyed = false;
   private tween?: Tween;
   private resolve?: (value: void | PromiseLike<void>) => void;
 
   constructor(
-    protected from: StrictNodeConfig,
+    protected from?: NodeConfig,
     protected to?: NodeConfig,
     protected animationConfig?: AnimationConfig
   ) {
     super();
-    this._x = from.x;
-    this._y = from.y;
-    this._width = from.width;
-    this._height = from.height;
+    if (from?.x) this._x = from.x;
+    if (from?.y) this._y = from.y;
+    if (from?.width) this._width = from.width;
+    if (from?.height) this._height = from.height;
   }
 
   private async delay(duration: number) {
@@ -151,11 +151,10 @@ export class AnimatedTextComponent extends AnimationComponent {
     return (
       <Text
         ref={this.ref}
+        key={Animatable.key--}
         {...(this.textProps ?? textProps)}
         {...this.from}
         text={this.text}
-        width={this.width()}
-        height={this.height()}
         listening={false}
         preventDefault={true}
       />
@@ -181,10 +180,9 @@ export class AnimatedRectComponent extends AnimationComponent {
     return (
       <Rect
         ref={this.ref}
+        key={Animatable.key--}
         {...(this.rectProps ?? rectProps)}
         {...this.from}
-        width={this.width()}
-        height={this.height()}
         listening={false}
         preventDefault={true}
       />
