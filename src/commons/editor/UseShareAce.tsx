@@ -30,13 +30,16 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
-      namespace: 'sa',
-      readOnly: sessionDetails.readOnly
+      namespace: 'sa'
     });
 
     ShareAce.on('ready', () => {
       ShareAce.add(editor, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
+
+      // Disables editor in a read-only session
+      editor.setReadOnly(sessionDetails.readOnly);
+
       showSuccessMessage(
         'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
       );
@@ -81,6 +84,9 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         connection.unlisten();
       }
       ShareAce.WS.close();
+
+      // Resets editor to normal after leaving the session
+      editor.setReadOnly(false);
     };
   }, [editorSessionId, sessionDetails, reactAceRef]);
 };
