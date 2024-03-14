@@ -483,10 +483,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
       }
     ]
   },
-  githubAssessment: {
-    ...createDefaultWorkspace('githubAssessment'),
-    hasUnsavedChanges: false
-  },
   stories: {
     ...createDefaultWorkspace('stories')
     // TODO: Perhaps we can add default values?
@@ -554,7 +550,6 @@ export const defaultSideContentManager: SideContentManagerState = {
   assessment: defaultSideContent,
   grading: defaultSideContent,
   playground: defaultSideContent,
-  githubAssessment: defaultSideContent,
   sicp: defaultSideContent,
   sourcecast: defaultSideContent,
   sourcereel: defaultSideContent,
