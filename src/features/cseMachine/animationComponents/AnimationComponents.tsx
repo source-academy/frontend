@@ -227,8 +227,10 @@ export class AnimatedTextboxComponent extends Animatable {
   }
 
   async animateTo(to: NodeConfig, animationConfig?: AnimationConfig) {
-    this.rectComponent.animateTo(to, animationConfig);
-    this.textComponent.animateTo(to, animationConfig);
+    return Promise.all([
+      this.rectComponent.animateTo(to, animationConfig),
+      this.textComponent.animateTo(to, animationConfig)
+    ]);
   }
 
   destroy() {

@@ -109,8 +109,10 @@ export class AnimatedGenericArrow<
   }
 
   async animateTo(to: NodeConfig, animationConfig?: AnimationConfig) {
-    this.pathComponent.animateTo(to, animationConfig);
-    this.arrowComponent.animateTo(to, animationConfig);
+    return Promise.all([
+      this.pathComponent.animateTo(to, animationConfig),
+      this.arrowComponent.animateTo(to, animationConfig)
+    ]);
   }
 
   destroy() {

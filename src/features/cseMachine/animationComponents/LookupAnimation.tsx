@@ -5,14 +5,17 @@ import { Binding } from '../compactComponents/Binding';
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { Frame } from '../compactComponents/Frame';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
+import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStash';
 import { getTextWidth } from '../CseMachineUtils';
+import { AnimatedGenericArrow } from './AnimatedArrowComponents';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
 import { getNodePosition } from './AnimationUtils';
 
 export class LookupAnimation extends Animatable {
   private nameItemAnimation: AnimatedTextboxComponent;
   private stashItemAnimation: AnimatedTextboxComponent;
+  private arrowAnimation?: AnimatedGenericArrow<StashItemComponent, Visible>;
 
   constructor(
     nameItem: ControlItemComponent,
@@ -45,6 +48,9 @@ export class LookupAnimation extends Animatable {
       { x: frame.x() - stashItemPosition.width, opacity: 1 },
       stashItem.text
     );
+    if (stashItem.arrow) {
+      this.arrowAnimation = new AnimatedGenericArrow(stashItem.arrow, { opacity: 0 });
+    }
   }
 
   draw(): React.ReactNode {
@@ -52,6 +58,7 @@ export class LookupAnimation extends Animatable {
       <Group key={Animatable.key--} ref={this.ref}>
         {this.nameItemAnimation.draw()}
         {this.stashItemAnimation.draw()}
+        {this.arrowAnimation?.draw()}
       </Group>
     );
   }
@@ -85,6 +92,9 @@ export class LookupAnimation extends Animatable {
         y: this.stashItem.y()
       })
     ]);
+    if (this.arrowAnimation) {
+      await this.arrowAnimation?.animateTo({ opacity: 1 });
+    }
     this.ref.current?.hide();
     this.stashItem.ref.current?.show();
     if (this.stashItem.arrow) {
@@ -94,6 +104,7 @@ export class LookupAnimation extends Animatable {
 
   destroy() {
     this.stashItem.ref.current.show();
+    this.stashItem.arrow?.ref.current?.show();
     this.nameItemAnimation.destroy();
     this.stashItemAnimation.destroy();
   }
