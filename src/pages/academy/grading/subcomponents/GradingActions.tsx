@@ -1,4 +1,4 @@
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button, Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Flex, Icon } from '@tremor/react';
 import { useDispatch } from 'react-redux';
@@ -89,18 +89,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isPublish
         <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
       </button>
 
-      <button
-        type="button"
-        style={{ padding: 0 }}
-        onClick={handlePublishClick}
-        hidden={isPublished}
-      >
-        <Icon
-          tooltip="Publish"
-          icon={() => <BpIcon icon={IconNames.TICK_CIRCLE} />}
-          variant="simple"
-        />
-      </button>
+      <Button onClick={handlePublishClick} hidden={isPublished} text={'Publish'} />
 
       <button
         type="button"
