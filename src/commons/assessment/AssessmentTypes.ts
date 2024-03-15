@@ -13,6 +13,8 @@ export enum AssessmentStatuses {
 }
 export type AssessmentStatus = keyof typeof AssessmentStatuses;
 
+export type SubmissionProgress = AssessmentStatus | 'published';
+
 export type AssessmentWorkspaceParams = {
   assessmentId?: string;
   questionId?: string;

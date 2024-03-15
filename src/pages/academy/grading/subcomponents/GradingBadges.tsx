@@ -11,6 +11,7 @@ const BADGE_COLORS = {
   paths: 'sky',
 
   // submission status
+  published: 'blue',
   submitted: 'green',
   attempting: 'yellow',
   attempted: 'red',
@@ -51,16 +52,6 @@ type SubmissionStatusBadgeProps = {
 const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
   const statusText = status.charAt(0).toUpperCase() + status.slice(1);
   return <Badge text={statusText} color={getBadgeColorFromLabel(status)} />;
-};
-
-type PublishedStatusBadgeProps = {
-  isPublished: boolean;
-};
-
-const PublishedStatusBadge: React.FC<PublishedStatusBadgeProps> = ({ isPublished }) => {
-  const statusText = isPublished ? 'Published' : 'Not published';
-  const badgeColor = isPublished ? 'green' : 'red';
-  return <Badge text={statusText} color={badgeColor} />;
 };
 
 type GradingStatusBadgeProps = {
@@ -113,6 +104,5 @@ export {
   AssessmentTypeBadge,
   FilterBadge,
   GradingStatusBadge,
-  PublishedStatusBadge,
   SubmissionStatusBadge
 };

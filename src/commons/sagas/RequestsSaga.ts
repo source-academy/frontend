@@ -45,12 +45,14 @@ import {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
+  AssessmentStatus,
   ContestEntry,
   GradingStatus,
   IContestVotingQuestion,
   IProgrammingQuestion,
   QuestionType,
-  QuestionTypes
+  QuestionTypes,
+  SubmissionProgress
 } from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
@@ -631,12 +633,11 @@ export const getGradingOverviews = async (
           assessmentNumber: overview.assessment.assessmentNumber,
           assessmentName: overview.assessment.title,
           assessmentType: overview.assessment.type,
-          isPublished: overview.isGradingPublished,
           studentId: overview.student.id,
           studentUsername: overview.student.username,
           studentName: overview.student.name,
           submissionId: overview.id,
-          submissionStatus: overview.status,
+          submissionProgress: computeSubmissionProgress(overview.status, overview.isGradingPublished),
           groupName: overview.student.groupName,
           groupLeaderId: overview.student.groupLeaderId,
           // Grading Status
@@ -652,7 +653,7 @@ export const getGradingOverviews = async (
         };
         gradingOverview.gradingStatus = computeGradingStatus(
           overview.assessment.isManuallyGraded,
-          gradingOverview.submissionStatus,
+          overview.status,
           gradingOverview.gradedCount,
           gradingOverview.questionCount
         );
@@ -1438,6 +1439,12 @@ const computeGradingStatus = (
       ? 'graded'
       : 'grading'
     : 'excluded';
+
+
+const computeSubmissionProgress = (
+  submissionStatus: AssessmentStatus,
+  isPublished: boolean
+): SubmissionProgress => submissionStatus === 'submitted' && isPublished ? 'published' : submissionStatus;
 
 const courseId: () => string = () => {
   const id = store.getState().session.courseId;
