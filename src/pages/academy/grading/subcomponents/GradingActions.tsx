@@ -91,18 +91,7 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, isPublish
 
       <Button onClick={handlePublishClick} hidden={isPublished} text={'Publish'} />
 
-      <button
-        type="button"
-        style={{ padding: 0 }}
-        onClick={handleUnpublishClick}
-        hidden={!isPublished}
-      >
-        <Icon
-          tooltip="Unpublish"
-          icon={() => <BpIcon icon={IconNames.CROSS_CIRCLE} />}
-          variant="simple"
-        />
-      </button>
+      <Button onClick={handleUnpublishClick} hidden={!isPublished} text={'Unpublish'} />
     </Flex>
   );
 };
