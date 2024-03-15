@@ -555,7 +555,7 @@ export class Layout {
               <Stage
                 width={Layout.stageWidth}
                 height={Layout.stageHeight}
-                ref={this.stageRef}
+                ref={Layout.stageRef}
                 draggable
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
@@ -583,6 +583,8 @@ export class Layout {
                   {CseMachine.getCompactLayout() &&
                     CseMachine.getControlStash() &&
                     Layout.stashComponent.draw()}
+                </Layer>
+                <Layer ref={CseAnimation.layerRef} listening={false}>
                   {CseMachine.getCompactLayout() &&
                     CseMachine.getControlStash() &&
                     CseAnimation.animationComponents.map(c => c.draw())}

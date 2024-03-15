@@ -1,56 +1,39 @@
-import { NodeConfig } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
-import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePosition } from './AnimationUtils';
+import { Animatable } from './base/Animatable';
+import { AnimatedTextbox } from './base/AnimatedTextbox';
+import { getNodePosition } from './base/AnimationUtils';
 
 export class BinaryOperationAnimation extends Animatable {
-  private binaryOperatorAnimation: AnimatedTextboxComponent;
-  private leftOperandAnimation: AnimatedTextboxComponent;
-  private rightOperandAnimation: AnimatedTextboxComponent;
-  private resultAnimation: AnimatedTextboxComponent;
-  private resultPosition: NodeConfig;
+  private binaryOperatorAnimation: AnimatedTextbox;
+  private leftOperandAnimation: AnimatedTextbox;
+  private rightOperandAnimation: AnimatedTextbox;
+  private resultAnimation: AnimatedTextbox;
 
   constructor(
     binaryOperator: ControlItemComponent,
     leftOperand: StashItemComponent,
-    rightOperand: StashItemComponent,
+    private rightOperand: StashItemComponent,
     private result: StashItemComponent
   ) {
     super();
-    const binOpPosition = getNodePosition(binaryOperator);
-    const leftOpPosition = getNodePosition(leftOperand);
-    const rightOpPosition = getNodePosition(rightOperand);
-    const resultPosition = getNodePosition(result);
-    this.resultPosition = resultPosition;
-    this.binaryOperatorAnimation = new AnimatedTextboxComponent(
-      binOpPosition,
-      rightOpPosition,
-      binaryOperator.text
+    this.binaryOperatorAnimation = new AnimatedTextbox(
+      binaryOperator.text,
+      getNodePosition(binaryOperator)
     );
-    this.rightOperandAnimation = new AnimatedTextboxComponent(
-      rightOpPosition,
-      { ...rightOpPosition, x: rightOpPosition.x + rightOpPosition.width },
-      rightOperand.text
+    this.rightOperandAnimation = new AnimatedTextbox(
+      rightOperand.text,
+      getNodePosition(rightOperand)
     );
-    this.leftOperandAnimation = new AnimatedTextboxComponent(
-      leftOpPosition,
-      { opacity: 0 },
-      leftOperand.text
-    );
-    this.resultAnimation = new AnimatedTextboxComponent(
-      {
-        ...resultPosition,
-        x: rightOpPosition.x,
-        opacity: 0
-      },
-      { ...resultPosition, opacity: 1 },
-      result.text,
-      { delayMultiplier: 0.5 }
-    );
+    this.leftOperandAnimation = new AnimatedTextbox(leftOperand.text, getNodePosition(leftOperand));
+    this.resultAnimation = new AnimatedTextbox(result.text, {
+      ...getNodePosition(result),
+      x: rightOperand.x(),
+      opacity: 0
+    });
   }
 
   draw(): React.ReactNode {
@@ -66,24 +49,30 @@ export class BinaryOperationAnimation extends Animatable {
 
   async animate() {
     this.result.ref.current.hide();
+    const rightOpPosition = getNodePosition(this.rightOperand);
+    const resultPosition = getNodePosition(this.result);
     // Shifts the right operand to the right and move the operator in between the operands
     await Promise.all([
-      this.binaryOperatorAnimation.animate(),
-      this.rightOperandAnimation.animate()
+      this.binaryOperatorAnimation.animateTo(rightOpPosition),
+      this.rightOperandAnimation.animateTo({
+        ...rightOpPosition,
+        x: rightOpPosition.x + rightOpPosition.width
+      })
     ]);
     // Merges the operators and operands together to form the result
-    const to = { ...this.resultPosition, opacity: 0 };
+    const to = { ...resultPosition, opacity: 0 };
     await Promise.all([
       this.binaryOperatorAnimation.animateTo(to),
-      this.leftOperandAnimation.animate(),
+      this.leftOperandAnimation.animateTo({ opacity: 0 }),
       this.rightOperandAnimation.animateTo(to),
-      this.resultAnimation.animate()
+      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delayMultiplier: 0.1 })
     ]);
-    this.ref.current?.hide();
-    this.result.ref.current?.show();
+    this.destroy();
   }
 
   destroy() {
+    this.ref.current?.hide();
+    this.result.ref.current?.show();
     this.binaryOperatorAnimation.destroy();
     this.leftOperandAnimation.destroy();
     this.rightOperandAnimation.destroy();

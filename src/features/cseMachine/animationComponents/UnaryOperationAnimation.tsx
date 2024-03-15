@@ -1,44 +1,30 @@
-import { NodeConfig } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
 import { StashItemComponent } from '../compactComponents/StashItemComponent';
-import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePosition } from './AnimationUtils';
+import { Animatable } from './base/Animatable';
+import { AnimatedTextbox } from './base/AnimatedTextbox';
+import { getNodePosition } from './base/AnimationUtils';
 
 export class UnaryOperationAnimation extends Animatable {
-  private operatorAnimation: AnimatedTextboxComponent;
-  private operandAnimation: AnimatedTextboxComponent;
-  private resultAnimation: AnimatedTextboxComponent;
-  private resultPosition: NodeConfig;
+  private operatorAnimation: AnimatedTextbox;
+  private operandAnimation: AnimatedTextbox;
+  private resultAnimation: AnimatedTextbox;
 
   constructor(
     operator: ControlItemComponent,
-    operand: StashItemComponent,
+    private operand: StashItemComponent,
     private result: StashItemComponent
   ) {
     super();
-    const operatorPosition = getNodePosition(operator);
-    const operandPosition = getNodePosition(operand);
-    const resultPosition = getNodePosition(result);
-    this.resultPosition = resultPosition;
-    this.operatorAnimation = new AnimatedTextboxComponent(
-      operatorPosition,
-      operandPosition,
-      operator.text
-    );
-    this.operandAnimation = new AnimatedTextboxComponent(
-      operandPosition,
-      { ...operandPosition, x: operandPosition.x + operandPosition.width },
-      operand.text
-    );
-    this.resultAnimation = new AnimatedTextboxComponent(
-      { ...resultPosition, x: operandPosition.x + operandPosition.width / 2, opacity: 0 },
-      { ...resultPosition, opacity: 1 },
-      result.text,
-      { delayMultiplier: 0.5 }
-    );
+    this.operatorAnimation = new AnimatedTextbox(operator.text, getNodePosition(operator));
+    this.operandAnimation = new AnimatedTextbox(operand.text, getNodePosition(operand));
+    this.resultAnimation = new AnimatedTextbox(result.text, {
+      ...getNodePosition(result),
+      x: operand.x() + operand.width() / 2,
+      opacity: 0
+    });
   }
 
   draw(): React.ReactNode {
@@ -53,18 +39,26 @@ export class UnaryOperationAnimation extends Animatable {
 
   async animate() {
     this.result.ref.current.hide();
-    await Promise.all([this.operatorAnimation.animate(), this.operandAnimation.animate()]);
-    const to = { ...this.resultPosition, opacity: 0 };
+    const operandPosition = getNodePosition(this.operand);
+    const resultPosition = getNodePosition(this.result);
     await Promise.all([
-      this.operatorAnimation.animateTo(to),
-      this.operandAnimation.animateTo(to),
-      this.resultAnimation.animate()
+      this.operatorAnimation.animateTo(operandPosition),
+      this.operandAnimation.animateTo({
+        ...operandPosition,
+        x: operandPosition.x + operandPosition.width
+      })
     ]);
-    this.ref.current?.hide();
-    this.result.ref.current?.show();
+    await Promise.all([
+      this.operatorAnimation.animateTo({ ...resultPosition, opacity: 0 }),
+      this.operandAnimation.animateTo({ ...resultPosition, opacity: 0 }),
+      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delayMultiplier: 0.5 })
+    ]);
+    this.destroy();
   }
 
   destroy() {
+    this.ref.current?.hide();
+    this.result.ref.current?.show();
     this.operatorAnimation.destroy();
     this.operandAnimation.destroy();
     this.resultAnimation.destroy();

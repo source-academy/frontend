@@ -1,9 +1,11 @@
 import { AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
+import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
+import React from 'react';
 
-import { Animatable } from './animationComponents/AnimationComponents';
-import { lookupBinding } from './animationComponents/AnimationUtils';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
+import { Animatable } from './animationComponents/base/Animatable';
+import { lookupBinding } from './animationComponents/base/AnimationUtils';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
@@ -19,11 +21,16 @@ import { Layout } from './CseMachineLayout';
 
 export class CseAnimation {
   static readonly animationComponents: Animatable[] = [];
-  static readonly defaultDuration = 0.3;
+  static readonly defaultDuration = 300;
   static readonly defaultEasing = Easings.StrongEaseInOut;
   private static animationEnabled = false;
   private static currentFrame: Frame;
   private static previousFrame: Frame;
+
+  static layerRef = React.createRef<Layer>();
+  static getLayer(): Layer | null {
+    return this.layerRef.current;
+  }
 
   static enableAnimations(): void {
     CseAnimation.animationEnabled = true;
@@ -71,7 +78,7 @@ export class CseAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
-      console.log("TYPE: " + lastControlItem.type);
+      console.log('TYPE: ' + lastControlItem.type);
       switch (lastControlItem.type) {
         case 'BlockStatement':
           CseAnimation.animationComponents.push(
@@ -83,10 +90,10 @@ export class CseAnimation {
             CseAnimation.animationComponents.push(
               new FrameCreationAnimation(
                 CseAnimation.previousFrame,
-                CseAnimation.currentFrame, 
+                CseAnimation.currentFrame,
                 currControlComponent
               )
-            )
+            );
           }
           break;
         case 'Identifier':
@@ -109,10 +116,10 @@ export class CseAnimation {
             CseAnimation.animationComponents.push(
               new FrameCreationAnimation(
                 CseAnimation.previousFrame,
-                CseAnimation.currentFrame, 
+                CseAnimation.currentFrame,
                 currControlComponent
               )
-            )
+            );
           }
           break;
         case 'UnaryExpression':
@@ -131,7 +138,7 @@ export class CseAnimation {
           break;
       }
     } else {
-      console.log("INSTRTYPE: " + lastControlItem.instrType);
+      console.log('INSTRTYPE: ' + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:

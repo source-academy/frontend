@@ -8,46 +8,30 @@ import { StashItemComponent } from '../compactComponents/StashItemComponent';
 import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStash';
 import { getTextWidth } from '../CseMachineUtils';
-import { AnimatedGenericArrow } from './AnimatedArrowComponents';
-import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePosition } from './AnimationUtils';
+import { Animatable } from './base/Animatable';
+import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
+import { AnimatedTextbox } from './base/AnimatedTextbox';
+import { getNodePosition } from './base/AnimationUtils';
 
 export class LookupAnimation extends Animatable {
-  private nameItemAnimation: AnimatedTextboxComponent;
-  private stashItemAnimation: AnimatedTextboxComponent;
+  private nameItemAnimation: AnimatedTextbox;
+  private stashItemAnimation: AnimatedTextbox;
   private arrowAnimation?: AnimatedGenericArrow<StashItemComponent, Visible>;
 
   constructor(
-    nameItem: ControlItemComponent,
+    private nameItem: ControlItemComponent,
     private stashItem: StashItemComponent,
     private frame: Frame,
-    binding: Binding
+    private binding: Binding
   ) {
     super();
-    const nameItemPosition = getNodePosition(nameItem);
-    const minNameItemWidth =
-      getTextWidth(nameItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
-    const stashItemPosition = getNodePosition(stashItem);
-    this.nameItemAnimation = new AnimatedTextboxComponent(
-      nameItemPosition,
-      {
-        x: frame.x() - minNameItemWidth,
-        y: binding.y() + binding.height() / 2 - nameItemPosition.height / 2,
-        width: minNameItemWidth
-      },
-      nameItem.text,
-      { durationMultiplier: 1.5 }
-    );
-    this.stashItemAnimation = new AnimatedTextboxComponent(
-      {
-        ...stashItemPosition,
-        x: frame.x(),
-        y: binding.y() + binding.height() / 2 - stashItemPosition.height / 2,
-        opacity: 0
-      },
-      { x: frame.x() - stashItemPosition.width, opacity: 1 },
-      stashItem.text
-    );
+    this.nameItemAnimation = new AnimatedTextbox(nameItem.text, getNodePosition(nameItem));
+    this.stashItemAnimation = new AnimatedTextbox(stashItem.text, {
+      ...getNodePosition(stashItem),
+      x: frame.x(),
+      y: binding.y() + binding.height() / 2 - stashItem.height() / 2,
+      opacity: 0
+    });
     if (stashItem.arrow) {
       this.arrowAnimation = new AnimatedGenericArrow(stashItem.arrow, { opacity: 0 });
     }
@@ -68,8 +52,17 @@ export class LookupAnimation extends Animatable {
     if (this.stashItem.arrow) {
       this.stashItem.arrow.ref.current?.hide();
     }
+    const minNameItemWidth =
+      getTextWidth(this.nameItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
     // move name item next to binding
-    await Promise.all([this.nameItemAnimation.animate()]);
+    await this.nameItemAnimation.animateTo(
+      {
+        x: this.frame.x() - minNameItemWidth,
+        y: this.binding.y() + this.binding.height() / 2 - this.nameItem.height() / 2,
+        width: minNameItemWidth
+      },
+      { durationMultiplier: 1.5 }
+    );
     // the name item 'pulls' the stash item out of the binding
     await Promise.all([
       this.nameItemAnimation.animateTo(
@@ -78,7 +71,7 @@ export class LookupAnimation extends Animatable {
         },
         { durationMultiplier: 1 }
       ),
-      this.stashItemAnimation.animate()
+      this.stashItemAnimation.animateTo({ x: this.frame.x() - this.stashItem.width(), opacity: 1 })
     ]);
     // move both name item and stash item to the stash, while fading out the name item
     await Promise.all([
@@ -92,18 +85,16 @@ export class LookupAnimation extends Animatable {
         y: this.stashItem.y()
       })
     ]);
+    // fade in the arrow if there is one
     if (this.arrowAnimation) {
       await this.arrowAnimation?.animateTo({ opacity: 1 });
     }
-    this.ref.current?.hide();
-    this.stashItem.ref.current?.show();
-    if (this.stashItem.arrow) {
-      this.stashItem.arrow.ref.current?.show();
-    }
+    this.destroy();
   }
 
   destroy() {
-    this.stashItem.ref.current.show();
+    this.ref.current?.hide();
+    this.stashItem.ref.current?.show();
     this.stashItem.arrow?.ref.current?.show();
     this.nameItemAnimation.destroy();
     this.stashItemAnimation.destroy();

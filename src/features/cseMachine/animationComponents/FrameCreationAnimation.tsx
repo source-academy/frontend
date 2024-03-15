@@ -5,8 +5,9 @@ import { ControlItemComponent } from '../compactComponents/ControlItemComponent'
 import { Frame } from '../compactComponents/Frame';
 import { CompactConfig } from '../CseMachineCompactConfig';
 import { Config } from '../CseMachineConfig';
-import { Animatable, AnimatedRectComponent } from './AnimationComponents';
-import { getNodePosition } from './AnimationUtils';
+import { Animatable } from './base/Animatable';
+import { AnimatedRectComponent } from './base/AnimationComponents';
+import { getNodePosition } from './base/AnimationUtils';
 import { EnvironmentAnimation } from './EnvironmentAnimation';
 
 export class FrameCreationAnimation extends Animatable {
