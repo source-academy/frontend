@@ -128,7 +128,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
   const { selectedTab, setSelectedTab } = useSideContent(
-    workspaceLocation,
+    workspaceLocation,  
     assessment?.questions[questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
@@ -289,7 +289,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const onChangeMethod = (newCode: string, delta: CodeDelta) => {
     isEditable ? handleUpdateHasUnsavedChanges?.(true) : handleUpdateHasUnsavedChanges?.(false);
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     const input: Input = {
       time: Date.now(),
       type: 'codeDelta',
@@ -329,10 +328,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = useCallback(() => {
-    console.log('handleeval');
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
-      console.log('running all test cases!');
       handleRunAllTestcases();
     } else {
       handleEditorEval();
@@ -365,6 +362,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         )
       );
       dispatch(updateActiveEditorTabIndex(workspaceLocation, 0));
+      dispatch(updateTabReadOnly(workspaceLocation, 0, false));
     }
   };
 
@@ -417,15 +415,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           }
         });
 
-        // ================================================
-        // !!! REMOVE AFTER TESTING !!!
-        // ================================================
-        question.library.chapter = Chapter.SOURCE_2;
-
         rewriteFilesWithContent(currentQuestionFilePath, {
-          [currentQuestionFilePath]: isReset
-            ? programmingQuestionData.solutionTemplate
-            : isReset
+          [currentQuestionFilePath]: 
+             isReset
             ? programmingQuestionData.solutionTemplate
             : programmingQuestionData.answer || programmingQuestionData.solutionTemplate,
           ...otherFiles
@@ -454,12 +446,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         break;
     }
 
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    handleEditorUpdateBreakpoints(0, []);
+    // Set to first tab first, the main editor tab should be the first tab
+    handleEditorUpdateBreakpoints(0, []); 
     handleUpdateCurrentAssessmentId(assessmentId, questionId);
     const resetWorkspaceOptions = assertType<WorkspaceState>()({
       autogradingResults: options.autogradingResults ?? [],
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
@@ -485,8 +476,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const isGraded = question.grader !== undefined;
     const isContestVoting = question?.type === QuestionTypes.voting;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      //handleEditorValueChange(0, answer);
+      // Contest entries should be fixed to the first tab
+      handleEditorValueChange(0, answer);
     };
 
     const tabs: SideContentTab[] = [
@@ -651,7 +642,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
     const onClickReturn = () => navigate(listingPath);
 
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    // Tab 0 contains the main question tab (always) - and the only 1 they can edit, so this works fine
     const onClickSave = () => handleSave(question.id, editorTabs[0].value);
 
     const onClickResetTemplate = () => {
@@ -734,6 +725,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={false}
         isPersistenceActive={false}
+        isSupportedSource={question.library.chapter >= 2}
         toggleFolderMode={async () => {
           dispatch(toggleFolderMode(workspaceLocation));
           if (isFolderModeEnabled && fileSystem) {
@@ -760,33 +752,17 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
-    // Moved to tabs
-    /*
-    const fileModeButton = (
-      <ControlBarFileModeButton fileMode={isEditable ? 1 : 0} key="file_mode" />
-    );
-    */
 
-    let editorButtonsMobileBreakpoint = [
-      // fileModeButton,
+    const editorButtonsMobileBreakpoint = [
       runButton,
       saveButton,
-      resetButton
+      resetButton,
+      toggleFolderModeButton,
     ];
-
-    // Only allow folder mode to be enabled if chapter >= 2
-    if (question.library.chapter >= 2) editorButtonsMobileBreakpoint.push(toggleFolderModeButton);
     editorButtonsMobileBreakpoint.push(chapterSelect);
 
-    let editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
+    const editorButtonsNotMobileBreakpoint = [saveButton, resetButton];
     const flowButtons = [previousButton, questionView, nextButton];
-
-    if (!isEditable) {
-      editorButtonsMobileBreakpoint = editorButtonsMobileBreakpoint.filter(x => x !== saveButton);
-      editorButtonsNotMobileBreakpoint = editorButtonsNotMobileBreakpoint.filter(
-        x => x !== saveButton
-      );
-    }
 
     return {
       editorButtons: !isMobileBreakpoint

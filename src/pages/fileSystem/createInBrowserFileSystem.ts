@@ -16,7 +16,7 @@ import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/W
 export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
   assessment: '/assessment',
   githubAssessment: '',
-  grading: '',
+  grading: '/grading',
   playground: '/playground',
   sicp: '/sicp',
   sourcecast: '',
@@ -46,6 +46,12 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
             fs: 'IndexedDB',
             options: {
               storeName: 'assessment'
+            }
+          },
+          [WORKSPACE_BASE_PATHS.grading]: {
+            fs: 'IndexedDB',
+            options: {
+              storeName: 'grading'
             }
           }
         }

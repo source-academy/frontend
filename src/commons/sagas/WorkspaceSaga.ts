@@ -848,7 +848,6 @@ export function* evalEditor(
     state.fileSystem.inBrowserFileSystem,
     state.session.remoteExecutionSession
   ]);
-  console.log('evalEditor');
   if (activeEditorTabIndex === null) {
     throw new Error('Cannot evaluate program without an entrypoint file.');
   }
@@ -858,9 +857,9 @@ export function* evalEditor(
   let files: Record<string, string>;
   if (isFolderModeEnabled) {
     files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
-    if (workspaceLocation === 'assessment' && isGraderTab) {
+    if ((workspaceLocation === 'assessment' || workspaceLocation === 'grading') && isGraderTab) {
       const questionNumber = yield select(
-        (state: OverallState) => state.workspaces.assessment.currentQuestion
+        (state: OverallState) => state.workspaces[workspaceLocation].currentQuestion
       );
       if (typeof questionNumber !== undefined) {
         entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`;
@@ -1008,10 +1007,9 @@ export function* runTestCase(
 
   // Populate valueFiles with the entire fileSystem if folder mode is enabled and is an assessment
   // Always sets the entry path as the current question
-  if (isFolderModeEnabled && workspaceLocation === 'assessment') {
-    console.log('In runtestcase and here!');
+  if (isFolderModeEnabled && (workspaceLocation === 'assessment' || workspaceLocation === 'grading')) {
     const questionNumber = yield select(
-      (state: OverallState) => state.workspaces.assessment.currentQuestion
+      (state: OverallState) => state.workspaces[workspaceLocation].currentQuestion
     );
     if (typeof questionNumber !== undefined) {
       valueFileEntryPath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`;
@@ -1136,7 +1134,6 @@ export function* evalCode(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  console.log('evalCode');
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
   const isStoriesBlock = actionType === EVAL_STORY || workspaceLocation === 'stories';
