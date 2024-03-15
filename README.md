@@ -90,7 +90,6 @@ See [here](https://github.com/source-academy/frontend/wiki/Google-Drive-Persiste
 
 1. `REACT_APP_DEPLOYMENT_NAME`: The name of the Source Academy deployment. This will be shown in the `/welcome` route. Defaults to 'Source Academy'.
 1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).
-1. `REACT_APP_ENABLE_GITHUB_ASSESSMENTS`: Whether to enable the GitHub Assessments feature. Off by default.
 1. `REACT_APP_SHOW_RESEARCH_PROMPT`: Whether to show the educational research consent prompt to users. This is mainly for instructors using their own deployment of Source Academy @ NUS to disable this prompt.
 
 ## Projects
