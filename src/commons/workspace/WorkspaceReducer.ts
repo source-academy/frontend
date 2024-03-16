@@ -5,6 +5,8 @@ import { Reducer } from 'redux';
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
+import { logOut } from '../application/actions/CommonsActions';
+import { handleConsoleLog } from '../application/actions/InterpreterActions';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -14,7 +16,6 @@ import {
   NotificationOutput,
   ResultOutput
 } from '../application/ApplicationTypes';
-import { LOG_OUT } from '../application/types/CommonsTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
@@ -24,7 +25,6 @@ import {
   EVAL_INTERPRETER_SUCCESS,
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
-  HANDLE_CONSOLE_LOG,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
   UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
 } from '../application/types/InterpreterTypes';
@@ -38,19 +38,20 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
+  changeExternalLibrary,
   changeStepLimit,
   clearReplInput,
   clearReplOutput,
   clearReplOutputLast,
+  endClearContext,
+  sendReplInputToOutput,
   setTokenCount
 } from './WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
-  CHANGE_EXTERNAL_LIBRARY,
   DISABLE_TOKEN_COUNTER,
   EditorTabState,
   ENABLE_TOKEN_COUNTER,
-  END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
   MOVE_CURSOR,
@@ -61,7 +62,6 @@ import {
   RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
-  SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
@@ -216,19 +216,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(clearReplOutput, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].output = [];
-    });
-});
-
-const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
-  state = defaultWorkspaceManager,
-  action: SourceActionType
-) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-  let newOutput: InterpreterOutput[];
-  let lastOutput: InterpreterOutput;
-
-  switch (action.type) {
-    case END_CLEAR_CONTEXT:
+    })
+    .addCase(endClearContext, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
       return {
         ...state,
         [workspaceLocation]: {
@@ -243,9 +235,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           externalLibrary: action.payload.library.external.name
         }
       };
-    case SEND_REPL_INPUT_TO_OUTPUT:
+    })
+    .addCase(sendReplInputToOutput, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       // CodeOutput properties exist in parallel with workspaceLocation
-      newOutput = state[workspaceLocation].output.concat(action.payload as CodeOutput);
+      const newOutput: InterpreterOutput[] = state[workspaceLocation].output.concat(
+        action.payload as CodeOutput
+      );
+
       let newReplHistoryRecords: string[];
       if (action.payload.value !== '') {
         newReplHistoryRecords = [action.payload.value].concat(
@@ -257,31 +254,24 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
       if (newReplHistoryRecords.length > Constants.maxBrowseIndex) {
         newReplHistoryRecords.pop();
       }
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: newOutput,
-          replHistory: {
-            ...state[workspaceLocation].replHistory,
-            records: newReplHistoryRecords
-          }
-        }
-      };
-    case CHANGE_EXTERNAL_LIBRARY:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          externalLibrary: action.payload.newExternal
-        }
-      };
-    case HANDLE_CONSOLE_LOG:
+
+      state[workspaceLocation].output = newOutput;
+      state[workspaceLocation].replHistory.records = newReplHistoryRecords;
+    })
+    .addCase(changeExternalLibrary, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].externalLibrary = action.payload.newExternal;
+    })
+    .addCase(handleConsoleLog, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       /* Possible cases:
        * (1) state[workspaceLocation].output === [], i.e. state[workspaceLocation].output[-1] === undefined
        * (2) state[workspaceLocation].output[-1] is not RunningOutput
        * (3) state[workspaceLocation].output[-1] is RunningOutput */
-      lastOutput = state[workspaceLocation].output[state[workspaceLocation].output.length - 1];
+      const lastOutput: InterpreterOutput =
+        state[workspaceLocation].output[state[workspaceLocation].output.length - 1];
+      let newOutput: InterpreterOutput[];
+
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         // New block of output.
         newOutput = state[workspaceLocation].output.concat({
@@ -296,20 +286,28 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         newOutput = state[workspaceLocation].output.slice(0, -1);
         newOutput.push(updatedLastOutput);
       }
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: newOutput
-        }
-      };
-    case LOG_OUT:
+
+      state[workspaceLocation].output = newOutput;
+    })
+    .addCase(logOut, (state, action) => {
       // Preserve the playground workspace even after log out
       const playgroundWorkspace = state.playground;
       return {
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
       };
+    });
+});
+
+const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
+  state = defaultWorkspaceManager,
+  action: SourceActionType
+) => {
+  const workspaceLocation = getWorkspaceLocation(action);
+  let newOutput: InterpreterOutput[];
+  let lastOutput: InterpreterOutput;
+
+  switch (action.type) {
     case ENABLE_TOKEN_COUNTER:
       return {
         ...state,
