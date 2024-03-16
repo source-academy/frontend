@@ -1,5 +1,5 @@
-import { createAction } from '@reduxjs/toolkit';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import { action } from 'typesafe-actions';
 
 import {
   AchievementGoal,
@@ -27,86 +27,58 @@ import {
   UPDATE_OWN_GOAL_PROGRESS
 } from './AchievementTypes';
 
-export const bulkUpdateAchievements = createAction(
-  BULK_UPDATE_ACHIEVEMENTS,
-  (achievements: AchievementItem[]) => ({ payload: achievements })
-);
+export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
+  action(BULK_UPDATE_ACHIEVEMENTS, achievements);
 
-export const bulkUpdateGoals = createAction(BULK_UPDATE_GOALS, (goals: GoalDefinition[]) => ({
-  payload: goals
-}));
+export const bulkUpdateGoals = (goals: GoalDefinition[]) => action(BULK_UPDATE_GOALS, goals);
 
-export const getAchievements = createAction(GET_ACHIEVEMENTS, () => ({ payload: {} }));
+export const getAchievements = () => action(GET_ACHIEVEMENTS);
 
-export const getGoals = createAction(GET_GOALS, (studentCourseRegId: number) => ({
-  payload: studentCourseRegId
-}));
+export const getGoals = (studentCourseRegId: number) => action(GET_GOALS, studentCourseRegId);
 
-export const getOwnGoals = createAction(GET_OWN_GOALS, () => ({ payload: {} }));
+export const getOwnGoals = () => action(GET_OWN_GOALS);
 
-export const getUserAssessmentOverviews = createAction(
-  GET_USER_ASSESSMENT_OVERVIEWS,
-  (studentCourseRegId: number) => ({ payload: studentCourseRegId })
-);
+export const getUserAssessmentOverviews = (studentCourseRegId: number) =>
+  action(GET_USER_ASSESSMENT_OVERVIEWS, studentCourseRegId);
 
-export const getUsers = createAction(GET_USERS, () => ({ payload: {} }));
+export const getUsers = () => action(GET_USERS);
 
-export const removeAchievement = createAction(REMOVE_ACHIEVEMENT, (uuid: string) => ({
-  payload: uuid
-}));
+export const removeAchievement = (uuid: string) => action(REMOVE_ACHIEVEMENT, uuid);
 
-export const removeGoal = createAction(REMOVE_GOAL, (uuid: string) => ({ payload: uuid }));
+export const removeGoal = (uuid: string) => action(REMOVE_GOAL, uuid);
 
-export const updateOwnGoalProgress = createAction(
-  UPDATE_OWN_GOAL_PROGRESS,
-  (progress: GoalProgress) => ({ payload: progress })
-);
+export const updateOwnGoalProgress = (progress: GoalProgress) =>
+  action(UPDATE_OWN_GOAL_PROGRESS, progress);
 
-export const addEvent = createAction(ADD_EVENT, (eventNames: EventType[]) => ({
-  payload: eventNames
-}));
+export const addEvent = (eventNames: EventType[]) => action(ADD_EVENT, eventNames);
 
-export const handleEvent = createAction(HANDLE_EVENT, (loggedEvents: EventType[][]) => ({
-  payload: loggedEvents
-}));
+export const handleEvent = (loggedEvents: EventType[][]) => action(HANDLE_EVENT, loggedEvents);
 
-export const updateGoalProgress = createAction(
-  UPDATE_GOAL_PROGRESS,
-  (studentCourseRegId: number, progress: GoalProgress) => ({
-    payload: { studentCourseRegId, progress }
-  })
-);
+export const updateGoalProgress = (studentCourseRegId: number, progress: GoalProgress) =>
+  action(UPDATE_GOAL_PROGRESS, { studentCourseRegId, progress });
 
 /*
   Note: This updates the frontend Achievement Redux store.
   Please refer to AchievementReducer to find out more. 
 */
-export const saveAchievements = createAction(
-  SAVE_ACHIEVEMENTS,
-  (achievements: AchievementItem[]) => ({ payload: achievements })
-);
+export const saveAchievements = (achievements: AchievementItem[]) =>
+  action(SAVE_ACHIEVEMENTS, achievements);
 
 /*
   Note: This updates the frontend Achievement Redux store.
   Please refer to AchievementReducer to find out more. 
 */
-export const saveGoals = createAction(SAVE_GOALS, (goals: AchievementGoal[]) => ({
-  payload: goals
-}));
+export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
 
 /*
   Note: This updates the frontend Achievement Redux store.
   Please refer to AchievementReducer to find out more. 
 */
-export const saveUsers = createAction(SAVE_USERS, (users: AchievementUser[]) => ({
-  payload: users
-}));
+export const saveUsers = (users: AchievementUser[]) => action(SAVE_USERS, users);
 
 /*
   Note: This updates the frontend Achievement Redux store.
   Please refer to AchievementReducer to find out more. 
 */
-export const saveUserAssessmentOverviews = createAction(
-  SAVE_USER_ASSESSMENT_OVERVIEWS,
-  (assessmentOverviews: AssessmentOverview[]) => ({ payload: assessmentOverviews })
-);
+export const saveUserAssessmentOverviews = (assessmentOverviews: AssessmentOverview[]) =>
+  action(SAVE_USER_ASSESSMENT_OVERVIEWS, assessmentOverviews);
