@@ -1,54 +1,44 @@
 import { Button, Intent, Switch } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
-import React from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
 import { useInput } from 'src/commons/utils/Hooks';
 import { SortableList, useSortableList } from 'src/commons/utils/SortableList';
-import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
-import { toS3Path } from 'src/features/game/utils/GameUtils';
-import { callGameManagerForSim } from 'src/features/game/utils/TxtLoaderUtils';
+import { defaultChapter } from 'src/features/gameSimulator/GameSimulatorConstants';
 import {
   deleteChapterRequest,
   updateChapterRequest
 } from 'src/features/gameSimulator/GameSimulatorService';
-import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
-
-import { createChapterIndex, inAYear } from './GameSimulatorChapterSim';
-
-type ChapterSimProps = {
-  chapterDetail: ChapterDetail;
-  checkpointFilenames?: string[];
-};
+import { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
+import { dateOneYearFromNow } from 'src/features/gameSimulator/GameSimulatorUtils';
 
 /**
- * This is the Chapter Editor Form that
- * storywriters use to either create
- * or udpate chapters for the game.
+ * This component renders the Chapter Publishing form to create new chapters.
  *
- * @param chapterDetail the starting state of the form,
- *                      either loaded from defaultChapter if user wants to create a new chapter
- *                      or loaded from the existing chapter if user wants to edit the chapter
- * @param checkpointFilenames the list of all checkpoint text files to choose from
+ * @param chapterDetail The starting state of the form, either loaded from defaultChapter
+ *                      if the user wants to create a new chapter, or loaded from
+ *                      existing chapters if user wants to edit the selected chapter.
+ * @param chapterFilenames List of all text asset filenames on S3 to choose from.
  */
-const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: ChapterSimProps) => {
+const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chapterFilenames }) => {
   const { id } = chapterDetail;
   const { value: title, setValue: setTitle, inputProps: titleProps } = useInput('');
   const { value: imageUrl, setValue: setImageUrl, inputProps: imageUrlProps } = useInput('');
   const { items: chosenFiles, setItems: setChosenFiles, onSortEnd } = useSortableList();
 
-  const [isPublished, setIsPublished] = React.useState(false);
-  const [openDate, setOpenDate] = React.useState<Date>(new Date());
-  const [txtsNotChosen, setTxtsNotChosen] = React.useState<string[]>([]);
-  const [rerender, setRender] = React.useState(false);
+  const [isPublished, setIsPublished] = useState(false);
+  const [openDate, setOpenDate] = useState<Date>(new Date());
+  const [txtsNotChosen, setTxtsNotChosen] = useState<string[]>([]);
+  const [rerender, setRender] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setTitle(chapterDetail.title);
     setImageUrl(chapterDetail.imageUrl);
     setOpenDate(new Date(chapterDetail.openAt));
     setChosenFiles(chapterDetail.filenames);
     setIsPublished(chapterDetail.isPublished);
     setTxtsNotChosen(
-      (checkpointFilenames || []).filter(textAsset => !chapterDetail.filenames.includes(textAsset))
+      (chapterFilenames || []).filter(textAsset => !chapterDetail.filenames.includes(textAsset))
     );
   }, [
     chapterDetail,
@@ -56,13 +46,13 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
     setImageUrl,
     setOpenDate,
     setTitle,
-    checkpointFilenames,
+    chapterFilenames,
     rerender
   ]);
 
   const deleteAllFromChosen = () => chosenFiles.map(deleteFileFromChosen);
 
-  const deleteFileFromChosen = React.useCallback(
+  const deleteFileFromChosen = useCallback(
     (txtFile: string) => {
       setChosenFiles(prevItemList => prevItemList.filter(item => item !== txtFile));
       setTxtsNotChosen(prevItemList => [...prevItemList, txtFile]);
@@ -70,7 +60,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
     [setChosenFiles]
   );
 
-  const addFileToChosen = React.useCallback(
+  const addFileToChosen = useCallback(
     (txtFile: string) => {
       setChosenFiles(prevItemList => [...prevItemList, txtFile]);
       setTxtsNotChosen(prevItemList => prevItemList.filter(item => item !== txtFile));
@@ -81,7 +71,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
   const saveChapter = async () => {
     const updatedChapter = {
       openAt: openDate.toISOString(),
-      closeAt: inAYear(openDate).toISOString(),
+      closeAt: dateOneYearFromNow(openDate).toISOString(),
       title,
       filenames: chosenFiles,
       imageUrl,
@@ -89,13 +79,15 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
     };
 
     const confirm = window.confirm(
-      `Are you sure you want to save changes to ${JSON.stringify(updatedChapter)}`
+      `Are you sure you want to save changes to Chapter ${id}: ${title}?\n\nChapter Information: ${JSON.stringify(
+        updatedChapter
+      )}`
     );
     if (!confirm) {
       return;
     }
     const response =
-      parseInt(id) === createChapterIndex
+      parseInt(id) === defaultChapter.id
         ? await updateChapterRequest('', { story: updatedChapter })
         : await updateChapterRequest(id, { story: updatedChapter });
 
@@ -103,7 +95,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
   };
 
   const deleteChapter = async () => {
-    const confirm = window.confirm('Are you sure you want to delete this chapter?');
+    const confirm = window.confirm(`Are you sure you want to delete Chapter ${id}: ${title}?`);
     if (confirm) {
       const response = await deleteChapterRequest(id);
       alert(response);
@@ -111,44 +103,47 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
   };
 
   const clearChanges = () => {
-    const confirm = window.confirm('Are you you want to clear changes for this chapter?');
+    const confirm = window.confirm(
+      `Are you sure you want to clear changes for Chapter ${id}: ${title}?`
+    );
     if (confirm) {
       setRender(!rerender);
       alert('Cleared changes');
     }
   };
 
-  const simulateChapter = async () => {
-    SourceAcademyGame.getInstance().setChapterSimStack(chosenFiles);
-    await callGameManagerForSim();
-  };
-
   return (
     <>
       <h4>
-        Title: <input className="bp5-input" type="text" {...titleProps} />
+        Title: <input className="bp5-input" type="text" placeholder="New title" {...titleProps} />
       </h4>
       <b>Open date: </b>
       {openDate && getStandardDateTime(openDate.toISOString())}
       <DatePicker
-        onChange={(date: Date) => {
+        onChange={(date: Date | null) => {
           date && setOpenDate(date);
         }}
+        showActionsBar
+        highlightCurrentDay
       />
       <h4>
-        Image url: <input className="bp5-input" type="text" {...imageUrlProps} />
-        <Button onClick={(_: any) => window.open(toS3Path(imageUrl, true))}>View</Button>
+        Chapter Preview Image URL: <input className="bp5-input" type="text" {...imageUrlProps} />
       </h4>
-      <b>Checkpoint Txt Files</b>
+      <h4>Chapter Files (.txt):</h4>
       <SortableList items={chosenFiles} onSortEnd={onSortEnd} />
-      <br />
-      {chosenFiles.length > 0 && (
-        <Button icon={'delete'} onClick={deleteAllFromChosen}>
-          Clear checkpoint files
-        </Button>
+      {chosenFiles.length > 0 ? (
+        <>
+          <br />
+          <Button icon="delete" onClick={deleteAllFromChosen}>
+            Clear all selected files
+          </Button>
+          <br />
+        </>
+      ) : (
+        <p>No file has been selected yet.</p>
       )}
       <br />
-      <b>All Txt Files</b>
+      <h4>All Available Chapter Files (.txt)</h4>
       {txtsNotChosen &&
         txtsNotChosen.map(textFile => {
           return (
@@ -160,14 +155,11 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
           );
         })}
       <br />
-      <Button icon="play" onClick={simulateChapter}>
-        Simulate Chapter
-      </Button>
-      <br />
+      <hr />
       <br />
       <Switch
         checked={isPublished}
-        labelElement={'Published'}
+        labelElement="Published"
         onChange={() => setIsPublished(!isPublished)}
       />
       <Button onClick={saveChapter}>Save Changes</Button>
@@ -181,6 +173,6 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
       </Button>
     </>
   );
-});
+};
 
-export default ChapterEditor;
+export default memo(ChapterPublisherEditor);
