@@ -49,10 +49,13 @@ abstract class BaseAnimationComponent<
       const attrs: Partial<KonvaConfig> = {};
       const resolveList: ((value: void | PromiseLike<void>) => void)[] = [];
 
-      this.animationData.forEach((data, i) => {
+      let i = 0;
+      while (i < this.animationData.length) {
+        const data = this.animationData[i];
         if (frame.time <= data.startTime) {
           animationComplete = false;
-          return;
+          i++;
+          continue;
         }
         // Calculate animation progress from 0 to 1
         const scale = Math.min((frame.time - data.startTime) / (data.endTime - data.startTime), 1);
@@ -82,8 +85,9 @@ abstract class BaseAnimationComponent<
           this.animationData.splice(i, 1);
         } else {
           animationComplete = false;
+          i++;
         }
-      });
+      }
       if (Object.keys(attrs).length > 0) {
         // Set all the attributes in one go to improve performance
         this.ref.current.setAttrs(attrs);
@@ -183,7 +187,6 @@ export class AnimatedTextComponent extends AnimationComponent<Konva.Text, Konva.
   constructor(props: Konva.TextConfig & Required<Pick<Konva.TextConfig, 'text'>>) {
     const defaultProps = {
       fill: ControlStashConfig.SA_WHITE.toString(),
-      padding: Number(ControlStashConfig.ControlItemTextPadding),
       fontFamily: ControlStashConfig.FontFamily.toString(),
       fontSize: Number(ControlStashConfig.FontSize),
       fontStyle: ControlStashConfig.FontStyle.toString(),

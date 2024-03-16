@@ -2,6 +2,7 @@ import { RectConfig } from 'konva/lib/shapes/Rect';
 import { TextConfig } from 'konva/lib/shapes/Text';
 import { Group } from 'react-konva';
 
+import { ControlStashConfig } from '../../CseMachineControlStash';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedRectComponent, AnimatedTextComponent } from './AnimationComponents';
 import { SharedProperties } from './AnimationUtils';
@@ -30,7 +31,12 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
     this.onPropsChange(rectProps);
     this.rectComponent = new AnimatedRectComponent(rectProps);
     this.rectComponent.addListener(this.onPropsChange);
-    const textProps = { ...sharedProps, ...additionalProps?.textProps, text };
+    const textProps = {
+      padding: Number(ControlStashConfig.ControlItemTextPadding),
+      ...sharedProps,
+      ...additionalProps?.textProps,
+      text
+    };
     this.textComponent = new AnimatedTextComponent(textProps);
   }
 

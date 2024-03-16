@@ -31,7 +31,7 @@ export abstract class Animatable extends Visible {
    * other none-animation component. */
   static key = -1;
 
-  /** Starts the animation.
+  /** Starts the animation. `animate` should not be called if the animation is still running.
    * @return a void promise that resolves when the animation is complete */
   abstract animate(): Promise<void>;
 
@@ -57,7 +57,10 @@ export abstract class AnimatableTo<KonvaConfig extends NodeConfig> extends Visib
   }
 
   /** Animates the node to the specified values, and update any listeners attached to the animation
-   * component in every frame of the animation.
+   * component in every frame of the animation. If multiple calls are made to `animateTo` in the same
+   * frame, all animations will correctly run and start at the same time. If there are conflicts in
+   * the property names in different `animateTo` calls, the latest call will be prioritised for
+   * that particular property.
    * @param to the target props
    * @param animationConfig an optional animation config to customise duration, delay or easing
    * @return a void promise that resolves when the animation is complete

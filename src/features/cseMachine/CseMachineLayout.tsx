@@ -587,7 +587,7 @@ export class Layout {
                 <Layer ref={CseAnimation.layerRef} listening={false}>
                   {CseMachine.getCompactLayout() &&
                     CseMachine.getControlStash() &&
-                    CseAnimation.animationComponents.map(c => c.draw())}
+                    CseAnimation.animations.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>

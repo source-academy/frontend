@@ -16,6 +16,7 @@ import {
   isUnassigned
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
+import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -46,6 +47,8 @@ export class Frame extends Visible implements IHoverable {
   readonly environment: Env;
   /** the parent/enclosing frame of this frame (the frame above it) */
   readonly parentFrame: Frame | undefined;
+  /** arrow that is drawn from this frame to the parent frame */
+  readonly arrow: GenericArrow<Frame, Frame> | undefined;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -130,6 +133,8 @@ export class Frame extends Visible implements IHoverable {
 
     this.totalHeight = this.height() + this.name.height() + CompactConfig.TextPaddingY / 2;
 
+    if (this.parentFrame) this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+
     if (CseMachine.getCurrentEnvId() === this.environment.id) {
       CseAnimation.setCurrentFrame(this);
     }
@@ -141,7 +146,7 @@ export class Frame extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     return (
-      <Group key={Layout.key++}>
+      <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
         <Rect
           {...ShapeDefaultProps}
@@ -156,7 +161,7 @@ export class Frame extends Visible implements IHoverable {
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {this.parentFrame && new ArrowFromFrame(this).to(this.parentFrame).draw()}
+        {this.arrow?.draw()}
       </Group>
     );
   }

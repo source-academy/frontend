@@ -41,7 +41,7 @@ export class EnvironmentAnimation extends Animatable {
 
   async animate() {
     const oldPosition = getNodePosition(this.frameAnimation);
-    const strokeWidth: number = this.currFrame.ref.current?.strokeWidth() ?? 2;
+    const strokeWidth: number = this.currFrame.ref.current?.strokeWidth?.() ?? 2;
     const strokeIncrease = 4;
     // increase frame border width
     await this.frameAnimation.animateTo({

@@ -5,7 +5,7 @@ import React from 'react';
 
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
-import { lookupBinding } from './animationComponents/base/AnimationUtils';
+import { checkFrameCreation, lookupBinding } from './animationComponents/base/AnimationUtils';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
@@ -20,7 +20,7 @@ import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 
 export class CseAnimation {
-  static readonly animationComponents: Animatable[] = [];
+  static readonly animations: Animatable[] = [];
   static readonly defaultDuration = 300;
   static readonly defaultEasing = Easings.StrongEaseInOut;
   private static animationEnabled = false;
@@ -46,7 +46,7 @@ export class CseAnimation {
   }
 
   private static clearAnimationComponents(): void {
-    CseAnimation.animationComponents.length = 0;
+    CseAnimation.animations.length = 0;
   }
 
   private static getNewControlItems() {
@@ -61,7 +61,7 @@ export class CseAnimation {
   }
 
   static updateAnimation() {
-    CseAnimation.animationComponents.forEach(a => a.destroy());
+    CseAnimation.animations.forEach(a => a.destroy());
     CseAnimation.clearAnimationComponents();
 
     if (!Layout.previousControlComponent) return;
@@ -78,21 +78,16 @@ export class CseAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
-      console.log('TYPE: ' + lastControlItem.type);
+      // console.log('TYPE: ' + lastControlItem.type);
       switch (lastControlItem.type) {
         case 'BlockStatement':
-          CseAnimation.animationComponents.push(
+          CseAnimation.animations.push(
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
           if (!currControlComponent) return;
-          // awkward check to detect if a frame has indeed been created
-          if (CseAnimation.currentFrame.y() !== CseAnimation.previousFrame.y()) {
-            CseAnimation.animationComponents.push(
-              new FrameCreationAnimation(
-                CseAnimation.previousFrame,
-                CseAnimation.currentFrame,
-                currControlComponent
-              )
+          if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
+            CseAnimation.animations.push(
+              new FrameCreationAnimation(CseAnimation.currentFrame, currControlComponent)
             );
           }
           break;
@@ -111,14 +106,9 @@ export class CseAnimation {
           break;
         case 'Program':
           if (!currControlComponent) return;
-          // awkward check to detect if a frame has indeed been created
-          if (CseAnimation.currentFrame.y() !== CseAnimation.previousFrame.y()) {
-            CseAnimation.animationComponents.push(
-              new FrameCreationAnimation(
-                CseAnimation.previousFrame,
-                CseAnimation.currentFrame,
-                currControlComponent
-              )
+          if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
+            CseAnimation.animations.push(
+              new FrameCreationAnimation(CseAnimation.currentFrame, currControlComponent)
             );
           }
           break;
@@ -138,7 +128,7 @@ export class CseAnimation {
           break;
       }
     } else {
-      console.log('INSTRTYPE: ' + lastControlItem.instrType);
+      // console.log('INSTRTYPE: ' + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
@@ -196,7 +186,7 @@ export class CseAnimation {
         case InstrType.MARKER:
       }
     }
-    if (animation) CseAnimation.animationComponents.push(animation);
+    if (animation) CseAnimation.animations.push(animation);
   }
 
   static async playAnimation() {
@@ -205,8 +195,13 @@ export class CseAnimation {
       return;
     }
     CseAnimation.disableAnimations();
-    for (const animationComponent of this.animationComponents) {
-      await animationComponent.animate();
-    }
+    // Get the actual HTML <canvas> element and set the pointer events to none, to allow for
+    // mouse events to pass through the animation layer, and be handled by the actual CSE Machine.
+    // Setting the listening property to false on the Konva Layer does not seem to work, so
+    // this is the only workaround.
+    const canvasElement = CseAnimation.getLayer()?.getCanvas()._canvas;
+    if (canvasElement) canvasElement.style.pointerEvents = 'none';
+    // Play all the animations
+    await Promise.all(this.animations.map(a => a.animate()));
   }
 }

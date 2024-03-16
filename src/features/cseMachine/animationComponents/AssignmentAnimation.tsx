@@ -44,8 +44,8 @@ export class AssignmentAnimation extends Animatable {
         x: this.binding.value.text.x() - 16,
         opacity: 0
       });
-    } else if (this.binding.getArrow()) {
-      const arrow = this.binding.getArrow()!;
+    } else if (this.binding.arrow) {
+      const arrow = this.binding.arrow!;
       this.arrow = arrow;
       this.arrowAnimation = new AnimatedGenericArrow(arrow, { x: -16, opacity: 0 });
     }
