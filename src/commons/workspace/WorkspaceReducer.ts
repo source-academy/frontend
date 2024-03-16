@@ -6,7 +6,10 @@ import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/Sour
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
-import { handleConsoleLog } from '../application/actions/InterpreterActions';
+import {
+  evalInterpreterSuccess,
+  handleConsoleLog
+} from '../application/actions/InterpreterActions';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -22,7 +25,6 @@ import {
   END_DEBUG_PAUSE,
   END_INTERRUPT_EXECUTION,
   EVAL_INTERPRETER_ERROR,
-  EVAL_INTERPRETER_SUCCESS,
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
@@ -43,17 +45,17 @@ import {
   clearReplInput,
   clearReplOutput,
   clearReplOutputLast,
+  disableTokenCounter,
+  enableTokenCounter,
   endClearContext,
+  evalEditor,
+  evalRepl,
   sendReplInputToOutput,
   setTokenCount
 } from './WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
-  DISABLE_TOKEN_COUNTER,
   EditorTabState,
-  ENABLE_TOKEN_COUNTER,
-  EVAL_EDITOR,
-  EVAL_REPL,
   MOVE_CURSOR,
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
@@ -296,52 +298,26 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
       };
-    });
-});
-
-const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
-  state = defaultWorkspaceManager,
-  action: SourceActionType
-) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-  let newOutput: InterpreterOutput[];
-  let lastOutput: InterpreterOutput;
-
-  switch (action.type) {
-    case ENABLE_TOKEN_COUNTER:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          hasTokenCounter: true
-        }
-      };
-    case DISABLE_TOKEN_COUNTER:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          hasTokenCounter: false
-        }
-      };
-    case EVAL_EDITOR:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: true,
-          isDebugging: false
-        }
-      };
-    case EVAL_REPL:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: true
-        }
-      };
-    case EVAL_INTERPRETER_SUCCESS:
+    })
+    .addCase(enableTokenCounter, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].hasTokenCounter = true;
+    })
+    .addCase(disableTokenCounter, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].hasTokenCounter = false;
+    })
+    .addCase(evalEditor, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = true;
+      state[workspaceLocation].isDebugging = false;
+    })
+    .addCase(evalRepl, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = true;
+    })
+    .addCase(evalInterpreterSuccess, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const execType = state[workspaceLocation].context.executionMethod;
       const tokens = state[workspaceLocation].tokenCount;
       const newOutputEntry: Partial<ResultOutput> = {
@@ -349,7 +325,9 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
       };
 
-      lastOutput = state[workspaceLocation].output.slice(-1)[0];
+      const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
+      let newOutput: InterpreterOutput[];
+
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         const newOutputEntryWithLogs = {
           consoleLogs: lastOutput.consoleLogs,
@@ -379,14 +357,20 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         } as ResultOutput);
       }
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: newOutput,
-          isRunning: false
-        }
-      };
+      state[workspaceLocation].output = newOutput;
+      state[workspaceLocation].isRunning = false;
+    });
+});
+
+const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
+  state = defaultWorkspaceManager,
+  action: SourceActionType
+) => {
+  const workspaceLocation = getWorkspaceLocation(action);
+  let newOutput: InterpreterOutput[];
+  let lastOutput: InterpreterOutput;
+
+  switch (action.type) {
     case EVAL_TESTCASE_SUCCESS:
       return {
         ...state,
