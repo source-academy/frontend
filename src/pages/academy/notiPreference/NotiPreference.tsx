@@ -25,7 +25,7 @@ const NotiPreference: React.FC = () => {
   const dispatch = useDispatch();
   const session = useTypedSelector(state => state.session);
 
-  const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const configurableNotificationConfigs = React.useRef<NotificationConfiguration[] | undefined>(
     session.configurableNotificationConfigs
