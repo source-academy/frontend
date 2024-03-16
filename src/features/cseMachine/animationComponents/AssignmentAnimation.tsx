@@ -66,13 +66,9 @@ export class AssignmentAnimation extends Animatable {
     const minAsgnItemWidth =
       getTextWidth(this.asgnItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
     // hide value of binding
-    if (this.bindingAnimation) {
-      this.binding.value.ref.current.hide();
-    }
+    if (this.bindingAnimation) this.binding.value.ref.current.hide();
     // hide arrow
-    if (this.arrow) {
-      this.arrow.ref.current.hide();
-    }
+    if (this.arrow) this.arrow.ref.current.hide();
     // move asgn instruction up, right next to stash item, while also decreasing its width
     await this.asgnItemAnimation.animateTo({
       x: this.stashItem.x() - minAsgnItemWidth,
@@ -86,14 +82,14 @@ export class AssignmentAnimation extends Animatable {
           x: this.frame.x() - this.asgnItemAnimation.width() - this.stashItemAnimation.width(),
           y: this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
         },
-        { durationMultiplier: 1.5 }
+        { duration: 1.5 }
       ),
       this.stashItemAnimation.animateTo(
         {
           x: this.frame.x() - this.stashItem.width(),
           y: this.binding.y() + this.binding.height() / 2 - this.stashItem.height() / 2
         },
-        { durationMultiplier: 1.5 }
+        { duration: 1.5 }
       )
     ]);
     // move both asgn instruction and stash item right, fade in the binding value and binding arrow
@@ -108,12 +104,9 @@ export class AssignmentAnimation extends Animatable {
       }),
       this.bindingAnimation?.animateTo(
         { x: (this.binding.value as PrimitiveValue).text.x(), opacity: 1 },
-        { durationMultiplier: 0.5, delayMultiplier: 0.5 }
+        { duration: 0.5, delay: 0.5 }
       ),
-      this.arrowAnimation?.animateTo(
-        { x: 0, opacity: 1 },
-        { durationMultiplier: 0.5, delayMultiplier: 0.5 }
-      )
+      this.arrowAnimation?.animateTo({ x: 0, opacity: 1 }, { duration: 0.5, delay: 0.5 })
     ]);
     this.destroy();
   }

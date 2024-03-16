@@ -65,7 +65,7 @@ export class BinaryOperationAnimation extends Animatable {
       this.binaryOperatorAnimation.animateTo(to),
       this.leftOperandAnimation.animateTo({ opacity: 0 }),
       this.rightOperandAnimation.animateTo(to),
-      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delayMultiplier: 0.1 })
+      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delay: 0.1 })
     ]);
     this.destroy();
   }

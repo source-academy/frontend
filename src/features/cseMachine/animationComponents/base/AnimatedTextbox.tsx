@@ -10,12 +10,17 @@ export class AnimatedTextbox extends AnimatableTo<NodeConfig> {
 
   constructor(text: string, props: NodeConfig) {
     super();
+    this.onPropsChange(props);
+    this.rectComponent = new AnimatedRectComponent(props);
+    this.rectComponent.addListener(this.onPropsChange);
+    this.textComponent = new AnimatedTextComponent({ ...props, text });
+  }
+
+  private onPropsChange(props: NodeConfig) {
     if (props.x) this._x = props.x;
     if (props.y) this._y = props.y;
     if (props.width) this._width = props.width;
     if (props.height) this._height = props.height;
-    this.rectComponent = new AnimatedRectComponent(props);
-    this.textComponent = new AnimatedTextComponent({ ...props, text });
   }
 
   draw(): React.ReactNode {
@@ -32,13 +37,10 @@ export class AnimatedTextbox extends AnimatableTo<NodeConfig> {
       this.rectComponent.animateTo(to, animationConfig),
       this.textComponent.animateTo(to, animationConfig)
     ]);
-    this._x = this.rectComponent.x();
-    this._y = this.rectComponent.y();
-    this._width = this.rectComponent.width();
-    this._height = this.rectComponent.height();
   }
 
   destroy() {
+    this.rectComponent.removeListener(this.onPropsChange);
     this.rectComponent.destroy();
     this.textComponent.destroy();
   }

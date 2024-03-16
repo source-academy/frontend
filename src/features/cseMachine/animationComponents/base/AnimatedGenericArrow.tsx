@@ -10,26 +10,35 @@ export class AnimatedGenericArrow<
   Source extends Visible,
   Target extends Visible
 > extends AnimatableTo<NodeConfig> {
-  private pathComponent?: AnimatedPathComponent;
+  private pathComponent: AnimatedPathComponent;
   private arrowComponent: AnimatedArrowComponent;
 
-  constructor(arrow: GenericArrow<Source, Target>, props: NodeConfig) {
+  constructor(
+    private arrow: GenericArrow<Source, Target>,
+    props: NodeConfig
+  ) {
     super();
     this._x = arrow.x();
     this._y = arrow.y();
     this._width = arrow.width();
     this._height = arrow.height();
     this.pathComponent = new AnimatedPathComponent({ ...props, data: arrow.path() });
+    this.pathComponent.addListener(this.onPropsChange);
     this.arrowComponent = new AnimatedArrowComponent({
       ...props,
       points: arrow.points.slice(arrow.points.length - 4)
     });
   }
 
+  private onPropsChange(props: NodeConfig) {
+    if (props.x) this._x = this.arrow.x() + props.x;
+    if (props.y) this._y = this.arrow.y() + props.y;
+  }
+
   draw(): React.ReactNode {
     return (
       <Group ref={this.ref} key={Animatable.key--}>
-        {this.pathComponent?.draw()}
+        {this.pathComponent.draw()}
         {this.arrowComponent.draw()}
       </Group>
     );
@@ -37,13 +46,14 @@ export class AnimatedGenericArrow<
 
   async animateTo(to: Partial<NodeConfig>, animationConfig?: AnimationConfig) {
     await Promise.all([
-      this.pathComponent?.animateTo(to, animationConfig),
+      this.pathComponent.animateTo(to, animationConfig),
       this.arrowComponent.animateTo(to, animationConfig)
     ]);
   }
 
   destroy() {
-    this.pathComponent?.destroy();
+    this.pathComponent.removeListener(this.onPropsChange);
+    this.pathComponent.destroy();
     this.arrowComponent.destroy();
   }
 }

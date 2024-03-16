@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
 
@@ -9,16 +8,16 @@ import { ControlStashConfig } from '../../CseMachineControlStash';
 import { currentItemSAColor, defaultSAColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 
-interface AnimationData<KonvaConfig extends Konva.NodeConfig> {
+type AnimationData<KonvaConfig extends Konva.NodeConfig> = {
   startTime: number;
   endTime: number;
-  from: Partial<KonvaConfig>;
-  current: Partial<KonvaConfig>; // Note that this is mutable for performance reasons
-  to: Partial<KonvaConfig>;
-  easing: typeof Easings.Linear;
+  from: Readonly<Partial<KonvaConfig>>;
+  current: Partial<KonvaConfig>;
+  to: Readonly<Partial<KonvaConfig>>;
+  easing: NonNullable<AnimationConfig['easing']>;
   resolve: (value: void | PromiseLike<void>) => void;
   reject: (reason?: any) => void;
-}
+};
 
 abstract class BaseAnimationComponent<
   KonvaConfig extends Konva.NodeConfig
@@ -62,15 +61,15 @@ abstract class BaseAnimationComponent<
           if (typeof data.to[attr] === 'number') {
             const start = data.from[attr] as number;
             const end = data.to[attr] as number;
-            const value = data.easing(scale, start, end - start, 1) as number;
+            const value = data.easing(scale, start, end - start, 1);
             (data.current[attr] as number) = value;
             if (attr === 'x') this._x = value;
             if (attr === 'y') this._y = value;
             if (attr === 'width') this._width = value;
             if (attr === 'height') this._height = value;
           } else {
-            // TODO: could handle the animation of path strings by interpolating between different coordinates
-            // For now, we just simply set the value to the target value immediately
+            // TODO: could handle the animation of path strings by interpolating between different coordinates.
+            // For now, we just simply set the value to the target value immediately.
             data.current[attr] = data.to[attr];
           }
         }
@@ -85,8 +84,11 @@ abstract class BaseAnimationComponent<
           animationComplete = false;
         }
       });
-      // Set all the attributes in one go to improve performance
-      this.ref.current.setAttrs(attrs);
+      if (Object.keys(attrs).length > 0) {
+        // Set all the attributes in one go to improve performance
+        this.ref.current.setAttrs(attrs);
+        this.listeners.forEach(f => f({ ...attrs }));
+      }
       if (animationComplete) this.animation.stop();
       resolveList.forEach(r => r());
       return;
@@ -99,7 +101,7 @@ abstract class BaseAnimationComponent<
 
   animateTo(to: Partial<KonvaConfig>, animationConfig?: AnimationConfig): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this.isDestroyed) {
+      if (this.isDestroyed || Object.keys(to).length === 0) {
         resolve();
         return;
       }
@@ -118,10 +120,8 @@ abstract class BaseAnimationComponent<
       }
       // Calculate timings based on values given in animationConfig
       const startTime =
-        this.animation.frame.time +
-        (animationConfig?.delayMultiplier ?? 0) * CseAnimation.defaultDuration;
-      const endTime =
-        startTime + (animationConfig?.durationMultiplier ?? 1) * CseAnimation.defaultDuration;
+        this.animation.frame.time + (animationConfig?.delay ?? 0) * CseAnimation.defaultDuration;
+      const endTime = startTime + (animationConfig?.duration ?? 1) * CseAnimation.defaultDuration;
       const easing = animationConfig?.easing ?? CseAnimation.defaultEasing;
       // Add animation data
       const data = { startTime, endTime, from, current: { ...from }, to, easing, resolve, reject };
@@ -139,6 +139,7 @@ abstract class BaseAnimationComponent<
     this.ref.current?.hide();
     this.animationData.forEach(data => data.resolve());
     this.animationData.length = 0;
+    this.listeners.length = 0;
   }
 }
 
@@ -179,7 +180,7 @@ export class AnimationComponent<
 }
 
 export class AnimatedTextComponent extends AnimationComponent<Konva.Text, Konva.TextConfig> {
-  constructor(props: Konva.TextConfig) {
+  constructor(props: Konva.TextConfig & Required<Pick<Konva.TextConfig, 'text'>>) {
     const defaultProps = {
       fill: ControlStashConfig.SA_WHITE.toString(),
       padding: Number(ControlStashConfig.ControlItemTextPadding),
@@ -189,9 +190,6 @@ export class AnimatedTextComponent extends AnimationComponent<Konva.Text, Konva.
       fontVariant: ControlStashConfig.FontVariant.toString()
     };
     super(Text, { ...defaultProps, ...props });
-    if (this.props?.text === undefined) {
-      console.warn('AnimatedTextComponent has no text value!');
-    }
   }
 }
 
@@ -206,16 +204,13 @@ export class AnimatedRectComponent extends AnimationComponent<Konva.Rect, Konva.
 }
 
 export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.PathConfig> {
-  constructor(props: Konva.PathConfig) {
+  constructor(props: Konva.PathConfig & Required<Pick<Konva.PathConfig, 'data'>>) {
     const defaultProps = {
       stroke: defaultSAColor(),
       strokeWidth: Number(CompactConfig.ArrowStrokeWidth),
       hitStrokeWidth: Number(CompactConfig.ArrowHitStrokeWidth)
     };
     super(Path, { ...defaultProps, ...props });
-    if (this.props?.data === undefined) {
-      console.warn('AnimatedPathComponent has no path data!');
-    }
   }
 }
 
@@ -227,8 +222,5 @@ export class AnimatedArrowComponent extends AnimationComponent<Konva.Arrow, Konv
       pointerWidth: Number(CompactConfig.ArrowHeadSize)
     };
     super(Arrow, { ...defaultProps, ...props });
-    if (this.props?.points.length === 0) {
-      console.warn('AnimatedArrowComponent has no points defined!');
-    }
   }
 }

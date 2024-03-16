@@ -51,14 +51,14 @@ export class PopAnimation extends Animatable {
     this.undefinedStashItem?.ref?.current?.hide();
     await Promise.all([
       this.popItemAnimation.animateTo({ ...getNodePosition(this.stashItem), opacity: 0 }),
-      this.stashItemAnimation.animateTo({ scaleX: 0.6, scaleY: 0.6 }, { delayMultiplier: 0.3 })
+      this.stashItemAnimation.animateTo({ scaleX: 0.6, scaleY: 0.6 }, { delay: 0.3 })
     ]);
     await Promise.all([
       this.stashItemAnimation.animateTo(
         { scaleX: 1.1, scaleY: 1.1, opacity: 0 },
-        { durationMultiplier: 0.5, easing: Easings.StrongEaseOut }
+        { duration: 0.5, easing: Easings.StrongEaseOut }
       ),
-      this.undefinedStashItemAnimation?.animateTo({ opacity: 1 }, { delayMultiplier: 0.3 })
+      this.undefinedStashItemAnimation?.animateTo({ opacity: 1 }, { delay: 0.3 })
     ]);
     this.destroy();
   }

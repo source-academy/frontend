@@ -51,7 +51,7 @@ export class UnaryOperationAnimation extends Animatable {
     await Promise.all([
       this.operatorAnimation.animateTo({ ...resultPosition, opacity: 0 }),
       this.operandAnimation.animateTo({ ...resultPosition, opacity: 0 }),
-      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delayMultiplier: 0.5 })
+      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delay: 0.5 })
     ]);
     this.destroy();
   }

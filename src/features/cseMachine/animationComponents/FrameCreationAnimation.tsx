@@ -31,7 +31,7 @@ export class FrameCreationAnimation extends Animatable {
     this.frameAnimation = new AnimatedRectComponent({
       ...getNodePosition(currBlockItem),
       opacity: 0
-    })
+    });
     this.envAnimation = new EnvironmentAnimation(prevFrame, currFrame);
   }
 
@@ -47,23 +47,27 @@ export class FrameCreationAnimation extends Animatable {
 
   async animate() {
     await this.frameAnimation.animateTo({ opacity: 1 });
-    await this.frameAnimation.animateTo({
-      ...getNodePosition(this.currFrame),
-      cornerRadius: Number(Config.FrameCornerRadius)
-    },
-    { durationMultiplier: 1.5 }
+    await this.frameAnimation.animateTo(
+      {
+        ...getNodePosition(this.currFrame),
+        cornerRadius: Number(Config.FrameCornerRadius)
+      },
+      { duration: 1.5 }
     );
-    await this.tempRect.animateTo({
-      opacity: 0
-    },
-    { durationMultiplier: 1.5 }
+    await this.tempRect.animateTo(
+      {
+        opacity: 0
+      },
+      { duration: 1.5 }
     );
     await Promise.all([
       this.envAnimation.animate(),
-      this.frameAnimation.animateTo({
-        opacity: 0
-      },
-      { delayMultiplier: 1})
+      this.frameAnimation.animateTo(
+        {
+          opacity: 0
+        },
+        { delay: 1 }
+      )
     ]);
   }
 

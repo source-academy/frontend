@@ -61,7 +61,7 @@ export class LookupAnimation extends Animatable {
         y: this.binding.y() + this.binding.height() / 2 - this.nameItem.height() / 2,
         width: minNameItemWidth
       },
-      { durationMultiplier: 1.5 }
+      { duration: 1.5 }
     );
     // the name item 'pulls' the stash item out of the binding
     await Promise.all([
@@ -69,7 +69,7 @@ export class LookupAnimation extends Animatable {
         {
           x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
         },
-        { durationMultiplier: 1 }
+        { duration: 1 }
       ),
       this.stashItemAnimation.animateTo({ x: this.frame.x() - this.stashItem.width(), opacity: 1 })
     ]);

@@ -60,10 +60,10 @@ export class EnvironmentAnimation extends Animatable {
         height: newPosition.height + strokeIncrease,
         width: newPosition.width + strokeIncrease
       },
-      { durationMultiplier: 1.5 }
+      { duration: 1.5 }
     );
     this.tempRect.ref.current?.hide();
-    await this.frameAnimation.animateTo({ ...newPosition, strokeWidth }, { durationMultiplier: 1 });
+    await this.frameAnimation.animateTo({ ...newPosition, strokeWidth }, { duration: 1 });
     this.destroy();
   }
 
