@@ -23,7 +23,7 @@ const AssetViewer: React.FC = () => {
 
   React.useEffect(() => {
     const deleteIcon = (filePath: string): JSX.Element => {
-      const deleteFile = (filePath: string) => async () => {
+      const deleteFile = async () => {
         const confirm = window.confirm(`Are you sure you want to delete ${filePath}?`);
         alert(
           confirm
@@ -33,7 +33,7 @@ const AssetViewer: React.FC = () => {
       };
       return (
         <Tooltip content="Delete">
-          <Icon icon="trash" onClick={deleteFile(filePath)} />
+          <Icon icon="trash" onClick={deleteFile} />
         </Tooltip>
       );
     };
