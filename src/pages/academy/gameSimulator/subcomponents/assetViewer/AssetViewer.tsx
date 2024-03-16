@@ -25,16 +25,7 @@ const AssetViewer: React.FC = () => {
     const deleteIcon = (filePath: string): JSX.Element => {
       const deleteFile = (filePath: string) => async () => {
         const confirm = window.confirm(`Are you sure you want to delete ${filePath}?`);
-        const reconfirm = window.confirm(
-          `Are you REALLY sure you want to delete ${filePath}?\nThere is NO undoing this action!`
-        );
-        alert(
-          confirm
-            ? reconfirm
-              ? await deleteS3File(filePath)
-              : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
-            : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
-        );
+        alert(confirm ? await deleteS3File(filePath) : 'Please double check before deleting an asset!\nThere is NO undoing this action!');
       };
       return (
         <Tooltip content="Delete">
