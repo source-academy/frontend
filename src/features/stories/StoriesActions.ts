@@ -1,7 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
-import { action } from 'typesafe-actions';
 
 import {
   ADD_STORY_ENV,
@@ -68,7 +67,7 @@ export const toggleStoriesUsingSubst = createAction(
 );
 
 // New action creators post-refactor
-export const getStoriesList = () => action(GET_STORIES_LIST);
+export const getStoriesList = createAction(GET_STORIES_LIST, () => ({ payload: {} }));
 export const updateStoriesList = createAction(
   UPDATE_STORIES_LIST,
   (storyList: StoryListView[]) => ({ payload: storyList })
@@ -85,7 +84,7 @@ export const saveStory = createAction(SAVE_STORY, (story: StoryParams, id: numbe
 }));
 export const deleteStory = createAction(DELETE_STORY, (id: number) => ({ payload: id }));
 // Auth-related actions
-export const getStoriesUser = () => action(GET_STORIES_USER);
+export const getStoriesUser = createAction(GET_STORIES_USER, () => ({ payload: {} }));
 export const setCurrentStoriesUser = createAction(
   SET_CURRENT_STORIES_USER,
   (id?: number, name?: string) => ({ payload: { id, name } })
@@ -95,4 +94,6 @@ export const setCurrentStoriesGroup = createAction(
   (id?: number, name?: string, role?: StoriesRole) => ({ payload: { id, name, role } })
 );
 // Helper/wrapper actions
-export const clearStoriesUserAndGroup = () => action(CLEAR_STORIES_USER_AND_GROUP);
+export const clearStoriesUserAndGroup = createAction(CLEAR_STORIES_USER_AND_GROUP, () => ({
+  payload: {}
+}));
