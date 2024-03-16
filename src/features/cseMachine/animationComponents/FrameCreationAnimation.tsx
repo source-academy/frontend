@@ -12,13 +12,11 @@ import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationCo
 import { getNodePosition } from './base/AnimationUtils';
 
 export class FrameCreationAnimation extends Animatable {
-  // private tempRect: AnimatedRectComponent; // hide the new frame temporarily
   private controlAnimation: AnimatedTextbox;
   private frameArrowAnimation?: AnimatedGenericArrow<Frame, Frame>;
   private frameNameAnimation: AnimatedTextComponent;
   private frameBorderAnimation: AnimatedRectComponent;
   private frameBindingsAnimation: AnimatedTextComponent[];
-  // private envAnimation: EnvironmentAnimation;
 
   constructor(
     private currFrame: Frame,

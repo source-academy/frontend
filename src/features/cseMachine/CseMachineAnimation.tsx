@@ -92,11 +92,18 @@ export class CseAnimation {
           }
           break;
         case 'Identifier':
-          animation = new LookupAnimation(
-            lastControlComponent,
-            Layout.stashComponent.stashItemComponents.at(-1)!,
-            ...lookupBinding(CseAnimation.currentFrame, lastControlItem.name)
-          );
+          if (lastControlComponent.text === 'undefined') {
+            animation = new LiteralAnimation(
+              lastControlComponent,
+              Layout.stashComponent.stashItemComponents.at(-1)!
+            );
+          } else {
+            animation = new LookupAnimation(
+              lastControlComponent,
+              Layout.stashComponent.stashItemComponents.at(-1)!,
+              ...lookupBinding(CseAnimation.currentFrame, lastControlItem.name)
+            );
+          }
           break;
         case 'Literal':
           animation = new LiteralAnimation(
