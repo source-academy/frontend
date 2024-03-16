@@ -1,26 +1,37 @@
-import { NodeConfig } from 'konva/lib/Node';
+import { RectConfig } from 'konva/lib/shapes/Rect';
+import { TextConfig } from 'konva/lib/shapes/Text';
 import { Group } from 'react-konva';
 
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedRectComponent, AnimatedTextComponent } from './AnimationComponents';
+import { SharedProperties } from './AnimationUtils';
 
-export class AnimatedTextbox extends AnimatableTo<NodeConfig> {
+type TextRectSharedConfig = SharedProperties<TextConfig, RectConfig>;
+
+export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
   private rectComponent: AnimatedRectComponent;
   private textComponent: AnimatedTextComponent;
 
-  private onPropsChange = (props: NodeConfig) => {
+  // Update the current component's dimensions based on the inner rect component's dimensions
+  private onPropsChange = (props: RectConfig) => {
     if (props.x) this._x = props.x;
     if (props.y) this._y = props.y;
     if (props.width) this._width = props.width;
     if (props.height) this._height = props.height;
   };
 
-  constructor(text: string, props: NodeConfig) {
+  constructor(
+    text: string,
+    sharedProps: TextRectSharedConfig,
+    additionalProps?: { rectProps?: RectConfig; textProps?: TextConfig }
+  ) {
     super();
-    this.onPropsChange(props);
-    this.rectComponent = new AnimatedRectComponent(props);
+    const rectProps = { ...sharedProps, ...additionalProps?.rectProps };
+    this.onPropsChange(rectProps);
+    this.rectComponent = new AnimatedRectComponent(rectProps);
     this.rectComponent.addListener(this.onPropsChange);
-    this.textComponent = new AnimatedTextComponent({ ...props, text });
+    const textProps = { ...sharedProps, ...additionalProps?.textProps, text };
+    this.textComponent = new AnimatedTextComponent(textProps);
   }
 
   draw(): React.ReactNode {
@@ -32,10 +43,18 @@ export class AnimatedTextbox extends AnimatableTo<NodeConfig> {
     );
   }
 
-  async animateTo(to: Partial<NodeConfig>, animationConfig?: AnimationConfig) {
+  animateRectTo(to: Partial<RectConfig>, animationConfig?: AnimationConfig) {
+    return this.rectComponent.animateTo(to, animationConfig);
+  }
+
+  animateTextTo(to: Partial<TextConfig>, animationConfig?: AnimationConfig) {
+    return this.textComponent.animateTo(to, animationConfig);
+  }
+
+  async animateTo(to: Partial<TextRectSharedConfig>, animationConfig?: AnimationConfig) {
     await Promise.all([
-      this.rectComponent.animateTo(to, animationConfig),
-      this.textComponent.animateTo(to, animationConfig)
+      this.animateRectTo(to, animationConfig),
+      this.animateTextTo(to, animationConfig)
     ]);
   }
 

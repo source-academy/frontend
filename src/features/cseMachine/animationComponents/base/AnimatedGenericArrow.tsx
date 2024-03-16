@@ -1,26 +1,30 @@
-import { NodeConfig } from 'konva/lib/Node';
+import { ArrowConfig } from 'konva/lib/shapes/Arrow';
+import { PathConfig } from 'konva/lib/shapes/Path';
 import { Group } from 'react-konva';
 
 import { GenericArrow } from '../../compactComponents/arrows/GenericArrow';
 import { Visible } from '../../components/Visible';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedArrowComponent, AnimatedPathComponent } from './AnimationComponents';
+import { SharedProperties } from './AnimationUtils';
+
+type PathArrowSharedConfig = SharedProperties<PathConfig, ArrowConfig>;
 
 export class AnimatedGenericArrow<
   Source extends Visible,
   Target extends Visible
-> extends AnimatableTo<NodeConfig> {
+> extends AnimatableTo<PathArrowSharedConfig> {
   private pathComponent: AnimatedPathComponent;
   private arrowComponent: AnimatedArrowComponent;
 
-  private onPropsChange = (props: NodeConfig) => {
+  private onPropsChange = (props: PathConfig) => {
     if (props.x) this._x = this.arrow.x() + props.x;
     if (props.y) this._y = this.arrow.y() + props.y;
   };
 
   constructor(
     private arrow: GenericArrow<Source, Target>,
-    props: NodeConfig
+    props: PathArrowSharedConfig
   ) {
     super();
     this._x = arrow.x();
@@ -44,10 +48,18 @@ export class AnimatedGenericArrow<
     );
   }
 
-  async animateTo(to: Partial<NodeConfig>, animationConfig?: AnimationConfig) {
+  animatePathTo(to: Partial<PathConfig>, animationConfig?: AnimationConfig) {
+    return this.pathComponent.animateTo(to, animationConfig);
+  }
+
+  animateArrowTo(to: Partial<ArrowConfig>, animationConfig?: AnimationConfig) {
+    return this.arrowComponent.animateTo(to, animationConfig);
+  }
+
+  async animateTo(to: Partial<PathArrowSharedConfig>, animationConfig?: AnimationConfig) {
     await Promise.all([
-      this.pathComponent.animateTo(to, animationConfig),
-      this.arrowComponent.animateTo(to, animationConfig)
+      this.animatePathTo(to, animationConfig),
+      this.animateArrowTo(to, animationConfig)
     ]);
   }
 
