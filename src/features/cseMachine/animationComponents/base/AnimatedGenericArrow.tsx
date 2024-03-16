@@ -13,6 +13,11 @@ export class AnimatedGenericArrow<
   private pathComponent: AnimatedPathComponent;
   private arrowComponent: AnimatedArrowComponent;
 
+  private onPropsChange = (props: NodeConfig) => {
+    if (props.x) this._x = this.arrow.x() + props.x;
+    if (props.y) this._y = this.arrow.y() + props.y;
+  };
+
   constructor(
     private arrow: GenericArrow<Source, Target>,
     props: NodeConfig
@@ -28,11 +33,6 @@ export class AnimatedGenericArrow<
       ...props,
       points: arrow.points.slice(arrow.points.length - 4)
     });
-  }
-
-  private onPropsChange(props: NodeConfig) {
-    if (props.x) this._x = this.arrow.x() + props.x;
-    if (props.y) this._y = this.arrow.y() + props.y;
   }
 
   draw(): React.ReactNode {

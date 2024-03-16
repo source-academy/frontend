@@ -9,6 +9,7 @@ import { getNodePosition } from './base/AnimationUtils';
 
 export class LiteralAnimation extends Animatable {
   private animation: AnimatedTextbox;
+
   constructor(
     controlItem: ControlItemComponent,
     private stashItem: StashItemComponent
@@ -17,18 +18,18 @@ export class LiteralAnimation extends Animatable {
     this.animation = new AnimatedTextbox(controlItem.text, getNodePosition(controlItem));
   }
 
-  async animate() {
-    this.stashItem.ref.current.hide();
-    await this.animation.animateTo(getNodePosition(this.stashItem));
-    this.destroy();
-  }
-
   draw(): React.ReactNode {
     return (
       <Group ref={this.ref} key={Animatable.key--}>
         {this.animation.draw()}
       </Group>
     );
+  }
+
+  async animate() {
+    this.stashItem.ref.current.hide();
+    await this.animation.animateTo(getNodePosition(this.stashItem));
+    this.destroy();
   }
 
   destroy() {

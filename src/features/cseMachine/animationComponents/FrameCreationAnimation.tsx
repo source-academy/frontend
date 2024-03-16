@@ -54,20 +54,10 @@ export class FrameCreationAnimation extends Animatable {
       },
       { duration: 1.5 }
     );
-    await this.tempRect.animateTo(
-      {
-        opacity: 0
-      },
-      { duration: 1.5 }
-    );
+    await this.tempRect.animateTo({ opacity: 0 }, { duration: 1.5 });
     await Promise.all([
       this.envAnimation.animate(),
-      this.frameAnimation.animateTo(
-        {
-          opacity: 0
-        },
-        { delay: 1 }
-      )
+      this.frameAnimation.animateTo({ opacity: 0 }, { delay: 1 })
     ]);
   }
 
