@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
 
-export type SideContentContestVotingProps = DispatchProps & StateProps;
+type SideContentContestVotingProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
@@ -28,15 +28,14 @@ const TIERS = [
   { name: 'D', color: 'rgb(127, 191, 255)', score: 1 }
 ];
 
-const SideContentContestVoting: React.FunctionComponent<SideContentContestVotingProps> = props => {
-  const {
-    contestEntries,
-    canSave,
-    isValid,
-    handleContestEntryClick,
-    handleVotingSubmissionChange
-  } = props;
-  const [showContestEntries, setShowContestEntries] = useState<boolean>(true);
+const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
+  contestEntries,
+  canSave,
+  isValid,
+  handleContestEntryClick,
+  handleVotingSubmissionChange
+}) => {
+  const [showContestEntries, setShowContestEntries] = useState(true);
   const [currentDraggedItem, setCurrentDraggedItem] = useState<HTMLElement | null>(null);
   const [hoveredTier, setHoveredTier] = useState<string | null>(null);
 
