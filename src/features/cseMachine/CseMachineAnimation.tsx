@@ -3,6 +3,7 @@ import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
+import { ArrowFunctionExpressionAnimation } from './animationComponents/ArrowFunctionExpressionAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
 import { checkFrameCreation, lookupBinding } from './animationComponents/base/AnimationUtils';
@@ -81,6 +82,12 @@ export class CseAnimation {
     if (!isInstr(lastControlItem)) {
       //console.log('TYPE: ' + lastControlItem.type);
       switch (lastControlItem.type) {
+        case 'ArrowFunctionExpression':
+          CseAnimation.animations.push(new ArrowFunctionExpressionAnimation(
+            lastControlComponent,
+            Layout.stashComponent.stashItemComponents.at(-1)!
+          ));
+          break;
         case 'BlockStatement':
           CseAnimation.animations.push(
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
