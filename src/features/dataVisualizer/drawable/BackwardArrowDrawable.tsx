@@ -3,13 +3,16 @@ import { Arrow } from 'react-konva';
 
 import { Config } from '../Config';
 
-type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number } };
+type Props = {
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+};
 
 /**
  * Represents an arrow used to connect a parent node and a child node that has been drawn before,
  * that is positioned to the top left of the parent node.
  */
-const BackwardArrowDrawable: React.FC<ArrowConfig> = ({ from, to }) => {
+const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
   /*
    *  Connects a box to a previously known box, the arrow path is more complicated.
    *

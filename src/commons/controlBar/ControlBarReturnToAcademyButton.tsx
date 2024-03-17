@@ -3,13 +3,11 @@ import React from 'react';
 
 import ControlButton from '../ControlButton';
 
-type ControlBarReturnToAcademyButtonProps = {
+type Props = {
   onClick?(): any;
 };
 
-export const ControlBarReturnToAcademyButton: React.FC<ControlBarReturnToAcademyButtonProps> = ({
-  onClick
-}) => {
+export const ControlBarReturnToAcademyButton: React.FC<Props> = ({ onClick }) => {
   return (
     <ControlButton
       label="Return to Academy"

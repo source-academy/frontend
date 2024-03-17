@@ -22,7 +22,7 @@ type OwnProps = {
   workspaceLocation: WorkspaceLocation;
 };
 
-const SideContentTestcaseCard: React.FunctionComponent<SideContentTestcaseCardProps> = props => {
+const SideContentTestcaseCard: React.FC<SideContentTestcaseCardProps> = props => {
   const { index, testcase, handleTestcaseEval } = props;
 
   const extraClasses = React.useMemo(() => {

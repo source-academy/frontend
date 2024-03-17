@@ -5,13 +5,13 @@ import React from 'react';
 import { DeadlineColors } from '../../../features/achievement/AchievementConstants';
 import { isExpired, prettifyDeadline, timeFromExpired } from '../utils/DateHelper';
 
-type AchievementDeadlineProps = {
+const twoDays = new Date(0, 0, 2).getTime() - new Date(0, 0, 0).getTime();
+
+type Props = {
   deadline?: Date;
 };
 
-const twoDays = new Date(0, 0, 2).getTime() - new Date(0, 0, 0).getTime();
-
-const AchievementDeadline: React.FC<AchievementDeadlineProps> = ({ deadline }) => {
+const AchievementDeadline: React.FC<Props> = ({ deadline }) => {
   // red deadline color for core achievements that are expiring in less than 2 days
   const deadlineColor =
     deadline !== undefined && !isExpired(deadline) && timeFromExpired(deadline) <= twoDays

@@ -2,14 +2,14 @@ import React from 'react';
 
 import SideContentMarkdownEditor from './SideContentMarkdownEditor';
 
-export type SideContentTaskEditorProps = {
+type Props = {
   allowEdits: boolean;
   currentTaskNumber: number;
   taskDescriptions: any[];
   setTaskDescriptions: (newList: any[]) => void;
 };
 
-const SideContentTaskEditor: React.FC<SideContentTaskEditorProps> = props => {
+const SideContentTaskEditor: React.FC<Props> = props => {
   const taskIndex = props.currentTaskNumber - 1;
   const taskDescriptions = props.taskDescriptions;
   const setTaskDescriptions = props.setTaskDescriptions;

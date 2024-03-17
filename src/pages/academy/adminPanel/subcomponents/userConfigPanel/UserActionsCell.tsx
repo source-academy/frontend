@@ -14,7 +14,7 @@ type Props = {
 };
 
 const DeleteUserCell: React.FC<Props> = ({ data, handleDeleteUserFromCourse }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const clickHandler = () => {
     if (data.role === Role.Admin) {

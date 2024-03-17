@@ -8,11 +8,11 @@ import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { Role } from '../../application/ApplicationTypes';
 import { createDesktopNavlink, NavbarEntryInfo, renderNavlinksFromInfo } from '../NavigationBar';
 
-type OwnProps = {
+type Props = {
   assessmentTypes?: AssessmentType[];
 };
 
-const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTypes }) => {
+const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
   const { role, courseId } = useSession();
   const isEnrolledInACourse = !!role;
 
