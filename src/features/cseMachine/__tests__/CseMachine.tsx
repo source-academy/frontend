@@ -184,7 +184,7 @@ const codeSamplesControlStash = [
     }
     create(3)[1]();
     `,
-    33
+    32
   ],
   [
     'global environments are treated correctly',
