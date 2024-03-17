@@ -9,6 +9,7 @@ import { Animatable } from './animationComponents/base/Animatable';
 import { checkFrameCreation, lookupBinding } from './animationComponents/base/AnimationUtils';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BlockAnimation } from './animationComponents/BlockAnimation';
+import { BranchAnimation } from './animationComponents/BranchAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
 import { FrameCreationAnimation } from './animationComponents/FrameCreationAnimation';
 import { FunctionFrameCreationAnimation } from './animationComponents/FunctionFrameCreationAnimation';
@@ -80,7 +81,7 @@ export class CseAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
-      //console.log('TYPE: ' + lastControlItem.type);
+      console.log('TYPE: ' + lastControlItem.type);
       switch (lastControlItem.type) {
         case 'ArrowFunctionExpression':
           CseAnimation.animations.push(new ArrowFunctionExpressionAnimation(
@@ -127,10 +128,11 @@ export class CseAnimation {
             );
           }
           break;
-        case 'UnaryExpression':
         case 'BinaryExpression':
         case 'CallExpression':
         case 'ExpressionStatement':
+        case 'IfStatement':
+        case 'UnaryExpression':
         case 'VariableDeclaration':
           const currentControlSize = Layout.controlComponent.control.size();
           const previousControlSize = Layout.previousControlComponent.control.size();
@@ -143,7 +145,7 @@ export class CseAnimation {
           break;
       }
     } else {
-      //console.log('INSTRTYPE: ' + lastControlItem.instrType);
+      console.log('INSTRTYPE: ' + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
@@ -203,6 +205,14 @@ export class CseAnimation {
           }
           break;
         case InstrType.BRANCH:
+          if (!currControlComponent) return;
+          CseAnimation.animations.push(
+            new BranchAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              currControlComponent
+            )
+          );
           break;
         case InstrType.ENVIRONMENT:
           animation = new EnvironmentAnimation(
