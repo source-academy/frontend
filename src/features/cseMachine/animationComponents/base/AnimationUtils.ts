@@ -19,12 +19,24 @@ export type RemoveIndex<T> = {
  * This also excludes the index signature from both `A` and `B` automatically. */
 export type SharedProperties<A, B> = Pick<A, Extract<keyof RemoveIndex<A>, keyof RemoveIndex<B>>>;
 
-export function getNodePosition(item: Visible) {
+export function getNodeDimensions(item: Visible) {
   return {
-    x: item.x(),
-    y: item.y(),
     height: item.height(),
     width: item.width()
+  };
+}
+
+export function getNodeLocation(item : Visible) {
+  return {
+    x: item.x(),
+    y: item.y()
+  };
+}
+
+export function getNodePosition(item: Visible) {
+  return {
+    ...getNodeDimensions(item),
+    ...getNodeLocation(item)
   };
 }
 
