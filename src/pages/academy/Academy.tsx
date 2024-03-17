@@ -28,7 +28,7 @@ import GroundControl from './groundControl/GroundControlContainer';
 import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/Sourcereel';
 
-const Academy: React.FC<{}> = () => {
+const Academy: React.FC = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(fetchNotifications());
@@ -88,7 +88,7 @@ const Academy: React.FC<{}> = () => {
   );
 };
 
-const CourseSelectingAcademy: React.FC<{}> = () => {
+const CourseSelectingAcademy: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { courseId } = useSession();

@@ -4,12 +4,12 @@ import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 
-type ItemDeleterProps = {
+type Props = {
   deleteItem: () => void;
   item: string;
 };
 
-const ItemDeleter: React.FC<ItemDeleterProps> = ({ deleteItem, item }) => {
+const ItemDeleter: React.FC<Props> = ({ deleteItem, item }) => {
   const confirmDelete = async () => {
     const confirm = await showSimpleConfirmDialog({
       contents: `Are you sure you want to delete '${item}' ?`,
