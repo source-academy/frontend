@@ -1,4 +1,4 @@
-import { AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
+import { AppInstr, AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';
@@ -10,6 +10,7 @@ import { BinaryOperationAnimation } from './animationComponents/BinaryOperationA
 import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
 import { FrameCreationAnimation } from './animationComponents/FrameCreationAnimation';
+import { FunctionFrameCreationAnimation } from './animationComponents/FunctionFrameCreationAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
@@ -78,7 +79,7 @@ export class CseAnimation {
     }
     let animation: Animatable | undefined;
     if (!isInstr(lastControlItem)) {
-      // console.log('TYPE: ' + lastControlItem.type);
+      //console.log('TYPE: ' + lastControlItem.type);
       switch (lastControlItem.type) {
         case 'BlockStatement':
           CseAnimation.animations.push(
@@ -135,7 +136,7 @@ export class CseAnimation {
           break;
       }
     } else {
-      // console.log('INSTRTYPE: ' + lastControlItem.instrType);
+      //console.log('INSTRTYPE: ' + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.RESET:
         case InstrType.WHILE:
@@ -175,6 +176,25 @@ export class CseAnimation {
           );
           break;
         case InstrType.APPLICATION:
+          CseAnimation.animations.push(
+            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          );
+          if (!currControlComponent) return;
+          if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
+            const appInstr = lastControlItem as AppInstr;
+            const argStashItems = Layout.previousStashComponent.stashItemComponents.slice(
+              -appInstr.numOfArgs
+            );
+            CseAnimation.animations.push(
+              new FunctionFrameCreationAnimation(
+                CseAnimation.currentFrame,
+                currControlComponent,
+                Layout.previousStashComponent.stashItemComponents.at(-appInstr.numOfArgs - 1)!,
+                argStashItems
+              )
+            );
+          }
+          break;
         case InstrType.BRANCH:
           break;
         case InstrType.ENVIRONMENT:

@@ -27,7 +27,7 @@ export class AssignmentAnimation extends Animatable {
   private arrow?: GenericArrow<Text, Value>;
 
   constructor(
-    private asgnItem: ControlItemComponent,
+    private asgnItem: ControlItemComponent | StashItemComponent,
     private stashItem: StashItemComponent,
     private frame: Frame,
     private binding: Binding
