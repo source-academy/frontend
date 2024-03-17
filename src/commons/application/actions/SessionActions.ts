@@ -1,8 +1,8 @@
+import { createAction } from '@reduxjs/toolkit';
 import {
   paginationToBackendParams,
   ungradedToBackendParams
 } from 'src/features/grading/GradingUtils';
-import { action } from 'typesafe-actions'; // EDITED
 
 import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import {
@@ -84,26 +84,39 @@ import {
   User
 } from '../types/SessionTypes';
 
-export const fetchAuth = (code: string, providerId?: string) =>
-  action(FETCH_AUTH, { code, providerId });
+export const fetchAuth = createAction(FETCH_AUTH, (code: string, providerId?: string) => ({
+  payload: { code, providerId }
+}));
 
-export const fetchUserAndCourse = () => action(FETCH_USER_AND_COURSE);
+export const fetchUserAndCourse = createAction(FETCH_USER_AND_COURSE, () => ({ payload: {} }));
 
-export const fetchCourseConfig = () => action(FETCH_COURSE_CONFIG);
+export const fetchCourseConfig = createAction(FETCH_COURSE_CONFIG, () => ({ payload: {} }));
 
-export const fetchAssessment = (assessmentId: number, assessmentPassword?: string) =>
-  action(FETCH_ASSESSMENT, { assessmentId, assessmentPassword });
+export const fetchAssessment = createAction(
+  FETCH_ASSESSMENT,
+  (assessmentId: number, assessmentPassword?: string) => ({
+    payload: { assessmentId, assessmentPassword }
+  })
+);
 
-export const fetchAssessmentAdmin = (assessmentId: number, courseRegId: number) =>
-  action(FETCH_ASSESSMENT_ADMIN, { assessmentId, courseRegId });
+export const fetchAssessmentAdmin = createAction(
+  FETCH_ASSESSMENT_ADMIN,
+  (assessmentId: number, courseRegId: number) => ({ payload: { assessmentId, courseRegId } })
+);
 
-export const fetchAssessmentOverviews = () => action(FETCH_ASSESSMENT_OVERVIEWS);
+export const fetchAssessmentOverviews = createAction(FETCH_ASSESSMENT_OVERVIEWS, () => ({
+  payload: {}
+}));
 
-export const fetchTotalXp = () => action(FETCH_TOTAL_XP);
+export const fetchTotalXp = createAction(FETCH_TOTAL_XP, () => ({ payload: {} }));
 
-export const fetchTotalXpAdmin = (courseRegId: number) => action(FETCH_TOTAL_XP_ADMIN, courseRegId);
+export const fetchTotalXpAdmin = createAction(FETCH_TOTAL_XP_ADMIN, (courseRegId: number) => ({
+  payload: courseRegId
+}));
 
-export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, submissionId);
+export const fetchGrading = createAction(FETCH_GRADING, (submissionId: number) => ({
+  payload: submissionId
+}));
 
 /**
  * @param filterToGroup - param that when set to true, only shows submissions under the group
@@ -114,184 +127,222 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  * @param filterParams - param that contains columnFilters converted into JSON for
  * processing into query parameters
  */
-export const fetchGradingOverviews = (
-  filterToGroup = true,
-  gradedFilter = ungradedToBackendParams(false),
-  pageParams = paginationToBackendParams(0, 10),
-  filterParams = {}
-) => action(FETCH_GRADING_OVERVIEWS, { filterToGroup, gradedFilter, pageParams, filterParams });
+export const fetchGradingOverviews = createAction(
+  FETCH_GRADING_OVERVIEWS,
+  (
+    filterToGroup = true,
+    gradedFilter = ungradedToBackendParams(false),
+    pageParams = paginationToBackendParams(0, 10),
+    filterParams = {}
+  ) => ({ payload: { filterToGroup, gradedFilter, pageParams, filterParams } })
+);
 
-export const login = (providerId: string) => action(LOGIN, providerId);
+export const login = createAction(LOGIN, (providerId: string) => ({ payload: providerId }));
 
-export const logoutGoogle = () => action(LOGOUT_GOOGLE);
+export const logoutGoogle = createAction(LOGOUT_GOOGLE, () => ({ payload: {} }));
 
-export const loginGitHub = () => action(LOGIN_GITHUB);
+export const loginGitHub = createAction(LOGIN_GITHUB, () => ({ payload: {} }));
 
-export const logoutGitHub = () => action(LOGOUT_GITHUB);
+export const logoutGitHub = createAction(LOGOUT_GITHUB, () => ({ payload: {} }));
 
-export const setTokens = ({ accessToken, refreshToken }: Tokens) =>
-  action(SET_TOKENS, {
-    accessToken,
-    refreshToken
-  });
+export const setTokens = createAction(SET_TOKENS, ({ accessToken, refreshToken }: Tokens) => ({
+  payload: { accessToken, refreshToken }
+}));
 
-export const setUser = (user: User) => action(SET_USER, user);
+export const setUser = createAction(SET_USER, (user: User) => ({ payload: user }));
 
-export const setCourseConfiguration = (courseConfiguration: UpdateCourseConfiguration) =>
-  action(SET_COURSE_CONFIGURATION, courseConfiguration);
+export const setCourseConfiguration = createAction(
+  SET_COURSE_CONFIGURATION,
+  (courseConfiguration: UpdateCourseConfiguration) => ({ payload: courseConfiguration })
+);
 
-export const setCourseRegistration = (courseRegistration: Partial<CourseRegistration>) =>
-  action(SET_COURSE_REGISTRATION, courseRegistration);
+export const setCourseRegistration = createAction(
+  SET_COURSE_REGISTRATION,
+  (courseRegistration: Partial<CourseRegistration>) => ({ payload: courseRegistration })
+);
 
-export const setAssessmentConfigurations = (assessmentConfigurations: AssessmentConfiguration[]) =>
-  action(SET_ASSESSMENT_CONFIGURATIONS, assessmentConfigurations);
+export const setAssessmentConfigurations = createAction(
+  SET_ASSESSMENT_CONFIGURATIONS,
+  (assessmentConfigurations: AssessmentConfiguration[]) => ({ payload: assessmentConfigurations })
+);
 
-export const setConfigurableNotificationConfigs = (
-  notificationConfigs: NotificationConfiguration[]
-) => action(SET_CONFIGURABLE_NOTIFICATION_CONFIGS, notificationConfigs);
+export const setConfigurableNotificationConfigs = createAction(
+  SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
+  (notificationConfigs: NotificationConfiguration[]) => ({ payload: notificationConfigs })
+);
 
-export const setNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
-  action(SET_NOTIFICATION_CONFIGS, notificationConfigs);
+export const setNotificationConfigs = createAction(
+  SET_NOTIFICATION_CONFIGS,
+  (notificationConfigs: NotificationConfiguration[]) => ({ payload: notificationConfigs })
+);
 
-export const setAdminPanelCourseRegistrations = (
-  courseRegistrations: AdminPanelCourseRegistration[]
-) => action(SET_ADMIN_PANEL_COURSE_REGISTRATIONS, courseRegistrations);
+export const setAdminPanelCourseRegistrations = createAction(
+  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  (courseRegistrations: AdminPanelCourseRegistration[]) => ({ payload: courseRegistrations })
+);
 
-export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
+export const setGoogleUser = createAction(SET_GOOGLE_USER, (user?: string) => ({ payload: user }));
 
-export const setGitHubOctokitObject = (authToken?: string) =>
-  action(SET_GITHUB_OCTOKIT_OBJECT, generateOctokitInstance(authToken || ''));
+export const setGitHubOctokitObject = createAction(
+  SET_GITHUB_OCTOKIT_OBJECT,
+  (authToken?: string) => ({ payload: generateOctokitInstance(authToken || '') })
+);
 
-export const setGitHubAccessToken = (authToken?: string) =>
-  action(SET_GITHUB_ACCESS_TOKEN, authToken);
+export const setGitHubAccessToken = createAction(SET_GITHUB_ACCESS_TOKEN, (authToken?: string) => ({
+  payload: authToken
+}));
 
-export const removeGitHubOctokitObjectAndAccessToken = () =>
-  action(REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN);
+export const removeGitHubOctokitObjectAndAccessToken = createAction(
+  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
+  () => ({ payload: {} })
+);
 
-export const submitAnswer = (id: number, answer: string | number | ContestEntry[]) =>
-  action(SUBMIT_ANSWER, {
-    id,
-    answer
-  });
+export const submitAnswer = createAction(
+  SUBMIT_ANSWER,
+  (id: number, answer: string | number | ContestEntry[]) => ({ payload: { id, answer } })
+);
 
-export const submitAssessment = (id: number) => action(SUBMIT_ASSESSMENT, id);
+export const submitAssessment = createAction(SUBMIT_ASSESSMENT, (id: number) => ({ payload: id }));
 
-export const submitGrading = (
-  submissionId: number,
-  questionId: number,
-  xpAdjustment: number = 0,
-  comments?: string
-) =>
-  action(SUBMIT_GRADING, {
-    submissionId,
-    questionId,
-    xpAdjustment,
-    comments
-  });
+export const submitGrading = createAction(
+  SUBMIT_GRADING,
+  (submissionId: number, questionId: number, xpAdjustment: number = 0, comments?: string) => ({
+    payload: { submissionId, questionId, xpAdjustment, comments }
+  })
+);
 
-export const submitGradingAndContinue = (
-  submissionId: number,
-  questionId: number,
-  xpAdjustment: number = 0,
-  comments?: string
-) =>
-  action(SUBMIT_GRADING_AND_CONTINUE, {
-    submissionId,
-    questionId,
-    xpAdjustment,
-    comments
-  });
+export const submitGradingAndContinue = createAction(
+  SUBMIT_GRADING_AND_CONTINUE,
+  (submissionId: number, questionId: number, xpAdjustment: number = 0, comments?: string) => ({
+    payload: { submissionId, questionId, xpAdjustment, comments }
+  })
+);
 
-export const reautogradeSubmission = (submissionId: number) =>
-  action(REAUTOGRADE_SUBMISSION, submissionId);
+export const reautogradeSubmission = createAction(
+  REAUTOGRADE_SUBMISSION,
+  (submissionId: number) => ({ payload: submissionId })
+);
 
-export const reautogradeAnswer = (submissionId: number, questionId: number) =>
-  action(REAUTOGRADE_ANSWER, { submissionId, questionId });
+export const reautogradeAnswer = createAction(
+  REAUTOGRADE_ANSWER,
+  (submissionId: number, questionId: number) => ({ payload: { submissionId, questionId } })
+);
 
-export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
-  action(UPDATE_ASSESSMENT_OVERVIEWS, overviews);
+export const updateAssessmentOverviews = createAction(
+  UPDATE_ASSESSMENT_OVERVIEWS,
+  (overviews: AssessmentOverview[]) => ({ payload: overviews })
+);
 
-export const updateTotalXp = (totalXp: number) => action(UPDATE_TOTAL_XP, totalXp);
+export const updateTotalXp = createAction(UPDATE_TOTAL_XP, (totalXp: number) => ({
+  payload: totalXp
+}));
 
-export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
+export const updateAssessment = createAction(UPDATE_ASSESSMENT, (assessment: Assessment) => ({
+  payload: assessment
+}));
 
-export const updateGradingOverviews = (overviews: GradingOverviews) =>
-  action(UPDATE_GRADING_OVERVIEWS, overviews);
+export const updateGradingOverviews = createAction(
+  UPDATE_GRADING_OVERVIEWS,
+  (overviews: GradingOverviews) => ({ payload: overviews })
+);
 
 /**
  * An extra id parameter is included here because of
  * no id for Grading.
  */
-export const updateGrading = (submissionId: number, grading: GradingQuery) =>
-  action(UPDATE_GRADING, {
-    submissionId,
-    grading
-  });
+export const updateGrading = createAction(
+  UPDATE_GRADING,
+  (submissionId: number, grading: GradingQuery) => ({ payload: { submissionId, grading } })
+);
 
-export const unsubmitSubmission = (submissionId: number) =>
-  action(UNSUBMIT_SUBMISSION, {
-    submissionId
-  });
+export const unsubmitSubmission = createAction(UNSUBMIT_SUBMISSION, (submissionId: number) => ({
+  payload: { submissionId }
+}));
 
 /**
  * Notification actions
  */
 
-export const fetchNotifications = () => action(FETCH_NOTIFICATIONS);
+export const fetchNotifications = createAction(FETCH_NOTIFICATIONS, () => ({ payload: {} }));
 
-export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction) =>
-  action(ACKNOWLEDGE_NOTIFICATIONS, {
-    withFilter
-  });
+export const acknowledgeNotifications = createAction(
+  ACKNOWLEDGE_NOTIFICATIONS,
+  (withFilter?: NotificationFilterFunction) => ({ payload: { withFilter } })
+);
 
-export const updateNotifications = (notifications: Notification[]) =>
-  action(UPDATE_NOTIFICATIONS, notifications);
+export const updateNotifications = createAction(
+  UPDATE_NOTIFICATIONS,
+  (notifications: Notification[]) => ({ payload: notifications })
+);
 
-export const updateLatestViewedCourse = (courseId: number) =>
-  action(UPDATE_LATEST_VIEWED_COURSE, { courseId });
+export const updateLatestViewedCourse = createAction(
+  UPDATE_LATEST_VIEWED_COURSE,
+  (courseId: number) => ({ payload: { courseId } })
+);
 
-export const updateCourseConfig = (courseConfiguration: UpdateCourseConfiguration) =>
-  action(UPDATE_COURSE_CONFIG, courseConfiguration);
+export const updateCourseConfig = createAction(
+  UPDATE_COURSE_CONFIG,
+  (courseConfiguration: UpdateCourseConfiguration) => ({ payload: courseConfiguration })
+);
 
-export const fetchAssessmentConfigs = () => action(FETCH_ASSESSMENT_CONFIGS);
+export const fetchAssessmentConfigs = createAction(FETCH_ASSESSMENT_CONFIGS, () => ({
+  payload: {}
+}));
 
-export const updateAssessmentConfigs = (assessmentConfigs: AssessmentConfiguration[]) =>
-  action(UPDATE_ASSESSMENT_CONFIGS, assessmentConfigs);
+export const updateAssessmentConfigs = createAction(
+  UPDATE_ASSESSMENT_CONFIGS,
+  (assessmentConfigs: AssessmentConfiguration[]) => ({ payload: assessmentConfigs })
+);
 
-export const updateNotificationConfigs = (notificationConfigs: NotificationConfiguration[]) =>
-  action(UPDATE_NOTIFICATION_CONFIG, notificationConfigs);
+export const updateNotificationConfigs = createAction(
+  UPDATE_NOTIFICATION_CONFIG,
+  (notificationConfigs: NotificationConfiguration[]) => ({ payload: notificationConfigs })
+);
 
-export const updateNotificationPreferences = (
-  notificationPreferences: NotificationPreference[],
-  courseRegId: number
-) =>
-  action(UPDATE_NOTIFICATION_PREFERENCES, {
-    notificationPreferences,
-    courseRegId
-  });
+export const updateNotificationPreferences = createAction(
+  UPDATE_NOTIFICATION_PREFERENCES,
+  (notificationPreferences: NotificationPreference[], courseRegId: number) => ({
+    payload: { notificationPreferences, courseRegId }
+  })
+);
 
-export const deleteAssessmentConfig = (assessmentConfig: AssessmentConfiguration) =>
-  action(DELETE_ASSESSMENT_CONFIG, assessmentConfig);
+export const deleteAssessmentConfig = createAction(
+  DELETE_ASSESSMENT_CONFIG,
+  (assessmentConfig: AssessmentConfiguration) => ({ payload: assessmentConfig })
+);
 
-export const fetchAdminPanelCourseRegistrations = () =>
-  action(FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS);
+export const fetchAdminPanelCourseRegistrations = createAction(
+  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+  () => ({ payload: {} })
+);
 
-export const fetchConfigurableNotificationConfigs = (courseRegId: number) =>
-  action(FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS, { courseRegId });
+export const fetchConfigurableNotificationConfigs = createAction(
+  FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
+  (courseRegId: number) => ({ payload: { courseRegId } })
+);
 
-export const fetchNotificationConfigs = () => action(FETCH_NOTIFICATION_CONFIGS);
+export const fetchNotificationConfigs = createAction(FETCH_NOTIFICATION_CONFIGS, () => ({
+  payload: {}
+}));
 
-export const updateTimeOptions = (timeOptions: TimeOption[]) =>
-  action(UPDATE_TIME_OPTIONS, timeOptions);
+export const updateTimeOptions = createAction(UPDATE_TIME_OPTIONS, (timeOptions: TimeOption[]) => ({
+  payload: timeOptions
+}));
 
-export const deleteTimeOptions = (timeOptionIds: number[]) =>
-  action(DELETE_TIME_OPTIONS, timeOptionIds);
+export const deleteTimeOptions = createAction(DELETE_TIME_OPTIONS, (timeOptionIds: number[]) => ({
+  payload: timeOptionIds
+}));
 
-export const updateUserRole = (courseRegId: number, role: Role) =>
-  action(UPDATE_USER_ROLE, { courseRegId, role });
+export const updateUserRole = createAction(UPDATE_USER_ROLE, (courseRegId: number, role: Role) => ({
+  payload: { courseRegId, role }
+}));
 
-export const deleteUserCourseRegistration = (courseRegId: number) =>
-  action(DELETE_USER_COURSE_REGISTRATION, { courseRegId });
+export const deleteUserCourseRegistration = createAction(
+  DELETE_USER_COURSE_REGISTRATION,
+  (courseRegId: number) => ({ payload: { courseRegId } })
+);
 
-export const updateCourseResearchAgreement = (agreedToResearch: boolean) =>
-  action(UPDATE_COURSE_RESEARCH_AGREEMENT, { agreedToResearch });
+export const updateCourseResearchAgreement = createAction(
+  UPDATE_COURSE_RESEARCH_AGREEMENT,
+  (agreedToResearch: boolean) => ({ payload: { agreedToResearch } })
+);

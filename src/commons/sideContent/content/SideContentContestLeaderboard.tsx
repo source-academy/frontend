@@ -26,11 +26,9 @@ type StateProps = {
  * @param props {orderedContestEntries: an ordered list by desc score of leaderboard entries to display,
  *  handleContestEntryClick: displays contest entry answer in assessment workspace editor}
  */
-const SideContentContestLeaderboard: React.FunctionComponent<
-  SideContentContestLeaderboardProps
-> = props => {
+const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps> = props => {
   const { orderedContestEntries, handleContestEntryClick, leaderboardType } = props;
-  const [showLeaderboard, setShowLeaderboard] = useState<boolean>(true);
+  const [showLeaderboard, setShowLeaderboard] = useState(true);
 
   /**
    * Contest Leaderboard inner components

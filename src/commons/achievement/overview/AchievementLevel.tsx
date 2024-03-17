@@ -5,12 +5,12 @@ import { xpPerLevel } from '../../../features/achievement/AchievementConstants';
 import Constants from '../../utils/Constants';
 import AchievementMilestone from './AchievementMilestone';
 
-type AchievementLevelProps = {
+type Props = {
   studentXp: number;
 };
 
-const AchievementLevel: React.FC<AchievementLevelProps> = ({ studentXp }) => {
-  const [showMilestone, setShowMilestone] = useState<boolean>(false);
+const AchievementLevel: React.FC<Props> = ({ studentXp }) => {
+  const [showMilestone, setShowMilestone] = useState(false);
   const displayMilestone = () => setShowMilestone(true);
   const hideMilestone = () => setShowMilestone(false);
 

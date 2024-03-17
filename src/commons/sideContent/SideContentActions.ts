@@ -1,5 +1,4 @@
 import { createAction } from '@reduxjs/toolkit';
-import { action } from 'typesafe-actions';
 
 import { DebuggerContext, type WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
@@ -14,30 +13,45 @@ import {
   VISIT_SIDE_CONTENT
 } from './SideContentTypes';
 
-export const beginAlertSideContent = (
-  id: SideContentType,
-  workspaceLocation: SideContentLocation
-) => action(BEGIN_ALERT_SIDE_CONTENT, { id, workspaceLocation });
-export const endAlertSideContent = (id: SideContentType, workspaceLocation: SideContentLocation) =>
-  action(END_ALERT_SIDE_CONTENT, { id, workspaceLocation });
-export const visitSideContent = (
-  newId: SideContentType,
-  prevId: SideContentType | undefined,
-  workspaceLocation: SideContentLocation
-) => action(VISIT_SIDE_CONTENT, { newId, prevId, workspaceLocation });
+export const beginAlertSideContent = createAction(
+  BEGIN_ALERT_SIDE_CONTENT,
+  (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+    payload: { id, workspaceLocation }
+  })
+);
+export const endAlertSideContent = createAction(
+  END_ALERT_SIDE_CONTENT,
+  (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+    payload: { id, workspaceLocation }
+  })
+);
+export const visitSideContent = createAction(
+  VISIT_SIDE_CONTENT,
+  (
+    newId: SideContentType,
+    prevId: SideContentType | undefined,
+    workspaceLocation: SideContentLocation
+  ) => ({ payload: { newId, prevId, workspaceLocation } })
+);
 
-export const removeSideContentAlert = (
-  id: SideContentType,
-  workspaceLocation: SideContentLocation
-) => action(REMOVE_SIDE_CONTENT_ALERT, { id, workspaceLocation });
+export const removeSideContentAlert = createAction(
+  REMOVE_SIDE_CONTENT_ALERT,
+  (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+    payload: { id, workspaceLocation }
+  })
+);
 
-export const spawnSideContent = (
-  workspaceLocation: SideContentLocation,
-  debuggerContext: DebuggerContext
-) => action(SPAWN_SIDE_CONTENT, { workspaceLocation, debuggerContext });
+export const spawnSideContent = createAction(
+  SPAWN_SIDE_CONTENT,
+  (workspaceLocation: SideContentLocation, debuggerContext: DebuggerContext) => ({
+    payload: { workspaceLocation, debuggerContext }
+  })
+);
 
-export const resetSideContent = (workspaceLocation: SideContentLocation) =>
-  action(RESET_SIDE_CONTENT, { workspaceLocation });
+export const resetSideContent = createAction(
+  RESET_SIDE_CONTENT,
+  (workspaceLocation: SideContentLocation) => ({ payload: { workspaceLocation } })
+);
 export const changeSideContentHeight = createAction(
   CHANGE_SIDE_CONTENT_HEIGHT,
   (height: number, workspaceLocation: WorkspaceLocation) => ({

@@ -2,7 +2,6 @@ import { Navigate, redirect, RouteObject } from 'react-router';
 
 import Application from '../commons/application/Application';
 import { Role } from '../commons/application/ApplicationTypes';
-import Constants from '../commons/utils/Constants';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
@@ -15,18 +14,17 @@ import Constants from '../commons/utils/Constants';
 
 // Conditionally allow access to route via `loader` instead of conditionally defining these routes in react-router v6.4.
 // See https://github.com/remix-run/react-router/discussions/10223#discussioncomment-5909050
-const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?: any) => () => {
-  if (condition) {
-    return redirect(redirectTo);
-  }
-  return returnValue ?? null;
-};
+// const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?: any) => () => {
+//   if (condition) {
+//     return redirect(redirectTo);
+//   }
+//   return returnValue ?? null;
+// };
 
 const Login = () => import('../pages/login/Login');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
 const Sicp = () => import('../pages/sicp/Sicp');
-const GitHubClassroom = () => import('../pages/githubAssessments/GitHubClassroom');
 const Playground = () => import('../pages/playground/Playground');
 const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../pages/welcome/Welcome');
@@ -54,11 +52,6 @@ const commonChildrenRoutes: RouteObject[] = [
   {
     path: 'sicpjs/:section?',
     lazy: Sicp
-  },
-  {
-    path: 'githubassessments/*',
-    lazy: GitHubClassroom,
-    loader: conditionalLoader(!Constants.enableGitHubAssessments, '/')
   }
 ];
 

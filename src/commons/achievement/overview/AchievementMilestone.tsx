@@ -2,12 +2,12 @@ import React from 'react';
 
 import Constants from '../../utils/Constants';
 
-type AchievementMilestoneProps = {
+type Props = {
   studentXp: number;
 };
 
 // 36k XP = Level 37
-const AchievementMilestone: React.FC<AchievementMilestoneProps> = ({ studentXp }) => {
+const AchievementMilestone: React.FC<Props> = ({ studentXp }) => {
   return (
     <div className="milestone">
       <h3>Your Total XP</h3>

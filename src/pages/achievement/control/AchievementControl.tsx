@@ -55,7 +55,7 @@ const AchievementControl: React.FC = () => {
   /**
    * Monitors changes that are awaiting publish
    */
-  const [awaitPublish, setAwaitPublish] = useState<boolean>(false);
+  const [awaitPublish, setAwaitPublish] = useState(false);
   const publishChanges = () => {
     // NOTE: Goals and achievements must exist in the backend before the association can be built
     handleBulkUpdateGoals(inferencer.getAllGoals());
