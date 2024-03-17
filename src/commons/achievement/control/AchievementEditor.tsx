@@ -4,13 +4,13 @@ import { AchievementContext } from 'src/features/achievement/AchievementConstant
 import AchievementAdder from './achievementEditor/AchievementAdder';
 import EditableCard from './achievementEditor/EditableCard';
 
-type AchievementEditorProps = {
+let editableCards: JSX.Element[] = [];
+
+type Props = {
   requestPublish: () => void;
 };
 
-let editableCards: JSX.Element[] = [];
-
-const AchievementEditor: React.FC<AchievementEditorProps> = ({ requestPublish }) => {
+const AchievementEditor: React.FC<Props> = ({ requestPublish }) => {
   const inferencer = useContext(AchievementContext);
 
   /**
@@ -24,7 +24,7 @@ const AchievementEditor: React.FC<AchievementEditorProps> = ({ requestPublish })
    * at one go. The newUuid holds the newly created achievement uuid until the new achievement
    * is added into the inferencer.
    */
-  const [newUuid, setNewUuid] = useState<string>('');
+  const [newUuid, setNewUuid] = useState('');
   const allowNewUuid = newUuid === '';
   const releaseUuid = () => setNewUuid('');
 

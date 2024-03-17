@@ -25,7 +25,7 @@ const NotiPreference: React.FC = () => {
   const dispatch = useDispatch();
   const session = useTypedSelector(state => state.session);
 
-  const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const configurableNotificationConfigs = React.useRef<NotificationConfiguration[] | undefined>(
     session.configurableNotificationConfigs
@@ -87,7 +87,7 @@ const NotiPreference: React.FC = () => {
     return params.data!.notificationType.forStaff ? 'Staff' : 'Student';
   };
 
-  const columnDefs: ColDef[] = [
+  const columnDefs: ColDef<NotificationConfiguration>[] = [
     {
       headerName: 'Notification Type',
       field: 'notificationType.name',
@@ -177,7 +177,7 @@ const NotiPreference: React.FC = () => {
     </div>
   );
 
-  return <ContentDisplay loadContentDispatch={() => {}} display={data} fullWidth={false} />;
+  return <ContentDisplay display={data} fullWidth={false} />;
 };
 
 export default NotiPreference;

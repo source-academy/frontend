@@ -48,8 +48,7 @@ type AnchorLinkType = {
   top: number;
 };
 
-const AnchorLink: React.FC<AnchorLinkType> = props => {
-  const { refs, id, children, top } = props;
+const AnchorLink: React.FC<AnchorLinkType> = ({ refs, id, children, top }) => {
   return (
     <div className="sicp-anchor-link-container">
       {id && (

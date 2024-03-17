@@ -10,7 +10,7 @@ const AssetViewerUpload: React.FC = () => {
   const [uploadFolder, setUploadFolder] = useState<string>(s3AssetFolders[0]);
 
   const [folderOverwrite, setFolderOverwrite] = useState<string>();
-  const [showfolderOverwrite, setShowFolderOverwrite] = useState<boolean>(false);
+  const [showfolderOverwrite, setShowFolderOverwrite] = useState(false);
 
   function handleLoadFile(e: any) {
     if (!e.target.files) return;

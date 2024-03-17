@@ -196,10 +196,10 @@ export default function* AchievementSaga(): SagaIterator {
       // Flash the home icon if there is an error and the user is in the CSE machine or subst viz tab
       const introIcon = document.getElementById(SideContentType.introduction + '-icon');
       const cseTab = document.getElementById(
-        'bp4-tab-panel_side-content-tabs_' + SideContentType.cseMachine
+        'bp5-tab-panel_side-content-tabs_' + SideContentType.cseMachine
       );
       const substTab = document.getElementById(
-        'bp4-tab-panel_side-content-tabs_' + SideContentType.substVisualizer
+        'bp5-tab-panel_side-content-tabs_' + SideContentType.substVisualizer
       );
       if (
         (cseTab && cseTab.ariaHidden === 'false') ||
