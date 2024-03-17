@@ -11,24 +11,21 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ReferenceType } from '../../CseMachineTypes';
-import { getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
+import { IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
-import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
-import { Frame } from '../Frame';
-import { FnValue } from './FnValue';
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */
-export class GlobalFnValue extends Value {
+export class GlobalFnValue extends Value implements IHoverable {
   centerX: number;
   readonly tooltipWidth: number;
   readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  private _arrow: GenericArrow<FnValue | GlobalFnValue, Frame> | undefined;
+  private _arrow: ArrowFromFn | undefined;
 
   readonly paramsText: string;
   readonly bodyText: string;
@@ -37,7 +34,6 @@ export class GlobalFnValue extends Value {
   readonly exportTooltip: string;
   private selected: boolean = false;
 
-  readonly ref: RefObject<any> = React.createRef();
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
@@ -87,11 +83,10 @@ export class GlobalFnValue extends Value {
       getTextWidth(this.exportBodyText)
     );
   }
-
   isSelected(): boolean {
     return this.selected;
   }
-  arrow(): GenericArrow<FnValue | GlobalFnValue, Frame> | undefined {
+  arrow(): ArrowFromFn | undefined {
     return this._arrow;
   }
 
@@ -142,7 +137,8 @@ export class GlobalFnValue extends Value {
   draw(): React.ReactNode {
     this._isDrawn = true;
     this._arrow =
-      Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame);
+      Layout.globalEnvNode.frame &&
+      (new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn);
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -157,9 +153,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -167,9 +161,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -177,9 +169,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -187,9 +177,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
         </Group>
         {CseMachine.getPrintableMode() ? (
@@ -227,7 +215,7 @@ export class GlobalFnValue extends Value {
             />
           </KonvaLabel>
         )}
-        {this._arrow?.draw()}
+        {Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

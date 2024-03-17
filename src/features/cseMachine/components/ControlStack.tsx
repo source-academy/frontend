@@ -5,10 +5,9 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';
 
-import { Visible } from '../components/Visible';
 import CseMachine from '../CseMachine';
-import { CompactConfig } from '../CseMachineCompactConfig';
-import { ControlStashConfig } from '../CseMachineControlStash';
+import { Config } from '../CseMachineConfig';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
@@ -20,6 +19,7 @@ import {
   setUnhoveredStyle
 } from '../CseMachineUtils';
 import { ControlItemComponent } from './ControlItemComponent';
+import { Visible } from './Visible';
 
 export class ControlStack extends Visible implements IHoverable {
   /** array of control item components */
@@ -108,7 +108,7 @@ export class ControlStack extends Visible implements IHoverable {
             />
             <Text
               {...textProps}
-              text={`${CompactConfig.Ellipsis}`}
+              text={`${Config.Ellipsis}`}
               align="center"
               fill={defaultSAColor()}
               width={Number(ControlStashConfig.ShowMoreButtonWidth)}

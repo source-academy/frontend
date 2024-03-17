@@ -20,7 +20,7 @@ interface Props {
 }
 
 /**
- * Represents Rectangle with rounded corners, for boundary of arrays (compact and non-compact).
+ * Represents Rectangle with rounded corners, for boundary of arrays.
  */
 export const RoundedRect: React.FC<Props> = ({
   x,

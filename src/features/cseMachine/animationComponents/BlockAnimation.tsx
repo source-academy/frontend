@@ -1,7 +1,7 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
+import { ControlItemComponent } from '../components/ControlItemComponent';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
 import { getNodePositionFromItem } from './AnimationUtils';
 
