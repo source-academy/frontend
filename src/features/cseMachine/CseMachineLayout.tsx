@@ -17,7 +17,7 @@ import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
-import { Data, EnvTree, EnvTreeNode,ReferenceType } from './CseMachineTypes';
+import { Data, EnvTree, EnvTreeNode, ReferenceType } from './CseMachineTypes';
 import {
   deepCopyTree,
   getNextChildren,
@@ -168,10 +168,7 @@ export class Layout {
 
     Layout._width = Math.max(
       Config.CanvasMinWidth,
-      Layout.levels.reduce<number>(
-        (maxWidth, level) => Math.max(maxWidth, level.width()),
-        0
-      ) +
+      Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width()), 0) +
         Config.CanvasPaddingX * 2 +
         (CseMachine.getControlStash()
           ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2

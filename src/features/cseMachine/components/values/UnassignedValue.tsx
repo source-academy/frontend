@@ -19,8 +19,7 @@ export class UnassignedValue extends Value {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x =
-        mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
       this._y = mainReference.y();
       this.text = new Text(Config.UnassignedData.toString(), this._x, this._y, {
         isStringIdentifiable: false

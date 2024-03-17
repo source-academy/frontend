@@ -22,9 +22,7 @@ export class Level extends Visible {
   ) {
     super();
     this._x = CseMachine.getControlStash()
-      ? ControlStashConfig.ControlPosX +
-        ControlStashConfig.ControlItemWidth +
-        Config.CanvasPaddingX
+      ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth + Config.CanvasPaddingX
       : Config.CanvasPaddingX;
     this._y = Config.CanvasPaddingY;
     CseMachine.getControlStash() &&

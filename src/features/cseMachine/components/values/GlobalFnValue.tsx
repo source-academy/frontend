@@ -11,7 +11,7 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable,ReferenceType } from '../../CseMachineTypes';
+import { IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -48,8 +48,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x =
-        mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
@@ -78,8 +77,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
     this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
     this.tooltipWidth =
-      Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) +
-      Config.TextPaddingX;
+      Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) + Config.TextPaddingX;
     this.exportTooltipWidth = Math.max(
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
@@ -95,8 +93,7 @@ export class GlobalFnValue extends Value implements IHoverable {
   updatePosition(): void {
     const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x =
-        mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
@@ -190,11 +187,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             visible={true}
             ref={this.labelRef}
           >
-            <KonvaTag
-              stroke="black"
-              fill={'white'}
-              opacity={Number(Config.FnTooltipOpacity)}
-            />
+            <KonvaTag stroke="black" fill={'white'} opacity={Number(Config.FnTooltipOpacity)} />
             <KonvaText
               text={this.exportTooltip}
               fontFamily={Config.FontFamily.toString()}
@@ -211,11 +204,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             visible={false}
             ref={this.labelRef}
           >
-            <KonvaTag
-              stroke="black"
-              fill={'black'}
-              opacity={Number(Config.FnTooltipOpacity)}
-            />
+            <KonvaTag stroke="black" fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
             <KonvaText
               text={this.tooltip}
               fontFamily={Config.FontFamily.toString()}
@@ -226,8 +215,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             />
           </KonvaLabel>
         )}
-        {Layout.globalEnvNode.frame &&
-          new ArrowFromFn(this).to(Layout.globalEnvNode.frame).draw()}
+        {Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

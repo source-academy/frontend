@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { PrimitiveTypes,ReferenceType } from '../../CseMachineTypes';
+import { PrimitiveTypes, ReferenceType } from '../../CseMachineTypes';
 import { getTextWidth, isNull } from '../../CseMachineUtils';
 import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';
@@ -25,8 +25,7 @@ export class PrimitiveValue extends Value {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x =
-        mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
       this._y = mainReference.y();
       this.text = new Text(this.data, this.x(), this.y(), { isStringIdentifiable: true });
     } else {

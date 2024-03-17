@@ -24,10 +24,7 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
       if (from.y() === to.y()) {
         if (Math.abs(from.x() - to.x()) > Config.DataUnitWidth * 2) {
           steps.push((x, y) => [x, y - Config.DataUnitHeight]);
-          steps.push(() => [
-            to.x() + Config.DataUnitWidth / 2,
-            to.y() - Config.DataUnitHeight / 2
-          ]);
+          steps.push(() => [to.x() + Config.DataUnitWidth / 2, to.y() - Config.DataUnitHeight / 2]);
           steps.push((x, y) => [x, y + Config.DataUnitHeight / 2]);
         } else {
           steps.push(() => [to.x(), to.y() + Config.DataUnitHeight / 2]);

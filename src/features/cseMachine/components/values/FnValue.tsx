@@ -12,7 +12,7 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { EnvTreeNode, FnTypes, IHoverable,ReferenceType } from '../../CseMachineTypes';
+import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultSAColor,
   getBodyText,
@@ -58,8 +58,7 @@ export class FnValue extends Value implements IHoverable {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x =
-        mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
@@ -161,11 +160,7 @@ export class FnValue extends Value implements IHoverable {
             visible={true}
             ref={this.labelRef}
           >
-            <KonvaTag
-              stroke="black"
-              fill={'white'}
-              opacity={Number(Config.FnTooltipOpacity)}
-            />
+            <KonvaTag stroke="black" fill={'white'} opacity={Number(Config.FnTooltipOpacity)} />
             <KonvaText
               text={this.exportTooltip}
               fontFamily={Config.FontFamily.toString()}
@@ -182,11 +177,7 @@ export class FnValue extends Value implements IHoverable {
             visible={false}
             ref={this.labelRef}
           >
-            <KonvaTag
-              stroke="black"
-              fill={'black'}
-              opacity={Number(Config.FnTooltipOpacity)}
-            />
+            <KonvaTag stroke="black" fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
             <KonvaText
               text={this.tooltip}
               fontFamily={Config.FontFamily.toString()}

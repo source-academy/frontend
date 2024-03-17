@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { Data,ReferenceType } from '../../CseMachineTypes';
+import { Data, ReferenceType } from '../../CseMachineTypes';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';

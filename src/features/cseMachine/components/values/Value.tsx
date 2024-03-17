@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Data,ReferenceType } from '../../CseMachineTypes';
+import { Data, ReferenceType } from '../../CseMachineTypes';
 import { Visible } from '../Visible';
 
 /** the value of a `Binding` or an `ArrayUnit` */

@@ -78,10 +78,7 @@ export class Frame extends Visible implements IHoverable {
         Math.max(Config.TextMinWidth, getTextWidth(key + Config.ConstantColon)) +
         Config.TextPaddingX +
         (isUnassigned(data)
-          ? Math.max(
-              Config.TextMinWidth,
-              getTextWidth(Config.UnassignedData.toString())
-            )
+          ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
           : isPrimitiveData(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
           : 0);

@@ -37,7 +37,8 @@ import {
   EnvTreeNode,
   FnTypes,
   PrimitiveTypes,
-  ReferenceType} from './CseMachineTypes';
+  ReferenceType
+} from './CseMachineTypes';
 
 // TODO: can make use of lodash
 /** Returns `true` if `x` is an object */
@@ -701,9 +702,7 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 };
 
 export const defaultSAColor = () =>
-  CseMachine.getPrintableMode()
-    ? Config.SA_BLUE.toString()
-    : Config.SA_WHITE.toString();
+  CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString();
 
 export const stackItemSAColor = (index: number) =>
   isStashItemInDanger(index)
