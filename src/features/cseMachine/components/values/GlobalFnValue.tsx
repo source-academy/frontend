@@ -190,7 +190,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             />
           </KonvaLabel>
         )}
-        {this._arrow?.draw()}
+        {Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame).draw()}
       </React.Fragment>
     );
   }
