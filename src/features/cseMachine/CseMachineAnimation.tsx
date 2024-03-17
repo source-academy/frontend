@@ -7,7 +7,7 @@ import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
-import { isInstr } from './compactComponents/ControlStack';
+import { isInstr } from './components/ControlStack';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 

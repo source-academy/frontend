@@ -119,7 +119,7 @@ exports[`CSE Machine component renders correctly 1`] = `
               className="bp5-button-text"
             >
               <label
-                className="bp5-control bp5-checkbox"
+                className="bp5-control bp5-checkbox bp5-disabled"
                 style={
                   Object {
                     "margin": 0,
@@ -128,7 +128,7 @@ exports[`CSE Machine component renders correctly 1`] = `
               >
                 <input
                   checked={false}
-                  disabled={false}
+                  disabled={true}
                   onChange={[Function]}
                   type="checkbox"
                 />
@@ -256,55 +256,6 @@ exports[`CSE Machine component renders correctly 1`] = `
       <div
         className="bp5-button-group"
       >
-        <span
-          className="bp5-popover-target"
-          onBlur={[Function]}
-          onContextMenu={[Function]}
-          onFocus={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <a
-            aria-disabled={true}
-            aria-expanded={false}
-            className="bp5-button bp5-disabled"
-            disabled={true}
-            onBlur={[Function]}
-            onKeyDown={[Function]}
-            onKeyUp={[Function]}
-            onMouseUp={[Function]}
-            role="button"
-            tabIndex={-1}
-          >
-            <span
-              aria-hidden={true}
-              className="bp5-icon bp5-icon-standard bp5-icon-build"
-              data-icon="build"
-            />
-            <span
-              className="bp5-button-text"
-            >
-              <label
-                className="bp5-control bp5-checkbox bp5-disabled"
-                style={
-                  Object {
-                    "margin": 0,
-                  }
-                }
-              >
-                <input
-                  checked={false}
-                  disabled={true}
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="bp5-control-indicator"
-                />
-              </label>
-            </span>
-          </a>
-        </span>
         <span
           className="bp5-popover-target"
           onBlur={[Function]}

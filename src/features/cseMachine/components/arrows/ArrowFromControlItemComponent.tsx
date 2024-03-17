@@ -1,6 +1,6 @@
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
-import { CompactConfig } from '../../CseMachineCompactConfig';
+import { Config } from '../../CseMachineConfig';
 import { StepsArray } from '../../CseMachineTypes';
 import { ControlItemComponent } from '../ControlItemComponent';
 import { Frame } from '../Frame';
@@ -19,11 +19,11 @@ export class ArrowFromControlItemComponent extends GenericArrow<
     const steps: StepsArray = [(x, y) => [x + from.width() / 1, y + from.height() / 2]];
 
     if (to.x() < from.x()) {
-      steps.push((x, y) => [x + CompactConfig.TextMargin, y]);
-      steps.push((x, y) => [x, y - from.height() / 2 - CompactConfig.TextMargin]);
-      steps.push((x, y) => [to.x() + to.width() + CompactConfig.ArrowHeadSize, y]);
+      steps.push((x, y) => [x + Config.TextMargin, y]);
+      steps.push((x, y) => [x, y - from.height() / 2 - Config.TextMargin]);
+      steps.push((x, y) => [to.x() + to.width() + Config.ArrowHeadSize, y]);
       steps.push((x, y) => [x, to.y()]);
-      steps.push((x, y) => [x - CompactConfig.ArrowHeadSize, y]);
+      steps.push((x, y) => [x - Config.ArrowHeadSize, y]);
     } else {
       steps.push((x, y) => [to.x(), to.y()]);
     }
