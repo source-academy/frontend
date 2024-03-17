@@ -139,13 +139,18 @@ export class CseAnimation {
             );
           }
           break;
+        // block split cases
+        case 'AssignmentExpression':
         case 'ArrayExpression':
         case 'BinaryExpression':
         case 'CallExpression':
+        case 'ConditionalExpression':
         case 'ExpressionStatement':
+        case 'ForStatement':
         case 'IfStatement':
         case 'UnaryExpression':
         case 'VariableDeclaration':
+        case 'WhileStatement':
           CseAnimation.animations.push(
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
@@ -231,16 +236,21 @@ export class CseAnimation {
             Layout.stashComponent.stashItemComponents.at(-1)!
           ));
           break;
+        // block split cases
+        case InstrType.FOR:
+        case InstrType.WHILE:
+          CseAnimation.animations.push(
+            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          );
+          break;
         case InstrType.ARRAY_ACCESS:
         case InstrType.ARRAY_ASSIGNMENT:
         case InstrType.ARRAY_LENGTH:
         case InstrType.BREAK:
         case InstrType.BREAK_MARKER:
         case InstrType.CONTINUE_MARKER:
-        case InstrType.FOR:
         case InstrType.MARKER:
         case InstrType.RESET:
-        case InstrType.WHILE:
           break;
       }
     }
