@@ -187,13 +187,13 @@ export class GlobalFnValue extends Value implements IHoverable {
             visible={true}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'white'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaTag stroke="black" fill={'white'} opacity={Config.FnTooltipOpacity} />
             <KonvaText
               text={this.exportTooltip}
-              fontFamily={Config.FontFamily.toString()}
-              fontSize={Number(Config.FontSize)}
-              fontStyle={Config.FontStyle.toString()}
-              fill={Config.SA_BLUE.toString()}
+              fontFamily={Config.FontFamily}
+              fontSize={Config.FontSize}
+              fontStyle={Config.FontStyle}
+              fill={Config.SA_BLUE}
               padding={5}
             />
           </KonvaLabel>
@@ -204,13 +204,13 @@ export class GlobalFnValue extends Value implements IHoverable {
             visible={false}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaTag stroke="black" fill={'black'} opacity={Config.FnTooltipOpacity} />
             <KonvaText
               text={this.tooltip}
-              fontFamily={Config.FontFamily.toString()}
-              fontSize={Number(Config.FontSize)}
-              fontStyle={Config.FontStyle.toString()}
-              fill={Config.SA_WHITE.toString()}
+              fontFamily={Config.FontFamily}
+              fontSize={Config.FontSize}
+              fontStyle={Config.FontStyle}
+              fill={Config.SA_WHITE}
               padding={5}
             />
           </KonvaLabel>

@@ -91,16 +91,16 @@ export class StashItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: ControlStashConfig.SA_WHITE.toString(),
-      padding: Number(ControlStashConfig.StashItemTextPadding),
-      fontFamily: ControlStashConfig.FontFamily.toString(),
-      fontSize: Number(ControlStashConfig.FontSize),
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fill: ControlStashConfig.SA_WHITE,
+      padding: ControlStashConfig.StashItemTextPadding,
+      fontFamily: ControlStashConfig.FontFamily,
+      fontSize: ControlStashConfig.FontSize,
+      fontStyle: ControlStashConfig.FontStyle,
+      fontVariant: ControlStashConfig.FontVariant
     };
     const tagProps = {
       stroke: stackItemSAColor(this.index),
-      cornerRadius: Number(ControlStashConfig.StashItemCornerRadius)
+      cornerRadius: ControlStashConfig.StashItemCornerRadius
     };
     return (
       <React.Fragment key={Layout.key++}>
@@ -124,13 +124,13 @@ export class StashItemComponent extends Visible implements IHoverable {
             {...ShapeDefaultProps}
             stroke="black"
             fill={'black'}
-            opacity={Number(ControlStashConfig.TooltipOpacity)}
+            opacity={ControlStashConfig.TooltipOpacity}
           />
           <Text
             {...ShapeDefaultProps}
             {...textProps}
             text={this.tooltip}
-            padding={Number(ControlStashConfig.TooltipPadding)}
+            padding={ControlStashConfig.TooltipPadding}
           />
         </Label>
         {this.arrow?.draw()}

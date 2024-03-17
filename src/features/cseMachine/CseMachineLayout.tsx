@@ -444,8 +444,8 @@ export class Layout {
                 height: Layout.height(),
                 overflow: 'hidden',
                 backgroundColor: CseMachine.getPrintableMode()
-                  ? Config.PRINT_BACKGROUND.toString()
-                  : Config.SA_BLUE.toString()
+                  ? Config.PRINT_BACKGROUND
+                  : Config.SA_BLUE
               }}
             >
               <Stage
@@ -465,8 +465,8 @@ export class Layout {
                     height={Layout.height()}
                     fill={
                       CseMachine.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND.toString()
-                        : Config.SA_BLUE.toString()
+                        ? Config.PRINT_BACKGROUND
+                        : Config.SA_BLUE
                     }
                     key={Layout.key++}
                     listening={false}
