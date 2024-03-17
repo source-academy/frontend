@@ -4,13 +4,13 @@ import React from 'react';
 import { getFilterColor } from '../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../features/achievement/AchievementTypes';
 
-type AchievementFilterProps = {
+type Props = {
   filterState: [FilterStatus, any];
   icon: IconName;
   ownStatus: FilterStatus;
 };
 
-const AchievementFilter: React.FC<AchievementFilterProps> = ({ filterState, icon, ownStatus }) => {
+const AchievementFilter: React.FC<Props> = ({ filterState, icon, ownStatus }) => {
   const [globalStatus, setGlobalStatus] = filterState;
 
   return (

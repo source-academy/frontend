@@ -11,14 +11,6 @@ type ButtonOptions = {
   type?: 'submit' | 'reset' | 'button';
 };
 
-type ControlButtonProps = {
-  label?: string;
-  icon?: IconName;
-  onClick?: () => void;
-  options?: Partial<ButtonOptions>;
-  isDisabled?: boolean;
-};
-
 const defaultOptions = {
   className: '',
   fullWidth: false,
@@ -27,7 +19,15 @@ const defaultOptions = {
   minimal: true
 };
 
-const ControlButton: React.FC<ControlButtonProps> = ({
+type Props = {
+  label?: string;
+  icon?: IconName;
+  onClick?: () => void;
+  options?: Partial<ButtonOptions>;
+  isDisabled?: boolean;
+};
+
+const ControlButton: React.FC<Props> = ({
   label = '',
   icon,
   onClick,

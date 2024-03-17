@@ -7,15 +7,12 @@ import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/Ac
 
 import AchievementView from '../AchievementView';
 
-type AchievementPreviewProps = {
+type Props = {
   awaitPublish: boolean;
   publishChanges: () => void;
 };
 
-const AchievementPreview: React.FC<AchievementPreviewProps> = ({
-  awaitPublish,
-  publishChanges
-}) => {
+const AchievementPreview: React.FC<Props> = ({ awaitPublish, publishChanges }) => {
   const inferencer = useContext(AchievementContext);
 
   // Show AchievementView when viewMode is true, otherwise show AchievementTask
@@ -25,7 +22,7 @@ const AchievementPreview: React.FC<AchievementPreviewProps> = ({
    * Marks the achievement uuid that is currently on focus (selected)
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
-  const focusState = useState<string>('');
+  const focusState = useState('');
   const [focusUuid] = focusState;
 
   return (

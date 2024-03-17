@@ -8,17 +8,17 @@ import { EventMeta, EventType, GoalMeta } from 'src/features/achievement/Achieve
 import EditableDate from '../EditableDate';
 import EditableTime from '../EditableTime';
 
-type EditableEventMetaProps = {
-  changeMeta: (meta: GoalMeta) => void;
-  eventMeta: EventMeta;
-};
-
 const EventSelect = Select.ofType<EventType>();
 const eventRenderer: ItemRenderer<EventType> = (eventName, { handleClick }) => (
   <MenuItem key={eventName} onClick={handleClick} text={eventName} />
 );
 
-const EditableEventMeta: React.FC<EditableEventMetaProps> = ({ changeMeta, eventMeta }) => {
+type Props = {
+  changeMeta: (meta: GoalMeta) => void;
+  eventMeta: EventMeta;
+};
+
+const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
   const { eventNames, targetCount, release, deadline, observeFrom, observeTo } = eventMeta;
 
   const changeTargetCount = (targetCount: number) =>

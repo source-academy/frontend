@@ -5,12 +5,12 @@ import { AchievementContext } from 'src/features/achievement/AchievementConstant
 
 import { goalDefinitionTemplate } from './GoalTemplate';
 
-type GoalAdderProps = {
+type Props = {
   allowNewUuid: boolean;
   setNewUuid: (uuid: string) => void;
 };
 
-const GoalAdder: React.FC<GoalAdderProps> = ({ allowNewUuid, setNewUuid }) => {
+const GoalAdder: React.FC<Props> = ({ allowNewUuid, setNewUuid }) => {
   const inferencer = useContext(AchievementContext);
 
   const addGoal = () => setNewUuid(inferencer.insertGoalDefinition(goalDefinitionTemplate));
