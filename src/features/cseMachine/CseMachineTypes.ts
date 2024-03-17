@@ -6,10 +6,6 @@ import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 
-import { ArrayUnit as CompactArrayUnit } from './compactComponents/ArrayUnit';
-import { Binding as CompactBinding } from './compactComponents/Binding';
-import { Frame as CompactFrame } from './compactComponents/Frame';
-import { Level as CompactLevel } from './compactComponents/Level';
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
 import { Frame } from './components/Frame';
@@ -80,10 +76,8 @@ export type EnvTree = EnvironmentTree & { root: EnvTreeNode };
 export type EnvTreeNode = EnvironmentTreeNode & {
   parent: EnvTreeNode;
   children: EnvTreeNode[];
-  level?: Level;
+  level: Level;
   frame?: Frame;
-  compactLevel: CompactLevel;
-  compactFrame?: CompactFrame;
   xCoord?: number;
 };
 
@@ -94,7 +88,6 @@ export type EmptyObject = {
 
 /** types that a reference can be: either from a binding in a frame or from an array  */
 export type ReferenceType = Binding | ArrayUnit;
-export type CompactReferenceType = CompactBinding | CompactArrayUnit;
 
 /** type of an array of steps (as defined by a function), for the arrow classes */
 export type StepsArray = Array<(x: number, y: number) => [number, number]>;
