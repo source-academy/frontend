@@ -7,7 +7,7 @@ import { Group, Rect, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import { CseAnimation } from '../CseMachineAnimation';
-import { ControlStashConfig } from '../CseMachineControlStash';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { currentItemSAColor } from '../CseMachineUtils';
 
 /** Type that extends the NodeConfig type from Konva, making the x, y, width & height values required */
