@@ -1,5 +1,5 @@
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
-import { StashItemComponent } from '../compactComponents/StashItemComponent';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { StashItemComponent } from '../components/StashItemComponent';
 
 export function getNodePositionFromItem(item: ControlItemComponent | StashItemComponent) {
   return {

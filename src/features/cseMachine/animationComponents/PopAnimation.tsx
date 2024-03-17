@@ -2,8 +2,8 @@ import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
-import { StashItemComponent } from '../compactComponents/StashItemComponent';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { StashItemComponent } from '../components/StashItemComponent';
 import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
 import { getNodePositionFromItem } from './AnimationUtils';
 
