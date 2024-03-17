@@ -5,12 +5,12 @@ import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
-type EditableGoalUuidsProps = {
+type Props = {
   changeGoalUuids: (goalUuids: string[]) => void;
   goalUuids: string[];
 };
 
-const EditableGoalUuids: React.FC<EditableGoalUuidsProps> = ({ changeGoalUuids, goalUuids }) => {
+const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
   const inferencer = useContext(AchievementContext);
   const allGoalUuids = inferencer.getAllGoalUuids();
   const selectedUuids = goalUuids.filter(

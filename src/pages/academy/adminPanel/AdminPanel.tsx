@@ -203,7 +203,7 @@ const AdminPanel: React.FC = () => {
     </div>
   );
 
-  return <ContentDisplay loadContentDispatch={() => {}} display={data} fullWidth={false} />;
+  return <ContentDisplay display={data} fullWidth={false} />;
 };
 
 export default AdminPanel;

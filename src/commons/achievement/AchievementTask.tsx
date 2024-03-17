@@ -8,18 +8,18 @@ import {
 import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
 import AchievementCard from './AchievementCard';
 
-type AchievementTaskProps = {
+type Props = {
   uuid: string;
   filterStatus: FilterStatus;
   focusState: [string, any];
 };
 
-const AchievementTask: React.FC<AchievementTaskProps> = ({ uuid, filterStatus, focusState }) => {
+const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) => {
   const inferencer = useContext(AchievementContext);
   const prerequisiteUuids = [...inferencer.getImmediateChildren(uuid)];
   const taskColor = getAbilityColor();
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   /**

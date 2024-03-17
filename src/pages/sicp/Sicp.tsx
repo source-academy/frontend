@@ -20,6 +20,7 @@ import {
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
+import Chatbot from './subcomponents/chatbot/Chatbot';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
@@ -42,6 +43,31 @@ const Sicp: React.FC = () => {
   const refs = React.useRef({});
   const navigate = useNavigate();
   const location = useLocation();
+
+  function getSection() {
+    return location.pathname.replace('/sicpjs/', ''); // To discard the '/sicpjs/'
+  }
+
+  const getText = () => {
+    const divs = document.querySelectorAll('p.sicp-text');
+    let visibleParagraphs = '';
+
+    divs.forEach(div => {
+      const rect = div.getBoundingClientRect();
+
+      if (
+        rect.top <= window.innerHeight &&
+        rect.bottom >= 0 &&
+        rect.left <= window.innerWidth &&
+        rect.right >= 0
+      ) {
+        const text = div.textContent;
+        visibleParagraphs += text + '\n';
+      }
+    });
+
+    return visibleParagraphs;
+  };
 
   const scrollRefIntoView = (ref: HTMLDivElement | null) => {
     if (!ref || !parentRef?.current) {
@@ -171,6 +197,7 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
+      <Chatbot getSection={getSection} getText={getText} />
     </div>
   );
 };

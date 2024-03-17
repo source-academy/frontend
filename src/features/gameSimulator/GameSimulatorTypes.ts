@@ -1,9 +1,8 @@
-export enum GameSimState {
-  Default = 'Default',
-  ObjectPlacement = 'ObjectPlacement',
-  AssetUploader = 'AssetUploader',
-  CheckpointSim = 'CheckpointSim',
-  ChapterSim = 'ChapterSim'
+export enum GameSimulatorState {
+  DEFAULT = 'DEFAULT',
+  ASSETVIEWER = 'ASSETVIEWER',
+  CHAPTERSIMULATOR = 'CHAPTERSIMULATOR',
+  CHAPTERPUBLISHER = 'CHAPTERPUBLISHER'
 }
 
 export type ChapterDetail = {
@@ -14,4 +13,18 @@ export type ChapterDetail = {
   filenames: string[];
   isPublished: boolean;
   imageUrl: string;
+};
+
+export type ChapterSimProps = {
+  chapterDetail: ChapterDetail;
+  chapterFilenames?: string[];
+};
+
+export type AssetProps = {
+  assetPath: string;
+};
+
+export type StorageProps = {
+  storageName: string;
+  s3TxtFiles: string[];
 };
