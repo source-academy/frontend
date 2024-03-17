@@ -7,7 +7,7 @@ import { AchievementStatus } from '../../features/achievement/AchievementTypes';
 import AchievementDeadline from './card/AchievementDeadline';
 import AchievementXp from './card/AchievementXp';
 
-type AchievementCardProps = {
+type Props = {
   uuid: string;
   focusState: [string, any];
   isDropdownOpen?: boolean;
@@ -15,9 +15,13 @@ type AchievementCardProps = {
   toggleDropdown?: () => void;
 };
 
-const AchievementCard: React.FC<AchievementCardProps> = props => {
-  const { uuid, focusState, isDropdownOpen, shouldRender, toggleDropdown } = props;
-
+const AchievementCard: React.FC<Props> = ({
+  uuid,
+  focusState,
+  isDropdownOpen,
+  shouldRender,
+  toggleDropdown
+}) => {
   const inferencer = useContext(AchievementContext);
 
   const [focusUuid, setFocusUuid] = focusState;

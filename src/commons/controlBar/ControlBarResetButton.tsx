@@ -3,10 +3,10 @@ import React from 'react';
 
 import ControlButton from '../ControlButton';
 
-type ControlBarResetButtonProps = {
+type Props = {
   onClick?(): any;
 };
 
-export const ControlBarResetButton: React.FC<ControlBarResetButtonProps> = ({ onClick }) => {
+export const ControlBarResetButton: React.FC<Props> = ({ onClick }) => {
   return <ControlButton label="Reset" icon={IconNames.REPEAT} onClick={onClick} />;
 };

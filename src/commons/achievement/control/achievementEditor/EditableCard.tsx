@@ -21,14 +21,6 @@ import {
 import EditableDate from './EditableDate';
 import EditableView from './EditableView';
 
-type EditableCardProps = {
-  uuid: string;
-  isNewAchievement: boolean;
-  releaseUuid: () => void;
-  removeCard: (uuid: string) => void;
-  requestPublish: () => void;
-};
-
 const init = (achievement: AchievementItem): State => {
   return {
     editableAchievement: achievement,
@@ -136,15 +128,27 @@ const reducer = (state: State, action: Action) => {
   }
 };
 
-const EditableCard: React.FC<EditableCardProps> = props => {
-  const { uuid, isNewAchievement, releaseUuid, removeCard, requestPublish } = props;
+type Props = {
+  uuid: string;
+  isNewAchievement: boolean;
+  releaseUuid: () => void;
+  removeCard: (uuid: string) => void;
+  requestPublish: () => void;
+};
 
+const EditableCard: React.FC<Props> = ({
+  uuid,
+  isNewAchievement,
+  releaseUuid,
+  removeCard,
+  requestPublish
+}) => {
   const inferencer = useContext(AchievementContext);
   const achievement = inferencer.getAchievement(uuid);
   const achievementClone = useMemo(() => cloneDeep(achievement), [achievement]);
 
   const [state, dispatch] = useReducer(reducer, achievementClone, init);
-  const [isNew, setIsNew] = useState<boolean>(isNewAchievement);
+  const [isNew, setIsNew] = useState(isNewAchievement);
   const { editableAchievement, isDirty } = state;
   const { cardBackground, deadline, release, title, view, xp } = editableAchievement;
 

@@ -10,11 +10,11 @@ import {
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-type GradingActionsProps = {
+type Props = {
   submissionId: number;
 };
 
-const GradingActions: React.FC<GradingActionsProps> = ({ submissionId }) => {
+const GradingActions: React.FC<Props> = ({ submissionId }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
 

@@ -104,14 +104,14 @@ const makeColumns = (handleClick: () => void) => [
   })
 ];
 
-type GradingSubmissionTableProps = {
+type Props = {
   totalRows: number;
   pageSize: number;
   submissions: GradingOverview[];
   updateEntries: (page: number, filterParams: Object) => void;
 };
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
+const GradingSubmissionTable: React.FC<Props> = ({
   totalRows,
   pageSize,
   submissions,
