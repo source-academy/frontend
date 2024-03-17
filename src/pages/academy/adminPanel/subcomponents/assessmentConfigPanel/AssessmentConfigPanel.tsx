@@ -26,7 +26,8 @@ type Props = {
 const AssessmentConfigPanel: React.FC<Props> = ({
   assessmentConfig,
   setAssessmentConfig,
-  setAssessmentConfigsToDelete
+  setAssessmentConfigsToDelete,
+  setHasChangesAssessmentConfig
 }) => {
   const gridApi = React.useRef<GridApi>();
 
@@ -207,7 +208,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
   // cellRenderer)
   const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
     gridApi.current?.setRowData(assessmentConfig.current);
-    props.setHasChangesAssessmentConfig(true);
+    setHasChangesAssessmentConfig(true);
   };
 
   // Updates our local React state whenever there are changes to the Assessment Type column
@@ -219,7 +220,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
         type: event.value
       };
       assessmentConfig.current = temp;
-      props.setHasChangesAssessmentConfig(true);
+      setHasChangesAssessmentConfig(true);
     }
   };
 
@@ -236,7 +237,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
-        rowData={props.assessmentConfig.current}
+        rowData={assessmentConfig.current}
         rowHeight={36}
         rowDragManaged={true}
         suppressCellFocus={true}
