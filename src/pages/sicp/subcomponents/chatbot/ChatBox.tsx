@@ -41,7 +41,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     const sectionNumber = getSection();
     return parseInt(sectionNumber.charAt(0), 10) > 3
       ? '\n(1) There is no section summary for this section. Please answer the question based on the following paragraph\n'
-      : '\n(1) Here is the summary of this section:\n' + SICPNotes[getSection()];
+      : '\n(1) Here is the summary of this section:\n' + SICPNotes[getSection() as keyof typeof SICPNotes];
   };
 
   function getPrompt() {
