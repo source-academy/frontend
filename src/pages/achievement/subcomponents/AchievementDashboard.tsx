@@ -128,10 +128,10 @@ const AchievementDashboard: React.FC = () => {
    * Marks the achievement uuid that is currently on focus (selected)
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
-  const focusState = useState<string>('');
+  const focusState = useState('');
   const [focusUuid, setFocusUuid] = focusState;
 
-  const hiddenState = useState<boolean>(false);
+  const hiddenState = useState(false);
   const [seeHidden] = hiddenState;
 
   // Resets AchievementView when the selected user changes

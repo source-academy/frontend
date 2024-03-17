@@ -9,24 +9,26 @@ import {
 import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash';
 import React from 'react';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
-import { AssessmentConfiguration } from '../../../../../commons/assessment/AssessmentTypes';
 import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
 import NumericCell from './NumericCell';
 
-export type AssessmentConfigPanelProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   assessmentConfig: React.MutableRefObject<AssessmentConfiguration[]>;
   setAssessmentConfig: (assessmentConfig: AssessmentConfiguration[]) => void;
   setAssessmentConfigsToDelete: (assessmentConfig: AssessmentConfiguration) => void;
   setHasChangesAssessmentConfig: (val: boolean) => void;
 };
 
-const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
-  const { assessmentConfig, setAssessmentConfig, setAssessmentConfigsToDelete } = props;
+const AssessmentConfigPanel: React.FC<Props> = ({
+  assessmentConfig,
+  setAssessmentConfig,
+  setAssessmentConfigsToDelete,
+  setHasChangesAssessmentConfig
+}) => {
   const gridApi = React.useRef<GridApi>();
 
   const setIsManuallyGraded = (index: number, value: boolean) => {
@@ -112,7 +114,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     setAssessmentConfigsToDelete(deleted[0]);
   };
 
-  const columnDefs: ColDef[] = [
+  const columnDefs: ColDef<AssessmentConfiguration>[] = [
     {
       headerName: 'Assessment Type',
       field: 'type',
@@ -166,7 +168,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
     },
     {
       headerName: 'Delete Row',
-      field: 'placeholderToPreventColumnRerender',
+      field: 'placeholderToPreventColumnRerender' as any,
       cellRenderer: DeleteRowCell,
       cellRendererParams: {
         deleteRowHandler: deleteRowHandler
@@ -206,7 +208,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
   // cellRenderer)
   const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
     gridApi.current?.setRowData(assessmentConfig.current);
-    props.setHasChangesAssessmentConfig(true);
+    setHasChangesAssessmentConfig(true);
   };
 
   // Updates our local React state whenever there are changes to the Assessment Type column
@@ -218,7 +220,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         type: event.value
       };
       assessmentConfig.current = temp;
-      props.setHasChangesAssessmentConfig(true);
+      setHasChangesAssessmentConfig(true);
     }
   };
 
@@ -235,7 +237,7 @@ const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
-        rowData={props.assessmentConfig.current}
+        rowData={assessmentConfig.current}
         rowHeight={36}
         rowDragManaged={true}
         suppressCellFocus={true}

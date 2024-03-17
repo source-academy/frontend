@@ -34,7 +34,7 @@ type OwnProps = {
   replButtons: Array<JSX.Element | null>;
 };
 
-export const ReplInput: React.FC<ReplInputProps> = (props: ReplInputProps) => {
+export const ReplInput: React.FC<ReplInputProps> = props => {
   const { onFocus, onBlur } = props;
 
   const replInput = React.useRef<ReactAce>(null);

@@ -1,46 +1,36 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
-import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
-import { Frame } from '../Frame';
-import { Text } from '../Text';
+import { IVisible, StepsArray } from '../../CseMachineTypes';
+import { defaultSAColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow<Source extends IVisible, Target extends IVisible>
-  extends Visible
-  implements IHoverable
-{
+export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible {
+  private _path: string = '';
   points: number[] = [];
   source: Source;
   target: Target | undefined;
 
-  private _path: string = '';
-  private selected: boolean = false;
-  readonly unhovered_opacity: number = Config.ArrowUnhoveredOpacity;
-  readonly hovered_opacity: number = 1;
-
-  constructor(source: Source) {
+  constructor(from: Source) {
     super();
-    this.source = source;
-    this._x = source.x();
-    this._y = source.y();
+    this.source = from;
+    this.target = undefined;
+    this._x = from.x();
+    this._y = from.y();
   }
-  path() {
+  path(): string {
     return this._path;
   }
-  to(target: Target): GenericArrow<Source, Target> {
-    this.target = target;
-    this._width = Math.abs(target.x() - this.source.x());
-    this._height = Math.abs(target.y() - this.source.y());
+
+  to(to: Target): GenericArrow<Source, Target> {
+    this.target = to;
+    this._width = Math.abs(to.x() - this.source.x());
+    this._height = Math.abs(to.y() - this.source.y());
     return this;
   }
-  isSelected(): boolean {
-    return this.selected;
-  }
+
   /**
    * Calculates the steps that this arrows takes.
    * The arrow is decomposed into numerous straight line segments, each of which we
@@ -62,37 +52,13 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     if (!to) return [];
     return [() => [to.x(), to.y()]];
   }
-  getStrokeWidth(): number {
-    return Number(Config.ArrowStrokeWidth);
-  }
-  onMouseEnter(e: KonvaEventObject<MouseEvent>) {
-    this.ref.current.opacity = this.unhovered_opacity;
-  }
-  onClick({ currentTarget }: KonvaEventObject<MouseEvent>) {
-    this.selected = !this.selected;
-    if (!this.isSelected()) {
-      if (
-        !(this.source instanceof Text && this.source.frame?.isSelected()) &&
-        !(this.source instanceof Frame && this.source.isSelected())
-      ) {
-        this.ref.current.opacity = this.unhovered_opacity;
-      } else {
-        this.ref.current.opacity = this.hovered_opacity;
-      }
-    }
-  }
-  onMouseLeave(e: KonvaEventObject<MouseEvent>) {
-    if (!this.isSelected()) {
-      if (
-        (this.source instanceof Text && this.source.frame?.isSelected()) ||
-        (this.source instanceof Frame && this.source.isSelected())
-      ) {
-        this.ref.current.opacity = this.hovered_opacity;
-      } else {
-        this.ref.current.opacity = this.unhovered_opacity;
-      }
-    }
-  }
+
+  onMouseEnter = () => {};
+
+  onMouseLeave = () => {};
+
+  onClick() {}
+
   draw() {
     const points = this.calculateSteps().reduce<Array<number>>(
       (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
@@ -100,64 +66,56 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     );
     points.splice(0, 2);
 
-    let path = '';
     // starting point
-    path += `M ${points[0]} ${points[1]} `;
+    this._path += `M ${points[0]} ${points[1]} `;
     if (points.length === 4) {
       // end the path if the line only has starting and ending coordinates
-      path += `L ${points[2]} ${points[3]} `;
+      this._path += `L ${points[2]} ${points[3]} `;
     } else {
       let n = 0;
       while (n < points.length - 4) {
         const [xa, ya, xb, yb, xc, yc] = points.slice(n, n + 6);
-        const dx1 = (xb - xa) / 2;
-        const dx2 = (xc - xb) / 2;
-        const dy1 = (yb - ya) / 2;
-        const dy2 = (yc - yb) / 2;
-        const r1 = Math.sqrt(Math.pow(dx1, 2) + Math.pow(dy1, 2)) / 2;
-        const r2 = Math.sqrt(Math.pow(dx2, 2) + Math.pow(dy2, 2)) / 2;
-        const br = Math.min(Config.ArrowCornerRadius, r1, r2);
-        const x1 = xb - (br * dx1) / r1;
-        const y1 = yb - (br * dy1) / r1;
-        const x2 = xb + (br * dx2) / r2;
-        const y2 = yb + (br * dy2) / r2;
+        const dx1 = xb - xa;
+        const dx2 = xc - xb;
+        const dy1 = yb - ya;
+        const dy2 = yc - yb;
+        const br = Math.min(
+          Config.ArrowCornerRadius,
+          Math.max(Math.abs(dx1), Math.abs(dy1)) / 2,
+          Math.max(Math.abs(dx2), Math.abs(dy2)) / 2
+        );
+        const x1 = xb - br * Math.sign(dx1);
+        const y1 = yb - br * Math.sign(dy1);
+        const x2 = xb + br * Math.sign(dx2);
+        const y2 = yb + br * Math.sign(dy2);
 
         // draw quadratic curves over corners
-        path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2} `;
+        this._path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2}`;
         n += 2;
       }
     }
     // end path
-    path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
-    this._path = path;
+    this._path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
     return (
       <KonvaGroup
         key={Layout.key++}
-        ref={this.ref}
-        onMouseEnter={e => this.onMouseEnter(e)}
-        onMouseLeave={e => this.onMouseLeave(e)}
-        onClick={e => this.onClick(e)}
-        opacity={this.unhovered_opacity}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
       >
         <KonvaPath
           {...ShapeDefaultProps}
-          stroke={
-            CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-          }
-          strokeWidth={this.getStrokeWidth()}
+          stroke={defaultSAColor()}
+          strokeWidth={Number(Config.ArrowStrokeWidth)}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
-          data={path}
+          data={this.path()}
           key={Layout.key++}
         />
         <KonvaArrow
           {...ShapeDefaultProps}
           points={points.slice(points.length - 4)}
-          fill={
-            CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-          }
+          fill={defaultSAColor()}
           strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}
-          pointerLength={Number(Config.ArrowHeadSize)}
           key={Layout.key++}
         />
       </KonvaGroup>
