@@ -45,24 +45,24 @@ const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props =>
   const users =
     studio === 'Staff'
       ? // The name can be null for users who have yet to log in. We push these to the back of the array.
-      [...props.users].sort(
-        (user1, user2) =>
-          user1.name != null && user2.name != null
-            ? user1.name.localeCompare(user2.name)
-            : user1.name == null
-              ? 1 // user1.name is null, user1 > user2
-              : -1 // user2.name is null, user1 < user2
-      )
-      : props.users
-        .filter(user => user.group === studio)
-        .sort(
+        [...props.users].sort(
           (user1, user2) =>
             user1.name != null && user2.name != null
               ? user1.name.localeCompare(user2.name)
               : user1.name == null
+              ? 1 // user1.name is null, user1 > user2
+              : -1 // user2.name is null, user1 < user2
+        )
+      : props.users
+          .filter(user => user.group === studio)
+          .sort(
+            (user1, user2) =>
+              user1.name != null && user2.name != null
+                ? user1.name.localeCompare(user2.name)
+                : user1.name == null
                 ? 1 // user1.name is null, user1 > user2
                 : -1 // user2.name is null, user1 < user2
-        );
+          );
 
   useEffect(() => {
     getUsers();

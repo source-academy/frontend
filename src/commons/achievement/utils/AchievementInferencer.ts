@@ -742,8 +742,6 @@ class AchievementInferencer {
       this.generateProgressFrac(node);
       this.generateStatus(node);
     });
-
-    
   }
 
   private processGoals() {
