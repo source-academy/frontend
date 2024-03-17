@@ -3,7 +3,6 @@ import {
   paginationToBackendParams,
   ungradedToBackendParams
 } from 'src/features/grading/GradingUtils';
-import { action } from 'typesafe-actions';
 
 import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import {
@@ -350,8 +349,12 @@ export const updateCourseResearchAgreement = createAction(
   (agreedToResearch: boolean) => ({ payload: { agreedToResearch } })
 );
 
-export const updateStoriesUserRole = (userId: number, role: StoriesRole) =>
-  action(UPDATE_STORIES_USER_ROLE, { userId, role });
+export const updateStoriesUserRole = createAction(
+  UPDATE_STORIES_USER_ROLE,
+  (userId: number, role: StoriesRole) => ({ payload: { userId, role } })
+);
 
-export const deleteStoriesUserUserGroups = (userId: number) =>
-  action(DELETE_STORIES_USER_USER_GROUPS, { userId });
+export const deleteStoriesUserUserGroups = createAction(
+  DELETE_STORIES_USER_USER_GROUPS,
+  (userId: number) => ({ payload: { userId } })
+);
