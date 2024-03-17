@@ -6,14 +6,12 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import ControlButton from '../ControlButton';
 
-type SourceRecorderShareCellProps = StateProps;
-
-type StateProps = {
+type Props = {
   data: SourcecastData;
   courseId?: number;
 };
 
-const SourceRecorderShareCell: React.FC<SourceRecorderShareCellProps> = props => {
+const SourceRecorderShareCell: React.FC<Props> = props => {
   const shareInputElem = useRef<HTMLInputElement>(null);
   const [shareURL] = useState<string>(
     `${window.location.protocol}//${window.location.host}/courses/${props.courseId}/sourcecast/${props.data.uid}`

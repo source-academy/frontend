@@ -3,14 +3,14 @@ import { DatePicker } from '@blueprintjs/datetime';
 import React, { useState } from 'react';
 import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
 
-type EditableDateProps = {
+type Props = {
   type: string;
   date?: Date;
   changeDate: (date?: Date) => void;
 };
 
-const EditableDate: React.FC<EditableDateProps> = ({ type, date, changeDate }) => {
-  const [isOpen, setOpen] = useState<boolean>(false);
+const EditableDate: React.FC<Props> = ({ type, date, changeDate }) => {
+  const [isOpen, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!isOpen);
 
   const hoverText = date === undefined ? `No ${type}` : `${prettifyDate(date)}`;

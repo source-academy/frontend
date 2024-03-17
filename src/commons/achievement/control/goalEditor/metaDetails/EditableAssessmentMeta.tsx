@@ -2,13 +2,12 @@ import { NumericInput, Tooltip } from '@blueprintjs/core';
 import React from 'react';
 import { AssessmentMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
-type EditableAssessmentMetaProps = {
+type Props = {
   assessmentMeta: AssessmentMeta;
   changeMeta: (meta: GoalMeta) => void;
 };
 
-const EditableAssessmentMeta: React.FC<EditableAssessmentMetaProps> = props => {
-  const { assessmentMeta, changeMeta } = props;
+const EditableAssessmentMeta: React.FC<Props> = ({ assessmentMeta, changeMeta }) => {
   const { assessmentNumber, requiredCompletionFrac } = assessmentMeta;
 
   const changeAssessmentNumber = (assessmentNumber: number) =>

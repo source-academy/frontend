@@ -3,12 +3,12 @@ import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
 
-type EditableManualMetaProps = {
+type Props = {
   changeMeta: (meta: GoalMeta) => void;
   manualMeta: ManualMeta;
 };
 
-const EditableManualMeta: React.FC<EditableManualMetaProps> = ({ changeMeta, manualMeta }) => {
+const EditableManualMeta: React.FC<Props> = ({ changeMeta, manualMeta }) => {
   const { targetCount } = manualMeta;
 
   const changeTargetCount = (targetCount: number) =>

@@ -1,6 +1,6 @@
-import * as bp3core from '@blueprintjs/core';
+import * as bpcore from '@blueprintjs/core';
 import { TabId } from '@blueprintjs/core';
-import * as bp3icons from '@blueprintjs/icons';
+import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
 import lodash from 'lodash';
@@ -31,8 +31,8 @@ const requireProvider = (x: string) => {
     'react/jsx-runtime': JSXRuntime,
     'react-ace': ace,
     'react-dom': ReactDOM,
-    '@blueprintjs/core': bp3core,
-    '@blueprintjs/icons': bp3icons,
+    '@blueprintjs/core': bpcore,
+    '@blueprintjs/icons': bpicons,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
     lodash,

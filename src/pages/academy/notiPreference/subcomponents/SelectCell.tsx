@@ -4,16 +4,14 @@ import React from 'react';
 import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
-type SelectCellProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   data: NotificationConfiguration;
   rowIndex: number;
   field: KeysOfType<NotificationConfiguration, TimeOption[]>;
   setStateHandler: (rowIndex: number, value: TimeOption) => void;
 };
 
-const SelectCell: React.FC<SelectCellProps> = props => {
+const SelectCell: React.FC<Props> = props => {
   const [selectedOption, setSelectedOption] = React.useState<TimeOption>();
   const timeOptions: TimeOption[] = props.data[props.field];
   timeOptions.sort((to1, to2) => to1.minutes - to2.minutes);

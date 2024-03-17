@@ -21,18 +21,14 @@ type StateProps = {
   testcase: Testcase;
 };
 
-const SideContentEditableTestcaseCard: React.FunctionComponent<
-  SideContentEditableTestcaseCardProps
-> = props => {
-  const {
-    index,
-    testcase,
-    setTestcaseProgram,
-    setTestcaseExpectedResult,
-    handleTestcaseEval,
-    deleteTestcase
-  } = props;
-
+const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardProps> = ({
+  index,
+  testcase,
+  setTestcaseProgram,
+  setTestcaseExpectedResult,
+  handleTestcaseEval,
+  deleteTestcase
+}) => {
   // TODO (Refactor): testcase type seems unused in GitHub Assessments
   const extraClasses = React.useMemo(() => {
     const isEvaluated = testcase.result !== undefined || testcase.errors;

@@ -15,19 +15,17 @@ import { useResponsive } from 'src/commons/utils/Hooks';
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 import Markdown from '../../../../commons/Markdown';
 
-export type CourseConfigPanelProps = OwnProps;
-
-type OwnProps = {
-  courseConfiguration: UpdateCourseConfiguration;
-  setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
-};
-
 export enum CourseHelpTextEditorTab {
   WRITE = 'WRITE',
   PREVIEW = 'PREVIEW'
 }
 
-const CourseConfigPanel: React.FC<CourseConfigPanelProps> = props => {
+type Props = {
+  courseConfiguration: UpdateCourseConfiguration;
+  setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
+};
+
+const CourseConfigPanel: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);

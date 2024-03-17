@@ -3,15 +3,14 @@ import React, { useEffect } from 'react';
 
 import Markdown from '../../../Markdown';
 
-export type SideContentMarkdownEditorProps = {
+type Props = {
   allowEdits: boolean;
   content: string;
   setContent: (content: string) => void;
 };
 
-const SideContentMarkdownEditor: React.FC<SideContentMarkdownEditorProps> = props => {
+const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setContent }) => {
   const [editorModeOn, setEditorModeOn] = React.useState(false);
-  const allowEdits = props.allowEdits;
 
   const node = React.useRef() as any;
 
@@ -43,16 +42,16 @@ const SideContentMarkdownEditor: React.FC<SideContentMarkdownEditorProps> = prop
           onChange={onEditorChange}
           fill={true}
           growVertically={true}
-          defaultValue={props.content}
+          defaultValue={content}
         />
       ) : (
-        <Markdown content={props.content} openLinksInNewWindow={true} />
+        <Markdown content={content} openLinksInNewWindow={true} />
       )}
     </div>
   );
 
   function onEditorChange(event: any) {
-    props.setContent(event.target.value);
+    setContent(event.target.value);
   }
 };
 

@@ -11,11 +11,6 @@ import { AND, BooleanExpression, OR } from 'src/features/achievement/ExpressionT
  * Why is this even a possible boolean expression? why would anyone ever use false?
  */
 
-type EditableBinaryMetaProps = {
-  binaryMeta: BinaryMeta;
-  changeMeta: (meta: GoalMeta) => void;
-};
-
 type Joiner = 'AND' | 'OR';
 const JoinerSelect = Select.ofType<Joiner>();
 const joinerRenderer: ItemRenderer<Joiner> = (joiner, { handleClick }) => (
@@ -43,7 +38,12 @@ const conditionSplitter = (condition: BooleanExpression): string[] => {
   }
 };
 
-const EditableBinaryMeta: React.FC<EditableBinaryMetaProps> = ({ binaryMeta, changeMeta }) => {
+type Props = {
+  binaryMeta: BinaryMeta;
+  changeMeta: (meta: GoalMeta) => void;
+};
+
+const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
   const { condition, targetCount } = binaryMeta;
 
   const joiners: string[] = [];
