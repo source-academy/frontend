@@ -1,16 +1,16 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { GenericArrow } from '../compactComponents/arrows/GenericArrow';
-import { Binding } from '../compactComponents/Binding';
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
-import { Frame } from '../compactComponents/Frame';
-import { StashItemComponent } from '../compactComponents/StashItemComponent';
-import { defaultOptions, Text } from '../compactComponents/Text';
-import { PrimitiveValue } from '../compactComponents/values/PrimitiveValue';
-import { Value } from '../compactComponents/values/Value';
-import { CompactConfig } from '../CseMachineCompactConfig';
-import { ControlStashConfig } from '../CseMachineControlStash';
+import { GenericArrow } from '../components/arrows/GenericArrow';
+import { Binding } from '../components/Binding';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { Frame } from '../components/Frame';
+import { StashItemComponent } from '../components/StashItemComponent';
+import { defaultOptions, Text } from '../components/Text';
+import { PrimitiveValue } from '../components/values/PrimitiveValue';
+import { Value } from '../components/values/Value';
+import { Config } from '../CseMachineConfig';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { getTextWidth } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -40,7 +40,7 @@ export class AssignmentAnimation extends Animatable {
         ...defaultOptions,
         ...getNodePosition(this.binding.value.text),
         text: this.binding.value.text.partialStr,
-        fill: CompactConfig.SA_WHITE.toString(),
+        fill: Config.SA_WHITE.toString(),
         x: this.binding.value.text.x() - 16,
         opacity: 0
       });

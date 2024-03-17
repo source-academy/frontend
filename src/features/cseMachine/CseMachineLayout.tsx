@@ -479,8 +479,7 @@ export class Layout {
                   {CseMachine.getControlStash() && Layout.stashComponent.draw()}
                 </Layer>
                 <Layer ref={CseAnimation.layerRef} listening={false}>
-                  {CseMachine.getControlStash() &&
-                    CseAnimation.animations.map(c => c.draw())}
+                  {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>

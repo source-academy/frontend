@@ -27,10 +27,8 @@ export class Binding extends Visible {
    * i.e. the value is anonymous
    */
   readonly isDummyBinding: boolean = false;
-  private arrow: GenericArrow<Text, Value> | undefined = undefined;
-  public getArrow = (): GenericArrow<Text, Value> | undefined => {
-    return this.arrow;
-  };
+  /** arrow that is drawn from the key to the value */
+  readonly arrow: GenericArrow<Text, Value> | undefined;
 
   constructor(
     /** the key of this binding */
@@ -84,6 +82,14 @@ export class Binding extends Visible {
         this._height = this.prevBinding.height();
       }
     }
+
+    if (
+      !this.isDummyBinding && // value is unreferenced in dummy binding
+      !(this.value instanceof PrimitiveValue) &&
+      !(this.value instanceof UnassignedValue)
+    ) {
+      this.arrow = new ArrowFromText(this.key).to(this.value);
+    }
   }
 
   draw(): React.ReactNode {
@@ -92,11 +98,7 @@ export class Binding extends Visible {
         {this.isDummyBinding
           ? null // omit the key since value is anonymous
           : this.key.draw()}
-        {this.isDummyBinding || // value is unreferenced in dummy binding
-        this.value instanceof PrimitiveValue ||
-        this.value instanceof UnassignedValue
-          ? null
-          : new ArrowFromText(this.key).to(this.value).draw()}
+        {this.arrow?.draw()}
         {isMainReference(this.value, this) ? this.value.draw() : null}
       </React.Fragment>
     );

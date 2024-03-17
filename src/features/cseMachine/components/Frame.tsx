@@ -2,6 +2,7 @@ import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import CseMachine from '../CseMachine';
+import { CseAnimation } from '../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
@@ -14,6 +15,7 @@ import {
   isUnassigned
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
+import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -45,6 +47,8 @@ export class Frame extends Visible implements IHoverable {
   readonly environment: Env;
   /** the parent/enclosing frame of this frame (the frame above it) */
   readonly parentFrame: Frame | undefined;
+  /** arrow that is drawn from this frame to the parent frame */
+  readonly arrow: GenericArrow<Frame, Frame> | undefined;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -111,7 +115,7 @@ export class Frame extends Visible implements IHoverable {
     for (const [key, data] of entries) {
       // If the value is unassigned, retrieve declaration type from its description, otherwise, retrieve directly from the data's property
       const constant =
-        this.environment.head[key].description === 'const declaration' || !data.writable;
+        this.environment.head[key]?.description === 'const declaration' || !data.writable;
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant);
       this.bindings.push(currBinding);
       prevBinding = currBinding;
@@ -125,6 +129,12 @@ export class Frame extends Visible implements IHoverable {
       : Config.FramePaddingY * 2;
 
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
+
+    if (this.parentFrame) this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+
+    if (CseMachine.getCurrentEnvId() === this.environment.id) {
+      CseAnimation.setCurrentFrame(this);
+    }
   }
 
   onMouseEnter = () => {};
@@ -133,7 +143,7 @@ export class Frame extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     return (
-      <Group key={Layout.key++}>
+      <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
         <Rect
           {...ShapeDefaultProps}
@@ -148,7 +158,7 @@ export class Frame extends Visible implements IHoverable {
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {this.parentFrame && new ArrowFromFrame(this).to(this.parentFrame).draw()}
+        {this.arrow?.draw()}
       </Group>
     );
   }

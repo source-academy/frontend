@@ -1,6 +1,6 @@
-import { Binding } from '../../compactComponents/Binding';
-import { Frame } from '../../compactComponents/Frame';
-import { UnassignedValue } from '../../compactComponents/values/UnassignedValue';
+import { Binding } from '../../components/Binding';
+import { Frame } from '../../components/Frame';
+import { UnassignedValue } from '../../components/values/UnassignedValue';
 import { Visible } from '../../components/Visible';
 
 /** Omits the index signature `[key: string]: any;` from type `T` */

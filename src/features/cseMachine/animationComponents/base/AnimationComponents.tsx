@@ -3,8 +3,8 @@ import React from 'react';
 import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
 
 import { CseAnimation } from '../../CseMachineAnimation';
-import { CompactConfig } from '../../CseMachineCompactConfig';
-import { ControlStashConfig } from '../../CseMachineControlStash';
+import { Config } from '../../CseMachineConfig';
+import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { currentItemSAColor, defaultSAColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 
@@ -210,8 +210,8 @@ export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.
   constructor(props: Konva.PathConfig & Required<Pick<Konva.PathConfig, 'data'>>) {
     const defaultProps = {
       stroke: defaultSAColor(),
-      strokeWidth: Number(CompactConfig.ArrowStrokeWidth),
-      hitStrokeWidth: Number(CompactConfig.ArrowHitStrokeWidth)
+      strokeWidth: Number(Config.ArrowStrokeWidth),
+      hitStrokeWidth: Number(Config.ArrowHitStrokeWidth)
     };
     super(Path, { ...defaultProps, ...props });
   }
@@ -222,7 +222,7 @@ export class AnimatedArrowComponent extends AnimationComponent<Konva.Arrow, Konv
     const defaultProps = {
       fill: defaultSAColor(),
       strokeEnabled: false,
-      pointerWidth: Number(CompactConfig.ArrowHeadSize)
+      pointerWidth: Number(Config.ArrowHeadSize)
     };
     super(Arrow, { ...defaultProps, ...props });
   }

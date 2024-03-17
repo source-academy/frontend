@@ -1,7 +1,7 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { Frame } from '../compactComponents/Frame';
+import { Frame } from '../components/Frame';
 import { Config } from '../CseMachineConfig';
 import { currentItemSAColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';

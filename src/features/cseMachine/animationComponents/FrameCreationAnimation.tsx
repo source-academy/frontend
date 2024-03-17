@@ -1,9 +1,9 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
-import { Frame } from '../compactComponents/Frame';
-import { CompactConfig } from '../CseMachineCompactConfig';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { Frame } from '../components/Frame';
+import { Config } from '../CseMachineConfig';
 import { currentItemSAColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -38,7 +38,7 @@ export class FrameCreationAnimation extends Animatable {
     });
     this.frameBorderAnimation = new AnimatedRectComponent({
       ...getNodePosition(currFrame),
-      cornerRadius: Number(CompactConfig.FrameCornerRadius),
+      cornerRadius: Number(Config.FrameCornerRadius),
       stroke: currentItemSAColor(true),
       y: currFrame.y() - moveDistance,
       opacity: 0
