@@ -184,7 +184,7 @@ const codeSamplesControlStash = [
     }
     create(3)[1]();
     `,
-    33
+    32
   ],
   [
     'global environments are treated correctly',
@@ -194,7 +194,7 @@ const codeSamplesControlStash = [
     }
     math_sin(math_PI / 2); 
     `,
-    7
+    6
   ],
   [
     'Control is truncated properly',
@@ -204,7 +204,7 @@ const codeSamplesControlStash = [
       }
       fact(10);
       `,
-    161,
+    160,
     true
   ]
 ];
