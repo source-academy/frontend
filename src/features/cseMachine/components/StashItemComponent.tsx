@@ -4,8 +4,8 @@ import { Label, Tag, Text } from 'react-konva';
 
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
-import { Visible } from '../components/Visible';
-import { ControlStashConfig, ShapeDefaultProps } from '../CseMachineControlStash';
+import { ShapeDefaultProps } from '../CseMachineConfig';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
@@ -22,6 +22,7 @@ import {
 } from '../CseMachineUtils';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
+import { Visible } from './Visible';
 
 export class StashItemComponent extends Visible implements IHoverable {
   /** text to display */

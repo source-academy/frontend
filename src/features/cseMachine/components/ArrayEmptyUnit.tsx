@@ -1,10 +1,10 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Rect } from 'react-konva';
 
-import CseMachine from '../CseMachine';
-import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
+import { defaultSAColor } from '../CseMachineUtils';
 import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
 
@@ -13,7 +13,6 @@ export class ArrayEmptyUnit extends Visible {
   readonly value: null = null;
 
   readonly data: Data = [];
-  ref: RefObject<any> = React.createRef();
 
   constructor(readonly parent: ArrayValue) {
     super();
@@ -22,11 +21,23 @@ export class ArrayEmptyUnit extends Visible {
     this._height = this.parent.height();
     this._width = this.parent.width();
   }
-
+  x(): number {
+    return this._x;
+  }
+  y(): number {
+    return this._y;
+  }
+  height(): number {
+    return this._height;
+  }
+  width(): number {
+    return this._width;
+  }
   updatePosition = () => {
     this._x = this.parent.x();
     this._y = this.parent.y();
   };
+  reset(): void {}
 
   draw(): React.ReactNode {
     return (
@@ -37,9 +48,7 @@ export class ArrayEmptyUnit extends Visible {
         y={this.y()}
         width={this.width()}
         height={this.height()}
-        stroke={
-          CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-        }
+        stroke={defaultSAColor()}
         ref={this.ref}
       />
     );

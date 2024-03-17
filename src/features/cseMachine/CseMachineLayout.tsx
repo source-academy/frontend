@@ -5,16 +5,9 @@ import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
-import { ControlStack } from './compactComponents/ControlStack';
-import { Level as CompactLevel } from './compactComponents/Level';
-import { StashStack } from './compactComponents/StashStack';
-import { ArrayValue as CompactArrayValue } from './compactComponents/values/ArrayValue';
-import { FnValue as CompactFnValue } from './compactComponents/values/FnValue';
-import { GlobalFnValue as CompactGlobalFnValue } from './compactComponents/values/GlobalFnValue';
-import { PrimitiveValue as CompactPrimitiveValue } from './compactComponents/values/PrimitiveValue';
-import { UnassignedValue as CompactUnassignedValue } from './compactComponents/values/UnassignedValue';
-import { Value as CompactValue } from './compactComponents/values/Value';
-import { Grid } from './components/Grid';
+import { ControlStack } from './components/ControlStack';
+import { Level } from './components/Level';
+import { StashStack } from './components/StashStack';
 import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
@@ -24,7 +17,7 @@ import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
-import { CompactReferenceType, Data, EnvTree, EnvTreeNode, ReferenceType } from './CseMachineTypes';
+import { Data, EnvTree, EnvTreeNode, ReferenceType } from './CseMachineTypes';
 import {
   deepCopyTree,
   getNextChildren,
@@ -39,14 +32,10 @@ import {
 
 /** this class encapsulates the logic for calculating the layout */
 export class Layout {
+  /** the width of the stage */
+  private static _width: number;
   /** the height of the stage */
-  static nonCompactHeight: number;
-  /** the width of the non-compact stage */
-  static nonCompactWidth: number;
-  /** the width of the compact stage */
-  static compactWidth: number;
-  /** the height of the compact stage */
-  static compactHeight: number;
+  private static _height: number;
   /** the width of the controlStash stage */
   static controlStashWidth: number;
   /** the height of the controlStash stage */
@@ -69,8 +58,7 @@ export class Layout {
   /** the global environment */
   static globalEnvNode: EnvTreeNode;
   /** grid of frames */
-  static grid: Grid;
-  static compactLevels: CompactLevel[] = [];
+  static levels: Level[] = [];
   /** the control and stash */
   static control: Control;
   static stash: Stash;
@@ -82,13 +70,10 @@ export class Layout {
 
   /** memoized values */
   static values = new Map<Data, Value>();
-  static compactValues = new Map<Data, CompactValue>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
   static currentLight: React.ReactNode;
-  static currentCompactDark: React.ReactNode;
-  static currentCompactLight: React.ReactNode;
   static currentStackDark: React.ReactNode;
   static currentStackTruncDark: React.ReactNode;
   static currentStackLight: React.ReactNode;
@@ -110,8 +95,6 @@ export class Layout {
     ) {
       Layout.currentLight = undefined;
       Layout.currentDark = undefined;
-      Layout.currentCompactLight = undefined;
-      Layout.currentCompactDark = undefined;
       Layout.stageWidth = Math.min(Layout.width(), window.innerWidth);
       Layout.stageHeight = Math.min(Layout.height(), window.innerHeight);
       Layout.stageRef.current.width(Layout.stageWidth);
@@ -138,8 +121,6 @@ export class Layout {
   static setContext(envTree: EnvTree, control: Control, stash: Stash): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
-    Layout.currentCompactLight = undefined;
-    Layout.currentCompactDark = undefined;
     Layout.currentStackDark = undefined;
     Layout.currentStackTruncDark = undefined;
     Layout.currentStackLight = undefined;
@@ -149,10 +130,6 @@ export class Layout {
       v.reset();
     });
     Layout.values.clear();
-    Layout.compactValues.forEach((v, d) => {
-      v.reset();
-    });
-    Layout.compactValues.clear();
     Layout.key = 0;
 
     // deep copy so we don't mutate the context
@@ -181,36 +158,22 @@ export class Layout {
         Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX
       );
     }
-    if (CseMachine.getCompactLayout()) {
-      // calculate height and width by considering lowest and widest level
-      const lastLevel = Layout.compactLevels[Layout.compactLevels.length - 1];
-      Layout.compactHeight = Math.max(
-        Config.CanvasMinHeight,
-        lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
-        Layout.controlStashHeight ?? 0
-      );
+    // calculate height and width by considering lowest and widest level
+    const lastLevel = Layout.levels[Layout.levels.length - 1];
+    Layout._height = Math.max(
+      Config.CanvasMinHeight,
+      lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
+      Layout.controlStashHeight ?? 0
+    );
 
-      Layout.compactWidth = Math.max(
-        Config.CanvasMinWidth,
-        Layout.compactLevels.reduce<number>(
-          (maxWidth, level) => Math.max(maxWidth, level.width()),
-          0
-        ) +
-          Config.CanvasPaddingX * 2 +
-          (CseMachine.getControlStash()
-            ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
-            : 0)
-      );
-    } else {
-      Layout.nonCompactHeight = Math.max(
-        Config.CanvasMinHeight,
-        this.grid.height() + Config.CanvasPaddingY
-      );
-      Layout.nonCompactWidth = Math.max(
-        Config.CanvasMinWidth,
-        this.grid.width() + Config.CanvasPaddingX * 2
-      );
-    }
+    Layout._width = Math.max(
+      Config.CanvasMinWidth,
+      Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width()), 0) +
+        Config.CanvasPaddingX * 2 +
+        (CseMachine.getControlStash()
+          ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
+          : 0)
+    );
     // initialise animations
     CseAnimation.updateAnimation();
   }
@@ -295,61 +258,35 @@ export class Layout {
   }
 
   public static width(): number {
-    return CseMachine.getCompactLayout() ? Layout.compactWidth : Layout.nonCompactWidth;
+    return Layout._width;
   }
 
   public static height(): number {
-    return CseMachine.getCompactLayout() ? Layout.compactHeight : Layout.nonCompactHeight;
+    return Layout._height;
   }
 
   /** initializes grid */
   private static initializeGrid(): void {
-    if (CseMachine.getCompactLayout()) {
-      this.compactLevels = [];
-      let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
-      let prevLevel: CompactLevel | null = null;
-      let currLevel: CompactLevel;
+    this.levels = [];
+    let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
+    let prevLevel: Level | null = null;
+    let currLevel: Level;
 
-      while (frontier.length > 0) {
-        currLevel = new CompactLevel(prevLevel, frontier);
-        this.compactLevels.push(currLevel);
-        const nextFrontier: EnvTreeNode[] = [];
+    while (frontier.length > 0) {
+      currLevel = new Level(prevLevel, frontier);
+      this.levels.push(currLevel);
+      const nextFrontier: EnvTreeNode[] = [];
 
-        frontier.forEach(e => {
-          e.children.forEach(c => {
-            const nextChildren = getNextChildren(c as EnvTreeNode);
-            nextChildren.forEach(c => (c.parent = e));
-            nextFrontier.push(...nextChildren);
-          });
+      frontier.forEach(e => {
+        e.children.forEach(c => {
+          const nextChildren = getNextChildren(c as EnvTreeNode);
+          nextChildren.forEach(c => (c.parent = e));
+          nextFrontier.push(...nextChildren);
         });
+      });
 
-        prevLevel = currLevel;
-        frontier = nextFrontier;
-      }
-    } else {
-      const frontiers: EnvTreeNode[][] = [];
-      let frontier = [Layout.globalEnvNode];
-
-      while (frontier.length > 0) {
-        frontiers.push(frontier);
-
-        const nextFrontier: EnvTreeNode[] = [];
-
-        frontier.forEach(e => {
-          e.children.forEach(c => {
-            const nextChildren = getNextChildren(c as EnvTreeNode);
-            nextChildren.forEach(c => (c.parent = e));
-            nextFrontier.push(...nextChildren);
-          });
-        });
-
-        frontier = nextFrontier;
-      }
-      if (this.grid === undefined) {
-        this.grid = new Grid(frontiers);
-      } else {
-        this.grid.update(frontiers);
-      }
+      prevLevel = currLevel;
+      frontier = nextFrontier;
     }
   }
 
@@ -384,44 +321,6 @@ export class Layout {
         } else {
           // function from the global env (has no extra props such as env, fnName)
           newValue = new GlobalFnValue(data, [reference]);
-        }
-      }
-
-      return newValue;
-    }
-  }
-
-  /** memoize `Value` (used to detect circular references in non-primitive `Value`) */
-  static memoizeCompactValue(value: CompactValue): void {
-    Layout.compactValues.set(value.data, value);
-  }
-
-  /** create an instance of the corresponding `Value` if it doesn't already exists,
-   *  else, return the existing value */
-  static createCompactValue(data: Data, reference: CompactReferenceType): CompactValue {
-    if (isUnassigned(data)) {
-      return new CompactUnassignedValue([reference]);
-    } else if (isPrimitiveData(data)) {
-      return new CompactPrimitiveValue(data, [reference]);
-    } else {
-      // try to find if this value is already created
-      const existingValue = Layout.compactValues.get(data);
-      if (existingValue) {
-        existingValue.addReference(reference);
-        return existingValue;
-      }
-
-      // else create a new one
-      let newValue: CompactValue = new CompactPrimitiveValue(null, [reference]);
-      if (isArray(data)) {
-        newValue = new CompactArrayValue(data, [reference]);
-      } else if (isFunction(data)) {
-        if (isFn(data)) {
-          // normal JS Slang function
-          newValue = new CompactFnValue(data, [reference]);
-        } else {
-          // function from the global env (has no extra props such as env, fnName)
-          newValue = new CompactGlobalFnValue(data, [reference]);
         }
       }
 
@@ -575,18 +474,12 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {!CseMachine.getCompactLayout() && Layout.grid.draw()}
-                  {CseMachine.getCompactLayout() && Layout.compactLevels.map(level => level.draw())}
-                  {CseMachine.getCompactLayout() &&
-                    CseMachine.getControlStash() &&
-                    Layout.controlComponent.draw()}
-                  {CseMachine.getCompactLayout() &&
-                    CseMachine.getControlStash() &&
-                    Layout.stashComponent.draw()}
+                  {Layout.levels.map(level => level.draw())}
+                  {CseMachine.getControlStash() && Layout.controlComponent.draw()}
+                  {CseMachine.getControlStash() && Layout.stashComponent.draw()}
                 </Layer>
                 <Layer ref={CseAnimation.layerRef} listening={false}>
-                  {CseMachine.getCompactLayout() &&
-                    CseMachine.getControlStash() &&
+                  {CseMachine.getControlStash() &&
                     CseAnimation.animations.map(c => c.draw())}
                 </Layer>
               </Stage>
@@ -595,31 +488,23 @@ export class Layout {
         </div>
       );
       Layout.prevLayout = layout;
-      if (CseMachine.getCompactLayout()) {
-        if (CseMachine.getPrintableMode()) {
-          if (CseMachine.getControlStash()) {
-            if (CseMachine.getStackTruncated()) {
-              Layout.currentStackTruncLight = layout;
-            } else {
-              Layout.currentStackLight = layout;
-            }
+      if (CseMachine.getPrintableMode()) {
+        if (CseMachine.getControlStash()) {
+          if (CseMachine.getStackTruncated()) {
+            Layout.currentStackTruncLight = layout;
           } else {
-            Layout.currentCompactLight = layout;
+            Layout.currentStackLight = layout;
           }
         } else {
-          if (CseMachine.getControlStash()) {
-            if (CseMachine.getStackTruncated()) {
-              Layout.currentStackTruncDark = layout;
-            } else {
-              Layout.currentStackDark = layout;
-            }
-          } else {
-            Layout.currentCompactDark = layout;
-          }
+          Layout.currentLight = layout;
         }
       } else {
-        if (CseMachine.getPrintableMode()) {
-          Layout.currentLight = layout;
+        if (CseMachine.getControlStash()) {
+          if (CseMachine.getStackTruncated()) {
+            Layout.currentStackTruncDark = layout;
+          } else {
+            Layout.currentStackDark = layout;
+          }
         } else {
           Layout.currentDark = layout;
         }

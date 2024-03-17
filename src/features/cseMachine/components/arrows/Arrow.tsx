@@ -2,14 +2,18 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 
 import { ArrayUnit } from '../ArrayUnit';
+import { ControlItemComponent } from '../ControlItemComponent';
 import { Frame } from '../Frame';
+import { StashItemComponent } from '../StashItemComponent';
 import { Text } from '../Text';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { Visible } from '../Visible';
 import { ArrowFromArrayUnit } from './ArrowFromArrayUnit';
+import { ArrowFromControlItemComponent } from './ArrowFromControlItemComponent';
 import { ArrowFromFn } from './ArrowFromFn';
 import { ArrowFromFrame } from './ArrowFromFrame';
+import { ArrowFromStashItemComponent } from './ArrowFromStashItemComponent';
 import { ArrowFromText } from './ArrowFromText';
 import { GenericArrow } from './GenericArrow';
 
@@ -36,6 +40,8 @@ export abstract class Arrow {
       return new ArrowFromFn(source);
     if (source instanceof Text) return new ArrowFromText(source);
     if (source instanceof ArrayUnit) return new ArrowFromArrayUnit(source);
+    if (source instanceof ControlItemComponent) return new ArrowFromControlItemComponent(source);
+    if (source instanceof StashItemComponent) return new ArrowFromStashItemComponent(source);
 
     // else return a generic arrow
     return new GenericArrow(source);

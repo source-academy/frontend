@@ -1,8 +1,8 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
-import { StashItemComponent } from '../compactComponents/StashItemComponent';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { StashItemComponent } from '../components/StashItemComponent';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';

@@ -14,8 +14,8 @@ import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
-import { isInstr } from './compactComponents/ControlStack';
-import { Frame } from './compactComponents/Frame';
+import { isInstr } from './components/ControlStack';
+import { Frame } from './components/Frame';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 

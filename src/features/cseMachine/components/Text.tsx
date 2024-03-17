@@ -1,13 +1,11 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-import { Group, Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
+import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
-import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data, IHoverable } from '../CseMachineTypes';
 import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../CseMachineUtils';
-import { Frame } from './Frame';
 import { Visible } from './Visible';
 
 export interface TextOptions {
@@ -30,26 +28,22 @@ export const defaultOptions: TextOptions = {
 
 /** this class encapsulates a string to be drawn onto the canvas */
 export class Text extends Visible implements IHoverable {
-  readonly _hoveredWidth: number;
+  readonly _height: number;
+  readonly _width: number;
 
   readonly partialStr: string; // truncated string representation of data
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  readonly frame?: Frame;
 
   constructor(
     readonly data: Data,
-    x: number,
-    y: number,
+    readonly _x: number,
+    readonly _y: number,
     /** additional options (for customization of text) */
-    options: Partial<TextOptions> = {},
-    frame?: Frame
+    options: Partial<TextOptions> = {}
   ) {
     super();
-    this._x = x;
-    this._y = y;
-    this.frame = frame;
     this.options = { ...this.options, ...options };
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
@@ -58,10 +52,8 @@ export class Text extends Visible implements IHoverable {
       ? JSON.stringify(data) || String(data)
       : String(data);
     this._height = fontSize;
-
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    this._hoveredWidth = widthOf(this.partialStr);
-    if (this._hoveredWidth > maxWidth) {
+    if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText = Config.Ellipsis.toString();
       let i = 0;
       while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis.toString()) < maxWidth) {
@@ -74,15 +66,7 @@ export class Text extends Visible implements IHoverable {
     }
   }
 
-  hoveredWidth(): number {
-    return this._hoveredWidth;
-  }
-  updatePosition = (x: number, y: number) => {
-    this._x = x;
-    this._y = y;
-  };
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
     this.ref.current.moveToTop();
     this.ref.current.show();
@@ -90,7 +74,6 @@ export class Text extends Visible implements IHoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
     setUnhoveredCursor(currentTarget);
     this.ref.current.hide();
     currentTarget.getLayer()?.draw();
@@ -101,29 +84,30 @@ export class Text extends Visible implements IHoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+      fill: Config.SA_WHITE.toString()
     };
     return (
-      <Group key={Layout.key++} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <KonvaLabel x={this.x()} y={this.y()}>
+      <React.Fragment key={Layout.key++}>
+        <KonvaLabel
+          x={this.x()}
+          y={this.y()}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+        >
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
         </KonvaLabel>
-        <KonvaLabel x={this.x()} y={this.y()} ref={this.ref} visible={false} listening={false}>
-          <KonvaTag
-            {...ShapeDefaultProps}
-            fill={CseMachine.getPrintableMode() ? 'white' : 'black'}
-            opacity={0.5}
-            listening={false}
-          />
-          <KonvaText
-            {...ShapeDefaultProps}
-            key={Layout.key++}
-            text={this.fullStr}
-            {...props}
-            listening={false}
-          />
+        <KonvaLabel
+          x={this.x()}
+          y={this.y()}
+          ref={this.ref}
+          visible={false}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+        >
+          <KonvaTag {...ShapeDefaultProps} fill={'black'} opacity={0.5} />
+          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
         </KonvaLabel>
-      </Group>
+      </React.Fragment>
     );
   }
 }
