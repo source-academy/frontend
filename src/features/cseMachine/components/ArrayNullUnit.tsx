@@ -9,10 +9,10 @@ import { Visible } from './Visible';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit extends Visible {
-  arrayUnit: ReferenceType | ReferenceType;
-  referencedBy: (ReferenceType | ReferenceType)[];
+  arrayUnit: ReferenceType;
+  referencedBy: ReferenceType[];
 
-  constructor(referencedBy: (ReferenceType | ReferenceType)[]) {
+  constructor(referencedBy: ReferenceType[]) {
     super();
     this.referencedBy = referencedBy;
     this.arrayUnit = referencedBy[0];

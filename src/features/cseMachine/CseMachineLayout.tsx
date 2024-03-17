@@ -126,9 +126,6 @@ export class Layout {
     Layout.currentStackLight = undefined;
     Layout.currentStackTruncLight = undefined;
     // clear/initialize data and value arrays
-    Layout.values.forEach((v, d) => {
-      v.reset();
-    });
     Layout.values.clear();
     Layout.key = 0;
 
