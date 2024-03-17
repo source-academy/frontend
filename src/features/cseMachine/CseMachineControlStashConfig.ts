@@ -36,7 +36,3 @@ export enum ControlStashConfig {
   PRINT_BACKGROUND = 'white',
   STASH_DANGER_ITEM = '#ff0000'
 }
-
-export const ShapeDefaultProps = {
-  preventDefault: false
-};
