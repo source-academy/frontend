@@ -216,7 +216,8 @@ test('fetchTeamFormationOverviews generates correct action object', () => {
 test('fetchStudents generates correct action object', () => {
   const action = fetchStudents();
   expect(action).toEqual({
-    type: FETCH_STUDENTS
+    type: FETCH_STUDENTS,
+    payload: {}
   });
 });
 
