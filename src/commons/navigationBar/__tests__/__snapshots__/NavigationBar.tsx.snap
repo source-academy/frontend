@@ -57,22 +57,6 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
           </Blueprint5.NavbarHeading>
         </NavLink>
       </Blueprint5.Popover>
-      <NavLink
-        className={[Function]}
-        title="Classroom"
-        to="/githubassessments"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="briefcase"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          Classroom
-        </div>
-      </NavLink>
     </Blueprint5.NavbarGroup>
     <Blueprint5.NavbarGroup
       align="right"
@@ -108,10 +92,6 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
     <Route
       element={null}
       path="/playground"
-    />
-    <Route
-      element={null}
-      path="/githubassessments/*"
     />
     <Route
       element={null}
@@ -329,22 +309,6 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
       </NavLink>
       <NavLink
         className={[Function]}
-        title="Classroom"
-        to="/githubassessments"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="briefcase"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          Classroom
-        </div>
-      </NavLink>
-      <NavLink
-        className={[Function]}
         title="SICP JS"
         to="/sicpjs"
       >
@@ -410,10 +374,6 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
     <Route
       element={null}
       path="/playground"
-    />
-    <Route
-      element={null}
-      path="/githubassessments/*"
     />
     <Route
       element={null}
@@ -510,22 +470,6 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
       </Blueprint5.Popover>
       <NavLink
         className={[Function]}
-        title="Classroom"
-        to="/githubassessments"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="briefcase"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          Classroom
-        </div>
-      </NavLink>
-      <NavLink
-        className={[Function]}
         title="SICP JS"
         to="/sicpjs"
       >
@@ -575,10 +519,6 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
     <Route
       element={null}
       path="/playground"
-    />
-    <Route
-      element={null}
-      path="/githubassessments/*"
     />
     <Route
       element={null}

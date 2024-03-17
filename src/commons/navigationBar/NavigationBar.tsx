@@ -154,12 +154,6 @@ const NavigationBar: React.FC = () => {
         disabled: !isEnrolledInACourse
       },
       {
-        to: '/githubassessments',
-        icon: IconNames.BRIEFCASE,
-        text: 'Classroom',
-        disabled: !Constants.enableGitHubAssessments
-      },
-      {
         to: '/sicpjs',
         icon: IconNames.BOOK,
         text: 'SICP JS',
@@ -235,7 +229,6 @@ const NavigationBar: React.FC = () => {
       '/playground',
       '/sicpjs',
       '/contributors',
-      '/githubassessments',
       `/courses/${courseId}/sourcecast`,
       `/courses/${courseId}/achievements`
     ];
@@ -324,7 +317,6 @@ const NavigationBar: React.FC = () => {
 
       <Routes>
         <Route path="/playground" element={null} />
-        <Route path="/githubassessments/*" element={null} />
         <Route path="/contributors" element={null} />
         <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
@@ -347,12 +339,6 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     to: '/playground',
     icon: IconNames.CODE,
     text: 'Playground'
-  },
-  {
-    to: '/githubassessments',
-    icon: IconNames.BRIEFCASE,
-    text: 'Classroom',
-    disabled: !Constants.enableGitHubAssessments
   },
   {
     to: '/sicpjs',
