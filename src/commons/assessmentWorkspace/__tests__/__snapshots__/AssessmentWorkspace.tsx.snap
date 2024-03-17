@@ -219,7 +219,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div
@@ -2249,7 +2249,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div
@@ -3019,7 +3019,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div
@@ -3741,7 +3741,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div

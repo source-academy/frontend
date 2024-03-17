@@ -17,12 +17,12 @@ import EditableBinaryMeta from './metaDetails/EditableBinaryMeta';
 import EditableEventMeta from './metaDetails/EditableEventMeta';
 import EditableManualMeta from './metaDetails/EditableManualMeta';
 
-type EditableMetaProps = {
+type Props = {
   changeMeta: (meta: GoalMeta) => void;
   meta: GoalMeta;
 };
 
-const EditableMeta: React.FC<EditableMetaProps> = ({ changeMeta, meta }) => {
+const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
   const { type } = meta;
 
   const TypeSelect = Select.ofType<GoalType>();
