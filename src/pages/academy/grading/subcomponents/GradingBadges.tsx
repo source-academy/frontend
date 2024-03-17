@@ -22,7 +22,7 @@ const BADGE_COLORS = Object.freeze({
 });
 
 export function getBadgeColorFromLabel(label: string) {
-  const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS
+  const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS;
   return BADGE_COLORS[maybeKey] || 'gray';
 }
 
