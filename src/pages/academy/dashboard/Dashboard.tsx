@@ -11,17 +11,13 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 
-type DashboardProps = StateProps;
-
-export type StateProps = {};
-
 const defaultColumnDefs: ColDef = {
   filter: true,
   resizable: true,
   sortable: true
 };
 
-const Dashboard: React.FC<DashboardProps> = props => {
+const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
   const gradingSummary = useTypedSelector(state => state.dashboard.gradingSummary);
 

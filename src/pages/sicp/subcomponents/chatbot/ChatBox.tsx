@@ -8,18 +8,18 @@ import classes from 'src/styles/Chatbot.module.scss';
 import { chat } from '../../../../commons/sagas/RequestsSaga';
 import SICPNotes from './SicpNotes';
 
-interface ChatBoxProps {
+type Props = {
   getSection: () => string;
   getText: () => string;
-}
+};
 
-const ChatBox: React.FC<ChatBoxProps> = ({ getSection, getText }) => {
+const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
   const chatRef = React.useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [messages, setMessages] = React.useState<{ role: 'user' | 'bot'; content: string[] }[]>([
     { content: ['Ask me something about this paragraph!'], role: 'bot' }
   ]);
-  const [userInput, setUserInput] = React.useState<string>('');
+  const [userInput, setUserInput] = React.useState('');
   const [contentHistory, setContentHistory] = React.useState<Array<string>>([]);
   const [roleHistory, setRoleHistory] = React.useState<Array<string>>([]);
   const { accessToken, refreshToken } = useSession();
