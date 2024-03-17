@@ -221,6 +221,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 >
                   <Checkbox
                     checked={CseMachine.getControlStash()}
+                    disabled={!this.state.visualization}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -238,6 +239,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 >
                   <Checkbox
                     checked={CseMachine.getStackTruncated()}
+                    disabled={!this.state.visualization}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
