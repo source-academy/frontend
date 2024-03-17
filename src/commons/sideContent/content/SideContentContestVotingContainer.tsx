@@ -20,11 +20,13 @@ type StateProps = {
  * Container to separate behaviour concerns from rendering concerns
  * Stores component-level voting ranking state
  */
-const SideContentContestVotingContainer: React.FunctionComponent<
-  SideContentContestVotingContainerProps
-> = props => {
-  const { canSave, contestEntries, handleSave, handleContestEntryClick } = props;
-  const [isValid, setIsValid] = useState<boolean>(true);
+const SideContentContestVotingContainer: React.FC<SideContentContestVotingContainerProps> = ({
+  canSave,
+  contestEntries,
+  handleSave,
+  handleContestEntryClick
+}) => {
+  const [isValid, setIsValid] = useState(true);
   const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>([]);
 
   useEffect(() => {

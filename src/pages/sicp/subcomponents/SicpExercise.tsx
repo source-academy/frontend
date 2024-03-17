@@ -1,13 +1,6 @@
 import { Button, Card, Collapse, Elevation } from '@blueprintjs/core';
 import React from 'react';
 
-type SicpExerciseProps = OwnProps;
-type OwnProps = {
-  title: string;
-  body: JSX.Element;
-  solution: JSX.Element | undefined;
-};
-
 export const noSolutionPlaceholder = (
   <span>
     There is currently no solution available for this exercise. This textbook adaptation is a
@@ -20,7 +13,13 @@ export const noSolutionPlaceholder = (
   </span>
 );
 
-const SicpExercise: React.FC<SicpExerciseProps> = props => {
+type Props = {
+  title: string;
+  body: JSX.Element;
+  solution: JSX.Element | undefined;
+};
+
+const SicpExercise: React.FC<Props> = props => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const onClick = () => {

@@ -77,8 +77,7 @@ const locations: ReadonlyArray<WorkspaceLocation> = [
   'playground',
   'sourcecast',
   'sourcereel',
-  'sicp',
-  'githubAssessment'
+  'sicp'
 ] as const;
 
 function generateActions(type: string, payload: any = {}): any[] {
@@ -112,10 +111,6 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     },
     sicp: {
       ...defaultWorkspaceManager.sicp,
-      ...cloneDeep(payload)
-    },
-    githubAssessment: {
-      ...defaultWorkspaceManager.githubAssessment,
       ...cloneDeep(payload)
     },
     stories: {

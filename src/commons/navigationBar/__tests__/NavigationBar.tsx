@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { Role } from '../../application/ApplicationTypes';
@@ -14,7 +14,7 @@ jest.mock('react-redux', () => ({
   useSelector: jest.fn()
 }));
 
-const useSelectorMock = useSelector as jest.Mock;
+const useSelectorMock = useTypedSelector as jest.Mock;
 const useLocationMock = useLocation as jest.Mock;
 
 describe('NavigationBar', () => {
