@@ -2,7 +2,7 @@ import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -35,12 +35,12 @@ export const CodeSnippetContext = React.createContext({
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
 const Sicp: React.FC = () => {
-  const [data, setData] = React.useState(<></>);
-  const [loading, setLoading] = React.useState(false);
-  const [active, setActive] = React.useState('0');
+  const [data, setData] = useState(<></>);
+  const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState('0');
   const { section } = useParams<{ section: string }>();
-  const parentRef = React.useRef<HTMLDivElement>(null);
-  const refs = React.useRef({});
+  const parentRef = useRef<HTMLDivElement>(null);
+  const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -69,7 +69,7 @@ const Sicp: React.FC = () => {
     return visibleParagraphs;
   };
 
-  const scrollRefIntoView = (ref: HTMLDivElement | null) => {
+  const scrollRefIntoView = (ref: HTMLElement | null) => {
     if (!ref || !parentRef?.current) {
       return;
     }
