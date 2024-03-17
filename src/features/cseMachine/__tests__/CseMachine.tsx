@@ -95,23 +95,13 @@ codeSamples.forEach((code, idx) => {
         });
       });
     });
-    // Layout.grid.frameLevels.forEach(({ frames }) => {
-    //   frames.forEach(({ environment, bindings, xCoord, yCoord }) => {
-    //     environmentsToTest.push(environment);
-    //     toTest.push(xCoord);
-    //     toTest.push(yCoord);
-    //     bindings.forEach(({ keyString, data }) => {
-    //       toTest.push(keyString);
-    //       toTest.push(data);
-    //     });
-    //   });
-    // });
     environmentsToTest.forEach(environment => {
       expect(environment).toMatchSnapshot({
         id: expect.any(String)
       });
     });
     expect(toTest).toMatchSnapshot();
+    // Note: Old code is kept here as a reference for later
     // const checkNonCompactLayout = () => {
     //   Layout.draw();
     //   Layout.values.forEach(v => {
