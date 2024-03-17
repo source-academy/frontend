@@ -78,8 +78,8 @@ export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
  */
 
 export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, height: number] => {
-  const [width, setWidth] = React.useState<number>(0);
-  const [height, setHeight] = React.useState<number>(0);
+  const [width, setWidth] = React.useState(0);
+  const [height, setHeight] = React.useState(0);
 
   const resizeObserver = React.useMemo(
     () =>

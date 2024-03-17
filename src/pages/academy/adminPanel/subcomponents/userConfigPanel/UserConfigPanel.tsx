@@ -8,9 +8,7 @@ import { AdminPanelCourseRegistration } from 'src/commons/application/types/Sess
 import RolesCell from './RolesCell';
 import UserActionsCell from './UserActionsCell';
 
-export type UserConfigPanelProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   courseRegId?: number;
   userCourseRegistrations?: AdminPanelCourseRegistration[];
   handleUpdateUserRole: (courseRegId: number, role: Role) => void;
@@ -24,7 +22,7 @@ type OwnProps = {
  *   other admins can do so, to prevent a scenario where there are
  *   no admins left in a course)
  */
-const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
+const UserConfigPanel: React.FC<Props> = props => {
   const gridApi = React.useRef<GridApi>();
 
   const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
