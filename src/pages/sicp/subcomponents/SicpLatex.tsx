@@ -1,12 +1,12 @@
 import React from 'react';
 import Latex from 'react-latex-next';
 
-type SicpLatexProps = {
+type Props = {
   math: string;
 };
 
-const SicpLatex: React.FC<SicpLatexProps> = props => {
-  return <Latex>{props.math}</Latex>;
+const SicpLatex: React.FC<Props> = ({ math }) => {
+  return <Latex>{math}</Latex>;
 };
 
 export default SicpLatex;

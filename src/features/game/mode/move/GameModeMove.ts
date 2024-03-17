@@ -3,13 +3,15 @@ import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
+import { ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { keyboardShortcuts } from '../../input/GameInputConstants';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType, LocationId } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
-import { createButton } from '../../utils/ButtonUtils';
+import { createButton, createButtonText } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import MoveModeConstants, { moveButtonStyle } from './GameModeMoveConstants';
@@ -38,7 +40,7 @@ class GameModeMove implements IGameUI {
   /**
    * Fetches the navigations of the current location id.
    */
-  private getLatestNavigations() {
+  private getLatestNavigations(): ItemId[] {
     return GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.navigation,
       GameGlobalAPI.getInstance().getCurrLocId()
@@ -79,16 +81,16 @@ class GameModeMove implements IGameUI {
     });
 
     moveMenuContainer.add(
-      buttons.map((button, index) =>
-        this.createMoveButton(
-          button.text,
+      buttons.map((button, index) => {
+        return this.createMoveButton(
+          createButtonText(index + 1, button.text),
           buttonPositions[index][0] + MoveModeConstants.button.xOffSet,
           buttonPositions[index][1],
           button.callback,
           button.onHover,
           button.onOut
-        )
-      )
+        );
+      })
     );
 
     const backButton = new CommonBackButton(
@@ -162,6 +164,22 @@ class GameModeMove implements IGameUI {
   }
 
   /**
+   * Register keyboard listeners for location selection.
+   * Called by activateUI function.
+   */
+  private registerKeyboardListener(): void {
+    const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
+    const navList: string[] = this.getLatestNavigations();
+
+    navList.forEach((nav, index) => {
+      inputManager.registerKeyboardListener(keyboardShortcuts.Options[index], 'up', async () => {
+        await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Sequence);
+        await GameGlobalAPI.getInstance().changeLocationTo(nav);
+      });
+    });
+  }
+
+  /**
    * Activate the 'Move' mode UI.
    *
    * Usually only called by the phase manager when 'Move' phase is
@@ -172,13 +190,23 @@ class GameModeMove implements IGameUI {
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
-    this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+    this.registerKeyboardListener();
 
+    this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
     gameManager.tweens.add({
       targets: this.uiContainer,
       ...entryTweenProps
     });
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
+  }
+
+  /**
+   * Remove keyboard listners for location selection
+   * when Move mode is transitioned out.
+   */
+  private removeKeyboardListener(): void {
+    const inputManager = GameGlobalAPI.getInstance().getGameManager().getInputManager();
+    inputManager.clearKeyboardListeners(keyboardShortcuts.Options);
   }
 
   /**
@@ -189,7 +217,7 @@ class GameModeMove implements IGameUI {
    */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-
+    this.removeKeyboardListener();
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 

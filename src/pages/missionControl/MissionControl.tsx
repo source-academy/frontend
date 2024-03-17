@@ -16,8 +16,6 @@ import Constants from '../../commons/utils/Constants';
 import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
-const nullFunction = () => {};
-
 const MissionControl: React.FC = () => {
   const { assessmentConfigurations } = useSession();
   const assessmentTypes = assessmentConfigurations?.map(e => e.type) || [];
@@ -75,7 +73,7 @@ const MissionControl: React.FC = () => {
   // Finally, render the ContentDisplay.
   return (
     <div className={classNames('Assessment', academyClasses['Academy'])}>
-      <ContentDisplay display={display} loadContentDispatch={nullFunction} />
+      <ContentDisplay display={display} />
     </div>
   );
 };

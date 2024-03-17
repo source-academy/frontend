@@ -17,13 +17,13 @@ import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
-type AchievementViewProps = {
+type Props = {
   focusUuid: string;
   assessments?: Map<number, Assessment>;
   userState?: [AchievementUser | undefined, any];
 };
 
-const AchievementView: React.FC<AchievementViewProps> = ({ focusUuid, userState }) => {
+const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
   const assessmentId = !Number.isNaN(+focusUuid) && +focusUuid !== 0 ? +focusUuid : undefined;
   let courseRegId: number | undefined;
 
