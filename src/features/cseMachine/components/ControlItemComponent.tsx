@@ -2,8 +2,8 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
-import { Visible } from '../components/Visible';
-import { ControlStashConfig, ShapeDefaultProps } from '../CseMachineControlStash';
+import { ShapeDefaultProps } from '../CseMachineConfig';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
@@ -17,6 +17,7 @@ import {
 } from '../CseMachineUtils';
 import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
 import { Frame } from './Frame';
+import { Visible } from './Visible';
 
 export class ControlItemComponent extends Visible implements IHoverable {
   /** text to display */
