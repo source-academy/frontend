@@ -45,24 +45,24 @@ const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props =>
   const users =
     studio === 'Staff'
       ? // The name can be null for users who have yet to log in. We push these to the back of the array.
-        [...props.users].sort(
+      [...props.users].sort(
+        (user1, user2) =>
+          user1.name != null && user2.name != null
+            ? user1.name.localeCompare(user2.name)
+            : user1.name == null
+              ? 1 // user1.name is null, user1 > user2
+              : -1 // user2.name is null, user1 < user2
+      )
+      : props.users
+        .filter(user => user.group === studio)
+        .sort(
           (user1, user2) =>
             user1.name != null && user2.name != null
               ? user1.name.localeCompare(user2.name)
               : user1.name == null
-              ? 1 // user1.name is null, user1 > user2
-              : -1 // user2.name is null, user1 < user2
-        )
-      : props.users
-          .filter(user => user.group === studio)
-          .sort(
-            (user1, user2) =>
-              user1.name != null && user2.name != null
-                ? user1.name.localeCompare(user2.name)
-                : user1.name == null
                 ? 1 // user1.name is null, user1 > user2
                 : -1 // user2.name is null, user1 < user2
-          );
+        );
 
   useEffect(() => {
     getUsers();
@@ -95,53 +95,63 @@ const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props =>
 
   return (
     <div className="achievement-manual-editor">
-      <h3>User: </h3>
-      <UserSelect
-        filterable={true}
-        items={users}
-        itemRenderer={userRenderer}
-        itemPredicate={userPredicate}
-        onItemSelect={changeSelectedUser}
-        noResults={<MenuItem disabled={true} text="No matching user" />}
-      >
-        <Button
-          outlined={true}
-          text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
-          color="White"
-        />
-      </UserSelect>
+      <div className="achievement-manual-editor">
+        <div className="editor-section">
+          <h3>User: </h3>
+          <UserSelect
+            filterable={true}
+            items={users}
+            itemRenderer={userRenderer}
+            itemPredicate={userPredicate}
+            onItemSelect={changeSelectedUser}
+            noResults={<MenuItem disabled={true} text="No matching user" />}
+          >
+            <Button
+              outlined={true}
+              text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
+              color="White"
+            />
+          </UserSelect>
+        </div>
 
-      <h3>Goal: </h3>
-      <GoalSelect
-        filterable={true}
-        items={manualAchievements}
-        itemRenderer={goalRenderer}
-        itemPredicate={goalPredicate}
-        onItemSelect={changeGoal}
-        noResults={<MenuItem disabled={true} text="No matching goal" />}
-      >
-        <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
-      </GoalSelect>
+        <div className="editor-section">
+          <h3>Goal: </h3>
+          <GoalSelect
+            filterable={true}
+            items={manualAchievements}
+            itemRenderer={goalRenderer}
+            itemPredicate={goalPredicate}
+            onItemSelect={changeGoal}
+            noResults={<MenuItem disabled={true} text="No matching goal" />}
+          >
+            <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
+          </GoalSelect>
+        </div>
 
-      <h3>Count: </h3>
-      <NumericInput
-        value={count}
-        min={0}
-        allowNumericCharactersOnly={true}
-        minorStepSize={null}
-        placeholder="Count"
-        onValueChange={changeCount}
-      />
+        <div className="editor-section">
+          <h3>Count: </h3>
+          <NumericInput
+            value={count}
+            min={0}
+            allowNumericCharactersOnly={true}
+            minorStepSize={null}
+            placeholder="Count"
+            onValueChange={changeCount}
+          />
+        </div>
 
-      <h3> </h3>
-      <Button outlined={true} text="Update Goal" onClick={updateGoal} intent="primary" />
+        <div className="editor-section">
+          <Button outlined={true} text="Update Goal" onClick={updateGoal} intent="primary" />
+        </div>
 
-      <h3> </h3>
-      <Checkbox
-        checked={viewHidden}
-        label="View Hidden Achievements"
-        onChange={() => changeViewHidden(!viewHidden)}
-      />
+        <div className="editor-section">
+          <Checkbox
+            checked={viewHidden}
+            label="View Hidden Achievements"
+            onChange={() => changeViewHidden(!viewHidden)}
+          />
+        </div>
+      </div>
     </div>
   );
 };
