@@ -4,7 +4,6 @@ import {
   ungradedToBackendParams
 } from 'src/features/grading/GradingUtils';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
-import { action } from 'typesafe-actions'; // EDITED
 
 import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
@@ -151,10 +150,12 @@ export const fetchGradingOverviews = createAction(
   ) => ({ payload: { filterToGroup, gradedFilter, pageParams, filterParams } })
 );
 
-export const fetchTeamFormationOverviews = (filterToGroup = true) =>
-  action(FETCH_TEAM_FORMATION_OVERVIEWS, filterToGroup);
+export const fetchTeamFormationOverviews = createAction(
+  FETCH_TEAM_FORMATION_OVERVIEWS,
+  (filterToGroup = true) => ({ payload: filterToGroup })
+);
 
-export const fetchStudents = () => action(FETCH_STUDENTS);
+export const fetchStudents = createAction(FETCH_STUDENTS, () => ({ payload: {} }));
 
 export const login = createAction(LOGIN, (providerId: string) => ({ payload: providerId }));
 
@@ -221,16 +222,12 @@ export const submitAnswer = createAction(
   (id: number, answer: string | number | ContestEntry[]) => ({ payload: { id, answer } })
 );
 
-export const checkAnswerLastModifiedAt = (
-  id: number,
-  lastModifiedAt: string,
-  saveAnswer: Function
-) =>
-  action(CHECK_ANSWER_LAST_MODIFIED_AT, {
-    id,
-    lastModifiedAt,
-    saveAnswer
-  });
+export const checkAnswerLastModifiedAt = createAction(
+  CHECK_ANSWER_LAST_MODIFIED_AT,
+  (id: number, lastModifiedAt: string, saveAnswer: Function) => ({
+    payload: { id, lastModifiedAt, saveAnswer }
+  })
+);
 
 export const submitAssessment = createAction(SUBMIT_ASSESSMENT, (id: number) => ({ payload: id }));
 
@@ -276,30 +273,45 @@ export const updateGradingOverviews = createAction(
   (overviews: GradingOverviews) => ({ payload: overviews })
 );
 
-export const fetchTeamFormationOverview = (assessmentId: number) =>
-  action(FETCH_TEAM_FORMATION_OVERVIEW, { assessmentId });
+export const fetchTeamFormationOverview = createAction(
+  FETCH_TEAM_FORMATION_OVERVIEW,
+  (assessmentId: number) => ({ payload: { assessmentId } })
+);
 
-export const createTeam = (assessment: AssessmentOverview, teams: OptionType[][]) =>
-  action(CREATE_TEAM, { assessment, teams });
+export const createTeam = createAction(
+  CREATE_TEAM,
+  (assessment: AssessmentOverview, teams: OptionType[][]) => ({ payload: { assessment, teams } })
+);
 
-export const updateTeam = (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) =>
-  action(UPDATE_TEAM, { teamId, assessment, teams });
+export const updateTeam = createAction(
+  UPDATE_TEAM,
+  (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) => ({
+    payload: { teamId, assessment, teams }
+  })
+);
 
-export const deleteTeam = (teamId: number) => action(DELETE_TEAM, { teamId });
+export const deleteTeam = createAction(DELETE_TEAM, (teamId: number) => ({ payload: { teamId } }));
 
-export const bulkUploadTeam = (
-  assessment: AssessmentOverview,
-  file: File,
-  students: User[] | undefined
-) => action(BULK_UPLOAD_TEAM, { assessment, file, students });
+export const bulkUploadTeam = createAction(
+  BULK_UPLOAD_TEAM,
+  (assessment: AssessmentOverview, file: File, students: User[] | undefined) => ({
+    payload: { assessment, file, students }
+  })
+);
 
-export const updateTeamFormationOverviews = (overviews: TeamFormationOverview[]) =>
-  action(UPDATE_TEAM_FORMATION_OVERVIEWS, overviews);
+export const updateTeamFormationOverviews = createAction(
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
+  (overviews: TeamFormationOverview[]) => ({ payload: overviews })
+);
 
-export const updateTeamFormationOverview = (overview: TeamFormationOverview) =>
-  action(UPDATE_TEAM_FORMATION_OVERVIEW, overview);
+export const updateTeamFormationOverview = createAction(
+  UPDATE_TEAM_FORMATION_OVERVIEW,
+  (overview: TeamFormationOverview) => ({ payload: overview })
+);
 
-export const updateStudents = (students: User[]) => action(UPDATE_STUDENTS, students);
+export const updateStudents = createAction(UPDATE_STUDENTS, (students: User[]) => ({
+  payload: students
+}));
 
 /**
  * An extra id parameter is included here because of
