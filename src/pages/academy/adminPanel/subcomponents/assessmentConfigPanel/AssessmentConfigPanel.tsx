@@ -16,17 +16,18 @@ import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
 import NumericCell from './NumericCell';
 
-export type AssessmentConfigPanelProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   assessmentConfig: React.MutableRefObject<AssessmentConfiguration[]>;
   setAssessmentConfig: (assessmentConfig: AssessmentConfiguration[]) => void;
   setAssessmentConfigsToDelete: (assessmentConfig: AssessmentConfiguration) => void;
   setHasChangesAssessmentConfig: (val: boolean) => void;
 };
 
-const AssessmentConfigPanel: React.FC<AssessmentConfigPanelProps> = props => {
-  const { assessmentConfig, setAssessmentConfig, setAssessmentConfigsToDelete } = props;
+const AssessmentConfigPanel: React.FC<Props> = ({
+  assessmentConfig,
+  setAssessmentConfig,
+  setAssessmentConfigsToDelete
+}) => {
   const gridApi = React.useRef<GridApi>();
 
   const setIsManuallyGraded = (index: number, value: boolean) => {
