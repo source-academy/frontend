@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { useResponsive, useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -52,7 +52,6 @@ const AchievementDashboard: React.FC = () => {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
-  const { isMobileBreakpoint } = useResponsive();
 
   const {
     group,
@@ -157,7 +156,7 @@ const AchievementDashboard: React.FC = () => {
             updateGoalProgress={handleUpdateGoalProgress}
           />
         )}
-        <div className='achievement-main'>
+        <div className="achievement-main">
           <div className="filter-container">
             <AchievementFilter
               filterState={filterState}
