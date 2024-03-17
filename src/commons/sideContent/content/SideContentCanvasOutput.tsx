@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-type SideContentCanvasOutputProps = StateProps;
-
-type StateProps = {
+type Props = {
   canvas: HTMLCanvasElement;
 };
 
@@ -10,7 +8,7 @@ type StateProps = {
  * Takes the output of the rendered graphics (in a hidden canvas tag under <body>)
  * and makes it into a new <canvas> output for viewing.
  */
-const SideContentCanvasOutput: React.FC<SideContentCanvasOutputProps> = ({ canvas }) => {
+const SideContentCanvasOutput: React.FC<Props> = ({ canvas }) => {
   const parentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
