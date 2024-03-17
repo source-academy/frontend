@@ -4,13 +4,13 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { Visible } from '../components/Visible';
 import CseMachine from '../CseMachine';
-import { ControlStashConfig } from '../CseMachineControlStash';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import { getStashItemComponent } from '../CseMachineUtils';
 import { StashItemComponent } from './StashItemComponent';
+import { Visible } from './Visible';
 
 export class StashStack extends Visible implements IHoverable {
   /** array of stash item components */

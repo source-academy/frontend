@@ -19,7 +19,8 @@ export class UnassignedValue extends Value {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
+      this._x =
+        mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
       this._y = mainReference.y();
       this.text = new Text(Config.UnassignedData.toString(), this._x, this._y, {
         isStringIdentifiable: false
@@ -43,21 +44,7 @@ export class UnassignedValue extends Value {
     super.reset();
     this.referencedBy.length = 0;
   }
-  updatePosition(): void {
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
-      this._y = mainReference.y();
-    } else {
-      const maxWidth = mainReference.width();
-      const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
-      this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
-      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
-    }
-    this.text.updatePosition(this._x, this._y);
-  }
-  onMouseEnter(): void {}
-  onMouseLeave(): void {}
+  updatePosition(): void {}
 
   draw(): React.ReactNode {
     this._isDrawn = true;

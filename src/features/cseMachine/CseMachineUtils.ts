@@ -17,22 +17,19 @@ import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 import classes from 'src/styles/Draggable.module.scss';
 
-import { ControlItemComponent } from './compactComponents/ControlItemComponent';
-import { Frame } from './compactComponents/Frame';
-import { StashItemComponent } from './compactComponents/StashItemComponent';
-import { ArrayValue } from './compactComponents/values/ArrayValue';
-import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
+import { ControlItemComponent } from './components/ControlItemComponent';
+import { Frame } from './components/Frame';
+import { StashItemComponent } from './components/StashItemComponent';
+import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
-import { CompactConfig } from './CseMachineCompactConfig';
 import { Config } from './CseMachineConfig';
-import { ControlStashConfig } from './CseMachineControlStash';
+import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
-  CompactReferenceType,
   Data,
   EmptyObject,
   Env,
@@ -40,8 +37,7 @@ import {
   EnvTreeNode,
   FnTypes,
   PrimitiveTypes,
-  ReferenceType
-} from './CseMachineTypes';
+  ReferenceType} from './CseMachineTypes';
 
 // TODO: can make use of lodash
 /** Returns `true` if `x` is an object */
@@ -143,11 +139,6 @@ export function isMainReference(value: Value, reference: ReferenceType) {
   } else {
     return value.referencedBy[0] === reference;
   }
-}
-
-/** Returns `true` if `reference` is the main reference of `value` */
-export function isCompactMainReference(value: CompactValue, reference: CompactReferenceType) {
-  return value.referencedBy[0] === reference;
 }
 
 /** checks if `value` is a `number` */
@@ -548,7 +539,7 @@ export function getControlItemComponent(
           highlightOnHover,
           unhighlightOnHover,
           topItem,
-          Layout.compactLevels.reduce<Frame | undefined>(
+          Layout.levels.reduce<Frame | undefined>(
             (accum, level) =>
               accum
                 ? accum
@@ -645,7 +636,7 @@ export function getControlItemComponent(
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
   if (isFn(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
-    for (const level of Layout.compactLevels) {
+    for (const level of Layout.levels) {
       for (const frame of level.frames) {
         if (isFn(stashItem) || isGlobalFn(stashItem)) {
           const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
@@ -711,8 +702,8 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 
 export const defaultSAColor = () =>
   CseMachine.getPrintableMode()
-    ? CompactConfig.SA_BLUE.toString()
-    : CompactConfig.SA_WHITE.toString();
+    ? Config.SA_BLUE.toString()
+    : Config.SA_WHITE.toString();
 
 export const stackItemSAColor = (index: number) =>
   isStashItemInDanger(index)
@@ -722,7 +713,7 @@ export const stackItemSAColor = (index: number) =>
     : ControlStashConfig.SA_WHITE.toString();
 export const currentItemSAColor = (test: boolean) =>
   test
-    ? CompactConfig.SA_CURRENT_ITEM.toString()
+    ? Config.SA_CURRENT_ITEM.toString()
     : CseMachine.getPrintableMode()
     ? ControlStashConfig.SA_BLUE.toString()
     : ControlStashConfig.SA_WHITE.toString();

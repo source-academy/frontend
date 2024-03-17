@@ -11,24 +11,21 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ReferenceType } from '../../CseMachineTypes';
-import { getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
+import { IHoverable,ReferenceType } from '../../CseMachineTypes';
+import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
-import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
-import { Frame } from '../Frame';
-import { FnValue } from './FnValue';
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */
-export class GlobalFnValue extends Value {
+export class GlobalFnValue extends Value implements IHoverable {
   centerX: number;
   readonly tooltipWidth: number;
   readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  private _arrow: GenericArrow<FnValue | GlobalFnValue, Frame> | undefined;
+  private _arrow: ArrowFromFn | undefined;
 
   readonly paramsText: string;
   readonly bodyText: string;
@@ -37,7 +34,6 @@ export class GlobalFnValue extends Value {
   readonly exportTooltip: string;
   private selected: boolean = false;
 
-  readonly ref: RefObject<any> = React.createRef();
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
@@ -52,7 +48,8 @@ export class GlobalFnValue extends Value {
     // derive the coordinates from the main reference (binding / array unit)
     const mainReference = this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+      this._x =
+        mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
@@ -81,24 +78,25 @@ export class GlobalFnValue extends Value {
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
     this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
     this.tooltipWidth =
-      Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) + Config.TextPaddingX;
+      Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) +
+      Config.TextPaddingX;
     this.exportTooltipWidth = Math.max(
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
   }
-
   isSelected(): boolean {
     return this.selected;
   }
-  arrow(): GenericArrow<FnValue | GlobalFnValue, Frame> | undefined {
+  arrow(): ArrowFromFn | undefined {
     return this._arrow;
   }
 
   updatePosition(): void {
     const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
     if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+      this._x =
+        mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
@@ -142,7 +140,8 @@ export class GlobalFnValue extends Value {
   draw(): React.ReactNode {
     this._isDrawn = true;
     this._arrow =
-      Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame);
+      Layout.globalEnvNode.frame &&
+      (new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn);
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -157,9 +156,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -167,9 +164,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -177,9 +172,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -187,9 +180,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
         </Group>
         {CseMachine.getPrintableMode() ? (
@@ -199,7 +190,11 @@ export class GlobalFnValue extends Value {
             visible={true}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'white'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaTag
+              stroke="black"
+              fill={'white'}
+              opacity={Number(Config.FnTooltipOpacity)}
+            />
             <KonvaText
               text={this.exportTooltip}
               fontFamily={Config.FontFamily.toString()}
@@ -216,7 +211,11 @@ export class GlobalFnValue extends Value {
             visible={false}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaTag
+              stroke="black"
+              fill={'black'}
+              opacity={Number(Config.FnTooltipOpacity)}
+            />
             <KonvaText
               text={this.tooltip}
               fontFamily={Config.FontFamily.toString()}
@@ -227,7 +226,8 @@ export class GlobalFnValue extends Value {
             />
           </KonvaLabel>
         )}
-        {this._arrow?.draw()}
+        {Layout.globalEnvNode.frame &&
+          new ArrowFromFn(this).to(Layout.globalEnvNode.frame).draw()}
       </React.Fragment>
     );
   }
