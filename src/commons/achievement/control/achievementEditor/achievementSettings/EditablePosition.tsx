@@ -3,12 +3,12 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-type EditablePositionProps = {
+type Props = {
   changePosition: (position: number) => void;
   position: number;
 };
 
-const EditablePosition: React.FC<EditablePositionProps> = ({ changePosition, position }) => {
+const EditablePosition: React.FC<Props> = ({ changePosition, position }) => {
   const inferencer = useContext(AchievementContext);
   const maxPosition = inferencer.listTaskUuids().length + 1;
   const positionOptions = [...Array(maxPosition + 1).keys()]; // [0..maxPosition + 1]

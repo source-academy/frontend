@@ -4,9 +4,7 @@ import React from 'react';
 import Markdown from '../Markdown';
 import { getPrettyDate } from '../utils/DateHelper';
 
-type AssessmentWorkspaceGradingResultProps = StateProps;
-
-type StateProps = {
+type Props = {
   graderName: string;
   gradedAt: string;
   xp: number;
@@ -14,7 +12,7 @@ type StateProps = {
   comments?: string;
 };
 
-const AssessmentWorkspaceGradingResult: React.FC<AssessmentWorkspaceGradingResultProps> = props => (
+const AssessmentWorkspaceGradingResult: React.FC<Props> = props => (
   <div className="GradingResult">
     <div className="grading-result-table">
       <HTMLTable>

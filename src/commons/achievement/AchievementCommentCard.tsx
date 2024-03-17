@@ -7,10 +7,12 @@ import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
-const AchievementCommentCard: React.FC<{
+type Props = {
   assessment: Assessment;
   showToQuestion: boolean;
-}> = ({ assessment, showToQuestion }) => {
+};
+
+const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion }) => {
   const navigate = useNavigate();
   const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(

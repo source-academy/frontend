@@ -5,14 +5,14 @@ import React from 'react';
 
 import ControlButton from '../ControlButton';
 
-type ControlBarToggleFolderModeButtonProps = {
+type Props = {
   isFolderModeEnabled: boolean;
   isSessionActive: boolean;
   isPersistenceActive: boolean;
   toggleFolderMode: () => void;
 };
 
-export const ControlBarToggleFolderModeButton: React.FC<ControlBarToggleFolderModeButtonProps> = ({
+export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
   isFolderModeEnabled,
   isSessionActive,
   isPersistenceActive,
