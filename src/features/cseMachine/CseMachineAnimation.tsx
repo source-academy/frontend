@@ -147,43 +147,6 @@ export class CseAnimation {
     } else {
       console.log('INSTRTYPE: ' + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
-        case InstrType.RESET:
-        case InstrType.WHILE:
-        case InstrType.FOR:
-          break;
-        case InstrType.ASSIGNMENT:
-          animation = new AssignmentAnimation(
-            lastControlComponent,
-            Layout.stashComponent.stashItemComponents.at(-1)!,
-            ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
-          );
-          break;
-        case InstrType.UNARY_OP:
-          animation = new UnaryOperationAnimation(
-            lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!,
-            Layout.stashComponent.stashItemComponents.at(-1)!
-          );
-          break;
-        case InstrType.BINARY_OP:
-          animation = new BinaryOperationAnimation(
-            lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-2)!,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!,
-            Layout.stashComponent.stashItemComponents.at(-1)!
-          );
-          break;
-        case InstrType.POP:
-          const currentStashSize = Layout.stashComponent.stash.size();
-          const previousStashSize = Layout.previousStashComponent.stash.size();
-          const lastStashIsUndefined =
-            currentStashSize === 1 && currentStashSize === previousStashSize;
-          animation = new PopAnimation(
-            lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!,
-            lastStashIsUndefined ? Layout.stashComponent.stashItemComponents.at(-1)! : undefined
-          );
-          break;
         case InstrType.APPLICATION:
           CseAnimation.animations.push(
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
@@ -204,6 +167,21 @@ export class CseAnimation {
             );
           }
           break;
+        case InstrType.ASSIGNMENT:
+          animation = new AssignmentAnimation(
+            lastControlComponent,
+            Layout.stashComponent.stashItemComponents.at(-1)!,
+            ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
+          );
+          break;
+        case InstrType.BINARY_OP:
+          animation = new BinaryOperationAnimation(
+            lastControlComponent,
+            Layout.previousStashComponent.stashItemComponents.at(-2)!,
+            Layout.previousStashComponent.stashItemComponents.at(-1)!,
+            Layout.stashComponent.stashItemComponents.at(-1)!
+          );
+          break;
         case InstrType.BRANCH:
           if (!currControlComponent) return;
           CseAnimation.animations.push(
@@ -220,14 +198,36 @@ export class CseAnimation {
             CseAnimation.currentFrame
           );
           break;
+        case InstrType.POP:
+          const currentStashSize = Layout.stashComponent.stash.size();
+          const previousStashSize = Layout.previousStashComponent.stash.size();
+          const lastStashIsUndefined =
+            currentStashSize === 1 && currentStashSize === previousStashSize;
+          animation = new PopAnimation(
+            lastControlComponent,
+            Layout.previousStashComponent.stashItemComponents.at(-1)!,
+            lastStashIsUndefined ? Layout.stashComponent.stashItemComponents.at(-1)! : undefined
+          );
+          break;
+        case InstrType.UNARY_OP:
+          animation = new UnaryOperationAnimation(
+            lastControlComponent,
+            Layout.previousStashComponent.stashItemComponents.at(-1)!,
+            Layout.stashComponent.stashItemComponents.at(-1)!
+          );
+          break;
         case InstrType.ARRAY_LITERAL:
         case InstrType.ARRAY_ACCESS:
         case InstrType.ARRAY_ASSIGNMENT:
         case InstrType.ARRAY_LENGTH:
-        case InstrType.CONTINUE_MARKER:
         case InstrType.BREAK:
         case InstrType.BREAK_MARKER:
+        case InstrType.CONTINUE_MARKER:
+        case InstrType.FOR:
         case InstrType.MARKER:
+        case InstrType.RESET:
+        case InstrType.WHILE:
+          break;
       }
     }
     if (animation) CseAnimation.animations.push(animation);
