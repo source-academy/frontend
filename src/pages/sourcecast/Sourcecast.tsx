@@ -56,7 +56,7 @@ import {
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
-import makeCSEMachineTabFrom from '../../commons/sideContent/content/SideContentCSEMachine';
+import makeCseMachineTabFrom from '../../commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from '../../commons/sideContent/content/SideContentDataVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
@@ -264,7 +264,7 @@ const Sourcecast: React.FC = () => {
 
   const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
 
-  const cseMachineTab = makeCSEMachineTabFrom(workspaceLocation);
+  const cseMachineTab = makeCseMachineTabFrom(workspaceLocation);
 
   const tabs: SideContentTab[] = [
     {

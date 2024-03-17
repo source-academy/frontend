@@ -2,10 +2,10 @@ import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import CSEMachine from '../CSEMachine';
-import { CompactConfig, ShapeDefaultProps } from '../CSEMachineCompactConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Env, EnvTreeNode, IHoverable } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { CompactConfig, ShapeDefaultProps } from '../CseMachineCompactConfig';
+import { Layout } from '../CseMachineLayout';
+import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
   getNonEmptyEnv,
@@ -13,7 +13,7 @@ import {
   isDummyKey,
   isPrimitiveData,
   isUnassigned
-} from '../CSEMachineUtils';
+} from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
 import { Level } from './Level';
@@ -144,7 +144,7 @@ export class Frame extends Visible implements IHoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={currentItemSAColor(CSEMachine.getCurrentEnvId() === this.environment?.id)}
+          stroke={currentItemSAColor(CseMachine.getCurrentEnvId() === this.environment?.id)}
           cornerRadius={Number(CompactConfig.FrameCornerRadius)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}

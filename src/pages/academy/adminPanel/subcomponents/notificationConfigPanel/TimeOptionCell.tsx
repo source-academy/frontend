@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
-type TimeOptionCellProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   data: NotificationConfiguration;
   rowIndex: number;
   field: KeysOfType<NotificationConfiguration, TimeOption[]>;
@@ -14,7 +12,7 @@ type OwnProps = {
   setDelete: (timeOption: TimeOption) => void;
 };
 
-const TimeOptionCell: React.FC<TimeOptionCellProps> = props => {
+const TimeOptionCell: React.FC<Props> = props => {
   const timeOptions: TimeOption[] = props.data[props.field];
   const [values, setValues] = useState<React.ReactNode[]>(
     timeOptions.map((timeOption: TimeOption) => (timeOption.minutes / 60).toFixed(2).toString())

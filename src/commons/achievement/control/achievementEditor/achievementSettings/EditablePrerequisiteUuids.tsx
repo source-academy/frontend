@@ -5,15 +5,17 @@ import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
-type EditablePrerequisiteUuidsProps = {
+type Props = {
   changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;
   uuid: string;
   prerequisiteUuids: string[];
 };
 
-const EditablePrerequisiteUuids: React.FC<EditablePrerequisiteUuidsProps> = props => {
-  const { changePrerequisiteUuids, uuid, prerequisiteUuids } = props;
-
+const EditablePrerequisiteUuids: React.FC<Props> = ({
+  changePrerequisiteUuids,
+  uuid,
+  prerequisiteUuids
+}) => {
   const enablePrerequisites = false;
 
   const inferencer = useContext(AchievementContext);

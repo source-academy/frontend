@@ -60,11 +60,6 @@ import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace
 import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
-type GradingWorkspaceProps = {
-  submissionId: number;
-  questionId: number;
-};
-
 const workspaceLocation: WorkspaceLocation = 'grading';
 const unansweredPrependValue: string = `// This answer does not have significant changes from the given solution
 // template and has thus been flagged as unanswered.
@@ -73,7 +68,12 @@ const unansweredPrependValue: string = `// This answer does not have significant
 
 `;
 
-const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
+type Props = {
+  submissionId: number;
+  questionId: number;
+};
+
+const GradingWorkspace: React.FC<Props> = props => {
   const navigate = useNavigate();
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
@@ -228,7 +228,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
    *
    * Assumes that 'grading' is defined
    */
-  const checkWorkspaceReset = (props: GradingWorkspaceProps) => {
+  const checkWorkspaceReset = (props: Props) => {
     /* Reset grading if it has changed.*/
     const submissionId = props.submissionId;
     const questionId = props.questionId;
@@ -290,8 +290,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   };
 
   /** Pre-condition: Grading has been loaded */
-  const sideContentProps: (p: GradingWorkspaceProps, q: number) => SideContentProps = (
-    props: GradingWorkspaceProps,
+  const sideContentProps: (p: Props, q: number) => SideContentProps = (
+    props: Props,
     questionId: number
   ) => {
     const tabs: SideContentTab[] = [

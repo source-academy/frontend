@@ -1,7 +1,7 @@
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
-import { CompactConfig } from '../../CSEMachineCompactConfig';
-import { StepsArray } from '../../CSEMachineTypes';
+import { CompactConfig } from '../../CseMachineCompactConfig';
+import { StepsArray } from '../../CseMachineTypes';
 import { ControlItemComponent } from '../ControlItemComponent';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';

@@ -1,10 +1,10 @@
 import React, { RefObject } from 'react';
 import { Rect } from 'react-konva';
 
-import CSEMachine from '../CSEMachine';
-import { Config, ShapeDefaultProps } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Data } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { Data } from '../CseMachineTypes';
 import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
 
@@ -38,7 +38,7 @@ export class ArrayEmptyUnit extends Visible {
         width={this.width()}
         height={this.height()}
         stroke={
-          CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+          CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
         }
         ref={this.ref}
       />

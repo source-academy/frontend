@@ -1,10 +1,10 @@
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import { CompactConfig, ShapeDefaultProps } from '../../CSEMachineCompactConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { IVisible, StepsArray } from '../../CSEMachineTypes';
-import { defaultSAColor } from '../../CSEMachineUtils';
+import { CompactConfig, ShapeDefaultProps } from '../../CseMachineCompactConfig';
+import { Layout } from '../../CseMachineLayout';
+import { IVisible, StepsArray } from '../../CseMachineTypes';
+import { defaultSAColor } from '../../CseMachineUtils';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible {

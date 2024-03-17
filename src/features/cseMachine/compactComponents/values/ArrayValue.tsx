@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { CompactConfig } from '../../CSEMachineCompactConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { CompactReferenceType, Data } from '../../CSEMachineTypes';
+import { CompactConfig } from '../../CseMachineCompactConfig';
+import { Layout } from '../../CseMachineLayout';
+import { CompactReferenceType, Data } from '../../CseMachineTypes';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';

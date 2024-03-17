@@ -9,17 +9,17 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import CSEMachine from '../../CSEMachine';
-import { CompactConfig, ShapeDefaultProps } from '../../CSEMachineCompactConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { CompactReferenceType, EnvTreeNode, FnTypes, IHoverable } from '../../CSEMachineTypes';
+import CseMachine from '../../CseMachine';
+import { CompactConfig, ShapeDefaultProps } from '../../CseMachineCompactConfig';
+import { Layout } from '../../CseMachineLayout';
+import { CompactReferenceType, EnvTreeNode, FnTypes, IHoverable } from '../../CseMachineTypes';
 import {
   defaultSAColor,
   getBodyText,
   getNonEmptyEnv,
   getParamsText,
   getTextWidth
-} from '../../CSEMachineUtils';
+} from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
@@ -100,13 +100,13 @@ export class FnValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.ref.current.moveToTop();
     this.labelRef.current.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.hide();
   };
   updatePosition(): void {}
@@ -154,7 +154,7 @@ export class FnValue extends Value implements IHoverable {
             fill={defaultSAColor()}
           />
         </Group>
-        {CSEMachine.getPrintableMode() ? (
+        {CseMachine.getPrintableMode() ? (
           <KonvaLabel
             x={this.x() + this.width() + CompactConfig.TextPaddingX * 2}
             y={this.y() - CompactConfig.TextPaddingY}

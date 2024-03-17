@@ -26,7 +26,7 @@ import {
   setEditorSessionId,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import makeCSEMachineTabFrom from 'src/commons/sideContent/content/SideContentCSEMachine';
+import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
@@ -58,7 +58,7 @@ import {
   setFolderMode,
   toggleEditorAutorun,
   toggleFolderMode,
-  toggleUpdateCSE,
+  toggleUpdateCse,
   toggleUsingSubst,
   updateActiveEditorTabIndex,
   updateEditorValue,
@@ -254,7 +254,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replValue,
     sharedbConnected,
     usingSubst,
-    usingCSE,
+    usingCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
@@ -435,7 +435,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // }
 
   //     // if (newTabId !== SideContentType.cseMachine) {
-  //     //   handleCSEMachineReset();
+  //     //   handleCseMachineReset();
   //     // }
 
   //     // if (
@@ -445,7 +445,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   //     //   if (playgroundSourceChapter <= Chapter.SOURCE_2) {
   //     //     handleUsingSubst(true);
   //     //   } else {
-  //     //     handleUsingCSE(true);
+  //     //     handleUsingCse(true);
   //     //   }
   //     // }
 
@@ -643,18 +643,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
         stepSize={usingSubst ? 2 : 1}
         handleChangeStepLimit={limit => {
           dispatch(changeStepLimit(limit, workspaceLocation));
-          usingCSE && dispatch(toggleUpdateCSE(true, workspaceLocation));
+          usingCse && dispatch(toggleUpdateCse(true, workspaceLocation));
         }}
         handleOnBlurAutoScale={limit => {
           limit % 2 === 0 || !usingSubst
             ? dispatch(changeStepLimit(limit, workspaceLocation))
             : dispatch(changeStepLimit(limit + 1, workspaceLocation));
-          usingCSE && dispatch(toggleUpdateCSE(true, workspaceLocation));
+          usingCse && dispatch(toggleUpdateCse(true, workspaceLocation));
         }}
         key="step_limit"
       />
     ),
-    [dispatch, stepLimit, usingSubst, usingCSE, workspaceLocation]
+    [dispatch, stepLimit, usingSubst, usingCse, workspaceLocation]
   );
 
   const getEditorValue = useCallback(
@@ -728,7 +728,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
 
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
-  const shouldShowCSEMachine = languageConfig.supports.cseMachine;
+  const shouldShowCseMachine = languageConfig.supports.cseMachine;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   const playgroundIntroductionTab: SideContentTab = useMemo(
@@ -758,8 +758,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       if (shouldShowDataVisualizer) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
-      if (shouldShowCSEMachine) {
-        tabs.push(makeCSEMachineTabFrom(workspaceLocation));
+      if (shouldShowCseMachine) {
+        tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
       if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
@@ -780,7 +780,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch,
     workspaceLocation,
     shouldShowDataVisualizer,
-    shouldShowCSEMachine,
+    shouldShowCseMachine,
     shouldShowSubstVisualizer,
     remoteExecutionTab
   ]);
@@ -809,7 +809,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       };
 
       pushLog(input);
-      dispatch(toggleUpdateCSE(true, workspaceLocation));
+      dispatch(toggleUpdateCse(true, workspaceLocation));
       dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
     },
     [pushLog, dispatch, workspaceLocation]
@@ -869,7 +869,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         }
       }
       handleSetEditorBreakpoints(editorTabIndex, breakpoints);
-      dispatch(toggleUpdateCSE(true, workspaceLocation));
+      dispatch(toggleUpdateCse(true, workspaceLocation));
     },
     [
       selectedTab,
@@ -992,7 +992,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
-          : usingSubst || usingCSE
+          : usingSubst || usingCse
           ? stepperStepLimit
           : executionTime
       ]

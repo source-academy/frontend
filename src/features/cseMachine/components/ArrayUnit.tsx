@@ -1,9 +1,9 @@
 import React from 'react';
 
-import CSEMachine from '../CSEMachine';
-import { Config } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Data } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { Config } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { Data } from '../CseMachineTypes';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
@@ -96,7 +96,7 @@ export class ArrayUnit extends Visible {
           width={this.width()}
           height={this.height()}
           stroke={
-            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+            CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
           fillEnabled={false}

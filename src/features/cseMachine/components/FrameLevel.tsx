@@ -1,9 +1,9 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
-import { Config, ShapeDefaultProps } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { EnvTreeNode } from '../CSEMachineTypes';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { EnvTreeNode } from '../CseMachineTypes';
 import { ArrayLevel } from './ArrayLevel';
 import { Frame } from './Frame';
 import { Level } from './Level';

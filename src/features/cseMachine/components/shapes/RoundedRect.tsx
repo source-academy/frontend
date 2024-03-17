@@ -2,7 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Shape } from 'react-konva';
 
-import { ShapeDefaultProps } from '../../CSEMachineConfig';
+import { ShapeDefaultProps } from '../../CseMachineConfig';
 
 interface Props {
   x: number;

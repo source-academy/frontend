@@ -38,7 +38,7 @@ import TeamFormationForm from './teamFormation/subcomponents/TeamFormationForm';
 import TeamFormationImport from './teamFormation/subcomponents/TeamFormationImport';
 import TeamFormation from './teamFormation/TeamFormation';
 
-const Academy: React.FC<{}> = () => {
+const Academy: React.FC = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(fetchStudents());
@@ -108,7 +108,7 @@ const Academy: React.FC<{}> = () => {
   );
 };
 
-const CourseSelectingAcademy: React.FC<{}> = () => {
+const CourseSelectingAcademy: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { courseId } = useSession();

@@ -1,7 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 
-import { Data, IHoverable, ReferenceType } from '../../CSEMachineTypes';
+import { Data, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { Visible } from '../Visible';
 
 /** the value of a `Binding` or an `ArrayUnit` */

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { CompactConfig } from '../../CSEMachineCompactConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { CompactReferenceType, UnassignedData } from '../../CSEMachineTypes';
-import { getTextWidth } from '../../CSEMachineUtils';
+import { CompactConfig } from '../../CseMachineCompactConfig';
+import { Layout } from '../../CseMachineLayout';
+import { CompactReferenceType, UnassignedData } from '../../CseMachineTypes';
+import { getTextWidth } from '../../CseMachineUtils';
 import { Binding } from '../Binding';
 import { Text } from '../Text';
 import { Value } from './Value';

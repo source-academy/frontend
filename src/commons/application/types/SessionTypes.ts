@@ -9,7 +9,6 @@ import {
   AssessmentConfiguration,
   AssessmentOverview
 } from '../../assessment/AssessmentTypes';
-import { MissionRepoData } from '../../githubAssessments/GitHubMissionTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
@@ -133,7 +132,6 @@ export type SessionState = {
   readonly gradings: Map<number, GradingQuery>;
   readonly notifications: Notification[];
   readonly googleUser?: string;
-  readonly githubAssessment?: MissionRepoData;
   readonly githubOctokitObject: { octokit: Octokit | undefined };
   readonly githubAccessToken?: string;
   readonly remoteExecutionDevices?: Device[];

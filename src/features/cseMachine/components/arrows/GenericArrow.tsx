@@ -1,10 +1,10 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
-import CSEMachine from '../../CSEMachine';
-import { Config, ShapeDefaultProps } from '../../CSEMachineConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { IHoverable, IVisible, StepsArray } from '../../CSEMachineTypes';
+import CseMachine from '../../CseMachine';
+import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
+import { Layout } from '../../CseMachineLayout';
+import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { Visible } from '../Visible';
@@ -142,7 +142,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         <KonvaPath
           {...ShapeDefaultProps}
           stroke={
-            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+            CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           strokeWidth={this.getStrokeWidth()}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
@@ -153,7 +153,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           {...ShapeDefaultProps}
           points={points.slice(points.length - 4)}
           fill={
-            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+            CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           strokeEnabled={false}
           pointerWidth={Number(Config.ArrowHeadSize)}

@@ -2,17 +2,17 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
-import CSEMachine from '../CSEMachine';
-import { Config, ShapeDefaultProps } from '../CSEMachineConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Env, EnvTreeNode, IHoverable } from '../CSEMachineTypes';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   getNonEmptyEnv,
   getTextWidth,
   isDummyKey,
   isPrimitiveData,
   isUnassigned
-} from '../CSEMachineUtils';
+} from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
@@ -190,7 +190,7 @@ export class Frame extends Visible implements IHoverable {
       }
     }
 
-    if (CSEMachine.getPrintableMode()) {
+    if (CseMachine.getPrintableMode()) {
       this.totalWidth = exportWidth;
     } else {
       this.totalWidth = totalWidth;
@@ -210,7 +210,7 @@ export class Frame extends Visible implements IHoverable {
     Frame.maxX = Math.max(
       Frame.maxX,
       Frame.cumWidths[this.xCoord] +
-        (CSEMachine.getPrintableMode() ? this.totalWidth : this.totalHoveredWidth),
+        (CseMachine.getPrintableMode() ? this.totalWidth : this.totalHoveredWidth),
       Frame.cumWidths[Frame.cumWidths.length - 1]
     );
     Frame.heights[this.yCoord] = Math.max(Frame.heights[this.yCoord] || 0, this.totalHeight);
@@ -256,7 +256,7 @@ export class Frame extends Visible implements IHoverable {
           width={this.width()}
           height={this.height()}
           stroke={
-            CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+            CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
           }
           cornerRadius={Number(Config.FrameCornerRadius)}
           key={Layout.key++}

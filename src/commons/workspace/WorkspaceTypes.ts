@@ -1,6 +1,5 @@
 import { Context } from 'js-slang';
 
-import { GitHubAssessmentWorkspaceState } from '../../features/githubAssessment/GitHubAssessmentTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -99,8 +98,8 @@ type GroundControlWorkspaceState = GroundControlWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
-  readonly usingCSE: boolean;
-  readonly updateCSE: boolean;
+  readonly usingCse: boolean;
+  readonly updateCse: boolean;
   readonly currentStep: number;
   readonly stepsTotal: number;
   readonly breakpointSteps: number[];
@@ -118,7 +117,6 @@ export type WorkspaceManagerState = {
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
   readonly sicp: SicpWorkspaceState;
-  readonly githubAssessment: GitHubAssessmentWorkspaceState;
   readonly stories: StoriesWorkspaceState;
 };
 

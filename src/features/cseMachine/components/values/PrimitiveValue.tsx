@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Config } from '../../CSEMachineConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { PrimitiveTypes, ReferenceType } from '../../CSEMachineTypes';
-import { getTextWidth, isNull } from '../../CSEMachineUtils';
+import { Config } from '../../CseMachineConfig';
+import { Layout } from '../../CseMachineLayout';
+import { PrimitiveTypes, ReferenceType } from '../../CseMachineTypes';
+import { getTextWidth, isNull } from '../../CseMachineUtils';
 import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';
 import { Text } from '../Text';

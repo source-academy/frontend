@@ -5,9 +5,9 @@ import { Label, Tag, Text } from 'react-konva';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { Visible } from '../components/Visible';
-import { ControlStashConfig, ShapeDefaultProps } from '../CSEMachineControlStash';
-import { Layout } from '../CSEMachineLayout';
-import { IHoverable } from '../CSEMachineTypes';
+import { ControlStashConfig, ShapeDefaultProps } from '../CseMachineControlStash';
+import { Layout } from '../CseMachineLayout';
+import { IHoverable } from '../CseMachineTypes';
 import {
   getTextWidth,
   isArray,
@@ -19,7 +19,7 @@ import {
   setUnhoveredStyle,
   stackItemSAColor,
   truncateText
-} from '../CSEMachineUtils';
+} from '../CseMachineUtils';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
 

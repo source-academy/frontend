@@ -3,9 +3,9 @@ import React from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import { ControlStashConfig, ShapeDefaultProps } from '../CSEMachineControlStash';
-import { Layout } from '../CSEMachineLayout';
-import { IHoverable } from '../CSEMachineTypes';
+import { ControlStashConfig, ShapeDefaultProps } from '../CseMachineControlStash';
+import { Layout } from '../CseMachineLayout';
+import { IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
   getTextHeight,
@@ -14,7 +14,7 @@ import {
   setUnhoveredCursor,
   setUnhoveredStyle,
   truncateText
-} from '../CSEMachineUtils';
+} from '../CseMachineUtils';
 import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
 import { Frame } from './Frame';
 

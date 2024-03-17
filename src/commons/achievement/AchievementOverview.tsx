@@ -6,12 +6,12 @@ import { FETCH_TOTAL_XP, FETCH_TOTAL_XP_ADMIN } from '../application/types/Sessi
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementLevel from './overview/AchievementLevel';
 
-type AchievementOverviewProps = {
+type Props = {
   name: string;
   userState: [AchievementUser | undefined, any];
 };
 
-const AchievementOverview: React.FC<AchievementOverviewProps> = ({ name, userState }) => {
+const AchievementOverview: React.FC<Props> = ({ name, userState }) => {
   const [selectedUser] = userState;
   const crid = selectedUser?.courseRegId;
   const userCrid = useTypedSelector(store => store.session.courseRegId);

@@ -2,10 +2,10 @@ import React from 'react';
 
 import { RoundedRect } from '../components/shapes/RoundedRect';
 import { Visible } from '../components/Visible';
-import { CompactConfig } from '../CSEMachineCompactConfig';
-import { Layout } from '../CSEMachineLayout';
-import { Data } from '../CSEMachineTypes';
-import { defaultSAColor } from '../CSEMachineUtils';
+import { CompactConfig } from '../CseMachineCompactConfig';
+import { Layout } from '../CseMachineLayout';
+import { Data } from '../CseMachineTypes';
+import { defaultSAColor } from '../CseMachineUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { Text } from './Text';

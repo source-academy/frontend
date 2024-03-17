@@ -43,7 +43,7 @@ import {
   SourcecastEditorContainerProps
 } from '../../../commons/editor/EditorContainer';
 import { Position } from '../../../commons/editor/EditorTypes';
-import makeCSEMachineTabFrom from '../../../commons/sideContent/content/SideContentCSEMachine';
+import makeCseMachineTabFrom from '../../../commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from '../../../commons/sideContent/content/SideContentDataVisualizer';
 import { useSideContent } from '../../../commons/sideContent/SideContentHelper';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
@@ -315,7 +315,7 @@ const Sourcereel: React.FC = () => {
   };
 
   const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
-  const cseMachineTab = makeCSEMachineTabFrom(workspaceLocation);
+  const cseMachineTab = makeCseMachineTabFrom(workspaceLocation);
 
   const workspaceHandlers = useMemo(() => {
     return {

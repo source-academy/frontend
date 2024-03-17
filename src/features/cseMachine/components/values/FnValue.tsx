@@ -9,11 +9,11 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import CSEMachine from '../../CSEMachine';
-import { Config, ShapeDefaultProps } from '../../CSEMachineConfig';
-import { Layout } from '../../CSEMachineLayout';
-import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from '../../CSEMachineTypes';
-import { getBodyText, getNonEmptyEnv, getParamsText, getTextWidth } from '../../CSEMachineUtils';
+import CseMachine from '../../CseMachine';
+import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
+import { Layout } from '../../CseMachineLayout';
+import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { getBodyText, getNonEmptyEnv, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
@@ -130,13 +130,13 @@ export class FnValue extends Value implements IHoverable {
     this.referencedBy.length = 0;
   }
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.moveToTop();
     this.labelRef.current.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     if (!this.selected) {
       this.labelRef.current.hide();
     } else {
@@ -145,7 +145,7 @@ export class FnValue extends Value implements IHoverable {
     }
   };
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CSEMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) return;
     this.selected = !this.selected;
     if (!this.selected) {
       this.labelRef.current.hide();
@@ -173,7 +173,7 @@ export class FnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.radius}
             stroke={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -183,7 +183,7 @@ export class FnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.innerRadius}
             fill={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -193,7 +193,7 @@ export class FnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.radius}
             stroke={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
           <Circle
@@ -203,11 +203,11 @@ export class FnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.innerRadius}
             fill={
-              CSEMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
+              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
             }
           />
         </Group>
-        {CSEMachine.getPrintableMode() ? (
+        {CseMachine.getPrintableMode() ? (
           <KonvaLabel
             x={this.x() + this.width() + Config.TextPaddingX * 2}
             y={this.y() - Config.TextPaddingY}

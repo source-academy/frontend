@@ -6,9 +6,9 @@ import React from 'react';
 import { Group, Rect, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
-import { CSEAnimation } from '../CSEMachineAnimation';
-import { ControlStashConfig } from '../CSEMachineControlStash';
-import { currentItemSAColor } from '../CSEMachineUtils';
+import { CseAnimation } from '../CseMachineAnimation';
+import { ControlStashConfig } from '../CseMachineControlStash';
+import { currentItemSAColor } from '../CseMachineUtils';
 
 /** Type that extends the NodeConfig type from Konva, making the x, y, width & height values required */
 type StrictNodeConfig = Omit<NodeConfig, 'x' | 'y' | 'width' | 'height'> & {
@@ -75,7 +75,7 @@ abstract class AnimationComponent extends Animatable {
       }
       this.resolve = resolve;
       if (this.animationConfig?.delayMultiplier) {
-        await this.delay(this.animationConfig.delayMultiplier * CSEAnimation.defaultDuration);
+        await this.delay(this.animationConfig.delayMultiplier * CseAnimation.defaultDuration);
       }
       if (this.isDestroyed) {
         return;
@@ -87,8 +87,8 @@ abstract class AnimationComponent extends Animatable {
       this.tween = new Tween({
         node: this.ref.current,
         ...this.to,
-        duration: CSEAnimation.defaultDuration * (this.animationConfig?.durationMultiplier ?? 1),
-        easing: this.animationConfig?.easing ?? CSEAnimation.defaultEasing,
+        duration: CseAnimation.defaultDuration * (this.animationConfig?.durationMultiplier ?? 1),
+        easing: this.animationConfig?.easing ?? CseAnimation.defaultEasing,
         onFinish: () => {
           if (this.to) {
             if (this.to.x) this._x = this.to.x;
