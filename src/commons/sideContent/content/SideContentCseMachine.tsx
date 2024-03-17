@@ -211,17 +211,17 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
               <Tooltip2 content="Control and Stash" compact>
                 <AnchorButton
                   onMouseUp={() => {
-                    if (this.state.visualization && CseMachine.getCompactLayout()) {
+                    if (this.state.visualization) {
                       CseMachine.toggleControlStash();
                       CseMachine.redraw();
                     }
                   }}
                   icon="layers"
-                  disabled={!this.state.visualization || !CseMachine.getCompactLayout()}
+                  disabled={!this.state.visualization}
                 >
                   <Checkbox
                     checked={CseMachine.getControlStash()}
-                    disabled={!CseMachine.getCompactLayout()}
+                    disabled={!this.state.visualization}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -229,17 +229,17 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
               <Tooltip2 content="Truncate Control" compact>
                 <AnchorButton
                   onMouseUp={() => {
-                    if (this.state.visualization && CseMachine.getControlStash()) {
+                    if (this.state.visualization) {
                       CseMachine.toggleStackTruncated();
                       CseMachine.redraw();
                     }
                   }}
                   icon="minimize"
-                  disabled={!this.state.visualization || !CseMachine.getControlStash()}
+                  disabled={!this.state.visualization}
                 >
                   <Checkbox
                     checked={CseMachine.getStackTruncated()}
-                    disabled={!CseMachine.getControlStash()}
+                    disabled={!this.state.visualization}
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
@@ -268,24 +268,6 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
               />
             </ButtonGroup>
             <ButtonGroup>
-              <Tooltip2 content="Experimental" compact>
-                <AnchorButton
-                  onMouseUp={() => {
-                    if (this.state.visualization) {
-                      CseMachine.toggleCompactLayout();
-                      CseMachine.redraw();
-                    }
-                  }}
-                  icon="build"
-                  disabled={!this.state.visualization}
-                >
-                  <Checkbox
-                    checked={!CseMachine.getCompactLayout()}
-                    disabled={!this.state.visualization}
-                    style={{ margin: 0 }}
-                  />
-                </AnchorButton>
-              </Tooltip2>
               <Tooltip2 content="Print" compact>
                 <AnchorButton
                   onMouseUp={() => {
