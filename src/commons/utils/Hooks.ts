@@ -1,5 +1,9 @@
 import React, { RefObject } from 'react';
-import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import {
+  TypedUseSelectorHook,
+  // eslint-disable-next-line no-restricted-imports
+  useSelector
+} from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { OverallState } from '../application/ApplicationTypes';

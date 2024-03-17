@@ -2,6 +2,22 @@
   "extends": ["react-app", "plugin:@typescript-eslint/recommended"],
   "plugins": ["simple-import-sort"],
   "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "react-redux",
+            "importNames": [
+              // TODO: Create typed hook for useDispatch
+              // "useDispatch",
+              "useSelector"
+            ],
+            "message": "Use the typed hook \"useTypedSelector\" instead."
+          }
+        ]
+      }
+    ],
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/camelcase": "off",
