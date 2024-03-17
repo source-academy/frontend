@@ -54,7 +54,7 @@ export class Text extends Visible implements IHoverable {
     this._height = fontSize;
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
-      let truncatedText = Config.Ellipsis;
+      let truncatedText: string = Config.Ellipsis;
       let i = 0;
       while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis) < maxWidth) {
         truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis;

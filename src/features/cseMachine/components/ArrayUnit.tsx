@@ -66,8 +66,7 @@ export class ArrayUnit extends Visible {
       lowerRight: 0
     };
 
-    if (this.isFirstUnit)
-      cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
+    if (this.isFirstUnit) cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
 

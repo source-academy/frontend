@@ -463,11 +463,7 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fill={
-                      CseMachine.getPrintableMode()
-                        ? Config.PRINT_BACKGROUND
-                        : Config.SA_BLUE
-                    }
+                    fill={CseMachine.getPrintableMode() ? Config.PRINT_BACKGROUND : Config.SA_BLUE}
                     key={Layout.key++}
                     listening={false}
                   />
