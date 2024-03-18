@@ -105,8 +105,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
         <KonvaPath
           {...ShapeDefaultProps}
           stroke={defaultSAColor()}
-          strokeWidth={Number(Config.ArrowStrokeWidth)}
-          hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
+          strokeWidth={Config.ArrowStrokeWidth}
+          hitStrokeWidth={Config.ArrowHitStrokeWidth}
           data={this.path()}
           key={Layout.key++}
         />
@@ -115,7 +115,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
           points={points.slice(points.length - 4)}
           fill={defaultSAColor()}
           strokeEnabled={false}
-          pointerWidth={Number(Config.ArrowHeadSize)}
+          pointerWidth={Config.ArrowHeadSize}
           key={Layout.key++}
         />
       </KonvaGroup>

@@ -31,7 +31,7 @@ export class ArrayNullUnit extends Visible {
         key={Layout.key++}
         points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
         stroke={defaultSAColor()}
-        hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
+        hitStrokeWidth={Config.DataHitStrokeWidth}
         ref={this.ref}
         listening={false}
       />
