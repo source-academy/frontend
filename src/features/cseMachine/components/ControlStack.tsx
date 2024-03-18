@@ -84,17 +84,17 @@ export class ControlStack extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fontFamily: ControlStashConfig.FontFamily.toString(),
+      fontFamily: ControlStashConfig.FontFamily,
       fontSize: 12,
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fontStyle: ControlStashConfig.FontStyle,
+      fontVariant: ControlStashConfig.FontVariant
     };
     return (
       <Group key={Layout.key++} ref={this.ref}>
         {CseMachine.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
-            x={Number(ControlStashConfig.ShowMoreButtonX)}
-            y={Number(ControlStashConfig.ShowMoreButtonY)}
+            x={ControlStashConfig.ShowMoreButtonX}
+            y={ControlStashConfig.ShowMoreButtonY}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onMouseUp={() => {
@@ -104,15 +104,15 @@ export class ControlStack extends Visible implements IHoverable {
           >
             <Tag
               stroke={defaultSAColor()}
-              cornerRadius={Number(ControlStashConfig.ControlItemCornerRadius)}
+              cornerRadius={ControlStashConfig.ControlItemCornerRadius}
             />
             <Text
               {...textProps}
               text={`${Config.Ellipsis}`}
               align="center"
               fill={defaultSAColor()}
-              width={Number(ControlStashConfig.ShowMoreButtonWidth)}
-              height={Number(ControlStashConfig.ShowMoreButtonHeight)}
+              width={ControlStashConfig.ShowMoreButtonWidth}
+              height={ControlStashConfig.ShowMoreButtonHeight}
             />
           </Label>
         )}
