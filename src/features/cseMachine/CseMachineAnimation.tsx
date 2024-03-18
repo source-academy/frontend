@@ -12,7 +12,7 @@ import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { BranchAnimation } from './animationComponents/BranchAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
 import { FrameCreationAnimation } from './animationComponents/FrameCreationAnimation';
-import { FunctionFrameCreationAnimation } from './animationComponents/FunctionFrameCreationAnimation';
+import { FunctionApplicationAnimation } from './animationComponents/FunctionApplicationAnimation';
 import { LiteralAnimation } from './animationComponents/LiteralAnimation';
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
@@ -92,7 +92,7 @@ export class CseAnimation {
           // if (!currControlComponent) return;
           if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
             CseAnimation.animations.push(
-              new FrameCreationAnimation(CseAnimation.currentFrame, lastControlComponent)
+              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
             );
           }
           break;
@@ -124,7 +124,7 @@ export class CseAnimation {
           // if (!currControlComponent) return;
           if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
             CseAnimation.animations.push(
-              new FrameCreationAnimation(CseAnimation.currentFrame, lastControlComponent)
+              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
             );
           }
           break;
@@ -149,24 +149,16 @@ export class CseAnimation {
       console.log('INSTRTYPE: ' + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.APPLICATION:
+          const appInstr = lastControlItem as AppInstr;
           CseAnimation.animations.push(
-            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+            new FunctionApplicationAnimation(
+              lastControlComponent,
+              CseAnimation.getNewControlItems(),
+              Layout.previousStashComponent.stashItemComponents.at(-appInstr.numOfArgs - 1)!,
+              Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
+              appInstr.numOfArgs > 0 ? CseAnimation.currentFrame : undefined
+            )
           );
-          // if (!currControlComponent) return;
-          if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
-            const appInstr = lastControlItem as AppInstr;
-            const argStashItems = Layout.previousStashComponent.stashItemComponents.slice(
-              -appInstr.numOfArgs
-            );
-            CseAnimation.animations.push(
-              new FunctionFrameCreationAnimation(
-                CseAnimation.currentFrame,
-                lastControlComponent, // TODO:
-                Layout.previousStashComponent.stashItemComponents.at(-appInstr.numOfArgs - 1)!,
-                argStashItems
-              )
-            );
-          }
           break;
         case InstrType.ARRAY_LITERAL:
           const arrSize = (lastControlItem as ArrLitInstr).arity;

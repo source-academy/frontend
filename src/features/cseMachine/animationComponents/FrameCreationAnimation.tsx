@@ -3,51 +3,57 @@ import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { Frame } from '../components/Frame';
+import { StashItemComponent } from '../components/StashItemComponent';
 import { Config } from '../CseMachineConfig';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { currentItemSAColor } from '../CseMachineUtils';
-import { Animatable } from './base/Animatable';
+import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
-import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
-import { getNodePosition } from './base/AnimationUtils';
+import { getNodeDimensions, getNodeLocation, getNodePosition } from './base/AnimationUtils';
 
 export class FrameCreationAnimation extends Animatable {
-  private controlAnimation: AnimatedTextbox;
+  private controlTextAnimation: AnimatedTextComponent;
+  private borderAnimation: AnimatedRectComponent;
   private frameArrowAnimation?: AnimatedGenericArrow<Frame, Frame>;
   private frameNameAnimation: AnimatedTextComponent;
-  private frameBorderAnimation: AnimatedRectComponent;
   private frameBindingsAnimation: AnimatedTextComponent[];
 
   constructor(
-    private currFrame: Frame,
-    private controlItem: ControlItemComponent
+    origin: ControlItemComponent | StashItemComponent,
+    private frame: Frame
   ) {
     super();
-    const moveDistance = 16;
-    this.controlAnimation = new AnimatedTextbox(controlItem.text, getNodePosition(controlItem), {
-      rectProps: { stroke: currentItemSAColor(true) }
+    const xDiff = frame.x() - origin.x();
+    const yDiff = frame.y() - origin.y();
+    this.controlTextAnimation = new AnimatedTextComponent({
+      ...getNodePosition(origin),
+      text: origin.text,
+      padding:
+        origin instanceof ControlItemComponent
+          ? Number(ControlStashConfig.ControlItemTextPadding)
+          : Number(ControlStashConfig.StashItemTextPadding)
     });
-    if (currFrame.arrow) {
-      this.frameArrowAnimation = new AnimatedGenericArrow(currFrame.arrow, { opacity: 0 });
+    this.borderAnimation = new AnimatedRectComponent({
+      ...getNodePosition(origin),
+      stroke: currentItemSAColor(origin instanceof ControlItemComponent)
+    });
+    if (frame.arrow) {
+      this.frameArrowAnimation = new AnimatedGenericArrow(frame.arrow, { opacity: 0 });
     }
     this.frameNameAnimation = new AnimatedTextComponent({
-      text: currFrame.name.partialStr,
-      ...getNodePosition(currFrame.name),
-      y: currFrame.name.y() - moveDistance,
+      text: frame.name.partialStr,
+      ...getNodeDimensions(frame.name),
+      x: frame.name.x() - xDiff,
+      y: frame.name.y() - yDiff,
       opacity: 0
     });
-    this.frameBorderAnimation = new AnimatedRectComponent({
-      ...getNodePosition(currFrame),
-      cornerRadius: Number(Config.FrameCornerRadius),
-      stroke: currentItemSAColor(true),
-      y: currFrame.y() - moveDistance,
-      opacity: 0
-    });
-    this.frameBindingsAnimation = currFrame.bindings.map(binding => {
+    this.frameBindingsAnimation = frame.bindings.map(binding => {
       return new AnimatedTextComponent({
         text: binding.keyString,
-        ...getNodePosition(binding.key),
-        y: binding.key.y() - moveDistance,
+        ...getNodeDimensions(binding.key),
+        x: binding.key.x() - xDiff,
+        y: binding.key.y() - yDiff,
         opacity: 0
       });
     });
@@ -56,56 +62,57 @@ export class FrameCreationAnimation extends Animatable {
   draw(): React.ReactNode {
     return (
       <Group key={Animatable.key--} ref={this.ref}>
-        {this.controlAnimation.draw()}
+        {this.controlTextAnimation.draw()}
+        {this.borderAnimation.draw()}
         {this.frameArrowAnimation?.draw()}
         {this.frameNameAnimation.draw()}
-        {this.frameBorderAnimation.draw()}
         {this.frameBindingsAnimation.map(a => a.draw())}
       </Group>
     );
   }
 
-  async animate() {
-    this.currFrame.ref.current.hide();
-    const framePosition = getNodePosition(this.currFrame);
-    const duration =
-      Math.sqrt(
-        Math.pow(framePosition.x - this.controlItem.x(), 2) +
-          Math.pow(framePosition.y - this.controlItem.y(), 2)
-      ) /
-        500 +
-      0.5;
+  async animate(animationConfig?: AnimationConfig) {
+    this.frame.ref.current.hide();
+    const duration = animationConfig?.duration ?? 1.2;
+    const translateConfig = { ...animationConfig, duration };
+    const fadeOutConfig = { ...animationConfig, duration: (duration * 3) / 4 };
+    const fadeInConfig = {
+      duration: (duration * 3) / 4,
+      delay: duration / 4 + (animationConfig?.delay ?? 0),
+      easing: animationConfig?.easing
+    };
+    const framePosition = getNodePosition(this.frame);
     await Promise.all([
-      // Move control block towards current frame position, while also fading out
-      this.controlAnimation.animateTo({ x: framePosition.x, y: framePosition.y }, { duration }),
-      this.controlAnimation.animateTo({ opacity: 0 }, { duration: 0.4, delay: duration - 0.6 }),
-      // Fade in all the frame elements with a slight movement downwards
-      this.frameNameAnimation.animateTo(
-        { ...getNodePosition(this.currFrame.name), opacity: 1 },
-        { delay: duration - 0.6 }
+      // Fade out the control text during translation
+      this.controlTextAnimation.animateTo({ opacity: 0 }, fadeOutConfig),
+      // Move everything towards the frame position
+      this.controlTextAnimation.animateTo(getNodeLocation(this.frame), translateConfig),
+      this.borderAnimation.animateTo(
+        { ...framePosition, cornerRadius: Number(Config.FrameCornerRadius) },
+        translateConfig
       ),
-      this.frameBorderAnimation.animateTo(
-        { ...framePosition, opacity: 1 },
-        { delay: duration - 0.6 }
-      ),
-      ...this.frameBindingsAnimation.map((a, i) =>
-        a.animateTo(
-          { ...getNodePosition(this.currFrame.bindings[i]), opacity: 1 },
-          { delay: duration - 0.6 }
-        )
-      ),
-      // Fade in arrow as well
-      this.frameArrowAnimation?.animateTo({ opacity: 1 }, { delay: duration - 0.2 })
+      this.frameNameAnimation.animateTo(getNodePosition(this.frame.name), translateConfig),
+      // Also fade frame items in during translation
+      ...this.frameBindingsAnimation.flatMap((a, i) => [
+        a.animateTo(getNodeLocation(this.frame.bindings[i]), translateConfig),
+        a.animateTo({ opacity: 1 }, fadeInConfig)
+      ]),
+      this.frameNameAnimation.animateTo({ opacity: 1 }, fadeInConfig),
+      // Fade in the arrow last
+      this.frameArrowAnimation?.animateTo(
+        { opacity: 1 },
+        { duration: 0.5, delay: duration + (animationConfig?.delay ?? 0) }
+      )
     ]);
     this.destroy();
   }
 
   destroy() {
-    this.currFrame.ref.current?.show();
-    this.controlAnimation.destroy();
+    this.frame.ref.current?.show();
+    this.controlTextAnimation.destroy();
+    this.borderAnimation.destroy();
     this.frameArrowAnimation?.destroy();
     this.frameNameAnimation.destroy();
-    this.frameBorderAnimation.destroy();
     this.frameBindingsAnimation.forEach(a => a.destroy());
   }
 }
