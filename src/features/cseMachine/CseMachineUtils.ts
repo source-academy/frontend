@@ -200,7 +200,7 @@ export function getTextHeight(
   text: string,
   width: number,
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
-  fontSize: number = Number(Config.FontSize)
+  fontSize: number = Config.FontSize
 ): number {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
@@ -266,8 +266,8 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
   nodes.push(target);
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.HoveredColor.toString() : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.HoveredColor.toString() : node.attrs.fill,
+      stroke: node.attrs.stroke ? Config.HoveredColor : node.attrs.stroke,
+      fill: node.attrs.fill ? Config.HoveredColor : node.attrs.fill,
       ...hoveredAttrs
     });
   });
@@ -283,13 +283,13 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
     node.setAttrs({
       stroke: node.attrs.stroke
         ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE.toString()
-          : Config.SA_WHITE.toString()
+          ? Config.SA_BLUE
+          : Config.SA_WHITE
         : node.attrs.stroke,
       fill: node.attrs.fill
         ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE.toString()
-          : Config.SA_WHITE.toString()
+          ? Config.SA_BLUE
+          : Config.SA_WHITE
         : node.attrs.fill,
       ...unhoveredAttrs
     });
@@ -702,17 +702,17 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 };
 
 export const defaultSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString();
+  CseMachine.getPrintableMode() ? Config.SA_BLUE : Config.SA_WHITE;
 
 export const stackItemSAColor = (index: number) =>
   isStashItemInDanger(index)
-    ? ControlStashConfig.STASH_DANGER_ITEM.toString()
+    ? ControlStashConfig.STASH_DANGER_ITEM
     : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE.toString()
-    : ControlStashConfig.SA_WHITE.toString();
+    ? ControlStashConfig.SA_BLUE
+    : ControlStashConfig.SA_WHITE;
 export const currentItemSAColor = (test: boolean) =>
   test
-    ? Config.SA_CURRENT_ITEM.toString()
+    ? Config.SA_CURRENT_ITEM
     : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE.toString()
-    : ControlStashConfig.SA_WHITE.toString();
+    ? ControlStashConfig.SA_BLUE
+    : ControlStashConfig.SA_WHITE;
