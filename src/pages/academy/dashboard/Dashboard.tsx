@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
     <div className="Dashboard">
       <div className="Grid ag-grid-parent ag-theme-balham">
         <AgGridReact
-          domLayout={'autoHeight'}
+          domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
           onGridReady={onGridReady}

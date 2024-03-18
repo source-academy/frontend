@@ -167,7 +167,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     const grid = (
       <div className="Grid ag-grid-parent ag-theme-balham">
         <AgGridReact
-          domLayout={'autoHeight'}
+          domLayout="autoHeight"
           columnDefs={this.columnDefs}
           defaultColDef={this.defaultColumnDefs}
           onGridReady={this.onGridReady}
