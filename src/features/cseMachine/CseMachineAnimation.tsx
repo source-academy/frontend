@@ -4,7 +4,6 @@ import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
 import { ArrayLiteralAnimation } from './animationComponents/ArrayLiteralAnimation';
-import { ArrowFunctionExpressionAnimation } from './animationComponents/ArrowFunctionExpressionAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
 import { checkFrameCreation, lookupBinding } from './animationComponents/base/AnimationUtils';
@@ -58,10 +57,7 @@ export class CseAnimation {
     const previousControlSize = Layout.previousControlComponent.control.size();
     const numOfItems = currentControlSize - previousControlSize + 1;
     if (numOfItems <= 0) return [];
-    const targetItems = Array.from({ length: numOfItems }, (_, i) => {
-      return Layout.controlComponent.stackItemComponents[previousControlSize + i - 1];
-    });
-    return targetItems;
+    return Layout.controlComponent.stackItemComponents.slice(previousControlSize - 1);
   }
 
   static updateAnimation() {
@@ -71,12 +67,13 @@ export class CseAnimation {
     if (!Layout.previousControlComponent) return;
     const lastControlItem = Layout.previousControlComponent.control.peek();
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
-    const currControlComponent = Layout.controlComponent.stackItemComponents.at(-1);
+    const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1);
+    // const currControlComponent = Layout.controlComponent.stackItemComponents.at(-1);
     if (
       !CseAnimation.animationEnabled ||
       !lastControlItem ||
       !lastControlComponent ||
-      !CseMachine.getControlStash() // TODO: handle cases where there are environment animations
+      !CseMachine.getControlStash() // TODO: handle cases where there are only environment animations
     ) {
       return;
     }
@@ -85,36 +82,31 @@ export class CseAnimation {
       switch (lastControlItem.type) {
         case 'ArrowFunctionExpression':
           CseAnimation.animations.push(
-            new ArrowFunctionExpressionAnimation(
-              lastControlComponent,
-              Layout.stashComponent.stashItemComponents.at(-1)!
-            )
+            new LiteralAnimation(lastControlComponent, currStashComponent!)
           );
           break;
         case 'BlockStatement':
           CseAnimation.animations.push(
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
-          if (!currControlComponent) return;
+          // if (!currControlComponent) return;
           if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
             CseAnimation.animations.push(
-              new FrameCreationAnimation(CseAnimation.currentFrame, currControlComponent)
+              new FrameCreationAnimation(CseAnimation.currentFrame, lastControlComponent)
             );
           }
           break;
         case 'Identifier':
+          // Special case for 'undefined' identifier, use the literal animation instead
           if (lastControlComponent.text === 'undefined') {
             CseAnimation.animations.push(
-              new LiteralAnimation(
-                lastControlComponent,
-                Layout.stashComponent.stashItemComponents.at(-1)!
-              )
+              new LiteralAnimation(lastControlComponent, currStashComponent!)
             );
           } else {
             CseAnimation.animations.push(
               new LookupAnimation(
                 lastControlComponent,
-                Layout.stashComponent.stashItemComponents.at(-1)!,
+                currStashComponent!,
                 ...lookupBinding(CseAnimation.currentFrame, lastControlItem.name)
               )
             );
@@ -122,20 +114,17 @@ export class CseAnimation {
           break;
         case 'Literal':
           CseAnimation.animations.push(
-            new LiteralAnimation(
-              lastControlComponent,
-              Layout.stashComponent.stashItemComponents.at(-1)!
-            )
+            new LiteralAnimation(lastControlComponent, currStashComponent!)
           );
           break;
         case 'Program':
           CseAnimation.animations.push(
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
-          if (!currControlComponent) return;
+          // if (!currControlComponent) return;
           if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
             CseAnimation.animations.push(
-              new FrameCreationAnimation(CseAnimation.currentFrame, currControlComponent)
+              new FrameCreationAnimation(CseAnimation.currentFrame, lastControlComponent)
             );
           }
           break;
@@ -163,7 +152,7 @@ export class CseAnimation {
           CseAnimation.animations.push(
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
-          if (!currControlComponent) return;
+          // if (!currControlComponent) return;
           if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
             const appInstr = lastControlItem as AppInstr;
             const argStashItems = Layout.previousStashComponent.stashItemComponents.slice(
@@ -172,7 +161,7 @@ export class CseAnimation {
             CseAnimation.animations.push(
               new FunctionFrameCreationAnimation(
                 CseAnimation.currentFrame,
-                currControlComponent,
+                lastControlComponent, // TODO:
                 Layout.previousStashComponent.stashItemComponents.at(-appInstr.numOfArgs - 1)!,
                 argStashItems
               )
@@ -180,61 +169,72 @@ export class CseAnimation {
           }
           break;
         case InstrType.ARRAY_LITERAL:
-          const arrSize = (lastControlItem as ArrLitInstr).arity
-          CseAnimation.animations.push(new ArrayLiteralAnimation(
-            lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.slice(-arrSize),
-            Layout.stashComponent.stashItemComponents.at(-1)!
-          ))
+          const arrSize = (lastControlItem as ArrLitInstr).arity;
+          CseAnimation.animations.push(
+            new ArrayLiteralAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.slice(-arrSize),
+              currStashComponent!
+            )
+          );
           break;
         case InstrType.ASSIGNMENT:
-          CseAnimation.animations.push(new AssignmentAnimation(
-            lastControlComponent,
-            Layout.stashComponent.stashItemComponents.at(-1)!,
-            ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
-          ));
+          CseAnimation.animations.push(
+            new AssignmentAnimation(
+              lastControlComponent,
+              currStashComponent!,
+              ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
+            )
+          );
           break;
         case InstrType.BINARY_OP:
-          CseAnimation.animations.push(new BinaryOperationAnimation(
-            lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-2)!,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!,
-            Layout.stashComponent.stashItemComponents.at(-1)!
-          ));
+          CseAnimation.animations.push(
+            new BinaryOperationAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-2)!,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              currStashComponent!
+            )
+          );
           break;
         case InstrType.BRANCH:
-          if (!currControlComponent) return;
+          // if (!currControlComponent) return;
           CseAnimation.animations.push(
             new BranchAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              currControlComponent
+              CseAnimation.getNewControlItems()
             )
           );
           break;
         case InstrType.ENVIRONMENT:
-          CseAnimation.animations.push(new EnvironmentAnimation(
-            CseAnimation.previousFrame,
-            CseAnimation.currentFrame
-          ));
+          CseAnimation.animations.push(
+            new EnvironmentAnimation(CseAnimation.previousFrame, CseAnimation.currentFrame)
+          );
           break;
         case InstrType.POP:
           const currentStashSize = Layout.stashComponent.stash.size();
           const previousStashSize = Layout.previousStashComponent.stash.size();
           const lastStashIsUndefined =
-            currentStashSize === 1 && currentStashSize === previousStashSize;
-          CseAnimation.animations.push(new PopAnimation(
-            lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!,
-            lastStashIsUndefined ? Layout.stashComponent.stashItemComponents.at(-1)! : undefined
-          ));
+            currentStashSize === 1 &&
+            currStashComponent!.text === 'undefined' &&
+            currentStashSize === previousStashSize;
+          CseAnimation.animations.push(
+            new PopAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              lastStashIsUndefined ? currStashComponent : undefined
+            )
+          );
           break;
         case InstrType.UNARY_OP:
-          CseAnimation.animations.push(new UnaryOperationAnimation(
-            lastControlComponent,
-            Layout.previousStashComponent.stashItemComponents.at(-1)!,
-            Layout.stashComponent.stashItemComponents.at(-1)!
-          ));
+          CseAnimation.animations.push(
+            new UnaryOperationAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              currStashComponent!
+            )
+          );
           break;
         // block split cases
         case InstrType.FOR:

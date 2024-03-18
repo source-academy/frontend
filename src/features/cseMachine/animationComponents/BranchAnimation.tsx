@@ -6,24 +6,22 @@ import { StashItemComponent } from '../components/StashItemComponent';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodeLocation, getNodePosition } from './base/AnimationUtils';
+import { BlockAnimation } from './BlockAnimation';
 
 export class BranchAnimation extends Animatable {
   private branchItemAnimation: AnimatedTextbox;
   private booleanItemAnimation: AnimatedTextbox;
-  private resultItemAnimation: AnimatedTextbox;
+  private blockAnimation: BlockAnimation;
 
   constructor(
     private branchItem: ControlItemComponent,
     booleanItem: StashItemComponent,
-    private resultItem: ControlItemComponent
+    private resultItems: ControlItemComponent[]
   ) {
     super();
     this.branchItemAnimation = new AnimatedTextbox(branchItem.text, getNodePosition(branchItem));
     this.booleanItemAnimation = new AnimatedTextbox(booleanItem.text, getNodePosition(booleanItem));
-    this.resultItemAnimation = new AnimatedTextbox(resultItem.text, {
-      ...getNodePosition(resultItem),
-      opacity: 0
-    });
+    this.blockAnimation = new BlockAnimation(branchItem, resultItems);
   }
 
   draw(): React.ReactNode {
@@ -31,32 +29,32 @@ export class BranchAnimation extends Animatable {
       <Group ref={this.ref} key={Animatable.key--}>
         {this.branchItemAnimation.draw()}
         {this.booleanItemAnimation.draw()}
-        {this.resultItemAnimation.draw()}
+        {this.blockAnimation.draw()}
       </Group>
     );
   }
 
   async animate() {
-    this.resultItem.ref.current?.hide();
+    this.resultItems.forEach(i => i.ref.current?.hide());
+    // Move boolean next to branch instruction
     await this.booleanItemAnimation.animateTo({
-        x: this.branchItem.x() + this.branchItem.width(),
-        y: this.branchItem.y()
+      x: this.branchItem.x() + this.branchItem.width(),
+      y: this.branchItem.y()
     });
+    // Merge boolean and branch instruction together
     await Promise.all([
       this.branchItemAnimation.animateTo({ opacity: 0 }),
-      this.booleanItemAnimation.animateTo({
-        ...getNodeLocation(this.branchItem),
-        opacity: 0
-      }),
-      this.resultItemAnimation.animateTo({ opacity: 1})
-    ])
+      this.booleanItemAnimation.animateTo({ ...getNodeLocation(this.branchItem), opacity: 0 }),
+      // Play the block animation for the results of the branch instruction
+      this.blockAnimation.animate({ delay: 0.5 })
+    ]);
     this.destroy();
   }
 
   destroy() {
-    this.resultItem.ref.current?.show();
+    this.ref.current?.hide();
     this.branchItemAnimation.destroy();
     this.booleanItemAnimation.destroy();
-    this.resultItemAnimation.destroy();
+    this.blockAnimation.destroy();
   }
 }

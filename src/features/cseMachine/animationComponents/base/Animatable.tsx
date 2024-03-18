@@ -33,7 +33,7 @@ export abstract class Animatable extends Visible {
 
   /** Starts the animation. `animate` should not be called if the animation is still running.
    * @return a void promise that resolves when the animation is complete */
-  abstract animate(): Promise<void>;
+  abstract animate(animationConfig?: AnimationConfig): Promise<void>;
 
   /** Properly dispose of the current animation and ensures that subsequent calls to animate cannot be made */
   abstract destroy(): void;
