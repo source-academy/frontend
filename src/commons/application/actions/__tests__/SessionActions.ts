@@ -114,14 +114,16 @@ test('fetchAuth generates correct action object', () => {
 test('fetchUserAndCourse generates correct action object', () => {
   const action = fetchUserAndCourse();
   expect(action).toEqual({
-    type: FETCH_USER_AND_COURSE
+    type: FETCH_USER_AND_COURSE,
+    payload: {}
   });
 });
 
 test('fetchCourseConfig generates correct action object', () => {
   const action = fetchCourseConfig();
   expect(action).toEqual({
-    type: FETCH_COURSE_CONFIG
+    type: FETCH_COURSE_CONFIG,
+    payload: {}
   });
 });
 
@@ -137,7 +139,8 @@ test('fetchAssessment generates correct action object', () => {
 test('fetchAssessmentOverviews generates correct action object', () => {
   const action = fetchAssessmentOverviews();
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT_OVERVIEWS
+    type: FETCH_ASSESSMENT_OVERVIEWS,
+    payload: {}
   });
 });
 
@@ -184,7 +187,8 @@ test('fetchNotifications generates correct action object', () => {
   const action = fetchNotifications();
 
   expect(action).toEqual({
-    type: FETCH_NOTIFICATIONS
+    type: FETCH_NOTIFICATIONS,
+    payload: {}
   });
 });
 
@@ -664,7 +668,8 @@ test('updateCourseConfig generates correct action object', () => {
 test('fetchAssessmentConfig generates correct action object', () => {
   const action = fetchAssessmentConfigs();
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT_CONFIGS
+    type: FETCH_ASSESSMENT_CONFIGS,
+    payload: {}
   });
 });
 
@@ -743,7 +748,8 @@ test('deleteAssessmentConfig generates correct action object', () => {
 test('fetchAdminPanelCourseRegistrations generates correct action object', () => {
   const action = fetchAdminPanelCourseRegistrations();
   expect(action).toEqual({
-    type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS
+    type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    payload: {}
   });
 });
 

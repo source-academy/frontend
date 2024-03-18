@@ -1,4 +1,4 @@
-import { action } from 'typesafe-actions';
+import { createAction } from '@reduxjs/toolkit';
 
 import {
   FETCH_GROUP_GRADING_SUMMARY,
@@ -6,7 +6,11 @@ import {
   UPDATE_GROUP_GRADING_SUMMARY
 } from './DashboardTypes';
 
-export const fetchGroupGradingSummary = () => action(FETCH_GROUP_GRADING_SUMMARY);
+export const fetchGroupGradingSummary = createAction(FETCH_GROUP_GRADING_SUMMARY, () => ({
+  payload: {}
+}));
 
-export const updateGroupGradingSummary = (gradingSummary: GradingSummary) =>
-  action(UPDATE_GROUP_GRADING_SUMMARY, gradingSummary);
+export const updateGroupGradingSummary = createAction(
+  UPDATE_GROUP_GRADING_SUMMARY,
+  (gradingSummary: GradingSummary) => ({ payload: gradingSummary })
+);

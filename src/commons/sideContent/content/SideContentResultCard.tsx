@@ -4,13 +4,6 @@ import React from 'react';
 
 import { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
 
-type SideContentResultCardProps = StateProps;
-
-type StateProps = {
-  index: number;
-  result: AutogradingResult;
-};
-
 const buildErrorString = (errors: AutogradingError[]) =>
   errors
     .map(error => {
@@ -29,9 +22,12 @@ const buildErrorString = (errors: AutogradingError[]) =>
     })
     .join('\n\n');
 
-const SideContentResultCard: React.FunctionComponent<SideContentResultCardProps> = props => {
-  const { index, result } = props;
+type Props = {
+  index: number;
+  result: AutogradingResult;
+};
 
+const SideContentResultCard: React.FC<Props> = ({ index, result }) => {
   return (
     <div
       className={classNames('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}

@@ -10,15 +10,6 @@ import {
 
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-type AchievementManualEditorProps = {
-  hiddenState: [boolean, any];
-  userState: [AchievementUser | undefined, any];
-  studio: string;
-  users: AchievementUser[];
-  getUsers: () => void;
-  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
-};
-
 const GoalSelect = Select.ofType<AchievementGoal>();
 const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
   <MenuItem key={goal.uuid} onClick={handleClick} text={goal.text} />
@@ -40,7 +31,16 @@ export function updateGoalProcessed() {
   showSuccessMessage('Goal updated');
 }
 
-const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props => {
+type Props = {
+  hiddenState: [boolean, any];
+  userState: [AchievementUser | undefined, any];
+  studio: string;
+  users: AchievementUser[];
+  getUsers: () => void;
+  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
+};
+
+const AchievementManualEditor: React.FC<Props> = props => {
   const { userState, hiddenState, studio, getUsers, updateGoalProgress } = props;
   const users =
     studio === 'Staff'
@@ -75,7 +75,7 @@ const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props =>
 
   const [goal, changeGoal] = useState<AchievementGoal | undefined>(undefined);
   const [selectedUser, changeSelectedUser] = userState;
-  const [count, changeCount] = useState<number>(0);
+  const [count, changeCount] = useState(0);
   const [viewHidden, changeViewHidden] = hiddenState;
 
   const updateGoal = () => {

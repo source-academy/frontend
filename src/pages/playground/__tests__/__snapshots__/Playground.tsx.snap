@@ -298,7 +298,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div
@@ -791,10 +791,11 @@ and also the
                                         class="bp5-button-text"
                                       >
                                         <label
-                                          class="bp5-control bp5-checkbox"
+                                          class="bp5-control bp5-checkbox bp5-disabled"
                                           style="margin: 0px;"
                                         >
                                           <input
+                                            disabled=""
                                             type="checkbox"
                                           />
                                           <span
@@ -894,40 +895,6 @@ and also the
                                 <div
                                   class="bp5-button-group"
                                 >
-                                  <span
-                                    class="bp5-popover-target"
-                                  >
-                                    <a
-                                      aria-disabled="true"
-                                      aria-expanded="false"
-                                      class="bp5-button bp5-disabled"
-                                      disabled=""
-                                      role="button"
-                                      tabindex="-1"
-                                    >
-                                      <span
-                                        aria-hidden="true"
-                                        class="bp5-icon bp5-icon-standard bp5-icon-build"
-                                        data-icon="build"
-                                      />
-                                      <span
-                                        class="bp5-button-text"
-                                      >
-                                        <label
-                                          class="bp5-control bp5-checkbox bp5-disabled"
-                                          style="margin: 0px;"
-                                        >
-                                          <input
-                                            disabled=""
-                                            type="checkbox"
-                                          />
-                                          <span
-                                            class="bp5-control-indicator"
-                                          />
-                                        </label>
-                                      </span>
-                                    </a>
-                                  </span>
                                   <span
                                     class="bp5-popover-target"
                                   >
@@ -1661,7 +1628,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div
