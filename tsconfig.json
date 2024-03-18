@@ -23,7 +23,7 @@
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true
   },
