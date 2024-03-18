@@ -82,7 +82,7 @@ const stringToUserStateTypeMap = {
  * This also acts as a validity checker to ensure that
  * strings such as action types (eg 'show_dialogue') and
  * game modes (eg 'explore') are actually valid enums
- * 
+ *
  * TODO: Investigate if the typing can be improved
  */
 export default class ParserConverter {

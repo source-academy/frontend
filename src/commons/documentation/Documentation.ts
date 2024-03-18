@@ -8,7 +8,7 @@ type DocType = {
   value: string;
   meta: string;
   docHTML?: string;
-}
+};
 
 const externalLibrariesDocumentation: Record<string, DocType[]> = {};
 
