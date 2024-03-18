@@ -19,10 +19,10 @@ export interface TextOptions {
 
 export const defaultOptions: TextOptions = {
   maxWidth: Number.MAX_VALUE, // maximum width this text should be
-  fontFamily: Config.FontFamily.toString(), // default is Arial
-  fontSize: Number(Config.FontSize), // in pixels. Default is 12
-  fontStyle: Config.FontStyle.toString(), // can be normal, bold, or italic. Default is normal
-  fontVariant: Config.FontVariant.toString(), // can be normal or small-caps. Default is normal
+  fontFamily: Config.FontFamily, // default is Arial
+  fontSize: Config.FontSize, // in pixels. Default is 12
+  fontStyle: Config.FontStyle, // can be normal, bold, or italic. Default is normal
+  fontVariant: Config.FontVariant, // can be normal or small-caps. Default is normal
   isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is false
 };
 
@@ -54,10 +54,10 @@ export class Text extends Visible implements IHoverable {
     this._height = fontSize;
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
-      let truncatedText = Config.Ellipsis.toString();
+      let truncatedText: string = Config.Ellipsis;
       let i = 0;
-      while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis.toString()) < maxWidth) {
-        truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis.toString();
+      while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis) < maxWidth) {
+        truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis;
       }
       this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
@@ -84,7 +84,7 @@ export class Text extends Visible implements IHoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: Config.SA_WHITE.toString()
+      fill: Config.SA_WHITE
     };
     return (
       <React.Fragment key={Layout.key++}>
