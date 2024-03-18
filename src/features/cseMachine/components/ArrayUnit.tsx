@@ -66,10 +66,9 @@ export class ArrayUnit extends Visible {
       lowerRight: 0
     };
 
-    if (this.isFirstUnit)
-      cornerRadius.upperLeft = cornerRadius.lowerLeft = Number(Config.DataCornerRadius);
+    if (this.isFirstUnit) cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
     if (this.isLastUnit)
-      cornerRadius.upperRight = cornerRadius.lowerRight = Number(Config.DataCornerRadius);
+      cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
 
     return (
       <React.Fragment key={Layout.key++}>
@@ -80,7 +79,7 @@ export class ArrayUnit extends Visible {
           width={this.width()}
           height={this.height()}
           stroke={defaultSAColor()}
-          hitStrokeWidth={Number(Config.DataHitStrokeWidth)}
+          hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={false}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
