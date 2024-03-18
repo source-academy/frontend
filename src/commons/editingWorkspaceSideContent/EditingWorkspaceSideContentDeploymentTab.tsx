@@ -254,7 +254,7 @@ const chapterSelect = (
     filterable={false}
   >
     <Button
-      className={Classes.MINIMAL}
+      minimal
       text={styliseSublanguage(currentChap, variant)}
       rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
@@ -284,11 +284,7 @@ const externalSelect = (
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button
-      className={Classes.MINIMAL}
-      text={currentExternal}
-      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-    />
+    <Button minimal text={currentExternal} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
   </ExternalSelectComponent>
 );
 

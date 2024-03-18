@@ -1,5 +1,5 @@
+import { createAction } from '@reduxjs/toolkit';
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
-import { action } from 'typesafe-actions';
 
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 import {
@@ -12,22 +12,31 @@ import {
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
 
-export const generateLzString = () => action(GENERATE_LZ_STRING);
+export const generateLzString = createAction(GENERATE_LZ_STRING, () => ({ payload: {} }));
 
-export const shortenURL = (keyword: string) => action(SHORTEN_URL, keyword);
+export const shortenURL = createAction(SHORTEN_URL, (keyword: string) => ({ payload: keyword }));
 
-export const updateShortURL = (shortURL: string) => action(UPDATE_SHORT_URL, shortURL);
+export const updateShortURL = createAction(UPDATE_SHORT_URL, (shortURL: string) => ({
+  payload: shortURL
+}));
 
-export const changeQueryString = (queryString: string) => action(CHANGE_QUERY_STRING, queryString);
+export const changeQueryString = createAction(CHANGE_QUERY_STRING, (queryString: string) => ({
+  payload: queryString
+}));
 
-export const playgroundUpdatePersistenceFile = (file?: PersistenceFile) =>
-  action(PLAYGROUND_UPDATE_PERSISTENCE_FILE, file);
+export const playgroundUpdatePersistenceFile = createAction(
+  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
+  (file?: PersistenceFile) => ({ payload: file })
+);
 
-export const playgroundUpdateGitHubSaveInfo = (
-  repoName: string,
-  filePath: string,
-  lastSaved: Date
-) => action(PLAYGROUND_UPDATE_GITHUB_SAVE_INFO, { repoName, filePath, lastSaved });
+export const playgroundUpdateGitHubSaveInfo = createAction(
+  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
+  (repoName: string, filePath: string, lastSaved: Date) => ({
+    payload: { repoName, filePath, lastSaved }
+  })
+);
 
-export const playgroundConfigLanguage = (languageConfig: SALanguage) =>
-  action(PLAYGROUND_UPDATE_LANGUAGE_CONFIG, languageConfig);
+export const playgroundConfigLanguage = createAction(
+  PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
+  (languageConfig: SALanguage) => ({ payload: languageConfig })
+);

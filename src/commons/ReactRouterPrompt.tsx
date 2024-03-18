@@ -7,7 +7,7 @@
  *
  * See: https://github.com/remix-run/react-router/issues/8139#issuecomment-1382428200
  */
-import * as React from 'react';
+import React from 'react';
 import { useBeforeUnload, useBlocker } from 'react-router-dom';
 
 // You can abstract `useBlocker` to use the browser's `window.confirm` dialog to

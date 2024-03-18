@@ -1,9 +1,9 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { Converter } from 'showdown';
 
-type MarkdownProps = {
+type Props = {
   className?: string;
   content: string;
   openLinksInNewWindow?: boolean;
@@ -12,7 +12,7 @@ type MarkdownProps = {
   tasklists?: boolean;
 };
 
-const Markdown: React.FC<MarkdownProps> = props => {
+const Markdown: React.FC<Props> = props => {
   const converter = new Converter({
     tables: true,
     simplifiedAutoLink: props.simplifiedAutoLink,

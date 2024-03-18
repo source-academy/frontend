@@ -1,3 +1,4 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 
@@ -34,16 +35,18 @@ import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeExecTime,
+  changeStepLimit,
+  clearReplInput,
+  clearReplOutput,
+  clearReplOutputLast,
+  setTokenCount
+} from './WorkspaceActions';
+import {
   ADD_EDITOR_TAB,
-  BROWSE_REPL_HISTORY_DOWN,
-  BROWSE_REPL_HISTORY_UP,
-  CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
-  CHANGE_STEP_LIMIT,
-  CLEAR_REPL_INPUT,
-  CLEAR_REPL_OUTPUT,
-  CLEAR_REPL_OUTPUT_LAST,
   DISABLE_TOKEN_COUNTER,
   EditorTabState,
   ENABLE_TOKEN_COUNTER,
@@ -60,29 +63,32 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
-  SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_UPDATE_ENV,
-  TOGGLE_USING_ENV,
+  TOGGLE_UPDATE_CSE,
+  TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
-  UPDATE_ENVSTEPS,
-  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
 } from './WorkspaceTypes';
+
+const getWorkspaceLocation = (action: any): WorkspaceLocation => {
+  return action.payload ? action.payload.workspaceLocation : 'assessment';
+};
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The
@@ -96,12 +102,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   state = defaultWorkspaceManager,
   action: SourceActionType
 ) => {
-  const workspaceLocation: WorkspaceLocation = (action as any).payload
-    ? (action as any).payload.workspaceLocation
-    : 'assessment';
-  let newOutput: InterpreterOutput[];
-  let lastOutput: InterpreterOutput;
-
+  const workspaceLocation = getWorkspaceLocation(action);
   switch (workspaceLocation) {
     case 'sourcecast':
       const sourcecastState = SourcecastReducer(state.sourcecast, action);
@@ -125,55 +126,47 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       break;
   }
 
-  switch (action.type) {
-    case SET_TOKEN_COUNT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          tokenCount: action.payload.tokenCount
-        }
-      };
+  state = oldWorkspaceReducer(state, action);
+  state = newWorkspaceReducer(state, action);
+  return state;
+};
 
-    case BROWSE_REPL_HISTORY_DOWN:
+const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
+  builder
+    .addCase(setTokenCount, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].tokenCount = action.payload.tokenCount;
+    })
+    .addCase(browseReplHistoryDown, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       if (state[workspaceLocation].replHistory.browseIndex === null) {
         // Not yet started browsing history, nothing to do
-        return state;
-      } else if (state[workspaceLocation].replHistory.browseIndex !== 0) {
+        return;
+      }
+      if (state[workspaceLocation].replHistory.browseIndex !== 0) {
         // Browsing history, and still have earlier records to show
         const newIndex = state[workspaceLocation].replHistory.browseIndex! - 1;
         const newReplValue = state[workspaceLocation].replHistory.records[newIndex];
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex
-            }
-          }
-        };
-      } else {
-        // Browsing history, no earlier records to show; return replValue to
-        // the last value when user started browsing
-        const newIndex = null;
-        const newReplValue = state[workspaceLocation].replHistory.originalValue;
-        const newRecords = state[workspaceLocation].replHistory.records.slice();
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              browseIndex: newIndex,
-              records: newRecords,
-              originalValue: ''
-            }
-          }
-        };
+
+        state[workspaceLocation].replValue = newReplValue;
+        state[workspaceLocation].replHistory.browseIndex = newIndex;
+        return;
       }
-    case BROWSE_REPL_HISTORY_UP:
+      // Browsing history, no earlier records to show; return replValue to
+      // the last value when user started browsing
+      const newIndex = null;
+      const newReplValue = state[workspaceLocation].replHistory.originalValue;
+      const newRecords = state[workspaceLocation].replHistory.records.slice();
+
+      state[workspaceLocation].replValue = newReplValue;
+      state[workspaceLocation].replHistory = {
+        browseIndex: newIndex,
+        records: newRecords,
+        originalValue: ''
+      };
+    })
+    .addCase(browseReplHistoryUp, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const lastRecords = state[workspaceLocation].replHistory.records;
       const lastIndex = state[workspaceLocation].replHistory.browseIndex;
       if (
@@ -181,90 +174,60 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         (lastIndex !== null && lastRecords[lastIndex + 1] === undefined)
       ) {
         // There is no more later history to show
-        return state;
-      } else if (lastIndex === null) {
+        return;
+      }
+      if (lastIndex === null) {
         // Not yet started browsing, initialise the index & array
         const newIndex = 0;
         const newRecords = lastRecords.slice();
         const originalValue = state[workspaceLocation].replValue;
         const newReplValue = newRecords[newIndex];
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex,
-              records: newRecords,
-              originalValue
-            }
-          }
+
+        state[workspaceLocation].replValue = newReplValue;
+        state[workspaceLocation].replHistory = {
+          browseIndex: newIndex,
+          records: newRecords,
+          originalValue
         };
-      } else {
-        // Browsing history, and still have later history to show
-        const newIndex = lastIndex + 1;
-        const newReplValue = lastRecords[newIndex];
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            replValue: newReplValue,
-            replHistory: {
-              ...state[workspaceLocation].replHistory,
-              browseIndex: newIndex
-            }
-          }
-        };
+        return;
       }
-    case CHANGE_EXEC_TIME:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          execTime: action.payload.execTime
-        }
-      };
-    case CHANGE_SIDE_CONTENT_HEIGHT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sideContentHeight: action.payload.height
-        }
-      };
-    case CHANGE_STEP_LIMIT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          stepLimit: action.payload.stepLimit
-        }
-      };
-    case CLEAR_REPL_INPUT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          replValue: ''
-        }
-      };
-    case CLEAR_REPL_OUTPUT_LAST:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: state[workspaceLocation].output.slice(0, -1)
-        }
-      };
-    case CLEAR_REPL_OUTPUT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: []
-        }
-      };
+      // Browsing history, and still have later history to show
+      const newIndex = lastIndex + 1;
+      const newReplValue = lastRecords[newIndex];
+      state[workspaceLocation].replValue = newReplValue;
+      state[workspaceLocation].replHistory.browseIndex = newIndex;
+    })
+    .addCase(changeExecTime, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].execTime = action.payload.execTime;
+    })
+    .addCase(changeStepLimit, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].stepLimit = action.payload.stepLimit;
+    })
+    .addCase(clearReplInput, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].replValue = '';
+    })
+    .addCase(clearReplOutputLast, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].output.pop();
+    })
+    .addCase(clearReplOutput, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].output = [];
+    });
+});
+
+const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
+  state = defaultWorkspaceManager,
+  action: SourceActionType
+) => {
+  const workspaceLocation = getWorkspaceLocation(action);
+  let newOutput: InterpreterOutput[];
+  let lastOutput: InterpreterOutput;
+
+  switch (action.type) {
     case END_CLEAR_CONTEXT:
       return {
         ...state,
@@ -632,28 +595,28 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         return state;
       }
     }
-    case TOGGLE_USING_ENV: {
+    case TOGGLE_USING_CSE: {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            usingEnv: action.payload.usingEnv
+            usingCse: action.payload.usingCse
           }
         };
       } else {
         return state;
       }
     }
-    case TOGGLE_UPDATE_ENV: {
+    case TOGGLE_UPDATE_CSE: {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         return {
           ...state,
           [workspaceLocation]: {
             ...state[workspaceLocation],
-            updateEnv: action.payload.updateEnv
+            updateCse: action.payload.updateCse
           }
         };
       } else {
@@ -1095,20 +1058,20 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
-    case UPDATE_ENVSTEPS:
+    case UPDATE_CURRENTSTEP:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          envSteps: action.payload.steps
+          currentStep: action.payload.steps
         }
       };
-    case UPDATE_ENVSTEPSTOTAL:
+    case UPDATE_STEPSTOTAL:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          envStepsTotal: action.payload.steps
+          stepsTotal: action.payload.steps
         }
       };
     case UPDATE_BREAKPOINTSTEPS:
@@ -1119,21 +1082,23 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           breakpointSteps: action.payload.breakpointSteps
         }
       };
-    case NOTIFY_PROGRAM_EVALUATED:
+    case NOTIFY_PROGRAM_EVALUATED: {
+      const debuggerContext = {
+        ...state[workspaceLocation].debuggerContext,
+        result: action.payload.result,
+        lastDebuggerResult: action.payload.lastDebuggerResult,
+        code: action.payload.code,
+        context: action.payload.context,
+        workspaceLocation: action.payload.workspaceLocation
+      };
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          debuggerContext: {
-            ...state[workspaceLocation].debuggerContext,
-            result: action.payload.result,
-            lastDebuggerResult: action.payload.lastDebuggerResult,
-            code: action.payload.code,
-            context: action.payload.context,
-            workspaceLocation: action.payload.workspaceLocation
-          }
+          debuggerContext
         }
       };
+    }
     default:
       return state;
   }

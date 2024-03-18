@@ -5,7 +5,7 @@ import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import * as React from 'react';
+import React from 'react';
 
 import {
   AssessmentConfiguration,

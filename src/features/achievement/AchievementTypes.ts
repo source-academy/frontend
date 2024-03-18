@@ -5,8 +5,6 @@ import { BooleanExpression } from './ExpressionTypes';
 export const ADD_EVENT = 'ADD_EVENT';
 export const BULK_UPDATE_ACHIEVEMENTS = 'BULK_UPDATE_ACHIEVEMENTS';
 export const BULK_UPDATE_GOALS = 'BULK_UPDATE_GOALS';
-export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
-export const EDIT_GOAL = 'EDIT_GOAL';
 export const HANDLE_EVENT = 'HANDLE_EVENT';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const GET_GOALS = 'GET_GOALS';

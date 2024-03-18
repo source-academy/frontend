@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
-import SideContentContestVotingContainer from '../SideContentContestVotingContainer';
+import SideContentContestVotingContainer from '../content/SideContentContestVotingContainer';
 
 const mockContestEntries = [
   {

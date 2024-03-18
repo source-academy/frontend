@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';

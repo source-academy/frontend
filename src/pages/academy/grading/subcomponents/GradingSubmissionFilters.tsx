@@ -3,15 +3,12 @@ import { Flex } from '@tremor/react';
 
 import { FilterBadge } from './GradingBadges';
 
-type GradingSubmissionFiltersProps = {
+type Props = {
   filters: ColumnFiltersState;
   onFilterRemove: (filter: ColumnFilter) => void;
 };
 
-const GradingSubmissionFilters: React.FC<GradingSubmissionFiltersProps> = ({
-  filters,
-  onFilterRemove
-}) => {
+const GradingSubmissionFilters: React.FC<Props> = ({ filters, onFilterRemove }) => {
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-1">
       {filters.map(filter => (

@@ -2,7 +2,7 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   beginDebuggerPause,
@@ -10,6 +10,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import {
   saveSourcecastData,
@@ -42,9 +43,10 @@ import {
   SourcecastEditorContainerProps
 } from '../../../commons/editor/EditorContainer';
 import { Position } from '../../../commons/editor/EditorTypes';
-import SideContentDataVisualizer from '../../../commons/sideContent/SideContentDataVisualizer';
-import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
-import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
+import makeCseMachineTabFrom from '../../../commons/sideContent/content/SideContentCseMachine';
+import makeDataVisualizerTabFrom from '../../../commons/sideContent/content/SideContentDataVisualizer';
+import { useSideContent } from '../../../commons/sideContent/SideContentHelper';
+import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
   SourceRecorderControlBarProps
 } from '../../../commons/sourceRecorder/SourceRecorderControlBar';
@@ -54,7 +56,6 @@ import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace'
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeSideContentHeight,
   chapterSelect,
   clearReplOutput,
   evalEditor,
@@ -85,7 +86,10 @@ const workspaceLocation: WorkspaceLocation = 'sourcereel';
 const sourcecastLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcereel: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState(SideContentType.sourcereel);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.sourcereel
+  );
 
   const courseId = useTypedSelector(state => state.session.courseId);
   const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(
@@ -113,7 +117,6 @@ const Sourcereel: React.FC = () => {
     playbackData,
     recordingStatus,
     replValue,
-    sideContentHeight,
     timeElapsedBeforePause,
     timeResumed
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
@@ -311,19 +314,8 @@ const Sourcereel: React.FC = () => {
     });
   };
 
-  const dataVisualizerTab: SideContentTab = {
-    label: 'Data Visualizer',
-    iconName: IconNames.EYE_OPEN,
-    body: <SideContentDataVisualizer />,
-    id: SideContentType.dataVisualizer
-  };
-
-  const envVisualizerTab: SideContentTab = {
-    label: 'CSE Machine',
-    iconName: IconNames.GLOBE,
-    body: <SideContentEnvVisualizer workspaceLocation={workspaceLocation} />,
-    id: SideContentType.envVisualizer
-  };
+  const dataVisualizerTab = makeDataVisualizerTabFrom(workspaceLocation);
+  const cseMachineTab = makeCseMachineTabFrom(workspaceLocation);
 
   const workspaceHandlers = useMemo(() => {
     return {
@@ -363,6 +355,7 @@ const Sourcereel: React.FC = () => {
       handleTimerStop: () => dispatch(timerStop(workspaceLocation))
     };
   }, [dispatch]);
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [autorunButtons, chapterSelectButton]
@@ -385,7 +378,6 @@ const Sourcereel: React.FC = () => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: {
       onChange: activeTabChangeHandler,
       selectedTabId: selectedTab,
@@ -443,11 +435,11 @@ const Sourcereel: React.FC = () => {
             id: SideContentType.introduction
           },
           dataVisualizerTab,
-          envVisualizerTab
+          cseMachineTab
         ],
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation
+      workspaceLocation
     }
   };
 

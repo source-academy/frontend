@@ -1,5 +1,5 @@
 import { H1, H2, H4 } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 
 import SicpToc from './SicpToc';
 

@@ -16,7 +16,7 @@ import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 
-export type FileSystemViewDirectoryNodeProps = {
+type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
@@ -25,24 +25,21 @@ export type FileSystemViewDirectoryNodeProps = {
   refreshParentDirectory: () => void;
 };
 
-const FileSystemViewDirectoryNode: React.FC<FileSystemViewDirectoryNodeProps> = (
-  props: FileSystemViewDirectoryNodeProps
-) => {
-  const {
-    workspaceLocation,
-    fileSystem,
-    basePath,
-    directoryName,
-    indentationLevel,
-    refreshParentDirectory
-  } = props;
+const FileSystemViewDirectoryNode: React.FC<Props> = ({
+  workspaceLocation,
+  fileSystem,
+  basePath,
+  directoryName,
+  indentationLevel,
+  refreshParentDirectory
+}) => {
   const fullPath = path.join(basePath, directoryName);
 
-  const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
-  const [isEditing, setIsEditing] = React.useState<boolean>(false);
-  const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
-  const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState<boolean>(false);
-  const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState<number>(0);
+  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
+  const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
+  const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState(0);
   const dispatch = useDispatch();
 
   const toggleIsExpanded = () => {

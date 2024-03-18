@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import * as ReactRouter from 'react-router';
 import { StaticRouter } from 'react-router-dom/server';
 import { fetchAuth } from 'src/commons/application/actions/SessionActions';
