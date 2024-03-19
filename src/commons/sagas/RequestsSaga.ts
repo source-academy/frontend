@@ -1432,7 +1432,7 @@ export function* handleResponseError(resp: Response | null): any {
 
 const computeGradingStatus = (
   isManuallyGraded: boolean,
-  submissionStatus: any,
+  submissionStatus: SubmissionProgress,
   numGraded: number,
   numQuestions: number
 ): GradingStatus =>
