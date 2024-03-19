@@ -104,8 +104,9 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
   if (showAll) {
     return {};
   }
-  // untangle this :OOO
+
   return {
-    isGradingPublished: false
+    status: SubmissionProgresses.submitted,
+    notPublished: true
   };
 };
