@@ -30,17 +30,14 @@ import {
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { SubmissionProgress } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import {
-  AssessmentTypeBadge,
-  GradingStatusBadge,
-  SubmissionStatusBadge
-} from './GradingBadges';
+import { AssessmentTypeBadge, GradingStatusBadge, SubmissionProgressBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -74,7 +71,7 @@ const makeColumns = (handleClick: () => void) => [
     header: 'Progress',
     cell: info => (
       <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <SubmissionStatusBadge status={info.getValue()} />
+        <SubmissionProgressBadge progress={info.getValue() as SubmissionProgress} />
       </Filterable>
     )
   }),
@@ -98,14 +95,22 @@ const makeColumns = (handleClick: () => void) => [
       );
     }
   }),
-  columnHelper.accessor(({ submissionId, isPublished }) => ({ submissionId, isPublished }), {
-    header: 'Actions',
-    enableColumnFilter: false,
-    cell: info => {
-      const { submissionId, isPublished } = info.getValue();
-      return <GradingActions submissionId={submissionId} isPublished={isPublished} />;
+  columnHelper.accessor(
+    ({ submissionId, submissionProgress }) => ({ submissionId, submissionProgress }),
+    {
+      header: 'Actions',
+      enableColumnFilter: false,
+      cell: info => {
+        const { submissionId, submissionProgress } = info.getValue();
+        return (
+          <GradingActions
+            submissionId={submissionId}
+            submissionProgress={submissionProgress as SubmissionProgress}
+          />
+        );
+      }
     }
-  })
+  )
 ];
 
 type GradingSubmissionTableProps = {

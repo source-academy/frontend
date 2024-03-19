@@ -198,7 +198,7 @@ export function* mockBackendSaga(): SagaIterator {
       );
       const index = overviews.data.findIndex(
         overview =>
-          overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
+          overview.submissionId === submissionId && overview.submissionProgress === 'submitted'
       );
       if (index === -1) {
         yield call(showWarningMessage, '400: Bad Request');

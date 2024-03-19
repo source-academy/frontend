@@ -5,7 +5,7 @@ import { GradingOverview } from './GradingTypes';
 
 // TODO: Unused. Marked for deletion.
 export const isSubmissionUngraded = (s: GradingOverview): boolean => {
-  const isSubmitted = s.submissionStatus === 'submitted';
+  const isSubmitted = s.submissionProgress === 'submitted';
   const isNotGraded =
     s.gradingStatus !== GradingStatuses.graded && s.gradingStatus !== GradingStatuses.excluded;
   return isSubmitted && isNotGraded;
@@ -31,7 +31,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
             e.studentName,
             e.studentUsername,
             e.groupName,
-            e.submissionStatus,
+            e.submissionProgress,
             e.gradingStatus,
             e.questionCount,
             e.gradedCount,
@@ -85,8 +85,12 @@ export const convertFilterToBackendParams = (column: ColumnFilter) => {
       return { name: column.value };
     case 'studentUsername':
       return { username: column.value };
-    case 'submissionStatus':
-      return { status: column.value };
+    case 'submissionProgress':
+      if (column.value === 'published') {
+        return { status: 'submitted', isGradingPublished: true };
+      } else {
+        return { status: column.value };
+      }
     case 'groupName':
       return { groupName: column.value };
     default:
@@ -98,13 +102,12 @@ export const paginationToBackendParams = (page: number, pageSize: number) => {
   return { offset: page * pageSize, pageSize: pageSize };
 };
 
-export const ungradedToBackendParams = (showAll: boolean) => {
+export const unpublishedToBackendParams = (showAll: boolean) => {
   if (showAll) {
     return {};
   }
+  // untangle this :OOO
   return {
-    status: 'submitted',
-    isManuallyGraded: true,
-    notFullyGraded: true
+    isGradingPublished: false
   };
 };

@@ -2,7 +2,7 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
-import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
+import { SubmissionProgress } from 'src/commons/assessment/AssessmentTypes';
 
 const BADGE_COLORS = {
   // assessment types
@@ -45,17 +45,17 @@ const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 
   );
 };
 
-type SubmissionStatusBadgeProps = {
-  status: string;
+type SubmissionProgressBadgeProps = {
+  progress: SubmissionProgress;
 };
 
-const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
-  const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-  return <Badge text={statusText} color={getBadgeColorFromLabel(status)} />;
+const SubmissionProgressBadge: React.FC<SubmissionProgressBadgeProps> = ({ progress }) => {
+  const statusText = progress.charAt(0).toUpperCase() + progress.slice(1);
+  return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} />;
 };
 
 type GradingStatusBadgeProps = {
-  status: GradingStatus;
+  status: string;
 };
 
 const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
@@ -100,9 +100,4 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export {
-  AssessmentTypeBadge,
-  FilterBadge,
-  GradingStatusBadge,
-  SubmissionStatusBadge
-};
+export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, SubmissionProgressBadge };

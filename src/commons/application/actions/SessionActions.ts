@@ -1,6 +1,6 @@
 import {
   paginationToBackendParams,
-  ungradedToBackendParams
+  unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
 import { action } from 'typesafe-actions'; // EDITED
 
@@ -118,10 +118,10 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  */
 export const fetchGradingOverviews = (
   filterToGroup = true,
-  gradedFilter = ungradedToBackendParams(false),
+  publishedFilter = unpublishedToBackendParams(false),
   pageParams = paginationToBackendParams(0, 10),
   filterParams = {}
-) => action(FETCH_GRADING_OVERVIEWS, { filterToGroup, gradedFilter, pageParams, filterParams });
+) => action(FETCH_GRADING_OVERVIEWS, { filterToGroup, publishedFilter, pageParams, filterParams });
 
 export const login = (providerId: string) => action(LOGIN, providerId);
 

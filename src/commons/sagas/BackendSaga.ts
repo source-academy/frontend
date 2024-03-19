@@ -419,13 +419,13 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
-      const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
+      const { filterToGroup, publishedFilter, pageParams, filterParams } = action.payload;
 
       const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,
         tokens,
         filterToGroup,
-        gradedFilter,
+        publishedFilter,
         pageParams,
         filterParams
       );

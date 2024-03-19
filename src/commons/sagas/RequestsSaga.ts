@@ -633,11 +633,15 @@ export const getGradingOverviews = async (
           assessmentNumber: overview.assessment.assessmentNumber,
           assessmentName: overview.assessment.title,
           assessmentType: overview.assessment.type,
+          isPublished: overview.isGradingPublished,
           studentId: overview.student.id,
           studentUsername: overview.student.username,
           studentName: overview.student.name,
           submissionId: overview.id,
-          submissionProgress: computeSubmissionProgress(overview.status, overview.isGradingPublished),
+          submissionProgress: computeSubmissionProgress(
+            overview.status,
+            overview.isGradingPublished
+          ),
           groupName: overview.student.groupName,
           groupLeaderId: overview.student.groupLeaderId,
           // Grading Status
@@ -1440,11 +1444,11 @@ const computeGradingStatus = (
       : 'grading'
     : 'excluded';
 
-
 const computeSubmissionProgress = (
   submissionStatus: AssessmentStatus,
   isPublished: boolean
-): SubmissionProgress => submissionStatus === 'submitted' && isPublished ? 'published' : submissionStatus;
+): SubmissionProgress =>
+  submissionStatus === 'submitted' && isPublished ? 'published' : submissionStatus;
 
 const courseId: () => string = () => {
   const id = store.getState().session.courseId;
