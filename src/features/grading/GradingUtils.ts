@@ -1,5 +1,5 @@
 import { ColumnFilter } from '@tanstack/react-table';
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
+import { GradingStatuses, SubmissionProgresses } from 'src/commons/assessment/AssessmentTypes';
 
 import { GradingOverview } from './GradingTypes';
 
@@ -72,9 +72,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
   }, 0);
 };
 
-// Cleanup work: change all references to column properties in backend saga to backend name to reduce
-// un-needed hardcode conversion, ensuring that places that reference it are updated. A two-way conversion
-// function would be good to implement in GradingUtils.
+// TODO: Two-way conversion function for frontend-backend parameter conversion
 export const convertFilterToBackendParams = (column: ColumnFilter) => {
   switch (column.id) {
     case 'assessmentName':
@@ -86,8 +84,8 @@ export const convertFilterToBackendParams = (column: ColumnFilter) => {
     case 'studentUsername':
       return { username: column.value };
     case 'submissionProgress':
-      if (column.value === 'published') {
-        return { status: 'submitted', isGradingPublished: true };
+      if (column.value === SubmissionProgresses.published) {
+        return { status: SubmissionProgresses.submitted, isGradingPublished: true };
       } else {
         return { status: column.value };
       }

@@ -48,11 +48,13 @@ import {
   AssessmentStatus,
   ContestEntry,
   GradingStatus,
+  GradingStatuses,
   IContestVotingQuestion,
   IProgrammingQuestion,
   QuestionType,
   QuestionTypes,
-  SubmissionProgress
+  SubmissionProgress,
+  SubmissionProgresses
 } from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
@@ -1436,19 +1438,21 @@ const computeGradingStatus = (
 ): GradingStatus =>
   // isGraded refers to whether the assessment type is graded or not, as specified in
   // the respective assessment configuration
-  isManuallyGraded && submissionStatus === 'submitted'
+  isManuallyGraded && submissionStatus === SubmissionProgresses.submitted
     ? numGraded === 0
-      ? 'none'
+      ? GradingStatuses.none
       : numGraded === numQuestions
-      ? 'graded'
-      : 'grading'
-    : 'excluded';
+      ? GradingStatuses.graded
+      : GradingStatuses.grading
+    : GradingStatuses.excluded;
 
 const computeSubmissionProgress = (
   submissionStatus: AssessmentStatus,
   isPublished: boolean
 ): SubmissionProgress =>
-  submissionStatus === 'submitted' && isPublished ? 'published' : submissionStatus;
+  submissionStatus === SubmissionProgresses.submitted && isPublished
+    ? SubmissionProgresses.published
+    : submissionStatus;
 
 const courseId: () => string = () => {
   const id = store.getState().session.courseId;

@@ -80,6 +80,7 @@ import {
   AssessmentStatuses,
   FETCH_ASSESSMENT_OVERVIEWS,
   Question,
+  SubmissionProgresses,
   SUBMIT_ASSESSMENT
 } from '../assessment/AssessmentTypes';
 import {
@@ -496,7 +497,7 @@ function* BackendSaga(): SagaIterator {
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, isPublished: true };
+          return { ...overview, submissionProgress: SubmissionProgresses.published };
         }
         return overview;
       });
@@ -528,7 +529,7 @@ function* BackendSaga(): SagaIterator {
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, isPublished: false };
+          return { ...overview, submissionProgress: SubmissionProgresses.submitted };
         }
         return overview;
       });

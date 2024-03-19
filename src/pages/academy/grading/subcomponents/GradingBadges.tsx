@@ -2,7 +2,11 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
-import { SubmissionProgress } from 'src/commons/assessment/AssessmentTypes';
+import {
+  GradingStatus,
+  GradingStatuses,
+  SubmissionProgress
+} from 'src/commons/assessment/AssessmentTypes';
 
 const BADGE_COLORS = {
   // assessment types
@@ -55,7 +59,7 @@ const SubmissionProgressBadge: React.FC<SubmissionProgressBadgeProps> = ({ progr
 };
 
 type GradingStatusBadgeProps = {
-  status: string;
+  status: GradingStatus;
 };
 
 const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
@@ -63,11 +67,11 @@ const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
   const badgeIcon = () => (
     <Icon
       icon={
-        status === 'graded'
+        status === GradingStatuses.graded
           ? IconNames.TICK
-          : status === 'grading'
+          : status === GradingStatuses.grading
           ? IconNames.TIME
-          : status === 'none'
+          : status === GradingStatuses.none
           ? IconNames.CROSS
           : IconNames.DISABLE
       }
