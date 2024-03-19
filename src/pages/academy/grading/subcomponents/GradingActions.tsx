@@ -86,7 +86,12 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, submissio
         />
       </button>
 
-      <button type="button" style={{ padding: 0 }} onClick={handleUnsubmitClick}>
+      <button
+        type="button"
+        style={{ padding: 0 }}
+        hidden={submissionProgress !== SubmissionProgresses.submitted}
+        onClick={handleUnsubmitClick}
+      >
         <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
       </button>
 
