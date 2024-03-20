@@ -9,6 +9,7 @@ export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';
 export const RESET_SIDE_CONTENT = 'RESET_SIDE_CONTENT';
 export const SPAWN_SIDE_CONTENT = 'SPAWN_SIDE_CONTENT';
 export const REMOVE_SIDE_CONTENT_ALERT = 'REMOVE_SIDE_CONTENT_ALERT';
+export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -108,6 +109,7 @@ export type SideContentState = {
   dynamicTabs: SideContentTab[];
   alerts: string[];
   selectedTab?: SideContentType;
+  dynamicTabsSpawned: boolean;
 };
 
 export type ChangeTabsCallback = (
@@ -122,4 +124,3 @@ export type SideContentDispatchProps = {
    */
   alertSideContent: (newId: SideContentType) => void;
 };
-export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';

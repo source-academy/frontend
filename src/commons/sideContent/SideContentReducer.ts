@@ -1,8 +1,10 @@
+import { NOTIFY_STORIES_EVALUATED } from 'src/features/stories/StoriesTypes';
+
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { getDynamicTabs, getTabId } from './SideContentHelper';
 import { getLocation } from './SideContentHelper';
-import { CHANGE_SIDE_CONTENT_HEIGHT } from './SideContentTypes';
+import { CHANGE_SIDE_CONTENT_HEIGHT, NOTIFY_PROGRAM_EVALUATED } from './SideContentTypes';
 import {
   END_ALERT_SIDE_CONTENT,
   REMOVE_SIDE_CONTENT_ALERT,
@@ -67,6 +69,25 @@ export function SideContentReducer(
       }
       return state;
     }
+    case NOTIFY_PROGRAM_EVALUATED:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          dynamicTabsSpawned: false
+        }
+      };
+    case NOTIFY_STORIES_EVALUATED:
+      return {
+        ...state,
+        stories: {
+          ...state.stories,
+          [storyEnv!]: {
+            ...state.stories[storyEnv!],
+            dynamicTabsSpawned: false
+          }
+        }
+      };
     case REMOVE_SIDE_CONTENT_ALERT:
       return workspaceLocation === 'stories'
         ? {
@@ -110,7 +131,8 @@ export function SideContentReducer(
               [storyEnv]: {
                 ...state.stories[storyEnv],
                 alerts,
-                dynamicTabs
+                dynamicTabs,
+                dynamicTabsSpawned: true
               }
             }
           }
@@ -119,7 +141,8 @@ export function SideContentReducer(
             [workspaceLocation]: {
               ...state[workspaceLocation],
               alerts,
-              dynamicTabs
+              dynamicTabs,
+              dynamicTabsSpawned: true
             }
           };
     }

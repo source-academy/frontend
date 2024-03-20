@@ -379,11 +379,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  debuggerContext: {} as DebuggerContext,
-  sideContent: {
-    alerts: [],
-    dynamicTabs: []
-  }
+  debuggerContext: {} as DebuggerContext
 });
 
 const defaultFileName = 'program.js';
@@ -524,11 +520,7 @@ export const createDefaultStoriesEnv = (
   stepLimit: 1000,
   globals: [],
   usingSubst: false,
-  debuggerContext: {} as DebuggerContext,
-  sideContent: {
-    dynamicTabs: [],
-    alerts: []
-  }
+  debuggerContext: {} as DebuggerContext
 });
 
 export const defaultFileSystem: FileSystemState = {
@@ -537,7 +529,8 @@ export const defaultFileSystem: FileSystemState = {
 
 export const defaultSideContent: SideContentState = {
   dynamicTabs: [],
-  alerts: []
+  alerts: [],
+  dynamicTabsSpawned: false
 };
 
 export const defaultSideContentManager: SideContentManagerState = {
