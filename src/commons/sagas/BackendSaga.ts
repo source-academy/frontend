@@ -986,7 +986,7 @@ function* BackendSaga(): SagaIterator {
         isManuallyGraded: true,
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
-        hasTokenCounter: false,
+        hasVotingAttributes: false,
         earlySubmissionXp: 0
       }
     ];

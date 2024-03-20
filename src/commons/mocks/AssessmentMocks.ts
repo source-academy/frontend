@@ -22,7 +22,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: false,
+      hasVotingAttributes: false,
       earlySubmissionXp: 200
     },
     {
@@ -31,7 +31,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: false,
+      hasVotingAttributes: false,
       earlySubmissionXp: 200
     },
     {
@@ -40,7 +40,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: false,
+      hasVotingAttributes: false,
       earlySubmissionXp: 200
     },
     {
@@ -49,7 +49,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: true,
+      hasVotingAttributes: true,
       earlySubmissionXp: 200
     },
     {
@@ -58,7 +58,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: false,
+      hasVotingAttributes: false,
       earlySubmissionXp: 200
     }
   ],
@@ -69,7 +69,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: false,
+      hasVotingAttributes: false,
       earlySubmissionXp: 200
     },
     {
@@ -78,7 +78,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: false,
+      hasVotingAttributes: false,
       earlySubmissionXp: 200
     },
     {
@@ -87,7 +87,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: false,
+      hasVotingAttributes: false,
       earlySubmissionXp: 200
     }
   ]
@@ -910,7 +910,8 @@ export const mockAssessments: Assessment[] = [
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'An Odessey to Runes'
+    title: 'An Odessey to Runes',
+    hasVotingAttributes: false
   },
   {
     type: 'Missions',
@@ -919,7 +920,8 @@ export const mockAssessments: Assessment[] = [
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'The Secret to Streams'
+    title: 'The Secret to Streams',
+    hasVotingAttributes: false
   },
   {
     type: 'Quests',
@@ -945,7 +947,8 @@ export const mockAssessments: Assessment[] = [
   \`\`\``,
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'A sample Sidequest'
+    title: 'A sample Sidequest',
+    hasVotingAttributes: false
   },
   {
     type: 'Missions',
@@ -954,7 +957,8 @@ export const mockAssessments: Assessment[] = [
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
-    title: 'A Closed Mission'
+    title: 'A Closed Mission',
+    hasVotingAttributes: false
   },
   {
     type: 'Quests',
@@ -963,7 +967,8 @@ export const mockAssessments: Assessment[] = [
       'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
-    title: 'A Closed Sidequest'
+    title: 'A Closed Sidequest',
+    hasVotingAttributes: false
   },
   {
     type: 'Paths',
@@ -975,7 +980,8 @@ export const mockAssessments: Assessment[] = [
   The path comprises 4 questions and is fully autograded and guided, and there are **no private test cases** - there will be no manual review by default. Please consult your Avenger if you require assistance!</TEXT>`,
     missionPDF: 'www.google.com',
     questions: mockPathQuestions,
-    title: 'A sample guided path'
+    title: 'A sample guided path',
+    hasVotingAttributes: false
   },
   // mock assessment used for testing contest voting assessments
   {
@@ -984,6 +990,7 @@ export const mockAssessments: Assessment[] = [
     title: 'A sample contest voting assessment',
     longSummary: 'Vote for your favourite contest entries here!',
     missionPDF: 'www.google.com',
-    questions: mockContestEntryQuestion
+    questions: mockContestEntryQuestion,
+    hasVotingAttributes: false
   }
 ];
