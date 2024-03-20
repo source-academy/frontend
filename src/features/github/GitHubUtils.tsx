@@ -238,6 +238,8 @@ export async function openFolderInFolderMode(
 ) {
   if (octokit === undefined) return;
 
+  store.dispatch(actions.deleteAllGithubSaveInfo());
+
   //In order to get the file paths recursively, we require the tree_sha, 
   // which is obtained from the most recent commit(any commit works but the most recent)
   // is the easiest
@@ -301,7 +303,15 @@ export async function openFolderInFolderMode(
           if (content) {
             const fileContent = Buffer.from(content, 'base64').toString();
             console.log(file);
-            writeFileRecursively(fileSystem, "/playground/" + file, fileContent)
+            writeFileRecursively(fileSystem, "/playground/" + file, fileContent);
+            store.dispatch(actions.addGithubSaveInfo(
+              {
+                repoName: repoName,
+                filePath: file,
+                lastSaved: new Date()
+              }
+            ))
+            console.log(store.getState().fileSystem.githubSaveInfoArray);
             console.log("wrote one file");
           }
         }
@@ -365,6 +375,7 @@ export async function performOverwritingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
+    //
     store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
