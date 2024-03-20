@@ -1,16 +1,16 @@
-import { DialogueObject } from "../dialogue/GameDialogueTypes";
+import { DialogueObject } from '../dialogue/GameDialogueTypes';
 
 export type Quiz = {
-  questions: Question[]
-}
+  questions: Question[];
+};
 
 export type Question = {
-  question: string,
-  answer: Number,
-  options: Option[]
-}
+  question: string;
+  answer: Number;
+  options: Option[];
+};
 
 export type Option = {
-  text: string,
-  reaction: DialogueObject
-}
+  text: string;
+  reaction: DialogueObject;
+};

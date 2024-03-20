@@ -1,10 +1,10 @@
-import Parser from "./Parser";
-import StringUtils from "../utils/StringUtils";
-import { Quiz, Question, Option } from "../quiz/GameQuizType";
-import DialogueParser from "./DialogueParser";
-import { DialogueObject } from "../dialogue/GameDialogueTypes";
+import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import { GameItemType } from '../location/GameMapTypes';
-import { defaultReaction } from "../quiz/GameQuizConstants";
+import { defaultReaction } from '../quiz/GameQuizConstants';
+import { Option, Question, Quiz } from '../quiz/GameQuizType';
+import StringUtils from '../utils/StringUtils';
+import DialogueParser from './DialogueParser';
+import Parser from './Parser';
 
 /**
  * This class parses quizzes and creates Quiz Objects
@@ -15,7 +15,7 @@ export default class QuizParser {
    * This function reads the entire text under the "quizzes" heading,
    * converts quizzes listed underneath into Quiz entities,
    * and stores these quizzes in the game map.
-   * 
+   *
    * @param quizText the entire quiz text beneath quizzes heading
    */
   public static parse(quizText: string[]) {
@@ -26,12 +26,12 @@ export default class QuizParser {
         return;
       }
       this.parseQuiz(quizId, quizBody);
-    }) 
+    });
   }
 
   /**
    * This function parses one quiz and stores it into the game map.
-   * 
+   *
    * @param quizId the string containing quiz Id
    * @param quizBody the body of the dialogue containing its questions and options
    */
@@ -39,7 +39,7 @@ export default class QuizParser {
     Parser.validator.registerId(quizId);
     const rawQuestions: Map<string, string[]> = StringUtils.mapByHeader(quizBody, isInteger);
     const questions: Question[] = this.parseQuizQuestions(rawQuestions);
-    const quiz: Quiz = {questions: questions};
+    const quiz: Quiz = { questions: questions };
     Parser.checkpoint.map.setItemInMap(GameItemType.quizzes, quizId, quiz);
   }
 
@@ -90,7 +90,7 @@ export default class QuizParser {
    * This function parses options of a question and
    * store them in an array.
    *
-   * @param optionsText An Array of string containing all options' content, 
+   * @param optionsText An Array of string containing all options' content,
    * including option text and reactions
    * @param answer The correct answer of the corresponding question
    */
@@ -98,7 +98,7 @@ export default class QuizParser {
     const optionsParagraph = StringUtils.splitToParagraph(optionsText);
     const options: Option[] = Array(optionsParagraph.length);
     optionsParagraph.forEach(([header, content]: [string, string[]], index) => {
-      options[index] = this.createOption(content, (answer === index));
+      options[index] = this.createOption(content, answer === index);
     });
     return options;
   }
@@ -106,19 +106,25 @@ export default class QuizParser {
   /**
    * This function creates an Option object.
    *
-   * @param content An Array of string containing an option's content, 
+   * @param content An Array of string containing an option's content,
    * including option text and reaction
    * @param isCorrect Indicates whether this option is the correct answer
    * @param [defaultReaction=false] Indicates whether this option uses the default reaction
    */
-  private static createOption(content: string[], isCorrect: boolean, defaultReaction: boolean = false): Option {
+  private static createOption(
+    content: string[],
+    isCorrect: boolean,
+    defaultReaction: boolean = false
+  ): Option {
     if (content.length <= 1) {
       defaultReaction = true;
     }
     const option: Option = {
       text: content[0],
-      reaction: defaultReaction ? this.createDefaultReaction(isCorrect) : DialogueParser.parseQuizReaction(content.slice(1))
-    }
+      reaction: defaultReaction
+        ? this.createDefaultReaction(isCorrect)
+        : DialogueParser.parseQuizReaction(content.slice(1))
+    };
     return option;
   }
 

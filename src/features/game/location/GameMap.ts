@@ -6,9 +6,9 @@ import { AssetKey, ItemId } from '../commons/CommonTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
+import { Quiz } from '../quiz/GameQuizType';
 import { mandatory } from '../utils/GameUtils';
 import { AnyId, GameItemType, GameLocation, LocationId } from './GameMapTypes';
-import { Quiz } from '../quiz/GameQuizType';
 
 /**
  * Game map is the class that encapsulates data about
