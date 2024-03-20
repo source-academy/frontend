@@ -9,6 +9,7 @@ import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
 import ParserValidator, { GameEntityType } from './ParserValidator';
 import TasksParser from './TasksParser';
+import QuizParser from './QuizParser';
 
 /**
  * This class converts a checkpoint txt file into a Checkpoint
@@ -93,6 +94,9 @@ class Parser {
         break;
       case 'dialogues':
         DialoguesParser.parse(body);
+        break;
+      case 'quizzes':
+        QuizParser.parse(body);
         break;
       default:
         return false;
