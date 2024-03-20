@@ -3,7 +3,6 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
-import { action } from 'typesafe-actions'; // EDITED
 
 import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import {
@@ -266,15 +265,13 @@ export const unsubmitSubmission = createAction(UNSUBMIT_SUBMISSION, (submissionI
  * Publishing / unpublishing actions
  */
 
-export const publishGrading = (submissionId: number) =>
-  action(PUBLISH_GRADING, {
-    submissionId
-  });
+export const publishGrading = createAction(PUBLISH_GRADING, (submissionId: number) => ({
+  payload: { submissionId }
+}));
 
-export const unpublishGrading = (submissionId: number) =>
-  action(UNPUBLISH_GRADING, {
-    submissionId
-  });
+export const unpublishGrading = createAction(UNPUBLISH_GRADING, (submissionId: number) => ({
+  payload: { submissionId }
+}));
 
 /**
  * Notification actions
