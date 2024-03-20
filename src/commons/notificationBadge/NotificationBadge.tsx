@@ -8,16 +8,14 @@ import { useSession } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
 import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
 
-type NotificationBadgeProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   className?: string;
   disableHover?: boolean; // Set to true to disable popover content
   large?: boolean; // Set to true to use large style
   notificationFilter?: (notifications: Notification[]) => Notification[];
 };
 
-const NotificationBadge: React.FC<NotificationBadgeProps> = props => {
+const NotificationBadge: React.FC<Props> = props => {
   const dispatch = useDispatch();
   const { notifications: initialNotifications } = useSession();
 

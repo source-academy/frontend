@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deepFilter, shallowRender } from 'src/commons/utils/TestUtils';
 
 import { Role } from '../../../application/ApplicationTypes';
@@ -8,7 +8,7 @@ jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn()
 }));
-const useSelectorMock = useSelector as jest.Mock;
+const useSelectorMock = useTypedSelector as jest.Mock;
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
 const staffRoutes = ['grading', 'groundcontrol', 'sourcereel', 'gamesimulator', 'dashboard'];

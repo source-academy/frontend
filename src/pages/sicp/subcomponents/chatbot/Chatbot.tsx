@@ -6,12 +6,12 @@ import classes from 'src/styles/Chatbot.module.scss';
 
 import ChatBox from './ChatBox';
 
-interface ChatbotProps {
+type Props = {
   getSection: () => string;
   getText: () => string;
-}
+};
 
-const Chatbot: React.FC<ChatbotProps> = ({ getSection, getText }) => {
+const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
   const [isPop, setPop] = React.useState(false);
   const [isDivVisible, setIsDivVisible] = React.useState(false);
   const [tipsMessage, setTipsMessage] = React.useState('You can click me for a chat');

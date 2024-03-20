@@ -3,16 +3,14 @@ import React from 'react';
 import { NotificationConfiguration } from 'src/commons/application/types/SessionTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
-type BooleanCellProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   data: NotificationConfiguration;
   field: KeysOfType<NotificationConfiguration, boolean>;
   rowIndex: number;
   setStateHandler: (index: number, value: boolean) => void;
 };
 
-const BooleanCell: React.FC<BooleanCellProps> = props => {
+const BooleanCell: React.FC<Props> = props => {
   const { data } = props;
   let checked = false;
 
