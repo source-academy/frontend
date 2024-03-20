@@ -12,18 +12,17 @@ import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 
-export type FileSystemViewProps = {
+type Props = {
   workspaceLocation: WorkspaceLocation;
   basePath: string;
 };
 
-const FileSystemView: React.FC<FileSystemViewProps> = (props: FileSystemViewProps) => {
-  const { workspaceLocation, basePath } = props;
+const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
-  const [isAddingNewFile, setIsAddingNewFile] = React.useState<boolean>(false);
-  const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState<boolean>(false);
-  const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState<number>(0);
+  const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
+  const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
+  const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState(0);
 
   const handleCreateNewFile = () => setIsAddingNewFile(true);
   const handleCreateNewDirectory = () => setIsAddingNewDirectory(true);

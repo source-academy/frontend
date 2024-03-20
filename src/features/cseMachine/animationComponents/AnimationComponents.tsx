@@ -7,7 +7,7 @@ import { Group, Rect, Text } from 'react-konva';
 
 import { Visible } from '../components/Visible';
 import { CseAnimation } from '../CseMachineAnimation';
-import { ControlStashConfig } from '../CseMachineControlStash';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { currentItemSAColor } from '../CseMachineUtils';
 
 /** Type that extends the NodeConfig type from Konva, making the x, y, width & height values required */
@@ -183,16 +183,16 @@ export class AnimatedTextboxComponent extends Animatable {
     super();
     const rectProps = {
       stroke: currentItemSAColor(false),
-      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     const textProps = {
       text,
-      fill: ControlStashConfig.SA_WHITE.toString(),
-      padding: Number(ControlStashConfig.ControlItemTextPadding),
-      fontFamily: ControlStashConfig.FontFamily.toString(),
-      fontSize: Number(ControlStashConfig.FontSize),
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fill: ControlStashConfig.SA_WHITE,
+      padding: ControlStashConfig.ControlItemTextPadding,
+      fontFamily: ControlStashConfig.FontFamily,
+      fontSize: ControlStashConfig.FontSize,
+      fontStyle: ControlStashConfig.FontStyle,
+      fontVariant: ControlStashConfig.FontVariant
     };
     this.rectComponent = new AnimatedRectComponent(from, to, rectProps, animationConfig);
     this.textComponent = new AnimatedTextComponent(from, to, textProps, animationConfig);

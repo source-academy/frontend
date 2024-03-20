@@ -3,16 +3,14 @@ import React from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
-type NumericCellProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   data: AssessmentConfiguration;
   field: KeysOfType<AssessmentConfiguration, number>;
   rowIndex: number;
   setStateHandler: (index: number, value: number) => void;
 };
 
-const NumericCell: React.FC<NumericCellProps> = props => {
+const NumericCell: React.FC<Props> = props => {
   const { data } = props;
 
   const changeHandler = React.useCallback(

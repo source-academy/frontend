@@ -4,13 +4,13 @@ import { AchievementContext } from 'src/features/achievement/AchievementConstant
 import EditableGoal from './goalEditor/EditableGoal';
 import GoalAdder from './goalEditor/GoalAdder';
 
-type GoalEditorProps = {
+let editableGoals: JSX.Element[] = [];
+
+type Props = {
   requestPublish: () => void;
 };
 
-let editableGoals: JSX.Element[] = [];
-
-const GoalEditor: React.FC<GoalEditorProps> = ({ requestPublish }) => {
+const GoalEditor: React.FC<Props> = ({ requestPublish }) => {
   const inferencer = useContext(AchievementContext);
 
   /**
@@ -24,7 +24,7 @@ const GoalEditor: React.FC<GoalEditorProps> = ({ requestPublish }) => {
    * at one go. The newUuid holds the newly created goal uuid until the new goal
    * is added into the inferencer.
    */
-  const [newUuid, setNewUuid] = useState<string>('');
+  const [newUuid, setNewUuid] = useState('');
   const allowNewUuid = newUuid === '';
   const releaseUuid = () => setNewUuid('');
 

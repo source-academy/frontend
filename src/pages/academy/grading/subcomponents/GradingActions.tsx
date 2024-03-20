@@ -13,12 +13,12 @@ import { SubmissionProgress, SubmissionProgresses } from 'src/commons/assessment
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-type GradingActionsProps = {
+type Props = {
   submissionId: number;
   submissionProgress: SubmissionProgress;
 };
 
-const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, submissionProgress }) => {
+const GradingActions: React.FC<Props> = ({ submissionId, submissionProgress }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
 
