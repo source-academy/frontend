@@ -51,14 +51,14 @@ const AssessmentConfigPanel: React.FC<Props> = ({
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('displayInDashboard', value);
   };
 
-  const setHasVotingAttributes = (index: number, value: boolean) => {
+  const setHasVotingFeatures = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
-      hasVotingAttributes: value
+      hasVotingFeatures: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasVotingAttributes', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasVotingFeatures', value);
   };
 
   const setEarlyXp = (index: number, value: number) => {
@@ -94,7 +94,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 0
     });
     setAssessmentConfig(temp);
@@ -140,12 +140,12 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       }
     },
     {
-      headerName: 'Has Voting Attributes',
-      field: 'hasVotingAttributes',
+      headerName: 'Has Voting Features',
+      field: 'hasVotingFeatures',
       cellRenderer: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setHasVotingAttributes,
-        field: 'hasVotingAttributes'
+        setStateHandler: setHasVotingFeatures,
+        field: 'hasVotingFeatures'
       }
     },
     {

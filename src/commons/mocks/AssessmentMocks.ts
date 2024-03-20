@@ -22,7 +22,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -31,7 +31,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -40,7 +40,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -49,7 +49,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: true,
+      hasVotingFeatures: true,
       earlySubmissionXp: 200
     },
     {
@@ -58,7 +58,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ],
@@ -69,7 +69,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -78,7 +78,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -87,7 +87,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasVotingAttributes: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ]
@@ -911,7 +911,7 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
     title: 'An Odessey to Runes',
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   },
   {
     type: 'Missions',
@@ -921,7 +921,7 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
     title: 'The Secret to Streams',
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -948,7 +948,7 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
     title: 'A sample Sidequest',
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   },
   {
     type: 'Missions',
@@ -958,7 +958,7 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission',
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -968,7 +968,7 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Sidequest',
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   },
   {
     type: 'Paths',
@@ -981,7 +981,7 @@ export const mockAssessments: Assessment[] = [
     missionPDF: 'www.google.com',
     questions: mockPathQuestions,
     title: 'A sample guided path',
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   },
   // mock assessment used for testing contest voting assessments
   {
@@ -991,6 +991,6 @@ export const mockAssessments: Assessment[] = [
     longSummary: 'Vote for your favourite contest entries here!',
     missionPDF: 'www.google.com',
     questions: mockContestEntryQuestion,
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   }
 ];

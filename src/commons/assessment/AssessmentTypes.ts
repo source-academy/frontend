@@ -81,7 +81,7 @@ export type Assessment = {
   type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
-  hasVotingAttributes: boolean;
+  hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   id: number;
   longSummary: string;
@@ -97,7 +97,7 @@ export type AssessmentConfiguration = {
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
-  hasVotingAttributes: boolean;
+  hasVotingFeatures: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {
@@ -320,6 +320,6 @@ export const assessmentTemplate = (): Assessment => {
     missionPDF: 'www.google.com',
     questions: [programmingTemplate()],
     title: 'Insert title here',
-    hasVotingAttributes: false
+    hasVotingFeatures: false
   };
 };
