@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import {
   paginationToBackendParams,
-  ungradedToBackendParams
+  unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
 
 import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
@@ -159,7 +159,7 @@ test('fetchGradingOverviews generates correct default action object', () => {
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: true,
-      gradedFilter: ungradedToBackendParams(false),
+      gradedFilter: unpublishedToBackendParams(false),
       pageParams: paginationToBackendParams(0, 10),
       filterParams: {}
     }
@@ -168,7 +168,7 @@ test('fetchGradingOverviews generates correct default action object', () => {
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const gradedFilter = ungradedToBackendParams(true);
+  const gradedFilter = unpublishedToBackendParams(true);
   const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
   const action = fetchGradingOverviews(filterToGroup, gradedFilter, pageParams, filterParams);
@@ -540,6 +540,7 @@ test('updateGradingOverviews generates correct action object', () => {
         assessmentName: 'test assessment',
         assessmentType: 'Contests',
         initialXp: 0,
+        isPublished: false,
         xpBonus: 100,
         xpAdjustment: 50,
         currentXp: 50,
@@ -548,7 +549,7 @@ test('updateGradingOverviews generates correct action object', () => {
         studentName: 'test student',
         studentUsername: 'E0123456',
         submissionId: 1,
-        submissionStatus: 'attempting',
+        submissionProgress: 'attempting',
         groupName: 'group',
         gradingStatus: 'excluded',
         questionCount: 6,
