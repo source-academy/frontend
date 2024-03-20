@@ -20,6 +20,7 @@ import { StateObserver, UserStateType } from '../../state/GameStateTypes';
 import { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
+import { Quiz } from '../../quiz/GameQuizType';
 
 /**
  * This class exposes all the public API's of managers
@@ -501,8 +502,20 @@ class GameGlobalAPI {
   public getBBoxById(bboxId: ItemId): BBoxProperty {
     return mandatory(this.getGameMap().getBBoxPropMap().get(bboxId));
   }
+
+  public getQuizById(quizId: ItemId): Quiz {
+    return mandatory(this.getGameMap().getQuizMap().get(quizId));
+  }
+
   public getAssetByKey(assetKey: AssetKey) {
     return this.getGameMap().getAssetByKey(assetKey);
+  }
+
+  /////////////////////
+  //   Game Quiz     //
+  /////////////////////
+  public showQuiz(quizId: ItemId) {
+    this.getGameManager().getQuizManager().showQuiz(quizId);
   }
 }
 
