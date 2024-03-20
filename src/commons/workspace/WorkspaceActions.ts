@@ -67,6 +67,7 @@ import {
   UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_REQUEST_COUNTER,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
@@ -393,6 +394,11 @@ export const setIsEditorReadonly = createAction(
   (workspaceLocation: WorkspaceLocation, isEditorReadonly: boolean) => ({
     payload: { workspaceLocation, isEditorReadonly }
   })
+);
+
+export const updateRequestCounter = createAction(
+  UPDATE_REQUEST_COUNTER,
+  (requestCount: number) => ({ payload: { requestCount } })
 );
 
 export const updateSubmissionsTableFilters = createAction(

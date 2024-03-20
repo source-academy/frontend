@@ -40,6 +40,7 @@ export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const TOGGLE_USING_CSE = 'TOGGLE_USING_CSE';
 export const TOGGLE_UPDATE_CSE = 'TOGGLE_UPDATE_CSE';
+export const UPDATE_REQUEST_COUNTER = 'UPDATE_REQUEST_COUNTER';
 export const UPDATE_SUBMISSIONS_TABLE_FILTERS = 'UPDATE_SUBMISSIONS_TABLE_FILTERS';
 export const UPDATE_GRADING_COLUMN_VISIBILITY = 'UPDATE_GRADING_COLUMN_VISIBILITY';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
@@ -82,6 +83,7 @@ type GradingWorkspaceAttr = {
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
+  readonly requestCounter: number;
 };
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
