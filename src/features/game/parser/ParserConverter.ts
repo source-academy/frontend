@@ -59,7 +59,8 @@ const stringToActionTypeMap = {
   show_object_layer: GameActionType.ShowObjectLayer,
   navigate_to_assessment: GameActionType.NavigateToAssessment,
   update_assessment_status: GameActionType.UpdateAssessmentStatus,
-  delay: GameActionType.Delay
+  delay: GameActionType.Delay,
+  show_quiz: GameActionType.ShowQuiz
 };
 
 const stringToGameStateStorageMap = {
