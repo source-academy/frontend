@@ -159,7 +159,7 @@ test('fetchGradingOverviews generates correct default action object', () => {
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: true,
-      unpublishedFilter: unpublishedToBackendParams(false),
+      publishedFilter: unpublishedToBackendParams(false),
       pageParams: paginationToBackendParams(0, 10),
       filterParams: {}
     }
@@ -168,15 +168,15 @@ test('fetchGradingOverviews generates correct default action object', () => {
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const unpublishedFilter = unpublishedToBackendParams(true);
+  const publishedFilter = unpublishedToBackendParams(true);
   const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
-  const action = fetchGradingOverviews(filterToGroup, unpublishedFilter, pageParams, filterParams);
+  const action = fetchGradingOverviews(filterToGroup, publishedFilter, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: filterToGroup,
-      unpublishedFilter: unpublishedFilter,
+      publishedFilter: publishedFilter,
       pageParams: pageParams,
       filterParams: filterParams
     }
