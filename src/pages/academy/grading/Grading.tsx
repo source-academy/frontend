@@ -3,13 +3,14 @@ import '@tremor/react/dist/esm/tremor.css';
 import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Button, Card, Flex, Text, Title } from '@tremor/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { updateRequestCounter } from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import {
   exportGradingCSV,
@@ -50,8 +51,12 @@ const Grading: React.FC = () => {
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
   const dispatch = useDispatch();
+  const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
+
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
+      console.log("+1 parent");
+      dispatch(updateRequestCounter(requestCounter + 1));
       dispatch(
         fetchGradingOverviews(
           showAllGroups,
@@ -63,6 +68,10 @@ const Grading: React.FC = () => {
     },
     [dispatch, showAllGroups, showAllSubmissions, pageSize]
   );
+
+  useEffect(() => {
+    dispatch(updateRequestCounter(Math.max(0, requestCounter - 1)));
+  }, [gradingOverviews]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (

@@ -415,7 +415,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     },
     currentSubmission: undefined,
     currentQuestion: undefined,
-    hasUnsavedChanges: false
+    hasUnsavedChanges: false,
+    requestCounter: 0
   },
   playground: {
     ...createDefaultWorkspace('playground'),

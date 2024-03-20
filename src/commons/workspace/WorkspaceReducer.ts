@@ -79,6 +79,7 @@ import {
   UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_REQUEST_COUNTER,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
@@ -656,6 +657,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...state.grading,
           currentSubmission: action.payload.submissionId,
           currentQuestion: action.payload.questionId
+        }
+      };
+    case UPDATE_REQUEST_COUNTER:
+      return {
+        ...state,
+        grading: {
+          ...state.grading,
+          requestCounter: action.payload.requestCount
         }
       };
     case SET_FOLDER_MODE:
