@@ -8,6 +8,7 @@ import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { mandatory } from '../utils/GameUtils';
 import { AnyId, GameItemType, GameLocation, LocationId } from './GameMapTypes';
+import { Quiz } from '../quiz/GameQuizType';
 
 /**
  * Game map is the class that encapsulates data about
@@ -36,6 +37,7 @@ class GameMap {
   private actions: Map<ItemId, GameAction>;
   private gameStartActions: ItemId[];
   private checkpointCompleteActions: ItemId[];
+  private quizzes: Map<ItemId, Quiz>;
 
   constructor() {
     this.soundAssets = [];
@@ -47,6 +49,7 @@ class GameMap {
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
     this.characters = new Map<ItemId, Character>();
     this.actions = new Map<ItemId, GameAction>();
+    this.quizzes = new Map<ItemId, Quiz>();
 
     this.gameStartActions = [];
     this.checkpointCompleteActions = [];
@@ -118,6 +121,10 @@ class GameMap {
 
   public getActionMap(): Map<ItemId, GameAction> {
     return this.actions;
+  }
+
+  public getQuizMap(): Map<ItemId, Quiz> {
+    return this.quizzes;
   }
 
   public getSoundAssets(): SoundAsset[] {

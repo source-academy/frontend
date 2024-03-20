@@ -34,6 +34,7 @@ import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
+import GameQuizManager from '../../quiz/GameQuizManager';
 
 type GameManagerProps = {
   continueGame: boolean;
@@ -75,6 +76,7 @@ class GameManager extends Phaser.Scene {
   private toolbarManager?: GameToolbarManager;
   private taskLogManager?: GameTaskLogManager;
   private dashboardManager?: GameDashboardManager;
+  private quizManager?: GameQuizManager;
 
   constructor() {
     super('GameManager');
@@ -125,6 +127,7 @@ class GameManager extends Phaser.Scene {
       ],
       [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
     );
+    this.quizManager = new GameQuizManager();
   }
 
   //////////////////////
@@ -432,6 +435,7 @@ class GameManager extends Phaser.Scene {
   public getToolbarManager = () => mandatory(this.toolbarManager);
   public getTaskLogManager = () => mandatory(this.taskLogManager);
   public getDashboardManager = () => mandatory(this.dashboardManager);
+  public getQuizManager = () => mandatory(this.quizManager);
 }
 
 export default GameManager;
