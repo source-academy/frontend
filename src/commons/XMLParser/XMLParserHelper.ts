@@ -101,7 +101,8 @@ const makeAssessment = (result: any): [Assessment, number] => {
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
       questions: questionArr[0],
-      title: rawOverview.title
+      title: rawOverview.title,
+      hasVotingFeatures: false
     },
     questionArr[1]
   ];

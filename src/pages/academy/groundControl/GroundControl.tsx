@@ -13,6 +13,7 @@ import {
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
+import ConfigureCell from './subcomponents/GroundControlConfigureCell';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
@@ -26,6 +27,7 @@ export type DispatchProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
+  handleAssessmentConfigure: (id: number, hasVotingFeatures: boolean, useCounter: boolean) => void;
   handleFetchCourseConfigs: () => void;
 };
 
@@ -105,7 +107,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         cellRendererParams: {
           handlePublishAssessment: this.props.handlePublishAssessment
         },
-        width: 100,
+        width: 80,
         filter: false,
         resizable: false,
         sortable: false,
@@ -120,7 +122,22 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         cellRendererParams: {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
-        width: 100,
+        width: 80,
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: {
+          padding: 0
+        }
+      },
+      {
+        headerName: 'Configure',
+        field: '',
+        cellRenderer: ConfigureCell,
+        cellRendererParams: {
+          handleAssessmentConfigure: this.props.handleAssessmentConfigure
+        },
+        width: 80,
         filter: false,
         resizable: false,
         sortable: false,
