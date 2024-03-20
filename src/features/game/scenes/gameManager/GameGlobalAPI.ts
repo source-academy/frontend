@@ -14,13 +14,13 @@ import { AnyId, GameItemType, GameLocation, LocationId } from '../../location/Ga
 import { GameMode } from '../../mode/GameModeTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import { Quiz } from '../../quiz/GameQuizType';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
 import { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
-import { Quiz } from '../../quiz/GameQuizType';
 
 /**
  * This class exposes all the public API's of managers

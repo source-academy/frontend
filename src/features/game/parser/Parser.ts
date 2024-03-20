@@ -8,8 +8,8 @@ import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
 import ParserValidator, { GameEntityType } from './ParserValidator';
-import TasksParser from './TasksParser';
 import QuizParser from './QuizParser';
+import TasksParser from './TasksParser';
 
 /**
  * This class converts a checkpoint txt file into a Checkpoint

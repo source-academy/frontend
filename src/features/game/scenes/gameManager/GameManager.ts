@@ -27,6 +27,7 @@ import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GamePopUpManager from '../../popUp/GamePopUpManager';
+import GameQuizManager from '../../quiz/GameQuizManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
 import GameTaskLogManager from '../../task/GameTaskLogManager';
@@ -34,7 +35,6 @@ import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
-import GameQuizManager from '../../quiz/GameQuizManager';
 
 type GameManagerProps = {
   continueGame: boolean;
