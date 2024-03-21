@@ -1232,6 +1232,14 @@ export function* evalCode(
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
       yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+      // enable the CSE machine visualizer during errors
+      if (context.executionMethod === 'cse-machine' && needUpdateCse) {
+        yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
+        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+        yield put(
+          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
+        );
+      }
     } else {
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
       yield put(actions.evalStoryError(context.errors, storyEnv!));
