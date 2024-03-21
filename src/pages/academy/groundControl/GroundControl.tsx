@@ -13,7 +13,7 @@ import {
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
-import ConfigureCell from './subcomponents/GroundControlConfigureCell';
+import ConfigureCell, { VotingConfiguration } from './subcomponents/GroundControlConfigureCell';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
@@ -27,11 +27,7 @@ export type DispatchProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
-  handleConfigureAssessment: (
-    id: number,
-    hasVotingFeatures: boolean,
-    hasTokenCounter: boolean
-  ) => void;
+  handleConfigureAssessment: (id: number, votingConfiguration: VotingConfiguration) => void;
   handleFetchCourseConfigs: () => void;
 };
 

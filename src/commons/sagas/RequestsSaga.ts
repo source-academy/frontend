@@ -1,4 +1,5 @@
 import { call } from 'redux-saga/effects';
+import { VotingConfiguration } from 'src/pages/academy/groundControl/subcomponents/GroundControlConfigureCell';
 
 import {
   AchievementGoal,
@@ -898,7 +899,12 @@ export const deleteSourcecastEntry = async (
  */
 export const updateAssessment = async (
   id: number,
-  body: { openAt?: string; closeAt?: string; isPublished?: boolean },
+  body: {
+    openAt?: string;
+    closeAt?: string;
+    isPublished?: boolean;
+    votingConfigurations?: VotingConfiguration;
+  },
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {

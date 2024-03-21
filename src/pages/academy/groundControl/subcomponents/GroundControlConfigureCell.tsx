@@ -14,12 +14,13 @@ import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTyp
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
-  handleConfigureAssessment: (
-    id: number,
-    hasVotingFeatures: boolean,
-    hasTokenCounter: boolean
-  ) => void;
+  handleConfigureAssessment: (id: number, votingConfigurations: VotingConfiguration) => void;
   data: AssessmentOverview;
+};
+
+export type VotingConfiguration = {
+  hasVotingFeatures: boolean;
+  hasTokenCounter: boolean;
 };
 
 const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => {
@@ -32,7 +33,7 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
 
   const handleConfigure = useCallback(() => {
     const { id } = data;
-    handleConfigureAssessment(id, hasVotingFeatures, hasTokenCounter);
+    handleConfigureAssessment(id, { hasVotingFeatures, hasTokenCounter });
   }, [data, handleConfigureAssessment, hasTokenCounter, hasVotingFeatures]);
 
   const toggleHasTokenCounter = useCallback(

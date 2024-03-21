@@ -17,10 +17,9 @@ import {
 } from '../../features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
+  CONFIGURE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
-  TOGGLE_TOKEN_COUNTER_ASSESSMENT,
-  TOGGLE_VOTING_FEATURES_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -1173,19 +1172,25 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.fetchAssessmentOverviews());
     }
   );
-  yield takeEvery(
-    TOGGLE_TOKEN_COUNTER_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.deleteAssessment>): any {
-      const tokens: Tokens = yield selectTokens();
-      const id = action.payload;
 
-      const resp: Response | null = yield deleteAssessment(id, tokens);
+  yield takeEvery(
+    CONFIGURE_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.configureAssessment>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload.id;
+      const votingConfigurations = action.payload.votingConfigurations;
+
+      const resp: Response | null = yield updateAssessment(
+        id,
+        { votingConfigurations: votingConfigurations },
+        tokens
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
 
       yield put(actions.fetchAssessmentOverviews());
-      yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+      yield call(showSuccessMessage, '', 1000);
     }
   );
 }
