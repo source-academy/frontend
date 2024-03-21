@@ -732,36 +732,42 @@ and also the
                                   class="bp5-slider-track"
                                 >
                                   <div
-                                    class="bp5-slider-progress"
-                                    style="left: 0.00%; right: 0.00%; top: 0px;"
-                                  />
-                                  <div
                                     class="bp5-slider-progress bp5-intent-primary"
-                                    style="left: 0.00%; right: 0.00%; top: 0px;"
+                                    style="left: 0.00%; right: 100.00%; top: 0px;"
                                   />
                                   <div
                                     class="bp5-slider-progress"
-                                    style="left: 0.00%; right: 0.00%; top: 0px;"
+                                    style="left: 0.00%; right: 100.00%; top: 0px;"
+                                  />
+                                  <div
+                                    class="bp5-slider-progress"
+                                    style="left: 0.00%; right: 100.00%; top: 0px;"
                                   />
                                 </div>
                                 <div
                                   class="bp5-slider-axis"
-                                />
+                                >
+                                  <div
+                                    class="bp5-slider-label"
+                                  >
+                                    0
+                                  </div>
+                                </div>
                                 <span
                                   aria-disabled="true"
                                   aria-orientation="horizontal"
                                   aria-valuemax="0"
-                                  aria-valuemin="1"
-                                  aria-valuenow="1"
+                                  aria-valuemin="0"
+                                  aria-valuenow="0"
                                   class="bp5-slider-handle"
                                   role="slider"
-                                  style="left: calc(0.00% - 0px);"
+                                  style="left: calc(NaN% - 0px);"
                                   tabindex="0"
                                 >
                                   <span
                                     class="bp5-slider-label"
                                   >
-                                    1
+                                    0
                                   </span>
                                 </span>
                               </div>
@@ -951,6 +957,7 @@ and also the
                               </div>
                             </div>
                              
+                            <div />
                             <div
                               class="bp5-running-text"
                               data-testid="cse-machine-default-text"
