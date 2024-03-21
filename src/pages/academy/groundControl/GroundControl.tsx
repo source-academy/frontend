@@ -27,8 +27,11 @@ export type DispatchProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
-  handleAssessmentToggleVotingFeatures: (id: number, hasVotingFeatures: boolean) => void;
-  handleAssessmentToggleTokenCounter: (id: number, hasTokenCounter: boolean) => void;
+  handleConfigureAssessment: (
+    id: number,
+    hasVotingFeatures: boolean,
+    hasTokenCounter: boolean
+  ) => void;
   handleFetchCourseConfigs: () => void;
 };
 
@@ -136,8 +139,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         field: '',
         cellRenderer: ConfigureCell,
         cellRendererParams: {
-          handleAssessmentVotingFeaturesChange: this.props.handleAssessmentToggleVotingFeatures,
-          handleAssessmentTokenCounterChange: this.props.handleAssessmentToggleTokenCounter
+          handleConfigureAssessment: this.props.handleConfigureAssessment
         },
         width: 80,
         filter: false,

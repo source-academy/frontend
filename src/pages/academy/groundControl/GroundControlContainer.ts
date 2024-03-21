@@ -8,10 +8,9 @@ import {
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   changeDateAssessment,
+  configureAssessment,
   deleteAssessment,
   publishAssessment,
-  toggleTokenCounterAssessment,
-  toggleVotingFeaturesAssessment,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
 import GroundControl, { DispatchProps, StateProps } from './GroundControl';
@@ -30,8 +29,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
       handleFetchCourseConfigs: fetchCourseConfig,
-      handleAssessmentToggleVotingFeatures: toggleVotingFeaturesAssessment,
-      handleAssessmentToggleTokenCounter: toggleTokenCounterAssessment
+      handleConfigureAssessment: configureAssessment
     },
     dispatch
   );

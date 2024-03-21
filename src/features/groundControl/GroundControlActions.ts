@@ -2,10 +2,9 @@ import { createAction } from '@reduxjs/toolkit';
 
 import {
   CHANGE_DATE_ASSESSMENT,
+  CONFIGURE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
-  TOGGLE_TOKEN_COUNTER_ASSESSMENT,
-  TOGGLE_VOTING_FEATURES_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from './GroundControlTypes';
 
@@ -28,12 +27,9 @@ export const uploadAssessment = createAction(
   })
 );
 
-export const toggleVotingFeaturesAssessment = createAction(
-  TOGGLE_VOTING_FEATURES_ASSESSMENT,
-  (id: number, hasVotingFeatures: boolean) => ({ payload: { id, hasVotingFeatures } })
-);
-
-export const toggleTokenCounterAssessment = createAction(
-  TOGGLE_TOKEN_COUNTER_ASSESSMENT,
-  (id: number, hasTokenCounter: boolean) => ({ payload: { id, hasTokenCounter } })
+export const configureAssessment = createAction(
+  CONFIGURE_ASSESSMENT,
+  (id: number, hasVotingFeatures: boolean, hasTokenCounter) => ({
+    payload: { id, hasVotingFeatures, hasTokenCounter }
+  })
 );
