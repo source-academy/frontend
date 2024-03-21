@@ -58,7 +58,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       hasTokenCounter: value
     };
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasVotingFeatures', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasTokenCounter', value);
   };
 
   const setHasVotingFeatures = (index: number, value: boolean) => {
@@ -151,22 +151,26 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       }
     },
     {
-      headerName: 'Has Voting Features',
+      headerName: 'Voting Features',
       field: 'hasVotingFeatures',
       cellRenderer: BooleanCell,
       cellRendererParams: {
         setStateHandler: setHasVotingFeatures,
         field: 'hasVotingFeatures'
-      }
+      },
+      maxWidth: 300,
+      resizable: false
     },
     {
-      headerName: 'Has Token Counter',
+      headerName: 'Token Counter',
       field: 'hasTokenCounter',
       cellRenderer: BooleanCell,
       cellRendererParams: {
         setStateHandler: setHasTokenCounter,
         field: 'hasTokenCounter'
-      }
+      },
+      maxWidth: 300,
+      resizable: false
     },
     {
       headerName: 'Max Bonus XP',
