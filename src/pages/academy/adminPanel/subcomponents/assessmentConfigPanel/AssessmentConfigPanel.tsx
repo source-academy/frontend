@@ -157,9 +157,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       cellRendererParams: {
         setStateHandler: setHasVotingFeatures,
         field: 'hasVotingFeatures'
-      },
-      maxWidth: 300,
-      resizable: false
+      }
     },
     {
       headerName: 'Token Counter',
@@ -168,9 +166,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       cellRendererParams: {
         setStateHandler: setHasTokenCounter,
         field: 'hasTokenCounter'
-      },
-      maxWidth: 300,
-      resizable: false
+      }
     },
     {
       headerName: 'Max Bonus XP',
