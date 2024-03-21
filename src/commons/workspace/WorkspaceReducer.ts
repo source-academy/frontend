@@ -100,9 +100,9 @@ const getWorkspaceLocation = (action: any): WorkspaceLocation => {
  *   - `location` is defined (and exists) as a property 'workspaceLocation' in
  *     the action's payload.
  */
-export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
+export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   state = defaultWorkspaceManager,
-  action: SourceActionType
+  action
 ) => {
   const workspaceLocation = getWorkspaceLocation(action);
   switch (workspaceLocation) {
@@ -362,9 +362,9 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     });
 });
 
-const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
+const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   state = defaultWorkspaceManager,
-  action: SourceActionType
+  action
 ) => {
   const workspaceLocation = getWorkspaceLocation(action);
   let newOutput: InterpreterOutput[];

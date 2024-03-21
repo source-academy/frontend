@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultAchievement } from '../../commons/application/ApplicationTypes';
 import {
@@ -10,7 +11,7 @@ import {
 } from './AchievementActions';
 import { AchievementState } from './AchievementTypes';
 
-export const AchievementReducer: Reducer<AchievementState> = createReducer(
+export const AchievementReducer: Reducer<AchievementState, SourceActionType> = createReducer(
   defaultAchievement,
   builder => {
     builder

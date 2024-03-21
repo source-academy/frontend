@@ -29,9 +29,9 @@ import {
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
-export const StoriesReducer: Reducer<StoriesState> = (
+export const StoriesReducer: Reducer<StoriesState, SourceActionType> = (
   state = defaultStories,
-  action: SourceActionType
+  action
 ) => {
   state = newStoriesReducer(state, action);
   state = oldStoriesReducer(state, action);
@@ -68,9 +68,9 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
     });
 });
 
-const oldStoriesReducer: Reducer<StoriesState> = (
+const oldStoriesReducer: Reducer<StoriesState, SourceActionType> = (
   state = defaultStories,
-  action: SourceActionType
+  action
 ) => {
   const env: string = getStoriesEnv(action);
   let newOutput: InterpreterOutput[];
