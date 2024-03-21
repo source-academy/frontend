@@ -13,14 +13,6 @@ import {
 } from './EditableGoalTypes';
 import EditableMeta from './EditableMeta';
 
-type EditableGoalProps = {
-  uuid: string;
-  isNewGoal: boolean;
-  releaseUuid: () => void;
-  removeCard: (uuid: string) => void;
-  requestPublish: () => void;
-};
-
 const init = (goal: GoalDefinition): State => {
   return {
     editableGoal: goal,
@@ -63,15 +55,27 @@ const reducer = (state: State, action: Action) => {
   }
 };
 
-const EditableGoal: React.FC<EditableGoalProps> = props => {
-  const { uuid, isNewGoal, releaseUuid, removeCard, requestPublish } = props;
+type Props = {
+  uuid: string;
+  isNewGoal: boolean;
+  releaseUuid: () => void;
+  removeCard: (uuid: string) => void;
+  requestPublish: () => void;
+};
 
+const EditableGoal: React.FC<Props> = ({
+  uuid,
+  isNewGoal,
+  releaseUuid,
+  removeCard,
+  requestPublish
+}) => {
   const inferencer = useContext(AchievementContext);
   const goal = inferencer.getGoalDefinition(uuid);
   const goalClone = useMemo(() => cloneDeep(goal), [goal]);
 
   const [state, dispatch] = useReducer(reducer, goalClone, init);
-  const [isNew, setIsNew] = useState<boolean>(isNewGoal);
+  const [isNew, setIsNew] = useState(isNewGoal);
   const { editableGoal, isDirty } = state;
   const { meta, text } = editableGoal;
 

@@ -24,12 +24,12 @@ import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
 import Markdown from '../Markdown';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-type DialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const DropdownCreateCourse: React.FC<DialogProps> = props => {
+const DropdownCreateCourse: React.FC<Props> = props => {
   const dispatch = useDispatch();
 
   const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({

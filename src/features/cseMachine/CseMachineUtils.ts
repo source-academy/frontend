@@ -17,22 +17,19 @@ import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 import classes from 'src/styles/Draggable.module.scss';
 
-import { ControlItemComponent } from './compactComponents/ControlItemComponent';
-import { Frame } from './compactComponents/Frame';
-import { StashItemComponent } from './compactComponents/StashItemComponent';
-import { ArrayValue } from './compactComponents/values/ArrayValue';
-import { Value as CompactValue } from './compactComponents/values/Value';
 import { Binding } from './components/Binding';
+import { ControlItemComponent } from './components/ControlItemComponent';
+import { Frame } from './components/Frame';
+import { StashItemComponent } from './components/StashItemComponent';
+import { ArrayValue } from './components/values/ArrayValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
-import { CompactConfig } from './CseMachineCompactConfig';
 import { Config } from './CseMachineConfig';
-import { ControlStashConfig } from './CseMachineControlStash';
+import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
-  CompactReferenceType,
   Data,
   EmptyObject,
   Env,
@@ -145,11 +142,6 @@ export function isMainReference(value: Value, reference: ReferenceType) {
   }
 }
 
-/** Returns `true` if `reference` is the main reference of `value` */
-export function isCompactMainReference(value: CompactValue, reference: CompactReferenceType) {
-  return value.referencedBy[0] === reference;
-}
-
 /** checks if `value` is a `number` */
 /** Returns `true` if `value` is a `number` */
 export function isNumeric(value: string) {
@@ -208,7 +200,7 @@ export function getTextHeight(
   text: string,
   width: number,
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
-  fontSize: number = Number(Config.FontSize)
+  fontSize: number = Config.FontSize
 ): number {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
@@ -274,8 +266,8 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
   nodes.push(target);
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.HoveredColor.toString() : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.HoveredColor.toString() : node.attrs.fill,
+      stroke: node.attrs.stroke ? Config.HoveredColor : node.attrs.stroke,
+      fill: node.attrs.fill ? Config.HoveredColor : node.attrs.fill,
       ...hoveredAttrs
     });
   });
@@ -291,13 +283,13 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
     node.setAttrs({
       stroke: node.attrs.stroke
         ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE.toString()
-          : Config.SA_WHITE.toString()
+          ? Config.SA_BLUE
+          : Config.SA_WHITE
         : node.attrs.stroke,
       fill: node.attrs.fill
         ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE.toString()
-          : Config.SA_WHITE.toString()
+          ? Config.SA_BLUE
+          : Config.SA_WHITE
         : node.attrs.fill,
       ...unhoveredAttrs
     });
@@ -548,7 +540,7 @@ export function getControlItemComponent(
           highlightOnHover,
           unhighlightOnHover,
           topItem,
-          Layout.compactLevels.reduce<Frame | undefined>(
+          Layout.levels.reduce<Frame | undefined>(
             (accum, level) =>
               accum
                 ? accum
@@ -645,7 +637,7 @@ export function getControlItemComponent(
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
   if (isFn(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
-    for (const level of Layout.compactLevels) {
+    for (const level of Layout.levels) {
       for (const frame of level.frames) {
         if (isFn(stashItem) || isGlobalFn(stashItem)) {
           const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
@@ -710,19 +702,17 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 };
 
 export const defaultSAColor = () =>
-  CseMachine.getPrintableMode()
-    ? CompactConfig.SA_BLUE.toString()
-    : CompactConfig.SA_WHITE.toString();
+  CseMachine.getPrintableMode() ? Config.SA_BLUE : Config.SA_WHITE;
 
 export const stackItemSAColor = (index: number) =>
   isStashItemInDanger(index)
-    ? ControlStashConfig.STASH_DANGER_ITEM.toString()
+    ? ControlStashConfig.STASH_DANGER_ITEM
     : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE.toString()
-    : ControlStashConfig.SA_WHITE.toString();
+    ? ControlStashConfig.SA_BLUE
+    : ControlStashConfig.SA_WHITE;
 export const currentItemSAColor = (test: boolean) =>
   test
-    ? CompactConfig.SA_CURRENT_ITEM.toString()
+    ? Config.SA_CURRENT_ITEM
     : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE.toString()
-    : ControlStashConfig.SA_WHITE.toString();
+    ? ControlStashConfig.SA_BLUE
+    : ControlStashConfig.SA_WHITE;

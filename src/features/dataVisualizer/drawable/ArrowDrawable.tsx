@@ -3,14 +3,17 @@ import { Arrow } from 'react-konva';
 
 import { Config } from '../Config';
 
-type ArrowConfig = { from: { x: number; y: number }; to: { x: number; y: number } };
+type Props = {
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+};
 
 /**
  * Represents an arrow used to connect a parent node and a child node.
  *
  * Used with ArrayDrawable and FunctionDrawable.
  */
-const ArrowDrawable: React.FC<ArrowConfig> = props => {
+const ArrowDrawable: React.FC<Props> = props => {
   return (
     <Arrow
       key={props + ''}

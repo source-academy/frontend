@@ -7,7 +7,13 @@ import { PersistenceFile, PersistenceState } from '../../features/persistence/Pe
 import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
 
-export type ControlBarGoogleDriveButtonsProps = {
+const stateToIntent: { [state in PersistenceState]: Intent } = {
+  INACTIVE: Intent.NONE,
+  SAVED: Intent.PRIMARY,
+  DIRTY: Intent.WARNING
+};
+
+type Props = {
   isFolderModeEnabled: boolean;
   loggedInAs?: string;
   currentFile?: PersistenceFile;
@@ -19,13 +25,7 @@ export type ControlBarGoogleDriveButtonsProps = {
   onPopoverOpening?: () => any;
 };
 
-const stateToIntent: { [state in PersistenceState]: Intent } = {
-  INACTIVE: Intent.NONE,
-  SAVED: Intent.PRIMARY,
-  DIRTY: Intent.WARNING
-};
-
-export const ControlBarGoogleDriveButtons: React.FC<ControlBarGoogleDriveButtonsProps> = props => {
+export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
   const state: PersistenceState = props.currentFile
     ? props.isDirty

@@ -97,6 +97,7 @@ import {
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
+
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
   needsPassword: boolean;
