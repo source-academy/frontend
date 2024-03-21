@@ -82,7 +82,7 @@ export class Frame extends Visible implements IHoverable {
         Math.max(Config.TextMinWidth, getTextWidth(key + Config.ConstantColon)) +
         Config.TextPaddingX +
         (isUnassigned(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData.toString()))
+          ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData))
           : isPrimitiveData(data)
           ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
           : 0);
@@ -152,7 +152,7 @@ export class Frame extends Visible implements IHoverable {
           width={this.width()}
           height={this.height()}
           stroke={currentItemSAColor(CseMachine.getCurrentEnvId() === this.environment?.id)}
-          cornerRadius={Number(Config.FrameCornerRadius)}
+          cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           key={Layout.key++}
