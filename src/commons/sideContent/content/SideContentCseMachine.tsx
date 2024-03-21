@@ -15,12 +15,13 @@ import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 
-import { OverallState } from '../../application/ApplicationTypes';
+import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import {
@@ -50,6 +51,7 @@ type StateProps = {
   currentStep: number;
   breakpointSteps: number[];
   needCseUpdate: boolean;
+  machineOutput: InterpreterOutput[];
 };
 
 type OwnProps = {
@@ -96,8 +98,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         // This comment is copied over from workspace saga
         props.setEditorHighlightedLines(0, segments);
       },
+      // We shouldn't be able to move slider to a step number beyond the step limit
       isControlEmpty => {
-        this.setState({ stepLimitExceeded: !isControlEmpty && this.state.lastStep });
+        this.setState({ stepLimitExceeded: false });
       }
     );
   }
@@ -200,11 +203,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         <div className={classNames('sa-substituter', Classes.DARK)}>
           <Slider
             disabled={!this.state.visualization}
-            min={1}
+            min={0}
             max={this.props.stepsTotal}
             onChange={this.sliderShift}
             onRelease={this.sliderRelease}
-            value={this.state.value < 1 ? 1 : this.state.value}
+            value={this.state.value < 0 ? 0 : this.state.value}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <ButtonGroup>
@@ -296,6 +299,15 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             </ButtonGroup>
           </div>
         </div>{' '}
+        {this.state.visualization &&
+        this.props.machineOutput.length &&
+        this.props.machineOutput[0].type === 'errors' ? (
+          this.props.machineOutput.map((slice, index) => (
+            <Output output={slice} key={index} usingSubst={false} isHtml={false} />
+          ))
+        ) : (
+          <div></div>
+        )}
         {this.state.visualization ? (
           this.state.stepLimitExceeded ? (
             <div
@@ -387,7 +399,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private stepPrevious = () => {
-    if (this.state.value !== 1) {
+    if (this.state.value !== 0) {
       this.sliderShift(this.state.value - 1);
       this.sliderRelease(this.state.value - 1);
     }
@@ -404,8 +416,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
 
   private stepFirst = () => {
     // Move to the first step
-    this.sliderShift(1);
-    this.sliderRelease(1);
+    this.sliderShift(0);
+    this.sliderRelease(0);
   };
 
   private stepLast = (lastStepValue: number) => () => {
@@ -435,8 +447,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         return;
       }
     }
-    this.sliderShift(1);
-    this.sliderRelease(1);
+    this.sliderShift(0);
+    this.sliderRelease(0);
   };
 }
 
@@ -467,7 +479,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     stepsTotal: workspace.stepsTotal,
     currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
-    needCseUpdate: workspace.updateCse
+    needCseUpdate: workspace.updateCse,
+    machineOutput: workspace.output
   };
 };
 
