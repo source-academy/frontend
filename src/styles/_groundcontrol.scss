@@ -67,3 +67,21 @@
     width: 28px;
   }
 }
+
+.voting-related-configs,
+.general-configs {
+  margin-top: 20px;
+
+  .voting-related-controls {
+    display: flex;
+    flex-direction: column;
+
+    .control-button-container {
+      display: flex;
+    }
+
+    .publish-voting {
+      margin-top: 4px;
+    }
+  }
+}

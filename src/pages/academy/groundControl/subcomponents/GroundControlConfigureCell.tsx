@@ -56,22 +56,15 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
       >
         <DialogBody>
           <p>
-            This <b>configuration tool</b> allows you to fine-tune this assessment to ensure it
-            meets your specific needs.
+            This <b>configuration tool</b> allows you to fine-tune this assessment. Any changes made
+            here will <b>override</b> any assessment configurations in the admin panel.
           </p>
           <br></br>
-          <p>
-            <b>Voting-Related Configurations</b>
-          </p>
-          <Divider></Divider>
-          <Switch
-            className="has-voting-features"
-            checked={hasVotingFeatures}
-            onChange={toggleVotingFeatures}
-            inline
-            label="Enable Voting Features"
-          ></Switch>
-          <Collapse isOpen={hasVotingFeatures}>
+          <div className="general-configurations">
+            <p>
+              <b>General Configurations</b>
+            </p>
+            <Divider></Divider>
             <Switch
               className="has-token-counter"
               checked={hasTokenCounter}
@@ -79,7 +72,44 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
               inline
               label="Has Token Counter"
             ></Switch>
-          </Collapse>
+          </div>
+          <div className="voting-related-configs">
+            <p>
+              <b>Voting-Related Configurations</b>
+            </p>
+            <Divider></Divider>
+            <Switch
+              className="has-voting-features"
+              checked={hasVotingFeatures}
+              onChange={toggleVotingFeatures}
+              inline
+              label="Enable Voting Features"
+            ></Switch>
+            <Collapse isOpen={hasVotingFeatures}>
+              <div className="voting-related-controls">
+                <div className="control-button-container">
+                  <ControlButton
+                    icon={IconNames.PEOPLE}
+                    isDisabled={true}
+                    label="Export Popular Vote Leaderboard (Coming soon!)"
+                  ></ControlButton>
+                </div>
+                <div className="control-button-container">
+                  <ControlButton
+                    icon={IconNames.CROWN}
+                    isDisabled={true}
+                    label="Export Score Leaderboard (Coming soon!)"
+                  ></ControlButton>
+                </div>
+                <Switch
+                  className="publish-voting"
+                  disabled={true}
+                  inline
+                  label="Publish Voting (Coming soon!)"
+                ></Switch>
+              </div>
+            </Collapse>
+          </div>
         </DialogBody>
         <DialogFooter
           actions={
