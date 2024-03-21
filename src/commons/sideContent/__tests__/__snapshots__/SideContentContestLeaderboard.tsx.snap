@@ -15,7 +15,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
     </span>
     <Blueprint5.Tooltip
       compact={false}
-      content="View the top-rated contest entries!"
+      content="View the highest scoring contest entries!"
       hoverCloseDelay={0}
       hoverOpenDelay={100}
       interactionKind="hover-target"
@@ -62,7 +62,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
         <div
           className="header-score"
         >
-          Score
+          Calculated Score
           <Blueprint5.Icon
             autoLoad={true}
             icon="caret-down"

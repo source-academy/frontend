@@ -1,17 +1,17 @@
 import { Dialog, DialogBody } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 
 import Markdown from '../Markdown';
 import { Links } from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 
-type DialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const DropdownHelp: React.FC<DialogProps> = props => {
+const DropdownHelp: React.FC<Props> = props => {
   const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
 
   return (

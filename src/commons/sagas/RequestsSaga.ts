@@ -8,7 +8,13 @@ import {
   GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingAnswer,
+  GradingOverview,
+  GradingOverviews,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   Device,
   WebSocketEndpointInformation
@@ -599,59 +605,73 @@ export const postAssessment = async (id: number, tokens: Tokens): Promise<Respon
  */
 export const getGradingOverviews = async (
   tokens: Tokens,
-  group: boolean
-): Promise<GradingOverview[] | null> => {
-  const resp = await request(`${courseId()}/admin/grading?group=${group}`, 'GET', {
+  group: boolean,
+  graded: Record<string, any> | undefined,
+  pageParams: Record<string, any>,
+  filterParams: Record<string, any>
+): Promise<GradingOverviews | null> => {
+  // gradedQuery placed behind filterQuery to override progress filter if any
+  const params = new URLSearchParams({ ...pageParams, ...filterParams, ...graded });
+  params.append('group', `${group}`);
+
+  const resp = await request(`${courseId()}/admin/grading?${params.toString()}`, 'GET', {
     ...tokens
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
   }
   const gradingOverviews = await resp.json();
-  return gradingOverviews
-    .map((overview: any) => {
-      const gradingOverview: GradingOverview = {
-        assessmentId: overview.assessment.id,
-        assessmentNumber: overview.assessment.assessmentNumber,
-        assessmentName: overview.assessment.title,
-        assessmentType: overview.assessment.type,
-        studentId: overview.student.id,
-        studentUsername: overview.student.username,
-        studentName: overview.student.name,
-        submissionId: overview.id,
-        submissionStatus: overview.status,
-        groupName: overview.student.groupName,
-        groupLeaderId: overview.student.groupLeaderId,
-        // Grading Status
-        gradingStatus: 'none',
-        questionCount: overview.assessment.questionCount,
-        gradedCount: overview.gradedCount,
-        // XP
-        initialXp: overview.xp,
-        xpAdjustment: overview.xpAdjustment,
-        currentXp: overview.xp + overview.xpAdjustment,
-        maxXp: overview.assessment.maxXp,
-        xpBonus: overview.xpBonus
-      };
-      gradingOverview.gradingStatus = computeGradingStatus(
-        overview.assessment.isManuallyGraded,
-        gradingOverview.submissionStatus,
-        gradingOverview.gradedCount,
-        gradingOverview.questionCount
-      );
-      return gradingOverview;
-    })
-    .sort((subX: GradingOverview, subY: GradingOverview) =>
-      subX.assessmentId !== subY.assessmentId
-        ? subY.assessmentId - subX.assessmentId
-        : subY.submissionId - subX.submissionId
-    );
+
+  return {
+    count: gradingOverviews.count,
+    data: gradingOverviews.data
+      .map((overview: any) => {
+        const gradingOverview: GradingOverview = {
+          assessmentId: overview.assessment.id,
+          assessmentNumber: overview.assessment.assessmentNumber,
+          assessmentName: overview.assessment.title,
+          assessmentType: overview.assessment.type,
+          studentId: overview.student.id,
+          studentUsername: overview.student.username,
+          studentName: overview.student.name,
+          submissionId: overview.id,
+          submissionStatus: overview.status,
+          groupName: overview.student.groupName,
+          groupLeaderId: overview.student.groupLeaderId,
+          // Grading Status
+          gradingStatus: 'none',
+          questionCount: overview.assessment.questionCount,
+          gradedCount: overview.gradedCount,
+          // XP
+          initialXp: overview.xp,
+          xpAdjustment: overview.xpAdjustment,
+          currentXp: overview.xp + overview.xpAdjustment,
+          maxXp: overview.assessment.maxXp,
+          xpBonus: overview.xpBonus
+        };
+        gradingOverview.gradingStatus = computeGradingStatus(
+          overview.assessment.isManuallyGraded,
+          gradingOverview.submissionStatus,
+          gradingOverview.gradedCount,
+          gradingOverview.questionCount
+        );
+        return gradingOverview;
+      })
+      .sort((subX: GradingOverview, subY: GradingOverview) =>
+        subX.assessmentId !== subY.assessmentId
+          ? subY.assessmentId - subX.assessmentId
+          : subY.submissionId - subX.submissionId
+      )
+  };
 };
 
 /**
  * GET /courses/{courseId}/admin/grading/{submissionId}
  */
-export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
+export const getGrading = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<GradingQuery | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}`, 'GET', {
     ...tokens
   });
@@ -661,7 +681,7 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
   }
 
   const gradingResult = await resp.json();
-  const grading: Grading = gradingResult.map((gradingQuestion: any) => {
+  const grading: GradingAnswer = gradingResult.answers.map((gradingQuestion: any) => {
     const { student, question, grade } = gradingQuestion;
     const result = {
       question: {
@@ -691,11 +711,10 @@ export const getGrading = async (submissionId: number, tokens: Tokens): Promise<
       result.grade.grader = gradingQuestion.grade.grader;
       result.grade.gradedAt = gradingQuestion.grade.gradedAt;
     }
-
     return result;
   });
 
-  return grading;
+  return { answers: grading, assessment: gradingResult.assessment };
 };
 
 /**
@@ -1308,6 +1327,28 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
   }
 
   return true;
+}
+
+/**
+ * POST /chat
+ */
+
+export async function chat(
+  tokens: Tokens,
+  payload: { role: string; content: string }[]
+): Promise<string> {
+  const response = await request(`chat`, 'POST', {
+    ...tokens,
+    body: { json: payload }
+  });
+  if (!response) {
+    throw new Error('Unknown error occurred.');
+  }
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`Failed to chat to louis: ${message}`);
+  }
+  return response.text();
 }
 
 function fillTokens(tokens?: Tokens): Tokens {

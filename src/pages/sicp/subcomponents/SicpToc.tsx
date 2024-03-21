@@ -1,7 +1,6 @@
 import { Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import toc from '../../../features/sicp/data/toc.json';

@@ -4,7 +4,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 
 import { Ace } from 'ace-builds';
 import { isEqual } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
@@ -206,7 +206,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
   public render() {
     return (
-      <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
+      <HotKeys className="Editor bp5-card bp5-elevation-0" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"

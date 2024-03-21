@@ -67,14 +67,18 @@ class Bindings extends Phaser.Scene {
     });
 
     bindingsContainer.add(
-      bindings.map((binding, index) =>
-        this.createBinding(
+      bindings.map((binding, index) => {
+        return this.createBinding(
           binding.key,
           binding.text,
-          bindingPositions[index][0],
-          bindingPositions[index][1] + BindingConstants.key.yStart
-        )
-      )
+          bindingPositions[index][1] < 450
+            ? bindingPositions[index][0] - BindingConstants.key.xOffset
+            : bindingPositions[index][0] + BindingConstants.key.xOffset,
+          bindingPositions[index][1] < 450
+            ? bindingPositions[index][1] + BindingConstants.key.yOffset1
+            : bindingPositions[index][1] + BindingConstants.key.yOffset2
+        );
+      })
     );
     const backButton = new CommonBackButton(this, () => {
       this.getLayerManager().clearAllLayers();
@@ -97,6 +101,26 @@ class Bindings extends Phaser.Scene {
       {
         key: 'Tab',
         text: 'Dashboard'
+      },
+      {
+        key: 'Space',
+        text: 'Next dialogue'
+      },
+      {
+        key: 'E',
+        text: 'Explore mode'
+      },
+      {
+        key: 'V',
+        text: 'Move mode'
+      },
+      {
+        key: 'T',
+        text: 'Talk mode'
+      },
+      {
+        key: '<Number>',
+        text: '       Select topics/locations'
       }
     ];
   }
@@ -122,6 +146,20 @@ class Bindings extends Phaser.Scene {
     );
     switch (key) {
       case 'Tab':
+        keyIcon.setTexture(ImageAssets.medKeyboardIcon.key);
+        break;
+      default:
+        break;
+    }
+    switch (key) {
+      case 'Space':
+        keyIcon.setTexture(ImageAssets.medKeyboardIcon.key);
+        break;
+      default:
+        break;
+    }
+    switch (key) {
+      case '<Number>':
         keyIcon.setTexture(ImageAssets.medKeyboardIcon.key);
         break;
       default:

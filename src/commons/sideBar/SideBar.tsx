@@ -18,17 +18,15 @@ export type SideBarTab = {
   id?: SideContentType;
 };
 
-export type SideBarProps = {
+type Props = {
   tabs: SideBarTab[];
   isExpanded: boolean;
   expandSideBar: () => void;
   collapseSideBar: () => void;
 };
 
-const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
-  const { tabs, isExpanded, expandSideBar, collapseSideBar } = props;
-
-  const [selectedTabIndex, setSelectedTabIndex] = React.useState<number>(0);
+const SideBar: React.FC<Props> = ({ tabs, isExpanded, expandSideBar, collapseSideBar }) => {
+  const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
 
   const handleTabSelection = (tabIndex: number) => {
     if (selectedTabIndex === tabIndex) {

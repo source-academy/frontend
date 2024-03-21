@@ -3,7 +3,7 @@ import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import * as React from 'react';
+import React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -38,7 +38,7 @@ type OwnProps = {
   replButtons: Array<JSX.Element | null>;
 };
 
-const Repl: React.FC<ReplProps> = (props: ReplProps) => {
+const Repl: React.FC<ReplProps> = props => {
   const cards = props.output.map((slice, index) => (
     <Output
       output={slice}
@@ -64,7 +64,7 @@ const Repl: React.FC<ReplProps> = (props: ReplProps) => {
   );
 };
 
-export const Output: React.FC<OutputProps> = (props: OutputProps) => {
+export const Output: React.FC<OutputProps> = props => {
   switch (props.output.type) {
     case 'code':
       return (

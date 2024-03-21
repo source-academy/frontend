@@ -1,5 +1,5 @@
+import { createAction } from '@reduxjs/toolkit';
 import { SourceError, Value } from 'js-slang/dist/types';
-import { action } from 'typesafe-actions';
 
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import {
@@ -16,41 +16,66 @@ import {
   HANDLE_CONSOLE_LOG
 } from '../types/InterpreterTypes';
 
-export const handleConsoleLog = (workspaceLocation: WorkspaceLocation, ...logString: string[]) =>
-  action(HANDLE_CONSOLE_LOG, { logString, workspaceLocation });
+export const handleConsoleLog = createAction(
+  HANDLE_CONSOLE_LOG,
+  (workspaceLocation: WorkspaceLocation, ...logString: string[]) => ({
+    payload: { logString, workspaceLocation }
+  })
+);
 
-export const evalInterpreterSuccess = (value: Value, workspaceLocation: WorkspaceLocation) =>
-  action(EVAL_INTERPRETER_SUCCESS, { type: 'result', value, workspaceLocation });
+export const evalInterpreterSuccess = createAction(
+  EVAL_INTERPRETER_SUCCESS,
+  (value: Value, workspaceLocation: WorkspaceLocation) => ({
+    payload: { type: 'result', value, workspaceLocation }
+  })
+);
 
-export const evalTestcaseSuccess = (
-  value: Value,
-  workspaceLocation: WorkspaceLocation,
-  index: number
-) => action(EVAL_TESTCASE_SUCCESS, { type: 'result', value, workspaceLocation, index });
+export const evalTestcaseSuccess = createAction(
+  EVAL_TESTCASE_SUCCESS,
+  (value: Value, workspaceLocation: WorkspaceLocation, index: number) => ({
+    payload: { type: 'result', value, workspaceLocation, index }
+  })
+);
 
-export const evalTestcaseFailure = (
-  value: Value,
-  workspaceLocation: WorkspaceLocation,
-  index: number
-) => action(EVAL_TESTCASE_FAILURE, { type: 'errors', value, workspaceLocation, index });
+export const evalTestcaseFailure = createAction(
+  EVAL_TESTCASE_FAILURE,
+  (value: Value, workspaceLocation: WorkspaceLocation, index: number) => ({
+    payload: { type: 'errors', value, workspaceLocation, index }
+  })
+);
 
-export const evalInterpreterError = (errors: SourceError[], workspaceLocation: WorkspaceLocation) =>
-  action(EVAL_INTERPRETER_ERROR, { type: 'errors', errors, workspaceLocation });
+export const evalInterpreterError = createAction(
+  EVAL_INTERPRETER_ERROR,
+  (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
+    payload: { type: 'errors', errors, workspaceLocation }
+  })
+);
 
-export const beginInterruptExecution = (workspaceLocation: WorkspaceLocation) =>
-  action(BEGIN_INTERRUPT_EXECUTION, { workspaceLocation });
+export const beginInterruptExecution = createAction(
+  BEGIN_INTERRUPT_EXECUTION,
+  (workspaceLocation: WorkspaceLocation) => ({ payload: { workspaceLocation } })
+);
 
-export const endInterruptExecution = (workspaceLocation: WorkspaceLocation) =>
-  action(END_INTERRUPT_EXECUTION, { workspaceLocation });
+export const endInterruptExecution = createAction(
+  END_INTERRUPT_EXECUTION,
+  (workspaceLocation: WorkspaceLocation) => ({ payload: { workspaceLocation } })
+);
 
-export const beginDebuggerPause = (workspaceLocation: WorkspaceLocation) =>
-  action(BEGIN_DEBUG_PAUSE, { workspaceLocation });
+export const beginDebuggerPause = createAction(
+  BEGIN_DEBUG_PAUSE,
+  (workspaceLocation: WorkspaceLocation) => ({ payload: { workspaceLocation } })
+);
 
-export const endDebuggerPause = (workspaceLocation: WorkspaceLocation) =>
-  action(END_DEBUG_PAUSE, { workspaceLocation });
+export const endDebuggerPause = createAction(
+  END_DEBUG_PAUSE,
+  (workspaceLocation: WorkspaceLocation) => ({ payload: { workspaceLocation } })
+);
 
-export const debuggerResume = (workspaceLocation: WorkspaceLocation) =>
-  action(DEBUG_RESUME, { workspaceLocation });
+export const debuggerResume = createAction(
+  DEBUG_RESUME,
+  (workspaceLocation: WorkspaceLocation) => ({ payload: { workspaceLocation } })
+);
 
-export const debuggerReset = (workspaceLocation: WorkspaceLocation) =>
-  action(DEBUG_RESET, { workspaceLocation });
+export const debuggerReset = createAction(DEBUG_RESET, (workspaceLocation: WorkspaceLocation) => ({
+  payload: { workspaceLocation }
+}));

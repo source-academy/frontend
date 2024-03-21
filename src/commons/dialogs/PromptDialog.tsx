@@ -1,5 +1,5 @@
 import { InputGroup, Intent } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 
 import { ConfirmDialog, ConfirmDialogProps } from './ConfirmDialog';
 

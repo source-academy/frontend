@@ -1,15 +1,15 @@
 import { Dialog, DialogBody } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 
 import { Links } from '../utils/Constants';
 
-type DialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const DropdownAbout: React.FC<DialogProps> = props => (
+const DropdownAbout: React.FC<Props> = props => (
   <Dialog
     style={{ textAlign: 'justify' }}
     icon={IconNames.HELP}

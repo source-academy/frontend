@@ -1,6 +1,6 @@
 import { Ace, Range as AceRange } from 'ace-builds';
 import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
-import * as React from 'react';
+import React from 'react';
 
 import { EditorHook } from './Editor';
 
