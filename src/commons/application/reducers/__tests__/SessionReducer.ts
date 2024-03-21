@@ -66,14 +66,14 @@ test('SET_USER works correctly', () => {
         courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         viewable: true,
-        role: Role.Student,
+        role: Role.Student
       },
       {
         courseId: 2,
         courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
         courseShortName: `CS2030S`,
         viewable: true,
-        role: Role.Staff,
+        role: Role.Staff
       }
     ]
   };
@@ -158,7 +158,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      hasTokenCounter: false
     },
     {
       assessmentConfigId: 1,
@@ -170,7 +170,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      hasTokenCounter: false
     },
     {
       assessmentConfigId: 1,
@@ -182,7 +182,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false,
+      hasTokenCounter: false
     }
   ];
 
