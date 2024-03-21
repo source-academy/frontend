@@ -83,7 +83,6 @@ export type Assessment = {
   type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
-  hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   id: number;
   longSummary: string;
@@ -99,6 +98,7 @@ export type AssessmentConfiguration = {
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
+  hasTokenCounter: boolean;
   hasVotingFeatures: boolean;
 };
 

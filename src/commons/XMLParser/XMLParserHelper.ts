@@ -84,7 +84,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     xp: 0,
-    gradingStatus: 'none' as GradingStatuses
+    gradingStatus: 'none' as GradingStatuses,
+    hasVotingFeatures: false
   };
 };
 
@@ -101,8 +102,7 @@ const makeAssessment = (result: any): [Assessment, number] => {
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
       questions: questionArr[0],
-      title: rawOverview.title,
-      hasVotingFeatures: false
+      title: rawOverview.title
     },
     questionArr[1]
   ];

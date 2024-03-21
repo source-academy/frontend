@@ -251,17 +251,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling enabling and disabling token counter depending on assessment properties
    */
   useEffect(() => {
-    if (assessment?.hasVotingFeatures && assessment?.hasTokenCounter) {
+    if (assessment?.hasTokenCounter) {
       handleEnableTokenCounter();
     } else {
       handleDisableTokenCounter();
     }
-  }, [
-    assessment?.hasTokenCounter,
-    handleEnableTokenCounter,
-    handleDisableTokenCounter,
-    assessment?.hasVotingFeatures
-  ]);
+  }, [assessment?.hasTokenCounter, handleEnableTokenCounter, handleDisableTokenCounter]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
