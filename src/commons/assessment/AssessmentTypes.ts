@@ -62,7 +62,7 @@ export type AssessmentOverview = {
   gradingStatus: GradingStatus;
   id: number;
   isPublished?: boolean;
-  hasVotingFeatures?: boolean;
+  hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   maxXp: number;
   number?: string; // For mission control
@@ -246,7 +246,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
     xp: 0,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    hasVotingFeatures: false
   };
 };
 
@@ -321,7 +322,6 @@ export const assessmentTemplate = (): Assessment => {
     longSummary: 'Insert mission briefing here',
     missionPDF: 'www.google.com',
     questions: [programmingTemplate()],
-    title: 'Insert title here',
-    hasVotingFeatures: false
+    title: 'Insert title here'
   };
 };

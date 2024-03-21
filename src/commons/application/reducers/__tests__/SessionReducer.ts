@@ -238,7 +238,8 @@ const assessmentTest1: Assessment = {
   longSummary: 'long summary here',
   missionPDF: 'www.google.com',
   questions: [],
-  title: 'first assessment'
+  title: 'first assessment',
+  hasVotingFeatures: false
 };
 
 const assessmentTest2: Assessment = {
@@ -249,7 +250,8 @@ const assessmentTest2: Assessment = {
   longSummary: 'another long summary',
   missionPDF: 'www.comp.nus.edu.sg',
   questions: [],
-  title: 'updated first assessment'
+  title: 'updated first assessment',
+  hasVotingFeatures: false
 };
 
 const assessmentTest3: Assessment = {
@@ -260,7 +262,8 @@ const assessmentTest3: Assessment = {
   longSummary: 'another long summary here',
   missionPDF: 'www.yahoo.com',
   questions: [],
-  title: 'path'
+  title: 'path',
+  hasVotingFeatures: false
 };
 
 test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
@@ -324,7 +327,8 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    hasVotingFeatures: false
   }
 ];
 
@@ -343,7 +347,8 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    hasVotingFeatures: false
   }
 ];
 

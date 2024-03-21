@@ -1178,11 +1178,12 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.configureAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
-      const votingConfigurations = action.payload.votingConfigurations;
+      const hasVotingFeatures = action.payload.hasVotingFeatures;
+      const hasTokenCounter = action.payload.hasTokenCounter;
 
       const resp: Response | null = yield updateAssessment(
         id,
-        { votingConfigurations: votingConfigurations },
+        { hasVotingFeatures: hasVotingFeatures, hasTokenCounter: hasTokenCounter },
         tokens
       );
       if (!resp || !resp.ok) {
@@ -1190,7 +1191,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield put(actions.fetchAssessmentOverviews());
-      yield call(showSuccessMessage, 'Assessment configurations updated successfully!', 1000);
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
 }

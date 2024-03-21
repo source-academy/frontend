@@ -108,7 +108,8 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    hasVotingFeatures: false
   }
 ];
 
@@ -139,7 +140,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    hasVotingFeatures: false
   },
   {
     type: 'Missions',
@@ -155,7 +157,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -171,7 +174,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    hasVotingFeatures: false
   },
   {
     type: 'Paths',
@@ -187,7 +191,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.excluded
+    gradingStatus: GradingStatuses.excluded,
+    hasVotingFeatures: false
   },
   {
     type: 'Others',
@@ -204,7 +209,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'sidequest-2.1',
     xp: 3,
     gradingStatus: GradingStatuses.none,
-    private: true
+    private: true,
+    hasVotingFeatures: false
   }
 ];
 
@@ -223,7 +229,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -239,7 +246,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -255,7 +263,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: GradingStatuses.graded
+    gradingStatus: GradingStatuses.graded,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -271,7 +280,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: GradingStatuses.excluded
+    gradingStatus: GradingStatuses.excluded,
+    hasVotingFeatures: false
   }
 ];
 

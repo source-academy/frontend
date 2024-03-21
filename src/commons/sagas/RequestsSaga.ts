@@ -1,5 +1,4 @@
 import { call } from 'redux-saga/effects';
-import { VotingConfiguration } from 'src/pages/academy/groundControl/subcomponents/GroundControlConfigureCell';
 
 import {
   AchievementGoal,
@@ -903,7 +902,8 @@ export const updateAssessment = async (
     openAt?: string;
     closeAt?: string;
     isPublished?: boolean;
-    votingConfigurations?: VotingConfiguration;
+    hasTokenCounter?: boolean;
+    hasVotingFeatures?: boolean;
   },
   tokens: Tokens
 ): Promise<Response | null> => {

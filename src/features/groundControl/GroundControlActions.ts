@@ -1,5 +1,4 @@
 import { createAction } from '@reduxjs/toolkit';
-import { VotingConfiguration } from 'src/pages/academy/groundControl/subcomponents/GroundControlConfigureCell';
 
 import {
   CHANGE_DATE_ASSESSMENT,
@@ -30,7 +29,7 @@ export const uploadAssessment = createAction(
 
 export const configureAssessment = createAction(
   CONFIGURE_ASSESSMENT,
-  (id: number, votingConfigurations: VotingConfiguration) => ({
-    payload: { id, votingConfigurations }
+  (id: number, hasTokenCounter: boolean, hasVotingFeatures: boolean) => ({
+    payload: { id, hasTokenCounter, hasVotingFeatures }
   })
 );

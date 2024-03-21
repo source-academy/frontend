@@ -501,7 +501,8 @@ test('updateAssessmentOverviews generates correct action object', () => {
       status: 'not_attempted',
       story: null,
       xp: 0,
-      gradingStatus: 'none'
+      gradingStatus: 'none',
+      hasVotingFeatures: false
     }
   ];
   const action = updateAssessmentOverviews(overviews);

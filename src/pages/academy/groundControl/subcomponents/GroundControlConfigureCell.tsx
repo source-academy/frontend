@@ -14,13 +14,12 @@ import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTyp
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
-  handleConfigureAssessment: (id: number, votingConfigurations: VotingConfiguration) => void;
+  handleConfigureAssessment: (
+    id: number,
+    hasVotingFeatures: boolean,
+    hasTokenCounter: boolean
+  ) => void;
   data: AssessmentOverview;
-};
-
-export type VotingConfiguration = {
-  hasVotingFeatures: boolean;
-  hasTokenCounter: boolean;
 };
 
 const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => {
@@ -33,7 +32,7 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
 
   const handleConfigure = useCallback(() => {
     const { id } = data;
-    handleConfigureAssessment(id, { hasVotingFeatures, hasTokenCounter });
+    handleConfigureAssessment(id, hasVotingFeatures, hasTokenCounter);
   }, [data, handleConfigureAssessment, hasTokenCounter, hasVotingFeatures]);
 
   const toggleHasTokenCounter = useCallback(
@@ -57,8 +56,8 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
       >
         <DialogBody>
           <p>
-            This <b>assessment configuration tool</b> allows you to fine-tune this assessment to
-            ensure it meets your specific <b>needs.</b>
+            This <b>configuration tool</b> allows you to fine-tune this assessment to ensure it
+            meets your specific needs.
           </p>
           <br></br>
           <p>
