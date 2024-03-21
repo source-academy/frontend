@@ -1167,27 +1167,6 @@ export function* evalCode(
     });
   }
 
-  function reportCCompilationWarnings(warningMessages: string[], context: Context) {
-    warningMessages.forEach(w => {
-      context.errors.push({
-        type: ErrorType.SYNTAX,
-        severity: ErrorSeverity.WARNING,
-        location: {
-          start: {
-            line: 0,
-            column: 0
-          },
-          end: {
-            line: 0,
-            column: 0
-          }
-        },
-        explain: () => w,
-        elaborate: () => w
-      });
-    });
-  }
-
   async function cCompileAndRun(cCode: string, context: Context) {
     const cCompilerConfig = await makeCCompilerConfig(cCode, context);
     return await compileAndRunCCode(cCode, cCompilerConfig)
@@ -1204,17 +1183,17 @@ export function* evalCode(
           };
         }
         if (compilationResult.warnings.length > 0) {
-          reportCCompilationWarnings(compilationResult.warnings, context);
           return {
-            status: 'error',
-            context
+            status: 'finished',
+            context,
+            value: { toReplString: () => `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join("\n")}` }
           };
         }
         if (specialCReturnObject === null) {
           return {
             status: 'finished',
             context,
-            value: { toReplString: () => 'Compilation Successful. Execution output:' }
+            value: { toReplString: () => 'Compilation and program execution successful.' }
           };
         }
         return { status: 'finished', context, value: specialCReturnObject };
