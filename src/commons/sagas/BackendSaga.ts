@@ -1190,7 +1190,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield put(actions.fetchAssessmentOverviews());
-      yield call(showSuccessMessage, '', 1000);
+      yield call(showSuccessMessage, 'Assessment configurations updated successfully!', 1000);
     }
   );
 }
