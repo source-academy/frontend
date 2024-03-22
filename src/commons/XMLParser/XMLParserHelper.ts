@@ -14,6 +14,7 @@ import {
   IProgrammingQuestion,
   Library,
   MCQChoice,
+  ProgressStatuses,
   Question,
   SubmissionProgresses,
   Testcase,
@@ -86,6 +87,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     submissionProgress: SubmissionProgresses.attempting,
+    progress: ProgressStatuses.attempting,
     xp: 0,
     gradingStatus: GradingStatuses.none
   };

@@ -442,6 +442,12 @@ export const getAssessmentOverviews = async (
       overview.status,
       overview.isGradingPublished
     );
+    overview.progress = backendParamsToProgressStatus(
+      overview.isGradingPublished,
+      overview.status,
+      overview.gradedCount,
+      overview.questionCount
+    );
     delete overview.gradedCount;
     delete overview.questionCount;
 

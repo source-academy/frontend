@@ -88,6 +88,7 @@ export type AssessmentOverview = {
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
+  progress: ProgressStatus;
   reading?: string; // For mission control
   shortSummary: string;
   status: AssessmentStatus;
@@ -267,6 +268,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
     submissionProgress: SubmissionProgresses.not_attempted,
+    progress: ProgressStatuses.not_attempted,
     xp: 0,
     gradingStatus: 'none'
   };
