@@ -58,6 +58,16 @@ const SubmissionProgressBadge: React.FC<SubmissionProgressBadgeProps> = ({ progr
   return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} />;
 };
 
+type ProgressStatusBadgeProps = {
+  progress: SubmissionProgress;
+};
+
+const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) => {
+  const statusText = progress.charAt(0).toUpperCase() + progress.slice(1);
+  return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} />;
+};
+
+
 type GradingStatusBadgeProps = {
   status: GradingStatus;
 };
@@ -104,4 +114,4 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, SubmissionProgressBadge };
+export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, ProgressStatusBadge, SubmissionProgressBadge };

@@ -30,14 +30,14 @@ import {
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { SubmissionProgress } from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatus, ProgressStatuses, SubmissionProgress } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, GradingStatusBadge, SubmissionProgressBadge } from './GradingBadges';
+import { AssessmentTypeBadge, GradingStatusBadge, ProgressStatusBadge, SubmissionProgressBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -69,7 +69,11 @@ const makeColumns = (handleClick: () => void) => [
   }),
   columnHelper.accessor('progress', {
     header: 'TEST',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+    cell: info => (
+      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+        <ProgressStatusBadge progress={info.getValue() as ProgressStatus} />
+      </Filterable>
+    )
   }),
   columnHelper.accessor('submissionProgress', {
     header: 'Progress',

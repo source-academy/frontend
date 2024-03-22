@@ -655,8 +655,18 @@ export const getGradingOverviews = async (
           groupName: overview.student.groupName,
           groupLeaderId: overview.student.groupLeaderId,
           // Grading Status
-          gradingStatus: 'none',
-          progress: 'x',
+          gradingStatus: computeGradingStatus(
+            overview.assessment.isManuallyGraded,
+            overview.status,
+            overview.gradedCount,
+            overview.assessment.questionCount
+          ),
+          progress: computeProgress(
+            overview.isGradingPublished,
+            overview.status,
+            overview.gradedCount,
+            overview.assessment.questionCount
+          ),
           questionCount: overview.assessment.questionCount,
           gradedCount: overview.gradedCount,
           // XP
@@ -666,18 +676,6 @@ export const getGradingOverviews = async (
           maxXp: overview.assessment.maxXp,
           xpBonus: overview.xpBonus
         };
-        gradingOverview.gradingStatus = computeGradingStatus(
-          overview.assessment.isManuallyGraded,
-          overview.status,
-          gradingOverview.gradedCount,
-          gradingOverview.questionCount
-        );
-        gradingOverview.progress = computeProgress(
-          overview.isGradingPublished,
-          overview.assessment.submissionStatus,
-          overview.gradedCount,
-          overview.assessment.questionCount
-        ) as ProgressStatus;
         return gradingOverview;
       })
       .sort((subX: GradingOverview, subY: GradingOverview) =>
@@ -1471,7 +1469,6 @@ const computeProgress = (
   } else {
     return ProgressStatuses.published;
   }
-  return 'hehe';
 }
 
 const computeGradingStatus = (
