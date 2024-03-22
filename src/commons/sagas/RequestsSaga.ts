@@ -433,6 +433,10 @@ export const getAssessmentOverviews = async (
       overview.gradedCount,
       overview.questionCount
     );
+    overview.submissionProgress = computeSubmissionProgress(
+      overview.status,
+      overview.isGradingPublished
+    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
