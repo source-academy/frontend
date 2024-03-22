@@ -6,6 +6,7 @@ import {
   GradingStatus,
   GradingStatuses,
   ProgressStatus,
+  ProgressStatuses,
   SubmissionProgress
 } from 'src/commons/assessment/AssessmentTypes';
 
@@ -15,20 +16,14 @@ const BADGE_COLORS = {
   quests: 'emerald',
   paths: 'sky',
 
-  // submission status
-  published: 'blue',
-  submitted: 'green',
-  attempting: 'yellow',
+
+  // ProgressStatus
+  not_attempted: 'red',
+  attempting: 'red',
   attempted: 'red',
-
-  // published status - assumes no other boolean usage here, change if required.
-  true: 'green',
-  false: 'red',
-
-  // grading status
+  submitted: 'yellow',
   graded: 'green',
-  grading: 'yellow',
-  none: 'red'
+  published: 'blue'
 };
 
 export function getBadgeColorFromLabel(label: string) {
@@ -65,7 +60,21 @@ type ProgressStatusBadgeProps = {
 
 const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) => {
   const statusText = progress.charAt(0).toUpperCase() + progress.slice(1);
-  return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} />;
+  const badgeIcon = () => (
+    <Icon
+      icon={
+        progress === ProgressStatuses.published
+          ? IconNames.ENDORSED
+          : progress === ProgressStatuses.graded
+          ? IconNames.TICK
+          : progress === ProgressStatuses.submitted
+          ? IconNames.TIME
+          : IconNames.DISABLE
+      }
+      style={{ marginRight: '0.5rem' }}
+    />
+  );
+  return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} icon={badgeIcon} />;
 };
 
 
