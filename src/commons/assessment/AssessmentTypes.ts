@@ -34,7 +34,6 @@ export enum ProgressStatuses {
 
 export type ProgressStatus = keyof typeof ProgressStatuses;
 
-
 export type AssessmentWorkspaceParams = {
   assessmentId?: string;
   questionId?: string;
@@ -266,7 +265,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
     progress: ProgressStatuses.not_attempted,
-    xp: 0,
+    xp: 0
   };
 };
 

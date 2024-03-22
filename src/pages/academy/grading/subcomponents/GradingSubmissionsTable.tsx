@@ -30,14 +30,16 @@ import {
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ProgressStatus, ProgressStatuses, SubmissionProgress } from 'src/commons/assessment/AssessmentTypes';
+import {
+  ProgressStatus,
+} from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, GradingStatusBadge, ProgressStatusBadge } from './GradingBadges';
+import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -96,22 +98,14 @@ const makeColumns = (handleClick: () => void) => [
       );
     }
   }),
-  columnHelper.accessor(
-    ({ submissionId, progress }) => ({ submissionId, progress }),
-    {
-      header: 'Actions',
-      enableColumnFilter: false,
-      cell: info => {
-        const { submissionId, progress } = info.getValue();
-        return (
-          <GradingActions
-            submissionId={submissionId}
-            progress={progress}
-          />
-        );
-      }
+  columnHelper.accessor(({ submissionId, progress }) => ({ submissionId, progress }), {
+    header: 'Actions',
+    enableColumnFilter: false,
+    cell: info => {
+      const { submissionId, progress } = info.getValue();
+      return <GradingActions submissionId={submissionId} progress={progress} />;
     }
-  )
+  })
 ];
 
 type Props = {

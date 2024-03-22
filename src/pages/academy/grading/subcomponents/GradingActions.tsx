@@ -9,7 +9,11 @@ import {
   unpublishGrading,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
-import { ProgressStatus, ProgressStatuses, SubmissionProgresses } from 'src/commons/assessment/AssessmentTypes';
+import {
+  ProgressStatus,
+  ProgressStatuses,
+  SubmissionProgresses
+} from 'src/commons/assessment/AssessmentTypes';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 

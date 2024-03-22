@@ -3,10 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
 import {
-  GradingStatus,
-  GradingStatuses,
   ProgressStatus,
-  ProgressStatuses,
+  ProgressStatuses
 } from 'src/commons/assessment/AssessmentTypes';
 
 const BADGE_COLORS = {
@@ -14,7 +12,6 @@ const BADGE_COLORS = {
   missions: 'indigo',
   quests: 'emerald',
   paths: 'sky',
-
 
   // ProgressStatus
   not_attempted: 'red',

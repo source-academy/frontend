@@ -1,4 +1,10 @@
 import { call } from 'redux-saga/effects';
+import { RuntimeError } from 'sourceror';
+import {
+  backendParamsToProgressStatus,
+  computeGradingStatus,
+  computeSubmissionProgress
+} from 'src/features/grading/GradingUtils';
 
 import {
   AchievementGoal,
@@ -49,15 +55,13 @@ import {
   IContestVotingQuestion,
   IProgrammingQuestion,
   QuestionType,
-  QuestionTypes,
+  QuestionTypes
 } from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
-import { RuntimeError } from 'sourceror';
-import { computeGradingStatus, computeSubmissionProgress, backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
 
 /**
  * GET /

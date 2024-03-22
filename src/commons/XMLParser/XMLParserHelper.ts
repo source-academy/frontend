@@ -85,7 +85,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     progress: ProgressStatuses.attempting,
-    xp: 0,
+    xp: 0
   };
 };
 

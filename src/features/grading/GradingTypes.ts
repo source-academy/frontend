@@ -27,7 +27,7 @@ export type GradingOverview = {
   xpAdjustment: number;
   currentXp: number;
   maxXp: number;
-  progress: ProgressStatus,
+  progress: ProgressStatus;
   studentId: number;
   studentName: string;
   studentUsername: string;

@@ -1,5 +1,14 @@
 import { ColumnFilter } from '@tanstack/react-table';
-import { AssessmentStatus, AssessmentStatuses, GradingStatus, GradingStatuses, ProgressStatus, ProgressStatuses, SubmissionProgress, SubmissionProgresses } from 'src/commons/assessment/AssessmentTypes';
+import {
+  AssessmentStatus,
+  AssessmentStatuses,
+  GradingStatus,
+  GradingStatuses,
+  ProgressStatus,
+  ProgressStatuses,
+  SubmissionProgress,
+  SubmissionProgresses
+} from 'src/commons/assessment/AssessmentTypes';
 
 import { GradingOverview } from './GradingTypes';
 
@@ -107,11 +116,11 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
 };
 
 /**
- * Converts multiple backend parameters into a single comprehensive grading status for use in the grading dashboard. 
+ * Converts multiple backend parameters into a single comprehensive grading status for use in the grading dashboard.
  * @param isPublished backend field denoting if grading of submitted work is to be shown to the student
  * @param submissionStatus backend field denoting if the student has submitted their work.
  * @param numGraded
- * @param numQuestions 
+ * @param numQuestions
  * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic.
  */
 export const backendParamsToProgressStatus = (
@@ -132,32 +141,30 @@ export const backendParamsToProgressStatus = (
   } else {
     return ProgressStatuses.published;
   }
-}
+};
 
-export const progressStatusToBackendParams = (
-  progress: ProgressStatus
-) => {
+export const progressStatusToBackendParams = (progress: ProgressStatus) => {
   switch (progress) {
     case ProgressStatuses.published:
-      return { 
+      return {
         notPublished: 44,
         notFullyGraded: false,
         status: AssessmentStatuses.submitted
       };
     case ProgressStatuses.graded:
-      return { 
+      return {
         notPublished: true,
         notFullyGraded: false,
         status: AssessmentStatuses.submitted
       };
     default:
-      return { 
+      return {
         notPublished: true,
         notFullyGraded: true,
-        status: progress as AssessmentStatus 
+        status: progress as AssessmentStatus
       };
   }
-}
+};
 
 export const computeGradingStatus = (
   isManuallyGraded: boolean,
