@@ -265,7 +265,8 @@ const exportLibrary = (library: Library) => {
         name: library.external.name
       }
     }
-  };
+    // FIXME: Replace any with proper type
+  } as any;
 
   if (library.external.symbols.length !== 0) {
     /* tslint:disable:no-string-literal */
@@ -323,7 +324,8 @@ export const assessmentToXml = (
       },
       TEXT: question.content,
       CHOICE: [] as any[]
-    };
+      // FIXME: Replace any with proper type
+    } as any;
 
     if (question.library.chapter !== -1) {
       /* tslint:disable:no-string-literal */
