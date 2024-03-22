@@ -189,14 +189,9 @@ export class Layout {
     const programEnvNode = Layout.globalEnvNode.children[0];
     const globalEnvNode = Layout.globalEnvNode;
 
-    // filter out dummy bindings from programEnvNode
-    const programBindings = Object.fromEntries(
-      Object.entries(programEnvNode.environment.head).filter(([key]) => !isDummyKey(key))
-    );
-
     // merge programEnvNode bindings into globalEnvNode
     globalEnvNode.environment.head = {
-      ...programBindings,
+      ...programEnvNode.environment.head,
       ...globalEnvNode.environment.head
     };
 

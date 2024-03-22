@@ -110,6 +110,23 @@ export class Frame extends Visible implements IHoverable {
         entries.push(entry);
       }
     }
+    // Show dummy bindings for objects in the heap that are not in the head
+    const values = new Set(Object.values(this.environment.head));
+    console.log(values, this.environment.heap.getHeap());
+    for (const obj of this.environment.heap.getHeap()) {
+      // Somehow, tThis does not work for arrays. TODO: Fix this in js-slang
+      if (!values.has(obj)) {
+        const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
+          value: obj,
+          configurable: false,
+          enumerable: true,
+          writable: false
+        };
+        // The key is a number string to "disguise" as a dummy binding
+        // TODO: revamp the dummy binding behavior, don't rely on numeric keys
+        dummyEntries.push(['0', descriptor] as const);
+      }
+    }
     entries.push(...dummyEntries);
 
     for (const [key, data] of entries) {
