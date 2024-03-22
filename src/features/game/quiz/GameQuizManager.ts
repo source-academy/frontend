@@ -1,6 +1,6 @@
 import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { Question } from './GameQuizType';
+import { Question, QuizResult } from './GameQuizType';
 import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
@@ -97,6 +97,7 @@ export default class QuizManager {
 
       GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
 
+      const quizResult: QuizResult = {numberOfQuestions : 0};
       const activateQuizContainer: Promise<any> = new Promise(resolve => {
         quizContainer.add(
           choices.map((response, index) =>
@@ -108,9 +109,10 @@ export default class QuizManager {
               onUp: () => {
                 quizContainer.destroy();
                 if (index == question.answer) {
-                resolve(this.showReaction(scene, question, choices[index].reaction, true)); 
+                  quizResult.numberOfQuestions += 1;
+                resolve(this.showReaction(scene, question, choices[index].reaction, quizResult)); 
               } else {
-                resolve(this.showReaction(scene, question, choices[index].reaction, false));
+                resolve(this.showReaction(scene, question, choices[index].reaction, quizResult));
               }
               }
             }).setPosition(
@@ -149,7 +151,7 @@ export default class QuizManager {
         return response;
   }
 
-  private async showReaction(scene: Phaser.Scene, question: Question, reaction: DialogueObject, status: boolean) {
+  private async showReaction(scene: Phaser.Scene, question: Question, reaction: DialogueObject, status: QuizResult) {
     console.log("correct answer: " + status);
     await this.showResult(scene, reaction);
   }
