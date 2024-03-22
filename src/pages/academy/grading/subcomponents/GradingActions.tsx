@@ -9,16 +9,16 @@ import {
   unpublishGrading,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
-import { SubmissionProgress, SubmissionProgresses } from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatus, ProgressStatuses, SubmissionProgresses } from 'src/commons/assessment/AssessmentTypes';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type Props = {
   submissionId: number;
-  submissionProgress: SubmissionProgress;
+  progress: ProgressStatus;
 };
 
-const GradingActions: React.FC<Props> = ({ submissionId, submissionProgress }) => {
+const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
 
@@ -89,7 +89,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, submissionProgress }) =
       <button
         type="button"
         style={{ padding: 0 }}
-        hidden={submissionProgress !== SubmissionProgresses.submitted}
+        hidden={progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted}
         onClick={handleUnsubmitClick}
       >
         <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
@@ -97,13 +97,13 @@ const GradingActions: React.FC<Props> = ({ submissionId, submissionProgress }) =
 
       <Button
         onClick={handlePublishClick}
-        hidden={submissionProgress !== SubmissionProgresses.submitted}
+        hidden={progress !== ProgressStatuses.graded}
         text={'Publish'}
       />
 
       <Button
         onClick={handleUnpublishClick}
-        hidden={submissionProgress !== SubmissionProgresses.published}
+        hidden={progress !== SubmissionProgresses.published}
         text={'Unpublish'}
       />
     </Flex>

@@ -104,16 +104,16 @@ const makeColumns = (handleClick: () => void) => [
     }
   }),
   columnHelper.accessor(
-    ({ submissionId, submissionProgress }) => ({ submissionId, submissionProgress }),
+    ({ submissionId, progress }) => ({ submissionId, progress }),
     {
       header: 'Actions',
       enableColumnFilter: false,
       cell: info => {
-        const { submissionId, submissionProgress } = info.getValue();
+        const { submissionId, progress } = info.getValue();
         return (
           <GradingActions
             submissionId={submissionId}
-            submissionProgress={submissionProgress as SubmissionProgress}
+            progress={progress}
           />
         );
       }

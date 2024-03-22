@@ -83,12 +83,8 @@ export const convertFilterToBackendParams = (column: ColumnFilter) => {
       return { name: column.value };
     case 'studentUsername':
       return { username: column.value };
-    case 'submissionProgress':
-      if (column.value === SubmissionProgresses.published) {
-        return { status: SubmissionProgresses.submitted, isGradingPublished: true };
-      } else {
-        return { status: column.value };
-      }
+    case 'progress':
+      return progressStatusToBackendParams(column.value as ProgressStatus);
     case 'groupName':
       return { groupName: column.value };
     default:
@@ -119,11 +115,11 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
  * @param numQuestions 
  * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic.
  */
-export const computeProgress = (
+export const backendParamsToProgressStatus = (
   isPublished: boolean,
   submissionStatus: AssessmentStatus,
   numGraded: number,
-  numQuestions: number,
+  numQuestions: number
 ): ProgressStatus => {
   // Devnote: Make sure that computeProgress is one-to-one such that each ProgressStatus can be mapped back to its backend parameters.
   // this allows pagination to be done fully in the backend using the progressToBackendParams function.
@@ -136,6 +132,31 @@ export const computeProgress = (
     return ProgressStatuses.graded;
   } else {
     return ProgressStatuses.published;
+  }
+}
+
+export const progressStatusToBackendParams = (
+  progress: ProgressStatus
+) => {
+  switch (progress) {
+    case ProgressStatuses.published:
+      return { 
+        notPublished: 44,
+        notFullyGraded: false,
+        status: AssessmentStatuses.submitted
+      };
+    case ProgressStatuses.graded:
+      return { 
+        notPublished: true,
+        notFullyGraded: false,
+        status: AssessmentStatuses.submitted
+      };
+    default:
+      return { 
+        notPublished: true,
+        notFullyGraded: true,
+        status: progress as AssessmentStatus 
+      };
   }
 }
 

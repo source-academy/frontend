@@ -65,7 +65,7 @@ import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
 import { RuntimeError } from 'sourceror';
-import { computeGradingStatus, computeSubmissionProgress, computeProgress } from 'src/features/grading/GradingUtils';
+import { computeGradingStatus, computeSubmissionProgress, backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
 
 /**
  * GET /
@@ -662,7 +662,7 @@ export const getGradingOverviews = async (
             overview.gradedCount,
             overview.assessment.questionCount
           ),
-          progress: computeProgress(
+          progress: backendParamsToProgressStatus(
             overview.isGradingPublished,
             overview.status,
             overview.gradedCount,
