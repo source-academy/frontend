@@ -6,13 +6,11 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses,
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
   ProgressStatuses,
-  SubmissionProgresses,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
