@@ -71,7 +71,7 @@ export type AssessmentOverview = {
   fileName?: string; // For mission control
   gradingStatus: GradingStatus;
   id: number;
-  isPublished?: boolean;
+  isPublished: boolean;
   maxXp: number;
   number?: string; // For mission control
   openAt: string;
@@ -80,6 +80,7 @@ export type AssessmentOverview = {
   shortSummary: string;
   status: AssessmentStatus;
   story: string | null;
+  submissionProgress: SubmissionProgress;
   title: string;
   xp: number;
 };
@@ -245,6 +246,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
+    isPublished: false,
     maxXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
@@ -252,6 +254,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     shortSummary: 'Insert short summary here',
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
+    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 0,
     gradingStatus: 'none'
   };

@@ -11,6 +11,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
+  SubmissionProgresses,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
@@ -100,12 +101,14 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 1,
+    isPublished: false,
     maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
     shortSummary:
       'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
     status: AssessmentStatuses.not_attempted,
+    submissionProgress: SubmissionProgresses.not_attempted,
     story: 'mission-1',
     xp: 0,
     gradingStatus: GradingStatuses.none
@@ -119,6 +122,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 2,
+    isPublished: false,
     maxXp: 1000,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
@@ -138,12 +142,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   `,
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
+    submissionProgress: SubmissionProgresses.attempted,
     xp: 1,
     gradingStatus: GradingStatuses.none
   },
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 3,
@@ -154,12 +160,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
+    submissionProgress: SubmissionProgresses.attempting,
     xp: 2,
     gradingStatus: GradingStatuses.none
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 4,
@@ -170,12 +178,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
+    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 3,
     gradingStatus: GradingStatuses.none
   },
   {
     type: 'Paths',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2069-04-20T01:23:45.111Z',
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     id: 5,
@@ -186,12 +196,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'This mock path serves as a demonstration of the support provided for mock programming path functionality.',
     status: AssessmentStatuses.not_attempted,
     story: null,
+    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 0,
     gradingStatus: GradingStatuses.excluded
   },
   {
     type: 'Others',
     isManuallyGraded: false,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 6,
@@ -202,6 +214,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
+    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 3,
     gradingStatus: GradingStatuses.none,
     private: true
@@ -212,6 +225,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 7,
@@ -222,12 +236,14 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
+    submissionProgress: SubmissionProgresses.submitted,
     xp: 800,
     gradingStatus: GradingStatuses.grading
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 8,
@@ -238,12 +254,14 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: null,
+    submissionProgress: SubmissionProgresses.submitted,
     xp: 500,
     gradingStatus: GradingStatuses.none
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 9,
@@ -254,12 +272,14 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
+    submissionProgress: SubmissionProgresses.published,
     xp: 150,
     gradingStatus: GradingStatuses.graded
   },
   {
-    type: 'Quests',
-    isManuallyGraded: true,
+    type: 'Paths',
+    isManuallyGraded: false,
+    isPublished: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 10,
@@ -270,6 +290,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
+    submissionProgress: SubmissionProgresses.published,
     xp: 100,
     gradingStatus: GradingStatuses.excluded
   }

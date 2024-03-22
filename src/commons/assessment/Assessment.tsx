@@ -51,7 +51,8 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentWorkspaceParams,
-  GradingStatuses
+  GradingStatuses,
+  SubmissionProgresses
 } from './AssessmentTypes';
 
 export type AssessmentProps = {
@@ -163,8 +164,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
   ) => {
-    const showGrade =
-      overview.gradingStatus === 'graded' || !props.assessmentConfiguration.isManuallyGraded;
+    const showGrade = overview.submissionProgress === SubmissionProgresses.published;
     return (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
