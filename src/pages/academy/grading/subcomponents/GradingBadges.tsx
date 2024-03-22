@@ -5,6 +5,7 @@ import { Badge } from '@tremor/react';
 import {
   GradingStatus,
   GradingStatuses,
+  ProgressStatus,
   SubmissionProgress
 } from 'src/commons/assessment/AssessmentTypes';
 
@@ -59,7 +60,7 @@ const SubmissionProgressBadge: React.FC<SubmissionProgressBadgeProps> = ({ progr
 };
 
 type ProgressStatusBadgeProps = {
-  progress: SubmissionProgress;
+  progress: ProgressStatus;
 };
 
 const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) => {

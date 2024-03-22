@@ -65,6 +65,7 @@ import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
 import { RuntimeError } from 'sourceror';
+import { computeGradingStatus, computeSubmissionProgress, computeProgress } from 'src/features/grading/GradingUtils';
 
 /**
  * GET /
@@ -1442,58 +1443,6 @@ export function* handleResponseError(resp: Response | null): any {
 
   yield call(showWarningMessage, respText);
 }
-
-/**
- * Converts multiple backend parameters into a single comprehensive grading status for use in the grading dashboard. 
- * @param isPublished backend field denoting if grading of submitted work is to be shown to the student
- * @param submissionStatus backend field denoting if the student has submitted their work.
- * @param numGraded
- * @param numQuestions 
- * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic.
- */
-const computeProgress = (
-  isPublished: boolean,
-  submissionStatus: AssessmentStatus,
-  numGraded: number,
-  numQuestions: number,
-): ProgressStatus => {
-  // Devnote: Make sure that computeProgress is one-to-one such that each ProgressStatus can be mapped back to its backend parameters.
-  // this allows pagination to be done fully in the backend using the progressToBackendParams function.
-  if (submissionStatus !== AssessmentStatuses.submitted) {
-    // derived ProgressStatus follows a 1-to-1 correspondence with backend "status" if status != submitted
-    return submissionStatus as ProgressStatus;
-  } else if (numGraded < numQuestions) {
-    return ProgressStatuses.submitted;
-  } else if (!isPublished) {
-    return ProgressStatuses.graded;
-  } else {
-    return ProgressStatuses.published;
-  }
-}
-
-const computeGradingStatus = (
-  isManuallyGraded: boolean,
-  submissionStatus: SubmissionProgress,
-  numGraded: number,
-  numQuestions: number
-): GradingStatus =>
-  // isGraded refers to whether the assessment type is graded or not, as specified in
-  // the respective assessment configuration
-  isManuallyGraded && submissionStatus === SubmissionProgresses.submitted
-    ? numGraded === 0
-      ? GradingStatuses.none
-      : numGraded === numQuestions
-      ? GradingStatuses.graded
-      : GradingStatuses.grading
-    : GradingStatuses.excluded;
-
-const computeSubmissionProgress = (
-  submissionStatus: AssessmentStatus,
-  isPublished: boolean
-): SubmissionProgress =>
-  submissionStatus === SubmissionProgresses.submitted && isPublished
-    ? SubmissionProgresses.published
-    : submissionStatus;
 
 const courseId: () => string = () => {
   const id = store.getState().session.courseId;
