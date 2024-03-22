@@ -59,8 +59,7 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
             This <b>configuration tool</b> allows you to fine-tune this assessment. Any changes made
             here will <b>override</b> any assessment configurations in the admin panel.
           </p>
-          <br></br>
-          <div className="general-configurations">
+          <div className="general-configs">
             <p>
               <b>General Configurations</b>
             </p>
