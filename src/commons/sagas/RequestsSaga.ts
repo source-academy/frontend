@@ -671,9 +671,6 @@ export const getGradingOverviews = async (
           gradingOverview.gradedCount,
           gradingOverview.questionCount
         );
-        gradingOverview.progress = computeProgress(
-          overview.assessment.
-        )
         return gradingOverview;
       })
       .sort((subX: GradingOverview, subY: GradingOverview) =>
