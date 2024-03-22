@@ -23,6 +23,17 @@ export enum SubmissionProgresses {
 
 export type SubmissionProgress = keyof typeof SubmissionProgresses;
 
+export enum ProgressStatuses {
+  attempting = 'attempting',
+  attempted = 'attempted',
+  not_attempted = 'not_attempted',
+  submitted = 'submitted',
+  published = 'published'
+}
+
+export type ProgressStatus = keyof typeof ProgressStatuses;
+
+
 export type AssessmentWorkspaceParams = {
   assessmentId?: string;
   questionId?: string;
