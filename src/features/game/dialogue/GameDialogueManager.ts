@@ -53,8 +53,7 @@ export default class DialogueManager {
     // add keyboard listener for dialogue box
     this.getInputManager().registerKeyboardListener(keyboardShortcuts.Next, 'up', async () => {
       // show the next line if dashboard or escape menu are not displayed
-      if (
-        !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
+      if ( !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
       ) {
         await this.showNextLine(resolve);
       }
@@ -73,7 +72,8 @@ export default class DialogueManager {
     const lineWithName = line.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
-
+    
+    console.log(GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal());
     // Store the current line into the storage
     GameGlobalAPI.getInstance().storeDialogueLine(lineWithName, speakerDetail);
 

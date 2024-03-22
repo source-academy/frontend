@@ -514,8 +514,8 @@ class GameGlobalAPI {
   /////////////////////
   //   Game Quiz     //
   /////////////////////
-  public showQuiz(quizId: ItemId) {
-    this.getGameManager().getQuizManager().showQuiz(quizId);
+  public async showQuiz(quizId: ItemId) {
+    await this.getGameManager().getQuizManager().showQuiz(quizId);
   }
 }
 
