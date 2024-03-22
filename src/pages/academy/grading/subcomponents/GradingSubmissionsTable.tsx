@@ -75,9 +75,10 @@ const makeColumns = (handleClick: () => void) => [
       </Filterable>
     )
   }),
-  columnHelper.accessor('gradingStatus', {
-    header: 'Grading',
-    cell: info => <GradingStatusBadge status={info.getValue()} />
+  // For debugging purposes - remove before PR finalization
+  columnHelper.accessor('submissionStatus', {
+    header: 'Progress',
+    cell: info => info.getValue()
   }),
   columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
     header: 'Raw XP (+Bonus)',

@@ -67,30 +67,6 @@ const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) =
   return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} icon={badgeIcon} />;
 };
 
-
-type GradingStatusBadgeProps = {
-  status: GradingStatus;
-};
-
-const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
-  const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-  const badgeIcon = () => (
-    <Icon
-      icon={
-        status === GradingStatuses.graded
-          ? IconNames.TICK
-          : status === GradingStatuses.grading
-          ? IconNames.TIME
-          : status === GradingStatuses.none
-          ? IconNames.CROSS
-          : IconNames.DISABLE
-      }
-      style={{ marginRight: '0.5rem' }}
-    />
-  );
-  return <Badge text={statusText} color={getBadgeColorFromLabel(status)} icon={badgeIcon} />;
-};
-
 type FilterBadgeProps = {
   filter: ColumnFilter;
   onRemove: (filter: ColumnFilter) => void;
@@ -114,4 +90,4 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, ProgressStatusBadge };
+export { AssessmentTypeBadge, FilterBadge, ProgressStatusBadge };
