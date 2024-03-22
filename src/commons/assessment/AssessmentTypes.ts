@@ -81,7 +81,6 @@ export type AssessmentOverview = {
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
-  gradingStatus: GradingStatus;
   id: number;
   isPublished: boolean;
   maxXp: number;
@@ -93,7 +92,6 @@ export type AssessmentOverview = {
   shortSummary: string;
   status: AssessmentStatus;
   story: string | null;
-  submissionProgress: SubmissionProgress;
   title: string;
   xp: number;
 };
@@ -267,10 +265,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     shortSummary: 'Insert short summary here',
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
-    submissionProgress: SubmissionProgresses.not_attempted,
     progress: ProgressStatuses.not_attempted,
     xp: 0,
-    gradingStatus: 'none'
   };
 };
 

@@ -45,19 +45,11 @@ import {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
-  AssessmentStatus,
-  AssessmentStatuses,
   ContestEntry,
-  GradingStatus,
-  GradingStatuses,
   IContestVotingQuestion,
   IProgrammingQuestion,
-  ProgressStatus,
-  ProgressStatuses,
   QuestionType,
   QuestionTypes,
-  SubmissionProgress,
-  SubmissionProgresses
 } from '../assessment/AssessmentTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';

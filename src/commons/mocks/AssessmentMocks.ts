@@ -11,6 +11,7 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
+  ProgressStatuses,
   SubmissionProgresses,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
@@ -108,10 +109,9 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     shortSummary:
       'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
     status: AssessmentStatuses.not_attempted,
-    submissionProgress: SubmissionProgresses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    progress: ProgressStatuses.not_attempted
   }
 ];
 
@@ -142,9 +142,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
   `,
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
-    submissionProgress: SubmissionProgresses.attempted,
     xp: 1,
-    gradingStatus: GradingStatuses.none
+    progress: ProgressStatuses.attempted
   },
   {
     type: 'Missions',
@@ -160,9 +159,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
-    submissionProgress: SubmissionProgresses.attempting,
     xp: 2,
-    gradingStatus: GradingStatuses.none
+    progress: ProgressStatuses.attempting
   },
   {
     type: 'Quests',
@@ -178,9 +176,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
-    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 3,
-    gradingStatus: GradingStatuses.none
+    progress: ProgressStatuses.not_attempted
   },
   {
     type: 'Paths',
@@ -196,9 +193,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'This mock path serves as a demonstration of the support provided for mock programming path functionality.',
     status: AssessmentStatuses.not_attempted,
     story: null,
-    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 0,
-    gradingStatus: GradingStatuses.excluded
+    progress: ProgressStatuses.not_attempted
   },
   {
     type: 'Others',
@@ -214,10 +210,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
       'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
-    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 3,
-    gradingStatus: GradingStatuses.none,
-    private: true
+    private: true,
+    progress: ProgressStatuses.not_attempted
   }
 ];
 
@@ -236,9 +231,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
-    submissionProgress: SubmissionProgresses.submitted,
     xp: 800,
-    gradingStatus: GradingStatuses.grading
+    progress: ProgressStatuses.submitted
   },
   {
     type: 'Quests',
@@ -254,9 +248,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
     status: AssessmentStatuses.submitted,
     story: null,
-    submissionProgress: SubmissionProgresses.submitted,
     xp: 500,
-    gradingStatus: GradingStatuses.none
+    progress: ProgressStatuses.not_attempted
   },
   {
     type: 'Quests',
@@ -272,9 +265,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
-    submissionProgress: SubmissionProgresses.published,
     xp: 150,
-    gradingStatus: GradingStatuses.graded
+    progress: ProgressStatuses.not_attempted
   },
   {
     type: 'Paths',
@@ -290,9 +282,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
       'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
-    submissionProgress: SubmissionProgresses.published,
     xp: 100,
-    gradingStatus: GradingStatuses.excluded
+    progress: ProgressStatuses.not_attempted
   }
 ];
 
