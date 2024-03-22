@@ -8399,10 +8399,10 @@ js-sdsl@4.3.0:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.50:
-  version "1.0.50"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.50.tgz#a18a7d02013b1e3555b5d5bea425ccee26d5b153"
-  integrity sha512-zgxhCUdAqh0TRCU5eizE35AgQYmxZyBhH8AnRap4eI1T5krGRlHwXzy9r05pTTKnK1LjR09sNVM6W7ai/i9q0w==
+js-slang@^1.0.51:
+  version "1.0.51"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.51.tgz#254ec52f4db29a8f51276cf681cf2608698337cf"
+  integrity sha512-UmoWDfcgwxG86s+Q7y9BxU8PcPnyyTs6jgVK77luaGqMy+kDKwwNqajjIOmd3thVOouAj2U1llAjVT1oZtmCLw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -13306,9 +13306,9 @@ webpack-bundle-analyzer@^4.9.0:
     ws "^7.3.1"
 
 webpack-dev-middleware@^5.3.1:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-5.3.3.tgz#efae67c2793908e7311f1d9b06f2a08dcc97e51f"
-  integrity sha512-hj5CYrY0bZLB+eTO+x/j67Pkrquiy7kWepMHmUMoPsmcUaeEnQJqFzHJOyxgWlq746/wUuA64p9ta34Kyb01pA==
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-5.3.4.tgz#eb7b39281cbce10e104eb2b8bf2b63fce49a3517"
+  integrity sha512-BVdTqhhs+0IfoeAf7EoH5WE+exCmqGerHfDM0IL096Px60Tq2Mn9MAbnaGUe6HiMa41KMCYF19gyzZmBcq/o4Q==
   dependencies:
     colorette "^2.0.10"
     memfs "^3.4.3"
