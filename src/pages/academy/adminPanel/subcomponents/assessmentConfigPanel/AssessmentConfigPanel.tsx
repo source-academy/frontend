@@ -151,7 +151,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       }
     },
     {
-      headerName: 'Voting Features',
+      headerName: 'Voting Features*',
       field: 'hasVotingFeatures',
       cellRenderer: BooleanCell,
       cellRendererParams: {
@@ -160,7 +160,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       }
     },
     {
-      headerName: 'Token Counter',
+      headerName: 'Token Counter*',
       field: 'hasTokenCounter',
       cellRenderer: BooleanCell,
       cellRendererParams: {
@@ -268,6 +268,11 @@ const AssessmentConfigPanel: React.FC<Props> = ({
         onRowDragEnd={onRowDragLeaveOrEnd}
         onCellValueChanged={onCellValueChanged}
       />
+      <div className="footer-text">
+        *If you create an assessment with these toggles enabled, they will be activated within the
+        assessment <b>by default</b>. However, you can also visit ground control to manually
+        override these settings if needed.
+      </div>
     </div>
   );
 
