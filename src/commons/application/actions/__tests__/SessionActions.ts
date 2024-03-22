@@ -3,9 +3,17 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
+import { SubmissionProgressBadge } from 'src/pages/academy/grading/subcomponents/GradingBadges';
 
 import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
-import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  AssessmentStatuses,
+  GradingStatuses,
+  SubmissionProgresses
+} from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
@@ -289,7 +297,7 @@ test('setCourseRegistration generates correct action object', () => {
 });
 
 test('setAssessmentConfigurations generates correct action object', () => {
-  const assesmentConfigurations = [
+  const assesmentConfigurations: AssessmentConfiguration[] = [
     {
       assessmentConfigId: 1,
       type: 'Mission1',
@@ -491,6 +499,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
     {
       type: 'Missions',
       isManuallyGraded: true,
+      isPublished: false,
       closeAt: 'test_string',
       coverImage: 'test_string',
       id: 0,
@@ -498,8 +507,9 @@ test('updateAssessmentOverviews generates correct action object', () => {
       openAt: 'test_string',
       title: 'test_string',
       shortSummary: 'test_string',
-      status: 'not_attempted',
+      status: AssessmentStatuses.not_attempted,
       story: null,
+      submissionProgress: SubmissionProgresses.not_attempted,
       xp: 0,
       gradingStatus: 'none'
     }

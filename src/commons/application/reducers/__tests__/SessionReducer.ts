@@ -5,7 +5,8 @@ import {
   Assessment,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses
+  GradingStatuses,
+  SubmissionProgresses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
@@ -314,6 +315,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: 'test_string',
     coverImage: 'test_string',
     id: 0,
@@ -323,6 +325,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
+    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 0,
     gradingStatus: GradingStatuses.none
   }
@@ -332,6 +335,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
     type: 'Contests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
@@ -342,6 +346,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
+    submissionProgress: SubmissionProgresses.attempted,
     xp: 1,
     gradingStatus: GradingStatuses.grading
   }
