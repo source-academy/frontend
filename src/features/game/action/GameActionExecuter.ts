@@ -103,7 +103,7 @@ export default class GameActionExecuter {
         await sleep(actionParams.duration);
         return;
       case GameActionType.ShowQuiz:
-        globalAPI.showQuiz(actionParams.id);
+        await globalAPI.showQuiz(actionParams.id);
         return;
       default:
         return;
