@@ -37,7 +37,7 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, GradingStatusBadge, ProgressStatusBadge, SubmissionProgressBadge } from './GradingBadges';
+import { AssessmentTypeBadge, GradingStatusBadge, ProgressStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -72,14 +72,6 @@ const makeColumns = (handleClick: () => void) => [
     cell: info => (
       <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
         <ProgressStatusBadge progress={info.getValue() as ProgressStatus} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor('submissionProgress', {
-    header: 'Progress',
-    cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <SubmissionProgressBadge progress={info.getValue() as SubmissionProgress} />
       </Filterable>
     )
   }),

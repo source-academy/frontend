@@ -5,7 +5,7 @@ import { GradingOverview } from './GradingTypes';
 
 // TODO: Unused. Marked for deletion.
 export const isSubmissionUngraded = (s: GradingOverview): boolean => {
-  const isSubmitted = s.submissionProgress === 'submitted';
+  const isSubmitted = s.submissionStatus === 'submitted';
   const isNotGraded =
     s.gradingStatus !== GradingStatuses.graded && s.gradingStatus !== GradingStatuses.excluded;
   return isSubmitted && isNotGraded;
@@ -31,7 +31,6 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
             e.studentName,
             e.studentUsername,
             e.groupName,
-            e.submissionProgress,
             e.gradingStatus,
             e.questionCount,
             e.gradedCount,

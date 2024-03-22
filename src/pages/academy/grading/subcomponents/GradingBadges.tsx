@@ -7,7 +7,6 @@ import {
   GradingStatuses,
   ProgressStatus,
   ProgressStatuses,
-  SubmissionProgress
 } from 'src/commons/assessment/AssessmentTypes';
 
 const BADGE_COLORS = {
@@ -43,15 +42,6 @@ const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 
       color={getBadgeColorFromLabel(type)}
     />
   );
-};
-
-type SubmissionProgressBadgeProps = {
-  progress: SubmissionProgress;
-};
-
-const SubmissionProgressBadge: React.FC<SubmissionProgressBadgeProps> = ({ progress }) => {
-  const statusText = progress.charAt(0).toUpperCase() + progress.slice(1);
-  return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} />;
 };
 
 type ProgressStatusBadgeProps = {
@@ -124,4 +114,4 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, ProgressStatusBadge, SubmissionProgressBadge };
+export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, ProgressStatusBadge };

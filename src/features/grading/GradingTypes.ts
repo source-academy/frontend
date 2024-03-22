@@ -1,4 +1,5 @@
 import {
+  AssessmentStatus,
   AssessmentType,
   AutogradingResult,
   GradingStatus,
@@ -30,8 +31,8 @@ export type GradingOverview = {
   studentId: number;
   studentName: string;
   studentUsername: string;
+  submissionStatus: AssessmentStatus;
   submissionId: number;
-  submissionProgress: string;
   groupName: string;
   groupLeaderId?: number;
   gradingStatus: GradingStatus;

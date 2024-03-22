@@ -655,10 +655,7 @@ export const getGradingOverviews = async (
           studentUsername: overview.student.username,
           studentName: overview.student.name,
           submissionId: overview.id,
-          submissionProgress: computeSubmissionProgress(
-            overview.status,
-            overview.isGradingPublished
-          ),
+          submissionStatus: overview.status,
           groupName: overview.student.groupName,
           groupLeaderId: overview.student.groupLeaderId,
           // Grading Status
