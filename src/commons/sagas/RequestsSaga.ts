@@ -656,6 +656,7 @@ export const getGradingOverviews = async (
           groupLeaderId: overview.student.groupLeaderId,
           // Grading Status
           gradingStatus: 'none',
+          progress: 'x',
           questionCount: overview.assessment.questionCount,
           gradedCount: overview.gradedCount,
           // XP
@@ -671,6 +672,12 @@ export const getGradingOverviews = async (
           gradingOverview.gradedCount,
           gradingOverview.questionCount
         );
+        gradingOverview.progress = computeProgress(
+          overview.isGradingPublished,
+          overview.assessment.submissionStatus,
+          overview.gradedCount,
+          overview.assessment.questionCount
+        ) as ProgressStatus;
         return gradingOverview;
       })
       .sort((subX: GradingOverview, subY: GradingOverview) =>
@@ -1454,8 +1461,7 @@ const computeProgress = (
 ): ProgressStatus => {
   // Devnote: Make sure that computeProgress is one-to-one such that each ProgressStatus can be mapped back to its backend parameters.
   // this allows pagination to be done fully in the backend using the progressToBackendParams function.
-
-  if (submissionStatus != AssessmentStatuses.submitted) {
+  if (submissionStatus !== AssessmentStatuses.submitted) {
     // derived ProgressStatus follows a 1-to-1 correspondence with backend "status" if status != submitted
     return submissionStatus as ProgressStatus;
   } else if (numGraded < numQuestions) {
@@ -1465,6 +1471,7 @@ const computeProgress = (
   } else {
     return ProgressStatuses.published;
   }
+  return 'hehe';
 }
 
 const computeGradingStatus = (

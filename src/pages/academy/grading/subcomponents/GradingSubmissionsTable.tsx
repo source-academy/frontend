@@ -67,6 +67,10 @@ const makeColumns = (handleClick: () => void) => [
     header: 'Group',
     cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
   }),
+  columnHelper.accessor('progress', {
+    header: 'TEST',
+    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+  }),
   columnHelper.accessor('submissionProgress', {
     header: 'Progress',
     cell: info => (

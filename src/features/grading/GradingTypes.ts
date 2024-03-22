@@ -3,7 +3,10 @@ import {
   AutogradingResult,
   GradingStatus,
   MCQChoice,
+  ProgressStatus,
   Question,
+  SubmissionProgress,
+  SubmissionProgresses,
   Testcase
 } from '../../commons/assessment/AssessmentTypes';
 import { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
@@ -23,6 +26,7 @@ export type GradingOverview = {
   xpAdjustment: number;
   currentXp: number;
   maxXp: number;
+  progress: ProgressStatus,
   studentId: number;
   studentName: string;
   studentUsername: string;

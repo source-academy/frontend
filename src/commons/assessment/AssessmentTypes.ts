@@ -28,6 +28,7 @@ export enum ProgressStatuses {
   attempted = 'attempted',
   not_attempted = 'not_attempted',
   submitted = 'submitted',
+  graded = 'graded',
   published = 'published'
 }
 
