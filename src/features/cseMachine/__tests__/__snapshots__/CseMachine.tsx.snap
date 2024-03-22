@@ -2111,7 +2111,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "1",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
@@ -2347,7 +2347,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "57",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
@@ -2538,7 +2538,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "107",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
@@ -2727,7 +2727,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "154",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
@@ -2898,7 +2898,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "205",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
@@ -3015,7 +3015,7 @@ Object {
         "stream_to_list": [Function],
       },
       "id": "205",
-      "name": "programEnvironment",
+      "name": "prelude",
       "tail": Object {
         "head": Object {
           ":::pre-declared names::": Symbol(),
@@ -3126,7 +3126,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "256",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
@@ -3230,7 +3230,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "303",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
@@ -3331,7 +3331,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "350",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         "411": [Function],
@@ -3443,7 +3443,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "350",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         "411": [Function],
@@ -3554,7 +3554,7 @@ Object {
       "stream_to_list": [Function],
     },
     "id": "350",
-    "name": "programEnvironment",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         "411": [Function],
@@ -3641,7 +3641,7 @@ Object {
         "stream_to_list": [Function],
       },
       "id": "350",
-      "name": "programEnvironment",
+      "name": "prelude",
       "tail": Object {
         "head": Object {
           "411": [Function],
@@ -3779,7 +3779,7 @@ Object {
         "stream_to_list": [Function],
       },
       "id": "350",
-      "name": "programEnvironment",
+      "name": "prelude",
       "tail": Object {
         "head": Object {
           "411": [Function],
@@ -3873,7 +3873,7 @@ Object {
           "stream_to_list": [Function],
         },
         "id": "350",
-        "name": "programEnvironment",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
             "411": [Function],
@@ -3968,7 +3968,7 @@ Object {
           "stream_to_list": [Function],
         },
         "id": "350",
-        "name": "programEnvironment",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
             "411": [Function],
@@ -4063,7 +4063,7 @@ Object {
           "stream_to_list": [Function],
         },
         "id": "350",
-        "name": "programEnvironment",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
             "411": [Function],
@@ -4158,7 +4158,7 @@ Object {
           "stream_to_list": [Function],
         },
         "id": "350",
-        "name": "programEnvironment",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
             "411": [Function],
@@ -4303,7 +4303,7 @@ Object {
           "stream_to_list": [Function],
         },
         "id": "350",
-        "name": "programEnvironment",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
             "411": [Function],
@@ -4404,7 +4404,7 @@ Object {
             "stream_to_list": [Function],
           },
           "id": "350",
-          "name": "programEnvironment",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
               "411": [Function],
@@ -4506,7 +4506,7 @@ Object {
             "stream_to_list": [Function],
           },
           "id": "350",
-          "name": "programEnvironment",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
               "411": [Function],
@@ -4608,7 +4608,7 @@ Object {
             "stream_to_list": [Function],
           },
           "id": "350",
-          "name": "programEnvironment",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
               "411": [Function],
@@ -4710,7 +4710,7 @@ Object {
             "stream_to_list": [Function],
           },
           "id": "350",
-          "name": "programEnvironment",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
               "411": [Function],
@@ -4912,7 +4912,7 @@ Object {
             "stream_to_list": [Function],
           },
           "id": "350",
-          "name": "programEnvironment",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
               "411": [Function],
@@ -5114,7 +5114,7 @@ Object {
             "stream_to_list": [Function],
           },
           "id": "350",
-          "name": "programEnvironment",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
               "411": [Function],
@@ -5224,7 +5224,7 @@ Object {
               "stream_to_list": [Function],
             },
             "id": "350",
-            "name": "programEnvironment",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
                 "411": [Function],
@@ -5335,7 +5335,7 @@ Object {
               "stream_to_list": [Function],
             },
             "id": "350",
-            "name": "programEnvironment",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
                 "411": [Function],
@@ -5446,7 +5446,7 @@ Object {
               "stream_to_list": [Function],
             },
             "id": "350",
-            "name": "programEnvironment",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
                 "411": [Function],
@@ -5557,7 +5557,7 @@ Object {
               "stream_to_list": [Function],
             },
             "id": "350",
-            "name": "programEnvironment",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
                 "411": [Function],
@@ -5775,7 +5775,7 @@ Object {
               "stream_to_list": [Function],
             },
             "id": "350",
-            "name": "programEnvironment",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
                 "411": [Function],
@@ -5993,7 +5993,7 @@ Object {
               "stream_to_list": [Function],
             },
             "id": "350",
-            "name": "programEnvironment",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
                 "411": [Function],
