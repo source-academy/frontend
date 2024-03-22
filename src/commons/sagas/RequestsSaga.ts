@@ -428,16 +428,6 @@ export const getAssessmentOverviews = async (
   }
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
-    overview.gradingStatus = computeGradingStatus(
-      overview.isManuallyGraded,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
-    overview.submissionProgress = computeSubmissionProgress(
-      overview.status,
-      overview.isGradingPublished
-    );
     overview.progress = backendParamsToProgressStatus(
       overview.isGradingPublished,
       overview.status,
@@ -490,8 +480,8 @@ export const getUserAssessmentOverviews = async (
   }
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
-    overview.gradingStatus = computeGradingStatus(
-      overview.isManuallyGraded,
+    overview.progress = backendParamsToProgressStatus(
+      overview.isGradingPublished,
       overview.status,
       overview.gradedCount,
       overview.questionCount

@@ -3,7 +3,6 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
-import { SubmissionProgressBadge } from 'src/pages/academy/grading/subcomponents/GradingBadges';
 
 import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import {
@@ -11,7 +10,7 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses,
+  ProgressStatuses,
   SubmissionProgresses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
@@ -509,9 +508,8 @@ test('updateAssessmentOverviews generates correct action object', () => {
       shortSummary: 'test_string',
       status: AssessmentStatuses.not_attempted,
       story: null,
-      submissionProgress: SubmissionProgresses.not_attempted,
       xp: 0,
-      gradingStatus: 'none'
+      progress: ProgressStatuses.not_attempted
     }
   ];
   const action = updateAssessmentOverviews(overviews);
@@ -559,9 +557,9 @@ test('updateGradingOverviews generates correct action object', () => {
         studentName: 'test student',
         studentUsername: 'E0123456',
         submissionId: 1,
-        submissionProgress: 'attempting',
+        progress: ProgressStatuses.attempting,
         groupName: 'group',
-        gradingStatus: 'excluded',
+        submissionStatus: AssessmentStatuses.attempting,
         questionCount: 6,
         gradedCount: 0
       }
