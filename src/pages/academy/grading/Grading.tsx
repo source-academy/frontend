@@ -10,7 +10,7 @@ import { fetchGradingOverviews } from 'src/commons/application/actions/SessionAc
 import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
-import { updateRequestCounter } from 'src/commons/workspace/WorkspaceActions';
+import { decreaseRequestCounter, increaseRequestCounter } from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import {
   exportGradingCSV,
@@ -55,8 +55,7 @@ const Grading: React.FC = () => {
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
-      console.log("+1 parent");
-      dispatch(updateRequestCounter(requestCounter + 1));
+      dispatch(increaseRequestCounter());
       dispatch(
         fetchGradingOverviews(
           showAllGroups,
@@ -70,7 +69,12 @@ const Grading: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(updateRequestCounter(Math.max(0, requestCounter - 1)));
+    console.log(requestCounter);
+  }, [requestCounter]);
+
+  useEffect(() => {
+    console.log("minus 11");
+    dispatch(decreaseRequestCounter());
   }, [gradingOverviews]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page

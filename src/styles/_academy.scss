@@ -553,7 +553,7 @@
 
   &:hover {
     // Buttons with bg
-    > div > span, &:has(> span), > a {
+    &:has(> div) {
       // Use of contrast due to unknown background color
       filter: contrast(0.9);
     }
@@ -583,7 +583,7 @@
   }
 }
 
-.ag-header-cell.grading-default-headers {
+.grading-default-headers {
   span.ag-header-cell-text {
     font-size: 0.8rem;
     color: #6b7280;
@@ -622,5 +622,43 @@
 
   &:hover {
     filter: contrast(0.9);
+  }
+}
+
+.grading-def-cell {
+  text-align: center;
+  display: flex!important; 
+  justify-content: center;
+  flex-direction: column;
+  font-size: 0.875rem;
+  user-select: text;
+  border: 0px!important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.075)!important;
+
+  &:hover:not(:has(> div)):has(button.grading-overview-filterable-btns) {
+    button {
+      text-decoration: underline;
+      
+      &:has(> div) {
+        filter: contrast(0.9);
+      }
+    }
+  }
+
+  &:active {
+    border-style: outset;
+  }
+
+  &.grading-def-cell-pointer {
+    cursor: pointer;
+  }
+
+  &.grading-def-cell-selectable {
+    cursor: text;
+    border-style: outset;
+  }
+
+  &.grading-cell-align-left {
+    text-align: left!important;
   }
 }

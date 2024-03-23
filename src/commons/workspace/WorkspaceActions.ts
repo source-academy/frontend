@@ -26,6 +26,7 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
+  DECREMENT_REQUEST_COUNTER,
   DISABLE_TOKEN_COUNTER,
   EditorTabState,
   ENABLE_TOKEN_COUNTER,
@@ -35,6 +36,7 @@ import {
   EVAL_REPL,
   EVAL_TESTCASE,
   GradingColumnVisibility,
+  INCREMENT_REQUEST_COUNTER,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -67,7 +69,6 @@ import {
   UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  UPDATE_REQUEST_COUNTER,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
@@ -396,10 +397,13 @@ export const setIsEditorReadonly = createAction(
   })
 );
 
-export const updateRequestCounter = createAction(
-  UPDATE_REQUEST_COUNTER,
-  (requestCount: number) => ({ payload: { requestCount } })
-);
+export const increaseRequestCounter = createAction(INCREMENT_REQUEST_COUNTER, () => ({
+  payload: {}
+}));
+
+export const decreaseRequestCounter = createAction(DECREMENT_REQUEST_COUNTER, () => ({
+  payload: {}
+}));
 
 export const updateSubmissionsTableFilters = createAction(
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
