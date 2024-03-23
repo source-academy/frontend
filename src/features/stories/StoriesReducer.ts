@@ -1,3 +1,4 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
 import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
@@ -11,12 +12,10 @@ import {
   ResultOutput
 } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
+import { addStoryEnv, clearStoryEnv, evalStory } from './StoriesActions';
 import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 import {
-  ADD_STORY_ENV,
   CLEAR_STORIES_USER_AND_GROUP,
-  CLEAR_STORY_ENV,
-  EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
   HANDLE_STORIES_CONSOLE_LOG,
@@ -30,59 +29,53 @@ import {
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
-export const StoriesReducer: Reducer<StoriesState> = (
+export const StoriesReducer: Reducer<StoriesState, SourceActionType> = (
   state = defaultStories,
-  action: SourceActionType
+  action
 ) => {
-  const env: string = (action as any).payload?.env ?? DEFAULT_ENV;
+  state = newStoriesReducer(state, action);
+  state = oldStoriesReducer(state, action);
+  return state;
+};
+
+const getStoriesEnv = (action: any) => action.payload?.env ?? DEFAULT_ENV;
+
+const newStoriesReducer = createReducer(defaultStories, builder => {
+  builder
+    .addCase(addStoryEnv, (state, action) => {
+      const env = getStoriesEnv(action);
+      state.envs[env] = createDefaultStoriesEnv(
+        action.payload.env,
+        action.payload.chapter,
+        action.payload.variant
+      );
+    })
+    .addCase(clearStoryEnv, (state, action) => {
+      if (!action.payload.env) {
+        state.envs = {};
+      } else {
+        const { chapter, variant } = state.envs[action.payload.env].context;
+        state.envs[action.payload.env] = createDefaultStoriesEnv(
+          action.payload.env,
+          chapter,
+          variant
+        );
+      }
+    })
+    .addCase(evalStory, (state, action) => {
+      const env = getStoriesEnv(action);
+      state.envs[env].isRunning = true;
+    });
+});
+
+const oldStoriesReducer: Reducer<StoriesState, SourceActionType> = (
+  state = defaultStories,
+  action
+) => {
+  const env: string = getStoriesEnv(action);
   let newOutput: InterpreterOutput[];
   let lastOutput: InterpreterOutput;
   switch (action.type) {
-    case ADD_STORY_ENV:
-      return {
-        ...state,
-        envs: {
-          ...state.envs,
-          [env]: {
-            ...createDefaultStoriesEnv(
-              action.payload.env,
-              action.payload.chapter,
-              action.payload.variant
-            )
-          }
-        }
-      };
-    case CLEAR_STORY_ENV:
-      if (!action.payload.env) {
-        return {
-          ...state,
-          envs: {}
-        };
-      } else {
-        const chapter = state.envs[action.payload.env].context.chapter;
-        const variant = state.envs[action.payload.env].context.variant;
-        return {
-          ...state,
-          envs: {
-            ...state.envs,
-            [action.payload.env]: {
-              ...createDefaultStoriesEnv(action.payload.env, chapter, variant)
-            }
-          }
-        };
-      }
-
-    case EVAL_STORY:
-      return {
-        ...state,
-        envs: {
-          ...state.envs,
-          [env]: {
-            ...state.envs[env],
-            isRunning: true
-          }
-        }
-      };
     case EVAL_STORY_ERROR:
       lastOutput = state.envs[env].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
