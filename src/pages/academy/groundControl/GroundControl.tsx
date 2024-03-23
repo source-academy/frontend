@@ -29,8 +29,8 @@ export type DispatchProps = {
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
   handleConfigureAssessment: (
     id: number,
-    hasTokenCounter: boolean,
-    hasVotingFeatures: boolean
+    hasVotingFeatures: boolean,
+    hasTokenCounter: boolean
   ) => void;
   handleFetchCourseConfigs: () => void;
 };

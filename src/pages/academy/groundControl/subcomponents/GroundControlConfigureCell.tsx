@@ -32,7 +32,7 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
 
   const handleConfigure = useCallback(() => {
     const { id } = data;
-    handleConfigureAssessment(id, hasTokenCounter, hasVotingFeatures);
+    handleConfigureAssessment(id, hasVotingFeatures, hasTokenCounter);
     handleCloseDialog();
   }, [data, handleCloseDialog, handleConfigureAssessment, hasTokenCounter, hasVotingFeatures]);
 

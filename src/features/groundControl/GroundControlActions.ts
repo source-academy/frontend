@@ -29,7 +29,7 @@ export const uploadAssessment = createAction(
 
 export const configureAssessment = createAction(
   CONFIGURE_ASSESSMENT,
-  (id: number, hasTokenCounter: boolean, hasVotingFeatures: boolean) => ({
-    payload: { id, hasTokenCounter, hasVotingFeatures }
+  (id: number, hasVotingFeatures: boolean, hasTokenCounter: boolean) => ({
+    payload: { id, hasVotingFeatures, hasTokenCounter }
   })
 );
