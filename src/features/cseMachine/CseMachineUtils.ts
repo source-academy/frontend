@@ -333,7 +333,7 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
     // copy descriptors from source frame to destination frame
     Object.defineProperties(destination.head, Object.getOwnPropertyDescriptors(source.head));
     // copy heap from source frame to destination frame as well, to preserve references
-    Object.defineProperties(destination.heap, Object.getOwnPropertyDescriptors(source.heap));
+    destination.heap = source.heap;
     // recurse on tail
     copyOwnPropertyDescriptors(source.tail, destination.tail);
   }
