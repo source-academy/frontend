@@ -122,25 +122,25 @@ export default class QuizManager {
           )
         );});
 
-        const response = await activateQuizContainer;
+      const response = await activateQuizContainer;
         
-        // Animate in
-        quizContainer.setPosition(screenSize.x, 0);
-        SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifEnter.key);
-        scene.add.tween({
-          targets: quizContainer,
-          alpha: 1,
-          ...rightSideEntryTweenProps
-        });
-        await sleep(rightSideEntryTweenProps.duration);
+      // Animate in
+      quizContainer.setPosition(screenSize.x, 0);
+      SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifEnter.key);
+      scene.add.tween({
+        targets: quizContainer,
+        alpha: 1,
+        ...rightSideEntryTweenProps
+      });
+      await sleep(rightSideEntryTweenProps.duration);
 
-        // Animate out
-        SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
-        scene.add.tween({
-          targets: quizContainer,
-          alpha: 1,
-          ...rightSideExitTweenProps
-        });
+      // Animate out
+      SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
+      scene.add.tween({
+        targets: quizContainer,
+        alpha: 1,
+        ...rightSideExitTweenProps
+      });
 
         //await sleep(rightSideExitTweenProps.duration);
         fadeAndDestroy(scene, quizContainer, { fadeDuration: Constants.fadeDuration });

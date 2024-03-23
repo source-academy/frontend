@@ -1,6 +1,4 @@
-import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import { GameItemType } from '../location/GameMapTypes';
-import { defaultReaction } from '../quiz/GameQuizConstants';
 import { Option, Question, Quiz } from '../quiz/GameQuizType';
 import StringUtils from '../utils/StringUtils';
 import DialogueParser from './DialogueParser';
@@ -114,32 +112,18 @@ export default class QuizParser {
   private static createOption(
     content: string[],
     isCorrect: boolean,
-    defaultReaction: boolean = false
+    noReaction: boolean = false
   ): Option {
     if (content.length <= 1) {
-      defaultReaction = true;
+      noReaction = true;
     }
     const option: Option = {
       text: content[0],
-      reaction: defaultReaction
-        ? this.createDefaultReaction(isCorrect)
+      reaction: noReaction
+        ? undefined
         : DialogueParser.parseQuizReaction(content.slice(1))
     };
     return option;
-  }
-
-  /**
-   * This function creates a Dialogue object with
-   * the default reactions defined in GamaQuizConstants
-   *
-   * @param isCorrect Indicates whether the correct or wrong reaction should be used
-   */
-  private static createDefaultReaction(isCorrect: boolean): DialogueObject {
-    if (isCorrect) {
-      return DialogueParser.parseQuizReaction(defaultReaction.correct);
-    } else {
-      return DialogueParser.parseQuizReaction(defaultReaction.wrong);
-    }
   }
 }
 
