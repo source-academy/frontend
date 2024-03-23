@@ -10,6 +10,11 @@ export type KeysOfType<O, T> = {
   [K in keyof O]: O[K] extends T ? K : never;
 }[keyof O];
 
+// Adapted from https://github.com/piotrwitek/typesafe-actions/blob/a1fe54bb150ac1b935bb9ca78361d2d024d2efaf/src/type-helpers.ts#L117-L130
+export type ActionType<T extends Record<string, any>> = {
+  [k in keyof T]: ReturnType<T[k]>;
+}[keyof T];
+
 /* =========================================
  * Utility types for tuple type manipulation
  * ========================================= */
