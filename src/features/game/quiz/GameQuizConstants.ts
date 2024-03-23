@@ -1,4 +1,6 @@
 import { Color } from '../utils/StyleUtils';
+import { BitmapFontStyle } from '../commons/CommonTypes';
+import FontAssets from '../assets/FontAssets';
 
 export const QuizConstants = {
   textPad: 20,
@@ -15,4 +17,10 @@ export const textStyle = {
   align: 'right',
   lineSpacing: 10,
   wordWrap: { width: QuizConstants.width - QuizConstants.textPad * 2 }
+};
+
+export const quizOptStyle: BitmapFontStyle = {
+  key: FontAssets.zektonFont.key,
+  size: 25,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };

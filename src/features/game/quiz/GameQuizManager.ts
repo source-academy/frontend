@@ -1,11 +1,9 @@
 import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Question } from './GameQuizType';
-import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
@@ -15,16 +13,11 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
-import { QuizConstants, textStyle } from './GameQuizConstants';
+import { QuizConstants, textStyle, quizOptStyle } from './GameQuizConstants';
 
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
   
-  quizOptStyle: BitmapFontStyle = {
-    key: FontAssets.zektonFont.key,
-    size: 25,
-    align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
-  };
   // Print everything. To test if the quiz parser parses correctly.
   public async showQuiz(quizId:ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId); // get a quiz
@@ -89,7 +82,7 @@ export default class QuizManager {
               assetKey: ImageAssets.mediumButton.key,
               message: response.text,
               textConfig: QuizConstants.textConfig,
-              bitMapTextStyle: this.quizOptStyle,
+              bitMapTextStyle: quizOptStyle,
               onUp: () => {
                 quizContainer.destroy();
                 if (response.reaction) {
