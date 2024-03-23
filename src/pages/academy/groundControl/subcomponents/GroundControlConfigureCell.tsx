@@ -70,7 +70,7 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
               checked={hasTokenCounter}
               onChange={toggleHasTokenCounter}
               inline
-              label="Has token counter"
+              label="Enable token counter"
             ></Switch>
           </div>
           <div className="voting-related-configs">
