@@ -101,7 +101,7 @@ export default class QuizManager {
               message: response.text,
               textConfig: QuizConstants.textConfig,
               bitMapTextStyle: quizOptStyle,
-              onUp: () => {
+              onUp: async () => {
                 quizContainer.destroy();
                 if (index === question.answer) {
                   quizResult.numberOfQuestions += 1;
