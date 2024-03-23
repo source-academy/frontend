@@ -10,30 +10,15 @@ import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
-import { calcListFormatPos, Color, HexColor } from '../utils/StyleUtils';
+import { calcListFormatPos, HexColor } from '../utils/StyleUtils';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
+import { QuizConstants, textStyle } from './GameQuizConstants';
 
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
-  QuizConstants = {
-    textPad: 20,
-    textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
-    y: 100,
-    width: 450,
-    yInterval: 100
-  };
-  
-  textStyle = {
-    fontFamily: 'Verdana',
-    fontSize: '20px',
-    fill: Color.offWhite,
-    align: 'right',
-    lineSpacing: 10,
-    wordWrap: { width: this.QuizConstants.width - this.QuizConstants.textPad * 2 }
-  };
   
   quizOptStyle: BitmapFontStyle = {
     key: FontAssets.zektonFont.key,
@@ -63,26 +48,26 @@ export default class QuizManager {
 
       const header = new Phaser.GameObjects.Text(
         scene,
-        screenSize.x - this.QuizConstants.textPad,
-        this.QuizConstants.y,
+        screenSize.x - QuizConstants.textPad,
+        QuizConstants.y,
         question.question,
-        this.textStyle
+        textStyle
       ).setOrigin(1.0, 0.0);
       const quizHeaderBg = new Phaser.GameObjects.Rectangle(
         scene,
         screenSize.x,
-        this.QuizConstants.y - this.QuizConstants.textPad,
-        this.QuizConstants.width * quizPartitions,
-        header.getBounds().bottom * 0.5 + this.QuizConstants.textPad,
+        QuizConstants.y - QuizConstants.textPad,
+        QuizConstants.width * quizPartitions,
+        header.getBounds().bottom * 0.5 + QuizConstants.textPad,
         HexColor.darkBlue,
         0.8
       ).setOrigin(1.0, 0.0);
       const quizBg = new Phaser.GameObjects.Rectangle(
         scene,
         screenSize.x,
-        this.QuizConstants.y - this.QuizConstants.textPad,
-        this.QuizConstants.width * quizPartitions,
-        quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * this.QuizConstants.yInterval,
+        QuizConstants.y - QuizConstants.textPad,
+        QuizConstants.width * quizPartitions,
+        quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * QuizConstants.yInterval,
         HexColor.lightBlue,
         0.2
       ).setOrigin(1.0, 0.0);
@@ -92,7 +77,7 @@ export default class QuizManager {
       const buttonPositions = calcListFormatPos({
         numOfItems: choices.length,
         xSpacing: 0,
-        ySpacing: this.QuizConstants.yInterval
+        ySpacing: QuizConstants.yInterval
       });
 
       GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
@@ -103,7 +88,7 @@ export default class QuizManager {
             createButton(scene, {
               assetKey: ImageAssets.mediumButton.key,
               message: response.text,
-              textConfig: this.QuizConstants.textConfig,
+              textConfig: QuizConstants.textConfig,
               bitMapTextStyle: this.quizOptStyle,
               onUp: () => {
                 quizContainer.destroy();
@@ -115,9 +100,9 @@ export default class QuizManager {
               }
             }).setPosition(
               screenSize.x -
-                this.QuizConstants.width / 2 -
-                this.QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
-              (buttonPositions[index][1] % (5 * this.QuizConstants.yInterval)) +
+                QuizConstants.width / 2 -
+                QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
+              (buttonPositions[index][1] % (5 * QuizConstants.yInterval)) +
                 quizHeaderBg.getBounds().bottom +
                 75
             )
