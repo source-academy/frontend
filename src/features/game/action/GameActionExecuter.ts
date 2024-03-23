@@ -103,7 +103,12 @@ export default class GameActionExecuter {
         await sleep(actionParams.duration);
         return;
       case GameActionType.ShowQuiz:
+        //alert("action type showQuiz is caught");
+        await GameGlobalAPI.getInstance().getGameManager()
+          .getDialogueManager().hideAll();
         await globalAPI.showQuiz(actionParams.id);
+        await GameGlobalAPI.getInstance().getGameManager()
+          .getDialogueManager().showAll();
         return;
       default:
         return;

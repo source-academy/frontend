@@ -15,6 +15,7 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
+//import { displayNotification } from '../effects/Notification';
 
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
@@ -43,16 +44,16 @@ export default class QuizManager {
   // Print everything. To test if the quiz parser parses correctly.
   public async showQuiz(quizId:ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId); // get a quiz
-   
+    const quizResult : QuizResult = {numberOfQuestions : 0}; 
 
     for (var i = 0; i < quiz.questions.length; i++ ) {
-        const res = await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
+        const res = await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i], quizResult);
         console.log("check the question displayed: " + res);
     }
   }
 
   //Display the specific quiz question
-  public async showQuizQuestion(scene: Phaser.Scene, question: Question){
+  public async showQuizQuestion(scene: Phaser.Scene, question: Question, quizResult : QuizResult){
         
       console.log(GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal());
       const choices = question.options;
@@ -96,8 +97,6 @@ export default class QuizManager {
       });
 
       GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
-
-      const quizResult: QuizResult = {numberOfQuestions : 0};
       const activateQuizContainer: Promise<any> = new Promise(resolve => {
         quizContainer.add(
           choices.map((response, index) =>
@@ -108,11 +107,11 @@ export default class QuizManager {
               bitMapTextStyle: this.quizOptStyle,
               onUp: () => {
                 quizContainer.destroy();
-                if (index == question.answer) {
+                if (index === question.answer) {
                   quizResult.numberOfQuestions += 1;
-                resolve(this.showReaction(scene, question, choices[index].reaction, quizResult)); 
+                  resolve(this.showReaction(scene, question, choices[index].reaction, quizResult)); 
               } else {
-                resolve(this.showReaction(scene, question, choices[index].reaction, quizResult));
+                  resolve(this.showReaction(scene, question, choices[index].reaction, quizResult));
               }
               }
             }).setPosition(
@@ -152,8 +151,9 @@ export default class QuizManager {
   }
 
   private async showReaction(scene: Phaser.Scene, question: Question, reaction: DialogueObject, status: QuizResult) {
-    console.log("correct answer: " + status);
+    console.log("the number of correct answer: " + status.numberOfQuestions);
     await this.showResult(scene, reaction);
+    //await displayNotification(GameGlobalAPI.getInstance().getGameManager(), "number of correct questions: " + status.numberOfQuestions);
   }
 
 
