@@ -15,7 +15,9 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
-//import { displayNotification } from '../effects/Notification';
+import { displayNotification } from '../effects/Notification';
+import GameQuizOutcomeManager from './GameQuizOutcome';
+import { ImproveMent, allCorrect } from './GameQuizConstants';
 
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
@@ -44,12 +46,17 @@ export default class QuizManager {
   // Print everything. To test if the quiz parser parses correctly.
   public async showQuiz(quizId:ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId); // get a quiz
-    const quizResult : QuizResult = {numberOfQuestions : 0}; 
+    const quizResult : QuizResult = {
+      numberOfQuestions : 0,
+      allCorrect : true,
+    }; 
 
     for (var i = 0; i < quiz.questions.length; i++ ) {
-        const res = await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i], quizResult);
-        console.log("check the question displayed: " + res);
+        await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i], quizResult);
+        //console.log("check the question displayed: " + res);
     }
+
+    await this.displayFinalResult(quizResult);
   }
 
   //Display the specific quiz question
@@ -111,6 +118,7 @@ export default class QuizManager {
                   quizResult.numberOfQuestions += 1;
                   resolve(this.showReaction(scene, question, choices[index].reaction, quizResult)); 
               } else {
+                  quizResult.allCorrect = false;
                   resolve(this.showReaction(scene, question, choices[index].reaction, quizResult));
               }
               }
@@ -160,6 +168,14 @@ export default class QuizManager {
   private async showResult(scene: Phaser.Scene, reaction: DialogueObject) {
     this.reactionManager = new GameQuizReactionManager(reaction);
     await this.reactionManager.showReaction();
+  }
+
+  private async displayFinalResult(quizResult : QuizResult) {
+    await displayNotification(GameGlobalAPI.getInstance().getGameManager(), "scores: " + quizResult.numberOfQuestions);
+    const outComeManager : GameQuizOutcomeManager = 
+      quizResult.allCorrect ? new GameQuizOutcomeManager(allCorrect) 
+      : new GameQuizOutcomeManager(ImproveMent);
+    await outComeManager.showReaction();
   }
 
   // private showQuestion(question: Question) {
