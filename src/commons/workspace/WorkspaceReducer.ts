@@ -47,12 +47,14 @@ import {
 import {
   ADD_EDITOR_TAB,
   CHANGE_EXTERNAL_LIBRARY,
+  DECREMENT_REQUEST_COUNTER,
   DISABLE_TOKEN_COUNTER,
   EditorTabState,
   ENABLE_TOKEN_COUNTER,
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
+  INCREMENT_REQUEST_COUNTER,
   MOVE_CURSOR,
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
@@ -79,7 +81,6 @@ import {
   UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  UPDATE_REQUEST_COUNTER,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
@@ -659,12 +660,20 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           currentQuestion: action.payload.questionId
         }
       };
-    case UPDATE_REQUEST_COUNTER:
+    case INCREMENT_REQUEST_COUNTER:
       return {
         ...state,
         grading: {
           ...state.grading,
-          requestCounter: action.payload.requestCount
+          requestCounter: state.grading.requestCounter + 1
+        }
+      };
+    case DECREMENT_REQUEST_COUNTER:
+      return {
+        ...state,
+        grading: {
+          ...state.grading,
+          requestCounter: Math.max(0, state.grading.requestCounter - 1)
         }
       };
     case SET_FOLDER_MODE:
