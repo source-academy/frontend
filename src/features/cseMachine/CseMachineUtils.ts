@@ -326,8 +326,14 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
     // recurse on array items
     source.forEach((item, i) => copyOwnPropertyDescriptors(item, destination[i]));
   } else if (isEnvironment(source) && isEnvironment(destination)) {
+    // TODO: revisit this approach of copying the raw values and descriptors from source,
+    // as this defeats the purpose of deep cloning by referencing the original values again.
+    // Perhaps, there should be a new deep cloning function that also clones property descriptors
+
     // copy descriptors from source frame to destination frame
     Object.defineProperties(destination.head, Object.getOwnPropertyDescriptors(source.head));
+    // copy heap from source frame to destination frame as well, to preserve references
+    Object.defineProperties(destination.heap, Object.getOwnPropertyDescriptors(source.heap));
     // recurse on tail
     copyOwnPropertyDescriptors(source.tail, destination.tail);
   }
