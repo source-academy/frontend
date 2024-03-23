@@ -4,9 +4,9 @@ import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { defaultRouter } from '../ApplicationTypes';
 import { RouterState, UPDATE_REACT_ROUTER } from '../types/CommonsTypes';
 
-export const RouterReducer: Reducer<RouterState> = (
+export const RouterReducer: Reducer<RouterState, SourceActionType> = (
   state = defaultRouter,
-  action: SourceActionType
+  action
 ) => {
   switch (action.type) {
     case UPDATE_REACT_ROUTER:
