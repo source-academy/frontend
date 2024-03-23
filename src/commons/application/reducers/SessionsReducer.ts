@@ -32,9 +32,9 @@ import {
   UPDATE_TOTAL_XP
 } from '../types/SessionTypes';
 
-export const SessionsReducer: Reducer<SessionState> = (
+export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
   state = defaultSession,
-  action: SourceActionType
+  action
 ) => {
   switch (action.type) {
     case LOG_OUT:
