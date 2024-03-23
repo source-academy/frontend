@@ -6,7 +6,7 @@ test('CHANGE_QUERY_STRING sets queryString correctly ', () => {
   const action = {
     type: CHANGE_QUERY_STRING,
     payload: 'hello world'
-  };
+  } as const;
   expect(PlaygroundReducer(defaultPlayground, action)).toEqual({
     ...defaultPlayground,
     queryString: action.payload
