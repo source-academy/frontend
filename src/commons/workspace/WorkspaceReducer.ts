@@ -77,6 +77,8 @@ import {
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_LAST_DEBUGGER_RESULT,
+  UPDATE_LAST_NON_DET_RESULT,
   UPDATE_REPL_VALUE,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
@@ -1080,6 +1082,23 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           breakpointSteps: action.payload.breakpointSteps
+        }
+      };
+    case UPDATE_LAST_DEBUGGER_RESULT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          lastDebuggerResult: action.payload.lastDebuggerResult
+        }
+      };
+
+    case UPDATE_LAST_NON_DET_RESULT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          lastNonDetResult: action.payload.lastNonDetResult
         }
       };
     case NOTIFY_PROGRAM_EVALUATED: {
