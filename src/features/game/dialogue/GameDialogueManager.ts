@@ -33,6 +33,8 @@ export default class DialogueManager {
   public async showDialogue(dialogueId: ItemId): Promise<void> {
     const dialogue = GameGlobalAPI.getInstance().getDialogueById(dialogueId);
 
+    
+
     this.dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
     this.dialogueGenerator = new DialogueGenerator(dialogue.content);
     this.speakerRenderer = new DialogueSpeakerRenderer();
@@ -79,7 +81,8 @@ export default class DialogueManager {
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
-
+    this.getInputManager().enableKeyboardInput(false);
+    
     if (prompt) {
       // disable keyboard input to prevent continue dialogue
       this.getInputManager().enableKeyboardInput(false);
@@ -94,6 +97,7 @@ export default class DialogueManager {
     }
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), true);
+    this.getInputManager().enableKeyboardInput(true);
 
     if (!line) {
       // clear keyboard listeners when dialogue ends
@@ -102,8 +106,18 @@ export default class DialogueManager {
     }
   }
 
+  public async hideAll() {
+    await this.getDialogueRenderer().hide();
+    await this.getSpeakerRenderer().hide();
+  }
+
+  public async showAll() {
+    await this.getDialogueRenderer().show();
+    await this.getSpeakerRenderer().show();
+  }
+
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
-  private getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
+  public getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
   private getSpeakerRenderer = () => this.speakerRenderer as DialogueSpeakerRenderer;
   private getInputManager = () => this.gameInputManager as GameInputManager;
 

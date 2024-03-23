@@ -19,6 +19,7 @@ class DialogueRenderer {
    */
   constructor(typewriterStyle: Phaser.Types.GameObjects.Text.TextStyle) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
+
     this.dialogueBox = createDialogueBox(gameManager).setInteractive({
       useHandCursor: true,
       pixelPerfect: true
@@ -66,6 +67,25 @@ class DialogueRenderer {
     this.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
     fadeAndDestroy(gameManager, this.getDialogueContainer());
   }
+
+  /**
+   * Hide the dialoguebox  
+   */
+  public async hide() {
+    this.typewriter.container.setVisible(false);
+    this.dialogueBox.setVisible(false);
+    this.blinkingDiamond.container.setVisible(false);
+  }
+
+  /**
+   * Show the hidden dialoguebox 
+   */
+  public async show() {
+    this.typewriter.container.setVisible(true);
+    this.dialogueBox.setVisible(true);
+    this.blinkingDiamond.container.setVisible(true); 
+  }
+
 
   /**
    * Change the text written in the box

@@ -15,3 +15,7 @@ export type Option = {
   text: string;
   reaction?: DialogueObject;
 };
+
+export type QuizResult = {
+  numberOfQuestions: number;
+}

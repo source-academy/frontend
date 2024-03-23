@@ -77,7 +77,6 @@ export default class QuizManager {
       });
 
       GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
-
       const activateQuizContainer: Promise<any> = new Promise(resolve => {
         quizContainer.add(
           choices.map((response, index) =>
