@@ -45,7 +45,7 @@ export default class QuizManager {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId); // get a quiz
    
 
-    for (var i = 0; i < quiz.questions.length; i++ ) {
+    for (let i = 0; i < quiz.questions.length; i++ ) {
         const res = await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
         console.log("check the question displayed: " + res);
     }
@@ -107,11 +107,11 @@ export default class QuizManager {
               bitMapTextStyle: this.quizOptStyle,
               onUp: () => {
                 quizContainer.destroy();
-                if (index == question.answer) {
-                resolve(this.showReaction(scene, question, choices[index].reaction, true)); 
-              } else {
-                resolve(this.showReaction(scene, question, choices[index].reaction, false));
-              }
+                if (response.reaction) {
+                  resolve(this.showReaction(response.reaction)); 
+                } else {
+                  resolve(() => {});
+                }
               }
             }).setPosition(
               screenSize.x -
@@ -124,38 +124,32 @@ export default class QuizManager {
           )
         );});
 
-        const response = await activateQuizContainer;
+      const response = await activateQuizContainer;
         
-        // Animate in
-        quizContainer.setPosition(screenSize.x, 0);
-        SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifEnter.key);
-        scene.add.tween({
-          targets: quizContainer,
-          alpha: 1,
-          ...rightSideEntryTweenProps
-        });
-        await sleep(rightSideEntryTweenProps.duration);
+      // Animate in
+      quizContainer.setPosition(screenSize.x, 0);
+      SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifEnter.key);
+      scene.add.tween({
+        targets: quizContainer,
+        alpha: 1,
+        ...rightSideEntryTweenProps
+      });
+      await sleep(rightSideEntryTweenProps.duration);
 
-        // Animate out
-        SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
-        scene.add.tween({
-          targets: quizContainer,
-          alpha: 1,
-          ...rightSideExitTweenProps
-        });
+      // Animate out
+      SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
+      scene.add.tween({
+        targets: quizContainer,
+        alpha: 1,
+        ...rightSideExitTweenProps
+      });
 
-        await sleep(rightSideExitTweenProps.duration);
-        fadeAndDestroy(scene, quizContainer, { fadeDuration: Constants.fadeDuration });
-        return response;
+      await sleep(rightSideExitTweenProps.duration);
+      fadeAndDestroy(scene, quizContainer, { fadeDuration: Constants.fadeDuration });
+      return response;
   }
 
-  private async showReaction(scene: Phaser.Scene, question: Question, reaction: DialogueObject, status: boolean) {
-    console.log("correct answer: " + status);
-    await this.showResult(scene, reaction);
-  }
-
-
-  private async showResult(scene: Phaser.Scene, reaction: DialogueObject) {
+  private async showReaction(reaction: DialogueObject) {
     this.reactionManager = new GameQuizReactionManager(reaction);
     await this.reactionManager.showReaction();
   }

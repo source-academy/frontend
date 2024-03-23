@@ -12,5 +12,5 @@ export type Question = {
 
 export type Option = {
   text: string;
-  reaction: DialogueObject;
+  reaction?: DialogueObject;
 };
