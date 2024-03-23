@@ -18,15 +18,18 @@ import { QuizConstants, textStyle, quizOptStyle } from './GameQuizConstants';
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
   
-  // Print everything. To test if the quiz parser parses correctly.
   public async showQuiz(quizId:ItemId) {
-    const quiz = GameGlobalAPI.getInstance().getQuizById(quizId); // get a quiz
-   
-
+    const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
+    const quizResult: boolean[] = new Array<boolean>(quiz.questions.length);
     for (let i = 0; i < quiz.questions.length; i++ ) {
-        const res = await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
-        console.log("check the question displayed: " + res);
+        const isCorrect = await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
+        console.log("check the question displayed: " + isCorrect);
+        quizResult[i] = isCorrect;
     }
+    console.log(quiz.result);
+    quiz.result = quizResult;
+    console.log(quiz.result);
+    await this.showResult(quiz.result);
   }
 
   //Display the specific quiz question
@@ -83,13 +86,13 @@ export default class QuizManager {
               message: response.text,
               textConfig: QuizConstants.textConfig,
               bitMapTextStyle: quizOptStyle,
-              onUp: () => {
+              onUp: async () => {
                 quizContainer.destroy();
+                const isCorrect = (index === question.answer);
                 if (response.reaction) {
-                  resolve(this.showReaction(response.reaction)); 
-                } else {
-                  resolve(() => {});
+                  await this.showReaction(response.reaction);
                 }
+                resolve(isCorrect);
               }
             }).setPosition(
               screenSize.x -
@@ -132,6 +135,14 @@ export default class QuizManager {
     await this.reactionManager.showReaction();
   }
 
+  private async showResult(result: boolean[]) {
+    const numOfCorrect = result.reduce((accumulator, current) => accumulator + (current ? 1 : 0), 0);
+    const line = numOfCorrect <= 1 ? `${ numOfCorrect } question` : `${ numOfCorrect } questions`;
+    const resultObject: DialogueObject = new Map([
+      ["0", [{line: `You got ${ line } correct!`}]]
+    ]);
+    await this.showReaction(resultObject);
+  }
   // private showQuestion(question: Question) {
   //   console.log(question.question);
   //   console.log(question.answer);

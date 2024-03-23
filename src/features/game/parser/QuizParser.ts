@@ -37,7 +37,9 @@ export default class QuizParser {
     Parser.validator.registerId(quizId);
     const rawQuestions: Map<string, string[]> = StringUtils.mapByHeader(quizBody, isInteger);
     const questions: Question[] = this.parseQuizQuestions(rawQuestions);
-    const quiz: Quiz = { questions: questions };
+    const result: boolean[] = new Array<boolean>(questions.length);
+    console.log(quizId + ":" + result);
+    const quiz: Quiz = { questions: questions, result: result};
     Parser.checkpoint.map.setItemInMap(GameItemType.quizzes, quizId, quiz);
   }
 
@@ -96,7 +98,7 @@ export default class QuizParser {
     const optionsParagraph = StringUtils.splitToParagraph(optionsText);
     const options: Option[] = Array(optionsParagraph.length);
     optionsParagraph.forEach(([header, content]: [string, string[]], index) => {
-      options[index] = this.createOption(content, answer === index);
+      options[index] = this.createOption(content);
     });
     return options;
   }
@@ -106,12 +108,10 @@ export default class QuizParser {
    *
    * @param content An Array of string containing an option's content,
    * including option text and reaction
-   * @param isCorrect Indicates whether this option is the correct answer
-   * @param [defaultReaction=false] Indicates whether this option uses the default reaction
+   * @param [noReaction=false] Indicates whether this option provides a reaction
    */
   private static createOption(
     content: string[],
-    isCorrect: boolean,
     noReaction: boolean = false
   ): Option {
     if (content.length <= 1) {
