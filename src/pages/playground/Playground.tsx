@@ -24,6 +24,7 @@ import {
 } from 'src/commons/application/actions/SessionActions';
 import {
   setEditorSessionId,
+  setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
@@ -245,6 +246,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const {
     editorTabs,
     editorSessionId,
+    sessionDetails,
     execTime,
     stepLimit,
     isEditorAutorun,
@@ -670,6 +672,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         editorSessionId={editorSessionId}
         getEditorValue={getEditorValue}
         handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
+        handleSetSessionDetails={details => dispatch(setSessionDetails(workspaceLocation, details))}
         sharedbConnected={sharedbConnected}
         key="session"
       />
@@ -902,6 +905,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [dispatch, workspaceLocation]);
   const editorContainerProps: NormalEditorContainerProps = {
     editorSessionId,
+    sessionDetails,
     isEditorAutorun,
     editorVariant: 'normal',
     baseFilePath: WORKSPACE_BASE_PATHS[workspaceLocation],
