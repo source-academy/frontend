@@ -108,12 +108,12 @@ export default class DialogueManager {
 
   public async hideAll() {
     await this.getDialogueRenderer().hide();
-    //await this.getSpeakerRenderer().hide();
+    await this.getSpeakerRenderer().hide();
   }
 
   public async showAll() {
     await this.getDialogueRenderer().show();
-    //await this.getSpeakerRenderer().show();
+    await this.getSpeakerRenderer().show();
   }
 
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
