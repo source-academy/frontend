@@ -17,6 +17,7 @@ import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
+import ReleaseGradingCell from './subcomponents/GroundControlReleaseGradingCell';
 
 export type GroundControlProps = DispatchProps & StateProps;
 
@@ -105,6 +106,21 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         cellRendererParams: {
           handlePublishAssessment: this.props.handlePublishAssessment
         },
+        width: 70,
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: {
+          padding: 0
+        }
+      },
+      {
+        headerName: 'Release Gradings',
+        field: '',
+        cellRenderer: ReleaseGradingCell,
+        cellRendererParams: {
+          handlePublishAssessment: this.props.handlePublishAssessment
+        },
         width: 100,
         filter: false,
         resizable: false,
@@ -120,7 +136,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         cellRendererParams: {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
-        width: 100,
+        width: 50,
         filter: false,
         resizable: false,
         sortable: false,
