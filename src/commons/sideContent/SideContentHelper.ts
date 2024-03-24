@@ -45,7 +45,7 @@ const requireProvider = (x: string) => {
   return exports[x];
 };
 
-type RawTab = (provider: ReturnType<typeof requireProvider>) => ModuleSideContent;
+type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };
 
 /**
  * Returns an array of SideContentTabs to be spawned
@@ -58,7 +58,10 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])
-    .map((rawTab: RawTab) => rawTab(requireProvider))
+    .map((rawTab: RawTab) => {
+      const { default: content } = rawTab(requireProvider);
+      return content;
+    })
     .filter(({ toSpawn }) => !toSpawn || toSpawn(debuggerContext))
     .map(tab => ({
       ...tab,
