@@ -1,5 +1,13 @@
-import { Classes, Colors, Divider, FormGroup, Menu, Text } from '@blueprintjs/core';
-import {  Popover, Tooltip } from '@blueprintjs/core';
+import {
+  Classes,
+  Colors,
+  Divider,
+  FormGroup,
+  Menu,
+  Popover,
+  Text,
+  Tooltip
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
