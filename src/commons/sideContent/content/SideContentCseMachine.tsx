@@ -258,7 +258,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
               <Button
                 disabled={!this.state.visualization}
                 icon="chevron-left"
-                onClick={CseMachine.getControlStash() ? this.stepPrevious : this.stepPrevChangepoint}
+                onClick={
+                  CseMachine.getControlStash() ? this.stepPrevious : this.stepPrevChangepoint
+                }
               />
               <Button
                 disabled={!this.state.visualization}
