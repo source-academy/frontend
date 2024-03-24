@@ -66,7 +66,11 @@ import {
   WorkspaceLocation,
   WorkspaceState
 } from '../../workspace/WorkspaceTypes';
-import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from '../WorkspaceSaga';
+import workspaceSaga from '../WorkspaceSaga';
+import { evalCode } from '../WorkspaceSaga/helpers/evalCode';
+import { evalEditor } from '../WorkspaceSaga/helpers/evalEditor';
+import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
+import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
 
 function generateDefaultState(
   workspaceLocation: WorkspaceLocation,
@@ -1303,7 +1307,7 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
         payload: { workspaceLocation }
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
-      .call.fn(evalEditor)
+      .call(evalEditor, workspaceLocation)
       .call(runTestCase, workspaceLocation, 0)
       .call(runTestCase, workspaceLocation, 1)
       .call(runTestCase, workspaceLocation, 2)
@@ -1329,7 +1333,7 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
         payload: { workspaceLocation }
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
-      .call.fn(evalEditor)
+      .call(evalEditor, workspaceLocation)
       .call(runTestCase, workspaceLocation, 0)
       .not.call(runTestCase, workspaceLocation, 1)
       .not.call(runTestCase, workspaceLocation, 2)
