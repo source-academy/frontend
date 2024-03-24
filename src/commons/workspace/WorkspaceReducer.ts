@@ -84,8 +84,11 @@ import {
   updateWorkspace
 } from './WorkspaceActions';
 import {
-  EditorTabState, UPDATE_LAST_DEBUGGER_RESULT,
-  UPDATE_LAST_NON_DET_RESULT, WorkspaceLocation, WorkspaceManagerState
+  EditorTabState,
+  UPDATE_LAST_DEBUGGER_RESULT,
+  UPDATE_LAST_NON_DET_RESULT,
+  WorkspaceLocation,
+  WorkspaceManagerState
 } from './WorkspaceTypes';
 
 const getWorkspaceLocation = (action: any): WorkspaceLocation => {
