@@ -58,6 +58,7 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
+  UPDATE_CHANGEPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_CURRENTSTEP,
@@ -490,5 +491,12 @@ export const updateBreakpointSteps = createAction(
   UPDATE_BREAKPOINTSTEPS,
   (breakpointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     payload: { breakpointSteps, workspaceLocation }
+  })
+);
+
+export const updateChangePointSteps = createAction(
+  UPDATE_CHANGEPOINTSTEPS,
+  (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
+    payload: { changepointSteps, workspaceLocation }
   })
 );

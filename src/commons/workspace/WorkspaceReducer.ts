@@ -77,6 +77,7 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
+  UPDATE_CHANGEPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_CURRENTSTEP,
@@ -1073,6 +1074,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           breakpointSteps: action.payload.breakpointSteps
+        }
+      };
+    case UPDATE_CHANGEPOINTSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          changepointSteps: action.payload.changepointSteps
         }
       };
     case NOTIFY_PROGRAM_EVALUATED: {
