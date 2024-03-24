@@ -76,29 +76,29 @@ export function* insertDebuggerStatements(
   }
 
   /*
-    Not sure how this works, but there were some issues with breakpoints
-    I'm not sure why `in` is being used here, given that it's usually not
-    the intended effect
-  
-    for (const breakpoint in breakpoints) {
-      // Add a debugger statement to the line with the breakpoint.
-      const breakpointLineNum: number = parseInt(breakpoint);
-      lines[breakpointLineNum] = 'debugger;' + lines[breakpointLineNum];
-      // Reconstruct the code & check that the code is still syntactically valid.
-      // The insertion of the debugger statement is potentially invalid if it
-      // happens within an existing statement (that is split across lines).
-      transformedCode = lines.join('\n');
-      if (isSourceLanguage(context.chapter)) {
-        parse(transformedCode, context);
-      }
-      // If the resulting code is no longer syntactically valid, throw an error.
-      if (context.errors.length > 0) {
-        const errorMessage = `Hint: Misplaced breakpoint at line ${breakpointLineNum + 1}.`;
-        yield put(actions.sendReplInputToOutput(errorMessage, workspaceLocation));
-        return code;
-      }
+  Not sure how this works, but there were some issues with breakpoints
+  I'm not sure why `in` is being used here, given that it's usually not
+  the intended effect
+
+  for (const breakpoint in breakpoints) {
+    // Add a debugger statement to the line with the breakpoint.
+    const breakpointLineNum: number = parseInt(breakpoint);
+    lines[breakpointLineNum] = 'debugger;' + lines[breakpointLineNum];
+    // Reconstruct the code & check that the code is still syntactically valid.
+    // The insertion of the debugger statement is potentially invalid if it
+    // happens within an existing statement (that is split across lines).
+    transformedCode = lines.join('\n');
+    if (isSourceLanguage(context.chapter)) {
+      parse(transformedCode, context);
     }
-    */
+    // If the resulting code is no longer syntactically valid, throw an error.
+    if (context.errors.length > 0) {
+      const errorMessage = `Hint: Misplaced breakpoint at line ${breakpointLineNum + 1}.`;
+      yield put(actions.sendReplInputToOutput(errorMessage, workspaceLocation));
+      return code;
+    }
+  }
+  */
 
   // Finally, return the transformed code with debugger statements added.
   return transformedCode;
