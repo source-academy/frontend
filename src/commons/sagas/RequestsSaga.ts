@@ -805,9 +805,21 @@ export const publishGrading = async (
 };
 
 /**
+ * POST /courses/{course_id}/admin/grading/{assessmentid}/publish_all_grades
+ */
+export const publishGradingAll = async (id: number, tokens: Tokens): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/grading/${id}/publish_all_grades`, 'POST', {
+    ...tokens,
+    noHeaderAccept: true
+  });
+
+  return resp;
+}
+
+/**
  * POST /courses/{courseId}/admin/grading/{submissionId}/unpublish_grades
  */
-export const UnpublishGrading = async (
+export const unpublishGrading = async (
   submissionId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
@@ -822,6 +834,18 @@ export const UnpublishGrading = async (
 
   return resp;
 };
+
+/**
+ * POST /courses/{course_id}/admin/grading/{assessmentid}/unpublish_all_grades
+ */
+export const unpublishGradingAll = async (id: number, tokens: Tokens): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/grading/${id}/unpublish_all_grades`, 'POST', {
+    ...tokens,
+    noHeaderAccept: true
+  });
+
+  return resp;
+}
 
 /**
  * GET /courses/{courseId}/notifications

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogBody, DialogFooter, Intent, Switch } from '@blueprintjs/core';
+import { Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
 
@@ -6,11 +6,11 @@ import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTyp
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
-  handleReleaseGradingAssessment: (id: number) => void;
+  handlePublishGrading: (id: number) => void;
   data: AssessmentOverview;
 };
 
-const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
+const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGrading }) => {
   const [isDialogOpen, setDialogState] = useState(false);
   const [isPublished] = useState(!!data.isPublished);
 
@@ -22,11 +22,11 @@ const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishAssessment }) 
     alert("Dummy publish all dispatch sent!");
     // handlePublishAssessment(!isPublished, id);
     handleCloseDialog();
-  }, [data, isPublished, handleCloseDialog, handlePublishAssessment]);
+  }, [data, isPublished, handleCloseDialog, handlePublishGrading]);
 
   return (
     <>
-      <Button text="PUBLISH ALL" className="release-grading-cell" onClick={handleOpenDialog} />
+      <Button className="release-grading-cell" onClick={handleOpenDialog} icon={IconNames.ENDORSED} color={'blue'} />
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}

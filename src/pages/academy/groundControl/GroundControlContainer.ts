@@ -10,6 +10,7 @@ import {
   changeDateAssessment,
   deleteAssessment,
   publishAssessment,
+  publishGrading,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
 import GroundControl, { DispatchProps, StateProps } from './GroundControl';
@@ -27,6 +28,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
+      handlePublishGrading: publishGrading,
       handleFetchCourseConfigs: fetchCourseConfig
     },
     dispatch

@@ -19,6 +19,8 @@ import {
   CHANGE_DATE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
+  PUBLISH_GRADING_ALL,
+  UNPUBLISH_GRADING_ALL,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -121,6 +123,7 @@ import {
   postSourcecast,
   postUnsubmit,
   publishGrading,
+  publishGradingAll,
   putAssessmentConfigs,
   putCourseConfig,
   putCourseResearchAgreement,
@@ -133,7 +136,8 @@ import {
   removeAssessmentConfig,
   removeTimeOptions,
   removeUserCourseRegistration,
-  UnpublishGrading,
+  unpublishGrading,
+  unpublishGradingAll,
   updateAssessment,
   uploadAssessment
 } from './RequestsSaga';
@@ -519,7 +523,7 @@ function* BackendSaga(): SagaIterator {
       const tokens: Tokens = yield selectTokens();
       const { submissionId } = action.payload;
 
-      const resp: Response | null = yield UnpublishGrading(submissionId, tokens);
+      const resp: Response | null = yield unpublishGrading(submissionId, tokens);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
@@ -1193,7 +1197,7 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.publishAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
-      const togglePublishTo = action.payload.togglePublishTo;
+      const togglePublishTo = action.payload.togglePublishAssessmentTo;
 
       const resp: Response | null = yield updateAssessment(
         id,
@@ -1211,6 +1215,7 @@ function* BackendSaga(): SagaIterator {
       } else {
         yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
       }
+      
     }
   );
 
@@ -1240,7 +1245,41 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.fetchAssessmentOverviews());
     }
   );
+
+  yield takeEvery(
+    PUBLISH_GRADING_ALL,
+    function* (action: ReturnType<typeof actions.publishGradingAll>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload;
+
+      const resp: Response | null = yield publishGradingAll(id, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Published all graded submissons successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UNPUBLISH_GRADING_ALL,
+    function* (action: ReturnType<typeof actions.unpublishGradingAll>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload;
+
+      const resp: Response | null = yield unpublishGradingAll(id, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Unpublished all submissons successfully!', 1000);
+    }
+  );
 }
+
+
 
 function* handleReautogradeResponse(resp: Response | null): any {
   if (resp && resp.ok) {

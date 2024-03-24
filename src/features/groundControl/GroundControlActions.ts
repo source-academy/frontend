@@ -4,6 +4,8 @@ import {
   CHANGE_DATE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
+  PUBLISH_GRADING_ALL,
+  UNPUBLISH_GRADING_ALL,
   UPLOAD_ASSESSMENT
 } from './GroundControlTypes';
 
@@ -16,7 +18,17 @@ export const deleteAssessment = createAction(DELETE_ASSESSMENT, (id: number) => 
 
 export const publishAssessment = createAction(
   PUBLISH_ASSESSMENT,
-  (togglePublishTo: boolean, id: number) => ({ payload: { id, togglePublishTo } })
+  (togglePublishAssessmentTo: boolean, id: number) => ({ payload: { id, togglePublishAssessmentTo } })
+);
+
+export const publishGradingAll = createAction(
+  PUBLISH_GRADING_ALL,
+  (id: number) => ({ payload: id })
+);
+
+export const unpublishGradingAll = createAction(
+  UNPUBLISH_GRADING_ALL,
+  (id: number) => ({ payload: id })
 );
 
 export const uploadAssessment = createAction(
