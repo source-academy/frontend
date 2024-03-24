@@ -11,10 +11,10 @@ type Props = {
   data: AssessmentOverview;
 };
 
+
+
 const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGradingAll, handleUnpublishGradingAll }) => {
   const [isDialogOpen, setDialogState] = useState(false);
-  // this refers to publishing the assessment, NOT publishing all gradings for the assessment.
-  const [isPublished] = useState(!!data.isPublished);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
@@ -32,14 +32,15 @@ const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGradingAll, ha
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
-        title={`${isPublished ? 'Unpublish' : 'Publish'} assessment`}
+        title={`Publish ALL gradings`}
         canOutsideClickClose={true}
       >
         <DialogBody>
           <p>
-            Are you sure you want to release the grading of all graded submissions for the assessment?{' '}
+            Are you sure you want to release the grading of ALL graded submissions for the assessment: {' '}
             <i>{data.title}</i>?
-
+          </p>
+          <p>
             Ungraded submissions or already-published submissions are not affected.
           </p>
         </DialogBody>
