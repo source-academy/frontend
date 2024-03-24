@@ -8,15 +8,14 @@ import * as actions from '../sideContent/SideContentActions';
 import {
   BEGIN_ALERT_SIDE_CONTENT,
   NOTIFY_PROGRAM_EVALUATED,
-  SPAWN_SIDE_CONTENT,
+  SPAWN_SIDE_CONTENT
 } from '../sideContent/SideContentTypes';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 const isSpawnSideContent = (
   action: Action
-): action is ReturnType<typeof actions.spawnSideContent> =>
-  action.type === SPAWN_SIDE_CONTENT;
+): action is ReturnType<typeof actions.spawnSideContent> => action.type === SPAWN_SIDE_CONTENT;
 
 export default function* SideContentSaga(): SagaIterator {
   yield takeEvery(
