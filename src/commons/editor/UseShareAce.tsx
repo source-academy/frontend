@@ -2,7 +2,8 @@ import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import React from 'react';
 
-import { checkSessionIdExists, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
 
 // EditorHook structure:
@@ -18,22 +19,30 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   const propsRef = React.useRef(inProps);
   propsRef.current = inProps;
 
-  const { editorSessionId } = inProps;
+  const { editorSessionId, sessionDetails } = inProps;
 
   React.useEffect(() => {
-    if (!editorSessionId) {
+    if (!editorSessionId || !sessionDetails) {
       return;
     }
 
     const editor = reactAceRef.current!.editor;
-    const ShareAce = new sharedbAce(editorSessionId, {
+    const ShareAce = new sharedbAce(sessionDetails.docId, {
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
       namespace: 'sa'
     });
+
     ShareAce.on('ready', () => {
-      ShareAce.add(editor, [], []);
+      ShareAce.add(editor, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
+
+      // Disables editor in a read-only session
+      editor.setReadOnly(sessionDetails.readOnly);
+
+      showSuccessMessage(
+        'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
+      );
     });
     ShareAce.on('error', (path: string, error: any) => {
       console.error('ShareAce error', error);
@@ -50,8 +59,8 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         return;
       }
       try {
-        const exists = await checkSessionIdExists(editorSessionId);
-        if (!exists) {
+        const docInfo = await getDocInfoFromSessionId(editorSessionId);
+        if (docInfo === null) {
           clearInterval(interval);
           WS.close();
         }
@@ -75,8 +84,11 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         connection.unlisten();
       }
       ShareAce.WS.close();
+
+      // Resets editor to normal after leaving the session
+      editor.setReadOnly(false);
     };
-  }, [editorSessionId, reactAceRef]);
+  }, [editorSessionId, sessionDetails, reactAceRef]);
 };
 
 export default useShareAce;

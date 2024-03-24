@@ -11,9 +11,9 @@ import {
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
 
-export const PlaygroundReducer: Reducer<PlaygroundState> = (
+export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = (
   state = defaultPlayground,
-  action: SourceActionType
+  action
 ) => {
   switch (action.type) {
     case CHANGE_QUERY_STRING:

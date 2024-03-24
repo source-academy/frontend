@@ -4,7 +4,7 @@ import { RefObject } from 'react';
 import { IVisible } from '../CseMachineTypes';
 
 /**
- * class to implement the IVisible interface, used by both compact and non-compact components.
+ * class to implement the IVisible interface, used by all components.
  */
 export abstract class Visible implements IVisible {
   protected _x: number = 0;

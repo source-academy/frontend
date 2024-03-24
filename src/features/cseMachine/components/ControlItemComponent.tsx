@@ -2,8 +2,8 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
-import { Visible } from '../components/Visible';
-import { ControlStashConfig, ShapeDefaultProps } from '../CseMachineControlStash';
+import { ShapeDefaultProps } from '../CseMachineConfig';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
@@ -17,6 +17,7 @@ import {
 } from '../CseMachineUtils';
 import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
 import { Frame } from './Frame';
+import { Visible } from './Visible';
 
 export class ControlItemComponent extends Visible implements IHoverable {
   /** text to display */
@@ -84,16 +85,16 @@ export class ControlItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: ControlStashConfig.SA_WHITE.toString(),
-      padding: Number(ControlStashConfig.ControlItemTextPadding),
-      fontFamily: ControlStashConfig.FontFamily.toString(),
-      fontSize: Number(ControlStashConfig.FontSize),
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fill: ControlStashConfig.SA_WHITE,
+      padding: ControlStashConfig.ControlItemTextPadding,
+      fontFamily: ControlStashConfig.FontFamily,
+      fontSize: ControlStashConfig.FontSize,
+      fontStyle: ControlStashConfig.FontStyle,
+      fontVariant: ControlStashConfig.FontVariant
     };
     const tagProps = {
       stroke: currentItemSAColor(this.topItem),
-      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     return (
       <React.Fragment key={Layout.key++}>
@@ -123,13 +124,13 @@ export class ControlItemComponent extends Visible implements IHoverable {
             {...ShapeDefaultProps}
             stroke="black"
             fill={'black'}
-            opacity={Number(ControlStashConfig.TooltipOpacity)}
+            opacity={ControlStashConfig.TooltipOpacity}
           />
           <Text
             {...ShapeDefaultProps}
             {...textProps}
             text={this.tooltip}
-            padding={Number(ControlStashConfig.TooltipPadding)}
+            padding={ControlStashConfig.TooltipPadding}
           />
         </Label>
         {this.arrow?.draw()}
