@@ -26,7 +26,8 @@ export type DispatchProps = {
   handleDeleteAssessment: (id: number) => void;
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) => void;
-  handlePublishGrading: (togglePublishGradingTo: boolean, id: number) => void;
+  handlePublishGradingAll: (id: number) => void;
+  handleUnpublishGradingAll: (id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
   handleFetchCourseConfigs: () => void;
 };
@@ -120,7 +121,8 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         field: '',
         cellRenderer: ReleaseGradingCell,
         cellRendererParams: {
-          handlePublishGrading: this.props.handlePublishGrading
+          handlePublishGradingAll: this.props.handlePublishGradingAll,
+          handleUnpublishAllGradings: this.props.handleUnpublishGradingAll,
         },
         width: 100,
         filter: false,

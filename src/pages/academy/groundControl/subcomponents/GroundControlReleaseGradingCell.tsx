@@ -6,12 +6,14 @@ import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTyp
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
-  handlePublishGrading: (id: number) => void;
+  handlePublishGradingAll: (id: number) => void;
+  handleUnpublishGradingAll: (id: number) => void;
   data: AssessmentOverview;
 };
 
-const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGrading }) => {
+const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGradingAll, handleUnpublishGradingAll }) => {
   const [isDialogOpen, setDialogState] = useState(false);
+  // this refers to publishing the assessment, NOT publishing all gradings for the assessment.
   const [isPublished] = useState(!!data.isPublished);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
@@ -19,10 +21,9 @@ const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGrading }) => 
 
   const handleTogglePublished = useCallback(() => {
     const { id } = data;
-    alert("Dummy publish all dispatch sent!");
-    // handlePublishAssessment(!isPublished, id);
+    handlePublishGradingAll(id);
     handleCloseDialog();
-  }, [data, isPublished, handleCloseDialog, handlePublishGrading]);
+  }, [data, handleCloseDialog, handlePublishGradingAll]);
 
   return (
     <>
