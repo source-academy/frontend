@@ -1307,7 +1307,7 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
         payload: { workspaceLocation }
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
-      .call(evalEditor, workspaceLocation)
+      .call.fn(evalEditor)
       .call(runTestCase, workspaceLocation, 0)
       .call(runTestCase, workspaceLocation, 1)
       .call(runTestCase, workspaceLocation, 2)
@@ -1333,7 +1333,7 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
         payload: { workspaceLocation }
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
-      .call(evalEditor, workspaceLocation)
+      .call.fn(evalEditor)
       .call(runTestCase, workspaceLocation, 0)
       .not.call(runTestCase, workspaceLocation, 1)
       .not.call(runTestCase, workspaceLocation, 2)
