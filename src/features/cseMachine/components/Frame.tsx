@@ -112,7 +112,6 @@ export class Frame extends Visible implements IHoverable {
     }
     // Show dummy bindings for objects in the heap that are not in the head
     const values = new Set(Object.values(this.environment.head));
-    console.log(values, this.environment.heap.getHeap());
     for (const obj of this.environment.heap.getHeap()) {
       // Somehow, tThis does not work for arrays. TODO: Fix this in js-slang
       if (!values.has(obj)) {

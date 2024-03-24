@@ -3,6 +3,7 @@ import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
+import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayLiteralAnimation } from './animationComponents/ArrayLiteralAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
@@ -137,6 +138,7 @@ export class CseAnimation {
         case 'ExpressionStatement':
         case 'ForStatement':
         case 'IfStatement':
+        case 'MemberExpression':
         case 'UnaryExpression':
         case 'VariableDeclaration':
         case 'WhileStatement':
@@ -157,6 +159,16 @@ export class CseAnimation {
               Layout.previousStashComponent.stashItemComponents.at(-appInstr.numOfArgs - 1)!,
               Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
               appInstr.numOfArgs > 0 ? CseAnimation.currentFrame : undefined
+            )
+          );
+          break;
+        case InstrType.ARRAY_ACCESS:
+          CseAnimation.animations.push(
+            new ArrayAccessAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-2)!,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              Layout.stashComponent.stashItemComponents.at(-1)!
             )
           );
           break;
@@ -235,7 +247,6 @@ export class CseAnimation {
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
           break;
-        case InstrType.ARRAY_ACCESS:
         case InstrType.ARRAY_ASSIGNMENT:
         case InstrType.ARRAY_LENGTH:
         case InstrType.BREAK:
