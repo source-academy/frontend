@@ -46,6 +46,7 @@ type Props = {
   maxXp: number;
   studentName: string;
   studentUsername: string;
+  questions: string;
   comments: string;
   graderName?: string;
   gradedAt?: string;

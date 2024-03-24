@@ -634,6 +634,7 @@ export const getGradingOverviews = async (
           studentId: overview.student.id,
           studentUsername: overview.student.username,
           studentName: overview.student.name,
+          questions: overview.questions,
           submissionId: overview.id,
           submissionStatus: overview.status,
           groupName: overview.student.groupName,
