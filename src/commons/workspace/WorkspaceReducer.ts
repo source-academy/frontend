@@ -83,7 +83,10 @@ import {
   updateSubmissionsTableFilters,
   updateWorkspace
 } from './WorkspaceActions';
-import { EditorTabState, WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
+import {
+  EditorTabState, UPDATE_LAST_DEBUGGER_RESULT,
+  UPDATE_LAST_NON_DET_RESULT, WorkspaceLocation, WorkspaceManagerState
+} from './WorkspaceTypes';
 
 const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';
@@ -851,7 +854,26 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   state = defaultWorkspaceManager,
   action
 ) => {
+  const workspaceLocation = getWorkspaceLocation(action);
+
   switch (action.type) {
+    case UPDATE_LAST_DEBUGGER_RESULT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          lastDebuggerResult: action.payload.lastDebuggerResult
+        }
+      };
+
+    case UPDATE_LAST_NON_DET_RESULT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          lastNonDetResult: action.payload.lastNonDetResult
+        }
+      };
     default:
       return state;
   }
