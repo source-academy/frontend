@@ -1,6 +1,5 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 
-import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { GradingQuery } from '../../features/grading/GradingTypes';
@@ -25,7 +24,6 @@ import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
   readonly router: RouterState;
-  readonly academy: AcademyState;
   readonly achievement: AchievementState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
@@ -297,10 +295,6 @@ export const getLanguageConfig = (
 
 export const defaultRouter: RouterState = null;
 
-export const defaultAcademy: AcademyState = {
-  gameCanvas: undefined
-};
-
 export const defaultDashboard: DashboardState = {
   gradingSummary: {
     cols: [],
@@ -356,9 +350,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
       filePath: ['playground', 'sicp'].includes(workspaceLocation)
         ? getDefaultFilePath(workspaceLocation)
         : undefined,
-      value: ['playground', 'sourcecast', 'githubAssessments'].includes(workspaceLocation)
-        ? defaultEditorValue
-        : '',
+      value: ['playground', 'sourcecast'].includes(workspaceLocation) ? defaultEditorValue : '',
       highlightedLines: [],
       breakpoints: []
     }
@@ -366,6 +358,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   programPrependValue: '',
   programPostpendValue: '',
   editorSessionId: '',
+  sessionDetails: null,
   isEditorReadonly: false,
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,
@@ -391,7 +384,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sideContent: {
     alerts: [],
     dynamicTabs: []
-  }
+  },
+  lastDebuggerResult: undefined,
+  lastNonDetResult: null
 });
 
 const defaultFileName = 'program.js';
@@ -485,10 +480,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
       }
     ]
   },
-  githubAssessment: {
-    ...createDefaultWorkspace('githubAssessment'),
-    hasUnsavedChanges: false
-  },
   stories: {
     ...createDefaultWorkspace('stories')
     // TODO: Perhaps we can add default values?
@@ -556,7 +547,6 @@ export const defaultSideContentManager: SideContentManagerState = {
   assessment: defaultSideContent,
   grading: defaultSideContent,
   playground: defaultSideContent,
-  githubAssessment: defaultSideContent,
   sicp: defaultSideContent,
   sourcecast: defaultSideContent,
   sourcereel: defaultSideContent,
@@ -565,7 +555,6 @@ export const defaultSideContentManager: SideContentManagerState = {
 
 export const defaultState: OverallState = {
   router: defaultRouter,
-  academy: defaultAcademy,
   achievement: defaultAchievement,
   dashboard: defaultDashboard,
   playground: defaultPlayground,

@@ -365,7 +365,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     context.runtime.break = false;
-    lastDebuggerResult = undefined;
+    yield put(actions.updateLastDebuggerResult(undefined));
   });
 
   yield takeEvery(
@@ -595,10 +595,11 @@ export default function* WorkspaceSaga(): SagaIterator {
   );
 }
 
-let lastDebuggerResult: any;
-let lastNonDetResult: Result;
 function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
+    const lastDebuggerResult = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
+    );
     const row = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
@@ -1099,6 +1100,9 @@ export function* evalCode(
   );
 
   const entrypointCode = files[entrypointFilePath];
+  const lastNonDetResult = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].lastNonDetResult
+  );
 
   function call_variant(variant: Variant) {
     if (variant === Variant.NON_DET) {
@@ -1155,6 +1159,10 @@ export function* evalCode(
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
 
+  const lastDebuggerResult = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
+  );
+
   // Handles `console.log` statements in fullJS
   const detachConsole: () => void =
     context.chapter === Chapter.FULL_JS
@@ -1208,14 +1216,14 @@ export function* evalCode(
 
   if (paused) {
     yield put(actions.endDebuggerPause(workspaceLocation));
-    lastDebuggerResult = manualToggleDebugger(context);
+    yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context)));
     yield call(updateInspector, workspaceLocation);
     yield call(showWarningMessage, 'Execution paused', 750);
     return;
   }
 
   if (actionType === EVAL_EDITOR) {
-    lastDebuggerResult = result;
+    yield put(actions.updateLastDebuggerResult(result));
   }
 
   // do not highlight for stories
@@ -1232,6 +1240,14 @@ export function* evalCode(
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
       yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+      // enable the CSE machine visualizer during errors
+      if (context.executionMethod === 'cse-machine' && needUpdateCse) {
+        yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
+        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+        yield put(
+          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
+        );
+      }
     } else {
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
       yield put(actions.evalStoryError(context.errors, storyEnv!));
@@ -1249,7 +1265,7 @@ export function* evalCode(
     if (result.value === 'cut') {
       result.value = undefined;
     }
-    lastNonDetResult = result;
+    yield put(actions.updateLastNonDetResult(result));
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);

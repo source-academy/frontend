@@ -48,6 +48,7 @@ type DispatchProps = {
 
 type EditorStateProps = {
   editorSessionId: string;
+  sessionDetails: { docId: string; readOnly: boolean } | null;
   isEditorAutorun: boolean;
   sourceChapter?: Chapter;
   externalLibraryName?: string;
@@ -643,7 +644,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, []);
 
   return (
-    <HotKeys className="Editor bp4-card bp4-elevation-0" handlers={handlers}>
+    <HotKeys className="Editor bp5-card bp5-elevation-0" handlers={handlers}>
       <div className="row editor-react-ace" data-testid="Editor">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
       </div>

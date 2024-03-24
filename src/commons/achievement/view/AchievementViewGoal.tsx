@@ -3,10 +3,6 @@ import React from 'react';
 
 import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
 
-type AchievementViewGoalProps = {
-  goals: AchievementGoal[];
-};
-
 /**
  * Maps an array of goalUuid to Goal component
  *
@@ -37,7 +33,11 @@ const mapGoalToJSX = (goal: AchievementGoal) => {
   );
 };
 
-const AchievementViewGoal: React.FC<AchievementViewGoalProps> = ({ goals }) => {
+type Props = {
+  goals: AchievementGoal[];
+};
+
+const AchievementViewGoal: React.FC<Props> = ({ goals }) => {
   return (
     <>
       <h1 className="progress-header">Progress</h1>

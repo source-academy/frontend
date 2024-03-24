@@ -1,6 +1,5 @@
-import { Context } from 'js-slang';
+import { Context, Result } from 'js-slang';
 
-import { GitHubAssessmentWorkspaceState } from '../../features/githubAssessment/GitHubAssessmentTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -64,6 +63,8 @@ export const UPDATE_CURRENTSTEP = 'UPDATE_CURRENTSTEP';
 export const UPDATE_STEPSTOTAL = 'UPDATE_STEPSTOTAL';
 export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
+export const UPDATE_LAST_DEBUGGER_RESULT = 'UPDATE_LAST_DEBUGGER_RESULT';
+export const UPDATE_LAST_NON_DET_RESULT = 'UPDATE_LAST_NON_DET_RESULT';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
@@ -102,7 +103,6 @@ export type WorkspaceManagerState = {
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
   readonly sicp: SicpWorkspaceState;
-  readonly githubAssessment: GitHubAssessmentWorkspaceState;
   readonly stories: StoriesWorkspaceState;
 };
 
@@ -128,6 +128,7 @@ export type WorkspaceState = {
   readonly programPrependValue: string;
   readonly programPostpendValue: string;
   readonly editorSessionId: string;
+  readonly sessionDetails: { docId: string; readOnly: boolean } | null;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
   readonly isRunning: boolean;
@@ -147,6 +148,8 @@ export type WorkspaceState = {
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
   readonly sideContent: SideContentState;
+  readonly lastDebuggerResult: any;
+  readonly lastNonDetResult: Result | null;
 };
 
 type ReplHistory = {

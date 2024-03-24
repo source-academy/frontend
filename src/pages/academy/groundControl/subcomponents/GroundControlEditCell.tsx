@@ -1,7 +1,7 @@
 import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { DateInput3 } from '@blueprintjs/datetime2';
 import { IconNames } from '@blueprintjs/icons';
-import * as moment from 'moment';
+import moment from 'moment';
 import React, { useCallback, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';

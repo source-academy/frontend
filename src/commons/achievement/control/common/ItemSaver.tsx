@@ -7,12 +7,12 @@ import {
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
 
-type ItemSaverProps = {
+type Props = {
   discardChanges: () => void;
   saveChanges: () => void;
 };
 
-const ItemSaver: React.FC<ItemSaverProps> = ({ discardChanges, saveChanges }) => {
+const ItemSaver: React.FC<Props> = ({ discardChanges, saveChanges }) => {
   const handleSaveChanges = () => {
     saveChanges();
     showSuccessMessage('Saved changes locally');

@@ -3,7 +3,7 @@ import React from 'react';
 import EditorTab from './EditorTab';
 import { getShortestUniqueFilePaths } from './utils';
 
-export type EditorTabContainerProps = {
+type Props = {
   baseFilePath: string;
   filePaths: string[];
   activeEditorTabIndex: number;
@@ -11,15 +11,13 @@ export type EditorTabContainerProps = {
   removeEditorTabByIndex: (editorTabIndex: number) => void;
 };
 
-const EditorTabContainer: React.FC<EditorTabContainerProps> = (props: EditorTabContainerProps) => {
-  const {
-    baseFilePath,
-    filePaths,
-    activeEditorTabIndex,
-    setActiveEditorTabIndex,
-    removeEditorTabByIndex
-  } = props;
-
+const EditorTabContainer: React.FC<Props> = ({
+  baseFilePath,
+  filePaths,
+  activeEditorTabIndex,
+  setActiveEditorTabIndex,
+  removeEditorTabByIndex
+}) => {
   const handleHorizontalScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     e.currentTarget.scrollTo({
       left: e.currentTarget.scrollLeft + e.deltaY

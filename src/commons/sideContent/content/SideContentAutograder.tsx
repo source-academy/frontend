@@ -28,9 +28,9 @@ type OwnProps = {
   workspaceLocation: WorkspaceLocation;
 };
 
-const SideContentAutograder: React.FunctionComponent<SideContentAutograderProps> = props => {
-  const [showsTestcases, setTestcasesShown] = React.useState<boolean>(true);
-  const [showsResults, setResultsShown] = React.useState<boolean>(true);
+const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
+  const [showsTestcases, setTestcasesShown] = React.useState(true);
+  const [showsResults, setResultsShown] = React.useState(true);
 
   const { testcases, autogradingResults, handleTestcaseEval, workspaceLocation } = props;
 
