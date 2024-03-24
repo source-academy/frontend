@@ -5,7 +5,7 @@ import {
   Assessment,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses,
+  ProgressStatuses,
   SubmissionProgresses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
@@ -321,13 +321,12 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     id: 0,
     maxXp: 0,
     openAt: 'test_string',
+    progress: ProgressStatuses.not_attempted,
     title: 'test_string',
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
-    submissionProgress: SubmissionProgresses.not_attempted,
     xp: 0,
-    gradingStatus: GradingStatuses.none
   }
 ];
 
@@ -342,13 +341,12 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     id: 1,
     maxXp: 1,
     openAt: 'test_string_0',
+    progress: ProgressStatuses.attempted,
     title: 'test_string_0',
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
-    submissionProgress: SubmissionProgresses.attempted,
     xp: 1,
-    gradingStatus: GradingStatuses.grading
   }
 ];
 
@@ -518,11 +516,11 @@ const gradingOverviewTest1: GradingOverview[] = [
     studentName: 'test student',
     studentUsername: 'E0123456',
     submissionId: 1,
-    submissionProgress: 'attempting',
+    submissionStatus: AssessmentStatuses.attempting,
+    progress: ProgressStatuses.attempting,
     groupName: 'group',
-    gradingStatus: 'excluded',
-    questionCount: 0,
-    gradedCount: 6
+    questionCount: 4,
+    gradedCount: 2
   }
 ];
 
@@ -542,11 +540,11 @@ const gradingOverviewTest2: GradingOverview[] = [
     studentName: 'another student',
     studentUsername: 'E0000000',
     submissionId: 2,
-    submissionProgress: 'attempted',
+    submissionStatus: AssessmentStatuses.attempted,
+    progress: ProgressStatuses.graded,
     groupName: 'another group',
-    gradingStatus: 'excluded',
-    questionCount: 6,
-    gradedCount: 0
+    questionCount: 3,
+    gradedCount: 3
   }
 ];
 

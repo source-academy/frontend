@@ -6,7 +6,7 @@ import {
   GradingQuery
 } from '../../features/grading/GradingTypes';
 import { Role } from '../application/ApplicationTypes';
-import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, ProgressStatuses, Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockLibrary } from './AssessmentMocks';
 import { mockFetchRole } from './UserMocks';
 
@@ -20,15 +20,15 @@ export const mockGradingOverviews: GradingOverview[] = [
     currentXp: 69,
     xpBonus: 10,
     initialXp: 69,
-    isPublished: false,
+    isPublished: true,
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
     studentUsername: 'E0123456',
     submissionId: 1,
-    submissionProgress: 'submitted',
+    submissionStatus: AssessmentStatuses.submitted,
+    progress: ProgressStatuses.published,
     groupName: '1D',
-    gradingStatus: 'graded',
     questionCount: 6,
     gradedCount: 6
   },
@@ -41,15 +41,15 @@ export const mockGradingOverviews: GradingOverview[] = [
     currentXp: -2,
     xpBonus: 12,
     initialXp: 0,
-    isPublished: true,
+    isPublished: false,
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
     studentUsername: 'E0000000',
     submissionId: 2,
-    submissionProgress: 'published',
+    submissionStatus: AssessmentStatuses.submitted,
+    progress: ProgressStatuses.submitted,
     groupName: '1F',
-    gradingStatus: 'grading',
     questionCount: 6,
     gradedCount: 2
   },
@@ -68,10 +68,10 @@ export const mockGradingOverviews: GradingOverview[] = [
     studentName: 'May Trix',
     studentUsername: 'E0000001',
     submissionId: 3,
-    submissionProgress: 'submitted',
+    submissionStatus: AssessmentStatuses.submitted,
+    progress: ProgressStatuses.graded,
     groupName: '1F',
-    gradingStatus: 'none',
-    questionCount: 6,
+    questionCount: 0,
     gradedCount: 0
   }
 ];
