@@ -13,16 +13,9 @@ export enum AssessmentStatuses {
 }
 export type AssessmentStatus = keyof typeof AssessmentStatuses;
 
-export enum SubmissionProgresses {
-  attempting = 'attempting',
-  attempted = 'attempted',
-  not_attempted = 'not_attempted',
-  submitted = 'submitted',
-  published = 'published'
-}
-
-export type SubmissionProgress = keyof typeof SubmissionProgresses;
-
+// Devnote: If adjusting this, ensure that each status can be uniquely attributed to one set of backend parameters, and vice versa.
+// This allows for a clean conversion from progress status to backend parameters, ensuring only backend pagination.
+// Adjust the computeProgress function in GradingUtils accordingly.
 export enum ProgressStatuses {
   attempting = 'attempting',
   attempted = 'attempted',
@@ -38,14 +31,6 @@ export type AssessmentWorkspaceParams = {
   assessmentId?: string;
   questionId?: string;
 };
-
-export enum GradingStatuses {
-  excluded = 'excluded',
-  graded = 'graded',
-  grading = 'grading',
-  none = 'none'
-}
-export type GradingStatus = keyof typeof GradingStatuses;
 
 export type AssessmentType = string;
 

@@ -2,23 +2,11 @@ import { ColumnFilter } from '@tanstack/react-table';
 import {
   AssessmentStatus,
   AssessmentStatuses,
-  GradingStatus,
-  GradingStatuses,
   ProgressStatus,
-  ProgressStatuses,
-  SubmissionProgress,
-  SubmissionProgresses
+  ProgressStatuses
 } from 'src/commons/assessment/AssessmentTypes';
 
 import { GradingOverview } from './GradingTypes';
-
-// TODO: Unused. Marked for deletion.
-export const isSubmissionUngraded = (s: GradingOverview): boolean => {
-  const isSubmitted = s.submissionStatus === 'submitted';
-  const isNotGraded =
-    s.gradingStatus !== GradingStatuses.graded && s.gradingStatus !== GradingStatuses.excluded;
-  return isSubmitted && isNotGraded;
-};
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
   if (!gradingOverviews) return;
@@ -31,7 +19,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
 
   const content = new Blob(
     [
-      '"Assessment Number","Assessment Name","Student Name","Student Username","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
+      '"Assessment Number","Assessment Name","Student Name","Student Username","Group","Progress","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
       ...gradingOverviews.map(
         e =>
           [
@@ -40,7 +28,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
             e.studentName,
             e.studentUsername,
             e.groupName,
-            e.gradingStatus,
+            e.progress,
             e.questionCount,
             e.gradedCount,
             e.initialXp,
@@ -110,7 +98,7 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
   }
 
   return {
-    status: SubmissionProgresses.submitted,
+    status: AssessmentStatuses.submitted,
     notPublished: true
   };
 };
@@ -129,10 +117,9 @@ export const backendParamsToProgressStatus = (
   numGraded: number,
   numQuestions: number
 ): ProgressStatus => {
-  // Devnote: Make sure that computeProgress is one-to-one such that each ProgressStatus can be mapped back to its backend parameters.
-  // this allows pagination to be done fully in the backend using the progressToBackendParams function.
   if (submissionStatus !== AssessmentStatuses.submitted) {
-    // derived ProgressStatus follows a 1-to-1 correspondence with backend "status" if status != submitted
+    // ProgressStatus and AssessmentStatus has a one-to-one correspondence
+    // if grading and publishing is not involved
     return submissionStatus as ProgressStatus;
   } else if (numGraded < numQuestions) {
     return ProgressStatuses.submitted;
@@ -147,7 +134,7 @@ export const progressStatusToBackendParams = (progress: ProgressStatus) => {
   switch (progress) {
     case ProgressStatuses.published:
       return {
-        notPublished: 44,
+        notPublished: false,
         notFullyGraded: false,
         status: AssessmentStatuses.submitted
       };
@@ -161,31 +148,9 @@ export const progressStatusToBackendParams = (progress: ProgressStatus) => {
       return {
         notPublished: true,
         notFullyGraded: true,
+        // ProgressStatus and AssessmentStatus has a one-to-one correspondence
+        // if grading and publishing is not involved
         status: progress as AssessmentStatus
       };
   }
 };
-
-export const computeGradingStatus = (
-  isManuallyGraded: boolean,
-  submissionStatus: SubmissionProgress,
-  numGraded: number,
-  numQuestions: number
-): GradingStatus =>
-  // isGraded refers to whether the assessment type is graded or not, as specified in
-  // the respective assessment configuration
-  isManuallyGraded && submissionStatus === SubmissionProgresses.submitted
-    ? numGraded === 0
-      ? GradingStatuses.none
-      : numGraded === numQuestions
-      ? GradingStatuses.graded
-      : GradingStatuses.grading
-    : GradingStatuses.excluded;
-
-export const computeSubmissionProgress = (
-  submissionStatus: AssessmentStatus,
-  isPublished: boolean
-): SubmissionProgress =>
-  submissionStatus === SubmissionProgresses.submitted && isPublished
-    ? SubmissionProgresses.published
-    : submissionStatus;

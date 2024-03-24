@@ -5,15 +5,17 @@ import {
   coverImageUrl
 } from '../../../features/achievement/AchievementConstants';
 import { GoalType } from '../../../features/achievement/AchievementTypes';
-import { AssessmentConfiguration, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import {
+  AssessmentConfiguration,
+  AssessmentOverview,
+  AssessmentStatuses,
+  ProgressStatuses
+} from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
 
-function assessmentCompleted(assessmentOverview: AssessmentOverview): boolean {
-  return (
-    assessmentOverview.gradingStatus === 'graded' ||
-    (!assessmentOverview.isManuallyGraded && assessmentOverview.status === 'submitted')
-  );
+function assessmentPublished(assessmentOverview: AssessmentOverview): boolean {
+  return assessmentOverview.progress === ProgressStatuses.published;
 }
 
 function insertFakeAchievements(
@@ -34,7 +36,8 @@ function insertFakeAchievements(
     // Reduce clutter for achievements that cannot be earned at that point
     if (
       !isReleased(new Date(assessmentOverview.openAt)) ||
-      (isExpired(new Date(assessmentOverview.closeAt)) && assessmentOverview.status !== 'submitted')
+      (isExpired(new Date(assessmentOverview.closeAt)) &&
+        assessmentOverview.status !== AssessmentStatuses.submitted)
     ) {
       return;
     }
@@ -69,14 +72,14 @@ function insertFakeAchievements(
               requiredCompletionFrac: 0
             }
           },
-          assessmentOverview.gradingStatus === 'graded'
+          assessmentOverview.progress === ProgressStatuses.published
         );
       }
 
       inferencer.insertFakeAchievement({
         uuid: idString,
         title: assessmentOverview.title,
-        xp: assessmentCompleted(assessmentOverview)
+        xp: assessmentPublished(assessmentOverview)
           ? assessmentOverview.xp
           : assessmentOverview.maxXp,
         isVariableXp: false,
@@ -98,7 +101,7 @@ function insertFakeAchievements(
       });
 
       // if completed, add the uuid into the appropriate array
-      if (assessmentCompleted(assessmentOverview)) {
+      if (assessmentPublished(assessmentOverview)) {
         assessmentTypes.forEach((type, idx) => {
           if (type === assessmentOverview.type) {
             categorisedUuids[idx].push(idString);

@@ -6,7 +6,12 @@ import {
   GradingQuery
 } from '../../features/grading/GradingTypes';
 import { Role } from '../application/ApplicationTypes';
-import { AssessmentStatuses, ProgressStatuses, Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
+import {
+  AssessmentStatuses,
+  ProgressStatuses,
+  Testcase,
+  TestcaseTypes
+} from '../assessment/AssessmentTypes';
 import { mockLibrary } from './AssessmentMocks';
 import { mockFetchRole } from './UserMocks';
 

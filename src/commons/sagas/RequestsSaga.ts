@@ -1,10 +1,6 @@
 import { call } from 'redux-saga/effects';
 import { RuntimeError } from 'sourceror';
-import {
-  backendParamsToProgressStatus,
-  computeGradingStatus,
-  computeSubmissionProgress
-} from 'src/features/grading/GradingUtils';
+import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
 
 import {
   AchievementGoal,
@@ -644,13 +640,6 @@ export const getGradingOverviews = async (
           submissionStatus: overview.status,
           groupName: overview.student.groupName,
           groupLeaderId: overview.student.groupLeaderId,
-          // Grading Status
-          gradingStatus: computeGradingStatus(
-            overview.assessment.isManuallyGraded,
-            overview.status,
-            overview.gradedCount,
-            overview.assessment.questionCount
-          ),
           progress: backendParamsToProgressStatus(
             overview.isGradingPublished,
             overview.status,

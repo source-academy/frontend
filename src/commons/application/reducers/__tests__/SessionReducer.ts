@@ -5,8 +5,7 @@ import {
   Assessment,
   AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses,
-  SubmissionProgresses
+  ProgressStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
@@ -339,7 +338,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
-    xp: 0,
+    xp: 0
   }
 ];
 
@@ -359,7 +358,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
-    xp: 1,
+    xp: 1
   }
 ];
 

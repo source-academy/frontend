@@ -79,8 +79,8 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   FETCH_ASSESSMENT_OVERVIEWS,
+  ProgressStatuses,
   Question,
-  SubmissionProgresses,
   SUBMIT_ASSESSMENT
 } from '../assessment/AssessmentTypes';
 import {
@@ -465,7 +465,7 @@ function* BackendSaga(): SagaIterator {
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, submissionStatus: 'attempted' };
+          return { ...overview, progress: ProgressStatuses.attempted };
         }
         return overview;
       });
@@ -497,7 +497,7 @@ function* BackendSaga(): SagaIterator {
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, submissionProgress: SubmissionProgresses.published };
+          return { ...overview, progress: ProgressStatuses.published };
         }
         return overview;
       });
@@ -529,7 +529,7 @@ function* BackendSaga(): SagaIterator {
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, submissionProgress: SubmissionProgresses.submitted };
+          return { ...overview, progress: ProgressStatuses.graded };
         }
         return overview;
       });

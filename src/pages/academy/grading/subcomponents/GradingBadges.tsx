@@ -2,10 +2,7 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
-import {
-  ProgressStatus,
-  ProgressStatuses
-} from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 
 const BADGE_COLORS = {
   // assessment types

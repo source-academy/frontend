@@ -6,7 +6,11 @@ import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { assertType } from 'src/commons/utils/TypeHelper';
 
-import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
+import {
+  AssessmentConfiguration,
+  AssessmentStatuses,
+  ProgressStatuses
+} from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import Profile, { ProfileProps } from '../Profile';
 
@@ -94,9 +98,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
   );
 
   const numProfileCards = mockAssessmentOverviews.filter(
-    item =>
-      item.status === AssessmentStatuses.submitted &&
-      (item.gradingStatus === 'graded' || item.gradingStatus === 'excluded')
+    item => item.progress === ProgressStatuses.published
   ).length;
 
   [

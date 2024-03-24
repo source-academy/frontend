@@ -2,12 +2,9 @@ import {
   AssessmentStatus,
   AssessmentType,
   AutogradingResult,
-  GradingStatus,
   MCQChoice,
   ProgressStatus,
   Question,
-  SubmissionProgress,
-  SubmissionProgresses,
   Testcase
 } from '../../commons/assessment/AssessmentTypes';
 import { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
