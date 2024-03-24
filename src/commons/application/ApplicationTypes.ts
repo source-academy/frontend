@@ -523,7 +523,7 @@ export const createDefaultStoriesEnv = (
   stepLimit: 1000,
   globals: [],
   usingSubst: false,
-  debuggerContext: {} as DebuggerContext,
+  debuggerContext: {} as DebuggerContext
 });
 
 export const defaultFileSystem: FileSystemState = {
