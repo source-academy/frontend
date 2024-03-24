@@ -384,7 +384,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sideContent: {
     alerts: [],
     dynamicTabs: []
-  }
+  },
+  lastDebuggerResult: undefined,
+  lastNonDetResult: null
 });
 
 const defaultFileName = 'program.js';
