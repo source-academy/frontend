@@ -3,7 +3,9 @@
  */
 .NavigationBar {
   width: 100%;
-  flex: 0 0 auto;
+  display: flex; /* Establish flex container */
+  justify-content: space-between; /* Align children to both ends */
+  flex-wrap: nowrap; /* Prevent wrapping */
   padding: 0px 10px;
 
   .thin-divider {
