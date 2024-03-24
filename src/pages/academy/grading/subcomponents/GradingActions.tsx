@@ -78,7 +78,11 @@ const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
         <Icon tooltip="Grade" icon={() => <BpIcon icon={IconNames.EDIT} />} variant="light" />
       </Link>
 
-      <button type="button" style={{ padding: 0 }} onClick={handleReautogradeClick}>
+      <button 
+        type="button"
+        style={{ padding: 0 }}
+        hidden={progress !== ProgressStatuses.graded && progress != ProgressStatuses.submitted}
+        onClick={handleReautogradeClick}>
         <Icon
           tooltip="Reautograde"
           icon={() => <BpIcon icon={IconNames.REFRESH} />}
