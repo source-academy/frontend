@@ -99,31 +99,29 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
 
   return {
     status: AssessmentStatuses.submitted,
-    notPublished: true
+    isGradingPublished: false
   };
 };
 
 /**
  * Converts multiple backend parameters into a single comprehensive grading status for use in the grading dashboard.
- * @param isPublished backend field denoting if grading of submitted work is to be shown to the student
+ * @param isGradingPublished backend field denoting if grading of submitted work is to be shown to the student
  * @param submissionStatus backend field denoting if the student has submitted their work.
  * @param numGraded
  * @param numQuestions
  * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic.
  */
 export const backendParamsToProgressStatus = (
-  isPublished: boolean,
+  isGradingPublished: boolean,
   submissionStatus: AssessmentStatus,
   numGraded: number,
   numQuestions: number
 ): ProgressStatus => {
   if (submissionStatus !== AssessmentStatuses.submitted) {
-    // ProgressStatus and AssessmentStatus has a one-to-one correspondence
-    // if grading and publishing is not involved
     return submissionStatus as ProgressStatus;
   } else if (numGraded < numQuestions) {
     return ProgressStatuses.submitted;
-  } else if (!isPublished) {
+  } else if (!isGradingPublished) {
     return ProgressStatuses.graded;
   } else {
     return ProgressStatuses.published;
@@ -134,22 +132,27 @@ export const progressStatusToBackendParams = (progress: ProgressStatus) => {
   switch (progress) {
     case ProgressStatuses.published:
       return {
-        notPublished: false,
-        notFullyGraded: false,
+        isGradingPublished: true,
+        isFullyGraded: true,
         status: AssessmentStatuses.submitted
       };
     case ProgressStatuses.graded:
       return {
-        notPublished: true,
-        notFullyGraded: false,
+        isGradingPublished: false,
+        isFullyGraded: true,
+        status: AssessmentStatuses.submitted
+      };
+    case ProgressStatuses.submitted:
+      return {
+        isGradingPublished: false,
+        isFullyGraded: false,
         status: AssessmentStatuses.submitted
       };
     default:
+      // 'attempted' work may have been previously graded and then unsubmitted
+      // thus, isFullyGraded flag is not added
       return {
-        notPublished: true,
-        notFullyGraded: true,
-        // ProgressStatus and AssessmentStatus has a one-to-one correspondence
-        // if grading and publishing is not involved
+        isGradingPublished: false,
         status: progress as AssessmentStatus
       };
   }
