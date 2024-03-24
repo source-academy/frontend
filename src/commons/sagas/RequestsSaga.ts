@@ -1,5 +1,4 @@
 import { call } from 'redux-saga/effects';
-import { RuntimeError } from 'sourceror';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
 
 import {

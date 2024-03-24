@@ -68,7 +68,7 @@ const makeColumns = (handleClick: () => void) => [
     cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
   }),
   columnHelper.accessor('progress', {
-    header: 'TEST',
+    header: 'Progress',
     cell: info => (
       <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
         <ProgressStatusBadge progress={info.getValue() as ProgressStatus} />
@@ -77,7 +77,7 @@ const makeColumns = (handleClick: () => void) => [
   }),
   // For debugging purposes - remove before PR finalization
   columnHelper.accessor('submissionStatus', {
-    header: 'Progress',
+    header: 'submissionStatus (debug)',
     cell: info => info.getValue()
   }),
   columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {

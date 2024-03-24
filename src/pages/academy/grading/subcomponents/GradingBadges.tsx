@@ -11,7 +11,7 @@ const BADGE_COLORS = {
   paths: 'sky',
 
   // ProgressStatus
-  not_attempted: 'red',
+  not_attempted: 'gray',
   attempting: 'red',
   attempted: 'red',
   submitted: 'yellow',
