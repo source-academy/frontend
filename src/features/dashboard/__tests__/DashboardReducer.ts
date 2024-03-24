@@ -57,7 +57,7 @@ test('UPDATE_GROUP_GRADING_SUMMARY initialises dashboard state', () => {
   const action = {
     type: UPDATE_GROUP_GRADING_SUMMARY,
     payload: gradingSummaryTest1
-  };
+  } as const;
 
   const result: DashboardState = DashboardReducer(defaultDashboard, action);
 
@@ -77,7 +77,7 @@ test('UPDATE_GROUP_GRADING_SUMMARY updates dashboard state', () => {
   const action = {
     type: UPDATE_GROUP_GRADING_SUMMARY,
     payload: gradingSummaryPayload
-  };
+  } as const;
 
   const result: DashboardState = DashboardReducer(newDefaultDashBoard, action);
 
