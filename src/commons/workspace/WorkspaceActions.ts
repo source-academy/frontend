@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Context } from 'js-slang';
+import { Context, Result } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -65,6 +65,8 @@ import {
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_LAST_DEBUGGER_RESULT,
+  UPDATE_LAST_NON_DET_RESULT,
   UPDATE_REPL_VALUE,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
@@ -498,5 +500,19 @@ export const updateChangePointSteps = createAction(
   UPDATE_CHANGEPOINTSTEPS,
   (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     payload: { changepointSteps, workspaceLocation }
+  })
+);
+
+export const updateLastDebuggerResult = createAction(
+  UPDATE_LAST_DEBUGGER_RESULT,
+  (lastDebuggerResult: any) => ({
+    payload: { lastDebuggerResult }
+  })
+);
+
+export const updateLastNonDetResult = createAction(
+  UPDATE_LAST_NON_DET_RESULT,
+  (lastNonDetResult: Result) => ({
+    payload: { lastNonDetResult }
   })
 );
