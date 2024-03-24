@@ -1,6 +1,6 @@
-import * as es from 'estree';
 import { Control } from 'js-slang/dist/cse-machine/interpreter';
 import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
+import { Node } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';
@@ -84,17 +84,17 @@ export class ControlStack extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fontFamily: ControlStashConfig.FontFamily.toString(),
+      fontFamily: ControlStashConfig.FontFamily,
       fontSize: 12,
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fontStyle: ControlStashConfig.FontStyle,
+      fontVariant: ControlStashConfig.FontVariant
     };
     return (
       <Group key={Layout.key++} ref={this.ref}>
         {CseMachine.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
-            x={Number(ControlStashConfig.ShowMoreButtonX)}
-            y={Number(ControlStashConfig.ShowMoreButtonY)}
+            x={ControlStashConfig.ShowMoreButtonX}
+            y={ControlStashConfig.ShowMoreButtonY}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
             onMouseUp={() => {
@@ -104,15 +104,15 @@ export class ControlStack extends Visible implements IHoverable {
           >
             <Tag
               stroke={defaultSAColor()}
-              cornerRadius={Number(ControlStashConfig.ControlItemCornerRadius)}
+              cornerRadius={ControlStashConfig.ControlItemCornerRadius}
             />
             <Text
               {...textProps}
               text={`${Config.Ellipsis}`}
               align="center"
               fill={defaultSAColor()}
-              width={Number(ControlStashConfig.ShowMoreButtonWidth)}
-              height={Number(ControlStashConfig.ShowMoreButtonHeight)}
+              width={ControlStashConfig.ShowMoreButtonWidth}
+              height={ControlStashConfig.ShowMoreButtonHeight}
             />
           </Label>
         )}
@@ -142,6 +142,6 @@ export const isInstr = (command: ControlItem): command is Instr => {
  * @param command A ControlItem
  * @returns true if the ControlItem is an esNode and false if it is an instruction.
  */
-export const isNode = (command: ControlItem): command is es.Node => {
-  return (command as es.Node).type !== undefined;
+export const isNode = (command: ControlItem): command is Node => {
+  return (command as Node).type !== undefined;
 };
