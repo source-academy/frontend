@@ -381,10 +381,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isDebugging: false,
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
-  sideContent: {
-    alerts: [],
-    dynamicTabs: []
-  },
   lastDebuggerResult: undefined,
   lastNonDetResult: null
 });
@@ -528,10 +524,6 @@ export const createDefaultStoriesEnv = (
   globals: [],
   usingSubst: false,
   debuggerContext: {} as DebuggerContext,
-  sideContent: {
-    dynamicTabs: [],
-    alerts: []
-  }
 });
 
 export const defaultFileSystem: FileSystemState = {
