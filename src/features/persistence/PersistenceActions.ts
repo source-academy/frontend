@@ -1,4 +1,4 @@
-import { action } from 'typesafe-actions';
+import { createAction } from '@reduxjs/toolkit';
 
 import {
   PERSISTENCE_INITIALISE,
@@ -8,10 +8,14 @@ import {
   PersistenceFile
 } from './PersistenceTypes';
 
-export const persistenceOpenPicker = () => action(PERSISTENCE_OPEN_PICKER);
+export const persistenceOpenPicker = createAction(PERSISTENCE_OPEN_PICKER, () => ({ payload: {} }));
 
-export const persistenceSaveFile = (file: PersistenceFile) => action(PERSISTENCE_SAVE_FILE, file);
+export const persistenceSaveFile = createAction(PERSISTENCE_SAVE_FILE, (file: PersistenceFile) => ({
+  payload: file
+}));
 
-export const persistenceSaveFileAs = () => action(PERSISTENCE_SAVE_FILE_AS);
+export const persistenceSaveFileAs = createAction(PERSISTENCE_SAVE_FILE_AS, () => ({
+  payload: {}
+}));
 
-export const persistenceInitialise = () => action(PERSISTENCE_INITIALISE);
+export const persistenceInitialise = createAction(PERSISTENCE_INITIALISE, () => ({ payload: {} }));
