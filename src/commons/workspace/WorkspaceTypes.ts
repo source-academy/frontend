@@ -92,11 +92,6 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type TeamFormationWorkspaceState = TeamFormationWorkspaceAttr & WorkspaceState;
 
-type GroundControlWorkspaceAttr = {
-  readonly GroundControlTableFilters: GroundControlTableFilters;
-};
-type GroundControlWorkspaceState = GroundControlWorkspaceAttr & WorkspaceState;
-
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
   readonly usingCse: boolean;
@@ -113,7 +108,6 @@ export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
   readonly grading: GradingWorkspaceState;
   readonly teamFormation: TeamFormationWorkspaceState;
-  readonly groundControl: GroundControlWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
@@ -187,8 +181,4 @@ export type SubmissionsTableFilters = {
 export type TeamFormationsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
   globalFilter: string | null;
-};
-
-export type GroundControlTableFilters = {
-  columnFilters: { id: string; value: unknown }[];
 };

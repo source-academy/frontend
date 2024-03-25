@@ -412,12 +412,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
       globalFilter: null
     }
   },
-  groundControl: {
-    ...createDefaultWorkspace('groundControl'),
-    GroundControlTableFilters: {
-      columnFilters: []
-    }
-  },
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
@@ -554,7 +548,6 @@ export const defaultSideContentManager: SideContentManagerState = {
   assessment: defaultSideContent,
   grading: defaultSideContent,
   playground: defaultSideContent,
-  groundControl: defaultSideContent,
   teamFormation: defaultSideContent,
   sicp: defaultSideContent,
   sourcecast: defaultSideContent,
