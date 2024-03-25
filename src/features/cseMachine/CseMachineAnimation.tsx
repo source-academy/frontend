@@ -140,6 +140,7 @@ export class CseAnimation {
         case 'ForStatement':
         case 'IfStatement':
         case 'MemberExpression':
+        case 'StatementSequence':
         case 'UnaryExpression':
         case 'VariableDeclaration':
         case 'WhileStatement':
@@ -159,7 +160,7 @@ export class CseAnimation {
               CseAnimation.getNewControlItems(),
               Layout.previousStashComponent.stashItemComponents.at(-appInstr.numOfArgs - 1)!,
               Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
-              appInstr.numOfArgs > 0 ? CseAnimation.currentFrame : undefined
+              checkFrameCreation(this.previousFrame, this.currentFrame) ? CseAnimation.currentFrame : undefined
             )
           );
           break;
