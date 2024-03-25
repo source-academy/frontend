@@ -211,7 +211,15 @@ export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
   return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
 });
 
-export const cLanguages: SALanguage[] = [{chapter: Chapter.FULL_C, variant: Variant.DEFAULT, displayName: "C", mainLanguage: SupportedLanguage.C, supports: {}}];
+export const cLanguages: SALanguage[] = [
+  {
+    chapter: Chapter.FULL_C,
+    variant: Variant.DEFAULT,
+    displayName: 'C',
+    mainLanguage: SupportedLanguage.C,
+    supports: {}
+  }
+];
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
   return getLanguageConfig(chapter, variant).displayName;

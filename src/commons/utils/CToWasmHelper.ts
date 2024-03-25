@@ -5,8 +5,11 @@ import { Context } from 'js-slang/dist/types';
 
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
-export async function makeCCompilerConfig(program: string, context: Context): Promise<CCompilerConfig> {
-  const externalFunctions = await loadModulesUsedInCProgram(program, context)
+export async function makeCCompilerConfig(
+  program: string,
+  context: Context
+): Promise<CCompilerConfig> {
+  const externalFunctions = await loadModulesUsedInCProgram(program, context);
   return {
     printFunction: (v: string) => {
       if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
@@ -24,7 +27,10 @@ export let specialCReturnObject: any = null;
 /**
  * Load all the modules used in C Program
  */
-export async function loadModulesUsedInCProgram(program: string, context: Context): Promise<ModuleFunctions> {
+export async function loadModulesUsedInCProgram(
+  program: string,
+  context: Context
+): Promise<ModuleFunctions> {
   const allModuleFunctions: ModuleFunctions = {};
   const regexp = /<[a-z0-9_]+>/g;
   const includedModules = program.match(regexp);
@@ -33,7 +39,7 @@ export async function loadModulesUsedInCProgram(program: string, context: Contex
   }
   for (const m of includedModules) {
     const moduleName = m.slice(1, m.length - 1);
-    
+
     if (modulesAvailableForC.has(moduleName)) {
       await initModuleContext(moduleName, context, true);
       const moduleFuncs = await loadModuleBundle(moduleName, context);
@@ -42,7 +48,9 @@ export async function loadModulesUsedInCProgram(program: string, context: Contex
       }
     }
   }
-  const pixNFlixStart = allModuleFunctions["start"];
-  allModuleFunctions["start"] = () => { specialCReturnObject = pixNFlixStart(); }
+  const pixNFlixStart = allModuleFunctions['start'];
+  allModuleFunctions['start'] = () => {
+    specialCReturnObject = pixNFlixStart();
+  };
   return allModuleFunctions;
 }
