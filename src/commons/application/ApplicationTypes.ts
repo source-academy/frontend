@@ -297,7 +297,6 @@ export const getLanguageConfig = (
   chapter: Chapter,
   variant: Variant = Variant.DEFAULT
 ): SALanguage => {
-  //TODO: come back fix
   const languageConfig = ALL_LANGUAGES.find(
     lang => lang.chapter === chapter && lang.variant === variant
   );
