@@ -171,6 +171,27 @@ export class CseAnimation {
             )
           );
           break;
+        case InstrType.ARRAY_ACCESS:
+          CseAnimation.animations.push(
+            new ArrayAccessAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-2)!,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              Layout.stashComponent.stashItemComponents.at(-1)!
+            )
+          );
+          break;
+        case InstrType.ARRAY_ASSIGNMENT:
+          CseAnimation.animations.push(
+            new ArrayAssignmentAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-3)!,
+              Layout.previousStashComponent.stashItemComponents.at(-2)!,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              Layout.stashComponent.stashItemComponents.at(-1)!
+            )
+          );
+          break;
         case InstrType.ARRAY_LITERAL:
           const arrSize = (lastControlItem as ArrLitInstr).arity;
           CseAnimation.animations.push(
