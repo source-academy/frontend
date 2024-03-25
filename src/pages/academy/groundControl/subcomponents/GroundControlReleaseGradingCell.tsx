@@ -26,14 +26,14 @@ const ReleaseGradingCell: React.FC<Props> = ({
   return (
     <>
       {cells.map(props => (
-        <MassPublishingChangeCell {...props} />
+        <MassPublishingChangeCell {...props} key={props.keyID}/>
       ))}
     </>
   );
 };
 
 type SubProps = {
-  key: string,
+  keyID: string;
   callbackFn: MassPublishFn;
   data: AssessmentOverview;
   change: string;
@@ -47,7 +47,7 @@ const massPublishingChanges = (
   unpublishAll: MassPublishFn
 ): SubProps[] => [
   {
-    key: '1',
+    keyID: '1',
     callbackFn: unpublishAll,
     data: data,
     change: 'Unpublish all submissions',
@@ -55,7 +55,7 @@ const massPublishingChanges = (
     icon: IconNames.CROSS_CIRCLE
   },
   {
-    key: '2',
+    keyID: '2',
     callbackFn: publishAll,
     data: data,
     change: 'Publish graded submissions',
@@ -65,7 +65,7 @@ const massPublishingChanges = (
 ];
 
 const MassPublishingChangeCell: React.FC<SubProps> = ({
-  key,
+  keyID,
   callbackFn,
   data,
   change,
@@ -84,15 +84,13 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
   }, [data, handleCloseDialog, callbackFn]);
 
   return (
-    <>
-      <Button className={change} key={key} onClick={handleOpenDialog} icon={icon} />
+    <Button className={change} key={keyID} onClick={handleOpenDialog} icon={icon}>
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={change}
         canOutsideClickClose={true}
-        key={key + '-dialog'}
       >
         <DialogBody>
           <p>
@@ -119,7 +117,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
           }
         />
       </Dialog>
-    </>
+    </Button>
   );
 };
 
