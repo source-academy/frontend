@@ -11,7 +11,7 @@ import {
 } from 'js-slang/dist/cse-machine/types';
 import Closure from 'js-slang/dist/interpreter/closure';
 import { Environment, Value as StashValue } from 'js-slang/dist/types';
-import { astToString } from 'js-slang/dist/utils/astToString';
+import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
