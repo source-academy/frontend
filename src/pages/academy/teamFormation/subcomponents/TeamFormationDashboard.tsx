@@ -29,7 +29,7 @@ const TeamFormationDashboard: React.FC<TeamFormationDashboardProps> = ({ teams }
     <Card>
       <Flex justifyContent="justify-between">
         <Title>Teams</Title>
-        <Flex justifyContent='justify-end' spaceX="space-x-2">
+        <Flex justifyContent="justify-end" spaceX="space-x-2">
           <BpButton onClick={createTeam}>Create Team</BpButton>
           <BpButton onClick={importTeam}>Import Team</BpButton>
         </Flex>
