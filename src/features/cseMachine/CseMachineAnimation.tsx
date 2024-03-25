@@ -3,6 +3,8 @@ import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
+import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
+import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
 import { ArrayLiteralAnimation } from './animationComponents/ArrayLiteralAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
@@ -138,6 +140,8 @@ export class CseAnimation {
         case 'ExpressionStatement':
         case 'ForStatement':
         case 'IfStatement':
+        case 'MemberExpression':
+        case 'StatementSequence':
         case 'UnaryExpression':
         case 'VariableDeclaration':
         case 'WhileStatement':
@@ -242,8 +246,6 @@ export class CseAnimation {
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
           break;
-        case InstrType.ARRAY_ACCESS:
-        case InstrType.ARRAY_ASSIGNMENT:
         case InstrType.ARRAY_LENGTH:
         case InstrType.BREAK:
         case InstrType.BREAK_MARKER:
