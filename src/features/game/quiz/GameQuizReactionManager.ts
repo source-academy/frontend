@@ -3,11 +3,12 @@ import { promptWithChoices } from '../effects/Prompt';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { textTypeWriterStyle } from '../dialogue/GameDialogueConstants';
+//import { textTypeWriterStyle } from '../dialogue/GameDialogueConstants';
 import DialogueGenerator from '../dialogue/GameDialogueGenerator';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 //import DialogueSpeakerRenderer from '../dialogue/GameDialogueSpeakerRenderer';
 import { DialogueObject } from "../dialogue/GameDialogueTypes";
+import { questionTextStyle } from './GameQuizConstants';
 
 
 export default class GameQuizReactionManager {
@@ -22,7 +23,7 @@ export default class GameQuizReactionManager {
     } 
 
     public async showReaction() : Promise<void> {
-        this.dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
+        this.dialogueRenderer = new DialogueRenderer(questionTextStyle);
         this.dialogueGenerator = new DialogueGenerator(this.dialogue);
         //this.speakerRenderer = new DialogueSpeakerRenderer();
 
