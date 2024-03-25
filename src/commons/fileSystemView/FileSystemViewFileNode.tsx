@@ -14,6 +14,7 @@ import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
+import { persistenceDeleteFile } from 'src/features/persistence/PersistenceActions';
 
 export type FileSystemViewFileNodeProps = {
   workspaceLocation: WorkspaceLocation;
@@ -86,7 +87,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
         if (err) {
           console.error(err);
         }
-
+        dispatch(persistenceDeleteFile(fullPath));
         dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });

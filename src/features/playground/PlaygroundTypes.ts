@@ -1,7 +1,7 @@
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
 
 import { GitHubSaveInfo } from '../github/GitHubTypes';
-import { PersistenceObject } from '../persistence/PersistenceTypes';
+import { PersistenceFile } from '../persistence/PersistenceTypes';
 
 export const CHANGE_QUERY_STRING = 'CHANGE_QUERY_STRING';
 export const GENERATE_LZ_STRING = 'GENERATE_LZ_STRING';
@@ -16,7 +16,7 @@ export const PLAYGROUND_UPDATE_REPO_NAME = 'PLAYGROUND_UPDATE_REPO_NAME';
 export type PlaygroundState = {
   readonly queryString?: string;
   readonly shortURL?: string;
-  readonly persistenceObject?: PersistenceObject;
+  readonly persistenceFile?: PersistenceFile;
   readonly githubSaveInfo: GitHubSaveInfo;
   readonly languageConfig: SALanguage;
   repoName: string;
