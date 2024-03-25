@@ -123,7 +123,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           handlePublishGradingAll: this.props.handlePublishGradingAll,
           handleUnpublishGradingAll: this.props.handleUnpublishGradingAll
         },
-        width: 100,
+        width: 120,
         filter: false,
         resizable: false,
         sortable: false,
@@ -138,7 +138,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         cellRendererParams: {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
-        width: 50,
+        width: 70,
         filter: false,
         resizable: false,
         sortable: false,
@@ -181,10 +181,11 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         />
       </Collapse>
     );
-
+    
     const grid = (
       <div className="Grid ag-grid-parent ag-theme-balham">
         <AgGridReact
+          alwaysShowHorizontalScroll={true}
           domLayout={'autoHeight'}
           columnDefs={this.columnDefs}
           defaultColDef={this.defaultColumnDefs}
