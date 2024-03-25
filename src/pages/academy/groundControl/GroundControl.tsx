@@ -16,10 +16,7 @@ import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import {
-  AssessmentConfiguration,
-  AssessmentOverview
-} from '../../../commons/assessment/AssessmentTypes';
+import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
@@ -28,7 +25,7 @@ import EditCell from './subcomponents/GroundControlEditCell';
 import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
 
-export type GroundControlProps = DispatchProps & StateProps;
+type Props = DispatchProps;
 
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
@@ -40,14 +37,9 @@ export type DispatchProps = {
   handleFetchCourseConfigs: () => void;
 };
 
-export type StateProps = {
-  assessmentOverviews?: AssessmentOverview[];
-  assessmentConfigurations?: AssessmentConfiguration[];
-};
-
-const GroundControl: React.FC<GroundControlProps> = props => {
+const GroundControl: React.FC<Props> = props => {
   const [showDropzone, setShowDropzone] = useState(false);
-  const { assessmentOverviews } = useSession();
+  const { assessmentOverviews, assessmentConfigurations } = useSession();
 
   let gridApi: GridApi | undefined;
 
@@ -189,7 +181,7 @@ const GroundControl: React.FC<GroundControlProps> = props => {
     <Collapse isOpen={showDropzone} keepChildrenMounted={true}>
       <Dropzone
         handleUploadAssessment={props.handleUploadAssessment}
-        assessmentConfigurations={props.assessmentConfigurations}
+        assessmentConfigurations={assessmentConfigurations}
       />
     </Collapse>
   );
@@ -202,7 +194,7 @@ const GroundControl: React.FC<GroundControlProps> = props => {
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={resizeGrid}
-        rowData={props.assessmentOverviews}
+        rowData={assessmentOverviews}
         rowHeight={30}
         suppressCellFocus={true}
         suppressMovableColumns={true}
