@@ -6,7 +6,6 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
-import { SideContentState } from '../sideContent/SideContentTypes';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -147,7 +146,6 @@ export type WorkspaceState = {
   readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
-  readonly sideContent: SideContentState;
   readonly lastDebuggerResult: any;
   readonly lastNonDetResult: Result | null;
 };

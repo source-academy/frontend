@@ -161,7 +161,7 @@ export function* evalCode(
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
 
-  const lastDebuggerResult = yield select(
+  let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
   );
 
@@ -215,17 +215,16 @@ export function* evalCode(
     yield call(showWarningMessage, 'Execution aborted', 750);
     return;
   }
-
   if (paused) {
     yield put(actions.endDebuggerPause(workspaceLocation));
-    yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context)));
+    yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context), workspaceLocation));
     yield call(updateInspector, workspaceLocation);
     yield call(showWarningMessage, 'Execution paused', 750);
     return;
   }
 
   if (actionType === EVAL_EDITOR) {
-    yield put(actions.updateLastDebuggerResult(result));
+    yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
   }
 
   // do not highlight for stories
@@ -267,7 +266,7 @@ export function* evalCode(
     if (result.value === 'cut') {
       result.value = undefined;
     }
-    yield put(actions.updateLastNonDetResult(result));
+    yield put(actions.updateLastNonDetResult(result, workspaceLocation));
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
@@ -289,6 +288,9 @@ export function* evalCode(
     }
   }
 
+  lastDebuggerResult = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
+  );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL || actionType === DEBUG_RESUME) {
     if (context.errors.length > 0) {
