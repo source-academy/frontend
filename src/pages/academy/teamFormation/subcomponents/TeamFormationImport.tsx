@@ -1,5 +1,6 @@
 import '@tremor/react/dist/esm/tremor.css';
 
+import { Button } from '@blueprintjs/core';
 import { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 import { useDispatch } from 'react-redux';
@@ -93,14 +94,14 @@ const TeamFormationImport: React.FC = () => {
         <p>{file ? `File name: ${file.name}` : 'No file uploaded'}</p>
 
         <div className={classes['form-footer']}>
-          <button type="button" onClick={backToTeamDashboard} className={classes['back-button']}>
+          <Button intent="danger" onClick={backToTeamDashboard}>
             Back
-          </button>
+          </Button>
 
-          <div className={classes['submit-button-container']}>
-            <button type="button" onClick={submitForm} className={classes['submit-button']}>
+          <div>
+            <Button intent="success" onClick={submitForm}>
               Submit
-            </button>
+            </Button>
           </div>
         </div>
       </Form>
