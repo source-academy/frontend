@@ -26,7 +26,7 @@ const ReleaseGradingCell: React.FC<Props> = ({
   return (
     <>
       {cells.map(props => (
-        <MassPublishingChangeCell {...props} key={props.keyID}/>
+        <MassPublishingChangeCell {...props} key={props.keyID} />
       ))}
     </>
   );
@@ -85,7 +85,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
 
   return (
     <>
-    <Button className={change} key={keyID} onClick={handleOpenDialog} icon={icon} />
+      <Button className={change} key={keyID} onClick={handleOpenDialog} icon={icon} />
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
@@ -118,7 +118,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
           }
         />
       </Dialog>
-      </>
+    </>
   );
 };
 
