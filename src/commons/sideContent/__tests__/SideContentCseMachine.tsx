@@ -26,7 +26,7 @@ test('CSE Machine sets visualization state and renders', async () => {
   expect(screen.queryAllByTestId('sa-cse-machine')).toHaveLength(0);
 
   const context = mockContext();
-  runInContext('const hello="world"; debugger;', context);
+  await runInContext('const hello="world"; debugger;', context);
   act(() => visualizeCseMachine({ context }));
 
   expect(screen.queryAllByTestId('cse-machine-default-text')).toHaveLength(0);
