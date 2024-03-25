@@ -364,6 +364,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   programPrependValue: '',
   programPostpendValue: '',
   editorSessionId: '',
+  sessionDetails: null,
   isEditorReadonly: false,
   editorTestcases: [],
   externalLibrary: ExternalLibraryName.NONE,
@@ -389,7 +390,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sideContent: {
     alerts: [],
     dynamicTabs: []
-  }
+  },
+  lastDebuggerResult: undefined,
+  lastNonDetResult: null
 });
 
 const defaultFileName = 'program.js';

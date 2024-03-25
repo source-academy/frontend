@@ -48,6 +48,7 @@ type DispatchProps = {
 
 type EditorStateProps = {
   editorSessionId: string;
+  sessionDetails: { docId: string; readOnly: boolean } | null;
   isEditorAutorun: boolean;
   sourceChapter?: Chapter;
   externalLibraryName?: string;
