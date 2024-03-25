@@ -1,16 +1,15 @@
 import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Question, QuizResult } from './GameQuizType';
-import FontAssets from '../assets/FontAssets';
+import { QuizConstants, textStyle, quizOptStyle, questionTextStyle } from './GameQuizConstants';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
-import { calcListFormatPos, Color, HexColor } from '../utils/StyleUtils';
+import { calcListFormatPos, HexColor } from '../utils/StyleUtils';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
@@ -18,31 +17,10 @@ import GameQuizReactionManager from './GameQuizReactionManager';
 import { displayNotification } from '../effects/Notification';
 import GameQuizOutcomeManager from './GameQuizOutcome';
 import { ImproveMent, allCorrect } from './GameQuizConstants';
+import { createDialogueBox, createTypewriter } from '../dialogue/GameDialogueHelper';
 
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
-  QuizConstants = {
-    textPad: 20,
-    textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
-    y: 100,
-    width: 450,
-    yInterval: 100
-  };
-  
-  textStyle = {
-    fontFamily: 'Verdana',
-    fontSize: '20px',
-    fill: Color.offWhite,
-    align: 'right',
-    lineSpacing: 10,
-    wordWrap: { width: this.QuizConstants.width - this.QuizConstants.textPad * 2 }
-  };
-  
-  quizOptStyle: BitmapFontStyle = {
-    key: FontAssets.zektonFont.key,
-    size: 25,
-    align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
-  };
 
   // Print everything. To test if the quiz parser parses correctly.
   public async showQuiz(quizId:ItemId) {
@@ -68,40 +46,48 @@ export default class QuizManager {
       const quizPartitions = Math.ceil(choices.length / 5);
       const quizHeight = choices.length;
 
+      //create quiz box contains quiz questions
+      const quizQuestionBox = createDialogueBox(scene);
+
+      const quizQuestionWriter = createTypewriter(scene, questionTextStyle);
+
+      quizQuestionWriter.changeLine(question.question);
+
       const header = new Phaser.GameObjects.Text(
         scene,
-        screenSize.x - this.QuizConstants.textPad,
-        this.QuizConstants.y,
-        "quiz: " + question.question,
-        this.textStyle
+        screenSize.x / 2 - QuizConstants.textPad,
+        QuizConstants.y,
+        "options" ,
+        textStyle
       ).setOrigin(1.0, 0.0);
       
       const quizHeaderBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x,
-        this.QuizConstants.y - this.QuizConstants.textPad,
-        this.QuizConstants.width * quizPartitions,
-        header.getBounds().bottom * 0.5 + this.QuizConstants.textPad,
+        screenSize.x / 2,
+        QuizConstants.y - QuizConstants.textPad,
+        QuizConstants.width * quizPartitions,
+        header.getBounds().bottom * 0.5 + QuizConstants.textPad,
         HexColor.darkBlue,
         0.8
       ).setOrigin(1.0, 0.0);
       
       const quizBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x,
-        this.QuizConstants.y - this.QuizConstants.textPad,
-        this.QuizConstants.width * quizPartitions,
-        quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * this.QuizConstants.yInterval,
+        screenSize.x / 2,
+        QuizConstants.y - QuizConstants.textPad,
+        QuizConstants.width * quizPartitions,
+        quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * QuizConstants.yInterval,
         HexColor.lightBlue,
         0.2
       ).setOrigin(1.0, 0.0);
 
-      quizContainer.add([quizBg, quizHeaderBg, header]);
+      quizContainer.add([quizBg, quizHeaderBg, header, 
+            quizQuestionBox, quizQuestionWriter.container]);
 
       const buttonPositions = calcListFormatPos({
         numOfItems: choices.length,
         xSpacing: 0,
-        ySpacing: this.QuizConstants.yInterval
+        ySpacing: QuizConstants.yInterval
       });
 
       GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
@@ -112,8 +98,8 @@ export default class QuizManager {
             createButton(scene, {
               assetKey: ImageAssets.mediumButton.key,
               message: response.text,
-              textConfig: this.QuizConstants.textConfig,
-              bitMapTextStyle: this.quizOptStyle,
+              textConfig: QuizConstants.textConfig,
+              bitMapTextStyle: quizOptStyle,
               onUp: () => {
                 quizContainer.destroy();
                 if (index === question.answer) {
@@ -125,10 +111,10 @@ export default class QuizManager {
               }
               }
             }).setPosition(
-              screenSize.x -
-                this.QuizConstants.width / 2 -
-                this.QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
-              (buttonPositions[index][1] % (5 * this.QuizConstants.yInterval)) +
+                screenSize.x / 2 -
+                QuizConstants.width / 2 -
+                QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
+              (buttonPositions[index][1] % (5 * QuizConstants.yInterval)) +
                 quizHeaderBg.getBounds().bottom +
                 75
             )
