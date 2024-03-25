@@ -60,8 +60,8 @@ const Dashboard: React.FC = () => {
 
   // TODO (with corresponding backend changes):
   // graded assessments may not be published and viewable by students.
-  // the dashboard could be updated to show unpublished assessment count 
-  // instead of just graded assessment count, which could be more accurate of visible work 
+  // the dashboard could be updated to show unpublished assessment count
+  // instead of just graded assessment count, which could be more accurate of visible work
   return (
     <div>
       <ContentDisplay

@@ -1215,7 +1215,6 @@ function* BackendSaga(): SagaIterator {
       } else {
         yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
       }
-      
     }
   );
 
@@ -1278,8 +1277,6 @@ function* BackendSaga(): SagaIterator {
     }
   );
 }
-
-
 
 function* handleReautogradeResponse(resp: Response | null): any {
   if (resp && resp.ok) {

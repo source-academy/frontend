@@ -1,19 +1,77 @@
-import { Button, Dialog, DialogBody, DialogFooter, Icon, Intent, Switch } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useState } from 'react';
+import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
+import { IconName, IconNames } from '@blueprintjs/icons';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
+type MassPublishFn = (id: number) => void;
+
 type Props = {
-  handlePublishGradingAll: (id: number) => void;
-  handleUnpublishGradingAll: (id: number) => void;
+  handlePublishGradingAll: MassPublishFn;
+  handleUnpublishGradingAll: MassPublishFn;
   data: AssessmentOverview;
 };
 
+const ReleaseGradingCell: React.FC<Props> = ({
+  data,
+  handlePublishGradingAll,
+  handleUnpublishGradingAll
+}) => {
+  const cells = useMemo(
+    () => massPublishingChanges(data, handlePublishGradingAll, handleUnpublishGradingAll),
+    [data, handlePublishGradingAll, handleUnpublishGradingAll]
+  );
 
+  return (
+    <>
+      {cells.map(props => (
+        <MassPublishingChangeCell {...props} />
+      ))}
+    </>
+  );
+};
 
-const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGradingAll, handleUnpublishGradingAll }) => {
+type SubProps = {
+  key: string,
+  callbackFn: MassPublishFn;
+  data: AssessmentOverview;
+  change: string;
+  description: string;
+  icon: IconName;
+};
+
+const massPublishingChanges = (
+  data: AssessmentOverview,
+  publishAll: MassPublishFn,
+  unpublishAll: MassPublishFn
+): SubProps[] => [
+  {
+    key: '1',
+    callbackFn: unpublishAll,
+    data: data,
+    change: 'Unpublish all submissions',
+    description: 'Non-published submissions are not affected.',
+    icon: IconNames.CROSS_CIRCLE
+  },
+  {
+    key: '2',
+    callbackFn: publishAll,
+    data: data,
+    change: 'Publish graded submissions',
+    description: 'Ungraded or already-published submissions are not affected.',
+    icon: IconNames.ENDORSED
+  }
+];
+
+const MassPublishingChangeCell: React.FC<SubProps> = ({
+  key,
+  callbackFn,
+  data,
+  change,
+  description,
+  icon
+}) => {
   const [isDialogOpen, setDialogState] = useState(false);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
@@ -21,28 +79,26 @@ const ReleaseGradingCell: React.FC<Props> = ({ data, handlePublishGradingAll, ha
 
   const handleTogglePublished = useCallback(() => {
     const { id } = data;
-    handlePublishGradingAll(id);
+    callbackFn(id);
     handleCloseDialog();
-  }, [data, handleCloseDialog, handlePublishGradingAll]);
+  }, [data, handleCloseDialog, callbackFn]);
 
   return (
     <>
-      <Button className="release-grading-cell" onClick={handleOpenDialog} icon={IconNames.ENDORSED} color={'blue'} />
+      <Button className={change} key={key} onClick={handleOpenDialog} icon={icon} />
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
-        title={`Publish ALL gradings`}
+        title={change}
         canOutsideClickClose={true}
+        key={key + '-dialog'}
       >
         <DialogBody>
           <p>
-            Are you sure you want to release the grading of ALL graded submissions for the assessment: {' '}
-            <i>{data.title}</i>?
+            Are you sure you want to {change.toLowerCase()} for the assessment: <i>{data.title}</i>?
           </p>
-          <p>
-            Ungraded submissions or already-published submissions are not affected.
-          </p>
+          <p>{description}</p>
         </DialogBody>
         <DialogFooter
           actions={

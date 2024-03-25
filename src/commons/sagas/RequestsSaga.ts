@@ -814,7 +814,7 @@ export const publishGradingAll = async (id: number, tokens: Tokens): Promise<Res
   });
 
   return resp;
-}
+};
 
 /**
  * POST /courses/{courseId}/admin/grading/{submissionId}/unpublish_grades
@@ -845,7 +845,7 @@ export const unpublishGradingAll = async (id: number, tokens: Tokens): Promise<R
   });
 
   return resp;
-}
+};
 
 /**
  * GET /courses/{courseId}/notifications

@@ -116,12 +116,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         }
       },
       {
-        headerName: 'Release Gradings',
+        headerName: 'Release Grading',
         field: '',
         cellRenderer: ReleaseGradingCell,
         cellRendererParams: {
           handlePublishGradingAll: this.props.handlePublishGradingAll,
-          handleUnpublishAllGradings: this.props.handleUnpublishGradingAll,
+          handleUnpublishGradingAll: this.props.handleUnpublishGradingAll
         },
         width: 100,
         filter: false,

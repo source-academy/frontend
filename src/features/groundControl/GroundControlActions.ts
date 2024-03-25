@@ -18,18 +18,18 @@ export const deleteAssessment = createAction(DELETE_ASSESSMENT, (id: number) => 
 
 export const publishAssessment = createAction(
   PUBLISH_ASSESSMENT,
-  (togglePublishAssessmentTo: boolean, id: number) => ({ payload: { id, togglePublishAssessmentTo } })
+  (togglePublishAssessmentTo: boolean, id: number) => ({
+    payload: { id, togglePublishAssessmentTo }
+  })
 );
 
-export const publishGradingAll = createAction(
-  PUBLISH_GRADING_ALL,
-  (id: number) => ({ payload: id })
-);
+export const publishGradingAll = createAction(PUBLISH_GRADING_ALL, (id: number) => ({
+  payload: id
+}));
 
-export const unpublishGradingAll = createAction(
-  UNPUBLISH_GRADING_ALL,
-  (id: number) => ({ payload: id })
-);
+export const unpublishGradingAll = createAction(UNPUBLISH_GRADING_ALL, (id: number) => ({
+  payload: id
+}));
 
 export const uploadAssessment = createAction(
   UPLOAD_ASSESSMENT,
