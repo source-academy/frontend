@@ -77,14 +77,15 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
 
-  const handleTogglePublished = useCallback(() => {
+  const handleMassPublishChange = useCallback(() => {
     const { id } = data;
     callbackFn(id);
     handleCloseDialog();
   }, [data, handleCloseDialog, callbackFn]);
 
   return (
-    <Button className={change} key={keyID} onClick={handleOpenDialog} icon={icon}>
+    <>
+    <Button className={change} key={keyID} onClick={handleOpenDialog} icon={icon} />
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
@@ -110,14 +111,14 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
               <ControlButton
                 label="Confirm"
                 icon={IconNames.CONFIRM}
-                onClick={handleTogglePublished}
+                onClick={handleMassPublishChange}
                 options={{ minimal: false, intent: Intent.DANGER }}
               />
             </>
           }
         />
       </Dialog>
-    </Button>
+      </>
   );
 };
 
