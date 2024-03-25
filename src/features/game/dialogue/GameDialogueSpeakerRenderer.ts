@@ -109,9 +109,7 @@ export default class DialogueSpeakerRenderer {
    * Show the hidden speaker box and sprite 
    */
   public async show() {
-    console.log(this.getSpeakerSprite().visible);
     this.getSpeakerSprite().setVisible(true);
-    console.log(this.getSpeakerSprite().visible);
     this.getSpeakerSpriteBox().setVisible(true);
   }
 
