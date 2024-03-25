@@ -5,9 +5,10 @@ import {
   DialogFooter,
   Divider,
   Intent,
+  NumericInput,
   Switch
 } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { IconNames, Team } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
@@ -26,6 +27,7 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
   const [isDialogOpen, setDialogState] = useState(false);
   const [hasVotingFeatures, setHasVotingFeatures] = useState(!!data.hasVotingFeatures);
   const [hasTokenCounter, setHasTokenCounter] = useState(!!data.hasTokenCounter);
+  const [isTeamAssessment, setIsTeamAssessment] = useState(false);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
@@ -43,6 +45,10 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
   const toggleVotingFeatures = useCallback(
     () => setHasVotingFeatures(!hasVotingFeatures),
     [hasVotingFeatures]
+  );
+  const toggleIsTeamAssessment = useCallback(
+    () => setIsTeamAssessment(!isTeamAssessment),
+    [isTeamAssessment]
   );
 
   return (
@@ -72,6 +78,25 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
               inline
               label="Enable token counter"
             ></Switch>
+          </div>
+          <div className="team-related-configs">
+            <p>
+              <b>Team-Related Configurations</b>
+            </p>
+            <Divider></Divider>
+            <Switch
+              className="is-team-assessment"
+              onChange={toggleIsTeamAssessment}
+              inline
+              label="Is team assessment"
+            ></Switch>
+            <Collapse isOpen={isTeamAssessment}>
+              <div className="numeric-input-container">
+                <Team></Team>
+                <p className="max-team-size">Max team size</p>
+                <NumericInput></NumericInput>
+              </div>
+            </Collapse>
           </div>
           <div className="voting-related-configs">
             <p>

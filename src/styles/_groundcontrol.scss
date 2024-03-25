@@ -69,7 +69,8 @@
 }
 
 .voting-related-configs,
-.general-configs {
+.general-configs,
+.team-related-configs {
   margin-top: 20px;
 
   .voting-related-controls {
@@ -83,6 +84,17 @@
 
     .publish-voting {
       margin-top: 5px;
+    }
+  }
+
+  .numeric-input-container {
+    display: flex;
+    margin-left: 14px;
+    gap: 8px;
+    align-items: center;
+
+    .max-team-size {
+      margin-top: 10px;
     }
   }
 }
