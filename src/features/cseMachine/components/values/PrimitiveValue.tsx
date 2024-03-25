@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { PrimitiveTypes, ReferenceType } from '../../CseMachineTypes';
+import { Primitive, ReferenceType } from '../../CseMachineTypes';
 import { getTextWidth, isNull } from '../../CseMachineUtils';
 import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';
@@ -16,7 +16,7 @@ export class PrimitiveValue extends Value {
 
   constructor(
     /** data */
-    readonly data: PrimitiveTypes,
+    readonly data: Primitive,
     /** what this value is being referenced by */
     readonly referencedBy: ReferenceType[]
   ) {

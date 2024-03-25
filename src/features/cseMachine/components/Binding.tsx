@@ -28,7 +28,7 @@ export class Binding extends Visible {
    */
   readonly isDummyBinding: boolean = false;
   /** arrow that is drawn from the key to the value */
-  readonly arrow: GenericArrow<Text, Value> | undefined;
+  arrow: GenericArrow<Text, Value> | undefined;
 
   constructor(
     /** the key of this binding */
@@ -83,11 +83,16 @@ export class Binding extends Visible {
       }
     }
 
+    this.updateArrow();
+  }
+
+  updateArrow(): void {
     if (
       !this.isDummyBinding && // value is unreferenced in dummy binding
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
+      if (this.key)
       this.arrow = new ArrowFromText(this.key).to(this.value);
     }
   }

@@ -21,6 +21,7 @@ import { isInstr } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
+import { isFn, isGlobalFn } from './CseMachineUtils';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
@@ -150,13 +151,19 @@ export class CseAnimation {
       switch (lastControlItem.instrType) {
         case InstrType.APPLICATION:
           const appInstr = lastControlItem as AppInstr;
+          const fnStashItem = Layout.previousStashComponent.stashItemComponents.at(
+            -appInstr.numOfArgs - 1
+          )!;
+          const fn = fnStashItem.value;
+          const isPredefined = isGlobalFn(fn) || (isFn(fn) && fn.preDefined);
           CseAnimation.animations.push(
             new FunctionApplicationAnimation(
               lastControlComponent,
               CseAnimation.getNewControlItems(),
-              Layout.previousStashComponent.stashItemComponents.at(-appInstr.numOfArgs - 1)!,
+              fnStashItem,
               Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
-              appInstr.numOfArgs > 0 ? CseAnimation.currentFrame : undefined
+              // TODO: find a better way to figure out if a function application creates a new frame
+              !isPredefined && appInstr.numOfArgs > 0 ? CseAnimation.currentFrame : undefined
             )
           );
           break;

@@ -1,5 +1,4 @@
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -17,12 +16,19 @@ import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
-import { Data, EnvTree, EnvTreeNode, ReferenceType } from './CseMachineTypes';
+import {
+  Closure,
+  Data,
+  DataArray,
+  EnvTree,
+  EnvTreeNode,
+  GlobalFn,
+  ReferenceType
+} from './CseMachineTypes';
 import {
   deepCopyTree,
   getNextChildren,
   isArray,
-  isDummyKey,
   isFn,
   isFunction,
   isGlobalFn,
@@ -136,7 +142,7 @@ export class Layout {
     Layout.stash = stash;
 
     // remove program environment and merge bindings into global env
-    Layout.removeProgramEnv();
+    Layout.removePreludeEnv();
     // remove global functions that are not referenced in the program
     Layout.removeUnreferencedGlobalFns();
     // initialize levels and frames
@@ -182,22 +188,43 @@ export class Layout {
     this.stashComponent = new StashStack(this.stash);
   }
 
-  /** remove program environment containing predefined functions */
-  private static removeProgramEnv() {
+  /** remove prelude environment containing predefined functions */
+  private static removePreludeEnv() {
     if (!Layout.globalEnvNode.children) return;
 
-    const programEnvNode = Layout.globalEnvNode.children[0];
+    const preludeEnvNode = Layout.globalEnvNode.children[0];
     const globalEnvNode = Layout.globalEnvNode;
 
-    // merge programEnvNode bindings into globalEnvNode
-    globalEnvNode.environment.head = {
-      ...programEnvNode.environment.head,
-      ...globalEnvNode.environment.head
-    };
+    // merge preludeEnvNode bindings and heap into globalEnvNode
+    const preludeObjects = [...preludeEnvNode.environment.heap.getHeap()];
+    const preludeMap = new Map(
+      Object.entries(preludeEnvNode.environment.head).map(([key, value]) => [value, key])
+    );
+    while (preludeObjects.length > 0) {
+      const value: Closure | DataArray = preludeObjects.shift() as any;
+      let newValue: Closure | DataArray;
+      if (isArray(value)) {
+        // create a new array with the changed environment
+        newValue = [...value] as DataArray;
+        Object.defineProperties(newValue, {
+          id: { value: value.id },
+          environment: { value: globalEnvNode.environment }
+        });
+      } else {
+        // mutate the original closure
+        newValue = value;
+        newValue.environment = globalEnvNode.environment;
+      }
+      globalEnvNode.environment.heap.add(newValue);
+      const key = preludeMap.get(value);
+      if (key) {
+        globalEnvNode.environment.head[key] = newValue;
+      }
+    }
 
     // update globalEnvNode children
-    if (programEnvNode.children) {
-      globalEnvNode.resetChildren(programEnvNode.children);
+    if (preludeEnvNode.children) {
+      globalEnvNode.resetChildren(preludeEnvNode.children);
     }
 
     // go through new bindings and update functions to be global functions
@@ -211,7 +238,7 @@ export class Layout {
 
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
-    const referencedGlobalFns = new Set<() => any>();
+    const referencedGlobalFns = new Set<GlobalFn>();
     const visitedData = new Set<Data[]>();
     const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
       for (const data of Object.values(envNode.environment.head)) {
@@ -241,17 +268,18 @@ export class Layout {
       Layout.globalEnvNode.children.forEach(findGlobalFnReferences);
     }
 
-    const newFrame: Frame = {};
-    for (const [key, data] of Object.entries(Layout.globalEnvNode.environment.head)) {
-      if (referencedGlobalFns.has(data) || isDummyKey(key)) {
-        newFrame[key] = data;
-      }
+    const newHead = {};
+    let i = 0;
+    for (const fn of referencedGlobalFns) {
+      newHead[`${i++}`] = fn;
     }
 
     Layout.globalEnvNode.environment.head = {
       [Config.GlobalFrameDefaultText]: Symbol(),
-      ...newFrame
+      ...newHead
     };
+
+    console.log(Layout.globalEnvNode.environment);
   }
 
   public static width(): number {

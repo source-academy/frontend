@@ -9,6 +9,7 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
+import Closure from 'js-slang/dist/interpreter/closure';
 import { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/astToString';
 import { Group } from 'konva/lib/Group';
@@ -17,6 +18,7 @@ import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
 import classes from 'src/styles/Draggable.module.scss';
 
+import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
 import { ControlItemComponent } from './components/ControlItemComponent';
 import { Frame } from './components/Frame';
@@ -31,20 +33,16 @@ import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
   Data,
+  DataArray,
   EmptyObject,
   Env,
   EnvTree,
   EnvTreeNode,
-  FnTypes,
-  PrimitiveTypes,
-  ReferenceType
+  GlobalFn,
+  Primitive,
+  ReferenceType,
+  Unassigned
 } from './CseMachineTypes';
-
-// TODO: can make use of lodash
-/** Returns `true` if `x` is an object */
-export function isObject(x: any): x is object {
-  return x === Object(x);
-}
 
 /** Returns `true` if `object` is empty */
 export function isEmptyObject(object: Object): object is EmptyObject {
@@ -72,8 +70,8 @@ export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject }
 }
 
 /** Returns `true` if `data` is a Javascript array */
-export function isArray(data: Data): data is Data[] {
-  return Array.isArray(data);
+export function isArray(data: Data): data is DataArray {
+  return Array.isArray(data); // && 'id' in data && 'environment' in data;
 }
 
 /** Returns `true` if `x` is a Javascript function */
@@ -82,7 +80,7 @@ export function isFunction(x: any): x is () => any {
 }
 
 /** Returns `true` if `data` is a JS Slang function */
-export function isFn(data: Data): data is FnTypes {
+export function isFn(data: Data): data is Closure {
   return isFunction(data) && 'environment' in data && 'functionName' in data;
 }
 
@@ -112,7 +110,7 @@ export function isNumber(data: Data): data is number {
 }
 
 /** Returns `true` if `data` is a symbol */
-export function isUnassigned(data: Data): data is symbol {
+export function isUnassigned(data: Data): data is Unassigned {
   return typeof data === 'symbol';
 }
 
@@ -122,24 +120,59 @@ export function isBoolean(data: Data): data is boolean {
 }
 
 /** Returns `true` if `data` is a primitive, defined as a null | data | number */
-export function isPrimitiveData(data: Data): data is PrimitiveTypes {
+export function isPrimitiveData(data: Data): data is Primitive {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
+}
+
+/**
+ * Returns the main reference of `value`. The main reference priority order is as follows:
+ * 1. The first `ArrayUnit` inside `value.referencedBy` that also shares the same environment
+ * 2. The first `Binding` inside `value.referencedBy` that also shares the same environment
+ * 3. The first reference `value.referencedBy[0]`
+ */
+export function getMainReference(value: Value): ReferenceType {
+  if (isFn(value.data) || isArray(value.data)) {
+    const valueEnv = value.data.environment;
+    // First find if value is referenced by an array in the same environment
+    const arrayUnit = value.referencedBy.find(
+      r => r instanceof ArrayUnit && isEnvEqual(r.parent.data.environment, valueEnv)
+    );
+    if (arrayUnit) return arrayUnit;
+    // Then find the first binding in the same environment
+    return (
+      value.referencedBy.find(
+        r => r instanceof Binding && isEnvEqual(r.frame.environment, valueEnv)
+      ) ?? value.referencedBy[0]
+    );
+  }
+  return value.referencedBy[0];
 }
 
 /** Returns `true` if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
-  if (value instanceof FnValue) {
-    // chooses the frame of the enclosing environment, not necessarily the first in referencedBy.
-    return (
-      reference instanceof Binding &&
-      value.enclosingEnvNode === (reference as Binding).frame.envTreeNode &&
-      value.referencedBy.findIndex(x => x instanceof Binding && x === reference) !== -1
-    );
-  } else if (value instanceof GlobalFnValue) {
-    return value.referencedBy.find(x => x instanceof Binding) === reference;
-  } else {
-    return value.referencedBy[0] === reference;
+  if (!isFn(value.data) && !isArray(value.data)) {
+    return false;
   }
+  const valueEnv = value.data.environment;
+  const mainRef = getMainReference(value);
+  return (
+    mainRef === reference &&
+    isEnvEqual(
+      valueEnv,
+      reference instanceof Binding ? reference.frame.environment : reference.parent.data.environment
+    )
+  );
+  // if (value instanceof FnValue) {
+  //   // chooses the frame of the enclosing environment, not necessarily the first in referencedBy.
+  //   return (
+  //     value.enclosingEnvNode === binding.frame.envTreeNode &&
+  //     value.referencedBy.findIndex(x => x instanceof Binding && x === binding) !== -1
+  //   );
+  // } else if (value instanceof GlobalFnValue) {
+  //   return value.referencedBy.find(x => x instanceof Binding) === binding;
+  // } else {
+  //   return value.referencedBy[0] === binding;
+  // }
 }
 
 /** checks if `value` is a `number` */
@@ -218,7 +251,7 @@ export function getTextHeight(
 }
 
 /** Returns the parameter string of the given function */
-export function getParamsText(data: () => any): string {
+export function getParamsText(data: Closure | GlobalFn): string {
   if (isFn(data)) {
     return data.node.params.map((node: any) => node.name).join(',');
   } else {
@@ -228,7 +261,7 @@ export function getParamsText(data: () => any): string {
 }
 
 /** Returns the body string of the given function */
-export function getBodyText(data: () => any): string {
+export function getBodyText(data: Closure | GlobalFn): string {
   const fnString = data.toString();
   if (isFn(data)) {
     let body =
@@ -297,7 +330,7 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
 }
 
 /** Extracts the non-empty tail environment from the given environment */
-export function getNonEmptyEnv(environment: Env): Env {
+export function getNonEmptyEnv(environment: Env | null): Env | null {
   if (environment === null) {
     return null;
   } else if (isEmptyEnvironment(environment)) {
@@ -305,6 +338,67 @@ export function getNonEmptyEnv(environment: Env): Env {
   } else {
     return environment;
   }
+}
+
+/** Returns whether the given environments `env1` and `env2` refer to the same environment. */
+export function isEnvEqual(env1: Env, env2: Env): boolean {
+  // Cannot check env references because of deep cloning and the step after where
+  // property descriptors are copied over, so can only check id
+  return env1.id === env2.id;
+}
+
+/**
+ * Recursively finds all objects in the given array and nested ones that are in the given
+ * environment, and adds them to the given set.
+ */
+function findObjects(
+  environment: Env,
+  set: Set<DataArray | Closure>,
+  array: any[],
+  visited = new Set<any[]>() // needed for circular references
+): void {
+  if (visited.has(array)) return;
+  visited.add(array);
+  for (const item of array) {
+    if (isArray(item)) {
+      if (item.environment === environment) set.add(item);
+      findObjects(environment, set, item);
+    } else if (isFn(item)) {
+      if (item.environment === environment) set.add(item);
+    }
+  }
+}
+
+/**
+ * Get the set of all objects in the heap of the given environment that are
+ * referenced in the head.
+ */
+export function getReferencedObjects(environment: Env): Set<DataArray | Closure> {
+  const objects = new Set<DataArray | Closure>();
+  if (environment !== null) {
+    findObjects(environment, objects, Object.values(environment.head));
+  }
+  return objects;
+}
+
+/**
+ * Get the set of all objects in the heap of the given environment that are **not**
+ * referenced in the head. (Note that these objects can still be referenced from other
+ * environments, just not the given one)
+ */
+export function getDereferencedObjects(environment: Env): Set<DataArray | Closure> {
+  // TODO: replace with native set difference function once it becomes more widely available
+  const dereferenced = new Set<DataArray | Closure>();
+  if (environment !== null) {
+    const referenced = getReferencedObjects(environment);
+    const heap = environment.heap.getHeap() as Set<DataArray | Closure>;
+    for (const obj of heap) {
+      if (!referenced.has(obj)) {
+        dereferenced.add(obj);
+      }
+    }
+  }
+  return dereferenced;
 }
 
 /**
@@ -338,6 +432,31 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
     copyOwnPropertyDescriptors(source.tail, destination.tail);
   }
 }
+
+// /**
+//  * Simple deep clone that also copies property descriptors and non-enumerable properties.
+//  * Only supports primitives, simple objects, sets and maps
+//  * Preserves references, but does not copy properties with symbols as their keys.
+//  */
+// function cloneDeepWithDescriptors(value: any, visited = new WeakMap()) {
+//   if (value == null || typeof value !== 'object') {
+//     return value;
+//   }
+//   if (visited.has(value)) {
+//     return visited.get(value);
+//   }
+//   const descriptors = Object.getOwnPropertyDescriptors(value);
+//   const clonedObject = Object.create(Object.getPrototypeOf(value), descriptors);
+//   visited.set(value, clonedObject);
+//   for (const key of Reflect.ownKeys(value)) {
+//     // TODO: remove the `any` casting once old ES versions (like ES2015, ES2017)
+//     // are removed from tsconfig, as currently, old type definitions are being used
+//     // which do not have symbol index signature on `Object.getOwnPropertyDescriptors`,
+//     // resulting in a type error: Type 'symbol' cannot be used as an index type.
+//     descriptors[key as any].value = cloneDeepWithDescriptors(value[key], visited);
+//   }
+//   return clonedObject;
+// }
 
 /**
  * Creates a deep clone of `EnvTree`

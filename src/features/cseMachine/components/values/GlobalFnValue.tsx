@@ -11,7 +11,7 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { GlobalFn, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -38,7 +38,7 @@ export class GlobalFnValue extends Value implements IHoverable {
 
   constructor(
     /** underlying function */
-    readonly data: () => any,
+    readonly data: GlobalFn,
     /** what this value is being referenced by */
     readonly referencedBy: ReferenceType[]
   ) {

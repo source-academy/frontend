@@ -1,4 +1,5 @@
 import Konva from 'konva';
+import { AnimationFn } from 'konva/lib/types';
 import React from 'react';
 import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
 
@@ -26,6 +27,71 @@ abstract class BaseAnimationComponent<
   private animationData: AnimationData<KonvaConfig>[] = [];
   private animation: Konva.Animation;
 
+  private animationFn: AnimationFn = frame => {
+    if (!frame || this.animationData.length === 0) return false;
+    if (!this.ref.current) {
+      this.animationData.forEach(data =>
+        data.reject(
+          'Animation error: Current node reference is null, unable to continue animation!'
+        )
+      );
+      this.animation.stop();
+      return;
+    }
+
+    let animationComplete = true;
+    const attrs: Partial<KonvaConfig> = {};
+    const resolveList: ((value: void | PromiseLike<void>) => void)[] = [];
+
+    let i = 0;
+    while (i < this.animationData.length) {
+      const data = this.animationData[i];
+      if (frame.time <= data.startTime) {
+        animationComplete = false;
+        i++;
+        continue;
+      }
+      // Calculate animation progress from 0 to 1
+      const scale = Math.min((frame.time - data.startTime) / (data.endTime - data.startTime), 1);
+      // Interpolate each attribute between the starting and ending values
+      for (const attr in data.current) {
+        if (typeof data.to[attr] === 'number') {
+          const start = data.from[attr] as number;
+          const end = data.to[attr] as number;
+          const value = data.easing(scale, start, end - start, 1);
+          (data.current[attr] as number) = value;
+          if (attr === 'x') this._x = value;
+          if (attr === 'y') this._y = value;
+          if (attr === 'width') this._width = value;
+          if (attr === 'height') this._height = value;
+        } else {
+          // TODO: could handle the animation of path strings by interpolating between different coordinates.
+          // For now, we just simply set the value to the target value immediately.
+          data.current[attr] = data.to[attr];
+        }
+      }
+      // Add the new attributes and values into the main attrs object
+      Object.assign(attrs, data.current);
+      // Resolve the animation's promise later if the animation is done, and also
+      // remove the animation data from the list
+      if (scale === 1) {
+        resolveList.push(data.resolve);
+        this.animationData.splice(i, 1);
+      } else {
+        animationComplete = false;
+        i++;
+      }
+    }
+    if (Object.keys(attrs).length > 0) {
+      // Set all the attributes in one go to improve performance
+      this.ref.current.setAttrs(attrs);
+      this.listeners.forEach(f => f({ ...attrs }));
+    }
+    if (animationComplete) this.animation.stop();
+    resolveList.forEach(r => r());
+    return;
+  };
+
   constructor(protected props: KonvaConfig) {
     super();
     if (!CseAnimation.getLayer()) {
@@ -33,70 +99,7 @@ abstract class BaseAnimationComponent<
       // before the animation layer is even drawn, as the layer ref current value would be null.
       console.error('Missing animation layer! Unable to create animation component!');
     }
-    this.animation = new Konva.Animation(frame => {
-      if (!frame || this.animationData.length === 0) return false;
-      if (!this.ref.current) {
-        this.animationData.forEach(data =>
-          data.reject(
-            'Animation error: Current node reference is null, unable to continue animation!'
-          )
-        );
-        this.animation.stop();
-        return;
-      }
-
-      let animationComplete = true;
-      const attrs: Partial<KonvaConfig> = {};
-      const resolveList: ((value: void | PromiseLike<void>) => void)[] = [];
-
-      let i = 0;
-      while (i < this.animationData.length) {
-        const data = this.animationData[i];
-        if (frame.time <= data.startTime) {
-          animationComplete = false;
-          i++;
-          continue;
-        }
-        // Calculate animation progress from 0 to 1
-        const scale = Math.min((frame.time - data.startTime) / (data.endTime - data.startTime), 1);
-        // Interpolate each attribute between the starting and ending values
-        for (const attr in data.current) {
-          if (typeof data.to[attr] === 'number') {
-            const start = data.from[attr] as number;
-            const end = data.to[attr] as number;
-            const value = data.easing(scale, start, end - start, 1);
-            (data.current[attr] as number) = value;
-            if (attr === 'x') this._x = value;
-            if (attr === 'y') this._y = value;
-            if (attr === 'width') this._width = value;
-            if (attr === 'height') this._height = value;
-          } else {
-            // TODO: could handle the animation of path strings by interpolating between different coordinates.
-            // For now, we just simply set the value to the target value immediately.
-            data.current[attr] = data.to[attr];
-          }
-        }
-        // Add the new attributes and values into the main attrs object
-        Object.assign(attrs, data.current);
-        // Resolve the animation's promise later if the animation is done, and also
-        // remove the animation data from the list
-        if (scale === 1) {
-          resolveList.push(data.resolve);
-          this.animationData.splice(i, 1);
-        } else {
-          animationComplete = false;
-          i++;
-        }
-      }
-      if (Object.keys(attrs).length > 0) {
-        // Set all the attributes in one go to improve performance
-        this.ref.current.setAttrs(attrs);
-        this.listeners.forEach(f => f({ ...attrs }));
-      }
-      if (animationComplete) this.animation.stop();
-      resolveList.forEach(r => r());
-      return;
-    }, CseAnimation.getLayer());
+    this.animation = new Konva.Animation(this.animationFn, CseAnimation.getLayer());
     if (props.x) this._x = props.x;
     if (props.y) this._y = props.y;
     if (props.width) this._width = props.width;
@@ -152,9 +155,10 @@ export class AnimationComponent<
   KonvaConfig extends Konva.NodeConfig
 > extends BaseAnimationComponent<KonvaConfig> {
   constructor(
-    /** The `KonvaNodeComponent` that we want to build. Examples: `Text`, `Rect`, `Path`, etc.
-     *  Note that these components are imported from the 'react-konva' library, not the
-     *  standard 'konva' library.
+    /**
+     * The `KonvaNodeComponent` that we want to build. Examples: `Text`, `Rect`, `Path`, etc.
+     * Note that these components are imported from the 'react-konva' library, not the
+     * standard 'konva' library.
      */
     // Note that the React nodes from `react-konva` (such as `Text`, `Rect`, etc.) are not
     // actually types/classes, but are disguised to look like them. They are just variable

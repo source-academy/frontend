@@ -5,11 +5,13 @@ import CseMachine from '../CseMachine';
 import { CseAnimation } from '../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
+import { DataArray, Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
+  getDereferencedObjects,
   getNonEmptyEnv,
   getTextWidth,
+  isArray,
   isDummyKey,
   isPrimitiveData,
   isUnassigned
@@ -98,6 +100,7 @@ export class Frame extends Visible implements IHoverable {
     const entries = [];
     const dummyEntries = [];
     for (const entry of Object.entries(descriptors)) {
+      // TODO: remove this, keys cannot by numeric anymore
       if (isDummyKey(entry[0])) {
         const actualEnv = getNonEmptyEnv(entry[1].value.environment);
         if (
@@ -111,21 +114,39 @@ export class Frame extends Visible implements IHoverable {
       }
     }
     // Show dummy bindings for objects in the heap that are not in the head
-    const values = new Set(Object.values(this.environment.head));
-    console.log(values, this.environment.heap.getHeap());
-    for (const obj of this.environment.heap.getHeap()) {
-      // Somehow, tThis does not work for arrays. TODO: Fix this in js-slang
-      if (!values.has(obj)) {
-        const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
-          value: obj,
-          configurable: false,
-          enumerable: true,
-          writable: false
-        };
-        // The key is a number string to "disguise" as a dummy binding
-        // TODO: revamp the dummy binding behavior, don't rely on numeric keys
-        dummyEntries.push(['0', descriptor] as const);
+    const dereferencedValues = getDereferencedObjects(this.environment);
+    // Find arrays that are children of other arrays, and prevent them from creating new
+    // dummy bindings, as they can be drawn around the original parent array
+    const nestedArrays = new Set<DataArray>();
+    // original is needed to track circular references
+    const addNestedArrays = (array: DataArray, original: DataArray) => {
+      if (array === original || nestedArrays.has(array)) return;
+      nestedArrays.add(array);
+      for (const data of array) {
+        if (isArray(data)) addNestedArrays(data, original);
       }
+    };
+    // Add all the nested arrays first before doing another loop to add the dummy bindings
+    for (const value of dereferencedValues) {
+      if (isArray(value)) {
+        for (const data of value) {
+          if (isArray(data)) addNestedArrays(data, value);
+        }
+      }
+    }
+    // Add dummy bindings
+    for (const value of dereferencedValues) {
+      // Exclude nested arrays
+      if (isArray(value) && nestedArrays.has(value)) continue;
+      const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
+        value,
+        configurable: false,
+        enumerable: true,
+        writable: false
+      };
+      // The key is a number string to "disguise" as a dummy binding
+      // TODO: revamp the dummy binding behavior, don't rely on numeric keys
+      dummyEntries.push(['0', descriptor] as const);
     }
     entries.push(...dummyEntries);
 

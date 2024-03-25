@@ -12,7 +12,7 @@ import { Visible } from './Visible';
 export class ArrayEmptyUnit extends Visible {
   readonly value: null = null;
 
-  readonly data: Data = [];
+  readonly data: Data = undefined;
 
   constructor(readonly parent: ArrayValue) {
     super();

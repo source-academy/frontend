@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ReferenceType, UnassignedData } from '../../CseMachineTypes';
+import { ReferenceType, Unassigned } from '../../CseMachineTypes';
 import { getTextWidth } from '../../CseMachineUtils';
 import { Binding } from '../Binding';
 import { Text } from '../Text';
@@ -10,7 +10,7 @@ import { Value } from './Value';
 
 /** this class encapsulates an unassigned value in Source, internally represented as a symbol */
 export class UnassignedValue extends Value {
-  readonly data: UnassignedData = Symbol();
+  readonly data: Unassigned = Symbol();
   readonly text: Text;
 
   constructor(readonly referencedBy: ReferenceType[]) {

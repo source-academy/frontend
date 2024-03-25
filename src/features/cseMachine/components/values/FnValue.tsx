@@ -12,13 +12,14 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { Closure, EnvTreeNode, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultSAColor,
   getBodyText,
   getNonEmptyEnv,
   getParamsText,
-  getTextWidth
+  getTextWidth,
+  isMainReference
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -28,35 +29,26 @@ import { Value } from './Value';
  *  contains extra props such as environment and fnName */
 export class FnValue extends Value implements IHoverable {
   /** name of this function */
-  readonly radius: number = Config.FnRadius;
-  readonly innerRadius: number = Config.FnInnerRadius;
-  readonly tooltipWidth: number;
-  readonly centerX: number;
+  radius: number = Config.FnRadius;
+  innerRadius: number = Config.FnInnerRadius;
+  tooltipWidth!: number;
+  centerX!: number;
 
-  readonly fnName: string;
-  readonly paramsText: string;
-  readonly bodyText: string;
-  readonly exportBodyText: string;
-  readonly tooltip: string;
-  readonly exportTooltip: string;
-  readonly exportTooltipWidth: number;
+  fnName!: string;
+  paramsText!: string;
+  bodyText!: string;
+  exportBodyText!: string;
+  tooltip!: string;
+  exportTooltip!: string;
+  exportTooltipWidth!: number;
   private _arrow: ArrowFromFn | undefined;
 
   /** the parent/enclosing environment of this fn value */
-  readonly enclosingEnvNode: EnvTreeNode;
+  enclosingEnvNode!: EnvTreeNode;
   readonly labelRef: RefObject<any> = React.createRef();
 
-  constructor(
-    /** underlying JS Slang function (contains extra props) */
-    readonly data: FnTypes,
-    /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
-  ) {
-    super();
-    Layout.memoizeValue(this);
-
-    // derive the coordinates from the main reference (binding / array unit)
-    const mainReference = this.referencedBy[0];
+  // derive the coordinates from the main reference (binding / array unit)
+  private constructFnValue = (mainReference: ReferenceType) => {
     if (mainReference instanceof Binding) {
       this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
@@ -96,6 +88,33 @@ export class FnValue extends Value implements IHoverable {
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
+  };
+
+  constructor(
+    /** underlying JS Slang function (contains extra props) */
+    readonly data: Closure,
+    /** what this value is being referenced by */
+    readonly referencedBy: ReferenceType[]
+  ) {
+    super();
+    Layout.memoizeValue(this);
+
+    // Values are always contructed with referencedBy having a single reference
+    const reference = referencedBy[0];
+    if (isMainReference(this, reference)) {
+      this.constructFnValue(reference);
+    }
+  }
+
+  addReference(newReference: ReferenceType): void {
+    super.addReference(newReference);
+    // We are assuming that there will be eventually a main reference
+    if (isMainReference(this, newReference)) {
+      this.constructFnValue(newReference);
+      for (const reference of this.referencedBy) {
+        if (reference instanceof Binding) reference.updateArrow();
+      }
+    }
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {

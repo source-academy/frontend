@@ -2,6 +2,7 @@ import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
 } from 'js-slang/dist/createContext';
+import JsSlangClosure from 'js-slang/dist/interpreter/closure';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
@@ -41,33 +42,47 @@ export interface IVisible extends Drawable {
 }
 
 /** unassigned is internally represented as a symbol */
-export type UnassignedData = symbol;
+export type Unassigned = symbol;
 
 /** types of primitives in JS Slang  */
-export type PrimitiveTypes = number | string | boolean | null | undefined;
+export type Primitive = number | string | boolean | null | undefined;
 
 /** types of functions in JS Slang */
-export type FnTypes = {
-  /** the function itself */
-  (): any;
+// export type Closure = {
+//   /** the function itself */
+//   (): any;
 
-  /** the enclosing environment */
-  environment: Environment;
+//   /** the enclosing environment */
+//   environment: Environment;
 
-  /** string representation of the function */
-  functionName: string;
+//   /** string representation of the function */
+//   functionName: string;
 
-  /** unique id of the function */
+//   /** unique id of the function */
+//   id: string;
+
+//   node: any;
+
+//   preDefined?: boolean;
+// };
+
+/** type of an closure function in JS Slang. Redefined here for convenience.  */
+export type Closure = JsSlangClosure;
+
+/** type of an in-built function in JS Slang  */
+export type GlobalFn = CallableFunction;
+
+/** type of an array in JS Slang */
+export type DataArray = Data[] & {
   id: string;
-
-  node: any;
+  environment: Environment;
 };
 
 /** the types of data in the JS Slang context */
-export type Data = PrimitiveTypes | FnTypes | (() => any) | UnassignedData | Data[];
+export type Data = Primitive | JsSlangClosure | GlobalFn | Unassigned | DataArray;
 
 /** modified `Environment` to store children and associated frame */
-export type Env = Environment | null;
+export type Env = Environment;
 
 /** modified `EnvTree` */
 export type EnvTree = EnvironmentTree & { root: EnvTreeNode };
