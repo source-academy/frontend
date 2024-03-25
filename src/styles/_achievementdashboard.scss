@@ -644,7 +644,8 @@
         flex-direction: column;
         margin: $default-spacing;
         max-width: $view-width * 1.25;
-        padding-bottom: 5rem;
+        padding-bottom: 2rem;
+        overflow-y: auto;
 
         .cover {
           border-top-left-radius: 1rem;
