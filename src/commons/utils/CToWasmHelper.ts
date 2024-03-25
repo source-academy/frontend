@@ -1,4 +1,4 @@
-import { ModulesGlobalConfig as CCompilerConfig } from 'ctowasm';
+import { ModulesGlobalConfig as CCompilerConfig } from '@sourceacademy/c-slang/ctowasm/dist';
 import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/moduleLoader';
 import { ModuleFunctions } from 'js-slang/dist/modules/moduleTypes';
 import { Context } from 'js-slang/dist/types';

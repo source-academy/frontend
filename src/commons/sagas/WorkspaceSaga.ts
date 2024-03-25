@@ -1,6 +1,6 @@
+import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { compileAndRun as compileAndRunCCode } from 'ctowasm';
 import {
   Context,
   findDeclaration,
