@@ -43,6 +43,7 @@ export default class QuizManager {
     size: 25,
     align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
   };
+
   // Print everything. To test if the quiz parser parses correctly.
   public async showQuiz(quizId:ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId); // get a quiz
@@ -61,21 +62,20 @@ export default class QuizManager {
 
   //Display the specific quiz question
   public async showQuizQuestion(scene: Phaser.Scene, question: Question, quizResult : QuizResult){
-        
-      console.log(GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal());
       const choices = question.options;
       const quizContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 
       const quizPartitions = Math.ceil(choices.length / 5);
-      const quizHeight = choices.length > 5 ? 5 : choices.length;
+      const quizHeight = choices.length;
 
       const header = new Phaser.GameObjects.Text(
         scene,
         screenSize.x - this.QuizConstants.textPad,
         this.QuizConstants.y,
-        question.question,
+        "quiz: " + question.question,
         this.textStyle
       ).setOrigin(1.0, 0.0);
+      
       const quizHeaderBg = new Phaser.GameObjects.Rectangle(
         scene,
         screenSize.x,
@@ -85,6 +85,7 @@ export default class QuizManager {
         HexColor.darkBlue,
         0.8
       ).setOrigin(1.0, 0.0);
+      
       const quizBg = new Phaser.GameObjects.Rectangle(
         scene,
         screenSize.x,
@@ -104,6 +105,7 @@ export default class QuizManager {
       });
 
       GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
+      
       const activateQuizContainer: Promise<any> = new Promise(resolve => {
         quizContainer.add(
           choices.map((response, index) =>
@@ -153,7 +155,7 @@ export default class QuizManager {
           ...rightSideExitTweenProps
         });
 
-        await sleep(rightSideExitTweenProps.duration);
+        //await sleep(rightSideExitTweenProps.duration);
         fadeAndDestroy(scene, quizContainer, { fadeDuration: Constants.fadeDuration });
         return response;
   }
@@ -178,20 +180,5 @@ export default class QuizManager {
     await outComeManager.showReaction();
   }
 
-  // private showQuestion(question: Question) {
-  //   console.log(question.question);
-  //   console.log(question.answer);
-  //   question.options.forEach(option => {
-  //     this.showOption(option);
-  //   });
-  // }
 
-  // private showOption(option: Option) {
-  //   console.log(option.text);
-  //   option.reaction.forEach((value: DialogueLine[]) => this.showReaction(value));
-  // }
-
-  // private showReaction(reaction: DialogueLine[]) {
-  //   reaction.forEach((line: DialogueLine) => console.log(line.line));
-  // }
 }
