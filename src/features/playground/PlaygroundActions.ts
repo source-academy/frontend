@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
 
-import { PersistenceObject } from '../persistence/PersistenceTypes';
+import { PersistenceFile } from '../persistence/PersistenceTypes';
 import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,

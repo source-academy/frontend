@@ -10,6 +10,7 @@ import {
   renameEditorTabsForDirectory
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { persistenceRenameFile, persistenceRenameFolder } from 'src/features/persistence/PersistenceActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -69,8 +70,10 @@ const FileSystemViewFileName: React.FC<Props> = ({
           }
 
           if (isDirectory) {
+            dispatch(persistenceRenameFolder({oldFolderPath: oldPath, newFolderPath: newPath}));
             dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
           } else {
+            dispatch(persistenceRenameFile({oldFilePath: oldPath, newFilePath: newPath}));
             dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
           }
           refreshDirectory();

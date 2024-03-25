@@ -7,7 +7,10 @@ import {
   setInBrowserFileSystem,
   addGithubSaveInfo,
   deleteAllGithubSaveInfo,
-  deleteGithubSaveInfo } from './FileSystemActions';
+  deleteGithubSaveInfo,
+  addPersistenceFile,
+  deletePersistenceFile,
+  deleteAllPersistenceFiles } from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
 export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = createReducer(
@@ -36,6 +39,24 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     })
     .addCase(deleteAllGithubSaveInfo, (state, action) => {
       state.githubSaveInfoArray = [];
-    });
+    })
+    .addCase(addPersistenceFile, (state, action) => {
+      const persistenceFilePayload = action.payload.persistenceFile;
+      const persistenceFileArray = state['persistenceFileArray'];
+      const persistenceFileIndex = persistenceFileArray.findIndex(e => e.id === persistenceFilePayload.id);
+      if (persistenceFileIndex === -1) {
+        persistenceFileArray[persistenceFileArray.length] = persistenceFilePayload;
+      } else {
+        persistenceFileArray[persistenceFileIndex] = persistenceFilePayload;
+      }
+      state.persistenceFileArray = persistenceFileArray;
+    })
+    .addCase(deletePersistenceFile, (state, action) => {
+      const newPersistenceFileArray = state['persistenceFileArray'].filter(e => e.id !== action.payload.persistenceFile.id);
+      state.persistenceFileArray = newPersistenceFileArray;
+    })
+    .addCase(deleteAllPersistenceFiles, (state, action) => {
+      state.persistenceFileArray = [];
+    })
   }
 );

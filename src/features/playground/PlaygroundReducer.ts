@@ -36,12 +36,12 @@ export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = (
     case PLAYGROUND_UPDATE_PERSISTENCE_FILE:
       return {
         ...state,
-        persistenceObject: action.payload
+        persistenceFile: action.payload
       };
     case PLAYGROUND_UPDATE_PERSISTENCE_FOLDER:
       return {
         ...state,
-        persistenceObject: action.payload
+        persistenceFile: action.payload
       };
     case PLAYGROUND_UPDATE_LANGUAGE_CONFIG:
       return {

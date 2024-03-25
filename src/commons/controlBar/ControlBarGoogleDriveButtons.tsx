@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 
-import { PersistenceObject, PersistenceState } from '../../features/persistence/PersistenceTypes';
+import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
 
@@ -17,7 +17,7 @@ type Props = {
   isFolderModeEnabled: boolean;
   loggedInAs?: string;
   accessToken?: string;
-  currentObject?: PersistenceObject;
+  currentObject?: PersistenceFile;
   isDirty?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;

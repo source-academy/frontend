@@ -265,7 +265,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceObject} = useTypedSelector(
+  const { queryString, shortURL, persistenceFile } = useTypedSelector(
     state => state.playground
   );
   const githubSaveInfo = getGithubSaveInfo();
@@ -590,12 +590,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   // Compute this here to avoid re-rendering the button every keystroke 
   const persistenceIsDirty =
-    persistenceObject && (!persistenceObject.lastSaved || persistenceObject.lastSaved < lastEdit);
+    persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
   const persistenceButtons = useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
         isFolderModeEnabled={isFolderModeEnabled}
-        currentObject={persistenceObject}
+        currentObject={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
         accessToken={googleAccessToken}
@@ -604,7 +604,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSaveAll={() => dispatch(persistenceSaveAll())}
         onClickOpen={() => dispatch(persistenceOpenPicker())}
         onClickSave={
-          persistenceObject ? () => dispatch(persistenceSaveFile(persistenceObject)) : undefined
+          persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
         onClickLogIn={() => dispatch(loginGoogle())}
         onClickLogOut={() => dispatch(logoutGoogle())}
@@ -613,7 +613,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     );
   }, [
     isFolderModeEnabled,
-    persistenceObject,
+    persistenceFile,
     persistenceUser,
     persistenceIsDirty,
     dispatch,
@@ -622,7 +622,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
-  console.log(githubSaveInfo);
+  //console.log(githubSaveInfo);
   const githubButtons = useMemo(() => {
     return (
       <ControlBarGitHubButtons
@@ -727,7 +727,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={editorSessionId !== ''}
-        isPersistenceActive={persistenceObject !== undefined || githubSaveInfo.repoName !== ''}
+        isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
@@ -736,7 +736,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch,
     githubSaveInfo.repoName,
     isFolderModeEnabled,
-    persistenceObject,
+    persistenceFile,
     editorSessionId,
     workspaceLocation
   ]);

@@ -6,12 +6,18 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
 import {
+  PERSISTENCE_CREATE_FILE,
+  PERSISTENCE_CREATE_FOLDER,
+  PERSISTENCE_DELETE_FILE,
+  PERSISTENCE_DELETE_FOLDER,
   PERSISTENCE_INITIALISE,
   PERSISTENCE_OPEN_PICKER,
+  PERSISTENCE_RENAME_FILE,
+  PERSISTENCE_RENAME_FOLDER,
   PERSISTENCE_SAVE_ALL,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
-  PersistenceObject
+  PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
@@ -144,13 +150,17 @@ export function* persistenceSaga(): SagaIterator {
         }
         yield call(console.log, "there is a filesystem");
 
-        // rmdir everything TODO replace everything hardcoded with playground?
+        // rm everything TODO replace everything hardcoded with playground?
         yield call(rmFilesInDirRecursively, fileSystem, "/playground");
 
+        // clear all persistence files
+        yield call(store.dispatch, actions.deleteAllPersistenceFiles());
 
         for (const currFile of fileList) {
+          yield put(actions.addPersistenceFile({ id: currFile.id, parentId: currFile.parentId, name: currFile.name, path: "/playground" + currFile.path, lastSaved: new Date() }));
           const contents = yield call([gapi.client.drive.files, 'get'], { fileId: currFile.id, alt: 'media' });
           yield call(writeFileRecursively, fileSystem, "/playground" + currFile.path, contents.body);
+          yield call(showSuccessMessage, `Loaded file ${currFile.path}.`, 1000);
         }
 
         // set source to chapter 4 TODO is there a better way of handling this
@@ -163,6 +173,10 @@ export function* persistenceSaga(): SagaIterator {
         );
         // open folder mode
         yield call(store.dispatch, actions.setFolderMode("playground", true));
+
+        // DDDDDDDDDDDDDDDebug
+        const test = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        yield call(console.log, test);
 
         // refresh needed
         yield call(store.dispatch, actions.removeEditorTabsForDirectory("playground", "/")); // deletes all active tabs
@@ -257,7 +271,7 @@ export function* persistenceSaga(): SagaIterator {
         }
       );
 
-      const saveToDir: PersistenceObject = pickedDir.picked // TODO is there a better way?
+      const saveToDir: PersistenceFile = pickedDir.picked // TODO is there a better way?
         ? {...pickedDir}
         : { id: ROOT_ID, name: 'My Drive'};
 
@@ -361,15 +375,15 @@ export function* persistenceSaga(): SagaIterator {
       // Callable only if persistenceObject isFolder
       const [currFolderObject] = yield select( // TODO resolve type here?
         (state: OverallState) => [
-          state.playground.persistenceObject
+          state.playground.persistenceFile
         ]
       );
       if (!currFolderObject) {
         yield call(console.log, "no obj!");
         return;
       }
-      if (!(currFolderObject as PersistenceObject).isFolder) {
-        yield call (console.log, "folder not opened!");
+      if (!(currFolderObject as PersistenceFile).isFolder) {
+        yield call(console.log, "folder not opened!");
         return;
       }
 
@@ -414,7 +428,7 @@ export function* persistenceSaga(): SagaIterator {
         return; // should never come here
       }
       const topLevelFolderName = regexResult[1].slice(
-        ("/playground/").length, -1).split("/")[0];
+        ("/playground/").length, -1).split("/")[0]; // TODO assuming only the top level folder exists, change?
       
       if (topLevelFolderName === "") {
         yield call(console.log, "no top level folder?");
@@ -429,9 +443,10 @@ export function* persistenceSaga(): SagaIterator {
         currFolderObject.name = topLevelFolderName; // so that the new top level folder will be created below
         currFolderObject.id = newTopLevelFolderId; // so that new top level folder will be saved in root of gdrive
       }
-
+      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
       //const fileNameRegex = new RegExp('@"[^\\]+$"');
       for (const currFullFilePath of Object.keys(currFiles)) {
+        // TODO assuming current files have not been renamed at all - to implement: rename/create/delete files instantly
         const currFileContent = currFiles[currFullFilePath];
         const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(currFullFilePath);
         if (regexResult === null) {
@@ -439,33 +454,44 @@ export function* persistenceSaga(): SagaIterator {
           continue;
         }
         const currFileName = regexResult[2] + regexResult[3];
-        const currFileParentFolders: string[] = regexResult[1].slice(
-          ("/playground/" + currFolderObject.name + "/").length, -1)
-          .split("/");
+        //const currFileParentFolders: string[] = regexResult[1].slice(
+        //  ("/playground/" + currFolderObject.name + "/").length, -1)
+        //  .split("/");
 
         // /fold1/ becomes ["fold1"]
         // /fold1/fold2/ becomes ["fold1", "fold2"]
         // If in top level folder, becomes [""]
 
-        const currFileParentFolderId: string = yield call(getContainingFolderIdRecursively, currFileParentFolders,
-          currFolderObject.id);
+        const currPersistenceFile = persistenceFileArray.find(e => e.path === currFullFilePath);
+        if (currPersistenceFile === undefined) {
+          yield call(console.log, "error");
+          return;
+        }
+        const currFileId = currPersistenceFile.id!;
+        const currFileParentFolderId = currPersistenceFile.parentId!;
+        
+        //const currFileParentFolderId: string = yield call(getContainingFolderIdRecursively, currFileParentFolders,
+        //  currFolderObject.id);
 
         yield call (console.log, "name", currFileName, "content", currFileContent
         , "parent folder id", currFileParentFolderId);
+        
 
-        const currFileId: string = yield call(getFileFromFolder, currFileParentFolderId, currFileName);
+        //const currFileId: string = yield call(getFileFromFolder, currFileParentFolderId, currFileName);
 
-        if (currFileId === "") {
+        //if (currFileId === "") {
           // file does not exist, create file
-          yield call(console.log, "creating ", currFileName);
-          yield call(createFile, currFileName, currFileParentFolderId, MIME_SOURCE, currFileContent, config);
+          // TODO: should never come here
+          //yield call(console.log, "creating ", currFileName);
+          //yield call(createFile, currFileName, currFileParentFolderId, MIME_SOURCE, currFileContent, config);
 
-        } else {
-          // file exists, update file
-          yield call(console.log, "updating ", currFileName, " id: ", currFileId);
-          yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
-        }
-        yield put(actions.playgroundUpdatePersistenceFolder({ id: currFolderObject.id, name: currFolderObject.name, parentId: currFolderObject.parentId, lastSaved: new Date() }));
+        yield call(console.log, "updating ", currFileName, " id: ", currFileId);
+        yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
+        
+        currPersistenceFile.lastSaved = new Date();
+        yield put(actions.addPersistenceFile(currPersistenceFile));
+
+        yield put(actions.playgroundUpdatePersistenceFolder({ id: currFolderObject.id, name: currFolderObject.name, parentId: currFolderObject.parentId, lastSaved: new Date() })); // TODO wut is this
         yield call(showSuccessMessage, `${currFileName} successfully saved to Google Drive.`, 1000);
 
         // TODO: create getFileIdRecursively, that uses currFileParentFolderId
@@ -476,6 +502,10 @@ export function* persistenceSaga(): SagaIterator {
         // TODO: lazy loading of files?
         //         just show the folder structure, then load the file - to turn into an issue
       }
+
+      // Ddededededebug
+      const t: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      yield call(console.log, t);
 
       
       // Case 1: Open picker to select location for saving, similar to save all
@@ -534,6 +564,52 @@ export function* persistenceSaga(): SagaIterator {
           dismiss(toastKey);
         }
       }
+    }
+  );
+
+  yield takeEvery(
+    PERSISTENCE_CREATE_FILE,
+    function* ({ payload }: ReturnType<typeof actions.persistenceCreateFile>) {
+      const newFilePath = payload;
+      yield call(console.log, "create file ", newFilePath);
+    }
+  );
+
+  yield takeEvery(
+    PERSISTENCE_CREATE_FOLDER,
+    function* ({ payload }: ReturnType<typeof actions.persistenceCreateFolder>) {
+      const newFolderPath = payload;
+      yield call(console.log, "create folder ", newFolderPath);
+    }
+  );
+
+  yield takeEvery(
+    PERSISTENCE_DELETE_FILE,
+    function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFile>) {
+      const filePath = payload;
+      yield call(console.log, "delete file ", filePath);
+    }
+  );
+
+  yield takeEvery(
+    PERSISTENCE_DELETE_FOLDER,
+    function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFolder>) {
+      const folderPath = payload;
+      yield call(console.log, "delete folder ", folderPath);
+    }
+  )
+
+  yield takeEvery(
+    PERSISTENCE_RENAME_FILE,
+    function* ({ payload : {oldFilePath, newFilePath} }: ReturnType<typeof actions.persistenceRenameFile>) {
+      yield call(console.log, "rename file ", oldFilePath, " to ", newFilePath);
+    }
+  );
+
+  yield takeEvery(
+    PERSISTENCE_RENAME_FOLDER,
+    function* ({ payload : {oldFolderPath, newFolderPath} }: ReturnType<typeof actions.persistenceRenameFolder>) {
+      yield call(console.log, "rename folder ", oldFolderPath, " to ", newFolderPath);
     }
   );
 }
@@ -722,6 +798,7 @@ async function getFilesOfFolder( // recursively get files
       ans.push({
         name: currFile.name,
         id: currFile.id,
+        parentId: folderId,
         path: currPath + '/' + currFolderName + '/' + currFile.name,
         isFile: true
       });
@@ -731,6 +808,7 @@ async function getFilesOfFolder( // recursively get files
   return ans;
 }
 
+/*
 async function getFileFromFolder( // returns string id or empty string if failed
   parentFolderId: string,
   fileName: string
@@ -759,6 +837,7 @@ async function getFileFromFolder( // returns string id or empty string if failed
     return "";
   }
 }
+*/
 
 async function getContainingFolderIdRecursively( // TODO memoize?
   parentFolders: string[],
@@ -812,7 +891,7 @@ function createFile(
   mimeType: string,
   contents: string = '',
   config: IPlaygroundConfig | {}
-): Promise<PersistenceObject> {
+): Promise<PersistenceFile> {
   const name = filename;
   const meta = {
     name,

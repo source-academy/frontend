@@ -15,6 +15,7 @@ import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
+import { persistenceCreateFile, persistenceCreateFolder, persistenceDeleteFolder } from 'src/features/persistence/PersistenceActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -77,7 +78,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
       if (!shouldProceed) {
         return;
       }
-
+      dispatch(persistenceDeleteFolder(fullPath));
       dispatch(removeEditorTabsForDirectory(workspaceLocation, fullPath));
       rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
     });
@@ -110,7 +111,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-
+        dispatch(persistenceCreateFile(newFilePath));
         forceRefreshFileSystemViewList();
       });
     });
@@ -139,6 +140,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
           console.error(err);
         }
 
+        dispatch(persistenceCreateFolder(newDirectoryPath));
         forceRefreshFileSystemViewList();
       });
     });

@@ -14,6 +14,7 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
+import { persistenceDeleteFile } from 'src/features/persistence/PersistenceActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -88,7 +89,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-
+        dispatch(persistenceDeleteFile(fullPath));
         dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });

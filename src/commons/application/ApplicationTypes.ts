@@ -550,7 +550,8 @@ export const createDefaultStoriesEnv = (
 
 export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null,
-  githubSaveInfoArray: []
+  githubSaveInfoArray: [],
+  persistenceFileArray: []
 };
 
 export const defaultSideContent: SideContentState = {
