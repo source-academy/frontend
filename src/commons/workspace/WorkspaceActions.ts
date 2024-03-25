@@ -34,7 +34,6 @@ import {
   EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
-  GroundControlTableFilters,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -65,7 +64,6 @@ import {
   UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
-  UPDATE_GROUND_CONTROL_TABLE_FILTERS,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
@@ -407,11 +405,6 @@ export const updateSubmissionsTableFilters = createAction(
 export const updateTeamFormationsTableFilters = createAction(
   UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
   (filters: TeamFormationsTableFilters) => ({ payload: { filters } })
-);
-
-export const updateGroundControlTableFilters = createAction(
-  UPDATE_GROUND_CONTROL_TABLE_FILTERS,
-  (filters: GroundControlTableFilters) => ({ payload: { filters } })
 );
 
 export const updateCurrentAssessmentId = createAction(

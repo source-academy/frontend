@@ -120,10 +120,6 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     teamFormation: {
       ...defaultWorkspaceManager.teamFormation,
       ...cloneDeep(payload)
-    },
-    groundControl: {
-      ...defaultWorkspaceManager.groundControl,
-      ...cloneDeep(payload)
     }
   };
 }
