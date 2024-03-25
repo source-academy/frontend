@@ -4,6 +4,7 @@ import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
+import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
 import { ArrayLiteralAnimation } from './animationComponents/ArrayLiteralAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
@@ -172,6 +173,17 @@ export class CseAnimation {
             )
           );
           break;
+        case InstrType.ARRAY_ASSIGNMENT:
+          CseAnimation.animations.push(
+            new ArrayAssignmentAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-3)!,
+              Layout.previousStashComponent.stashItemComponents.at(-2)!,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              Layout.stashComponent.stashItemComponents.at(-1)!
+            )
+          );
+          break;
         case InstrType.ARRAY_LITERAL:
           const arrSize = (lastControlItem as ArrLitInstr).arity;
           CseAnimation.animations.push(
@@ -247,7 +259,6 @@ export class CseAnimation {
             new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
           break;
-        case InstrType.ARRAY_ASSIGNMENT:
         case InstrType.ARRAY_LENGTH:
         case InstrType.BREAK:
         case InstrType.BREAK_MARKER:
