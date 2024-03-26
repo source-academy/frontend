@@ -248,7 +248,9 @@ export function* evalCode(
         yield put(
           actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
         );
-        yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
+        yield put(
+          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
+        );
       }
     } else {
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
