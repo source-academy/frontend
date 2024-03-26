@@ -1052,11 +1052,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.clearStoriesUserAndGroup());
     }
 
-    const placeholderAssessmentConfig = [
+    const placeholderAssessmentConfig: AssessmentConfiguration[] = [
       {
         type: 'Missions',
         assessmentConfigId: -1,
         isManuallyGraded: true,
+        isAutoPublished: false,
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
         hasTokenCounter: false,
