@@ -22,7 +22,6 @@ export const allCorrect : DialogueObject = new Map([
 ]); 
 
 export const ImproveMent : DialogueObject = new Map([
-  ["improvement", [resultLine2]]
 ]);
 
 export const QuizConstants = {
