@@ -133,22 +133,22 @@ const GroundControl: React.FC<Props> = props => {
         handlePublishAssessment: props.handlePublishAssessment
       },
       width: 70,
-        filter: false,
-        resizable: false,
-        sortable: false,
-        cellStyle: {
-          padding: 0
-        }
+      filter: false,
+      resizable: false,
+      sortable: false,
+      cellStyle: {
+        padding: 0
+      }
+    },
+    {
+      headerName: 'Release Grading',
+      field: 'placeholderReleaseGrading' as any,
+      cellRenderer: ReleaseGradingCell,
+      cellRendererParams: {
+        handlePublishGradingAll: props.handlePublishGradingAll,
+        handleUnpublishGradingAll: props.handleUnpublishGradingAll
       },
-      {
-        headerName: 'Release Grading',
-        field: '',
-        cellRenderer: ReleaseGradingCell,
-        cellRendererParams: {
-          handlePublishGradingAll: this.props.handlePublishGradingAll,
-          handleUnpublishGradingAll: this.props.handleUnpublishGradingAll
-        },
-        width: 120,
+      width: 120,
       filter: false,
       resizable: false,
       sortable: false,
@@ -209,8 +209,8 @@ const GroundControl: React.FC<Props> = props => {
     <div className="Grid ag-grid-parent ag-theme-balham">
       <AgGridReact
         alwaysShowHorizontalScroll={true}
-          domLayout={'autoHeight'}
-          columnDefs={columnDefs}
+        domLayout={'autoHeight'}
+        columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={resizeGrid}
