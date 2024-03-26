@@ -351,7 +351,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
 
   // Define the warning text when finalising submissions
   const hasBonusXp = (betchaAssessment?.earlySubmissionXp as number) > 0;
-  console.log(hasBonusXp);
   const warningText = hasBonusXp ? (
     <p>
       Finalising your submission early grants you additional XP, but{' '}
