@@ -497,14 +497,14 @@ export const updateBreakpointSteps = createAction(
 
 export const updateLastDebuggerResult = createAction(
   UPDATE_LAST_DEBUGGER_RESULT,
-  (lastDebuggerResult: any) => ({
-    payload: { lastDebuggerResult }
+  (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
+    payload: { lastDebuggerResult, workspaceLocation }
   })
 );
 
 export const updateLastNonDetResult = createAction(
   UPDATE_LAST_NON_DET_RESULT,
-  (lastNonDetResult: Result) => ({
-    payload: { lastNonDetResult }
+  (lastNonDetResult: Result, workspaceLocation: WorkspaceLocation) => ({
+    payload: { lastNonDetResult, workspaceLocation }
   })
 );
