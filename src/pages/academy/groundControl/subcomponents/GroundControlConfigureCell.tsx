@@ -38,18 +38,9 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
     handleCloseDialog();
   }, [data, handleCloseDialog, handleConfigureAssessment, hasTokenCounter, hasVotingFeatures]);
 
-  const toggleHasTokenCounter = useCallback(
-    () => setHasTokenCounter(!hasTokenCounter),
-    [hasTokenCounter]
-  );
-  const toggleVotingFeatures = useCallback(
-    () => setHasVotingFeatures(!hasVotingFeatures),
-    [hasVotingFeatures]
-  );
-  const toggleIsTeamAssessment = useCallback(
-    () => setIsTeamAssessment(!isTeamAssessment),
-    [isTeamAssessment]
-  );
+  const toggleHasTokenCounter = useCallback(() => setHasTokenCounter(prev => !prev), []);
+  const toggleVotingFeatures = useCallback(() => setHasVotingFeatures(prev => !prev), []);
+  const toggleIsTeamAssessment = useCallback(() => setIsTeamAssessment(prev => !prev), []);
 
   return (
     <>
@@ -70,31 +61,31 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
             <p>
               <b>General Configurations</b>
             </p>
-            <Divider></Divider>
+            <Divider />
             <Switch
               className="has-token-counter"
               checked={hasTokenCounter}
               onChange={toggleHasTokenCounter}
               inline
               label="Enable token counter"
-            ></Switch>
+            />
           </div>
           <div className="team-related-configs">
             <p>
               <b>Team-Related Configurations</b>
             </p>
-            <Divider></Divider>
+            <Divider />
             <Switch
               className="is-team-assessment"
               onChange={toggleIsTeamAssessment}
               inline
               label="Is team assessment"
-            ></Switch>
+            />
             <Collapse isOpen={isTeamAssessment}>
               <div className="numeric-input-container">
-                <Team></Team>
+                <Team />
                 <p className="max-team-size">Max team size</p>
-                <NumericInput></NumericInput>
+                <NumericInput />
               </div>
             </Collapse>
           </div>
@@ -102,14 +93,14 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
             <p>
               <b>Voting-Related Configurations</b>
             </p>
-            <Divider></Divider>
+            <Divider />
             <Switch
               className="has-voting-features"
               checked={hasVotingFeatures}
               onChange={toggleVotingFeatures}
               inline
               label="Enable voting features"
-            ></Switch>
+            />
             <Collapse isOpen={hasVotingFeatures}>
               <div className="voting-related-controls">
                 <div className="control-button-container">
@@ -117,35 +108,33 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
                     icon={IconNames.PEOPLE}
                     isDisabled={true}
                     label="Export Popular Vote Leaderboard (Coming soon!)"
-                  ></ControlButton>
+                  />
                 </div>
                 <div className="control-button-container">
                   <ControlButton
                     icon={IconNames.CROWN}
                     isDisabled={true}
                     label="Export Score Leaderboard (Coming soon!)"
-                  ></ControlButton>
+                  />
                 </div>
                 <Switch
                   className="publish-voting"
                   disabled={true}
                   inline
                   label="Publish Voting (Coming soon!)"
-                ></Switch>
+                />
               </div>
             </Collapse>
           </div>
         </DialogBody>
         <DialogFooter
           actions={
-            <>
-              <ControlButton
-                label="Save"
-                icon={IconNames.UPLOAD}
-                onClick={handleConfigure}
-                options={{ minimal: false, intent: Intent.PRIMARY }}
-              />
-            </>
+            <ControlButton
+              label="Save"
+              icon={IconNames.UPLOAD}
+              onClick={handleConfigure}
+              options={{ minimal: false, intent: Intent.PRIMARY }}
+            />
           }
         ></DialogFooter>
       </Dialog>
