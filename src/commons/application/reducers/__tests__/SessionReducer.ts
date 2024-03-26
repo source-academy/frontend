@@ -8,9 +8,10 @@ import {
   GradingStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import { GameState, Role, Story, defaultSession } from '../../ApplicationTypes';
+import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
+  SessionState,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
@@ -18,7 +19,6 @@ import {
   SET_GITHUB_ACCESS_TOKEN,
   SET_TOKENS,
   SET_USER,
-  SessionState,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
