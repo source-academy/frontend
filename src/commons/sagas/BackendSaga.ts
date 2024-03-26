@@ -17,6 +17,7 @@ import {
 } from '../../features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
+  CHANGE_TEAM_SIZE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
@@ -27,14 +28,19 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { OverallState, Role } from '../application/ApplicationTypes';
 import { RouterState } from '../application/types/CommonsTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
+  BULK_UPLOAD_TEAM,
+  CHECK_ANSWER_LAST_MODIFIED_AT,
   CourseConfiguration,
   CourseRegistration,
+  CREATE_TEAM,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_TEAM,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
@@ -48,6 +54,9 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEW,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
@@ -66,6 +75,7 @@ import {
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
+  UPDATE_TEAM,
   UPDATE_TIME_OPTIONS,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -89,8 +99,10 @@ import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/Au
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
+  checkAnswerLastModifiedAt,
   deleteAssessment,
   deleteSourcecastEntry,
+  deleteTeam,
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
@@ -103,6 +115,9 @@ import {
   getNotificationConfigs,
   getNotifications,
   getSourcecastIndex,
+  getStudents,
+  getTeamFormationOverview,
+  getTeamFormationOverviews,
   getTotalXp,
   getUser,
   getUserCourseRegistrations,
@@ -116,7 +131,9 @@ import {
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
+  postTeams,
   postUnsubmit,
+  postUploadTeams,
   putAssessmentConfigs,
   putCourseConfig,
   putCourseResearchAgreement,
@@ -124,6 +141,7 @@ import {
   putNewUsers,
   putNotificationConfigs,
   putNotificationPreferences,
+  putTeams,
   putTimeOptions,
   putUserRole,
   removeAssessmentConfig,
@@ -383,6 +401,24 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(
+    CHECK_ANSWER_LAST_MODIFIED_AT,
+    function* (action: ReturnType<typeof actions.checkAnswerLastModifiedAt>): any {
+      const tokens: Tokens = yield selectTokens();
+      const questionId = action.payload.id;
+      const lastModifiedAt = action.payload.lastModifiedAt;
+      const saveAnswer = action.payload.saveAnswer;
+
+      const resp: boolean | null = yield call(
+        checkAnswerLastModifiedAt,
+        questionId,
+        lastModifiedAt,
+        tokens
+      );
+      saveAnswer(resp);
+    }
+  );
+
+  yield takeEvery(
     SUBMIT_ASSESSMENT,
     function* (action: ReturnType<typeof actions.submitAssessment>): any {
       const tokens: Tokens = yield selectTokens();
@@ -415,6 +451,11 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
+      const role: Role = yield select((state: OverallState) => state.session.role!);
+      if (role === Role.Student) {
+        return;
+      }
+
       const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
 
       const gradingOverviews: GradingOverviews | null = yield call(
@@ -430,6 +471,138 @@ function* BackendSaga(): SagaIterator {
       }
     }
   );
+
+  yield takeEvery(
+    FETCH_TEAM_FORMATION_OVERVIEW,
+    function* (action: ReturnType<typeof actions.fetchTeamFormationOverview>) {
+      const tokens: Tokens = yield selectTokens();
+      const { assessmentId } = action.payload;
+
+      const teamFormationOverview: TeamFormationOverview | null = yield call(
+        getTeamFormationOverview,
+        assessmentId,
+        tokens
+      );
+      if (teamFormationOverview) {
+        yield put(actions.updateTeamFormationOverview(teamFormationOverview));
+      }
+    }
+  );
+
+  yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEWS, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return;
+    }
+
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  });
+
+  yield takeEvery(FETCH_STUDENTS, function* (): any {
+    const tokens: Tokens = yield selectTokens();
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return;
+    }
+    const students: User[] | null = yield call(getStudents, tokens);
+    if (students) {
+      yield put(actions.updateStudents(students));
+    }
+  });
+
+  yield takeEvery(CREATE_TEAM, function* (action: ReturnType<typeof actions.createTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { assessment, teams } = action.payload;
+
+    const resp: Response | null = yield call(postTeams, assessment.id, teams, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+    yield call(showSuccessMessage, 'Team created successfully', 1000);
+    if (resp && resp.status === 409) {
+      return yield call(showWarningMessage, resp.statusText);
+    }
+  });
+
+  yield takeEvery(
+    BULK_UPLOAD_TEAM,
+    function* (action: ReturnType<typeof actions.bulkUploadTeam>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { assessment, file, students } = action.payload;
+
+      const resp: Response | null = yield call(
+        postUploadTeams,
+        assessment.id,
+        file,
+        students,
+        tokens
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+      const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+        getTeamFormationOverviews,
+        tokens
+      );
+
+      yield call(showSuccessMessage, 'Team created successfully', 1000);
+      if (teamFormationOverviews) {
+        yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+      }
+    }
+  );
+
+  yield takeEvery(UPDATE_TEAM, function* (action: ReturnType<typeof actions.updateTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { teamId, assessment, teams } = action.payload;
+    const resp: Response | null = yield call(putTeams, assessment.id, teamId, teams, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+
+    yield call(showSuccessMessage, 'Team updated successfully', 1000);
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  });
+
+  yield takeEvery(DELETE_TEAM, function* (action: ReturnType<typeof actions.deleteTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { teamId } = action.payload;
+
+    const resp: Response | null = yield call(deleteTeam, teamId, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+
+    yield call(showSuccessMessage, 'Team deleted successfully', 1000);
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  });
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
     const tokens: Tokens = yield selectTokens();
@@ -1100,6 +1273,23 @@ function* BackendSaga(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    CHANGE_TEAM_SIZE_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.changeTeamSizeAssessment>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload.id;
+      const maxTeamSize = action.payload.maxTeamSize;
+
+      const resp: Response | null = yield updateAssessment(id, { maxTeamSize }, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Team size updated successfully!', 1000);
     }
   );
 
