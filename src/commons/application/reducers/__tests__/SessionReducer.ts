@@ -59,6 +59,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
 test('SET_USER works correctly', () => {
   const payload = {
     userId: 123,
+    username: 'E1234567',
     name: 'test student',
     courses: [
       {
@@ -337,7 +338,8 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 5
   }
 ];
 
@@ -356,7 +358,8 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    maxTeamSize: 1
   }
 ];
 
@@ -523,7 +526,9 @@ const gradingOverviewTest1: GradingOverview[] = [
     maxXp: 500,
     studentId: 100,
     studentName: 'test student',
+    studentNames: [],
     studentUsername: 'E0123456',
+    studentUsernames: [],
     submissionId: 1,
     submissionStatus: 'attempting',
     groupName: 'group',
@@ -546,7 +551,9 @@ const gradingOverviewTest2: GradingOverview[] = [
     maxXp: 1000,
     studentId: 20,
     studentName: 'another student',
+    studentNames: [],
     studentUsername: 'E0000000',
+    studentUsernames: [],
     submissionId: 2,
     submissionStatus: 'attempted',
     groupName: 'another group',
