@@ -23,8 +23,10 @@ export type GradingOverview = {
   currentXp: number;
   maxXp: number;
   studentId: number;
-  studentName: string;
-  studentUsername: string;
+  studentName: string | undefined;
+  studentNames: string[] | undefined;
+  studentUsername: string | undefined;
+  studentUsernames: string[] | undefined;
   submissionId: number;
   submissionStatus: string;
   groupName: string;
@@ -71,6 +73,11 @@ export type GradingQuery = {
  */
 export type GradingQuestion = {
   question: AnsweredQuestion;
+  team?: Array<{
+    username: any;
+    name: string;
+    id: number;
+  }>;
   student: {
     name: string;
     username: string;
@@ -101,6 +108,7 @@ export type AnsweredQuestion = Question & Answer;
 
 type Answer = {
   autogradingResults: AutogradingResult[];
+  lastModifiedAt: string;
   prepend: string;
   postpend: string;
   testcases: Testcase[];

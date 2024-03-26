@@ -34,6 +34,7 @@ import {
   EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
+  GroundControlTableFilters,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -50,6 +51,7 @@ import {
   SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   SubmissionsTableFilters,
+  TeamFormationsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
   TOGGLE_UPDATE_CSE,
@@ -63,6 +65,7 @@ import {
   UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
+  UPDATE_GROUND_CONTROL_TABLE_FILTERS,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
@@ -70,6 +73,7 @@ import {
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
+  UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
@@ -398,6 +402,16 @@ export const setIsEditorReadonly = createAction(
 export const updateSubmissionsTableFilters = createAction(
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   (filters: SubmissionsTableFilters) => ({ payload: { filters } })
+);
+
+export const updateTeamFormationsTableFilters = createAction(
+  UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
+  (filters: TeamFormationsTableFilters) => ({ payload: { filters } })
+);
+
+export const updateGroundControlTableFilters = createAction(
+  UPDATE_GROUND_CONTROL_TABLE_FILTERS,
+  (filters: GroundControlTableFilters) => ({ payload: { filters } })
 );
 
 export const updateCurrentAssessmentId = createAction(

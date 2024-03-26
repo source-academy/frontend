@@ -16,6 +16,8 @@ import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/W
 export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
   assessment: '',
   grading: '',
+  teamFormation: '',
+  groundControl: '',
   playground: '/playground',
   sicp: '/sicp',
   sourcecast: '',

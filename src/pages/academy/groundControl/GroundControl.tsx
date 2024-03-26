@@ -1,21 +1,52 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-
-import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
+import {
+  Button,
+  Collapse,
+  Divider,
+  Icon as BpIcon,
+  Intent,
+  NonIdealState,
+  Spinner,
+  SpinnerSize
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef, ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
-import React from 'react';
+import {
+  Column,
+  ColumnFilter,
+  ColumnFiltersState,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable
+} from '@tanstack/react-table';
+import {
+  Flex,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
+  Text
+} from '@tremor/react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { updateGroundControlTableFilters } from 'src/commons/workspace/WorkspaceActions';
 
 import {
   AssessmentConfiguration,
   AssessmentOverview
 } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import { AssessmentTypeBadge } from '../grading/subcomponents/GradingBadges';
+import GroundControlFilters from './GroundControlFilters';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
+import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
 
 export type GroundControlProps = DispatchProps & StateProps;
@@ -26,6 +57,7 @@ export type DispatchProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
+  handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
   handleFetchCourseConfigs: () => void;
 };
 
@@ -34,207 +66,242 @@ export type StateProps = {
   assessmentConfigurations?: AssessmentConfiguration[];
 };
 
-type State = {
-  showDropzone: boolean;
+const columnHelper = createColumnHelper<AssessmentOverview>();
+
+const GroundControl: React.FC<GroundControlProps> = props => {
+  const [showDropzone, setShowDropzone] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const tableFilters = useTypedSelector(
+    state => state.workspaces.groundControl.GroundControlTableFilters
+  );
+
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    ...tableFilters.columnFilters
+  ]);
+
+  const { assessmentOverviews } = useSession();
+
+  const toggleDropzone = () => {
+    setShowDropzone(!showDropzone);
+  };
+
+  useEffect(() => {
+    dispatch(updateGroundControlTableFilters({ columnFilters }));
+  }, [columnFilters, dispatch]);
+
+  const columns = [
+    columnHelper.accessor('id', {
+      header: 'ID',
+      cell: info => <span>{info.getValue()}</span>
+    }),
+    columnHelper.accessor('title', {
+      header: 'Title',
+      cell: info => <span>{info.getValue()}</span>,
+      enableSorting: true,
+      sortingFn: 'alphanumeric'
+    }),
+    columnHelper.accessor('type', {
+      header: 'Category',
+      cell: info => (
+        <Filterable column={info.column} value={info.getValue()}>
+          <AssessmentTypeBadge type={info.getValue()} />
+        </Filterable>
+      ),
+      enableSorting: true
+    }),
+    columnHelper.accessor('openAt', {
+      header: 'Open Date',
+      cell: info => (
+        <EditCell
+          handleAssessmentChangeDate={props.handleAssessmentChangeDate}
+          data={info.row.original}
+          forOpenDate={true}
+        />
+      ),
+      enableSorting: true
+    }),
+    columnHelper.accessor('closeAt', {
+      header: 'Close Date',
+      cell: info => (
+        <EditCell
+          handleAssessmentChangeDate={props.handleAssessmentChangeDate}
+          data={info.row.original}
+          forOpenDate={false}
+        />
+      ),
+      enableSorting: true
+    }),
+
+    columnHelper.accessor('maxTeamSize', {
+      header: 'Max Team Size',
+      cell: info => (
+        <EditTeamSizeCell
+          onTeamSizeChange={(id, newTeamSize) => {
+            props.handleAssessmentChangeTeamSize(id, newTeamSize);
+          }}
+          data={info.row.original}
+        />
+      )
+    }),
+    columnHelper.accessor('isPublished', {
+      header: 'Publish',
+      cell: info => (
+        <PublishCell
+          handlePublishAssessment={props.handlePublishAssessment}
+          data={info.row.original}
+        />
+      ),
+      enableSorting: false
+    }),
+    columnHelper.display({
+      header: 'Delete',
+      size: 100,
+      cell: info => (
+        <DeleteCell
+          handleDeleteAssessment={props.handleDeleteAssessment}
+          data={info.row.original}
+        />
+      ),
+      enableSorting: false
+    })
+  ];
+
+  const controls = (
+    <div className="GridControls ground-control-controls">
+      <Button
+        active={showDropzone}
+        icon={IconNames.CLOUD_UPLOAD}
+        intent={showDropzone ? Intent.PRIMARY : Intent.NONE}
+        onClick={toggleDropzone}
+      >
+        <span className="hidden-xs">Upload assessment</span>
+      </Button>
+      <DefaultChapterSelect />
+      <Button icon={IconNames.REFRESH} onClick={props.handleAssessmentOverviewFetch}>
+        <span className="hidden-xs">Refresh assessments</span>
+      </Button>
+    </div>
+  );
+
+  const dropzone = (
+    <Collapse isOpen={showDropzone} keepChildrenMounted={true}>
+      <Dropzone
+        handleUploadAssessment={props.handleUploadAssessment}
+        assessmentConfigurations={props.assessmentConfigurations}
+      />
+    </Collapse>
+  );
+
+  const table = useReactTable({
+    data: assessmentOverviews ?? [],
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel()
+  });
+
+  const handleFilterRemove = ({ id, value }: ColumnFilter) => {
+    const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
+    setColumnFilters(newFilters);
+  };
+
+  const grid = (
+    <div>
+      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
+        <Flex alignItems="items-center" spaceX="space-x-2">
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
+            <BpIcon icon={IconNames.FILTER_LIST} />
+            <Text>
+              {columnFilters.length > 0
+                ? 'Filters: '
+                : 'No filters applied. Click on any cell to filter by its value.'}{' '}
+            </Text>
+          </div>
+          <GroundControlFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
+        </Flex>
+      </Flex>
+      <Table>
+        <TableHead>
+          {table.getHeaderGroups().map(headerGroup => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <TableHeaderCell key={header.id}>
+                  {header.isPlaceholder ? null : (
+                    <div>{flexRender(header.column.columnDef.header, header.getContext())}</div>
+                  )}
+                </TableHeaderCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableHead>
+        <TableBody>
+          {table.getRowModel().rows.map(row => (
+            <TableRow key={row.id}>
+              {row.getVisibleCells().map(cell => (
+                <TableCell key={cell.id}>
+                  {cell.getIsPlaceholder()
+                    ? null
+                    : flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+
+  if (!assessmentOverviews) {
+    return (
+      <NonIdealState
+        description="Fetching assessments..."
+        icon={<Spinner size={SpinnerSize.LARGE} />}
+      />
+    );
+  }
+
+  const content = (
+    <div className="GroundControl">
+      {controls}
+      {dropzone}
+      <Divider />
+      {grid}
+    </div>
+  );
+
+  const loadContent = () => {
+    // Always load AssessmentOverviews and CourseConfigs to get the latest values (just in case)
+    props.handleAssessmentOverviewFetch();
+    props.handleFetchCourseConfigs();
+  };
+
+  return (
+    <div>
+      <ContentDisplay display={content} loadContentDispatch={loadContent} />
+    </div>
+  );
 };
 
-class GroundControl extends React.Component<GroundControlProps, State> {
-  private columnDefs: ColDef[];
-  private defaultColumnDefs: ColDef;
-  private gridApi?: GridApi;
-  private columnApi?: ColumnApi;
+type FilterableProps = {
+  column: Column<any, unknown>;
+  value: string;
+  children?: React.ReactNode;
+};
 
-  public constructor(props: GroundControlProps) {
-    super(props);
-
-    this.state = {
-      showDropzone: false
-    };
-
-    this.columnDefs = [
-      {
-        field: 'number',
-        headerName: 'ID',
-        width: 50
-      },
-      {
-        headerName: 'Title',
-        field: 'title'
-      },
-      {
-        headerName: 'Category',
-        field: 'type',
-        width: 100
-      },
-      {
-        headerName: 'Open Date',
-        field: 'openAt',
-        filter: 'agDateColumnFilter',
-        filterParams: {
-          comparator: this.dateFilterComparator,
-          inRangeInclusive: true
-        },
-        sortingOrder: ['desc', 'asc', null],
-        cellRenderer: EditCell,
-        cellRendererParams: {
-          handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
-          forOpenDate: true
-        },
-        width: 150
-      },
-      {
-        headerName: 'Close Date',
-        field: 'closeAt',
-        filter: 'agDateColumnFilter',
-        filterParams: {
-          comparator: this.dateFilterComparator,
-          inRangeInclusive: true
-        },
-        sortingOrder: ['desc', 'asc', null],
-        cellRenderer: EditCell,
-        cellRendererParams: {
-          handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
-          forOpenDate: false
-        },
-        width: 150
-      },
-      {
-        headerName: 'Publish',
-        field: '',
-        cellRenderer: PublishCell,
-        cellRendererParams: {
-          handlePublishAssessment: this.props.handlePublishAssessment
-        },
-        width: 100,
-        filter: false,
-        resizable: false,
-        sortable: false,
-        cellStyle: {
-          padding: 0
-        }
-      },
-      {
-        headerName: 'Delete',
-        field: '',
-        cellRenderer: DeleteCell,
-        cellRendererParams: {
-          handleDeleteAssessment: this.props.handleDeleteAssessment
-        },
-        width: 100,
-        filter: false,
-        resizable: false,
-        sortable: false,
-        cellStyle: {
-          padding: 0
-        }
-      }
-    ];
-
-    this.defaultColumnDefs = {
-      filter: true,
-      resizable: true,
-      sortable: true
-    };
-  }
-
-  public render() {
-    const controls = (
-      <div className="GridControls ground-control-controls">
-        <Button
-          active={this.state.showDropzone}
-          icon={IconNames.CLOUD_UPLOAD}
-          intent={this.state.showDropzone ? Intent.PRIMARY : Intent.NONE}
-          onClick={this.toggleDropzone}
-        >
-          <span className="hidden-xs">Upload assessment</span>
-        </Button>
-        <DefaultChapterSelect />
-        <Button icon={IconNames.REFRESH} onClick={this.props.handleAssessmentOverviewFetch}>
-          <span className="hidden-xs">Refresh assessments</span>
-        </Button>
-      </div>
-    );
-
-    const dropzone = (
-      <Collapse isOpen={this.state.showDropzone} keepChildrenMounted={true}>
-        <Dropzone
-          handleUploadAssessment={this.props.handleUploadAssessment}
-          assessmentConfigurations={this.props.assessmentConfigurations}
-        />
-      </Collapse>
-    );
-
-    const grid = (
-      <div className="Grid ag-grid-parent ag-theme-balham">
-        <AgGridReact
-          domLayout={'autoHeight'}
-          columnDefs={this.columnDefs}
-          defaultColDef={this.defaultColumnDefs}
-          onGridReady={this.onGridReady}
-          onGridSizeChanged={this.resizeGrid}
-          rowData={this.props.assessmentOverviews}
-          rowHeight={30}
-          suppressCellFocus={true}
-          suppressMovableColumns={true}
-          suppressPaginationPanel={true}
-        />
-      </div>
-    );
-
-    const content = (
-      <div className="GroundControl">
-        {controls}
-        {dropzone}
-        <Divider />
-        {grid}
-      </div>
-    );
-
-    return (
-      <div>
-        <ContentDisplay display={content} loadContentDispatch={this.loadContent} />
-      </div>
-    );
-  }
-
-  private loadContent = () => {
-    // Always load AssessmentOverviews and CourseConfigs to get the latest values (just in case)
-    this.props.handleAssessmentOverviewFetch();
-    this.props.handleFetchCourseConfigs();
+const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
+  const handleFilterChange = () => {
+    column.setFilterValue(value);
   };
 
-  /*
-   *  Reference: https://www.ag-grid.com/javascript-grid-filter-date/#date-filter-comparator
-   */
-  private dateFilterComparator = (filterDate: Date, cellValue: string) => {
-    const cellDate = new Date(cellValue);
-
-    return cellDate < filterDate ? -1 : cellDate > filterDate ? 1 : 0;
-  };
-
-  private onGridReady = (params: GridReadyEvent) => {
-    this.gridApi = params.api;
-    this.columnApi = params.columnApi;
-    this.gridApi.sizeColumnsToFit();
-
-    // Sort assessments by opening date, breaking ties by later of closing dates
-    this.columnApi.applyColumnState({
-      state: [
-        { colId: 'openAt', sort: 'desc' },
-        { colId: 'closeAt', sort: 'desc' }
-      ]
-    });
-  };
-
-  private resizeGrid = () => {
-    if (this.gridApi) {
-      this.gridApi.sizeColumnsToFit();
-    }
-  };
-
-  private toggleDropzone = () => {
-    this.setState({ showDropzone: !this.state.showDropzone });
-  };
-}
+  return (
+    <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+      {children || value}
+    </button>
+  );
+};
 
 export default GroundControl;

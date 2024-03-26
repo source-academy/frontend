@@ -405,6 +405,19 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
+  teamFormation: {
+    ...createDefaultWorkspace('teamFormation'),
+    teamFormationTableFilters: {
+      columnFilters: [],
+      globalFilter: null
+    }
+  },
+  groundControl: {
+    ...createDefaultWorkspace('groundControl'),
+    GroundControlTableFilters: {
+      columnFilters: []
+    }
+  },
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
@@ -500,6 +513,8 @@ export const defaultSession: SessionState = {
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
+  students: undefined,
+  teamFormationOverviews: undefined,
   gradings: new Map<number, GradingQuery>(),
   notifications: []
 };
@@ -539,6 +554,8 @@ export const defaultSideContentManager: SideContentManagerState = {
   assessment: defaultSideContent,
   grading: defaultSideContent,
   playground: defaultSideContent,
+  groundControl: defaultSideContent,
+  teamFormation: defaultSideContent,
   sicp: defaultSideContent,
   sourcecast: defaultSideContent,
   sourcereel: defaultSideContent,
