@@ -26,7 +26,7 @@ export function getNodeDimensions(item: Visible) {
   };
 }
 
-export function getNodeLocation(item : Visible) {
+export function getNodeLocation(item: Visible) {
   return {
     x: item.x(),
     y: item.y()

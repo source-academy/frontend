@@ -14,39 +14,30 @@ export class ArrayAccessAnimation extends Animatable {
   private pairArrayItemAnimation: AnimatedTextbox;
   private indexItemAnimation: AnimatedTextbox;
   private resultAnimation: AnimatedTextbox;
-  private arrayUnit: ArrayUnit
+  private arrayUnit: ArrayUnit;
 
   constructor(
     accItem: ControlItemComponent,
     pairArrayItem: StashItemComponent,
     indexItem: StashItemComponent,
-    private resultItem: StashItemComponent,
+    private resultItem: StashItemComponent
   ) {
     super();
-    this.accessorAnimation = new AnimatedTextbox(
-      accItem.text,
-      getNodePosition(accItem)
-    );
+    this.accessorAnimation = new AnimatedTextbox(accItem.text, getNodePosition(accItem));
     this.pairArrayItemAnimation = new AnimatedTextbox(
       pairArrayItem.text,
       getNodePosition(pairArrayItem)
     );
-    this.indexItemAnimation = new AnimatedTextbox(
-      indexItem.text,
-      getNodePosition(indexItem)
-    );
+    this.indexItemAnimation = new AnimatedTextbox(indexItem.text, getNodePosition(indexItem));
     // the target should always be an array value
     const array = pairArrayItem.arrow!.target! as ArrayValue;
     this.arrayUnit = array.units[parseInt(indexItem.text)];
-    this.resultAnimation = new AnimatedTextbox(
-      resultItem.text,
-      {
-        ...getNodeDimensions(resultItem),
-        x: this.arrayUnit.x() + this.arrayUnit.width() / 4,
-        y: this.arrayUnit.y(),
-        opacity: 0
-      }
-    );
+    this.resultAnimation = new AnimatedTextbox(resultItem.text, {
+      ...getNodeDimensions(resultItem),
+      x: this.arrayUnit.x() + this.arrayUnit.width() / 4,
+      y: this.arrayUnit.y(),
+      opacity: 0
+    });
   }
 
   draw(): React.ReactNode {

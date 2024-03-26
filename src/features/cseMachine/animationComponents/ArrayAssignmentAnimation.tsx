@@ -15,7 +15,7 @@ export class ArrayAssignmentAnimation extends Animatable {
   private indexItemAnimation: AnimatedTextbox;
   private valueAnimation: AnimatedTextbox;
   private resultAnimation: AnimatedTextbox;
-  private arrayUnit: ArrayUnit
+  private arrayUnit: ArrayUnit;
 
   constructor(
     asgnItem: ControlItemComponent,
@@ -25,26 +25,14 @@ export class ArrayAssignmentAnimation extends Animatable {
     private resultItem: StashItemComponent
   ) {
     super();
-    this.asgnItemAnimation = new AnimatedTextbox(
-      asgnItem.text,
-      getNodePosition(asgnItem)
-    );
+    this.asgnItemAnimation = new AnimatedTextbox(asgnItem.text, getNodePosition(asgnItem));
     this.pairArrayItemAnimation = new AnimatedTextbox(
       pairArrayItem.text,
       getNodePosition(pairArrayItem)
     );
-    this.indexItemAnimation = new AnimatedTextbox(
-      indexItem.text,
-      getNodePosition(indexItem)
-    );
-    this.valueAnimation = new AnimatedTextbox(
-      valueItem.text,
-      getNodePosition(valueItem)
-    );
-    this.resultAnimation = new AnimatedTextbox(
-      resultItem.text,
-      getNodePosition(valueItem)
-    );
+    this.indexItemAnimation = new AnimatedTextbox(indexItem.text, getNodePosition(indexItem));
+    this.valueAnimation = new AnimatedTextbox(valueItem.text, getNodePosition(valueItem));
+    this.resultAnimation = new AnimatedTextbox(resultItem.text, getNodePosition(valueItem));
     // the target should always be an array value
     const array = pairArrayItem.arrow!.target! as ArrayValue;
     this.arrayUnit = array.units[parseInt(indexItem.text)];

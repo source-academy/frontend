@@ -61,7 +61,7 @@ export class ArrayValue extends Value {
 
       this.units = [unit, ...this.units];
     }
-  };
+  }
 
   constructor(
     /** underlying values this array contains */
@@ -77,7 +77,7 @@ export class ArrayValue extends Value {
       this.constructArrayValue(reference);
     }
   }
-  
+
   addReference(newReference: ReferenceType): void {
     super.addReference(newReference);
     // We are assuming that there will be eventually a main reference

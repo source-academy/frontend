@@ -21,20 +21,23 @@ export class ArrayLiteralAnimation extends Animatable {
     private resultItem: StashItemComponent
   ) {
     super();
-    this.arrayControlItemAnimation = new AnimatedTextbox(arrayControlItem.text, getNodePosition(arrayControlItem));
+    this.arrayControlItemAnimation = new AnimatedTextbox(
+      arrayControlItem.text,
+      getNodePosition(arrayControlItem)
+    );
     this.leftBracketAnimation = new AnimatedTextComponent({
       x: arrayControlItem.x() - 10,
       y: arrayControlItem.y() + arrayControlItem.height() / 3.5,
-      text: "[",
+      text: '[',
       opacity: 0
     });
     this.rightBracketAnimation = new AnimatedTextComponent({
       x: arrayControlItem.x() + arrayControlItem.width() + 10,
       y: arrayControlItem.y() + arrayControlItem.height() / 3.5,
-      text: "]",
+      text: ']',
       opacity: 0
     });
-    this.stashItemAnimations = stashItems.map((item) => {
+    this.stashItemAnimations = stashItems.map(item => {
       return new AnimatedTextbox(item.text, {
         ...getNodePosition(item)
       });
@@ -70,8 +73,8 @@ export class ArrayLiteralAnimation extends Animatable {
       })
     ]);
     // move the brackets to enclose the items
-    const firstItem = this.stashItemAnimations.at(0)!
-    const lastItem = this.stashItemAnimations.at(-1)!
+    const firstItem = this.stashItemAnimations.at(0)!;
+    const lastItem = this.stashItemAnimations.at(-1)!;
     await Promise.all([
       this.leftBracketAnimation.animateTo({
         x: firstItem.x() - 10,
@@ -92,14 +95,16 @@ export class ArrayLiteralAnimation extends Animatable {
         x: this.resultItem.x() + this.resultItem.width(),
         opacity: 0
       }),
-      this.stashItemAnimations.map(a => a.animateTo({
-        ...getNodePosition(this.resultItem),
-        opacity: 0
-      })),
+      this.stashItemAnimations.map(a =>
+        a.animateTo({
+          ...getNodePosition(this.resultItem),
+          opacity: 0
+        })
+      ),
       this.resultArrayAnimation.animateTo({
         opacity: 1
       })
-    ])
+    ]);
     this.destroy();
   }
 
