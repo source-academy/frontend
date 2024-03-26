@@ -2909,8 +2909,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
               </span>
             </button>
           </span>
-          <button
-            class="bp5-button bp5-minimal"
+          <a
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
+            disabled=""
+            role="button"
+            tabindex="-1"
           >
             <span
               aria-hidden="true"
@@ -2922,7 +2926,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
             >
               Save
             </span>
-          </button>
+          </a>
           <button
             class="bp5-button bp5-minimal"
           >
@@ -3595,8 +3599,12 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
               </span>
             </button>
           </span>
-          <button
-            class="bp5-button bp5-minimal"
+          <a
+            aria-disabled="true"
+            class="bp5-button bp5-disabled bp5-minimal"
+            disabled=""
+            role="button"
+            tabindex="-1"
           >
             <span
               aria-hidden="true"
@@ -3620,7 +3628,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
             >
               Save
             </span>
-          </button>
+          </a>
           <button
             class="bp5-button bp5-minimal"
           >

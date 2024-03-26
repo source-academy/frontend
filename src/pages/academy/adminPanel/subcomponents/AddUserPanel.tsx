@@ -100,7 +100,6 @@ const AddUserPanel: React.FC<Props> = props => {
      * valid uploaded entries in the table
      */
     const processed: UsernameRoleGroup[] = [...users];
-
     if (data.length + users.length > 1000) {
       setInvalidCsvMsg('Please limit each upload to 1000 entries!');
       return;
