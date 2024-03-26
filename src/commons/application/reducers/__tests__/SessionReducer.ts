@@ -3,7 +3,6 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import {
   Assessment,
-  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses
