@@ -8,10 +8,9 @@ import {
   ProgressStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
+import { GameState, Role, Story, defaultSession } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {
-  SessionState,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_COURSE_CONFIGURATION,
@@ -19,6 +18,7 @@ import {
   SET_GITHUB_ACCESS_TOKEN,
   SET_TOKENS,
   SET_USER,
+  SessionState,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_OVERVIEWS,
   UPDATE_GRADING,
@@ -59,6 +59,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
 test('SET_USER works correctly', () => {
   const payload = {
     userId: 123,
+    username: 'E1234567',
     name: 'test student',
     courses: [
       {
@@ -341,7 +342,8 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
-    xp: 0
+    xp: 0,
+    maxTeamSize: 5
   }
 ];
 
@@ -361,7 +363,8 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
-    xp: 1
+    xp: 1,
+    maxTeamSize: 1
   }
 ];
 
@@ -528,7 +531,9 @@ const gradingOverviewTest1: GradingOverview[] = [
     maxXp: 500,
     studentId: 100,
     studentName: 'test student',
+    studentNames: [],
     studentUsername: 'E0123456',
+    studentUsernames: [],
     submissionId: 1,
     submissionStatus: AssessmentStatuses.attempting,
     progress: ProgressStatuses.attempting,
@@ -551,7 +556,9 @@ const gradingOverviewTest2: GradingOverview[] = [
     maxXp: 1000,
     studentId: 20,
     studentName: 'another student',
+    studentNames: [],
     studentUsername: 'E0000000',
+    studentUsernames: [],
     submissionId: 2,
     submissionStatus: AssessmentStatuses.attempted,
     progress: ProgressStatuses.graded,

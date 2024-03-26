@@ -81,6 +81,7 @@ type GradingWorkspaceAttr = {
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
 };
+
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
@@ -166,4 +167,9 @@ export type DebuggerContext = {
 
 export type SubmissionsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
+};
+
+export type TeamFormationsTableFilters = {
+  columnFilters: { id: string; value: unknown }[];
+  globalFilter: string | null;
 };

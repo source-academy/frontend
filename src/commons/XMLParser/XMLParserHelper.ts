@@ -85,7 +85,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     progress: ProgressStatuses.attempting,
-    xp: 0
+    xp: 0,
+    maxTeamSize: 1
   };
 };
 
@@ -203,6 +204,7 @@ const makeProgramming = (
     testcases: publicTestcases.map(testcase => makeTestcase(testcase)),
     testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
     answer: solution ? (solution[0] as string).trim() : '',
+    lastModifiedAt: new Date().toISOString(),
     type: 'programming'
   };
   if (problem.SNIPPET[0].GRADER) {
