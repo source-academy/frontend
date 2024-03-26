@@ -6,11 +6,12 @@ import {
   DialogBody,
   DialogFooter,
   Divider,
+  Icon,
   Intent,
   NumericInput,
   Switch
 } from '@blueprintjs/core';
-import { IconNames, InfoSign, Reset, Team } from '@blueprintjs/icons';
+import { IconNames, InfoSign, Team } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
@@ -149,11 +150,11 @@ const ConfigureCell: React.FC<Props> = ({
                       icon={IconNames.RESET}
                       onClick={onAssignClick}
                       label={`${!isVotingPublished ? 'Assign' : 'Reassign'} entries for voting`}
-                    ></ControlButton>
+                    />
                   </div>
                 ) : (
                   <div className="confirm-assign-voting">
-                    <Reset />
+                    <Icon icon="reset" />
                     <p className="confirm-assign-text">
                       Are you sure you want to{' '}
                       <b>{isVotingPublished ? 're-assign' : 'assign'} entries?</b>
