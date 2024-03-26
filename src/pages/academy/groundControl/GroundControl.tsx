@@ -16,6 +16,7 @@ import { useSession } from 'src/commons/utils/Hooks';
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
+import ConfigureCell from './subcomponents/GroundControlConfigureCell';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
@@ -31,6 +32,11 @@ export type DispatchProps = {
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
   handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
+  handleConfigureAssessment: (
+    id: number,
+    hasVotingFeatures: boolean,
+    hasTokenCounter: boolean
+  ) => void;
   handleFetchCourseConfigs: () => void;
 };
 
@@ -126,7 +132,7 @@ const GroundControl: React.FC<Props> = props => {
       cellRendererParams: {
         handlePublishAssessment: props.handlePublishAssessment
       },
-      width: 100,
+      width: 80,
       filter: false,
       resizable: false,
       sortable: false,
@@ -141,7 +147,22 @@ const GroundControl: React.FC<Props> = props => {
       cellRendererParams: {
         handleDeleteAssessment: props.handleDeleteAssessment
       },
-      width: 100,
+      width: 80,
+      filter: false,
+      resizable: false,
+      sortable: false,
+      cellStyle: {
+        padding: 0
+      }
+    },
+    {
+      headerName: 'Configure',
+      field: 'placeholderConfigure' as any,
+      cellRenderer: ConfigureCell,
+      cellRendererParams: {
+        handleConfigureAssessment: props.handleConfigureAssessment
+      },
+      width: 80,
       filter: false,
       resizable: false,
       sortable: false,

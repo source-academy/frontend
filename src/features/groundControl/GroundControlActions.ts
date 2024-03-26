@@ -3,6 +3,7 @@ import { createAction } from '@reduxjs/toolkit';
 import {
   CHANGE_DATE_ASSESSMENT,
   CHANGE_TEAM_SIZE_ASSESSMENT,
+  CONFIGURE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
@@ -29,5 +30,12 @@ export const uploadAssessment = createAction(
   UPLOAD_ASSESSMENT,
   (file: File, forceUpdate: boolean, assessmentConfigId: number) => ({
     payload: { file, forceUpdate, assessmentConfigId }
+  })
+);
+
+export const configureAssessment = createAction(
+  CONFIGURE_ASSESSMENT,
+  (id: number, hasVotingFeatures: boolean, hasTokenCounter: boolean) => ({
+    payload: { id, hasVotingFeatures, hasTokenCounter }
   })
 );

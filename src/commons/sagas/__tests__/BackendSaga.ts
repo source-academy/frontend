@@ -231,6 +231,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     earlySubmissionXp: 200
   },
   {
@@ -240,6 +241,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     earlySubmissionXp: 200
   },
   {
@@ -249,6 +251,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     earlySubmissionXp: 200
   },
   {
@@ -257,7 +260,8 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: false,
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
-    hasTokenCounter: true,
+    hasTokenCounter: false,
+    hasVotingFeatures: true,
     earlySubmissionXp: 200
   },
   {
@@ -267,6 +271,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     earlySubmissionXp: 200
   }
 ];
@@ -1068,6 +1073,7 @@ describe('Test CREATE_COURSE action', () => {
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 0
     }
   ];
