@@ -13,7 +13,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
@@ -47,14 +47,14 @@ const GroundControl: React.FC<Props> = props => {
   const [showDropzone, setShowDropzone] = useState(false);
   const { assessmentOverviews, assessmentConfigurations } = useSession();
 
-  let gridApi: GridApi | undefined;
+  const gridApi = useRef<GridApi>();
 
   const onGridReady = (params: GridReadyEvent) => {
-    gridApi = params.api;
-    gridApi.sizeColumnsToFit();
+    gridApi.current = params.api;
+    params.api.sizeColumnsToFit();
 
     // Sort assessments by opening date, breaking ties by later of closing dates
-    gridApi.applyColumnState({
+    params.api.applyColumnState({
       state: [
         { colId: 'openAt', sort: 'desc' },
         { colId: 'closeAt', sort: 'desc' }
@@ -63,9 +63,7 @@ const GroundControl: React.FC<Props> = props => {
   };
 
   const resizeGrid = () => {
-    if (gridApi) {
-      gridApi.sizeColumnsToFit();
-    }
+    gridApi.current?.sizeColumnsToFit()
   };
 
   const toggleDropzone = () => {
