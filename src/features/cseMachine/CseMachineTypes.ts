@@ -66,11 +66,11 @@ export type Primitive = number | string | boolean | null | undefined;
 //   preDefined?: boolean;
 // };
 
-/** type of an closure function in JS Slang. Redefined here for convenience.  */
-export type Closure = JsSlangClosure;
-
 /** type of an in-built function in JS Slang  */
-export type GlobalFn = CallableFunction;
+export type GlobalFn = Function;
+
+/** type of a closure in JS Slang redefined here for convenience.  */
+export type Closure = JsSlangClosure;
 
 /** type of an array in JS Slang */
 export type DataArray = Data[] & {

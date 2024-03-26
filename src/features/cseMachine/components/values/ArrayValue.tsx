@@ -18,7 +18,7 @@ export class ArrayValue extends Value {
   units: ArrayUnit[] = [];
 
   // derive the coordinates from the main reference (binding / array unit)
-  private constructArrayValue = (mainReference: ReferenceType) => {
+  private constructArrayValue(mainReference: ReferenceType) {
     if (mainReference instanceof Binding) {
       this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
       this._y = mainReference.y();

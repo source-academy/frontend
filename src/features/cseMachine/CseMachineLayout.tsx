@@ -1,3 +1,4 @@
+import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
@@ -26,14 +27,16 @@ import {
   ReferenceType
 } from './CseMachineTypes';
 import {
+  convertClosureToGlobalFn,
   deepCopyTree,
   getNextChildren,
   isArray,
-  isFn,
+  isClosure,
   isFunction,
   isGlobalFn,
   isPrimitiveData,
-  isUnassigned
+  isUnassigned,
+  setDifference
 } from './CseMachineUtils';
 
 /** this class encapsulates the logic for calculating the layout */
@@ -188,50 +191,60 @@ export class Layout {
     this.stashComponent = new StashStack(this.stash);
   }
 
-  /** remove prelude environment containing predefined functions */
+  /**
+   * remove prelude environment containing predefined functions, by merging the prelude
+   * objects into the global environment head and heap
+   */
   private static removePreludeEnv() {
     if (!Layout.globalEnvNode.children) return;
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
+    const preludeEnv = preludeEnvNode.environment;
     const globalEnvNode = Layout.globalEnvNode;
+    const globalEnv = globalEnvNode.environment;
 
     // merge preludeEnvNode bindings and heap into globalEnvNode
     const preludeObjects = [...preludeEnvNode.environment.heap.getHeap()];
-    const preludeMap = new Map(
-      Object.entries(preludeEnvNode.environment.head).map(([key, value]) => [value, key])
-    );
+    const preludeMap = new Map(Object.entries(preludeEnv.head).map(([key, value]) => [value, key]));
+    const arrayReferenceMap = new Map<DataArray, DataArray>();
     while (preludeObjects.length > 0) {
-      const value: Closure | DataArray = preludeObjects.shift() as any;
+      const value = preludeObjects.shift()!;
       let newValue: Closure | DataArray;
       if (isArray(value)) {
-        // create a new array with the changed environment
+        // Modify environment of each array by creating new array
         newValue = [...value] as DataArray;
+        arrayReferenceMap.set(value, newValue);
+        // Also change the reference of any nested arrays to the one with the modified environment.
+        // `arrayReferenceMap` is guaranteed to contain any nested array, because the heap order is
+        // based on object creation order, and nested arrays are always created before parent array.
+        newValue.forEach((child, i) => {
+          if (isArray(child) && arrayReferenceMap.has(child)) {
+            newValue[i] = arrayReferenceMap.get(child);
+          }
+        });
         Object.defineProperties(newValue, {
           id: { value: value.id },
           environment: { value: globalEnvNode.environment }
         });
       } else {
-        // mutate the original closure
+        // Modify environment of each closure by mutation
         newValue = value;
         newValue.environment = globalEnvNode.environment;
       }
-      globalEnvNode.environment.heap.add(newValue);
+      globalEnv.heap.add(newValue);
       const key = preludeMap.get(value);
       if (key) {
-        globalEnvNode.environment.head[key] = newValue;
+        globalEnv.head[key] = newValue;
       }
     }
 
     // update globalEnvNode children
-    if (preludeEnvNode.children) {
-      globalEnvNode.resetChildren(preludeEnvNode.children);
-    }
+    globalEnvNode.resetChildren(preludeEnvNode.children);
 
     // go through new bindings and update functions to be global functions
-    // by removing extra props such as functionName
     for (const value of Object.values(globalEnvNode.environment.head)) {
-      if (isFn(value)) {
-        delete (value as { functionName?: string }).functionName;
+      if (isClosure(value)) {
+        convertClosureToGlobalFn(value);
       }
     }
   }
@@ -239,21 +252,28 @@ export class Layout {
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
     const referencedGlobalFns = new Set<GlobalFn>();
-    const visitedData = new Set<Data[]>();
+    const visitedData = new Set<DataArray>();
+
     const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
-      for (const data of Object.values(envNode.environment.head)) {
+      const headValues = Object.values(envNode.environment.head);
+      const unreferenced = setDifference(envNode.environment.heap.getHeap(), new Set(headValues));
+      for (const data of headValues) {
         if (isGlobalFn(data)) {
           referencedGlobalFns.add(data);
         } else if (isArray(data)) {
           findGlobalFnReferencesInData(data);
         }
       }
-      if (envNode.children) {
-        envNode.children.forEach(findGlobalFnReferences);
+      for (const data of unreferenced) {
+        // The heap will never contain a global function, unless it is the global/prelude environment
+        if (isArray(data)) {
+          findGlobalFnReferencesInData(data);
+        }
       }
+      envNode.children.forEach(findGlobalFnReferences);
     };
 
-    const findGlobalFnReferencesInData = (data: Data[]): void => {
+    const findGlobalFnReferencesInData = (data: DataArray): void => {
       data.forEach(d => {
         if (isGlobalFn(d)) {
           referencedGlobalFns.add(d);
@@ -264,22 +284,51 @@ export class Layout {
       });
     };
 
-    if (Layout.globalEnvNode.children) {
-      Layout.globalEnvNode.children.forEach(findGlobalFnReferences);
+    // First, add any referenced global functions in the stash
+    for (const item of Layout.stash.getStack()) {
+      if (isGlobalFn(item)) {
+        if (isGlobalFn(item)) {
+          referencedGlobalFns.add(item);
+        } else if (isArray(item)) {
+          findGlobalFnReferencesInData(item);
+        }
+      }
     }
 
+    // Then, find any references within any arrays inside the global environment heap
+    for (const data of Layout.globalEnvNode.environment.heap.getHeap()) {
+      if (isArray(data)) {
+        findGlobalFnReferencesInData(data);
+      }
+    }
+
+    // Finally, find any references inside the global environment children
+    Layout.globalEnvNode.children.forEach(findGlobalFnReferences);
+
+    const functionNames = new Map(
+      Object.entries(Layout.globalEnvNode.environment.head).map(([key, value]) => [value, key])
+    );
+
     const newHead = {};
-    let i = 0;
+    const newHeap = new Heap();
     for (const fn of referencedGlobalFns) {
-      newHead[`${i++}`] = fn;
+      newHead[functionNames.get(fn)!] = fn;
+      if (fn.hasOwnProperty('environment')) {
+        newHeap.add(fn as Closure);
+      }
+    }
+    // add any arrays from the original heap to the new heap
+    for (const item of Layout.globalEnvNode.environment.heap.getHeap()) {
+      if (isArray(item)) {
+        newHeap.add(item);
+      }
     }
 
     Layout.globalEnvNode.environment.head = {
       [Config.GlobalFrameDefaultText]: Symbol(),
       ...newHead
     };
-
-    console.log(Layout.globalEnvNode.environment);
+    Layout.globalEnvNode.environment.heap = newHeap;
   }
 
   public static width(): number {
@@ -340,7 +389,7 @@ export class Layout {
       if (isArray(data)) {
         newValue = new ArrayValue(data, [reference]);
       } else if (isFunction(data)) {
-        if (isFn(data)) {
+        if (isClosure(data)) {
           // normal JS Slang function
           newValue = new FnValue(data, [reference]);
         } else {

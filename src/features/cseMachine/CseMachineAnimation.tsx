@@ -23,7 +23,7 @@ import { isInstr } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
-import { isFn, isGlobalFn } from './CseMachineUtils';
+import { isClosure, isGlobalFn } from './CseMachineUtils';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
@@ -159,7 +159,7 @@ export class CseAnimation {
             -appInstr.numOfArgs - 1
           )!;
           const fn = fnStashItem.value;
-          const isPredefined = isGlobalFn(fn) || (isFn(fn) && fn.preDefined);
+          const isPredefined = isGlobalFn(fn) || (isClosure(fn) && fn.preDefined);
           CseAnimation.animations.push(
             new FunctionApplicationAnimation(
               lastControlComponent,

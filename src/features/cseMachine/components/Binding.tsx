@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { isDummyKey, isMainReference } from '../CseMachineUtils';
+import { isArray, isClosure, isDummyKey, isMainReference } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
@@ -92,8 +92,8 @@ export class Binding extends Visible {
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
-      if (this.key)
-      this.arrow = new ArrowFromText(this.key).to(this.value);
+      // TODO: Figure out why sometimes the key is null
+      if (this.key) this.arrow = new ArrowFromText(this.key).to(this.value);
     }
   }
 
@@ -104,7 +104,9 @@ export class Binding extends Visible {
           ? null // omit the key since value is anonymous
           : this.key.draw()}
         {this.arrow?.draw()}
-        {isMainReference(this.value, this) ? this.value.draw() : null}
+        {(!isClosure(this.data) && !isArray(this.data)) || isMainReference(this.value, this)
+          ? this.value.draw()
+          : null}
       </React.Fragment>
     );
   }

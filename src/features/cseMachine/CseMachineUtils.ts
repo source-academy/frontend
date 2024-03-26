@@ -9,7 +9,6 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import Closure from 'js-slang/dist/interpreter/closure';
 import { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
@@ -32,6 +31,7 @@ import { Config } from './CseMachineConfig';
 import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
+  Closure,
   Data,
   DataArray,
   EmptyObject,
@@ -75,18 +75,18 @@ export function isArray(data: Data): data is DataArray {
 }
 
 /** Returns `true` if `x` is a Javascript function */
-export function isFunction(x: any): x is () => any {
+export function isFunction(x: any): x is Function {
   return x && {}.toString.call(x) === '[object Function]';
 }
 
-/** Returns `true` if `data` is a JS Slang function */
-export function isFn(data: Data): data is Closure {
+/** Returns `true` if `data` is a JS Slang closure */
+export function isClosure(data: Data): data is Closure {
   return isFunction(data) && 'environment' in data && 'functionName' in data;
 }
 
 /** Returns `true` if `x` is a JS Slang function in the global frame */
-export function isGlobalFn(x: any): x is () => any {
-  return isFunction(x) && !isFn(x);
+export function isGlobalFn(x: any): x is GlobalFn {
+  return isFunction(x) && !isClosure(x);
 }
 
 /** Returns `true` if `data` is null */
@@ -124,14 +124,41 @@ export function isPrimitiveData(data: Data): data is Primitive {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
 }
 
+/** Returns the elements in `set1` that are not in `set2` */
+export function setDifference(set1: Set<any>, set2: Set<any>) {
+  // use native set difference function if it exists
+  if ('difference' in Set.prototype) {
+    return (set1 as any).difference(set2);
+  }
+  const result = new Set();
+  for (const item of set1) {
+    if (!set2.has(item)) result.add(item);
+  }
+  return result;
+}
+
+/**
+ * Mutates the given closure and converts it into a global function,
+ * by removing the `functionName` property
+ */
+export function convertClosureToGlobalFn(fn: Closure) {
+  delete (fn as Partial<Closure>).functionName;
+}
+
 /**
  * Returns the main reference of `value`. The main reference priority order is as follows:
  * 1. The first `ArrayUnit` inside `value.referencedBy` that also shares the same environment
  * 2. The first `Binding` inside `value.referencedBy` that also shares the same environment
- * 3. The first reference `value.referencedBy[0]`
+ * 3. The first reference `value.referencedBy[0]`.
+ *
+ * An exception is for a global function value, in which case the first binding is always
+ * prioritised.
  */
 export function getMainReference(value: Value): ReferenceType {
-  if (isFn(value.data) || isArray(value.data)) {
+  if (isGlobalFn(value.data)) {
+    return value.referencedBy.find(r => r instanceof Binding) ?? value.referencedBy[0];
+  }
+  if (isClosure(value.data) || isArray(value.data)) {
     const valueEnv = value.data.environment;
     // First find if value is referenced by an array in the same environment
     const arrayUnit = value.referencedBy.find(
@@ -150,7 +177,7 @@ export function getMainReference(value: Value): ReferenceType {
 
 /** Returns `true` if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
-  if (!isFn(value.data) && !isArray(value.data)) {
+  if (!isClosure(value.data) && !isArray(value.data)) {
     return false;
   }
   const valueEnv = value.data.environment;
@@ -252,7 +279,7 @@ export function getTextHeight(
 
 /** Returns the parameter string of the given function */
 export function getParamsText(data: Closure | GlobalFn): string {
-  if (isFn(data)) {
+  if (isClosure(data)) {
     return data.node.params.map((node: any) => node.name).join(',');
   } else {
     const fnString = data.toString();
@@ -263,7 +290,7 @@ export function getParamsText(data: Closure | GlobalFn): string {
 /** Returns the body string of the given function */
 export function getBodyText(data: Closure | GlobalFn): string {
   const fnString = data.toString();
-  if (isFn(data)) {
+  if (isClosure(data)) {
     let body =
       data.node.type === 'FunctionDeclaration' || fnString.substring(0, 8) === 'function'
         ? fnString.substring(fnString.indexOf('{'))
@@ -363,7 +390,7 @@ function findObjects(
     if (isArray(item)) {
       if (item.environment === environment) set.add(item);
       findObjects(environment, set, item);
-    } else if (isFn(item)) {
+    } else if (isClosure(item)) {
       if (item.environment === environment) set.add(item);
     }
   }
@@ -761,12 +788,12 @@ export function getControlItemComponent(
 }
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
-  if (isFn(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
+  if (isClosure(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
     for (const level of Layout.levels) {
       for (const frame of level.frames) {
-        if (isFn(stashItem) || isGlobalFn(stashItem)) {
+        if (isClosure(stashItem) || isGlobalFn(stashItem)) {
           const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
-            if (isFn(stashItem) && isFn(binding.data)) {
+            if (isClosure(stashItem) && isClosure(binding.data)) {
               return binding.data.id === stashItem.id;
             } else if (isGlobalFn(stashItem) && isGlobalFn(binding.data)) {
               return binding.data?.toString() === stashItem.toString();

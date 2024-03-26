@@ -48,7 +48,7 @@ export class FnValue extends Value implements IHoverable {
   readonly labelRef: RefObject<any> = React.createRef();
 
   // derive the coordinates from the main reference (binding / array unit)
-  private constructFnValue = (mainReference: ReferenceType) => {
+  private constructFnValue(mainReference: ReferenceType) {
     if (mainReference instanceof Binding) {
       this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
       this._y = mainReference.y();
@@ -88,7 +88,7 @@ export class FnValue extends Value implements IHoverable {
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
-  };
+  }
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
