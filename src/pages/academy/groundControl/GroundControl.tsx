@@ -181,7 +181,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         />
       </Collapse>
     );
-    
+
     const grid = (
       <div className="Grid ag-grid-parent ag-theme-balham">
         <AgGridReact
