@@ -172,6 +172,4 @@ export type SubmissionsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
 };
 
-export type GradingColumnVisibility = {
-  columns: string[];
-};
+export type GradingColumnVisibility = string[];

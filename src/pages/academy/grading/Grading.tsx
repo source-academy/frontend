@@ -9,7 +9,8 @@ import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
+// import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { decreaseRequestCounter, increaseRequestCounter } from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import {
@@ -51,7 +52,7 @@ const Grading: React.FC = () => {
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
   const dispatch = useDispatch();
-  const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
+  // const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
@@ -68,14 +69,13 @@ const Grading: React.FC = () => {
     [dispatch, showAllGroups, showAllSubmissions, pageSize]
   );
 
-  useEffect(() => {
-    console.log(requestCounter);
-  }, [requestCounter]);
+  // useEffect(() => {
+  //   console.log(requestCounter);
+  // }, [requestCounter]);
 
   useEffect(() => {
-    console.log("minus 11");
     dispatch(decreaseRequestCounter());
-  }, [gradingOverviews]);
+  }, [gradingOverviews, dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (

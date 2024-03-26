@@ -2,29 +2,30 @@ import '@tremor/react/dist/esm/tremor.css';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css"
 
-import { Button, H6, Icon as BpIcon } from '@blueprintjs/core';
+import { Button, H6, Icon as BpIcon, InputGroup } from '@blueprintjs/core';
+// import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
-  Column,
+  // Column,
   ColumnFilter,
   ColumnFiltersState,
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable
+  // createColumnHelper,
+  // flexRender,
+  // getCoreRowModel,
+  // getFilteredRowModel,
+  // getPaginationRowModel,
+  // useReactTable
 } from '@tanstack/react-table';
-import {
-  Footer,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  TextInput
-} from '@tremor/react';
+// import {
+//   Footer,
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeaderCell,
+//   TableRow,
+//   TextInput
+// } from '@tremor/react';
 import { CellClickedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { debounce } from 'lodash';
@@ -45,73 +46,93 @@ import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils'
 
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
+import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
 import GradingColumnFilters from './GradingColumnFilters';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
-const columnHelper = createColumnHelper<GradingOverview>();
+// const columnHelper = createColumnHelper<GradingOverview>();
 
-const makeColumns = (handleClick: () => void) => [
-  columnHelper.accessor('assessmentName', {
-    header: 'Name',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('assessmentType', {
-    header: 'Type',
-    cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <AssessmentTypeBadge type={info.getValue()} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor('studentName', {
-    header: 'Student',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('studentUsername', {
-    header: 'Username',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('groupName', {
-    header: 'Group',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('submissionStatus', {
-    header: 'Progress',
-    cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <SubmissionStatusBadge status={info.getValue()} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor('gradingStatus', {
-    header: 'Grading',
-    cell: info => <GradingStatusBadge status={info.getValue()} />
-  }),
-  columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
-    header: 'Raw XP (+Bonus)',
-    enableColumnFilter: false,
-    cell: info => {
-      const { currentXp, xpBonus, maxXp } = info.getValue();
-      return (
-        <GradingFlex justifyContent="justify-start" style={{ columnGap: "7.5px" }}>
-          <GradingText>
-            {currentXp} (+{xpBonus})
-          </GradingText>
-          <GradingText>/</GradingText>
-          <GradingText>{maxXp}</GradingText>
-        </GradingFlex>
-      );
-    }
-  }),
-  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
-    header: 'Actions',
-    enableColumnFilter: false,
-    cell: info => {
-      const { submissionId } = info.getValue();
-      return <GradingActions submissionId={submissionId} />;
-    }
-  })
-];
+// const makeColumns = (handleClick: () => void) => [
+//   columnHelper.accessor('assessmentName', {
+//     header: 'Name',
+//     cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+//   }),
+//   columnHelper.accessor('assessmentType', {
+//     header: 'Type',
+//     cell: info => (
+//       <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+//         <AssessmentTypeBadge type={info.getValue()} />
+//       </Filterable>
+//     )
+//   }),
+//   columnHelper.accessor('studentName', {
+//     header: 'Student',
+//     cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+//   }),
+//   columnHelper.accessor('studentUsername', {
+//     header: 'Username',
+//     cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+//   }),
+//   columnHelper.accessor('groupName', {
+//     header: 'Group',
+//     cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+//   }),
+//   columnHelper.accessor('submissionStatus', {
+//     header: 'Progress',
+//     cell: info => (
+//       <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
+//         <SubmissionStatusBadge status={info.getValue()} />
+//       </Filterable>
+//     )
+//   }),
+//   columnHelper.accessor('gradingStatus', {
+//     header: 'Grading',
+//     cell: info => <GradingStatusBadge status={info.getValue()} />
+//   }),
+//   columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
+//     header: 'Raw XP (+Bonus)',
+//     enableColumnFilter: false,
+//     cell: info => {
+//       const { currentXp, xpBonus, maxXp } = info.getValue();
+//       return (
+//         <GradingFlex justifyContent="justify-start" style={{ columnGap: "7.5px" }}>
+//           <GradingText>
+//             {currentXp} (+{xpBonus})
+//           </GradingText>
+//           <GradingText>/</GradingText>
+//           <GradingText>{maxXp}</GradingText>
+//         </GradingFlex>
+//       );
+//     }
+//   }),
+//   columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
+//     header: 'Actions',
+//     enableColumnFilter: false,
+//     cell: info => {
+//       const { submissionId } = info.getValue();
+//       return <GradingActions submissionId={submissionId} />;
+//     }
+//   })
+// ];
+
+export enum SortStates {
+  ASC = 'sort-asc',
+  DESC = 'sort-desc',
+  NONE = 'sort'
+}
+
+export const getNextSortState = (current: SortStates) => {
+  switch (current) {
+    case SortStates.NONE:
+      return SortStates.ASC;
+    case SortStates.ASC:
+      return SortStates.DESC;
+    case SortStates.DESC:
+      return SortStates.NONE;
+    default:
+      return SortStates.NONE;
+  }
+}
 
 type GradingSubmissionTableProps = {
   totalRows: number;
@@ -129,7 +150,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   // End of Original Code
 
-  interface IRow {
+  interface IGradingTableRow {
     assessmentName: string;
     assessmentType: string;
     studentName: string;
@@ -142,7 +163,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     courseID: number;
   }
 
-  interface ITableProperties {
+  interface IGradingTableProperties {
     defaultColDefs: ColDef;
     pagination: boolean;
     pageSize: number;
@@ -154,6 +175,18 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     suppressRowClickSelection: boolean;
     tableHeight: string;
     tableMargins: string;
+  }
+
+  interface SortStateProperties {
+    assessmentName: SortStates;
+    assessmentType: SortStates;
+    studentName: SortStates;
+    studentUsername: SortStates;
+    groupName: SortStates;
+    submissionStatus: SortStates;
+    gradingStatus: SortStates;
+    xp: SortStates;
+    actionsIndex: SortStates;
   }
 
   enum ColumnFields {
@@ -168,10 +201,32 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     actionsIndex = "actionsIndex",
   }
 
-  const defaultColumnDefs: ColDef = {
-    filter: false,
-    resizable: false,
-    sortable: true
+  enum ColumnName {
+    assessmentName = "Name",
+    assessmentType = "Type",
+    studentName = "Student",
+    studentUsername = "Username",
+    groupName = "Group",
+    submissionStatus = "Progress",
+    gradingStatus = "Grading",
+    xp = "Raw XP (+Bonus)",
+    actionsIndex = "Actions",
+  }
+
+  const freshSortState: SortStateProperties = {
+    assessmentName: SortStates.NONE,
+    assessmentType: SortStates.NONE,
+    studentName: SortStates.NONE,
+    studentUsername: SortStates.NONE,
+    groupName: SortStates.NONE,
+    submissionStatus: SortStates.NONE,
+    gradingStatus: SortStates.NONE,
+    xp: SortStates.NONE,
+    actionsIndex: SortStates.NONE,
+  };
+
+  const customComponents = {
+    agColumnHeader: GradingColumnCustomHeaders,
   };
 
   const disabledEditModeCols: string[] = [
@@ -184,9 +239,34 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     ColumnFields.actionsIndex,
   ]
 
+  const newSortState = (affectedID: ColumnFields, sortDirection: SortStates) => {
+    setColumnSortStates((prev) => {
+      const newState: SortStateProperties = {...prev};
+      newState[affectedID] = sortDirection;
+      return newState;
+    });
+    setColumnSortOrder((prev) => {
+      const newOrder: ColumnFields[] = prev.filter((item) => String(item) !== String(affectedID));
+      if (sortDirection !== SortStates.NONE) {
+        newOrder.push(affectedID);
+      }
+      return newOrder;
+    })
+  }
+
+  const defaultColumnDefs: ColDef = {
+    filter: false,
+    resizable: false,
+    sortable: true,
+    headerComponentParams: {
+      hideColumn: (id: string) => handleColumnFilterAdd(id),
+      newSortState: newSortState,
+    },
+  };
+
   const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
 
-  const tableProperties: ITableProperties = {
+  const tableProperties: IGradingTableProperties = {
     defaultColDefs: defaultColumnDefs,
     pagination: true,
     pageSize: pageSize,
@@ -196,27 +276,37 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     overlayNoRowsTemplate: "Hmm... No submissions found, did you filter them all out?",
     overlayLoadingTemplate: '<div aria-live="polite" aria-atomic="true" style="position:absolute;top:0;left:0;right:0; bottom:0; background: url(https://ag-grid.com/images/ag-grid-loading-spinner.svg) center no-repeat" aria-label="loading"></div>',
     suppressRowClickSelection: true,
-    tableHeight: String(ROW_HEIGHT * Math.min(pageSize, Math.max(2, submissions.length)) + 50) + "px",
+    tableHeight: String(ROW_HEIGHT * Math.min(pageSize, Math.max(2, submissions.length)) + 48) + "px",
     tableMargins: "1rem 0 0 0",
   };
 
-  const [rowData, setRowData] = useState<IRow[]>();
-  const [colDefs, setColDefs] = useState<ColDef<IRow>[]>();
+  const [rowData, setRowData] = useState<IGradingTableRow[]>();
+  const [colDefs, setColDefs] = useState<ColDef<IGradingTableRow>[]>();
   const [filterMode, setFilterMode] = useState<boolean>(false);
+  const [columnSortStates, setColumnSortStates] = useState<SortStateProperties>(freshSortState);
+  const [columnSortOrder, setColumnSortOrder] = useState<ColumnFields[]>([]);
 
-  const gridRef = useRef<AgGridReact<IRow>>(null);
+  const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
 
-  const generateCols = () => {
+  const generateCols = useCallback(() => {
 
-    const cols: ColDef<IRow>[] = [];
+    const cols: ColDef<IGradingTableRow>[] = [];
+
+    const generalColProperties: ColDef<IGradingTableRow> = {
+      suppressMovable: true,
+      cellClass: "grading-def-cell grading-def-cell-pointer",
+      headerClass: "grading-default-headers",
+      flex: 1, 
+    }
 
     cols.push({ 
-      headerName: "Name", 
+      ...generalColProperties,
+      headerName: ColumnName.assessmentName, 
       field: ColumnFields.assessmentName, 
       flex: 3, 
-      cellClass: "grading-def-cell grading-def-cell-pointer grading-cell-align-left",
-      headerClass: "grading-default-headers grading-left-align",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellClass: generalColProperties.cellClass + " grading-cell-align-left",
+      headerClass: generalColProperties.headerClass + " grading-left-align",
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: FilterableNew, 
@@ -230,12 +320,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     cols.push({ 
-      headerName: "Type", 
+      ...generalColProperties,
+      headerName: ColumnName.assessmentType, 
       field: ColumnFields.assessmentType, 
-      flex: 1, 
-      cellClass: "grading-def-cell grading-def-cell-pointer",
-      headerClass: "grading-default-headers",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: FilterableNew, 
@@ -250,12 +338,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     cols.push({ 
-      headerName: "Student", 
+      ...generalColProperties,
+      headerName: ColumnName.studentName, 
       field: ColumnFields.studentName, 
       flex: 1.5, 
-      cellClass: "grading-def-cell grading-def-cell-pointer grading-cell-align-left",
-      headerClass: "grading-default-headers grading-left-align",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellClass: generalColProperties.cellClass + " grading-cell-align-left",
+      headerClass: generalColProperties.headerClass + " grading-left-align",
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: FilterableNew, 
@@ -269,12 +358,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     cols.push({ 
-      headerName: "Username", 
+      ...generalColProperties,
+      headerName: ColumnName.studentUsername, 
       field: ColumnFields.studentUsername, 
-      flex: 1, 
-      cellClass: "grading-def-cell grading-def-cell-pointer",
-      headerClass: "grading-default-headers",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: FilterableNew, 
@@ -288,12 +375,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     cols.push({ 
-      headerName: "Group", 
+      ...generalColProperties,
+      headerName: ColumnName.groupName, 
       field: ColumnFields.groupName, 
       flex: 0.75, 
-      cellClass: "grading-def-cell grading-def-cell-pointer",
-      headerClass: "grading-default-headers",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: FilterableNew, 
@@ -307,12 +393,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     cols.push({ 
-      headerName: "Progress", 
+      ...generalColProperties,
+      headerName: ColumnName.submissionStatus, 
       field: ColumnFields.submissionStatus, 
-      flex: 1, 
-      cellClass: "grading-def-cell grading-def-cell-pointer",
-      headerClass: "grading-default-headers",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: FilterableNew, 
@@ -327,12 +411,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     cols.push({ 
-      headerName: "Grading", 
+      ...generalColProperties,
+      headerName: ColumnName.gradingStatus, 
       field: ColumnFields.gradingStatus, 
-      flex: 1, 
-      cellClass: "grading-def-cell" + (!filterMode ? " grading-def-cell-pointer" : ""),
-      headerClass: "grading-default-headers",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellClass: generalColProperties.cellClass + (!filterMode ? " grading-def-cell-pointer" : ""),
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: GradingStatusBadge, 
@@ -345,20 +428,17 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     cols.push({ 
-      headerName: "Raw XP (+Bonus)", 
+      ...generalColProperties,
+      headerName: ColumnName.xp, 
       field: ColumnFields.xp, 
-      flex: 1, 
-      cellClass: "grading-def-cell" + (!filterMode ? " grading-def-cell-pointer" : " grading-def-cell-selectable"),
-      headerClass: "grading-default-headers",
+      cellClass: generalColProperties.cellClass + (!filterMode ? " grading-def-cell-pointer" : " grading-def-cell-selectable"),
     });
 
     cols.push({ 
-      headerName: "Actions", 
+      ...generalColProperties,
+      headerName: ColumnName.actionsIndex, 
       field: ColumnFields.actionsIndex, 
-      flex: 1, 
-      cellClass: "grading-def-cell",
-      headerClass: "grading-default-headers",
-      cellRendererSelector: (params: ICellRendererParams<IRow>) => {
+      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined) 
           ? { 
               component: GradingActions, 
@@ -372,19 +452,19 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
 
     return cols;
-  }
+  }, [ColumnFields, ColumnName, filterMode]);
 
-  const showLoading = useCallback(() => {
-    gridRef.current!.api.showLoadingOverlay();
-  }, [])
+  // const showLoading = useCallback(() => {
+  //   gridRef.current!.api.showLoadingOverlay();
+  // }, [])
 
-  const hideLoading = useCallback(() => {
-    gridRef.current!.api.hideOverlay();
-  }, [])
+  // const hideLoading = useCallback(() => {
+  //   gridRef.current!.api.hideOverlay();
+  // }, [])
 
-  const showNoRows = useCallback(() => {
-    gridRef.current!.api.showNoRowsOverlay();
-  }, [])
+  // const showNoRows = useCallback(() => {
+  //   gridRef.current!.api.showNoRowsOverlay();
+  // }, [])
 
   const cellClickedEvent = (event: CellClickedEvent) => {
 
@@ -411,7 +491,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   ]);
 
   const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
-    columnVisibility ? columnVisibility : { columns: [] }
+    columnVisibility ? columnVisibility : []
   );
 
   const [page, setPage] = useState(0);
@@ -450,24 +530,24 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       });
     });
     return params;
-  }, [columnFilters, searchValue]);
+  }, [columnFilters, searchValue, ColumnFields.assessmentName]);
 
-  const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
-  const table = useReactTable({
-    data: submissions,
-    columns,
-    state: {
-      columnFilters,
-      pagination: {
-        pageIndex: 0,
-        pageSize: pageSize
-      }
-    },
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
-  });
+  // const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
+  // const table = useReactTable({
+  //   data: submissions,
+  //   columns,
+  //   state: {
+  //     columnFilters,
+  //     pagination: {
+  //       pageIndex: 0,
+  //       pageSize: pageSize
+  //     }
+  //   },
+  //   onColumnFiltersChange: setColumnFilters,
+  //   getCoreRowModel: getCoreRowModel(),
+  //   getFilteredRowModel: getFilteredRowModel(),
+  //   getPaginationRowModel: getPaginationRowModel()
+  // });
 
   const handleFilterAdd = ({ id, value }: ColumnFilter) => {
     dispatch(increaseRequestCounter());
@@ -495,19 +575,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   };
 
   const handleColumnFilterRemove = (toRemove: string) => {
-    setHiddenColumns((prev: GradingColumnVisibility) => {
-      return {
-        columns: prev.columns.filter(column => column !== toRemove)
-      };
-    });
+    if (gridRef.current?.api) {
+      setHiddenColumns((prev: GradingColumnVisibility) => prev.filter(column => column !== toRemove));
+      gridRef.current.api.setColumnsVisible([toRemove], true);
+    }
   };
 
   const handleColumnFilterAdd = (toAdd: string) => {
-    setHiddenColumns((prev: GradingColumnVisibility) => {
-      return {
-        columns: [...prev.columns, toAdd]
-      };
-    });
+    setHiddenColumns((prev: GradingColumnVisibility) => [...prev, toAdd]);
   };
 
   useEffect(() => {
@@ -516,6 +591,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   useEffect(() => {
     dispatch(updateGradingColumnVisibility(hiddenColumns));
+    if (gridRef.current?.api) {
+      gridRef.current.api.setColumnsVisible(hiddenColumns, false);
+    }
   }, [hiddenColumns, dispatch]);
 
   useEffect(() => {
@@ -526,68 +604,80 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     updateEntries(page, backendFilterParams);
   }, [updateEntries, page, backendFilterParams]);
 
+  useEffect(() => {
+    // TODO BACKEND SORT
+    console.log(columnSortStates);
+    console.log(columnSortOrder);
+  }, [columnSortStates, columnSortOrder]);
+
   // End of Original Code
 
   useEffect(() => {
-
     if (gridRef.current?.api) {
-
       if (requestCounter <= 0) {
-        let sameData: boolean = submissions.length === rowData?.length;
 
-        const newData: IRow[] = submissions.map((submission, index): IRow => {
-          if (sameData && submission.submissionId !== rowData?.[index]?.actionsIndex) {
-            sameData = false;
-          }
-          return {
-            assessmentName: submission.assessmentName,
-            assessmentType: submission.assessmentType,
-            studentName: submission.studentName,
-            studentUsername: submission.studentUsername,
-            groupName: submission.groupName,
-            submissionStatus: submission.submissionStatus,
-            gradingStatus: submission.gradingStatus,
-            xp: submission.currentXp + " (+" + submission.xpBonus + ") / " + submission.maxXp,
-            actionsIndex: submission.submissionId,
-            courseID: courseId!,
-          };
-        });
+        const newData: IGradingTableRow[] = [];
+
+        const sameData: boolean = submissions.reduce(
+          (accumulator, currentSubmission, index) => {
+            newData.push({
+              assessmentName: currentSubmission.assessmentName,
+              assessmentType: currentSubmission.assessmentType,
+              studentName: currentSubmission.studentName,
+              studentUsername: currentSubmission.studentUsername,
+              groupName: currentSubmission.groupName,
+              submissionStatus: currentSubmission.submissionStatus,
+              gradingStatus: currentSubmission.gradingStatus,
+              xp: currentSubmission.currentXp + " (+" + currentSubmission.xpBonus + ") / " + currentSubmission.maxXp,
+              actionsIndex: currentSubmission.submissionId,
+              courseID: courseId!,
+            })
+            return accumulator && (currentSubmission.submissionId === rowData?.[index]?.actionsIndex);
+          },
+          submissions.length === rowData?.length
+        );
 
         if (!sameData) {
           setRowData(newData); 
         }
 
-        hideLoading();
-        if (rowData?.length === 0) {
-          showNoRows();
-        }
+        gridRef.current!.api.hideOverlay();
         
       } else {
-        showLoading();
+        gridRef.current!.api.showLoadingOverlay();
       }
     }
+    // We ignore the dependency on rowData purposely as we setRowData above. If not, it may cause an infinite loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestCounter, submissions, courseId]);
 
-  }, [requestCounter, submissions, gridRef.current]);
+  useEffect(() => {
+    if (rowData?.length === 0 && requestCounter <= 0 && gridRef.current?.api) {
+      gridRef.current!.api.showNoRowsOverlay();
+    }
+  }, [requestCounter, rowData]);
 
   useEffect(() => {
     setColDefs(generateCols());
-  }, [resetPage, filterMode]);
+  }, [resetPage, filterMode, generateCols]);
 
   // Start of Original Code
 
   return (
     <>
-      {hiddenColumns.columns.length > 0 ? (
+      {hiddenColumns.length > 0 ? (
         <GradingFlex justifyContent="justify-between" alignItems="items-center" style={{ marginTop: "0.5rem" }}>
           <GradingFlex>
             <GradingText secondaryText>Columns Hidden:</GradingText>
             <GradingColumnFilters
-              filters={hiddenColumns.columns}
-              filtersName={hiddenColumns.columns.map(id => {
-                const headerTexts = columns.filter(
-                  col => col['accessorKey'] === id || col['header'] === id
-                );
-                return headerTexts[0]['header'] ? headerTexts[0]['header'].toString() : '';
+              filters={hiddenColumns}
+              filtersName={hiddenColumns.map(id => {
+                for (const item in ColumnName) {
+                  if (ColumnFields[item] === id) {
+                    return ColumnName[item];
+                  }
+                }
+                return '';
               })}
               onFilterRemove={handleColumnFilterRemove}
             />
@@ -606,26 +696,34 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 ? 'Filters: '
                 : (filterMode === true
                   ? 'No filters applied. Click on any cell to filter by its value.' +
-                    (hiddenColumns.columns.length === 0
+                    (hiddenColumns.length === 0
                       ? ' Click on any column header to hide it.'
                       : '')
-                  : <strong>Disable Edit Mode to enable click to filter</strong>)}{' '}
+                  : <strong>Disable Grading Mode to enable click to filter</strong>)}{' '}
             </GradingText>
           </div>
           <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
         </GradingFlex>
 
         <button className={(filterMode ? "grading-filter-btn-on " : "") + "grading-filter-btn"} onClick={(e) => setFilterMode((prev: boolean) => !prev)}>
-          {filterMode ? "Filter Mode" : "Edit Mode"}
+          {filterMode ? "Filter Mode" : "Grading Mode"}
         </button>
 
-        <TextInput
+        {/* <TextInput
           maxWidth="max-w-sm"
           icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
           placeholder="Search by assessment name"
           value={searchQuery}
           onChange={handleSearchQueryUpdate}
-        />
+        /> */}
+        <InputGroup
+          className="grading-search-input"
+          placeholder="Search by assessment name"
+          leftIcon="search"
+          large={true}
+          value={searchQuery}
+          onChange={handleSearchQueryUpdate}
+        ></InputGroup>
       </GradingFlex>
       
       {/* End of Original Code */}
@@ -648,17 +746,19 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           overlayLoadingTemplate={tableProperties.overlayLoadingTemplate}
           suppressRowClickSelection={tableProperties.suppressRowClickSelection}
           onCellClicked={cellClickedEvent}
+          components={customComponents}
+          suppressMenuHide={true}
         />
       </div>
 
       {/* Start of Original Code */}
 
-      <Table marginTop="mt-2">
+      {/* <Table marginTop="mt-2">
         <TableHead>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map(header =>
-                hiddenColumns.columns.reduce(
+                hiddenColumns.reduce(
                   (accumulator, currentValue) => accumulator || header.id.includes(currentValue),
                   false
                 ) ? (
@@ -688,7 +788,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               {row
                 .getVisibleCells()
                 .map(cell =>
-                  hiddenColumns.columns.reduce(
+                  hiddenColumns.reduce(
                     (accumulator, currentValue) => accumulator || cell.id.includes(currentValue),
                     false
                   ) ? (
@@ -701,55 +801,55 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 )}
             </TableRow>
           ))}
-        </TableBody>
-        <div className="grading-overview-footer-sibling"></div>
-        <Footer>
-          <GradingFlex justifyContent="justify-center" style={{ width: "100%", columnGap: "5px" }}>
-            <Button
-              small
-              minimal
-              icon={IconNames.DOUBLE_CHEVRON_LEFT}
-              onClick={() => setPage(0)}
-              disabled={page <= 0}
-            />
-            <Button
-              small
-              minimal
-              icon={IconNames.ARROW_LEFT}
-              onClick={() => setPage(page - 1)}
-              disabled={page <= 0}
-            />
-            <H6 style={{ margin: "auto 0" }}>
-              Page {page + 1} of {maxPage + 1}
-            </H6>
-            <Button
-              small
-              minimal
-              icon={IconNames.ARROW_RIGHT}
-              onClick={() => setPage(page + 1)}
-              disabled={page >= maxPage}
-            />
-            <Button
-              small
-              minimal
-              icon={IconNames.DOUBLE_CHEVRON_RIGHT}
-              onClick={() => setPage(maxPage)}
-              disabled={page >= maxPage}
-            />
-          </GradingFlex>
-        </Footer>
-      </Table>
+        </TableBody> */}
+        {/* <div className="grading-overview-footer-sibling"></div> */}
+        {/* <Footer> */}
+        <GradingFlex justifyContent="justify-center" className="grading-table-footer" style={{ width: "100%", columnGap: "5px" }}>
+          <Button
+            small
+            minimal
+            icon={IconNames.DOUBLE_CHEVRON_LEFT}
+            onClick={() => setPage(0)}
+            disabled={page <= 0}
+          />
+          <Button
+            small
+            minimal
+            icon={IconNames.ARROW_LEFT}
+            onClick={() => setPage(page - 1)}
+            disabled={page <= 0}
+          />
+          <H6 style={{ margin: "auto 0" }}>
+            Page {page + 1} of {maxPage + 1}
+          </H6>
+          <Button
+            small
+            minimal
+            icon={IconNames.ARROW_RIGHT}
+            onClick={() => setPage(page + 1)}
+            disabled={page >= maxPage}
+          />
+          <Button
+            small
+            minimal
+            icon={IconNames.DOUBLE_CHEVRON_RIGHT}
+            onClick={() => setPage(maxPage)}
+            disabled={page >= maxPage}
+          />
+        </GradingFlex>
+        {/* </Footer> */}
+      {/* </Table> */}
       <GradingFlex style={{ marginTop: "-1.5rem" }} />
     </>
   );
 };
 
-type FilterableProps = {
-  column: Column<any, unknown>;
-  value: string;
-  children?: React.ReactNode;
-  onClick?: () => void;
-};
+// type FilterableProps = {
+//   column: Column<any, unknown>;
+//   value: string;
+//   children?: React.ReactNode;
+//   onClick?: () => void;
+// };
 
 type FilterablePropsNew = {
   setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
@@ -760,18 +860,18 @@ type FilterablePropsNew = {
   filterMode: boolean;
 };
 
-const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClick }) => {
-  const handleFilterChange = () => {
-    column.setFilterValue(value);
-    onClick?.();
-  };
+// const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClick }) => {
+//   const handleFilterChange = () => {
+//     column.setFilterValue(value);
+//     onClick?.();
+//   };
 
-  return (
-    <button type="button" className="grading-overview-filterable-btns" onClick={handleFilterChange}>
-      {children || value}
-    </button>
-  );
-};
+//   return (
+//     <button type="button" className="grading-overview-filterable-btns" onClick={handleFilterChange}>
+//       {children || value}
+//     </button>
+//   );
+// };
 
 const FilterableNew: React.FC<FilterablePropsNew> = ({ value, children, filterMode }) => {
   return (
