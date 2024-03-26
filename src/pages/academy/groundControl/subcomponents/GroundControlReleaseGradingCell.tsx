@@ -85,7 +85,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
 
   return (
     <>
-      <Button className={change} key={keyID} onClick={handleOpenDialog} icon={icon} />
+      <Button className="bp5-minimal" key={keyID} onClick={handleOpenDialog} icon={icon} />
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
