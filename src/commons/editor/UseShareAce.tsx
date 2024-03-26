@@ -1,9 +1,11 @@
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
+import { Ace } from 'ace-builds';
 import React from 'react';
 
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
+import AceMultiCursorManager from './AceMultiCursorManager';
 import { EditorHook } from './Editor';
 
 // EditorHook structure:
@@ -39,6 +41,15 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
+
+      const curMgr = new AceMultiCursorManager(editor.getSession());
+      curMgr.addCursor('default', 'Name', '#5f9ea0', { row: 1, column: 1 } as Ace.Point); // hardcoded for now
+
+      ShareAce.connections.contents.on('docPresenceUpdate', (newPresence: Ace.Point) => {
+        // TODO: modify this and move it to a separate handler
+        // when more info is added to presence
+        curMgr.setCursor('default', newPresence);
+      });
 
       showSuccessMessage(
         'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
