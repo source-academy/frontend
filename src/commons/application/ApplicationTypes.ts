@@ -502,6 +502,8 @@ export const defaultSession: SessionState = {
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
+  students: undefined,
+  teamFormationOverviews: undefined,
   gradings: new Map<number, GradingQuery>(),
   notifications: []
 };
